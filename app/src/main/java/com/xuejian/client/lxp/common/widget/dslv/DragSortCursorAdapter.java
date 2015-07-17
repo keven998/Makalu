@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * To persist changes made by drag-sorts, one can retrieve the
  * mapping with the {@link #getCursorPositions()} method, which
  * returns the reordered list of Cursor positions.
- *
+ * <p>
  * An instance of this class is passed
  * to {@link com.xuejian.client.lxp.common.widget.dslv.DragSortListView#setAdapter(ListAdapter)} and, since
  * this class implements the {@link com.xuejian.client.lxp.common.widget.dslv.DragSortListView.DragSortListener}
@@ -37,7 +37,7 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
     private ArrayList<Integer> mRemovedCursorPositions = new ArrayList<Integer>();
 
     @SuppressWarnings("deprecation")
-	public DragSortCursorAdapter(Context context, Cursor c) {
+    public DragSortCursorAdapter(Context context, Cursor c) {
         super(context, c);
     }
 
@@ -196,7 +196,6 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
      * operations).
      *
      * @param position List position
-     *
      * @return The mapped-to Cursor position
      */
     public int getCursorPosition(int position) {

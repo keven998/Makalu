@@ -112,6 +112,7 @@ public class GroupsActivity extends ChatBaseActivity {
 
     /**
      * 返回
+     *
      * @param view
      */
     public void back(View view) {

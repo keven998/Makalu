@@ -32,6 +32,7 @@ public class ModifySignActivity extends PeachBaseActivity {
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
     private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -42,62 +43,62 @@ public class ModifySignActivity extends PeachBaseActivity {
         titleHeaderBar.enableBackKey(true);
         titleHeaderBar.getRightTextView().setText("保存");
         titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {
-                                                           @Override
-                                                           public void onClick(View view) {
-                                                               if(TextUtils.isEmpty(signEt.getText())){
-                                                                   ToastUtil.getInstance(mContext).showToast("你的性感签名呢");
-                                                                   return;
-                                                               }
-                                                               if(!CommonUtils.isNetWorkConnected(mContext)){
-                                                                   ToastUtil.getInstance(mContext).showToast("呃～好像没找到网络");
-                                                                   return;
-                                                               }
-                                                               DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-                                                               UserApi.editUserSignature(user, signEt.getText().toString().trim(), new HttpCallBack<String>() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(signEt.getText())) {
+                    ToastUtil.getInstance(mContext).showToast("你的性感签名呢");
+                    return;
+                }
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
+                    ToastUtil.getInstance(mContext).showToast("呃～好像没找到网络");
+                    return;
+                }
+                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                UserApi.editUserSignature(user, signEt.getText().toString().trim(), new HttpCallBack<String>() {
 
 
-                                                                   @Override
-                                                                   public void doSuccess(String result, String method) {
-                                                                       DialogManager.getInstance().dissMissLoadingDialog();
-                                                                       CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
-                                                                       if (modifyResult.code == 0) {
-                                                                           user.setSignature(signEt.getText().toString().trim());
-                                                                           AccountManager.getInstance().saveLoginAccount(mContext, user);
-                                                                           Intent intent=new Intent();
-                                                                           intent.putExtra("signature", signEt.getText().toString().trim());
-                                                                           setResult(RESULT_OK,intent);
-                                                                           ToastUtil.getInstance(mContext).showToast("OK~成功修改");
+                    @Override
+                    public void doSuccess(String result, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
+                        if (modifyResult.code == 0) {
+                            user.setSignature(signEt.getText().toString().trim());
+                            AccountManager.getInstance().saveLoginAccount(mContext, user);
+                            Intent intent = new Intent();
+                            intent.putExtra("signature", signEt.getText().toString().trim());
+                            setResult(RESULT_OK, intent);
+                            ToastUtil.getInstance(mContext).showToast("OK~成功修改");
 //                                                                           Intent intent=new Intent();
 //                                                                           intent.putExtra("signature",signEt.getText().toString().trim());
 //                                                                           setResult(RESULT_OK,intent);
-                                                                           finish();
-                                                                       } else {
-                                                                           if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
-                                                                               ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);
-                                                                       }
-                                                                   }
+                            finish();
+                        } else {
+                            if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))
+                                ToastUtil.getInstance(mContext).showToast(modifyResult.err.message);
+                        }
+                    }
 
-                                                                   @Override
-                                                                   public void doFailure(Exception error, String msg, String method) {
-                                                                       DialogManager.getInstance().dissMissLoadingDialog();
-                                                                       if (!isFinishing())
-                                                                           ToastUtil.getInstance(ModifySignActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                                                   }
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        if (!isFinishing())
+                            ToastUtil.getInstance(ModifySignActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
 
-                                                                   @Override
-                                                                   public void doFailure(Exception error, String msg, String method, int code) {
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
 
-                                                                   }
+                    }
 
-                                                                   @Override
-                                                                   public void onStart() {
-                                                                   }
-                                                               });
+                    @Override
+                    public void onStart() {
+                    }
+                });
 //                                                               finish();
 
-                                                           }
+            }
 
-                                                       });
+        });
 
         initData();
     }

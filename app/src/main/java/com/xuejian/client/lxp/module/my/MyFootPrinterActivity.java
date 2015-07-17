@@ -64,10 +64,10 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private ArrayList<LocBean> originalAllAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> hasSelectLoc;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
-    private Map<LatLng,AirMapMarker> markers;
+    private Map<LatLng, AirMapMarker> markers;
     private RelativeLayout titleHeaderBar;
     private String printInfo;
-    private TextView tv_title,title_back,title_confirm;
+    private TextView tv_title, title_back, title_confirm;
 
     @Override
     public void onDestAdded(LocBean locBean, boolean isEdit, String type) {
@@ -84,7 +84,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     @Override
     public void onDestRemoved(LocBean locBean, String type) {
         allAddCityList.remove(locBean);
-       // refreshMapView(allAddCityList);
+        // refreshMapView(allAddCityList);
         updataUserFootPrint("del", locBean, type);
     }
 
@@ -186,7 +186,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private void refreshMapView(final ArrayList<LocBean> bean) {
         if (mapView != null) {
             mapView.removeAllViews();
-           // mapView.clearMarkers();
+            // mapView.clearMarkers();
         }
         if (bean.size() > 0) {
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
@@ -219,14 +219,14 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        printInfo=getIntent().getStringExtra("title");
+        printInfo = getIntent().getStringExtra("title");
         View rootView = View.inflate(mContext, R.layout.activity_my_footprinter, null);
         setContentView(rootView);
 
-        titleHeaderBar=(RelativeLayout)rootView.findViewById(R.id.my_footprinter_title);
-        tv_title=(TextView)rootView.findViewById(R.id.tv_title);
-        title_back=(TextView)rootView.findViewById(R.id.title_back);
-        title_confirm=(TextView)rootView.findViewById(R.id.title_confirm);
+        titleHeaderBar = (RelativeLayout) rootView.findViewById(R.id.my_footprinter_title);
+        tv_title = (TextView) rootView.findViewById(R.id.tv_title);
+        title_back = (TextView) rootView.findViewById(R.id.title_back);
+        title_confirm = (TextView) rootView.findViewById(R.id.title_confirm);
         tv_title.setText(printInfo);
 
         mapView = (AirMapView) rootView.findViewById(R.id.my_footprinter_map);
@@ -272,7 +272,6 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         });
 
 
-
         if (hasSelectLoc != null && hasSelectLoc.size() > 0) {
             for (LocBean locBean : hasSelectLoc) {
                 onDestAdded(locBean, false, null);
@@ -309,38 +308,38 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     }
 
     private void updateFootPrint(ArrayList<LocBean> allAddCityList) {
-        HashMap<String,ArrayList<LocBean>> track=new HashMap<>();
+        HashMap<String, ArrayList<LocBean>> track = new HashMap<>();
         String outcountry = PreferenceUtils.getCacheData(MyFootPrinterActivity.this, "destination_outcountry");
         String inCountry = PreferenceUtils.getCacheData(MyFootPrinterActivity.this, "destination_indest_group");
         CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(outcountry, CountryBean.class);
         CommonJson4List<CountryBean> groupListResult = CommonJson4List.fromJson(inCountry, CountryBean.class);
-        for (LocBean locBean:allAddCityList){
-                for (CountryBean countryBean : countryListResult.result) {
-                    for (LocBean kLocBean : countryBean.destinations) {
-                        if (locBean.equals(kLocBean)) {
-                            if (track.containsKey(countryBean.zhName)) {
-                                track.get(countryBean.zhName).add(locBean);
-                            } else {
-                                track.put(countryBean.zhName, new ArrayList<LocBean>());
-                                track.get(countryBean.zhName).add(locBean);
-                            }
-                        }
-                    }
-                }
-
-                for (CountryBean incountryBean : groupListResult.result) {
-                    for (LocBean kLocBean : incountryBean.destinations) {
-                        if (locBean.equals(kLocBean)) {
-                            if (track.containsKey("中国")) {
-                                track.get("中国").add(locBean);
-                            } else {
-                                track.put("中国", new ArrayList<LocBean>());
-                                track.get("中国").add(locBean);
-                            }
+        for (LocBean locBean : allAddCityList) {
+            for (CountryBean countryBean : countryListResult.result) {
+                for (LocBean kLocBean : countryBean.destinations) {
+                    if (locBean.equals(kLocBean)) {
+                        if (track.containsKey(countryBean.zhName)) {
+                            track.get(countryBean.zhName).add(locBean);
+                        } else {
+                            track.put(countryBean.zhName, new ArrayList<LocBean>());
+                            track.get(countryBean.zhName).add(locBean);
                         }
                     }
                 }
             }
+
+            for (CountryBean incountryBean : groupListResult.result) {
+                for (LocBean kLocBean : incountryBean.destinations) {
+                    if (locBean.equals(kLocBean)) {
+                        if (track.containsKey("中国")) {
+                            track.get("中国").add(locBean);
+                        } else {
+                            track.put("中国", new ArrayList<LocBean>());
+                            track.get("中国").add(locBean);
+                        }
+                    }
+                }
+            }
+        }
         AccountManager.getInstance().getLoginAccountInfo().setTracks(track);
     }
 

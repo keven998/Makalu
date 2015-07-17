@@ -5,5 +5,6 @@ package com.xuejian.client.lxp.module.toolbox.im.group;
  */
 public interface CreateSuccessListener {
     void OnSuccess(String groupId, String conversation);
+
     void OnFailed();
 }

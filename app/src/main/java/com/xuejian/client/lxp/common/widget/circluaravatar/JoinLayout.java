@@ -8,17 +8,17 @@ public class JoinLayout {
         return 5;
     }
 
-    private static final float[][] rotations = { new float[] { 360 }, new float[] { 45, 360 },
-            new float[] { 120, 0, -120 }, new float[] { 90, 180, -90, 0 },
-            new float[] { 144, 72, 0, -72, -144 }, };
+    private static final float[][] rotations = {new float[]{360}, new float[]{45, 360},
+            new float[]{120, 0, -120}, new float[]{90, 180, -90, 0},
+            new float[]{144, 72, 0, -72, -144},};
 
     public static float[] rotation(int count) {
         return count > 0 && count <= rotations.length ? rotations[count - 1] : null;
     }
 
-    private static final float[][] sizes = { new float[] { 0.9f, 0.9f },
-            new float[] { 0.5f, 0.65f }, new float[] { 0.5f, 0.8f },
-            new float[] { 0.5f, 0.91f }, new float[] { 0.38f, 0.80f } };
+    private static final float[][] sizes = {new float[]{0.9f, 0.9f},
+            new float[]{0.5f, 0.65f}, new float[]{0.5f, 0.8f},
+            new float[]{0.5f, 0.91f}, new float[]{0.38f, 0.80f}};
 
     public static float[] size(int count) {
         return count > 0 && count <= sizes.length ? sizes[count - 1] : null;
@@ -39,18 +39,15 @@ public class JoinLayout {
             default:
                 break;
         }
-        return new float[] { 0f, 0f };
+        return new float[]{0f, 0f};
     }
 
     /**
      * 5个头像
-     * 
-     * @param index
-     *            下标
-     * @param width
-     *            画布边长（正方形）
-     * @param size
-     *            size[0]缩放 size[1]边距
+     *
+     * @param index 下标
+     * @param width 画布边长（正方形）
+     * @param size  size[0]缩放 size[1]边距
      * @return 下标index X，Y轴坐标
      */
     private static float[] offset5(int index, float dimension, float[] size) {
@@ -89,30 +86,27 @@ public class JoinLayout {
         switch (index) {
             case 0:
                 // return new float[] { s1 + xxc1, xx1 };
-                return new float[] { x1 + xxc1, y1 + xx1 };
+                return new float[]{x1 + xxc1, y1 + xx1};
             case 1:
-                return new float[] { x2 + xxc1, y2 + xx1 };
+                return new float[]{x2 + xxc1, y2 + xx1};
             case 2:
-                return new float[] { x3 + xxc1, y3 + xx1 };
+                return new float[]{x3 + xxc1, y3 + xx1};
             case 3:
-                return new float[] { x4 + xxc1, y4 + xx1 };
+                return new float[]{x4 + xxc1, y4 + xx1};
             case 4:
-                return new float[] { x5 + xxc1, y5 + xx1 };
+                return new float[]{x5 + xxc1, y5 + xx1};
             default:
                 break;
         }
-        return new float[] { 0f, 0f };
+        return new float[]{0f, 0f};
     }
 
     /**
      * 4个头像
-     * 
-     * @param index
-     *            下标
-     * @param width
-     *            画布边长（正方形）
-     * @param size
-     *            size[0]缩放 size[1]边距
+     *
+     * @param index 下标
+     * @param width 画布边长（正方形）
+     * @param size  size[0]缩放 size[1]边距
      * @return 下标index X，Y轴坐标
      */
     private static float[] offset4(int index, float dimension, float[] size) {
@@ -142,28 +136,25 @@ public class JoinLayout {
         float xx1 = (dimension - cd - s1) / 2;
         switch (index) {
             case 0:
-                return new float[] { x1 + xx1, y1 + xx1 };
+                return new float[]{x1 + xx1, y1 + xx1};
             case 1:
-                return new float[] { x2 + xx1, y2 + xx1 };
+                return new float[]{x2 + xx1, y2 + xx1};
             case 2:
-                return new float[] { x3 + xx1, y3 + xx1 };
+                return new float[]{x3 + xx1, y3 + xx1};
             case 3:
-                return new float[] { x4 + xx1, y4 + xx1 };
+                return new float[]{x4 + xx1, y4 + xx1};
             default:
                 break;
         }
-        return new float[] { 0f, 0f };
+        return new float[]{0f, 0f};
     }
 
     /**
      * 3个头像
-     * 
-     * @param index
-     *            下标
-     * @param width
-     *            画布边长（正方形）
-     * @param size
-     *            size[0]缩放 size[1]边距
+     *
+     * @param index 下标
+     * @param width 画布边长（正方形）
+     * @param size  size[0]缩放 size[1]边距
      * @return 下标index X，Y轴坐标
      */
     private static float[] offset3(int index, float dimension, float[] size) {
@@ -184,26 +175,23 @@ public class JoinLayout {
         // xx1 = xxc1 = 0;
         switch (index) {
             case 0:
-                return new float[] { s1 + xxc1, xx1 };
+                return new float[]{s1 + xxc1, xx1};
             case 1:
-                return new float[] { x2 + xxc1, y2 + xx1 };
+                return new float[]{x2 + xxc1, y2 + xx1};
             case 2:
-                return new float[] { x3 + xxc1, y2 + xx1 };
+                return new float[]{x3 + xxc1, y2 + xx1};
             default:
                 break;
         }
-        return new float[] { 0f, 0f };
+        return new float[]{0f, 0f};
     }
 
     /**
      * 2个头像
-     * 
-     * @param index
-     *            下标
-     * @param width
-     *            画布边长（正方形）
-     * @param size
-     *            size[0]缩放 size[1]边距
+     *
+     * @param index 下标
+     * @param width 画布边长（正方形）
+     * @param size  size[0]缩放 size[1]边距
      * @return 下标index X，Y轴坐标
      */
     private static float[] offset2(int index, float dimension, float[] size) {
@@ -225,30 +213,27 @@ public class JoinLayout {
         float xx1 = (dimension - cd - s1) / 2;
         switch (index) {
             case 0:
-                return new float[] { x1 + xx1, y1 + xx1 };
+                return new float[]{x1 + xx1, y1 + xx1};
             case 1:
-                return new float[] { x2 + xx1, y2 + xx1 };
+                return new float[]{x2 + xx1, y2 + xx1};
             default:
                 break;
         }
-        return new float[] { 0f, 0f };
+        return new float[]{0f, 0f};
     }
 
     /**
      * 1个头像
-     * 
-     * @param index
-     *            下标
-     * @param width
-     *            画布边长（正方形）
-     * @param size
-     *            size[0]缩放 size[1]边距
+     *
+     * @param index 下标
+     * @param width 画布边长（正方形）
+     * @param size  size[0]缩放 size[1]边距
      * @return 下标index X，Y轴坐标
      */
     private static float[] offset1(int index, float dimension, float[] size) {
         // 圆的直径
         float cd = dimension * size[0];
         float offset = (dimension - cd) / 2;
-        return new float[] { offset, offset };
+        return new float[]{offset, offset};
     }
 }

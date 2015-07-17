@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/11/22.
  */
-public class PoiDetailBean implements Parcelable, ICreateShareDialog,Comparable {
+public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable {
     public final static String RESTAURANT = "restaurant";
     public final static String SHOPPING = "shopping";
     public String distance = "";

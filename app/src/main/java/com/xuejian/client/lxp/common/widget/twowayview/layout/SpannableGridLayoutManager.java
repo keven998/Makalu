@@ -237,7 +237,7 @@ public class SpannableGridLayoutManager extends GridLayoutManager {
     @Override
     public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
         if (lp.width != LayoutParams.MATCH_PARENT ||
-            lp.height != LayoutParams.MATCH_PARENT) {
+                lp.height != LayoutParams.MATCH_PARENT) {
             return false;
         }
 

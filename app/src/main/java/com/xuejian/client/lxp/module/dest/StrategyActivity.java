@@ -185,7 +185,9 @@ public class StrategyActivity extends PeachBaseActivity {
         return strategy;
     }
 
-    public ArrayList<LocBean> getDestinations(){ return destinations;}
+    public ArrayList<LocBean> getDestinations() {
+        return destinations;
+    }
 
     private void initData(Bundle savedInstanceState) {
         id = getIntent().getStringExtra("id");
@@ -194,7 +196,7 @@ public class StrategyActivity extends PeachBaseActivity {
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
             }
-            createStrategyByCityIds(cityIdList,true);
+            createStrategyByCityIds(cityIdList, true);
 
         } else {
             if (savedInstanceState != null) {
@@ -321,7 +323,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private void bindView(final StrategyBean result) {
         destinations = result.localities;
         strategy = result;
-       final TextView dtv = (TextView) findViewById(R.id.jh_title);
+        final TextView dtv = (TextView) findViewById(R.id.jh_title);
         dtv.setText(result.title);
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);

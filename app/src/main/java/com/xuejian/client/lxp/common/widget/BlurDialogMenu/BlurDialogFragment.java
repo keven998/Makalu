@@ -6,7 +6,7 @@ import android.support.v4.app.DialogFragment;
 
 /**
  * Encapsulate dialog behavior with blur effect for app using {@link android.app.DialogFragment}.
- * <p/>
+ * <p>
  * All the screen behind the dialog will be blurred except the action bar.
  */
 public class BlurDialogFragment extends DialogFragment {

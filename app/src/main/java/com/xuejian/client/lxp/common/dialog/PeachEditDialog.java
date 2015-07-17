@@ -44,7 +44,7 @@ public class PeachEditDialog extends Dialog {
         }
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return mContetEt.getText().toString().trim();
     }
 

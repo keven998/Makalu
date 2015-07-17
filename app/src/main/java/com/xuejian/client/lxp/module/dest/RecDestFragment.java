@@ -62,19 +62,19 @@ public class RecDestFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(getActivity(),"event_go_search");
-                Intent intent = new Intent(getActivity(),SearchAllActivity.class);
+                MobclickAgent.onEvent(getActivity(), "event_go_search");
+                Intent intent = new Intent(getActivity(), SearchAllActivity.class);
                 startActivityWithNoAnim(intent);
                 getActivity().overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
             }
         });
-        rootView.findViewById(R.id.des_back).setOnClickListener(new View.OnClickListener(){
+        rootView.findViewById(R.id.des_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 (getActivity()).finish();
             }
         });
-        box = new DynamicBox(getActivity(),recDestContainer);
+        box = new DynamicBox(getActivity(), recDestContainer);
         setupViewFromCache();
         initData();
         return rootView;
@@ -99,7 +99,7 @@ public class RecDestFragment extends PeachBaseFragment {
                     new TypeToken<List<RecDestBean>>() {
                     });
             bindView(lists);
-        }else{
+        } else {
             box.showLoadingLayout();
         }
     }
@@ -108,7 +108,7 @@ public class RecDestFragment extends PeachBaseFragment {
         getRecDestData();
     }
 
-    private void getRecDestData(){
+    private void getRecDestData() {
         TravelApi.getRecDest(new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -148,16 +148,16 @@ public class RecDestFragment extends PeachBaseFragment {
         recDestContainer.setOnItemClickListener(new AbsLayoutContainer.OnItemClickListener() {
             @Override
             public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
-                if(!proxy.isHeader) {
-                    MobclickAgent.onEvent(getActivity(),"event_click_destination_cell");
+                if (!proxy.isHeader) {
+                    MobclickAgent.onEvent(getActivity(), "event_click_destination_cell");
                     RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
                     if (itemData.linkType.equals("html")) {
                         Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
-                        intent.putExtra("title",itemData.title);
-                        intent.putExtra("url",itemData.linkUrl);
+                        intent.putExtra("title", itemData.title);
+                        intent.putExtra("url", itemData.linkUrl);
                         startActivity(intent);
                     } else if (itemData.linkType.equals("app")) {
-                        if(!itemData.itemType.equals(TravelApi.PeachType.NOTE)){
+                        if (!itemData.itemType.equals(TravelApi.PeachType.NOTE)) {
                             IntentUtils.intentToDetail(getActivity(), itemData.itemType, itemData.itemId);
                         } else {
                             TravelNoteBean noteBean = new TravelNoteBean();
@@ -176,13 +176,14 @@ public class RecDestFragment extends PeachBaseFragment {
         private Context context;
         private ArrayList<Section> sections = new ArrayList<Section>();
         private DisplayImageOptions options;
-        public RecDestAdapter(Context context,List<RecDestBean> destBeanList){
+
+        public RecDestAdapter(Context context, List<RecDestBean> destBeanList) {
             this.context = context;
             Section section;
-            for(RecDestBean recDestBean:destBeanList){
+            for (RecDestBean recDestBean : destBeanList) {
                 section = new Section();
                 section.setHeaderData(recDestBean.title);
-                for(RecDestBean.RecDestItem item : recDestBean.contents){
+                for (RecDestBean.RecDestItem item : recDestBean.contents) {
                     section.getData().add(item);
                 }
                 sections.add(section);
@@ -193,7 +194,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public long getItemId(int section, int position) {
-            return section*1000+position;
+            return section * 1000 + position;
         }
 
         @Override
@@ -211,9 +212,9 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public View getHeaderViewForSection(int section, View convertView, ViewGroup parent) {
-                convertView = View.inflate(context, R.layout.row_rec_dest_header,null);
+            convertView = View.inflate(context, R.layout.row_rec_dest_header, null);
             TextView titleTv = (TextView) convertView.findViewById(R.id.tv_rec_title);
-            String title= (String) sections.get(section).getHeaderData();
+            String title = (String) sections.get(section).getHeaderData();
             titleTv.setText(title);
             return convertView;
         }
@@ -233,7 +234,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
         @Override
         public Class[] getViewTypes() {
-            return new Class[]{LinearLayout.class,RelativeLayout.class};
+            return new Class[]{LinearLayout.class, RelativeLayout.class};
         }
 
         @Override
@@ -261,12 +262,12 @@ public class RecDestFragment extends PeachBaseFragment {
         @Override
         public void setDimensions(int measuredWidth, int measuredHeight) {
             super.setDimensions(measuredWidth, measuredHeight);
-            oneTwoItemSide  = measuredWidth / 2;
+            oneTwoItemSide = measuredWidth / 2;
             oneThirdItemSide = measuredWidth / 3;
 
         }
 
-        private HashMap<Object, FreeFlowItem> map=new HashMap<>();
+        private HashMap<Object, FreeFlowItem> map = new HashMap<>();
 
         @Override
         public void prepareLayout() {
@@ -445,7 +446,7 @@ public class RecDestFragment extends PeachBaseFragment {
 
     }
 
-    public  class LayoutParams extends FreeFlowLayout.FreeFlowLayoutParams {
+    public class LayoutParams extends FreeFlowLayout.FreeFlowLayoutParams {
         public int headerWidth = 0;
         public int headerHeight = 0;
 

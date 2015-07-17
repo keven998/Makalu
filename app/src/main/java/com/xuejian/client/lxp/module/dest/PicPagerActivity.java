@@ -24,97 +24,97 @@ import java.util.ArrayList;
 
 public class PicPagerActivity extends PeachBaseActivity {
 
-	
-	private HackyViewPager mViewPager;
-	private ArrayList<ImageBean> imageUrls;
-	
+
+    private HackyViewPager mViewPager;
+    private ArrayList<ImageBean> imageUrls;
+
     @Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
-		imageUrls = getIntent().getParcelableArrayListExtra("imageUrlList");
-		int pos = getIntent().getIntExtra("pos",0);
-		mViewPager.setAdapter(new ImagePagerAdapter());
-		mViewPager.setCurrentItem(pos);
-		if (savedInstanceState != null) {
-		}
-	}
+        imageUrls = getIntent().getParcelableArrayListExtra("imageUrlList");
+        int pos = getIntent().getIntExtra("pos", 0);
+        mViewPager.setAdapter(new ImagePagerAdapter());
+        mViewPager.setCurrentItem(pos);
+        if (savedInstanceState != null) {
+        }
+    }
 
     @Override
     public void onBackPressed() {
         PicPagerActivity.this.finishWithNoAnim();
-        overridePendingTransition(0,R.anim.fade_out);
+        overridePendingTransition(0, R.anim.fade_out);
     }
 
     class ImagePagerAdapter extends PagerAdapter {
 
 
-		@Override
-		public int getCount() {
-			return imageUrls.size();
-		}
+        @Override
+        public int getCount() {
+            return imageUrls.size();
+        }
 
-		@Override
-		public View instantiateItem(ViewGroup container, int position) {
+        @Override
+        public View instantiateItem(ViewGroup container, int position) {
 //			ImageView photoView = new ImageView(container.getContext());
 ////			photoView.setScaleType(ScaleType.FIT_CENTER);
 //			PhotoViewAttacher mAttacher=new PhotoViewAttacher(photoView);
-			// Now just add PhotoView to ViewPager and return it
-			View contentView = View.inflate(mContext, R.layout.item_view_pic, null);
-			
-			PhotoView photeView =(PhotoView) contentView.findViewById(R.id.pv_view);
-			final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
-			ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(),new ImageLoadingListener() {
-				
-				@Override
-				public void onLoadingStarted(String imageUri, View view) {
-					loadingPb.setVisibility(View.VISIBLE);
-					
-				}
-				
-				@Override
-				public void onLoadingFailed(String imageUri, View view,
-						FailReason failReason) {
-					
-				}
-				
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-					loadingPb.setVisibility(View.GONE);					
-				}
-				
-				@Override
-				public void onLoadingCancelled(String imageUri, View view) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			container.addView(contentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            // Now just add PhotoView to ViewPager and return it
+            View contentView = View.inflate(mContext, R.layout.item_view_pic, null);
 
-			photeView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-				
-				@Override
-				public void onViewTap(View view, float x, float y) {
-					PicPagerActivity.this.finishWithNoAnim();
-                    overridePendingTransition(0,R.anim.fade_out);
-					
-				}
-			});
-			return contentView;
-		}
+            PhotoView photeView = (PhotoView) contentView.findViewById(R.id.pv_view);
+            final ProgressBar loadingPb = (ProgressBar) contentView.findViewById(R.id.pb_loading);
+            ImageLoader.getInstance().displayImage(imageUrls.get(position).url, photeView, UILUtils.getDefaultOption(), new ImageLoadingListener() {
 
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView((View) object);
-		}
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    loadingPb.setVisibility(View.VISIBLE);
 
-		@Override
-		public boolean isViewFromObject(View view, Object object) {
-			return view == object;
-		}
+                }
 
-	}
+                @Override
+                public void onLoadingFailed(String imageUri, View view,
+                                            FailReason failReason) {
 
-    
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    loadingPb.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+            container.addView(contentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+            photeView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+
+                @Override
+                public void onViewTap(View view, float x, float y) {
+                    PicPagerActivity.this.finishWithNoAnim();
+                    overridePendingTransition(0, R.anim.fade_out);
+
+                }
+            });
+            return contentView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+    }
+
+
 }

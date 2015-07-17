@@ -101,7 +101,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         findViewById(R.id.btn_add_day).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewDayRouter(routeDayMap.size(),false);
+                addNewDayRouter(routeDayMap.size(), false);
             }
         });
         fragment = new EditPlanFragment();
@@ -244,7 +244,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         }
 
         @Override
-        public View getItemView(final int section,final int position, View convertView, ViewGroup parent) {
+        public View getItemView(final int section, final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_plan_editor, null);
@@ -420,7 +420,7 @@ public class ActivityPlanEditor extends FragmentActivity {
                 if (saveResult.code == 0) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     Intent intent = new Intent(ActivityPlanEditor.this, StrategyActivity.class);
-                    intent.putExtra("id",strategy.id);
+                    intent.putExtra("id", strategy.id);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }

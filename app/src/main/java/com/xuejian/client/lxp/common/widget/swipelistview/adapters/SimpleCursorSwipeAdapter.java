@@ -30,9 +30,9 @@ public abstract class SimpleCursorSwipeAdapter extends SimpleCursorAdapter imple
     public View getView(int position, View convertView, ViewGroup parent) {
         boolean convertViewIsNull = convertView == null;
         View v = super.getView(position, convertView, parent);
-        if(convertViewIsNull){
+        if (convertViewIsNull) {
             mItemManger.initialize(v, position);
-        }else{
+        } else {
             mItemManger.updateConvertView(v, position);
         }
         return v;

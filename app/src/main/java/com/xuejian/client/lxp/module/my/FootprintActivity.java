@@ -29,6 +29,7 @@ public class FootprintActivity extends PeachBaseActivity {
         footprintMap.onCreate(savedInstanceState);
         init();
     }
+
     /**
      * 初始化AMap对象
      */

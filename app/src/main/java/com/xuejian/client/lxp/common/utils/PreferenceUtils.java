@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,69 +20,69 @@ import android.text.TextUtils;
 
 public class PreferenceUtils {
 
-	/**
-	 * 保存Preference的name
-	 */
-	public static final String PREFERENCE_NAME = "saveInfo";
-	private static SharedPreferences mSharedPreferences;
-	private static PreferenceUtils mPreferenceUtils;
-	private static SharedPreferences.Editor editor;
+    /**
+     * 保存Preference的name
+     */
+    public static final String PREFERENCE_NAME = "saveInfo";
+    private static SharedPreferences mSharedPreferences;
+    private static PreferenceUtils mPreferenceUtils;
+    private static SharedPreferences.Editor editor;
 
-	private String SHARED_KEY_SETTING_NOTIFICATION = "shared_key_setting_notification";
-	private String SHARED_KEY_SETTING_SOUND = "shared_key_setting_sound";
-	private String SHARED_KEY_SETTING_VIBRATE = "shared_key_setting_vibrate";
-	private String SHARED_KEY_SETTING_SPEAKER = "shared_key_setting_speaker";
+    private String SHARED_KEY_SETTING_NOTIFICATION = "shared_key_setting_notification";
+    private String SHARED_KEY_SETTING_SOUND = "shared_key_setting_sound";
+    private String SHARED_KEY_SETTING_VIBRATE = "shared_key_setting_vibrate";
+    private String SHARED_KEY_SETTING_SPEAKER = "shared_key_setting_speaker";
 
-	private PreferenceUtils(Context cxt) {
-		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-	}
+    private PreferenceUtils(Context cxt) {
+        mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+    }
 
-	/**
-	 * 单例模式，获取instance实例
-	 * 
-	 * @param cxt
-	 * @return
-	 */
-	public static PreferenceUtils getInstance(Context cxt) {
-		if (mPreferenceUtils == null) {
-			mPreferenceUtils = new PreferenceUtils(cxt);
-		}
-		editor = mSharedPreferences.edit();
-		return mPreferenceUtils;
-	}
+    /**
+     * 单例模式，获取instance实例
+     *
+     * @param cxt
+     * @return
+     */
+    public static PreferenceUtils getInstance(Context cxt) {
+        if (mPreferenceUtils == null) {
+            mPreferenceUtils = new PreferenceUtils(cxt);
+        }
+        editor = mSharedPreferences.edit();
+        return mPreferenceUtils;
+    }
 
-	public void setSettingMsgNotification(boolean paramBoolean) {
-		editor.putBoolean(SHARED_KEY_SETTING_NOTIFICATION, paramBoolean);
-		editor.commit();
-	}
+    public void setSettingMsgNotification(boolean paramBoolean) {
+        editor.putBoolean(SHARED_KEY_SETTING_NOTIFICATION, paramBoolean);
+        editor.commit();
+    }
 
-	public boolean getSettingMsgNotification() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_NOTIFICATION, true);
-	}
+    public boolean getSettingMsgNotification() {
+        return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_NOTIFICATION, true);
+    }
 
-	public void setSettingMsgSound(boolean paramBoolean) {
-		editor.putBoolean(SHARED_KEY_SETTING_SOUND, paramBoolean);
-		editor.commit();
-	}
+    public void setSettingMsgSound(boolean paramBoolean) {
+        editor.putBoolean(SHARED_KEY_SETTING_SOUND, paramBoolean);
+        editor.commit();
+    }
 
-	public boolean getSettingMsgSound() {
+    public boolean getSettingMsgSound() {
 
-		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SOUND, true);
-	}
+        return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SOUND, true);
+    }
 
-	public void setSettingMsgVibrate(boolean paramBoolean) {
-		editor.putBoolean(SHARED_KEY_SETTING_VIBRATE, paramBoolean);
-		editor.commit();
-	}
+    public void setSettingMsgVibrate(boolean paramBoolean) {
+        editor.putBoolean(SHARED_KEY_SETTING_VIBRATE, paramBoolean);
+        editor.commit();
+    }
 
-	public boolean getSettingMsgVibrate() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_VIBRATE, true);
-	}
+    public boolean getSettingMsgVibrate() {
+        return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_VIBRATE, true);
+    }
 
-	public void setSettingMsgSpeaker(boolean paramBoolean) {
-		editor.putBoolean(SHARED_KEY_SETTING_SPEAKER, paramBoolean);
-		editor.commit();
-	}
+    public void setSettingMsgSpeaker(boolean paramBoolean) {
+        editor.putBoolean(SHARED_KEY_SETTING_SPEAKER, paramBoolean);
+        editor.commit();
+    }
 
 
     public static String getCacheData(Context context, String key) {
@@ -90,7 +90,7 @@ public class PreferenceUtils {
     }
 
     public static void cacheData(Context context, String key, String value) {
-        if(!TextUtils.isEmpty(value)){
+        if (!TextUtils.isEmpty(value)) {
             PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key, value).commit();
         }
 

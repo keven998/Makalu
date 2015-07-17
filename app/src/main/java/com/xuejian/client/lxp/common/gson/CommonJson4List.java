@@ -37,46 +37,46 @@ public class CommonJson4List<T> implements Serializable {
         this.type = (Class<T>) getClass();
     }
 
-	public List<T> result;
+    public List<T> result;
 
-	public List<T> getData() {
-		return result;
-	}
+    public List<T> getData() {
+        return result;
+    }
 
-	public void setData(List<T> data) {
-		this.result = result;
-	}
+    public void setData(List<T> data) {
+        this.result = result;
+    }
 
-	public static CommonJson4List fromJson(String json, Class clazz) {
-		Gson gson = new Gson();
-		Type objectType = type(CommonJson4List.class, clazz);
-		return gson.fromJson(json, objectType);
-	}
-	
-	public CommonJson4List<T> fromJsonList(String json, TypeToken<T> token) {
-		Gson gson = new Gson();
-        return gson.fromJson(json, token.getType());  
-	}
+    public static CommonJson4List fromJson(String json, Class clazz) {
+        Gson gson = new Gson();
+        Type objectType = type(CommonJson4List.class, clazz);
+        return gson.fromJson(json, objectType);
+    }
 
-	public String toJson(Class<T> clazz) {
-		Gson gson = new Gson();
-		Type objectType = type(CommonJson4List.class, clazz);
-		return gson.toJson(this, objectType);
-	}
+    public CommonJson4List<T> fromJsonList(String json, TypeToken<T> token) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, token.getType());
+    }
 
-	static ParameterizedType type(final Class raw, final Type... args) {
-		return new ParameterizedType() {
-			public Type getRawType() {
-				return raw;
-			}
+    public String toJson(Class<T> clazz) {
+        Gson gson = new Gson();
+        Type objectType = type(CommonJson4List.class, clazz);
+        return gson.toJson(this, objectType);
+    }
 
-			public Type[] getActualTypeArguments() {
-				return args;
-			}
+    static ParameterizedType type(final Class raw, final Type... args) {
+        return new ParameterizedType() {
+            public Type getRawType() {
+                return raw;
+            }
 
-			public Type getOwnerType() {
-				return null;
-			}
-		};
-	}
+            public Type[] getActualTypeArguments() {
+                return args;
+            }
+
+            public Type getOwnerType() {
+                return null;
+            }
+        };
+    }
 }

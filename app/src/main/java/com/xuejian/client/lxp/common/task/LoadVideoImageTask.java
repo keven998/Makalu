@@ -9,14 +9,14 @@ import android.widget.ImageView;
 
 public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 
-	private ImageView iv = null;
-	String thumbnailPath = null;
-	String thumbnailUrl = null;
-	Activity activity;
-	BaseAdapter adapter;
+    private ImageView iv = null;
+    String thumbnailPath = null;
+    String thumbnailUrl = null;
+    Activity activity;
+    BaseAdapter adapter;
 
-	@Override
-	protected Bitmap doInBackground(Object... params) {
+    @Override
+    protected Bitmap doInBackground(Object... params) {
 //		thumbnailPath = (String) params[0];
 //		thumbnailUrl = (String) params[1];
 //		iv = (ImageView) params[2];
@@ -28,12 +28,12 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 //		} else {
 //			return null;
 //		}
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	protected void onPostExecute(Bitmap result) {
-		super.onPostExecute(result);
+    @Override
+    protected void onPostExecute(Bitmap result) {
+        super.onPostExecute(result);
 //		if (result != null) {
 //			iv.setImageBitmap(result);
 //			ImageCache.getInstance().put(thumbnailPath, result);
@@ -91,6 +91,6 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 //			}
 //
 //		}
-	}
+    }
 
 }

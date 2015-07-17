@@ -1,18 +1,20 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright 2013 Comcast Cable Communications Management, LLC
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package com.xuejian.client.lxp.common.widget.freeflow.layouts;
 
 import android.graphics.Rect;
@@ -26,169 +28,169 @@ import java.util.Map;
 
 public class HGridLayout extends FreeFlowLayoutBase implements FreeFlowLayout {
 
-	private static final String TAG = "HGridLayout";
-	private int itemHeight = -1;
-	private int itemWidth = -1;
-	private Map<Object, FreeFlowItem> proxies = new LinkedHashMap<Object, FreeFlowItem>();
-	private int headerWidth = -1;
-	private int headerHeight = -1;
-	private int cellBufferSize = 0;
-	private int bufferCount = 1;
-	
-	protected FreeFlowLayoutParams layoutParams;
-	
-	@Override
-	public void setLayoutParams(FreeFlowLayoutParams params){
-		if(params.equals(this.layoutParams)){
-			return;
-		}
-		LayoutParams lp = (LayoutParams)params;
-		this.itemWidth = lp.itemWidth;
-		this.itemHeight = lp.itemHeight;
-		this.headerWidth = lp.headerWidth;
-		this.headerHeight = lp.headerHeight;
-		cellBufferSize = bufferCount * cellBufferSize;
-	}
+    private static final String TAG = "HGridLayout";
+    private int itemHeight = -1;
+    private int itemWidth = -1;
+    private Map<Object, FreeFlowItem> proxies = new LinkedHashMap<Object, FreeFlowItem>();
+    private int headerWidth = -1;
+    private int headerHeight = -1;
+    private int cellBufferSize = 0;
+    private int bufferCount = 1;
 
-	public void prepareLayout() {
-		proxies.clear();
+    protected FreeFlowLayoutParams layoutParams;
 
-		int rows = height / itemHeight;
-		int leftStart = 0;
+    @Override
+    public void setLayoutParams(FreeFlowLayoutParams params) {
+        if (params.equals(this.layoutParams)) {
+            return;
+        }
+        LayoutParams lp = (LayoutParams) params;
+        this.itemWidth = lp.itemWidth;
+        this.itemHeight = lp.itemHeight;
+        this.headerWidth = lp.headerWidth;
+        this.headerHeight = lp.headerHeight;
+        cellBufferSize = bufferCount * cellBufferSize;
+    }
 
-		for (int i = 0; i < itemsAdapter.getNumberOfSections(); i++) {
+    public void prepareLayout() {
+        proxies.clear();
 
-			Section s = itemsAdapter.getSection(i);
+        int rows = height / itemHeight;
+        int leftStart = 0;
 
-			if (itemsAdapter.shouldDisplaySectionHeaders()) {
-				
-				FreeFlowItem header = new FreeFlowItem();
-				Rect hframe = new Rect();
-				header.itemSection = i;
-				header.itemIndex = -1;
-				header.isHeader = true;
-				hframe.left = leftStart;
-				hframe.top = 0;
-				hframe.right = leftStart + headerWidth;
-				hframe.bottom = headerHeight;
-				header.frame = hframe;
-				header.data = s.getHeaderData();
-				proxies.put(header.data, header);
+        for (int i = 0; i < itemsAdapter.getNumberOfSections(); i++) {
 
-				leftStart += headerWidth;
-			}
+            Section s = itemsAdapter.getSection(i);
 
-			for (int j = 0; j < s.getDataCount(); j++) {
-				FreeFlowItem descriptor = new FreeFlowItem();
-				Rect frame = new Rect();
-				descriptor.itemSection = i;
-				descriptor.itemIndex = j;
-				frame.left = (j / rows) * itemWidth + leftStart;
-				frame.top = (j % rows) * itemHeight;
-				frame.right = frame.left + itemWidth;
-				frame.bottom = frame.top + itemHeight;
-				descriptor.frame = frame;
-				descriptor.data = s.getDataAtIndex(j);
-				proxies.put(descriptor.data, descriptor);
-			}
-			int mod = 0;
-			if (s.getDataCount() % rows != 0)
-				mod = 1;
-			leftStart += ((s.getDataCount() / rows) + mod) * itemWidth;
-		}
-	}
+            if (itemsAdapter.shouldDisplaySectionHeaders()) {
 
-	/**
-	 * NOTE: In this instance, we subtract/add the cellBufferSize (computed when
-	 * item width is set, defaulted to 1 cell) to add a buffer of cellBufferSize
-	 * to each end of the viewport. <br>
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public LinkedHashMap<Object, FreeFlowItem> getItemProxies(int viewPortLeft, int viewPortTop) {
-		LinkedHashMap<Object, FreeFlowItem> desc = new LinkedHashMap<Object, FreeFlowItem>();
+                FreeFlowItem header = new FreeFlowItem();
+                Rect hframe = new Rect();
+                header.itemSection = i;
+                header.itemIndex = -1;
+                header.isHeader = true;
+                hframe.left = leftStart;
+                hframe.top = 0;
+                hframe.right = leftStart + headerWidth;
+                hframe.bottom = headerHeight;
+                header.frame = hframe;
+                header.data = s.getHeaderData();
+                proxies.put(header.data, header);
 
-		for (FreeFlowItem fd : proxies.values()) {
+                leftStart += headerWidth;
+            }
 
-			if (fd.frame.left + itemWidth > viewPortLeft - cellBufferSize
-					&& fd.frame.left < viewPortLeft + width + cellBufferSize) {
-				desc.put(fd.data, fd);
-			}
-		}
+            for (int j = 0; j < s.getDataCount(); j++) {
+                FreeFlowItem descriptor = new FreeFlowItem();
+                Rect frame = new Rect();
+                descriptor.itemSection = i;
+                descriptor.itemIndex = j;
+                frame.left = (j / rows) * itemWidth + leftStart;
+                frame.top = (j % rows) * itemHeight;
+                frame.right = frame.left + itemWidth;
+                frame.bottom = frame.top + itemHeight;
+                descriptor.frame = frame;
+                descriptor.data = s.getDataAtIndex(j);
+                proxies.put(descriptor.data, descriptor);
+            }
+            int mod = 0;
+            if (s.getDataCount() % rows != 0)
+                mod = 1;
+            leftStart += ((s.getDataCount() / rows) + mod) * itemWidth;
+        }
+    }
 
-		return desc;
-	}
-	
-	@Override
-	public FreeFlowItem getItemAt(float x, float y){
-		return ViewUtils.getItemAt(proxies, (int) x, (int) y);
-	}
+    /**
+     * NOTE: In this instance, we subtract/add the cellBufferSize (computed when
+     * item width is set, defaulted to 1 cell) to add a buffer of cellBufferSize
+     * to each end of the viewport. <br>
+     *
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public LinkedHashMap<Object, FreeFlowItem> getItemProxies(int viewPortLeft, int viewPortTop) {
+        LinkedHashMap<Object, FreeFlowItem> desc = new LinkedHashMap<Object, FreeFlowItem>();
 
-	@Override
-	public boolean horizontalScrollEnabled() {
-		return true;
-	}
+        for (FreeFlowItem fd : proxies.values()) {
 
-	@Override
-	public boolean verticalScrollEnabled() {
-		return false;
-	}
+            if (fd.frame.left + itemWidth > viewPortLeft - cellBufferSize
+                    && fd.frame.left < viewPortLeft + width + cellBufferSize) {
+                desc.put(fd.data, fd);
+            }
+        }
 
-	@Override
-	public int getContentWidth() {
-		if (itemsAdapter == null  || itemsAdapter.getNumberOfSections() <= 0){
-			return 0;
-		}
-		
-		int sectionIndex = itemsAdapter.getNumberOfSections() - 1;
-		Section s = itemsAdapter.getSection(sectionIndex);
+        return desc;
+    }
 
-		if (s.getDataCount() == 0)
-			return 0;
+    @Override
+    public FreeFlowItem getItemAt(float x, float y) {
+        return ViewUtils.getItemAt(proxies, (int) x, (int) y);
+    }
 
-		Object lastFrameData = s.getDataAtIndex(s.getDataCount() - 1);
-		FreeFlowItem fd = proxies.get(lastFrameData);
+    @Override
+    public boolean horizontalScrollEnabled() {
+        return true;
+    }
 
-		return (fd.frame.left + fd.frame.width());
-	}
+    @Override
+    public boolean verticalScrollEnabled() {
+        return false;
+    }
 
-	@Override
-	public int getContentHeight() {
-		if (itemsAdapter == null)
-			return 0;
+    @Override
+    public int getContentWidth() {
+        if (itemsAdapter == null || itemsAdapter.getNumberOfSections() <= 0) {
+            return 0;
+        }
 
-		return height;
-	}
+        int sectionIndex = itemsAdapter.getNumberOfSections() - 1;
+        Section s = itemsAdapter.getSection(sectionIndex);
 
-	@Override
-	public FreeFlowItem getFreeFlowItemForItem(Object data) {
-		return proxies.get(data);
-	}
+        if (s.getDataCount() == 0)
+            return 0;
 
-	public void setBufferCount(int bufferCount) {
-		this.bufferCount = bufferCount;
-	}
-	
-	public static class LayoutParams extends FreeFlowLayoutParams{
-		public int itemWidth = 0;
-		public int itemHeight = 0;
-		public int headerWidth = 0;
-		public int headerHeight = 0;
-		
-		public LayoutParams(int itemWidth, int itemHeight){
-			this.itemWidth = itemWidth;
-			this.itemHeight = itemHeight;
-		}
-		
-		public LayoutParams(int itemWidth, int itemHeight, int headerWidth, int headerHeight){
-			this.itemWidth = itemWidth;
-			this.itemHeight = itemHeight;
-			this.headerWidth = headerWidth;
-			this.headerHeight = headerHeight;
-		}
-		
-	}
+        Object lastFrameData = s.getDataAtIndex(s.getDataCount() - 1);
+        FreeFlowItem fd = proxies.get(lastFrameData);
+
+        return (fd.frame.left + fd.frame.width());
+    }
+
+    @Override
+    public int getContentHeight() {
+        if (itemsAdapter == null)
+            return 0;
+
+        return height;
+    }
+
+    @Override
+    public FreeFlowItem getFreeFlowItemForItem(Object data) {
+        return proxies.get(data);
+    }
+
+    public void setBufferCount(int bufferCount) {
+        this.bufferCount = bufferCount;
+    }
+
+    public static class LayoutParams extends FreeFlowLayoutParams {
+        public int itemWidth = 0;
+        public int itemHeight = 0;
+        public int headerWidth = 0;
+        public int headerHeight = 0;
+
+        public LayoutParams(int itemWidth, int itemHeight) {
+            this.itemWidth = itemWidth;
+            this.itemHeight = itemHeight;
+        }
+
+        public LayoutParams(int itemWidth, int itemHeight, int headerWidth, int headerHeight) {
+            this.itemWidth = itemWidth;
+            this.itemHeight = itemHeight;
+            this.headerWidth = headerWidth;
+            this.headerHeight = headerHeight;
+        }
+
+    }
 
 }

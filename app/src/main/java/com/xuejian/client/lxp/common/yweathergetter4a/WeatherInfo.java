@@ -24,336 +24,337 @@ import java.util.List;
 
 /**
  * A wrapper for all weather information provided by Yahoo weather apis.
+ *
  * @author Zhenghong Wang
  */
 public class WeatherInfo {
-	
-	String mTitle = "";
-	String mDescription = "";
-	String mLanguage = "";
-	String mLastBuildDate = "";
-	String mLocationCity = "";
-	String mLocationRegion = "";
-	String mLocationCountry = "";
-	
-	String mWindChill = "";
-	String mWindDirection = "";
-	String mWindSpeed = "";
-	
-	String mAtmosphereHumidity = "";
-	String mAtmosphereVisibility = "";
-	String mAtmospherePressure = "";
-	String mAtmosphereRising = "";
-	
-	String mAstronomySunrise = "";
-	String mAstronomySunset = "";
-	
-	String mConditionTitle = "";
-	String mConditionLat = "";
-	String mConditionLon = "";
+
+    String mTitle = "";
+    String mDescription = "";
+    String mLanguage = "";
+    String mLastBuildDate = "";
+    String mLocationCity = "";
+    String mLocationRegion = "";
+    String mLocationCountry = "";
+
+    String mWindChill = "";
+    String mWindDirection = "";
+    String mWindSpeed = "";
+
+    String mAtmosphereHumidity = "";
+    String mAtmosphereVisibility = "";
+    String mAtmospherePressure = "";
+    String mAtmosphereRising = "";
+
+    String mAstronomySunrise = "";
+    String mAstronomySunset = "";
+
+    String mConditionTitle = "";
+    String mConditionLat = "";
+    String mConditionLon = "";
+
+    /*
+     * information in tag "yweather:condition"
+     */
+    int mCurrentCode = 0;
+    String mCurrentText = "";
+    int mCurrentTempC = 0;
+    int mCurrentTempF = 0;
+    String mCurrentConditionIconURL = "";
+    Bitmap mCurrentConditionIcon = null;
+    String mCurrentConditionDate = "";
 
 	/*
-	 * information in tag "yweather:condition"
-	 */
-	int mCurrentCode = 0;
-	String mCurrentText = "";
-	int mCurrentTempC = 0;
-	int mCurrentTempF = 0;
-	String mCurrentConditionIconURL = "";
-	Bitmap mCurrentConditionIcon = null;
-	String mCurrentConditionDate = "";
-
-	/*
-	 * information in the first tag "yweather:forecast"
+     * information in the first tag "yweather:forecast"
 	 */
 
 	/*
 	 * information in the second tag "yweather:forecast"
 	 */
-	
-	ForecastInfo mForecastInfo1 = new ForecastInfo();
-	ForecastInfo mForecastInfo2 = new ForecastInfo();
-	ForecastInfo mForecastInfo3 = new ForecastInfo();
-	ForecastInfo mForecastInfo4 = new ForecastInfo();
-	ForecastInfo mForecastInfo5 = new ForecastInfo();
-	private List<ForecastInfo> mForecastInfoList = null;
-	
-	/*
-	 * detail location info from woeid result
-	 */
-	String mWOEIDneighborhood = "";
-	String mWOEIDCounty = "";
-	String mWOEIDCountry = "";
-	String mWOEIDState = "";
-	
-	public WeatherInfo() {
-		mForecastInfoList = new ArrayList<ForecastInfo>();
-		mForecastInfoList.add(mForecastInfo1);
-		mForecastInfoList.add(mForecastInfo2);
-		mForecastInfoList.add(mForecastInfo3);
-		mForecastInfoList.add(mForecastInfo4);
-		mForecastInfoList.add(mForecastInfo5);
-	}
 
-	public List<ForecastInfo> getForecastInfoList() {
-		return mForecastInfoList;
-	}
+    ForecastInfo mForecastInfo1 = new ForecastInfo();
+    ForecastInfo mForecastInfo2 = new ForecastInfo();
+    ForecastInfo mForecastInfo3 = new ForecastInfo();
+    ForecastInfo mForecastInfo4 = new ForecastInfo();
+    ForecastInfo mForecastInfo5 = new ForecastInfo();
+    private List<ForecastInfo> mForecastInfoList = null;
 
-	protected void setForecastInfoList(List<ForecastInfo> forecastInfoList) {
-		mForecastInfoList = forecastInfoList;
-	}
+    /*
+     * detail location info from woeid result
+     */
+    String mWOEIDneighborhood = "";
+    String mWOEIDCounty = "";
+    String mWOEIDCountry = "";
+    String mWOEIDState = "";
 
-	public ForecastInfo getForecastInfo1() {
-		return mForecastInfo1;
-	}
+    public WeatherInfo() {
+        mForecastInfoList = new ArrayList<ForecastInfo>();
+        mForecastInfoList.add(mForecastInfo1);
+        mForecastInfoList.add(mForecastInfo2);
+        mForecastInfoList.add(mForecastInfo3);
+        mForecastInfoList.add(mForecastInfo4);
+        mForecastInfoList.add(mForecastInfo5);
+    }
 
-	protected void setForecastInfo1(ForecastInfo forecastInfo1) {
-		mForecastInfo1 = forecastInfo1;
-	}
+    public List<ForecastInfo> getForecastInfoList() {
+        return mForecastInfoList;
+    }
 
-	public ForecastInfo getForecastInfo2() {
-		return mForecastInfo2;
-	}
+    protected void setForecastInfoList(List<ForecastInfo> forecastInfoList) {
+        mForecastInfoList = forecastInfoList;
+    }
 
-	protected void setForecastInfo2(ForecastInfo forecastInfo2) {
-		mForecastInfo2 = forecastInfo2;
-	}
+    public ForecastInfo getForecastInfo1() {
+        return mForecastInfo1;
+    }
 
-	public ForecastInfo getForecastInfo3() {
-		return mForecastInfo3;
-	}
+    protected void setForecastInfo1(ForecastInfo forecastInfo1) {
+        mForecastInfo1 = forecastInfo1;
+    }
 
-	protected void setForecastInfo3(ForecastInfo forecastInfo3) {
-		mForecastInfo3 = forecastInfo3;
-	}
+    public ForecastInfo getForecastInfo2() {
+        return mForecastInfo2;
+    }
 
-	public ForecastInfo getForecastInfo4() {
-		return mForecastInfo4;
-	}
+    protected void setForecastInfo2(ForecastInfo forecastInfo2) {
+        mForecastInfo2 = forecastInfo2;
+    }
 
-	protected void setForecastInfo4(ForecastInfo forecastInfo4) {
-		mForecastInfo4 = forecastInfo4;
-	}
+    public ForecastInfo getForecastInfo3() {
+        return mForecastInfo3;
+    }
 
-	public ForecastInfo getForecastInfo5() {
-		return mForecastInfo5;
-	}
+    protected void setForecastInfo3(ForecastInfo forecastInfo3) {
+        mForecastInfo3 = forecastInfo3;
+    }
 
-	protected void setForecastInfo5(ForecastInfo forecastInfo5) {
-		mForecastInfo5 = forecastInfo5;
-	}
+    public ForecastInfo getForecastInfo4() {
+        return mForecastInfo4;
+    }
 
-	public String getCurrentConditionDate() {
-		return mCurrentConditionDate;
-	}
-	
-	protected void setCurrentConditionDate(String currentConditionDate) {
-		mCurrentConditionDate = currentConditionDate;
-	}
-	
-	public int getCurrentCode() {
-		return mCurrentCode;
-	}
+    protected void setForecastInfo4(ForecastInfo forecastInfo4) {
+        mForecastInfo4 = forecastInfo4;
+    }
 
-	protected void setCurrentCode(int currentCode) {
-		mCurrentCode = currentCode;
-		mCurrentConditionIconURL = "http://l.yimg.com/a/i/us/we/52/" + currentCode + ".gif";
-	}
+    public ForecastInfo getForecastInfo5() {
+        return mForecastInfo5;
+    }
 
-	public int getCurrentTempF() {
-		return mCurrentTempF;
-	}
+    protected void setForecastInfo5(ForecastInfo forecastInfo5) {
+        mForecastInfo5 = forecastInfo5;
+    }
 
-	protected void setCurrentTempF(int currentTempF) {
-		mCurrentTempF = currentTempF;
-		mCurrentTempC = this.turnFtoC(currentTempF);
-	}
+    public String getCurrentConditionDate() {
+        return mCurrentConditionDate;
+    }
 
-	public int getCurrentTempC() {
-		return mCurrentTempC;
-	}
+    protected void setCurrentConditionDate(String currentConditionDate) {
+        mCurrentConditionDate = currentConditionDate;
+    }
 
-	public String getTitle() {
-		return mTitle;
-	}
+    public int getCurrentCode() {
+        return mCurrentCode;
+    }
 
-	protected void setTitle(String title) {
-		mTitle = title;
-	}
+    protected void setCurrentCode(int currentCode) {
+        mCurrentCode = currentCode;
+        mCurrentConditionIconURL = "http://l.yimg.com/a/i/us/we/52/" + currentCode + ".gif";
+    }
 
-	public String getDescription() {
-		return mDescription;
-	}
+    public int getCurrentTempF() {
+        return mCurrentTempF;
+    }
 
-	protected void setDescription(String description) {
-		mDescription = description;
-	}
+    protected void setCurrentTempF(int currentTempF) {
+        mCurrentTempF = currentTempF;
+        mCurrentTempC = this.turnFtoC(currentTempF);
+    }
 
-	public String getLanguage() {
-		return mLanguage;
-	}
+    public int getCurrentTempC() {
+        return mCurrentTempC;
+    }
 
-	protected void setLanguage(String language) {
-		mLanguage = language;
-	}
+    public String getTitle() {
+        return mTitle;
+    }
 
-	public String getLastBuildDate() {
-		return mLastBuildDate;
-	}
+    protected void setTitle(String title) {
+        mTitle = title;
+    }
 
-	protected void setLastBuildDate(String lastBuildDate) {
-		mLastBuildDate = lastBuildDate;
-	}
+    public String getDescription() {
+        return mDescription;
+    }
 
-	public String getLocationCity() {
-		return mLocationCity;
-	}
+    protected void setDescription(String description) {
+        mDescription = description;
+    }
 
-	protected void setLocationCity(String locationCity) {
-		mLocationCity = locationCity;
-	}
+    public String getLanguage() {
+        return mLanguage;
+    }
 
-	public String getLocationRegion() {
-		return mLocationRegion;
-	}
+    protected void setLanguage(String language) {
+        mLanguage = language;
+    }
 
-	protected void setLocationRegion(String locationRegion) {
-		mLocationRegion = locationRegion;
-	}
+    public String getLastBuildDate() {
+        return mLastBuildDate;
+    }
 
-	public String getLocationCountry() {
-		return mLocationCountry;
-	}
+    protected void setLastBuildDate(String lastBuildDate) {
+        mLastBuildDate = lastBuildDate;
+    }
 
-	protected void setLocationCountry(String locationCountry) {
-		mLocationCountry = locationCountry;
-	}
+    public String getLocationCity() {
+        return mLocationCity;
+    }
 
-	public String getWindChill() {
-		return mWindChill;
-	}
+    protected void setLocationCity(String locationCity) {
+        mLocationCity = locationCity;
+    }
 
-	protected void setWindChill(String windChill) {
-		mWindChill = windChill;
-	}
+    public String getLocationRegion() {
+        return mLocationRegion;
+    }
 
-	public String getWindDirection() {
-		return mWindDirection;
-	}
+    protected void setLocationRegion(String locationRegion) {
+        mLocationRegion = locationRegion;
+    }
 
-	protected void setWindDirection(String windDirection) {
-		mWindDirection = windDirection;
-	}
+    public String getLocationCountry() {
+        return mLocationCountry;
+    }
 
-	public String getWindSpeed() {
-		return mWindSpeed;
-	}
+    protected void setLocationCountry(String locationCountry) {
+        mLocationCountry = locationCountry;
+    }
 
-	protected void setWindSpeed(String windSpeed) {
-		mWindSpeed = windSpeed;
-	}
+    public String getWindChill() {
+        return mWindChill;
+    }
 
-	public String getAtmosphereHumidity() {
-		return mAtmosphereHumidity;
-	}
+    protected void setWindChill(String windChill) {
+        mWindChill = windChill;
+    }
 
-	protected void setAtmosphereHumidity(String atmosphereHumidity) {
-		mAtmosphereHumidity = atmosphereHumidity;
-	}
+    public String getWindDirection() {
+        return mWindDirection;
+    }
 
-	public String getAtmosphereVisibility() {
-		return mAtmosphereVisibility;
-	}
+    protected void setWindDirection(String windDirection) {
+        mWindDirection = windDirection;
+    }
 
-	protected void setAtmosphereVisibility(String atmosphereVisibility) {
-		mAtmosphereVisibility = atmosphereVisibility;
-	}
+    public String getWindSpeed() {
+        return mWindSpeed;
+    }
 
-	public String getAtmospherePressure() {
-		return mAtmospherePressure;
-	}
+    protected void setWindSpeed(String windSpeed) {
+        mWindSpeed = windSpeed;
+    }
 
-	protected void setAtmospherePressure(String atmospherePressure) {
-		mAtmospherePressure = atmospherePressure;
-	}
+    public String getAtmosphereHumidity() {
+        return mAtmosphereHumidity;
+    }
 
-	public String getAtmosphereRising() {
-		return mAtmosphereRising;
-	}
+    protected void setAtmosphereHumidity(String atmosphereHumidity) {
+        mAtmosphereHumidity = atmosphereHumidity;
+    }
 
-	protected void setAtmosphereRising(String atmosphereRising) {
-		mAtmosphereRising = atmosphereRising;
-	}
+    public String getAtmosphereVisibility() {
+        return mAtmosphereVisibility;
+    }
 
-	public String getAstronomySunrise() {
-		return mAstronomySunrise;
-	}
+    protected void setAtmosphereVisibility(String atmosphereVisibility) {
+        mAtmosphereVisibility = atmosphereVisibility;
+    }
 
-	protected void setAstronomySunrise(String astronomySunrise) {
-		mAstronomySunrise = astronomySunrise;
-	}
+    public String getAtmospherePressure() {
+        return mAtmospherePressure;
+    }
 
-	public String getAstronomySunset() {
-		return mAstronomySunset;
-	}
+    protected void setAtmospherePressure(String atmospherePressure) {
+        mAtmospherePressure = atmospherePressure;
+    }
 
-	protected void setAstronomySunset(String astronomySunset) {
-		mAstronomySunset = astronomySunset;
-	}
+    public String getAtmosphereRising() {
+        return mAtmosphereRising;
+    }
 
-	public String getConditionTitle() {
-		return mConditionTitle;
-	}
+    protected void setAtmosphereRising(String atmosphereRising) {
+        mAtmosphereRising = atmosphereRising;
+    }
 
-	protected void setConditionTitle(String conditionTitle) {
-		mConditionTitle = conditionTitle;
-	}
+    public String getAstronomySunrise() {
+        return mAstronomySunrise;
+    }
 
-	public String getConditionLat() {
-		return mConditionLat;
-	}
+    protected void setAstronomySunrise(String astronomySunrise) {
+        mAstronomySunrise = astronomySunrise;
+    }
 
-	protected void setConditionLat(String conditionLat) {
-		mConditionLat = conditionLat;
-	}
+    public String getAstronomySunset() {
+        return mAstronomySunset;
+    }
 
-	public String getConditionLon() {
-		return mConditionLon;
-	}
+    protected void setAstronomySunset(String astronomySunset) {
+        mAstronomySunset = astronomySunset;
+    }
 
-	protected void setConditionLon(String conditionLon) {
-		mConditionLon = conditionLon;
-	}
+    public String getConditionTitle() {
+        return mConditionTitle;
+    }
 
-	public String getCurrentText() {
-		return mCurrentText;
-	}
+    protected void setConditionTitle(String conditionTitle) {
+        mConditionTitle = conditionTitle;
+    }
 
-	protected void setCurrentText(String currentText) {
-		mCurrentText = currentText;
-	}
+    public String getConditionLat() {
+        return mConditionLat;
+    }
 
-	protected void setCurrentTempC(int currentTempC) {
-		mCurrentTempC = currentTempC;
-	}
+    protected void setConditionLat(String conditionLat) {
+        mConditionLat = conditionLat;
+    }
 
-	public String getCurrentConditionIconURL() {
-		return mCurrentConditionIconURL;
-	}
+    public String getConditionLon() {
+        return mConditionLon;
+    }
 
-	public Bitmap getCurrentConditionIcon() {
-		return mCurrentConditionIcon;
-	}
+    protected void setConditionLon(String conditionLon) {
+        mConditionLon = conditionLon;
+    }
 
-	protected void setCurrentConditionIcon(Bitmap mCurrentConditionIcon) {
-		this.mCurrentConditionIcon = mCurrentConditionIcon;
-	}
+    public String getCurrentText() {
+        return mCurrentText;
+    }
 
-	private int turnFtoC(int tempF) {
-		return (tempF - 32) * 5 / 9;
-	}
+    protected void setCurrentText(String currentText) {
+        mCurrentText = currentText;
+    }
 
-	protected void setWOEIDneighborhood(String wOEIDneighborhood) {
+    protected void setCurrentTempC(int currentTempC) {
+        mCurrentTempC = currentTempC;
+    }
+
+    public String getCurrentConditionIconURL() {
+        return mCurrentConditionIconURL;
+    }
+
+    public Bitmap getCurrentConditionIcon() {
+        return mCurrentConditionIcon;
+    }
+
+    protected void setCurrentConditionIcon(Bitmap mCurrentConditionIcon) {
+        this.mCurrentConditionIcon = mCurrentConditionIcon;
+    }
+
+    private int turnFtoC(int tempF) {
+        return (tempF - 32) * 5 / 9;
+    }
+
+    protected void setWOEIDneighborhood(String wOEIDneighborhood) {
         mWOEIDneighborhood = wOEIDneighborhood;
     }
 
@@ -386,95 +387,95 @@ public class WeatherInfo {
     }
 
     public class ForecastInfo {
-		private String mForecastDay;
-		private String mForecastDate;
-		private int mForecastCode;
-		private int mForecastTempHighC;
-		private int mForecastTempLowC;
-		private int mForecastTempHighF;
-		private int mForecastTempLowF;
-		private String mForecastConditionIconURL;
-		private Bitmap mForecastConditionIcon;
-		private String mForecastText;
+        private String mForecastDay;
+        private String mForecastDate;
+        private int mForecastCode;
+        private int mForecastTempHighC;
+        private int mForecastTempLowC;
+        private int mForecastTempHighF;
+        private int mForecastTempLowF;
+        private String mForecastConditionIconURL;
+        private Bitmap mForecastConditionIcon;
+        private String mForecastText;
 
-		public Bitmap getForecastConditionIcon() {
-			return mForecastConditionIcon;
-		}
+        public Bitmap getForecastConditionIcon() {
+            return mForecastConditionIcon;
+        }
 
-		protected void setForecastConditionIcon(Bitmap mForecastConditionIcon) {
-			this.mForecastConditionIcon = mForecastConditionIcon;
-		}
+        protected void setForecastConditionIcon(Bitmap mForecastConditionIcon) {
+            this.mForecastConditionIcon = mForecastConditionIcon;
+        }
 
-		public String getForecastDay() {
-			return mForecastDay;
-		}
+        public String getForecastDay() {
+            return mForecastDay;
+        }
 
-		protected void setForecastDay(String forecastDay) {
-			mForecastDay = forecastDay;
-		}
+        protected void setForecastDay(String forecastDay) {
+            mForecastDay = forecastDay;
+        }
 
-		public String getForecastDate() {
-			return mForecastDate;
-		}
+        public String getForecastDate() {
+            return mForecastDate;
+        }
 
-		protected void setForecastDate(String forecastDate) {
-			mForecastDate = forecastDate;
-		}
+        protected void setForecastDate(String forecastDate) {
+            mForecastDate = forecastDate;
+        }
 
-		public int getForecastCode() {
-			return mForecastCode;
-		}
+        public int getForecastCode() {
+            return mForecastCode;
+        }
 
-		protected void setForecastCode(int forecastCode) {
-			mForecastCode = forecastCode;
-			mForecastConditionIconURL = "http://l.yimg.com/a/i/us/we/52/" + forecastCode + ".gif";
-		}
+        protected void setForecastCode(int forecastCode) {
+            mForecastCode = forecastCode;
+            mForecastConditionIconURL = "http://l.yimg.com/a/i/us/we/52/" + forecastCode + ".gif";
+        }
 
-		public int getForecastTempHighC() {
-			return mForecastTempHighC;
-		}
+        public int getForecastTempHighC() {
+            return mForecastTempHighC;
+        }
 
-		protected void setForecastTempHighC(int forecastTempHighC) {
-			mForecastTempHighC = forecastTempHighC;
-		}
+        protected void setForecastTempHighC(int forecastTempHighC) {
+            mForecastTempHighC = forecastTempHighC;
+        }
 
-		public int getForecastTempLowC() {
-			return mForecastTempLowC;
-		}
+        public int getForecastTempLowC() {
+            return mForecastTempLowC;
+        }
 
-		protected void setForecastTempLowC(int forecastTempLowC) {
-			mForecastTempLowC = forecastTempLowC;
-		}
+        protected void setForecastTempLowC(int forecastTempLowC) {
+            mForecastTempLowC = forecastTempLowC;
+        }
 
-		public int getForecastTempHighF() {
-			return mForecastTempHighF;
-		}
+        public int getForecastTempHighF() {
+            return mForecastTempHighF;
+        }
 
-		protected void setForecastTempHighF(int forecastTempHighF) {
-			mForecastTempHighF = forecastTempHighF;
-			mForecastTempHighC = turnFtoC(forecastTempHighF);
-		}
+        protected void setForecastTempHighF(int forecastTempHighF) {
+            mForecastTempHighF = forecastTempHighF;
+            mForecastTempHighC = turnFtoC(forecastTempHighF);
+        }
 
-		public int getForecastTempLowF() {
-			return mForecastTempLowF;
-		}
+        public int getForecastTempLowF() {
+            return mForecastTempLowF;
+        }
 
-		protected void setForecastTempLowF(int forecastTempLowF) {
-			mForecastTempLowF = forecastTempLowF;
-			mForecastTempLowC = turnFtoC(forecastTempLowF);
-		}
+        protected void setForecastTempLowF(int forecastTempLowF) {
+            mForecastTempLowF = forecastTempLowF;
+            mForecastTempLowC = turnFtoC(forecastTempLowF);
+        }
 
-		public String getForecastConditionIconURL() {
-			return mForecastConditionIconURL;
-		}
+        public String getForecastConditionIconURL() {
+            return mForecastConditionIconURL;
+        }
 
-		public String getForecastText() {
-			return mForecastText;
-		}
+        public String getForecastText() {
+            return mForecastText;
+        }
 
-		protected void setForecastText(String forecastText) {
-			mForecastText = forecastText;
-		}
-		
-	}
+        protected void setForecastText(String forecastText) {
+            mForecastText = forecastText;
+        }
+
+    }
 }

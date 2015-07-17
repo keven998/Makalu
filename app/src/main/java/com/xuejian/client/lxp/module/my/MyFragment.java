@@ -189,8 +189,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (user1 == null) {
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
-                }else{
-                    ArrayList<String> pic=new ArrayList<>();
+                } else {
+                    ArrayList<String> pic = new ArrayList<>();
                     pic.add(user1.getAvatar());
                     showSelectedPics(pic);
                 }
@@ -266,7 +266,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     startActivity(logIntent);
                 } else {
                     Intent tracks_intent = new Intent(getActivity(), StrategyMapActivity.class);
-                    tracks_intent.putExtra("isMyFootPrint",true);
+                    tracks_intent.putExtra("isMyFootPrint", true);
                     tracks_intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
                     tracks_intent.putExtra("title", tvTracksCount.getText().toString());
                     startActivityForResult(tracks_intent, CODE_FOOTPRINT);
@@ -278,7 +278,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         }
     }
 
-    private void showSelectedPics(ArrayList<String> pics){
+    private void showSelectedPics(ArrayList<String> pics) {
         IntentUtils.intentToPicGallery2(getActivity(), pics, 0);
     }
 

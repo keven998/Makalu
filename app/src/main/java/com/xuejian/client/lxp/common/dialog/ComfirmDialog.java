@@ -1,6 +1,4 @@
-                                                                                                                                 package com.xuejian.client.lxp.common.dialog;
-
-
+package com.xuejian.client.lxp.common.dialog;
 
 
 import android.app.Dialog;
@@ -13,60 +11,60 @@ import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
 
-                                                                                                                                 /**
+/**
  * 自定义圆形进度条对话框
  */
-public class ComfirmDialog extends Dialog{
+public class ComfirmDialog extends Dialog {
 
-	private TextView mTitleTv;
-	private TextView mContetTv;
-	private Button mOkBtn;
-	private Button mCancleBtn;
-	
-	public ComfirmDialog(Context context) {
-		super(context, R.style.ComfirmDialog);
-		initView();
-		setCanceledOnTouchOutside(false);
-	}
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-	}
+    private TextView mTitleTv;
+    private TextView mContetTv;
+    private Button mOkBtn;
+    private Button mCancleBtn;
 
-	
-	public void setMessage(String str){
-		mContetTv.setText(str);
-	}
-	public void setTitle(String str){
-		if(!TextUtils.isEmpty(str)){
-			mTitleTv.setText(str);
-			mTitleTv.setVisibility(View.VISIBLE);
-		}
-		
-		
-	}
+    public ComfirmDialog(Context context) {
+        super(context, R.style.ComfirmDialog);
+        initView();
+        setCanceledOnTouchOutside(false);
+    }
 
-	private void initView() {
-		setContentView(R.layout.view_comfirm_dialog);
-		mTitleTv = (TextView) findViewById(R.id.tv_dialog_title);
-		mTitleTv.setVisibility(View.GONE);
-		mContetTv = (TextView) findViewById(R.id.tv_dialog_message);
-		mOkBtn = (Button) findViewById(R.id.btn_ok);
-		mCancleBtn = (Button) findViewById(R.id.btn_cancle);
-	}
-	
-	public void setPositiveButton(String str,View.OnClickListener listener){
-		mOkBtn.setText(str);
-		mOkBtn.setOnClickListener(listener);
-	}
-	
-	public void setNegativeButton(String str,View.OnClickListener listener){
-		mCancleBtn.setText(str);
-		mCancleBtn.setOnClickListener(listener);
-	}
-	
-	
-	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+
+    public void setMessage(String str) {
+        mContetTv.setText(str);
+    }
+
+    public void setTitle(String str) {
+        if (!TextUtils.isEmpty(str)) {
+            mTitleTv.setText(str);
+            mTitleTv.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    private void initView() {
+        setContentView(R.layout.view_comfirm_dialog);
+        mTitleTv = (TextView) findViewById(R.id.tv_dialog_title);
+        mTitleTv.setVisibility(View.GONE);
+        mContetTv = (TextView) findViewById(R.id.tv_dialog_message);
+        mOkBtn = (Button) findViewById(R.id.btn_ok);
+        mCancleBtn = (Button) findViewById(R.id.btn_cancle);
+    }
+
+    public void setPositiveButton(String str, View.OnClickListener listener) {
+        mOkBtn.setText(str);
+        mOkBtn.setOnClickListener(listener);
+    }
+
+    public void setNegativeButton(String str, View.OnClickListener listener) {
+        mCancleBtn.setText(str);
+        mCancleBtn.setOnClickListener(listener);
+    }
+
+
 }

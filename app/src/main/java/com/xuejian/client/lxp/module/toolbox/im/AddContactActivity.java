@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,9 +39,9 @@ import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 public class AddContactActivity extends ChatBaseActivity implements View.OnClickListener {
     private EditText editText;
-//    private LinearLayout searchedUserLayout;
+    //    private LinearLayout searchedUserLayout;
     private TextView nameText;
-//    private Button searchBtn;
+    //    private Button searchBtn;
 //    private ImageView avatar;
 //    private InputMethodManager inputMethodManager;
     private String toAddUsername;
@@ -79,6 +79,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -90,7 +91,8 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
         super.onPause();
 //        MobclickAgent.onPageEnd("page_add_friend");
     }
-    private void initTitleBar(){
+
+    private void initTitleBar() {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
 
 //        titleHeaderBar.getRightTextView().setText(getString(R.string.button_search));
@@ -115,39 +117,39 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
      *
      */
     public void searchContact() {
-        MobclickAgent.onEvent(mContext,"event_search_friend");
+        MobclickAgent.onEvent(mContext, "event_search_friend");
         final String name = editText.getText().toString();
 //        String saveText = searchBtn.getText().toString();
 //        if (getString(R.string.button_search).equals(saveText)) {
-            toAddUsername = name;
-            if (TextUtils.isEmpty(name)) {
+        toAddUsername = name;
+        if (TextUtils.isEmpty(name)) {
 //                startActivity(new Intent(this, IMAlertDialog.class).putExtra("msg", "请输入用户名"));
-                ToastUtil.getInstance(mContext).showToast("你想找谁呢～");
-                return;
-            }
-            // TODO 从服务器获取此contact,如果不存在提示不存在此用户
-            //服务器存在此用户，显示此用户和添加按钮
+            ToastUtil.getInstance(mContext).showToast("你想找谁呢～");
+            return;
+        }
+        // TODO 从服务器获取此contact,如果不存在提示不存在此用户
+        //服务器存在此用户，显示此用户和添加按钮
 //			searchedUserLayout.setVisibility(View.VISIBLE);
 //			nameText.setText(toAddUsername);
-            DialogManager.getInstance().showLoadingDialog(this);
-            UserApi.seachContact(toAddUsername, new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                    CommonJson4List<User> seachResult = CommonJson4List.fromJson(result, User.class);
-                    if (seachResult.code == 0) {
-                        if (seachResult.result.size() > 0) {
-                            User user = seachResult.result.get(0);
-                            /**
-                             * 测试中注销掉
-                             */
+        DialogManager.getInstance().showLoadingDialog(this);
+        UserApi.seachContact(toAddUsername, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson4List<User> seachResult = CommonJson4List.fromJson(result, User.class);
+                if (seachResult.code == 0) {
+                    if (seachResult.result.size() > 0) {
+                        User user = seachResult.result.get(0);
+                        /**
+                         * 测试中注销掉
+                         */
 //                            if (AccountManager.getInstance().getLoginAccount(mContext).getUserId() == (seachResult.result.get(0).getUserId())) {
 //                                ToastUtil.getInstance(mContext).showToast("不能添加自己");
 //                                return;
 //                            }
 
-                            if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).getUserId())) {
-                                ToastUtil.getInstance(mContext).showToast("该用户已是你的好友");
+                        if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).getUserId())) {
+                            ToastUtil.getInstance(mContext).showToast("该用户已是你的好友");
                                /* User imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
                                 imUser.setNickName(user.nickName);
                                 imUser.setAvatar(user.avatar);
@@ -157,38 +159,38 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                                 IMUtils.setUserHead(imUser);
                                 AccountManager.getInstance().getContactList(mContext).put(imUser.getUsername(), imUser);
                                 IMUserRepository.saveContact(mContext, imUser);*/
-                                Intent intent = new Intent(mContext, HisMainPageActivity.class);
-                                intent.putExtra("userId", user.getUserId());
-                                // intent.putExtra("userNick", user.nickName);
-                                startActivity(intent);
-                                return;
-                            }
                             Intent intent = new Intent(mContext, HisMainPageActivity.class);
-                            //intent.putExtra("isSeach",true);
                             intent.putExtra("userId", user.getUserId());
+                            // intent.putExtra("userNick", user.nickName);
                             startActivity(intent);
-                        } else {
-                            ToastUtil.getInstance(mContext).showToast("查无此用户~");
+                            return;
                         }
-
-                    } else if (!TextUtils.isEmpty(seachResult.err.message)) {
-                        ToastUtil.getInstance(mContext).showToast(seachResult.err.message);
+                        Intent intent = new Intent(mContext, HisMainPageActivity.class);
+                        //intent.putExtra("isSeach",true);
+                        intent.putExtra("userId", user.getUserId());
+                        startActivity(intent);
+                    } else {
+                        ToastUtil.getInstance(mContext).showToast("查无此用户~");
                     }
 
+                } else if (!TextUtils.isEmpty(seachResult.err.message)) {
+                    ToastUtil.getInstance(mContext).showToast(seachResult.err.message);
                 }
 
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                    if (!isFinishing())
-                        ToastUtil.getInstance(AddContactActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                }
+            }
 
-                @Override
-                public void doFailure(Exception error, String msg, String method, int code) {
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing())
+                    ToastUtil.getInstance(AddContactActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
 
-                }
-            });
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
 
 //        }
     }
@@ -201,13 +203,13 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_contact:
-                MobclickAgent.onEvent(mContext,"event_add_friend_from_contacts");
+                MobclickAgent.onEvent(mContext, "event_add_friend_from_contacts");
                 Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
                 startActivity(phoneIntent);
                 break;
 
             case R.id.tv_weixin_contacts:
-                MobclickAgent.onEvent(mContext,"event_notify_weichat_friends");
+                MobclickAgent.onEvent(mContext, "event_notify_weichat_friends");
                 ShareUtils.shareAppToWx(this, String.format("我正在用旅行派，搜索: %s 加我", AccountManager.getInstance().getLoginAccount(this).getNickName()));
                 break;
         }

@@ -15,7 +15,7 @@ public class CountryBean implements Parcelable {
     public String enName;
     public String desc;
     public ArrayList<ImageBean> images = new ArrayList<ImageBean>();
-    public ArrayList<LocBean> destinations= new ArrayList<LocBean>();
+    public ArrayList<LocBean> destinations = new ArrayList<LocBean>();
     public boolean isOpened;
 
     @Override

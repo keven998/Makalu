@@ -438,7 +438,6 @@ public class IMMainActivity extends ChatBaseActivity {
 
     /**
      * 保存提示新消息
-     *
      */
     private void notifyNewIviteMessage() {
 

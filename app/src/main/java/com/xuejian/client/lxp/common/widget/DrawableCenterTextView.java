@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 /**
  * drawableLeft与文本一起居中显示
- *
- *
  */
 public class DrawableCenterTextView extends TextView {
 

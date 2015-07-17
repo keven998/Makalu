@@ -74,7 +74,6 @@ public class SlideScaleInOutRightItemAnimator extends BaseItemAnimator {
     }
 
 
-
     protected void animateAddImpl(final RecyclerView.ViewHolder holder) {
         final View view = holder.itemView;
 
@@ -99,11 +98,11 @@ public class SlideScaleInOutRightItemAnimator extends BaseItemAnimator {
         mAddAnimations.add(holder);
     }
 
-    public void setInitialScale(float scaleXY){
-       setInitialScale(scaleXY, scaleXY);
+    public void setInitialScale(float scaleXY) {
+        setInitialScale(scaleXY, scaleXY);
     }
 
-    public void setInitialScale(float scaleX, float scaleY){
+    public void setInitialScale(float scaleX, float scaleY) {
         mInitialScaleX = scaleX;
         mInitialScaleY = scaleY;
 
@@ -111,11 +110,11 @@ public class SlideScaleInOutRightItemAnimator extends BaseItemAnimator {
         mEndScaleY = scaleY;
     }
 
-    public void setEndScale(float scaleXY){
+    public void setEndScale(float scaleXY) {
         setEndScale(scaleXY, scaleXY);
     }
 
-    public void setEndScale(float scaleX, float scaleY){
+    public void setEndScale(float scaleX, float scaleY) {
         mEndScaleX = scaleX;
         mEndScaleY = scaleY;
     }

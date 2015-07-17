@@ -31,6 +31,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
 
     @ViewInject(R.id.title_bar)
     private TitleHeaderBar titleHeaderBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -55,7 +56,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
         titleHeaderBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!CommonUtils.isNetWorkConnected(mContext)){
+                if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
                     return;
                 }
@@ -98,12 +99,12 @@ public class ModifyGenderActivity extends PeachBaseActivity {
 
     }
 
-    private void initData(){
+    private void initData() {
         user = AccountManager.getInstance().getLoginAccount(this);
         gender = user.getGenderDesc();
-        if(gender.equals(User.M)){
+        if (gender.equals(User.M)) {
             genderRg.check(R.id.rb_men);
-        }else{
+        } else {
             genderRg.check(R.id.rb_women);
         }
 

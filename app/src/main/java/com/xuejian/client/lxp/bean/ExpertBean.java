@@ -23,7 +23,7 @@ public class ExpertBean {
     public String zodiac;
     public String memo;
     public String[] roles;
-    public Map<String,ArrayList<LocBean>> tracks;
+    public Map<String, ArrayList<LocBean>> tracks;
     public int guideCnt;
 
 

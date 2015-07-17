@@ -144,14 +144,14 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             }
 
                             @Override
-                            public void doFailure(Exception error, String msg, String method,int code) {
+                            public void doFailure(Exception error, String msg, String method, int code) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                if (code== HttpManager.PERMISSION_ERROR){
+                                if (code == HttpManager.PERMISSION_ERROR) {
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("验证码错误");
-                                }else if (code==HttpManager.RESOURSE_CONFLICT){
+                                } else if (code == HttpManager.RESOURSE_CONFLICT) {
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("手机号已存在");
-                                }
-                                else ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                } else
+                                    ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
                         });
                     } else if (actionCode.equals(UserApi.ValidationCode.FIND_PWD)) {
@@ -193,11 +193,10 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                     public void doFailure(Exception error, String msg, String method, int code) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         System.out.println(code);
-                        if (code== HttpManager.PERMISSION_ERROR){
+                        if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("发送短信过于频繁！");
-                        }
-                        else if (!isFinishing())
+                        } else if (!isFinishing())
                             ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

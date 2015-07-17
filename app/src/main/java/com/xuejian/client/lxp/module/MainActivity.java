@@ -144,7 +144,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             });
             getInLocList();
             getOutCountryList();
-         //   DialogManager.getInstance().showLoadingDialog(this);
+            //   DialogManager.getInstance().showLoadingDialog(this);
         }
     }
 
@@ -378,7 +378,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
-        if (!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this,m.getSenderId()+"")){
+        if (!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
             vibrator.vibrate(500);
         }
         //  notifyNewMessage(m);
@@ -387,7 +387,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     public void onCMDMessageArrive(MessageBean m) {
         try {
-            if (m.getType()==100) {
+            if (m.getType() == 100) {
                 String cmd = m.getMessage();
                 JSONObject object = new JSONObject(cmd);
                 String action = object.getString("action");
@@ -411,7 +411,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     default:
                         break;
                 }
-            }else if (m.getType()==200){
+            } else if (m.getType() == 200) {
 
             }
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 /**
  * ViewHelper.java
  * StickyScrollView
- * 
+ * <p>
  * Created by likebamboo on 2014-4-21
  * Copyright (c) 1998-2014 https://github.com/likebamboo All rights reserved.
  */
@@ -16,7 +16,7 @@ import com.nineoldandroids.view.animation.AnimatorProxy;
 
 /**
  * 动画代理，来源于NineOldAndroids
- * 
+ *
  * @author likebamboo
  */
 public final class ViewHelper {

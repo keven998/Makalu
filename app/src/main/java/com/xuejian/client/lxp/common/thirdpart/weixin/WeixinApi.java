@@ -13,18 +13,20 @@ import com.xuejian.client.lxp.common.thirdpart.SnsAccountsUtils;
 public class WeixinApi {
     private WeixinAuthListener mListener;
     private static WeixinApi instance;
-    public static WeixinApi getInstance(){
-        if(instance==null){
+
+    public static WeixinApi getInstance() {
+        if (instance == null) {
             instance = new WeixinApi();
         }
         return instance;
     }
-    public WeixinAuthListener getAuthListener(){
-        return  mListener;
+
+    public WeixinAuthListener getAuthListener() {
+        return mListener;
     }
 
 
-    public  void auth(Activity activity,WeixinAuthListener listener) {
+    public void auth(Activity activity, WeixinAuthListener listener) {
         mListener = listener;
         IWXAPI wxAPi = WXAPIFactory.createWXAPI(activity, SnsAccountsUtils.WeiXinConstants.APP_ID);
         // send oauth request
@@ -34,7 +36,7 @@ public class WeixinApi {
         wxAPi.sendReq(req);
     }
 
-    public interface WeixinAuthListener{
+    public interface WeixinAuthListener {
         void onComplete(String code);
 
         void onError(int errCode);

@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,66 +33,64 @@ import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
 import java.io.File;
 
 public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
-	private ImageView iv = null;
-	String localFullSizePath = null;
-	String thumbnailPath = null;
-	String remotePath = null;
-	MessageBean message = null;
-	String chatType;
-	Activity activity;
-	private TextView tv = null;
-	@Override
-	protected Bitmap doInBackground(Object... args) {
-		thumbnailPath = (String) args[0];
-		localFullSizePath = (String) args[1];
-		remotePath = (String) args[2];
-		chatType = (String) args[3];
-		iv = (ImageView) args[4];
-		// if(args[2] != null) {
-		activity = (Activity) args[5];
-		// }
-		message = (MessageBean) args[6];
-		tv=(TextView)args[7];
-		File file = new File(thumbnailPath);
-		if (message.getType()== Config.LOC_MSG){
-			if (file.exists()) {
-				return ImageUtils.decodeScaleImage(thumbnailPath, 320, 320);
-			}
-			else return null;
-		}
-		else if (file.exists()) {
-			return ImageUtils.decodeScaleImage(thumbnailPath, 160, 160);
-		} else {
-			return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
-		}
-	}
+    private ImageView iv = null;
+    String localFullSizePath = null;
+    String thumbnailPath = null;
+    String remotePath = null;
+    MessageBean message = null;
+    String chatType;
+    Activity activity;
+    private TextView tv = null;
 
-	protected void onPostExecute(Bitmap image) {
-		if (message.getType()==Config.LOC_MSG){
-			if (image!=null){
-				tv.setBackgroundDrawable(new BitmapDrawable(image));
-				ImageCache.getInstance().put(thumbnailPath, image);
-			}
-		}
-		else if (image != null) {
-			iv.setImageBitmap(image);
-			ImageCache.getInstance().put(thumbnailPath, image);
-			iv.setClickable(true);
-			iv.setTag(thumbnailPath);
-			iv.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (thumbnailPath != null) {
+    @Override
+    protected Bitmap doInBackground(Object... args) {
+        thumbnailPath = (String) args[0];
+        localFullSizePath = (String) args[1];
+        remotePath = (String) args[2];
+        chatType = (String) args[3];
+        iv = (ImageView) args[4];
+        // if(args[2] != null) {
+        activity = (Activity) args[5];
+        // }
+        message = (MessageBean) args[6];
+        tv = (TextView) args[7];
+        File file = new File(thumbnailPath);
+        if (message.getType() == Config.LOC_MSG) {
+            if (file.exists()) {
+                return ImageUtils.decodeScaleImage(thumbnailPath, 320, 320);
+            } else return null;
+        } else if (file.exists()) {
+            return ImageUtils.decodeScaleImage(thumbnailPath, 160, 160);
+        } else {
+            return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
+        }
+    }
 
-						Intent intent = new Intent(activity, ShowBigImage.class);
-						File file = new File(localFullSizePath);
-						if (file.exists()) {
-							Uri uri = Uri.fromFile(file);
-							intent.putExtra("uri", uri);
-						} else {
+    protected void onPostExecute(Bitmap image) {
+        if (message.getType() == Config.LOC_MSG) {
+            if (image != null) {
+                tv.setBackgroundDrawable(new BitmapDrawable(image));
+                ImageCache.getInstance().put(thumbnailPath, image);
+            }
+        } else if (image != null) {
+            iv.setImageBitmap(image);
+            ImageCache.getInstance().put(thumbnailPath, image);
+            iv.setClickable(true);
+            iv.setTag(thumbnailPath);
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (thumbnailPath != null) {
+
+                        Intent intent = new Intent(activity, ShowBigImage.class);
+                        File file = new File(localFullSizePath);
+                        if (file.exists()) {
+                            Uri uri = Uri.fromFile(file);
+                            intent.putExtra("uri", uri);
+                        } else {
                             intent.putExtra("downloadFilePath", localFullSizePath);
-							intent.putExtra("remotepath", remotePath);
-						}
+                            intent.putExtra("remotepath", remotePath);
+                        }
 //						if (message.getChatType() != ChatType.Chat) {
 //							// delete the image from server after download
 //						}
@@ -105,13 +103,12 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 //								e.printStackTrace();
 //							}
 //						}
-                        ((BaseActivity)activity).startActivityWithNoAnim(intent);
-					}
-				}
-			});
-		}
-		else {
-			if (message.getStatus() == 2) {
+                        ((BaseActivity) activity).startActivityWithNoAnim(intent);
+                    }
+                }
+            });
+        } else {
+            if (message.getStatus() == 2) {
 //				if (CommonUtils.isNetWorkConnected(activity)) {
 //					new Thread(new Runnable() {
 //
@@ -121,13 +118,13 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 //						}
 //					}).start();
 //				}
-			}
+            }
 
-		}
-	}
+        }
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
 }

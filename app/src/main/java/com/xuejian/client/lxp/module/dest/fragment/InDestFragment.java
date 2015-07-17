@@ -71,8 +71,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     private boolean isClickable;
     OnDestActionListener mOnDestActionListener;
 
-    public InDestFragment(boolean isClickable){
-        this.isClickable=isClickable;
+    public InDestFragment(boolean isClickable) {
+        this.isClickable = isClickable;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 return new InCityViewHolder();
             }
         });
-        if(isClickable) {
+        if (isClickable) {
             //in_out_search.setVisibility(View.VISIBLE);
             View view = new View(getActivity());
             view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LocalDisplay.dp2px(50)));
@@ -117,7 +117,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             if (locListResult.code == 0) {
                 bindInView(locListResult.result);
             }
-        }else{
+        } else {
             box.showLoadingLayout();
         }
         getInLocList();
@@ -173,7 +173,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         ArrayList<LocBean> allSelectLoc = null;
         if (getActivity() != null && isClickable) {
             allSelectLoc = ((SelectDestActivity) getActivity()).getAllSelectedLoc();
-        }else if(getActivity() != null && !isClickable){
+        } else if (getActivity() != null && !isClickable) {
             allSelectLoc = ((MyFootPrinterActivity) getActivity()).getAllSelectedLoc();
         }
         incityList.clear();
@@ -181,7 +181,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             InDestBean inDestBean = new InDestBean();
             inDestBean.section = groupLocBean.zhName;
             inDestBean.locList = new ArrayList<>();
-            for(LocBean locBean:groupLocBean.destinations){
+            for (LocBean locBean : groupLocBean.destinations) {
                 if (allSelectLoc != null && allSelectLoc.contains(locBean)) {
                     locBean.isAdded = true;
                 }
@@ -205,7 +205,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             incityList.add(inDestBean);
 
 
-
         }
         inCityAdapter.getDataList().clear();
         inCityAdapter.getDataList().addAll(incityList);
@@ -213,27 +212,27 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     }
 
     @Override
-    public void onDestAdded(LocBean locBean,boolean isEdit,String type) {
-            for (InDestBean inDestBean : incityList) {
-                for (LocBean kLocBean : inDestBean.locList) {
-                    if (locBean.id.equals(kLocBean.id)) {
-                        kLocBean.isAdded = true;
-                    }
+    public void onDestAdded(LocBean locBean, boolean isEdit, String type) {
+        for (InDestBean inDestBean : incityList) {
+            for (LocBean kLocBean : inDestBean.locList) {
+                if (locBean.id.equals(kLocBean.id)) {
+                    kLocBean.isAdded = true;
                 }
             }
-            inCityAdapter.notifyDataSetChanged();
+        }
+        inCityAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onDestRemoved(LocBean locBean,String type) {
-            for (InDestBean inDestBean : incityList) {
-                for (LocBean kLocBean : inDestBean.locList) {
-                    if (locBean.id.equals(kLocBean.id)) {
-                        kLocBean.isAdded = false;
-                    }
+    public void onDestRemoved(LocBean locBean, String type) {
+        for (InDestBean inDestBean : incityList) {
+            for (LocBean kLocBean : inDestBean.locList) {
+                if (locBean.id.equals(kLocBean.id)) {
+                    kLocBean.isAdded = false;
                 }
             }
-            inCityAdapter.notifyDataSetChanged();
+        }
+        inCityAdapter.notifyDataSetChanged();
     }
 
    /* private class InCityAdapter2 extends BaseSectionAdapter {
@@ -327,9 +326,11 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             return mInDestBeanList.size();
         }
 
-        *//**
-         * 根据分类的首字母获取其第一次出现该首字母的位置
-         *//*
+        */
+
+    /**
+     * 根据分类的首字母获取其第一次出现该首字母的位置
+     *//*
         public int getPositionForIndex(String indexStr) {
             for (int i = 0; i < getSectionCount(); i++) {
                 String sortStr = mInDestBeanList.get(i).section;
@@ -463,37 +464,37 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 des_box_fl.setLayoutParams(lytp);
                 cityNameTv.setText(bean.zhName);
                 ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/06ba9e1897fe8a2da0114ea7e6b0fcd8?imageView2/2/w/960", desBgImage, poptions);
-                    if (!bean.isAdded) {
-                        //if(isClickable) {
-                            addIcon.setVisibility(View.GONE);
-                            //cityNameTv.setCompoundDrawables(add, null, null, null);
-                       // }
-                    } else {
-                       // if(isClickable) {
-                            addIcon.setVisibility(View.VISIBLE);
-                           // cityNameTv.setCompoundDrawables(selected, null, null, null);
-                       // }
-                    }
-                    contentView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            bean.isAdded = !bean.isAdded;
-                            if (mOnDestActionListener != null) {
-                                if (bean.isAdded) {
-                                    addIcon.setVisibility(View.VISIBLE);
-                                    //cityNameTv.setCompoundDrawables(selected, null, null, null);
+                if (!bean.isAdded) {
+                    //if(isClickable) {
+                    addIcon.setVisibility(View.GONE);
+                    //cityNameTv.setCompoundDrawables(add, null, null, null);
+                    // }
+                } else {
+                    // if(isClickable) {
+                    addIcon.setVisibility(View.VISIBLE);
+                    // cityNameTv.setCompoundDrawables(selected, null, null, null);
+                    // }
+                }
+                contentView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bean.isAdded = !bean.isAdded;
+                        if (mOnDestActionListener != null) {
+                            if (bean.isAdded) {
+                                addIcon.setVisibility(View.VISIBLE);
+                                //cityNameTv.setCompoundDrawables(selected, null, null, null);
 
-                                    mOnDestActionListener.onDestAdded(bean,true,"in");
-                                } else {
-                                    addIcon.setVisibility(View.GONE);
-                                    //cityNameTv.setCompoundDrawables(add, null, null, null);
+                                mOnDestActionListener.onDestAdded(bean, true, "in");
+                            } else {
+                                addIcon.setVisibility(View.GONE);
+                                //cityNameTv.setCompoundDrawables(add, null, null, null);
 
-                                    mOnDestActionListener.onDestRemoved(bean,"in");
-                                }
+                                mOnDestActionListener.onDestRemoved(bean, "in");
                             }
-                            inCityAdapter.notifyDataSetChanged();
                         }
-                    });
+                        inCityAdapter.notifyDataSetChanged();
+                    }
+                });
                 cityListFl.addView(contentView);
             }
         }

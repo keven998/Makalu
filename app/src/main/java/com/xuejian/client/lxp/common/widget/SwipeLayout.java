@@ -129,18 +129,21 @@ public class SwipeLayout extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(viewDragHelper.shouldInterceptTouchEvent(ev)) {
+        if (viewDragHelper.shouldInterceptTouchEvent(ev)) {
             return true;
         }
         return super.onInterceptTouchEvent(ev);
     }
+
     private boolean shouldAllowSwipe() {
         if (mCurrentDirectionIndex == mLeftIndex && !mLeftSwipeEnabled) return false;
         if (mCurrentDirectionIndex == mRightIndex && !mRightSwipeEnabled) return false;
         if (mCurrentDirectionIndex == mTopIndex && !mTopSwipeEnabled) return false;
         return !(mCurrentDirectionIndex == mBottomIndex && !mBottomSwipeEnabled);
     }
+
     private float sX = -1, sY = -1;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getActionMasked();
@@ -175,7 +178,7 @@ public class SwipeLayout extends LinearLayout {
     @Override
     public void computeScroll() {
         super.computeScroll();
-        if(viewDragHelper.continueSettling(true)) {
+        if (viewDragHelper.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
     }

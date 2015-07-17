@@ -124,7 +124,7 @@ public class PoiAdapter extends BaseAdapter {
                     spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                     spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
                     //spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
-                }else {
+                } else {
                     spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -135,7 +135,7 @@ public class PoiAdapter extends BaseAdapter {
                     poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.theme_button_selctor);
                     poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
                     //poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
-                }else {
+                } else {
                     poiViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 }
             }
@@ -155,17 +155,17 @@ public class PoiAdapter extends BaseAdapter {
                 //spotViewHolder.mSpotImageIv.setImageDrawable(null);
             }
             spotViewHolder.mTvSpotName.setText(poiDetailBean.zhName);
-           // spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
-            if(TextUtils.isEmpty(poiDetailBean.timeCostDesc)){
+            // spotViewHolder.mSpotAddressTv.setText(poiDetailBean.address);
+            if (TextUtils.isEmpty(poiDetailBean.timeCostDesc)) {
                 spotViewHolder.mSpotCosttimeTv.setText("");
-            }else{
+            } else {
                 spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
             }
 
             //spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
-            if(!poiDetailBean.getFormatRank().equals("0")){
+            if (!poiDetailBean.getFormatRank().equals("0")) {
                 spotViewHolder.mSpotRankTv.setText(poiDetailBean.getFormatRank());
-            }else {
+            } else {
                 spotViewHolder.mSpotRankTv.setText("N");
             }
             if (mIsCanAdd) {
@@ -177,7 +177,7 @@ public class PoiAdapter extends BaseAdapter {
                     spotViewHolder.mBtnAdd.setText(mAddStr);
                     spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_normal_shape_radius_4);
                 }
-                 spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
+                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (poiDetailBean.hasAdded) {
@@ -186,7 +186,7 @@ public class PoiAdapter extends BaseAdapter {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
-                            MobclickAgent.onEvent(mContext,"event_add_desination_as_schedule");
+                            MobclickAgent.onEvent(mContext, "event_add_desination_as_schedule");
                             poiDetailBean.hasAdded = true;
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
@@ -233,7 +233,7 @@ public class PoiAdapter extends BaseAdapter {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
-                            MobclickAgent.onEvent(mContext,"event_add_desination_as_schedule");
+                            MobclickAgent.onEvent(mContext, "event_add_desination_as_schedule");
                             poiDetailBean.hasAdded = true;
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
@@ -265,10 +265,10 @@ public class PoiAdapter extends BaseAdapter {
                 //poiViewHolder.mPoiImageIv.setImageDrawable(null);
             }
 //            poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
-            if(!poiDetailBean.getFormatRank().equals("0")){
+            if (!poiDetailBean.getFormatRank().equals("0")) {
 //                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
                 poiViewHolder.mPoiRankTv.setText(poiDetailBean.getFormatRank());
-            }else {
+            } else {
                 poiViewHolder.mPoiRankTv.setText("N");
             }
 //            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
@@ -299,7 +299,7 @@ public class PoiAdapter extends BaseAdapter {
         CheckedTextView mBtnAdd;
         @InjectView(R.id.iv_poi_img)
         ImageView mSpotImageIv;
-//        @InjectView(R.id.spot_address_tv)
+        //        @InjectView(R.id.spot_address_tv)
 //        TextView mSpotAddressTv;
         @InjectView(R.id.tv_poi_time)
         TextView mSpotCosttimeTv;
@@ -323,11 +323,11 @@ public class PoiAdapter extends BaseAdapter {
         CheckedTextView mBtnAdd;
         @InjectView(R.id.iv_poi_img)
         ImageView mPoiImageIv;
-//        @InjectView(R.id.poi_address_tv)
+        //        @InjectView(R.id.poi_address_tv)
 //        TextView mPoiAddressTv;
         @InjectView(R.id.tv_poi_time)
         TextView mPoiPriceTv;
-//        @InjectView(R.id.poi_rating)
+        //        @InjectView(R.id.poi_rating)
 //        RatingBar mPoiRating;
         @InjectView(R.id.tv_poi_level)
         TextView mPoiRankTv;

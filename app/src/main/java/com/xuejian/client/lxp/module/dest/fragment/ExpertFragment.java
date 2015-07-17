@@ -49,14 +49,14 @@ public class ExpertFragment extends PeachBaseFragment {
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> ids = new ArrayList<>();
 
-    public ExpertFragment(int pos){
-        this.pos=pos;
+    public ExpertFragment(int pos) {
+        this.pos = pos;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView= inflater.inflate(R.layout.expert_des_box,container,false);
-        fl = (FlowLayout)rootView.findViewById(R.id.fl_expert_city_list);
+        View rootView = inflater.inflate(R.layout.expert_des_box, container, false);
+        fl = (FlowLayout) rootView.findViewById(R.id.fl_expert_city_list);
         /*expertDesAdapter = new ExpertDesAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -67,24 +67,24 @@ public class ExpertFragment extends PeachBaseFragment {
         return rootView;
     }
 
-    public void initData(){
+    public void initData() {
         getData(pos);
     }
 
-    public void bindView(ArrayList<String> names,ArrayList<String> ids){
+    public void bindView(ArrayList<String> names, ArrayList<String> ids) {
         fl.removeAllViews();
-        for (int i=0;i<names.size();i++) {
+        for (int i = 0; i < names.size(); i++) {
             View contentView = View.inflate(getActivity(), R.layout.des_text_style, null);
             final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
             cityNameTv.setText(names.get(i));
-            final String id=ids.get(i);
+            final String id = ids.get(i);
             cityNameTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //进入达人列表
                     Intent intent = new Intent();
-                    intent.putExtra("locId",id);
-                    getActivity().setResult(Activity.RESULT_OK,intent);
+                    intent.putExtra("locId", id);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
                     getActivity().finish();
                 }
             });
@@ -93,56 +93,56 @@ public class ExpertFragment extends PeachBaseFragment {
     }
 
 
-    public void getData(int position){
-        boolean flag=false;
-        if(position==0){
-            flag=false;
-        }else if(position==1){
-            flag=true;
+    public void getData(int position) {
+        boolean flag = false;
+        if (position == 0) {
+            flag = false;
+        } else if (position == 1) {
+            flag = true;
         }
         DialogManager.getInstance().showModelessLoadingDialog(getActivity());
-            UserApi.searchExpertFootPrint(flag, new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
+        UserApi.searchExpertFootPrint(flag, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
 
-                }
+            }
 
-                @Override
-                public void doSuccess(String result, String method, Header[] headers) {
-                    DialogManager.getInstance().dissMissModelessLoadingDialog();
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(result);
-                        if (jsonObject.getInt("code") == 0) {
-                            JSONObject object = (JSONObject) jsonObject.get("result");
-                            Iterator iterator = object.keys();
-                            while (iterator.hasNext()) {
-                                String name = String.valueOf(iterator.next());
-                                JSONArray value = object.getJSONArray(name);
-                                for (int i = 0; i < value.length(); i++) {
-                                    names.add(value.getJSONObject(i).getString("zhName"));
-                                    ids.add(value.getJSONObject(i).getString("id"));
-                                }
+            @Override
+            public void doSuccess(String result, String method, Header[] headers) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject.getInt("code") == 0) {
+                        JSONObject object = (JSONObject) jsonObject.get("result");
+                        Iterator iterator = object.keys();
+                        while (iterator.hasNext()) {
+                            String name = String.valueOf(iterator.next());
+                            JSONArray value = object.getJSONArray(name);
+                            for (int i = 0; i < value.length(); i++) {
+                                names.add(value.getJSONObject(i).getString("zhName"));
+                                ids.add(value.getJSONObject(i).getString("id"));
                             }
-                            bindView(names, ids);
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        bindView(names, ids);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+            }
 
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-                    DialogManager.getInstance().dissMissModelessLoadingDialog();
-                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
 //
-                }
+            }
 
-                @Override
-                public void doFailure(Exception error, String msg, String method, int code) {
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
 
-                }
-            });
+            }
+        });
     }
 
     private class ExpertDesAdapter extends ListViewDataAdapter<InDestBean> implements SectionIndexer {
@@ -160,7 +160,6 @@ public class ExpertFragment extends PeachBaseFragment {
             super(viewHolderCreator);
             initSections();
         }
-
 
 
         @Override
@@ -209,8 +208,8 @@ public class ExpertFragment extends PeachBaseFragment {
 
     private class InExpertDesHolder extends ViewHolderBase<InDestBean> {
         //InDestBean作为返回的数据传入
-        String[] in={"北京","北京","北京","北京","北京","北京","北京"};
-        String[] out={"美国","美国","美国","美国","美国","美国","美国"};
+        String[] in = {"北京", "北京", "北京", "北京", "北京", "北京", "北京"};
+        String[] out = {"美国", "美国", "美国", "美国", "美国", "美国", "美国"};
 
 
         @Override
@@ -222,28 +221,28 @@ public class ExpertFragment extends PeachBaseFragment {
         public void showData(int position, final InDestBean itemData) {
             fl.removeAllViews();
             //for (final LocBean bean : itemData.locList) {
-                View contentView = View.inflate(getActivity(), R.layout.des_text_style, null);
-                final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
-                if(pos==0){
+            View contentView = View.inflate(getActivity(), R.layout.des_text_style, null);
+            final TextView cityNameTv = (TextView) contentView.findViewById(R.id.tv_cell_name);
+            if (pos == 0) {
 
-                    cityNameTv.setText(in[position]);
-                }else if(pos==1){
-                    cityNameTv.setText(out[position]);
+                cityNameTv.setText(in[position]);
+            } else if (pos == 1) {
+                cityNameTv.setText(out[position]);
+            }
+
+            //cityNameTv.setChecked(bean.isAdded);
+
+            /// 这一步必须要做,否则不会显示.
+            cityNameTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //进入达人列表
                 }
-
-                    //cityNameTv.setChecked(bean.isAdded);
-
-                    /// 这一步必须要做,否则不会显示.
-                    cityNameTv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //进入达人列表
-                        }
-                    });
+            });
 
 
-                fl.addView(contentView);
-           // }
+            fl.addView(contentView);
+            // }
         }
     }
 

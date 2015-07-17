@@ -76,9 +76,9 @@ public class SearchPoiActivity extends PeachBaseActivity {
         titleHeaderBar.setLeftOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hasAddList==null){
+                if (hasAddList == null) {
                     finish();
-                }else{
+                } else {
                     Intent intent = new Intent();
                     intent.putParcelableArrayListExtra("poiList", hasAddList);
                     intent.putExtra("dayIndex", dayIndex);
@@ -98,9 +98,9 @@ public class SearchPoiActivity extends PeachBaseActivity {
         mType = getIntent().getStringExtra("type");
         mKeyWord = getIntent().getStringExtra("keyword");
         mLvPoiList.doPullRefreshing(true, 500);
-        if(hasAddList==null){
+        if (hasAddList == null) {
             mPoiAdapter = new PoiAdapter(mContext, false);
-        }else{
+        } else {
             mPoiAdapter = new PoiAdapter(mContext, true);
         }
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
@@ -164,7 +164,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
         }
         boolean hasMore = true;
         if (type.equals("vs")) {
-            if(hasAddList!=null){
+            if (hasAddList != null) {
                 for (PoiDetailBean detailBean : result.vs) {
                     detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
@@ -174,7 +174,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
                 hasMore = false;
             }
         } else if (type.equals("hotel")) {
-            if(hasAddList!=null) {
+            if (hasAddList != null) {
                 for (PoiDetailBean detailBean : result.hotel) {
                     detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
@@ -184,7 +184,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
                 hasMore = false;
             }
         } else if (type.equals("restaurant")) {
-            if(hasAddList!=null) {
+            if (hasAddList != null) {
                 for (PoiDetailBean detailBean : result.restaurant) {
                     detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
@@ -194,7 +194,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
                 hasMore = false;
             }
         } else if (type.equals("shopping")) {
-            if(hasAddList!=null) {
+            if (hasAddList != null) {
                 for (PoiDetailBean detailBean : result.shopping) {
                     detailBean.hasAdded = hasAddList.contains(detailBean);
                 }

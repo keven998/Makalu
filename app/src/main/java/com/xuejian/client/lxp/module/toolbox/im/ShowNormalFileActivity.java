@@ -9,14 +9,14 @@ import com.xuejian.client.lxp.base.ChatBaseActivity;
 import java.io.File;
 
 public class ShowNormalFileActivity extends ChatBaseActivity {
-	private ProgressBar progressBar;
-	private File file;
+    private ProgressBar progressBar;
+    private File file;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_show_file);
-		progressBar = (ProgressBar) findViewById(R.id.progressBar);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_show_file);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 //		final FileMessageBody messageBody = getIntent().getParcelableExtra("msgbody");
 //		file = new File(messageBody.getLocalUrl());
@@ -28,10 +28,10 @@ public class ShowNormalFileActivity extends ChatBaseActivity {
 //			maps.put("share-secret", messageBody.getSecret());
 //		}
 //		maps.put("Accept", "application/octet-stream");
-		
-		//下载文件
-		new Thread(new Runnable() {
-			public void run() {
+
+        //下载文件
+        new Thread(new Runnable() {
+            public void run() {
 //				HttpFileManager fileManager = new HttpFileManager(ShowNormalFileActivity.this, EMChatConfig.getInstance().getStorageUrl());
 //				fileManager.downloadFile(messageBody.getRemoteUrl(), messageBody.getLocalUrl(), EMChatConfig.getInstance().APPKEY,maps,
 //						new CloudOperationCallback() {
@@ -70,8 +70,8 @@ public class ShowNormalFileActivity extends ChatBaseActivity {
 //							}
 //						});
 
-			}
-		}).start();
-		
-	}
+            }
+        }).start();
+
+    }
 }

@@ -15,7 +15,7 @@ import com.xuejian.client.lxp.base.ChatBaseActivity;
 
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- * 
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -27,70 +27,70 @@ import com.xuejian.client.lxp.base.ChatBaseActivity;
 
 /**
  * 诊断界面；在此上传错误日志
- * 
+ *
  * @author lyuzhao
- * 
+ *
  */
 public class DiagnoseActivity extends ChatBaseActivity implements OnClickListener {
-	private TextView currentVersion;
-	private Button uploadLog;
+    private TextView currentVersion;
+    private Button uploadLog;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_diagnose);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_diagnose);
 
-		currentVersion = (TextView) findViewById(R.id.tv_version);
-		uploadLog = (Button) findViewById(R.id.button_uploadlog);
-		uploadLog.setOnClickListener(this);
-		String strVersion = "";
-		try {
-			strVersion = getVersionName();
-		} catch (Exception e) {
-		}
-		if (!TextUtils.isEmpty(strVersion))
-			currentVersion.setText("V" + strVersion);
-		else
-			currentVersion.setText("未设置");
-	}
+        currentVersion = (TextView) findViewById(R.id.tv_version);
+        uploadLog = (Button) findViewById(R.id.button_uploadlog);
+        uploadLog.setOnClickListener(this);
+        String strVersion = "";
+        try {
+            strVersion = getVersionName();
+        } catch (Exception e) {
+        }
+        if (!TextUtils.isEmpty(strVersion))
+            currentVersion.setText("V" + strVersion);
+        else
+            currentVersion.setText("未设置");
+    }
 
-	public void back(View view) {
-		finish();
-	}
+    public void back(View view) {
+        finish();
+    }
 
-	private String getVersionName() throws Exception {
-		// 获取packagemanager的实例
-		PackageManager packageManager = getPackageManager();
-		// getPackageName()是你当前类的包名，0代表是获取版本信息
-		PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(),
-				0);
-		String version = packInfo.versionName;
-		return version;
+    private String getVersionName() throws Exception {
+        // 获取packagemanager的实例
+        PackageManager packageManager = getPackageManager();
+        // getPackageName()是你当前类的包名，0代表是获取版本信息
+        PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(),
+                0);
+        String version = packInfo.versionName;
+        return version;
 
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.button_uploadlog:
-			uploadlog();
-			break;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_uploadlog:
+                uploadlog();
+                break;
 
-		default:
-			break;
-		}
+            default:
+                break;
+        }
 
-	}
+    }
 
-	private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
-	public void uploadlog() {
+    public void uploadlog() {
 
-		if (progressDialog == null)
-			progressDialog = new ProgressDialog(this);
-		progressDialog.setMessage("上传日志中...");
-		progressDialog.setCancelable(false);
-		progressDialog.show();
+        if (progressDialog == null)
+            progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("上传日志中...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
 //		EMChat.getInstance().uploadLog(new EMCallBack() {
 //
@@ -137,6 +137,6 @@ public class DiagnoseActivity extends ChatBaseActivity implements OnClickListene
 //			}
 //		});
 
-	}
+    }
 
 }

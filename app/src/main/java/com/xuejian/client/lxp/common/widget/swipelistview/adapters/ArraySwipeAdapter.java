@@ -13,10 +13,13 @@ import com.xuejian.client.lxp.common.widget.swipelistview.util.Attributes;
 
 import java.util.List;
 
-public abstract class ArraySwipeAdapter<T> extends ArrayAdapter implements SwipeItemMangerInterface,SwipeAdapterInterface {
+public abstract class ArraySwipeAdapter<T> extends ArrayAdapter implements SwipeItemMangerInterface, SwipeAdapterInterface {
 
     private SwipeItemAdapterMangerImpl mItemManger = new SwipeItemAdapterMangerImpl(this);
-    {}
+
+    {
+    }
+
     public ArraySwipeAdapter(Context context, int resource) {
         super(context, resource);
     }
@@ -45,9 +48,9 @@ public abstract class ArraySwipeAdapter<T> extends ArrayAdapter implements Swipe
     public View getView(int position, View convertView, ViewGroup parent) {
         boolean convertViewIsNull = convertView == null;
         View v = super.getView(position, convertView, parent);
-        if(convertViewIsNull){
+        if (convertViewIsNull) {
             mItemManger.initialize(v, position);
-        }else{
+        } else {
             mItemManger.updateConvertView(v, position);
         }
         return v;

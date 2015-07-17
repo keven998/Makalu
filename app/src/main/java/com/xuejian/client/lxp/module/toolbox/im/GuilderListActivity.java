@@ -61,7 +61,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        countryId=getIntent().getStringExtra("countryId");
+        countryId = getIntent().getStringExtra("countryId");
         setContentView(R.layout.activity_expert);
 
         findViewById(R.id.expert_back).setOnClickListener(new View.OnClickListener() {
@@ -116,7 +116,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     }
 
     public void getExpertData(final int page, final int pageSize) {
-        String[] countryIds={countryId};
+        String[] countryIds = {countryId};
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getExpertById(countryIds, new HttpCallBack<String>() {
             @Override

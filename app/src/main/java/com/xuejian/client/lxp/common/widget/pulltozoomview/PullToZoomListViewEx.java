@@ -138,7 +138,7 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
      */
     @Override
     protected ListView createRootView(Context context, AttributeSet attrs) {
-        ListView listView =new ListView(context, attrs);
+        ListView listView = new ListView(context, attrs);
         listView.setId(android.R.id.list);
         return listView;
     }
@@ -218,7 +218,7 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
         if (mHeaderHeight == 0 && mHeaderView != null) {
             mHeaderHeight = mHeaderView.getHeight();
         }
-        if (zoomViewHeight==0&&mZoomView != null) {
+        if (zoomViewHeight == 0 && mZoomView != null) {
             zoomViewHeight = mZoomView.getHeight();
         }
     }
@@ -233,7 +233,7 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
         if (mZoomView != null && !isHideHeader() && isPullToZoomEnabled()) {
             float f = StickyUtils.getScrollY(mHeaderView, mRootView);
 //                    mHeaderHeight - mHeaderView.getBottom();
-            if(mOnScrollYListener!=null){
+            if (mOnScrollYListener != null) {
                 mOnScrollYListener.onScrollY(f);
             }
             if (isParallax()) {
@@ -276,7 +276,7 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
                     zoomLayoutParams.height = ((int) (f2 * zoomViewHeight));
 //                        mHeaderView.setLayoutParams(localLayoutParams);
                     mZoomView.setLayoutParams(zoomLayoutParams);
-                    Log.d(TAG, "ScalingRunnable --> f2 = " + f2+"--zoomViewHeight="+f2 * zoomViewHeight);
+                    Log.d(TAG, "ScalingRunnable --> f2 = " + f2 + "--zoomViewHeight=" + f2 * zoomViewHeight);
                     if (f2 > 1.0F) {
                         post(this);
                         return;
@@ -292,8 +292,8 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
             if (mZoomView != null) {
                 mStartTime = SystemClock.currentThreadTimeMillis();
                 mDuration = paramLong;
-                mScale = ((float) (mZoomView.getBottom()-mZoomView.getTop()) / zoomViewHeight);
-                Log.d(TAG, "ScalingRunnable --> mZoomView.getBottom() = " + mZoomView.getBottom()+"--zo0mViewHeight="+zoomViewHeight);
+                mScale = ((float) (mZoomView.getBottom() - mZoomView.getTop()) / zoomViewHeight);
+                Log.d(TAG, "ScalingRunnable --> mZoomView.getBottom() = " + mZoomView.getBottom() + "--zo0mViewHeight=" + zoomViewHeight);
                 mIsFinished = false;
                 post(this);
             }

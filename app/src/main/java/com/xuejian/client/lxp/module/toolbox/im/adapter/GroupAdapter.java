@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,36 +33,36 @@ import java.util.List;
 
 public class GroupAdapter extends ArrayAdapter<User> {
 
-	private LayoutInflater inflater;
+    private LayoutInflater inflater;
 
-	public GroupAdapter(Context context, int res, List<User> groups) {
-		super(context, res, groups);
-		this.inflater = LayoutInflater.from(context);
-	}
-	
-	@Override
-	public int getViewTypeCount() {
-		return 3;
-	}
-	
-	@Override
-	public int getItemViewType(int position) {
-	    if(position == 0){
-	        return 0;
-	    }else if(position == getCount() - 1){ 
-	        return 1;
-	    }else{
-	        return 2;
-	    }
-	}
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-	    if(getItemViewType(position) == 0){
-	        if (convertView == null) {
+    public GroupAdapter(Context context, int res, List<User> groups) {
+        super(context, res, groups);
+        this.inflater = LayoutInflater.from(context);
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 3;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 0;
+        } else if (position == getCount() - 1) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (getItemViewType(position) == 0) {
+            if (convertView == null) {
                 convertView = inflater.inflate(R.layout.search_bar_with_padding, null);
             }
-    	    final EditText query = (EditText) convertView.findViewById(R.id.query);
+            final EditText query = (EditText) convertView.findViewById(R.id.query);
             final ImageButton clearSearch = (ImageButton) convertView.findViewById(R.id.search_clear);
             query.addTextChangedListener(new TextWatcher() {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -73,10 +73,10 @@ public class GroupAdapter extends ArrayAdapter<User> {
                         clearSearch.setVisibility(View.INVISIBLE);
                     }
                 }
-    
+
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
-    
+
                 public void afterTextChanged(Editable s) {
                 }
             });
@@ -86,27 +86,27 @@ public class GroupAdapter extends ArrayAdapter<User> {
                     query.getText().clear();
                 }
             });
-	    }else if(getItemViewType(position) == 1){
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_add_group, null);
-			}
-			((ImageView)convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.roominfo_add_btn);
-			((TextView)convertView.findViewById(R.id.name)).setText("新建群组");
-		} else {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_group, null);
-			}
-			
-			((TextView)convertView.findViewById(R.id.name)).setText(getItem(position-1).getNickName());
-			
-		}
-		
-		return convertView;
-	}
+        } else if (getItemViewType(position) == 1) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.row_add_group, null);
+            }
+            ((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.roominfo_add_btn);
+            ((TextView) convertView.findViewById(R.id.name)).setText("新建群组");
+        } else {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.row_group, null);
+            }
 
-	@Override
-	public int getCount() {
-		return super.getCount() + 2;
-	}
+            ((TextView) convertView.findViewById(R.id.name)).setText(getItem(position - 1).getNickName());
+
+        }
+
+        return convertView;
+    }
+
+    @Override
+    public int getCount() {
+        return super.getCount() + 2;
+    }
 
 }

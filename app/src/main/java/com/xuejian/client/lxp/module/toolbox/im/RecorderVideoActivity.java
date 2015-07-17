@@ -1,14 +1,15 @@
-/************************************************************
-  *  * EaseMob CONFIDENTIAL 
-  * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
-  *  
-  * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
-  */
+/**
+ * *********************************************************
+ * * EaseMob CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * <p>
+ * NOTICE: All information contained herein is, and remains
+ * the property of EaseMob Technologies.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from EaseMob Technologies.
+ */
 package com.xuejian.client.lxp.module.toolbox.im;
 
 import android.annotation.SuppressLint;
@@ -53,395 +54,395 @@ import java.util.List;
 
 public class RecorderVideoActivity extends ChatBaseActivity implements OnClickListener, Callback, OnErrorListener, OnInfoListener {
 
-	private final static String CLASS_LABEL = "RecordActivity";
-	private PowerManager.WakeLock mWakeLock;
-	private ImageView btnStart;// 开始录制按钮
-	private ImageView btnStop;// 停止录制按钮
-	private MediaRecorder mediarecorder;// 录制视频的类
-	private SurfaceView surfaceview;// 显示视频的控件
+    private final static String CLASS_LABEL = "RecordActivity";
+    private PowerManager.WakeLock mWakeLock;
+    private ImageView btnStart;// 开始录制按钮
+    private ImageView btnStop;// 停止录制按钮
+    private MediaRecorder mediarecorder;// 录制视频的类
+    private SurfaceView surfaceview;// 显示视频的控件
 
-	private SurfaceHolder surfaceHolder;
-	String localPath = "";// 录制的视频路径
-	private Camera mCamera;
-	// 预览的宽高
-	private int previewWidth = 480;
-	private int previewHeight = 480;
+    private SurfaceHolder surfaceHolder;
+    String localPath = "";// 录制的视频路径
+    private Camera mCamera;
+    // 预览的宽高
+    private int previewWidth = 480;
+    private int previewHeight = 480;
 
-	Parameters cameraParameters = null;
+    Parameters cameraParameters = null;
 
-	// 分别为 默认摄像头（后置）、默认调用摄像头的分辨率、被选择的摄像头（前置或者后置）
-	int defaultCameraId = -1, defaultScreenResolution = -1, cameraSelection = 0;
-	int defaultVideoFrameRate = -1;
+    // 分别为 默认摄像头（后置）、默认调用摄像头的分辨率、被选择的摄像头（前置或者后置）
+    int defaultCameraId = -1, defaultScreenResolution = -1, cameraSelection = 0;
+    int defaultVideoFrameRate = -1;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
-		// 选择支持半透明模式，在有surfaceview的activity中使用
-		getWindow().setFormat(PixelFormat.TRANSLUCENT);
-		setContentView(R.layout.recorder_activity);
-		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, CLASS_LABEL);
-		mWakeLock.acquire();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
+        // 选择支持半透明模式，在有surfaceview的activity中使用
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        setContentView(R.layout.recorder_activity);
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, CLASS_LABEL);
+        mWakeLock.acquire();
 
-		btnStart = (ImageView) findViewById(R.id.recorder_start);
-		btnStop = (ImageView) findViewById(R.id.recorder_stop);
-		btnStart.setOnClickListener(this);
-		btnStop.setOnClickListener(this);
-		surfaceview = (SurfaceView) this.findViewById(R.id.surfaceview);
-		SurfaceHolder holder = surfaceview.getHolder();// 取得holder
-		holder.addCallback(this); // holder加入回调接口
-		// setType必须设置，要不出错.
-		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-	}
+        btnStart = (ImageView) findViewById(R.id.recorder_start);
+        btnStop = (ImageView) findViewById(R.id.recorder_stop);
+        btnStart.setOnClickListener(this);
+        btnStop.setOnClickListener(this);
+        surfaceview = (SurfaceView) this.findViewById(R.id.surfaceview);
+        SurfaceHolder holder = surfaceview.getHolder();// 取得holder
+        holder.addCallback(this); // holder加入回调接口
+        // setType必须设置，要不出错.
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
 
-	public void back(View view) {
+    public void back(View view) {
 
-		if (mediarecorder != null) {
-			// 停止录制
-			mediarecorder.stop();
-			// 释放资源
-			mediarecorder.release();
-			mediarecorder = null;
-		}
-		try {
-			mCamera.reconnect();
-		} catch (IOException e) {
+        if (mediarecorder != null) {
+            // 停止录制
+            mediarecorder.stop();
+            // 释放资源
+            mediarecorder.release();
+            mediarecorder = null;
+        }
+        try {
+            mCamera.reconnect();
+        } catch (IOException e) {
 //			Toast.makeText(this, "reconect fail", Toast.LENGTH_SHORT).show();
-		}
-		finish();
-	}
+        }
+        finish();
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (mWakeLock == null) {
-			// 获取唤醒锁,保持屏幕常亮
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, CLASS_LABEL);
-			mWakeLock.acquire();
-		}
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mWakeLock == null) {
+            // 获取唤醒锁,保持屏幕常亮
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, CLASS_LABEL);
+            mWakeLock.acquire();
+        }
+    }
 
-	private void handleSurfaceChanged() {
-		if (mCamera == null) {
-			finish();
-			return;
-		}
+    private void handleSurfaceChanged() {
+        if (mCamera == null) {
+            finish();
+            return;
+        }
 
-		boolean hasSupportRate = false;
-		List<Integer> supportedPreviewFrameRates = mCamera.getParameters().getSupportedPreviewFrameRates();
-		if (supportedPreviewFrameRates != null && supportedPreviewFrameRates.size() > 0) {
-			Collections.sort(supportedPreviewFrameRates);
-			for (int i = 0; i < supportedPreviewFrameRates.size(); i++) {
-				int supportRate = supportedPreviewFrameRates.get(i);
+        boolean hasSupportRate = false;
+        List<Integer> supportedPreviewFrameRates = mCamera.getParameters().getSupportedPreviewFrameRates();
+        if (supportedPreviewFrameRates != null && supportedPreviewFrameRates.size() > 0) {
+            Collections.sort(supportedPreviewFrameRates);
+            for (int i = 0; i < supportedPreviewFrameRates.size(); i++) {
+                int supportRate = supportedPreviewFrameRates.get(i);
 
-				if (supportRate == 15) {
-					hasSupportRate = true;
-				}
+                if (supportRate == 15) {
+                    hasSupportRate = true;
+                }
 
-			}
-			if (hasSupportRate) {
-				defaultVideoFrameRate = 15;
-			} else {
-				defaultVideoFrameRate = supportedPreviewFrameRates.get(0);
-			}
+            }
+            if (hasSupportRate) {
+                defaultVideoFrameRate = 15;
+            } else {
+                defaultVideoFrameRate = supportedPreviewFrameRates.get(0);
+            }
 
-		}
+        }
 
-		// 获取摄像头的所有支持的分辨率
-		List<Size> resolutionList = Utils.getResolutionList(mCamera);
-		if (resolutionList != null && resolutionList.size() > 0) {
-			Collections.sort(resolutionList, new Utils.ResolutionComparator());
-			Size previewSize = null;
-			if (defaultScreenResolution == -1) {
-				boolean hasSize = false;
-				// 如果摄像头支持640*480，那么强制设为640*480
-				for (int i = 0; i < resolutionList.size(); i++) {
-					Size size = resolutionList.get(i);
-					if (size != null && size.width == 640 && size.height == 480) {
-						previewSize = size;
-						previewWidth = previewSize.width;
-						previewHeight = previewSize.height;
-						hasSize = true;
-						break;
-					}
-				}
-				// 如果不支持设为中间的那个
-				if (!hasSize) {
-					int mediumResolution = resolutionList.size() / 2;
-					if (mediumResolution >= resolutionList.size())
-						mediumResolution = resolutionList.size() - 1;
-					previewSize = resolutionList.get(mediumResolution);
-					previewWidth = previewSize.width;
-					previewHeight = previewSize.height;
+        // 获取摄像头的所有支持的分辨率
+        List<Size> resolutionList = Utils.getResolutionList(mCamera);
+        if (resolutionList != null && resolutionList.size() > 0) {
+            Collections.sort(resolutionList, new Utils.ResolutionComparator());
+            Size previewSize = null;
+            if (defaultScreenResolution == -1) {
+                boolean hasSize = false;
+                // 如果摄像头支持640*480，那么强制设为640*480
+                for (int i = 0; i < resolutionList.size(); i++) {
+                    Size size = resolutionList.get(i);
+                    if (size != null && size.width == 640 && size.height == 480) {
+                        previewSize = size;
+                        previewWidth = previewSize.width;
+                        previewHeight = previewSize.height;
+                        hasSize = true;
+                        break;
+                    }
+                }
+                // 如果不支持设为中间的那个
+                if (!hasSize) {
+                    int mediumResolution = resolutionList.size() / 2;
+                    if (mediumResolution >= resolutionList.size())
+                        mediumResolution = resolutionList.size() - 1;
+                    previewSize = resolutionList.get(mediumResolution);
+                    previewWidth = previewSize.width;
+                    previewHeight = previewSize.height;
 
-				}
+                }
 
-			}
+            }
 
-		}
+        }
 
-	}
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if (mWakeLock != null) {
-			mWakeLock.release();
-			mWakeLock = null;
-		}
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mWakeLock != null) {
+            mWakeLock.release();
+            mWakeLock = null;
+        }
+    }
 
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-		case R.id.recorder_start:
-			mCamera.unlock();
-			mediarecorder = new MediaRecorder();// 创建mediarecorder对象
-			mediarecorder.reset();
-			mediarecorder.setCamera(mCamera);
-			mediarecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-			// 设置录制视频源为Camera（相机）
-			mediarecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-			// 设置录制完成后视频的封装格式THREE_GPP为3gp.MPEG_4为mp4
-			mediarecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-			mediarecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-			// 设置录制的视频编码h263 h264
-			mediarecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-			
-			// 设置视频录制的分辨率。必须放在设置编码和格式的后面，否则报错
-			mediarecorder.setVideoSize(previewWidth, previewHeight);
-			// 设置视频的比特率
-			mediarecorder.setVideoEncodingBitRate(384 * 1024);
-			// // 设置录制的视频帧率。必须放在设置编码和格式的后面，否则报错
-			if (defaultVideoFrameRate != -1) {
-				mediarecorder.setVideoFrameRate(defaultVideoFrameRate);
-			}
-			mediarecorder.setPreviewDisplay(surfaceHolder.getSurface());
-			// 设置视频文件输出的路径
-		//	localPath = PathUtil.getInstance().getVideoPath() + "/" + System.currentTimeMillis() + ".mp4";
-			mediarecorder.setOutputFile(localPath);
-			mediarecorder.setOnErrorListener(this);
-			mediarecorder.setOnInfoListener(this);
-			try {
-				// 准备录制
-				mediarecorder.prepare();
-				// 开始录制
-				mediarecorder.start();
-				Toast.makeText(this, "录像开始", Toast.LENGTH_SHORT).show();
-				btnStart.setVisibility(View.INVISIBLE);
-				btnStop.setVisibility(View.VISIBLE);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.recorder_start:
+                mCamera.unlock();
+                mediarecorder = new MediaRecorder();// 创建mediarecorder对象
+                mediarecorder.reset();
+                mediarecorder.setCamera(mCamera);
+                mediarecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+                // 设置录制视频源为Camera（相机）
+                mediarecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+                // 设置录制完成后视频的封装格式THREE_GPP为3gp.MPEG_4为mp4
+                mediarecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+                mediarecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                // 设置录制的视频编码h263 h264
+                mediarecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 
-			break;
-		case R.id.recorder_stop:
+                // 设置视频录制的分辨率。必须放在设置编码和格式的后面，否则报错
+                mediarecorder.setVideoSize(previewWidth, previewHeight);
+                // 设置视频的比特率
+                mediarecorder.setVideoEncodingBitRate(384 * 1024);
+                // // 设置录制的视频帧率。必须放在设置编码和格式的后面，否则报错
+                if (defaultVideoFrameRate != -1) {
+                    mediarecorder.setVideoFrameRate(defaultVideoFrameRate);
+                }
+                mediarecorder.setPreviewDisplay(surfaceHolder.getSurface());
+                // 设置视频文件输出的路径
+                //	localPath = PathUtil.getInstance().getVideoPath() + "/" + System.currentTimeMillis() + ".mp4";
+                mediarecorder.setOutputFile(localPath);
+                mediarecorder.setOnErrorListener(this);
+                mediarecorder.setOnInfoListener(this);
+                try {
+                    // 准备录制
+                    mediarecorder.prepare();
+                    // 开始录制
+                    mediarecorder.start();
+                    Toast.makeText(this, "录像开始", Toast.LENGTH_SHORT).show();
+                    btnStart.setVisibility(View.INVISIBLE);
+                    btnStop.setVisibility(View.VISIBLE);
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-			if (mediarecorder != null) {
-				// 停止录制
-				mediarecorder.stop();
-				// 释放资源
-				mediarecorder.release();
-				mediarecorder = null;
-			}
-			try {
-				mCamera.reconnect();
-			} catch (IOException e) {
-				Toast.makeText(this, "reconect fail", Toast.LENGTH_SHORT).show();
-			}
-			btnStart.setVisibility(View.VISIBLE);
-			btnStop.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.recorder_stop:
 
-			new AlertDialog.Builder(this).setMessage("是否发送？").setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                if (mediarecorder != null) {
+                    // 停止录制
+                    mediarecorder.stop();
+                    // 释放资源
+                    mediarecorder.release();
+                    mediarecorder = null;
+                }
+                try {
+                    mCamera.reconnect();
+                } catch (IOException e) {
+                    Toast.makeText(this, "reconect fail", Toast.LENGTH_SHORT).show();
+                }
+                btnStart.setVisibility(View.VISIBLE);
+                btnStop.setVisibility(View.INVISIBLE);
 
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					arg0.dismiss();
-					sendVideo(null);
+                new AlertDialog.Builder(this).setMessage("是否发送？").setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
-				}
-			}).setNegativeButton(R.string.cancel, null).show();
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                        sendVideo(null);
 
-			break;
+                    }
+                }).setNegativeButton(R.string.cancel, null).show();
 
-		default:
-			break;
-		}
-	}
+                break;
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		// 将holder，这个holder为开始在oncreat里面取得的holder，将它赋给surfaceHolder
-		surfaceHolder = holder;
+            default:
+                break;
+        }
+    }
 
-	}
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        // 将holder，这个holder为开始在oncreat里面取得的holder，将它赋给surfaceHolder
+        surfaceHolder = holder;
 
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		// 将holder，这个holder为开始在oncreat里面取得的holder，将它赋给surfaceHolder
-		surfaceHolder = holder;
-		try {
-			initpreview();
-		} catch (Exception e) {
-			showFailDialog();
-			return;
-		}
-		handleSurfaceChanged();
+    }
 
-	}
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        // 将holder，这个holder为开始在oncreat里面取得的holder，将它赋给surfaceHolder
+        surfaceHolder = holder;
+        try {
+            initpreview();
+        } catch (Exception e) {
+            showFailDialog();
+            return;
+        }
+        handleSurfaceChanged();
 
-	@Override
-	public void surfaceDestroyed(SurfaceHolder arg0) {
-		// surfaceDestroyed的时候同时对象设置为null
-		surfaceview = null;
-		surfaceHolder = null;
-		mediarecorder = null;
-		releaseCamera();
-	}
+    }
 
-	protected void releaseCamera() {
-		try {
-			if (mCamera != null) {
-				mCamera.stopPreview();
-				mCamera.release();
-				mCamera = null;
-			}
-		} catch (Exception e) {
-		}
-	}
+    @Override
+    public void surfaceDestroyed(SurfaceHolder arg0) {
+        // surfaceDestroyed的时候同时对象设置为null
+        surfaceview = null;
+        surfaceHolder = null;
+        mediarecorder = null;
+        releaseCamera();
+    }
 
-	@SuppressLint("NewApi")
-	protected void initpreview() throws Exception {
-		try {
+    protected void releaseCamera() {
+        try {
+            if (mCamera != null) {
+                mCamera.stopPreview();
+                mCamera.release();
+                mCamera = null;
+            }
+        } catch (Exception e) {
+        }
+    }
 
-			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
-				int numberOfCameras = Camera.getNumberOfCameras();
-				CameraInfo cameraInfo = new CameraInfo();
-				for (int i = 0; i < numberOfCameras; i++) {
-					Camera.getCameraInfo(i, cameraInfo);
-					if (cameraInfo.facing == cameraSelection) {
-						defaultCameraId = i;
-					}
-				}
+    @SuppressLint("NewApi")
+    protected void initpreview() throws Exception {
+        try {
 
-			}
-			if (mCamera != null) {
-				mCamera.stopPreview();
-			}
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
+                int numberOfCameras = Camera.getNumberOfCameras();
+                CameraInfo cameraInfo = new CameraInfo();
+                for (int i = 0; i < numberOfCameras; i++) {
+                    Camera.getCameraInfo(i, cameraInfo);
+                    if (cameraInfo.facing == cameraSelection) {
+                        defaultCameraId = i;
+                    }
+                }
 
-			mCamera = Camera.open(CameraInfo.CAMERA_FACING_BACK);
-			mCamera.setPreviewDisplay(surfaceHolder);
-			setCameraDisplayOrientation(this, CameraInfo.CAMERA_FACING_BACK, mCamera);
-			mCamera.startPreview();
-		} catch (Exception e) {
-			Log.e("###", e.getMessage());
-			throw new Exception(e.getMessage());
-		}
+            }
+            if (mCamera != null) {
+                mCamera.stopPreview();
+            }
 
-	}
+            mCamera = Camera.open(CameraInfo.CAMERA_FACING_BACK);
+            mCamera.setPreviewDisplay(surfaceHolder);
+            setCameraDisplayOrientation(this, CameraInfo.CAMERA_FACING_BACK, mCamera);
+            mCamera.startPreview();
+        } catch (Exception e) {
+            Log.e("###", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
 
-	@SuppressLint("NewApi")
-	public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
-		CameraInfo info = new CameraInfo();
-		Camera.getCameraInfo(cameraId, info);
-		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-		int degrees = 0;
-		switch (rotation) {
-		case Surface.ROTATION_0:
-			degrees = 0;
-			break;
-		case Surface.ROTATION_90:
-			degrees = 90;
-			break;
-		case Surface.ROTATION_180:
-			degrees = 180;
-			break;
-		case Surface.ROTATION_270:
-			degrees = 270;
-			break;
-		}
+    }
 
-		int result;
-		if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-			result = (info.orientation + degrees) % 360;
-			result = (360 - result) % 360; // compensate the mirror
-		} else { // back-facing
-			result = (info.orientation - degrees + 360) % 360;
-		}
-		camera.setDisplayOrientation(result);
-	}
+    @SuppressLint("NewApi")
+    public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
+        CameraInfo info = new CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
 
-	MediaScannerConnection msc = null;
+        int result;
+        if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360; // compensate the mirror
+        } else { // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
+    }
 
-	public void sendVideo(View view) {
-		if (TextUtils.isEmpty(localPath)) {
-			Log.e("Recorder", "recorder fail please try again!");
-			return;
-		}
+    MediaScannerConnection msc = null;
 
-		msc = new MediaScannerConnection(this, new MediaScannerConnectionClient() {
+    public void sendVideo(View view) {
+        if (TextUtils.isEmpty(localPath)) {
+            Log.e("Recorder", "recorder fail please try again!");
+            return;
+        }
 
-			@Override
-			public void onScanCompleted(String path, Uri uri) {
-				msc.disconnect();
-				setResult(RESULT_OK, getIntent().putExtra("uri", uri));
-				finish();
-			}
+        msc = new MediaScannerConnection(this, new MediaScannerConnectionClient() {
 
-			@Override
-			public void onMediaScannerConnected() {
-				msc.scanFile(localPath, "video/*");
-			}
-		});
-		msc.connect();
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                msc.disconnect();
+                setResult(RESULT_OK, getIntent().putExtra("uri", uri));
+                finish();
+            }
 
-	}
+            @Override
+            public void onMediaScannerConnected() {
+                msc.scanFile(localPath, "video/*");
+            }
+        });
+        msc.connect();
 
-	@Override
-	public void onInfo(MediaRecorder arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void onInfo(MediaRecorder arg0, int arg1, int arg2) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void onError(MediaRecorder arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void onError(MediaRecorder arg0, int arg1, int arg2) {
+        // TODO Auto-generated method stub
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		releaseCamera();
+    }
 
-		if (mWakeLock != null) {
-			mWakeLock.release();
-			mWakeLock = null;
-		}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseCamera();
 
-	}
+        if (mWakeLock != null) {
+            mWakeLock.release();
+            mWakeLock = null;
+        }
 
-	@Override
-	public void onBackPressed() {
-		back(null);
-	}
+    }
 
-	private void showFailDialog() {
-		new AlertDialog.Builder(this).setTitle("提示").setMessage("打开设备失败！")
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+    @Override
+    public void onBackPressed() {
+        back(null);
+    }
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						finish();
+    private void showFailDialog() {
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("打开设备失败！")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
-					}
-				}).setCancelable(false).show();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
 
-	}
+                    }
+                }).setCancelable(false).show();
+
+    }
 
 }

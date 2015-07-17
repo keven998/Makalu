@@ -271,7 +271,7 @@ class Lanes {
             }
 
             if ((direction == TwoWayLayoutManager.Direction.END && laneEdge < targetEdge) ||
-                (direction == TwoWayLayoutManager.Direction.START && laneEdge > targetEdge)) {
+                    (direction == TwoWayLayoutManager.Direction.START && laneEdge > targetEdge)) {
 
                 final int targetLane = findLaneThatFitsSpan(l, laneSpan, direction);
                 if (targetLane != NO_LANE) {
@@ -308,7 +308,7 @@ class Lanes {
             final Rect laneRect = mLanes[i];
 
             laneRect.offsetTo(mIsVertical ? laneRect.left : offset,
-                              mIsVertical ? offset : laneRect.top);
+                    mIsVertical ? offset : laneRect.top);
 
             if (mIsVertical) {
                 laneRect.bottom = laneRect.top;

@@ -12,10 +12,10 @@ import java.util.HashMap;
  * Entity mapped to table USER.
  */
 public class User implements Serializable {
-    public static final String M="M";
-    public static final String F="F";
-    public static final String S="S";
-    public static final String U="U";
+    public static final String M = "M";
+    public static final String F = "F";
+    public static final String S = "S";
+    public static final String U = "U";
     private long userId;
     private String nickName;
     private String avatar;
@@ -32,7 +32,7 @@ public class User implements Serializable {
     private String level;
     private String zodiac;
     private String birthday;
-    private HashMap<String,ArrayList<LocBean>> tracks;
+    private HashMap<String, ArrayList<LocBean>> tracks;
     private int guideCnt;
     private Integer Type;
     private String Ext;
@@ -46,18 +46,19 @@ public class User implements Serializable {
     }
 
     private String header;
+
     public User() {
     }
 
-    public User(Long userId, String nickName, String ext, Integer type,String avatar) {
+    public User(Long userId, String nickName, String ext, Integer type, String avatar) {
         this.userId = userId;
         this.nickName = nickName;
         Ext = ext;
         Type = type;
-        this.avatar=avatar;
+        this.avatar = avatar;
     }
 
-    public User(Long userId, String nickName, String avatar, String avatarSmall, String gender, String signature, String tel, String secToken, String countryCode, String email, String memo, String travelStatus, String residence, String level, String zodiac, String birthday,int guideCnt, Integer Type, String Ext,String header) {
+    public User(Long userId, String nickName, String avatar, String avatarSmall, String gender, String signature, String tel, String secToken, String countryCode, String email, String memo, String travelStatus, String residence, String level, String zodiac, String birthday, int guideCnt, Integer Type, String Ext, String header) {
         this.userId = userId;
         this.nickName = nickName;
         this.avatar = avatar;
@@ -77,7 +78,7 @@ public class User implements Serializable {
         this.guideCnt = guideCnt;
         this.Type = Type;
         this.Ext = Ext;
-        this.header=header;
+        this.header = header;
     }
 
     public Long getUserId() {
@@ -208,11 +209,11 @@ public class User implements Serializable {
         this.birthday = birthday;
     }
 
-    public HashMap<String,ArrayList<LocBean>> getTracks() {
+    public HashMap<String, ArrayList<LocBean>> getTracks() {
         return tracks;
     }
 
-    public void setTracks(HashMap<String,ArrayList<LocBean>> tracks) {
+    public void setTracks(HashMap<String, ArrayList<LocBean>> tracks) {
         this.tracks = tracks;
     }
 

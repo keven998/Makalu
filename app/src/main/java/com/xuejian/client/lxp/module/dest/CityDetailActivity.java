@@ -57,6 +57,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private TextView mCityDesc;
     private TextView mCostTimeTv;
     private TextView bestMonthTv;
+    private ImageView iv_create;
     private ImageView iv_share;
     private ImageView foodTv, shoppingTv, spotsTv, travelTv;
     private ListViewDataAdapter travelAdapter;
@@ -102,6 +103,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityIv4 = (ImageView) findViewById(R.id.iv_city_4);
         mCityIv5 = (ImageView) findViewById(R.id.iv_city_5);
         mCityIv6 = (ImageView) findViewById(R.id.iv_city_6);
+        iv_create = (ImageView) findViewById(R.id.iv_create_plan);
         imageViews = new ImageView[]{mCityIv1, mCityIv2, mCityIv3, mCityIv4, mCityIv5, mCityIv6};
         mCityNameTv = (TextView) findViewById(R.id.tv_city_name);
         mCityDesc = (TextView) findViewById(R.id.tv_city_desc);
@@ -111,14 +113,13 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         spotsTv = (ImageView) findViewById(R.id.tv_spots);
         foodTv = (ImageView) findViewById(R.id.tv_restaurant);
         shoppingTv = (ImageView) findViewById(R.id.tv_shopping);
-        iv_share= (ImageView) findViewById(R.id.iv_talk_share);
+        iv_share = (ImageView) findViewById(R.id.iv_talk_share);
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IMUtils.onClickImShare(CityDetailActivity.this);
             }
         });
-
         travelAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -218,6 +219,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void bindView(final LocBean detailBean) {
+        iv_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( );
+                intent.setClass(CityDetailActivity.this,SelectDestActivity.class);
+                ArrayList<LocBean> locList = new ArrayList<LocBean>();
+                locList.add(locDetailBean);
+                intent.putExtra("locList", locList);
+                startActivity(intent);
+            }
+        });
+
         TextView titleTv = (TextView) findViewById(R.id.tv_title_bar_title);
         titleTv.setText(detailBean.zhName);
 
@@ -336,9 +349,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent();
-                intent.putExtra("content",desc);
-                intent.setClass(CityDetailActivity.this,ReadMoreActivity.class);
+                Intent intent = new Intent();
+                intent.putExtra("content", desc);
+                intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
                 startActivityWithNoAnim(intent);
             }
         });

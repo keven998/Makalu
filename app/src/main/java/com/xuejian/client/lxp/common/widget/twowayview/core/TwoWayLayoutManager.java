@@ -115,7 +115,7 @@ public abstract class TwoWayLayoutManager extends LayoutManager {
     }
 
     protected int getChildEnd(View child) {
-        return (mIsVertical ?  getDecoratedBottom(child) : getDecoratedRight(child));
+        return (mIsVertical ? getDecoratedBottom(child) : getDecoratedRight(child));
     }
 
     protected Adapter getAdapter() {
@@ -226,7 +226,7 @@ public abstract class TwoWayLayoutManager extends LayoutManager {
 
         final int absDelta = Math.abs(delta);
         if (canAddMoreViews(Direction.START, start - absDelta) ||
-            canAddMoreViews(Direction.END, end + absDelta)) {
+                canAddMoreViews(Direction.END, end + absDelta)) {
             fillGap(direction, recycler, state);
         }
 
@@ -322,7 +322,7 @@ public abstract class TwoWayLayoutManager extends LayoutManager {
 
         // Make sure we are 1) Too high, and 2) Either there are more rows above the
         // first row or the first row is scrolled off the top of the drawable area
-        if (endOffset > 0 && (firstPosition > 0 || mLayoutStart < start))  {
+        if (endOffset > 0 && (firstPosition > 0 || mLayoutStart < start)) {
             if (firstPosition == 0) {
                 // Don't pull the top too far down.
                 endOffset = Math.min(endOffset, start - mLayoutStart);
@@ -363,7 +363,7 @@ public abstract class TwoWayLayoutManager extends LayoutManager {
         // last column/row or the last column/row is scrolled off the end of the
         // drawable area.
         if (startOffset > 0) {
-            if (lastPosition < itemCount - 1 || mLayoutEnd > end)  {
+            if (lastPosition < itemCount - 1 || mLayoutEnd > end) {
                 if (lastPosition == itemCount - 1) {
                     // Don't pull the bottom too far up.
                     startOffset = Math.min(startOffset, mLayoutEnd - end);
@@ -957,6 +957,7 @@ public abstract class TwoWayLayoutManager extends LayoutManager {
     }
 
     protected abstract void measureChild(View child, Direction direction);
+
     protected abstract void layoutChild(View child, Direction direction);
 
     protected abstract boolean canAddMoreViews(Direction direction, int limit);

@@ -20,7 +20,8 @@ public class PhoneContactUtils {
             ContactsContract.Contacts.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER
     };
-    public static ArrayList<AddressBookbean> getPhoneContact(Context context){
+
+    public static ArrayList<AddressBookbean> getPhoneContact(Context context) {
         ArrayList<AddressBookbean> contactList = new ArrayList<AddressBookbean>();
         AddressBookbean bean = null;
         Cursor phones = null;
@@ -35,26 +36,26 @@ public class PhoneContactUtils {
                 final int displayNameIndex = phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                 final int phoneIndex = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 String phoneString, displayNameString, contactIdString;
-                String lastContactIdString="";
-                int entryId=0;
-                int sourceId=0;
+                String lastContactIdString = "";
+                int entryId = 0;
+                int sourceId = 0;
                 User user = AccountManager.getInstance().getLoginAccount(context);
                 while (phones.moveToNext()) {
-                    bean= new AddressBookbean();
+                    bean = new AddressBookbean();
                     phoneString = phones.getString(phoneIndex);
-                    if(phoneString.equals(user.getTel())){
+                    if (phoneString.equals(user.getTel())) {
                         continue;
                     }
                     displayNameString = phones.getString(displayNameIndex);
                     contactIdString = phones.getString(contactIdIndex);
-                    if(!lastContactIdString.equals(contactIdString)){
+                    if (!lastContactIdString.equals(contactIdString)) {
                         sourceId++;
                     }
                     entryId++;
 
-                    bean.entryId=entryId;
+                    bean.entryId = entryId;
                     bean.sourceId = sourceId;
-                    bean.name =displayNameString;
+                    bean.name = displayNameString;
                     bean.tel = phoneString;
                     contactList.add(bean);
                 }
@@ -66,7 +67,7 @@ public class PhoneContactUtils {
                 phones.close();
         }
         long endTime = System.currentTimeMillis();
-        return  contactList;
+        return contactList;
 
     }
 

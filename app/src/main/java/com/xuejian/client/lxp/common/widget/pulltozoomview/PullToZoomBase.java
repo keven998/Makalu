@@ -85,7 +85,7 @@ public abstract class PullToZoomBase<T extends View> extends LinearLayout implem
             }
             int zoomViewResId = a.getResourceId(R.styleable.PullToZoomView_zoomView, 0);
             if (zoomViewResId > 0) {
-                mZoomView =mHeaderView.findViewById(zoomViewResId);
+                mZoomView = mHeaderView.findViewById(zoomViewResId);
             }
 
             isParallax = a.getBoolean(R.styleable.PullToZoomListView_isHeadParallax, true);
@@ -284,7 +284,8 @@ public abstract class PullToZoomBase<T extends View> extends LinearLayout implem
 
         void onPullZoomEnd();
     }
-    public interface OnScrollYListener{
+
+    public interface OnScrollYListener {
         void onScrollY(float scrollY);
     }
 }

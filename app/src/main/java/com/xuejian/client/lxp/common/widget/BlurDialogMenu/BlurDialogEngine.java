@@ -23,9 +23,9 @@ import android.widget.ImageView;
 
 /**
  * Encapsulate the whole behaviour to provide a blur effect on a DialogFragment.
- * <p/>
+ * <p>
  * All the screen behind the dialog will be blurred except the action bar.
- * <p/>
+ * <p>
  * Simply linked all methods to the matching lifecycle ones.
  */
 public class BlurDialogEngine {
@@ -130,7 +130,7 @@ public class BlurDialogEngine {
 
     /**
      * Enable / disable debug mode.
-     * <p/>
+     * <p>
      * LogCat and graphical information directly on blurred screen.
      *
      * @param enable true to display log in LogCat.
@@ -141,10 +141,10 @@ public class BlurDialogEngine {
 
     /**
      * Apply custom down scale factor.
-     * <p/>
+     * <p>
      * By default down scale factor is set to
      * {@link com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogEngine#BLUR_DOWN_SCALE_FACTOR}
-     * <p/>
+     * <p>
      * Higher down scale factor will increase blurring speed but reduce final rendering quality.
      *
      * @param factor customized down scale factor, must be at least 1.0 ( no down scale applied )
@@ -159,7 +159,7 @@ public class BlurDialogEngine {
 
     /**
      * Apply custom blur radius.
-     * <p/>
+     * <p>
      * By default blur radius is set to
      * {@link com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogEngine#BLUR_RADIUS}
      *

@@ -70,7 +70,7 @@ public class FavListActivity extends PeachBaseActivity {
     PullToRefreshListView mFavLv;
     StringSpinnerAdapter mTypeSpinnerAdapter;
     private int currentPage = 0;
-    private String curType="all";
+    private String curType = "all";
     private CustomAdapter mAdapter;
     boolean isShare;
     String chatType;
@@ -112,7 +112,7 @@ public class FavListActivity extends PeachBaseActivity {
             }
         });
 
-        isShare=getIntent().getBooleanExtra("isShare", false);
+        isShare = getIntent().getBooleanExtra("isShare", false);
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getStringExtra("chatType");
         mTypeSpinnerAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(favTypeArray));
@@ -121,7 +121,7 @@ public class FavListActivity extends PeachBaseActivity {
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MobclickAgent.onEvent(mContext,"event_do_filter");
+                MobclickAgent.onEvent(mContext, "event_do_filter");
                 curType = favTypeValueArray[position];
 //                initData(curType, 0);
                 mFavLv.onPullUpRefreshComplete();
@@ -139,6 +139,7 @@ public class FavListActivity extends PeachBaseActivity {
         setupViewFromCache();
         mFavLv.doPullRefreshing(true, 0);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -170,7 +171,7 @@ public class FavListActivity extends PeachBaseActivity {
 //            }
 //            initData(curType, 0);
 //        } else {
-            mFavLv.doPullRefreshing(true, 0);
+        mFavLv.doPullRefreshing(true, 0);
 //        }
     }
 
@@ -282,7 +283,7 @@ public class FavListActivity extends PeachBaseActivity {
 
         @Override
         public View generateView(int position, ViewGroup parent) {
-            View view =inflater.inflate(R.layout.favorite_list_item, null);
+            View view = inflater.inflate(R.layout.favorite_list_item, null);
             return view;
         }
 
@@ -298,16 +299,16 @@ public class FavListActivity extends PeachBaseActivity {
             RelativeLayout sendRl = (RelativeLayout) convertView.findViewById(R.id.rl_send);
             TextView sendBtn = (TextView) convertView.findViewById(R.id.btn_send);
             final FavoritesBean item = mItemDataList.get(position);
-            if(isShare){
+            if (isShare) {
                 sendRl.setVisibility(View.VISIBLE);
                 sendBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         IMUtils.showImShareDialog(mContext, item, new IMUtils.OnDialogShareCallBack() {
                             @Override
-                            public void onDialogShareOk(Dialog dialog, int type, String content,String leave_msg) {
+                            public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(),toId, chatType, content, type, new HttpCallback() {
+                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
                                     @Override
                                     public void onSuccess() {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -337,13 +338,13 @@ public class FavListActivity extends PeachBaseActivity {
                         });
                     }
                 });
-            }else{
+            } else {
                 sendRl.setVisibility(View.GONE);
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!item.type.equals(TravelApi.PeachType.NOTE)){
+                    if (!item.type.equals(TravelApi.PeachType.NOTE)) {
                         IntentUtils.intentToDetail(FavListActivity.this, item.type, item.itemId);
                     } else {
                         TravelNoteBean noteBean = new TravelNoteBean();
@@ -356,7 +357,7 @@ public class FavListActivity extends PeachBaseActivity {
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext,"event_delete_favorite");
+                    MobclickAgent.onEvent(mContext, "event_delete_favorite");
                     deleteItem(item);
                 }
             });
@@ -412,7 +413,7 @@ public class FavListActivity extends PeachBaseActivity {
             dialog.setTitle("提示");
             dialog.setTitleIcon(R.drawable.ic_dialog_tip);
             dialog.setMessage("确定移除收藏");
-            dialog.setPositiveButton("确定",new View.OnClickListener() {
+            dialog.setPositiveButton("确定", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
@@ -451,7 +452,7 @@ public class FavListActivity extends PeachBaseActivity {
                     });
                 }
             });
-            dialog.setNegativeButton("取消",new View.OnClickListener() {
+            dialog.setNegativeButton("取消", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();

@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,115 +43,115 @@ import java.util.UUID;
  *
  */
 public class VoiceCallActivity extends ChatBaseActivity implements OnClickListener {
-	private LinearLayout comingBtnContainer;
-	private Button hangupBtn;
-	private Button refuseBtn;
-	private Button answerBtn;
-	private ImageView muteImage;
-	private ImageView handsFreeImage;
+    private LinearLayout comingBtnContainer;
+    private Button hangupBtn;
+    private Button refuseBtn;
+    private Button answerBtn;
+    private ImageView muteImage;
+    private ImageView handsFreeImage;
 
-	private boolean isMuteState;
-	private boolean isHandsfreeState;
-	private boolean isInComingCall;
-	private TextView callStateTextView;
-	private SoundPool soundPool;
-	private int streamID;
-	private boolean endCallTriggerByMe = false;
-	private Handler handler = new Handler();
-	private Ringtone ringtone;
-	private int outgoing;
-	private TextView nickTextView;
-	private TextView durationTextView;
-	private SimpleDateFormat dateFormat;
-	private WindowManager windowManager;
-	private AudioManager audioManager;
-	private Chronometer chronometer;
+    private boolean isMuteState;
+    private boolean isHandsfreeState;
+    private boolean isInComingCall;
+    private TextView callStateTextView;
+    private SoundPool soundPool;
+    private int streamID;
+    private boolean endCallTriggerByMe = false;
+    private Handler handler = new Handler();
+    private Ringtone ringtone;
+    private int outgoing;
+    private TextView nickTextView;
+    private TextView durationTextView;
+    private SimpleDateFormat dateFormat;
+    private WindowManager windowManager;
+    private AudioManager audioManager;
+    private Chronometer chronometer;
 
-	private String callDruationText;
-	private String username;
-	private CallingState callingState = CallingState.CANCED;
-	String msgid;
-	private boolean isAnswered;
-	private LinearLayout voiceContronlLayout;
+    private String callDruationText;
+    private String username;
+    private CallingState callingState = CallingState.CANCED;
+    String msgid;
+    private boolean isAnswered;
+    private LinearLayout voiceContronlLayout;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_voice_call);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_voice_call);
 
-		comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
-		refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
-		answerBtn = (Button) findViewById(R.id.btn_answer_call);
-		hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
-		muteImage = (ImageView) findViewById(R.id.iv_mute);
-		handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
-		callStateTextView = (TextView) findViewById(R.id.tv_call_state);
-		nickTextView = (TextView) findViewById(R.id.tv_nick);
-		durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
-		chronometer = (Chronometer) findViewById(R.id.chronometer);
-		voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
+        comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
+        refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
+        answerBtn = (Button) findViewById(R.id.btn_answer_call);
+        hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
+        muteImage = (ImageView) findViewById(R.id.iv_mute);
+        handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
+        callStateTextView = (TextView) findViewById(R.id.tv_call_state);
+        nickTextView = (TextView) findViewById(R.id.tv_nick);
+        durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
+        chronometer = (Chronometer) findViewById(R.id.chronometer);
+        voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
 
-		refuseBtn.setOnClickListener(this);
-		answerBtn.setOnClickListener(this);
-		hangupBtn.setOnClickListener(this);
-		muteImage.setOnClickListener(this);
-		handsFreeImage.setOnClickListener(this);
+        refuseBtn.setOnClickListener(this);
+        answerBtn.setOnClickListener(this);
+        hangupBtn.setOnClickListener(this);
+        muteImage.setOnClickListener(this);
+        handsFreeImage.setOnClickListener(this);
 
-		getWindow().addFlags(
-				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-		audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-		audioManager.setMicrophoneMute(false);
+        getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setMicrophoneMute(false);
 
-		// 注册语音电话的状态的监听
-		addCallStateListener();
-		msgid = UUID.randomUUID().toString();
+        // 注册语音电话的状态的监听
+        addCallStateListener();
+        msgid = UUID.randomUUID().toString();
 
-		username = getIntent().getStringExtra("username");
-		// 语音电话是否为接收的
-		isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
+        username = getIntent().getStringExtra("username");
+        // 语音电话是否为接收的
+        isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
 
-		// 设置通话人
-		nickTextView.setText(username);
-		if (!isInComingCall) {// 拨打电话
-			soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
-			outgoing = soundPool.load(this, R.raw.outgoing, 1);
-			
-				comingBtnContainer.setVisibility(View.INVISIBLE);
-				hangupBtn.setVisibility(View.VISIBLE);
-				callStateTextView.setText("正在呼叫...");
-				handler.postDelayed(new Runnable() {
-					public void run() {
-						streamID = playMakeCallSounds();
-					}
-				}, 300);
-				try {
-					// 拨打语音电话
-					//EMChatManager.getInstance().makeVoiceCall(username);
-				} catch (Exception e) {
-					e.printStackTrace();
-                    if (!isFinishing())
-					runOnUiThread(new Runnable() {
-						public void run() {
+        // 设置通话人
+        nickTextView.setText(username);
+        if (!isInComingCall) {// 拨打电话
+            soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
+            outgoing = soundPool.load(this, R.raw.outgoing, 1);
+
+            comingBtnContainer.setVisibility(View.INVISIBLE);
+            hangupBtn.setVisibility(View.VISIBLE);
+            callStateTextView.setText("正在呼叫...");
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    streamID = playMakeCallSounds();
+                }
+            }, 300);
+            try {
+                // 拨打语音电话
+                //EMChatManager.getInstance().makeVoiceCall(username);
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (!isFinishing())
+                    runOnUiThread(new Runnable() {
+                        public void run() {
 //							Toast.makeText(VoiceCallActivity.this, "尚未连接至服务器", Toast.LENGTH_SHORT);
                             ToastUtil.getInstance(getApplicationContext()).showToast("呃~好像没找到网络");
-						}
-					});
-				}
-		} else { // 有电话进来
-			voiceContronlLayout.setVisibility(View.INVISIBLE);
-			Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-			audioManager.setMode(AudioManager.MODE_RINGTONE);
-			audioManager.setSpeakerphoneOn(true);
-			ringtone = RingtoneManager.getRingtone(this, ringUri);
-			ringtone.play();
-		}
-	}
+                        }
+                    });
+            }
+        } else { // 有电话进来
+            voiceContronlLayout.setVisibility(View.INVISIBLE);
+            Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            audioManager.setMode(AudioManager.MODE_RINGTONE);
+            audioManager.setSpeakerphoneOn(true);
+            ringtone = RingtoneManager.getRingtone(this, ringUri);
+            ringtone.play();
+        }
+    }
 
-	/**
-	 * 设置电话监听
-	 */
-	void addCallStateListener() {
+    /**
+     * 设置电话监听
+     */
+    void addCallStateListener() {
 //		EMChatManager.getInstance().addVoiceCallStateChangeListener(new EMCallStateChangeListener() {
 //
 //			@Override
@@ -271,171 +271,171 @@ public class VoiceCallActivity extends ChatBaseActivity implements OnClickListen
 //
 //			}
 //		});
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btn_refuse_call: // 拒绝接听
-			if (ringtone != null)
-				ringtone.stop();
-			try {
-			//	EMChatManager.getInstance().rejectCall();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				saveCallRecord();
-				finish();
-			}
-			callingState = CallingState.REFUESD;
-			break;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_refuse_call: // 拒绝接听
+                if (ringtone != null)
+                    ringtone.stop();
+                try {
+                    //	EMChatManager.getInstance().rejectCall();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    saveCallRecord();
+                    finish();
+                }
+                callingState = CallingState.REFUESD;
+                break;
 
-		case R.id.btn_answer_call: // 接听电话
-			comingBtnContainer.setVisibility(View.INVISIBLE);
-			hangupBtn.setVisibility(View.VISIBLE);
-			voiceContronlLayout.setVisibility(View.VISIBLE);
-			if (ringtone != null)
-				ringtone.stop();
-			closeSpeakerOn();
-			if (isInComingCall) {
-				try {
-					isAnswered = true;
-				//	EMChatManager.getInstance().answerCall();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					saveCallRecord();
-					finish();
-				}
-			}
-			break;
+            case R.id.btn_answer_call: // 接听电话
+                comingBtnContainer.setVisibility(View.INVISIBLE);
+                hangupBtn.setVisibility(View.VISIBLE);
+                voiceContronlLayout.setVisibility(View.VISIBLE);
+                if (ringtone != null)
+                    ringtone.stop();
+                closeSpeakerOn();
+                if (isInComingCall) {
+                    try {
+                        isAnswered = true;
+                        //	EMChatManager.getInstance().answerCall();
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                        saveCallRecord();
+                        finish();
+                    }
+                }
+                break;
 
-		case R.id.btn_hangup_call: // 挂断电话
-			if (soundPool != null)
-				soundPool.stop(streamID);
-			endCallTriggerByMe = true;
-			try {
-				//EMChatManager.getInstance().endCall();
-			} catch (Exception e) {
-				e.printStackTrace();
-				saveCallRecord();
-				finish();
-			}
-			break;
+            case R.id.btn_hangup_call: // 挂断电话
+                if (soundPool != null)
+                    soundPool.stop(streamID);
+                endCallTriggerByMe = true;
+                try {
+                    //EMChatManager.getInstance().endCall();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    saveCallRecord();
+                    finish();
+                }
+                break;
 
-		case R.id.iv_mute: // 静音开关
-			if (isMuteState) {
-				// 关闭静音
-				muteImage.setImageResource(R.drawable.icon_mute_normal);
-				audioManager.setMicrophoneMute(false);
-				isMuteState = false;
-			} else {
-				// 打开静音
-				muteImage.setImageResource(R.drawable.icon_mute_on);
-				audioManager.setMicrophoneMute(true);
-				isMuteState = true;
-			}
-			break;
-		case R.id.iv_handsfree: // 免提开关
-			if (isHandsfreeState) {
-				// 关闭免提
-				handsFreeImage.setImageResource(R.drawable.icon_speaker_normal);
-				closeSpeakerOn();
-				isHandsfreeState = false;
-			} else {
-				handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
-				openSpeakerOn();
-				isHandsfreeState = true;
-			}
-			break;
-		default:
-			break;
-		}
-	}
+            case R.id.iv_mute: // 静音开关
+                if (isMuteState) {
+                    // 关闭静音
+                    muteImage.setImageResource(R.drawable.icon_mute_normal);
+                    audioManager.setMicrophoneMute(false);
+                    isMuteState = false;
+                } else {
+                    // 打开静音
+                    muteImage.setImageResource(R.drawable.icon_mute_on);
+                    audioManager.setMicrophoneMute(true);
+                    isMuteState = true;
+                }
+                break;
+            case R.id.iv_handsfree: // 免提开关
+                if (isHandsfreeState) {
+                    // 关闭免提
+                    handsFreeImage.setImageResource(R.drawable.icon_speaker_normal);
+                    closeSpeakerOn();
+                    isHandsfreeState = false;
+                } else {
+                    handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+                    openSpeakerOn();
+                    isHandsfreeState = true;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
-	/**
-	 * 播放拨号响铃
-	 * 
-	 */
-	private int playMakeCallSounds() {
-		try {
-			// 最大音量
-			float audioMaxVolumn = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-			// 当前音量
-			float audioCurrentVolumn = audioManager.getStreamVolume(AudioManager.STREAM_RING);
-			float volumnRatio = audioCurrentVolumn / audioMaxVolumn;
+    /**
+     * 播放拨号响铃
+     *
+     */
+    private int playMakeCallSounds() {
+        try {
+            // 最大音量
+            float audioMaxVolumn = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+            // 当前音量
+            float audioCurrentVolumn = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            float volumnRatio = audioCurrentVolumn / audioMaxVolumn;
 
-			audioManager.setMode(AudioManager.MODE_RINGTONE);
-			audioManager.setSpeakerphoneOn(false);
+            audioManager.setMode(AudioManager.MODE_RINGTONE);
+            audioManager.setSpeakerphoneOn(false);
 
-			// 播放
-			int id = soundPool.play(outgoing, // 声音资源
-					volumnRatio, // 左声道
-					volumnRatio, // 右声道
-					1, // 优先级，0最低
-					-1, // 循环次数，0是不循环，-1是永远循环
-					1); // 回放速度，0.5-2.0之间。1为正常速度
-			return id;
-		} catch (Exception e) {
-			return -1;
-		}
-	}
+            // 播放
+            int id = soundPool.play(outgoing, // 声音资源
+                    volumnRatio, // 左声道
+                    volumnRatio, // 右声道
+                    1, // 优先级，0最低
+                    -1, // 循环次数，0是不循环，-1是永远循环
+                    1); // 回放速度，0.5-2.0之间。1为正常速度
+            return id;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
 
-	@Override
-	protected void onDestroy() {
-		if (soundPool != null)
-			soundPool.release();
-		if (ringtone != null && ringtone.isPlaying())
-			ringtone.stop();
-		audioManager.setMode(AudioManager.MODE_NORMAL);
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        if (soundPool != null)
+            soundPool.release();
+        if (ringtone != null && ringtone.isPlaying())
+            ringtone.stop();
+        audioManager.setMode(AudioManager.MODE_NORMAL);
+        super.onDestroy();
+    }
 
-	@Override
-	public void onBackPressed() {
-		//EMChatManager.getInstance().endCall();
-		callDruationText = chronometer.getText().toString();
-		saveCallRecord();
-		finish();
-	}
+    @Override
+    public void onBackPressed() {
+        //EMChatManager.getInstance().endCall();
+        callDruationText = chronometer.getText().toString();
+        saveCallRecord();
+        finish();
+    }
 
-	// 打开扬声器
-	public void openSpeakerOn() {
-		try {
-			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    // 打开扬声器
+    public void openSpeakerOn() {
+        try {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-			if (!audioManager.isSpeakerphoneOn())
-				audioManager.setSpeakerphoneOn(true);
-			audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-			// audioManager.setMode(AudioManager.MODE_IN_CALL);
-			// audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
-			// audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL ),
-			// AudioManager.STREAM_VOICE_CALL);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            if (!audioManager.isSpeakerphoneOn())
+                audioManager.setSpeakerphoneOn(true);
+            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+            // audioManager.setMode(AudioManager.MODE_IN_CALL);
+            // audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
+            // audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL ),
+            // AudioManager.STREAM_VOICE_CALL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	// 关闭扬声器
-	public void closeSpeakerOn() {
+    // 关闭扬声器
+    public void closeSpeakerOn() {
 
-		try {
-			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-			if (audioManager != null) {
-				if (audioManager.isSpeakerphoneOn())
-					audioManager.setSpeakerphoneOn(false);
-				audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-				// audioManager.setMode(AudioManager.MODE_IN_CALL);
-			}
+        try {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null) {
+                if (audioManager.isSpeakerphoneOn())
+                    audioManager.setSpeakerphoneOn(false);
+                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+                // audioManager.setMode(AudioManager.MODE_IN_CALL);
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * 保存通话消息记录
-	 */
-	private void saveCallRecord() {
+    /**
+     * 保存通话消息记录
+     */
+    private void saveCallRecord() {
 //		EMMessage message = null;
 //		TextMessageBody txtBody = null;
 //		if (!isInComingCall) { // 打出去的通话
@@ -481,9 +481,9 @@ public class VoiceCallActivity extends ChatBaseActivity implements OnClickListen
 //
 //		// 保存
 //		EMChatManager.getInstance().saveMessage(message, false);
-	}
+    }
 
-	enum CallingState {
-		CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY
-	}
+    enum CallingState {
+        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY
+    }
 }

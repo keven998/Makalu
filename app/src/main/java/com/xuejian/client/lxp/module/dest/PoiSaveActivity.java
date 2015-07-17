@@ -39,8 +39,8 @@ import java.util.Map;
  */
 public class PoiSaveActivity extends PeachBaseActivity {
 
-    public final static int ADD_SHOPPING_REQUEST_CODE=103;
-    public final static int ADD_REST_REQUEST_CODE=102;
+    public final static int ADD_SHOPPING_REQUEST_CODE = 103;
+    public final static int ADD_REST_REQUEST_CODE = 102;
     private ExpandableListView eListView;
     private PoiSaveAdapter adapter;
     private StrategyBean strategy;
@@ -48,7 +48,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
     private TitleHeaderBar bar;
     private LinearLayout add_btn;
     private TextView saveTypeName;
-    private ArrayList<ArrayList<PoiDetailBean>> content=new ArrayList<ArrayList<PoiDetailBean>>();
+    private ArrayList<ArrayList<PoiDetailBean>> content = new ArrayList<ArrayList<PoiDetailBean>>();
     private String type;
     private int requestType;
 
@@ -59,25 +59,24 @@ public class PoiSaveActivity extends PeachBaseActivity {
         strategy = getIntent().getParcelableExtra("strategy");
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         setContentView(R.layout.poi_save_activity);
-        bar = (TitleHeaderBar)findViewById(R.id.poi_save_titleBar);
-        saveTypeName = (TextView)findViewById(R.id.save_type_name);
-        add_btn = (LinearLayout)findViewById(R.id.save_btn);
-        bar.getTitleTextView().setText(getIntent().getStringExtra("title")+"收藏");
-        saveTypeName.setText("收藏"+getIntent().getStringExtra("title"));
+        bar = (TitleHeaderBar) findViewById(R.id.poi_save_titleBar);
+        saveTypeName = (TextView) findViewById(R.id.save_type_name);
+        add_btn = (LinearLayout) findViewById(R.id.save_btn);
+        bar.getTitleTextView().setText(getIntent().getStringExtra("title") + "收藏");
+        saveTypeName.setText("收藏" + getIntent().getStringExtra("title"));
 
 
-
-        if(getIntent().getStringExtra("title").equals("购物")){
+        if (getIntent().getStringExtra("title").equals("购物")) {
             resizeData(strategy.shopping);
-            type=TravelApi.PeachType.SHOPPING;
-            requestType=ADD_SHOPPING_REQUEST_CODE;
+            type = TravelApi.PeachType.SHOPPING;
+            requestType = ADD_SHOPPING_REQUEST_CODE;
             add_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
                     intent.putExtra("type", TravelApi.PeachType.SHOPPING);
                     intent.putExtra("canAdd", true);
-                    intent.putExtra("strategy",strategy);
+                    intent.putExtra("strategy", strategy);
                     startActivityForResult(intent, ADD_SHOPPING_REQUEST_CODE);
                 }
             });
@@ -91,17 +90,17 @@ public class PoiSaveActivity extends PeachBaseActivity {
                 }
             });
 
-        }else {
+        } else {
             resizeData(strategy.restaurant);
-            type=TravelApi.PeachType.RESTAURANTS;
-            requestType=ADD_REST_REQUEST_CODE;
+            type = TravelApi.PeachType.RESTAURANTS;
+            requestType = ADD_REST_REQUEST_CODE;
             add_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
                     intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
                     intent.putExtra("canAdd", true);
-                    intent.putExtra("strategy",strategy);
+                    intent.putExtra("strategy", strategy);
                     startActivityForResult(intent, ADD_REST_REQUEST_CODE);
                 }
             });
@@ -124,12 +123,12 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode== Activity.RESULT_OK){
-            if(requestCode==ADD_SHOPPING_REQUEST_CODE){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ADD_SHOPPING_REQUEST_CODE) {
                 strategy.shopping = data.getParcelableArrayListExtra("poiList");
                 resizeData(strategy.shopping);
                 adapter.notifyDataSetChanged();
-            }else if(requestCode==ADD_REST_REQUEST_CODE){
+            } else if (requestCode == ADD_REST_REQUEST_CODE) {
                 strategy.restaurant = data.getParcelableArrayListExtra("poiList");
                 resizeData(strategy.restaurant);
                 adapter.notifyDataSetChanged();
@@ -150,11 +149,11 @@ public class PoiSaveActivity extends PeachBaseActivity {
         }
     }
 
-    private class PoiSaveAdapter extends BaseExpandableListAdapter{
+    private class PoiSaveAdapter extends BaseExpandableListAdapter {
 
-        private TextView groupTitle,groupSum,save_btn;
+        private TextView groupTitle, groupSum, save_btn;
         private ImageView childCellImage;
-        private TextView childTitle,childLevel,childTime;
+        private TextView childTitle, childLevel, childTime;
         private DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
@@ -193,11 +192,11 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         @Override
         public long getChildId(int i, int i1) {
-            int sum=0;
-            for(int j=0;j<i;j++){
-                sum+=content.get(j).size();
+            int sum = 0;
+            for (int j = 0; j < i; j++) {
+                sum += content.get(j).size();
             }
-            return sum+i1;
+            return sum + i1;
         }
 
         @Override
@@ -207,20 +206,20 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         @Override
         public View getGroupView(final int i, boolean b, View view, ViewGroup viewGroup) {
-            if(view==null){
-               view= View.inflate(mContext,R.layout.poi_save_group_cell,null);
+            if (view == null) {
+                view = View.inflate(mContext, R.layout.poi_save_group_cell, null);
             }
             groupTitle = (TextView) view.findViewById(R.id.tv_save_group_palce);
             groupSum = (TextView) view.findViewById(R.id.tv_save_group_num);
             save_btn = (TextView) view.findViewById(R.id.poi_save_btn);
 
             groupTitle.setText(destinations.get(i).zhName);
-            groupSum.setText("("+content.get(i).size() + ")");
+            groupSum.setText("(" + content.get(i).size() + ")");
 
             save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ArrayList<LocBean> list=new ArrayList<LocBean>();
+                    ArrayList<LocBean> list = new ArrayList<LocBean>();
                     list.add(destinations.get(i));
 
                     Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
@@ -237,19 +236,19 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         @Override
         public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-            if(view==null){
-                view= View.inflate(mContext,R.layout.item_plan_day_detil,null);
+            if (view == null) {
+                view = View.inflate(mContext, R.layout.item_plan_day_detil, null);
             }
             childCellImage = (ImageView) view.findViewById(R.id.iv_poi_img);
             childTitle = (TextView) view.findViewById(R.id.tv_poi_title);
             childLevel = (TextView) view.findViewById(R.id.tv_poi_level);
             childTime = (TextView) view.findViewById(R.id.tv_poi_time);
 
-            value=content.get(i);
+            value = content.get(i);
 
-            if(value.get(i1).images.size()==0){
+            if (value.get(i1).images.size() == 0) {
                 ImageLoader.getInstance().displayImage(null, childCellImage, options);
-            }else{
+            } else {
                 ImageLoader.getInstance().displayImage(value.get(i1).images.get(0).url, childCellImage, options);
             }
             childTitle.setText(value.get(i1).zhName);

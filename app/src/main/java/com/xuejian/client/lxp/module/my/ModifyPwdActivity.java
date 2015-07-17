@@ -94,8 +94,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                             DialogManager.getInstance().dissMissLoadingDialog();
                             if (code == HttpManager.PWD_ERROR) {
                                 ToastUtil.getInstance(ModifyPwdActivity.this).showToast("密码错误");
-                            }
-                            else if (!isFinishing())
+                            } else if (!isFinishing())
                                 ToastUtil.getInstance(ModifyPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         }
                     });

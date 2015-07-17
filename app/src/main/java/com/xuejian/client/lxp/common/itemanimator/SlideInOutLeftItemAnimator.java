@@ -22,12 +22,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- *
  * @see android.support.v7.widget.RecyclerView#setItemAnimator(android.support.v7.widget.RecyclerView.ItemAnimator)
  */
 public class SlideInOutLeftItemAnimator extends BaseItemAnimator {
 
-    public SlideInOutLeftItemAnimator(RecyclerView recyclerView){
+    public SlideInOutLeftItemAnimator(RecyclerView recyclerView) {
         super(recyclerView);
     }
 

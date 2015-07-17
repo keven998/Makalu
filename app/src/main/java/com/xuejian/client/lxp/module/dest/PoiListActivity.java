@@ -52,7 +52,7 @@ public class PoiListActivity extends PeachBaseActivity {
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
-//    @InjectView(R.id.et_search)
+    //    @InjectView(R.id.et_search)
 //    EditText mEtSearch;
 //    @InjectView(R.id.btn_search)
 //    Button mBtnSearch;
@@ -66,7 +66,7 @@ public class PoiListActivity extends PeachBaseActivity {
     private boolean canAdd;
     private List<LocBean> locList;
     private ArrayList<PoiDetailBean> hasAddList;
-    private ArrayList<PoiDetailBean> originAddList=new ArrayList<PoiDetailBean>();
+    private ArrayList<PoiDetailBean> originAddList = new ArrayList<PoiDetailBean>();
     private StrategyBean strategy;
     private int curPage = 0;
     private LocBean curLoc;
@@ -75,13 +75,13 @@ public class PoiListActivity extends PeachBaseActivity {
     private String value;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
         initData();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -106,19 +106,19 @@ public class PoiListActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         canAdd = getIntent().getBooleanExtra("canAdd", false);
         strategy = getIntent().getParcelableExtra("strategy");
-        if (!canAdd){
-            locList=getIntent().getParcelableArrayListExtra("locList");
-        }else {
+        if (!canAdd) {
+            locList = getIntent().getParcelableArrayListExtra("locList");
+        } else {
             locList = getIntent().getParcelableArrayListExtra("locList");
             //locList = strategy.localities;
-            if(type.equals(TravelApi.PeachType.SHOPPING)){
+            if (type.equals(TravelApi.PeachType.SHOPPING)) {
                 hasAddList = strategy.shopping;
-            }else if(type.equals(TravelApi.PeachType.RESTAURANTS)){
+            } else if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                 hasAddList = strategy.restaurant;
             }
             originAddList.addAll(hasAddList);
         }
-        isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail",false);
+        isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail", false);
         value = getIntent().getStringExtra("value");
 
 //        if (locList.size() > 1) {
@@ -130,9 +130,9 @@ public class PoiListActivity extends PeachBaseActivity {
             mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(checkAddDiff()){
+                    if (checkAddDiff()) {
                         savePoiStrategy();
-                    }else {
+                    } else {
                         Intent intent = new Intent();
                         intent.putParcelableArrayListExtra("poiList", hasAddList);
                         setResult(RESULT_OK, intent);
@@ -226,10 +226,10 @@ public class PoiListActivity extends PeachBaseActivity {
 
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
             mTitle.setText(String.format("吃在%s", curLoc.zhName));
-          //  mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
+            //  mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("%s购物", curLoc.zhName));
-         //   mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
+            //   mTvPoiWantType.setImageResource(R.drawable.jingdian_shopping);
         }
 
         loadPageData();
@@ -237,9 +237,9 @@ public class PoiListActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(checkAddDiff()){
+        if (checkAddDiff()) {
             savePoiStrategy();
-        }else {
+        } else {
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra("poiList", hasAddList);
             setResult(RESULT_OK, intent);
@@ -247,11 +247,11 @@ public class PoiListActivity extends PeachBaseActivity {
         }
     }
 
-    private void savePoiStrategy(){
+    private void savePoiStrategy() {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, PoiListActivity.this, strategy);
         StrategyManager.putRestaurantJson(PoiListActivity.this, jsonObject, strategy);
-        StrategyManager.putShoppingJson(PoiListActivity.this, jsonObject ,strategy);
+        StrategyManager.putShoppingJson(PoiListActivity.this, jsonObject, strategy);
 
         DialogManager.getInstance().showLoadingDialog(PoiListActivity.this);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
@@ -279,17 +279,17 @@ public class PoiListActivity extends PeachBaseActivity {
         });
     }
 
-    private boolean checkAddDiff(){
-        boolean flag=false;
-        if(originAddList.size()==hasAddList.size()){
-            for(int i=0;i<originAddList.size();i++){
-                if(!originAddList.get(i).id.equals(hasAddList.get(i).id)){
-                    flag=true;
+    private boolean checkAddDiff() {
+        boolean flag = false;
+        if (originAddList.size() == hasAddList.size()) {
+            for (int i = 0; i < originAddList.size(); i++) {
+                if (!originAddList.get(i).id.equals(hasAddList.get(i).id)) {
+                    flag = true;
                 }
             }
             return flag;
-        }else{
-            flag=true;
+        } else {
+            flag = true;
             return flag;
         }
     }
@@ -338,7 +338,7 @@ public class PoiListActivity extends PeachBaseActivity {
             public void doSuccess(String result, String method) {
                 CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
                 if (poiGuideResult.code == 0) {
-                    bindGuideView(poiGuideResult.result,value);
+                    bindGuideView(poiGuideResult.result, value);
                 }
             }
 
@@ -356,38 +356,38 @@ public class PoiListActivity extends PeachBaseActivity {
         });
     }
 
-    private void bindGuideView(final PoiGuideBean result,String value) {
+    private void bindGuideView(final PoiGuideBean result, String value) {
 
-            if (TextUtils.isEmpty(result.desc)) {
-                headerView.setVisibility(View.GONE);
-            } else {
-                headerView.setVisibility(View.VISIBLE);
+        if (TextUtils.isEmpty(result.desc)) {
+            headerView.setVisibility(View.GONE);
+        } else {
+            headerView.setVisibility(View.VISIBLE);
 //                if(isFromCityDetail) {
 //                    mTvCityPoiDesc.setText(value);
 //                }else{
-                    mTvCityPoiDesc.setText(result.desc);
-       //         }
-            }
-            findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
-                    if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                        MobclickAgent.onEvent(mContext, "event_delicacy_strategy");
-                        intent.putExtra("url", result.detailUrl);
-//                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
-                        intent.putExtra("title", "美食攻略");
-                    } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                        MobclickAgent.onEvent(mContext, "event_shopping_strategy");
-                        intent.putExtra("url", result.detailUrl);
-//                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
-                        intent.putExtra("title", "购物攻略");
-                    }
-                    startActivity(intent);
-
-                }
-            });
+            mTvCityPoiDesc.setText(result.desc);
+            //         }
         }
+        findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                    MobclickAgent.onEvent(mContext, "event_delicacy_strategy");
+                    intent.putExtra("url", result.detailUrl);
+//                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
+                    intent.putExtra("title", "美食攻略");
+                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                    MobclickAgent.onEvent(mContext, "event_shopping_strategy");
+                    intent.putExtra("url", result.detailUrl);
+//                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
+                    intent.putExtra("title", "购物攻略");
+                }
+                startActivity(intent);
+
+            }
+        });
+    }
 
     private void getPoiListData(final String type, final String cityId, final int page) {
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
