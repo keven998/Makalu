@@ -185,9 +185,9 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        // if(((AdapterContextMenuInfo)menuInfo).position > 0){ m,
-        getActivity().getMenuInflater().inflate(R.menu.delete_message, menu);
-        // }
+        if (((AdapterView.AdapterContextMenuInfo) menuInfo).position > 1) {
+            getActivity().getMenuInflater().inflate(R.menu.delete_message, menu);
+        }
     }
 
     @Override
@@ -229,16 +229,22 @@ public class TalkFragment extends PeachBaseFragment {
         conversations.clear();
         tempConversations.clear();
         tempConversations.addAll(IMClient.getInstance().getConversationList());
+        conversations.add(0, new ConversationBean(10, 0, "single"));
+        conversations.add(1, new ConversationBean(11, 0, "single"));
         for (ConversationBean bean : tempConversations) {
             if (bean.getFriendId() == 10000) {
-                conversations.add(0, bean);
+                conversations.set(1, bean);
+                del.add(bean);
+            }
+            if (bean.getFriendId() == 10001) {
+                conversations.set(0, bean);
                 del.add(bean);
             }
         }
         tempConversations.removeAll(del);
         sortConversationByLastChatTime(tempConversations);
-        if (conversations.size() == 0) {
-            conversations.add(0, new ConversationBean(10000, 0, "single"));
+        if (conversations.get(0).getFriendId() == 10) {
+            conversations.set(0, new ConversationBean(10001, 0, "single"));
         }
         conversations.addAll(tempConversations);
         refresh();
