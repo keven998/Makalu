@@ -129,7 +129,7 @@ public class StrategyActivity extends PeachBaseActivity {
         mStrategyViewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         mStrategyViewpager.setPrepareNumber(2);
-        mStrategyIndicator.setDividerDrawable(getResources().getDrawable(R.color.gray_normal));
+        mStrategyIndicator.setDividerDrawable(getResources().getDrawable(R.color.color_line));
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
 
         findViewById(R.id.iv_location).setOnClickListener(new View.OnClickListener() {
