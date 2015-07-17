@@ -1,7 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="title_bar_height">46dp</dimen>
-    <dimen name="content_top_margin">44dp</dimen>
+    <dimen name="title_bar_height">52dp</dimen>
+    <dimen name="content_top_margin">50dp</dimen>
     <dimen name="title_text_size">18sp</dimen>
 
     <dimen name="alpha_indexing_size_normal">22dp</dimen>
