@@ -254,7 +254,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
             }
             childTitle.setText(value.get(i1).zhName);
             childLevel.setText(value.get(i1).getFormatRank());
-            childTime.setText(value.get(i1).address);
+            childTime.setText(value.get(i1).type);
             return view;
         }
 

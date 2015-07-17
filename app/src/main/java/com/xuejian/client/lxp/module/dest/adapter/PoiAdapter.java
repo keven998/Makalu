@@ -1,7 +1,10 @@
 package com.xuejian.client.lxp.module.dest.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -120,7 +123,7 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder = new SpotViewHolder(convertView);
                 convertView.setTag(spotViewHolder);
                 if (!mIsCanAdd) {
-                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.theme_button_selctor);
+                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn);
                     spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                     spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
                     //spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
@@ -132,7 +135,7 @@ public class PoiAdapter extends BaseAdapter {
                 poiViewHolder = new PoiViewHolder(convertView);
                 convertView.setTag(poiViewHolder);
                 if (!mIsCanAdd) {
-                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.theme_button_selctor);
+                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn);
                     poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
                     //poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
                 }else {
@@ -170,10 +173,12 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 if (poiDetailBean.hasAdded) {
                     spotViewHolder.mBtnAdd.setText("已" + mAddStr);
-                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_has_add);
+                    spotViewHolder.mBtnAdd.setTextColor(Color.rgb(150, 150, 150));
+                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_disable);
                 } else {
                     spotViewHolder.mBtnAdd.setText(mAddStr);
-                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_normal_shape_radius_4);
+                    spotViewHolder.mBtnAdd.setTextColor(Color.rgb(153, 204, 102));
+                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_normal);
                 }
                  spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -217,10 +222,12 @@ public class PoiAdapter extends BaseAdapter {
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
                     poiViewHolder.mBtnAdd.setText("已" + mAddStr);
-                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_has_add);
+                    poiViewHolder.mBtnAdd.setTextColor(Color.rgb(150,150,150));
+                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_disable);
                 } else {
                     poiViewHolder.mBtnAdd.setText(mAddStr);
-                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.btn_theme_normal_shape_radius_4);
+                    poiViewHolder.mBtnAdd.setTextColor(Color.rgb(153,204,102));
+                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_normal);
                 }
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override

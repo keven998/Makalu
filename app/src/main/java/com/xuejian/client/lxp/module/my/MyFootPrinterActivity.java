@@ -388,6 +388,16 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        updateFootPrint(originalAllAddCityList);
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra("footprint", originalAllAddCityList);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
     }
