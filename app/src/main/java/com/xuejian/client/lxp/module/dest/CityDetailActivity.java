@@ -286,7 +286,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 if (nc < bt.length() && nc < timeView.getText().length()) {
                     String text = bt.substring(0, nc - 8);
                     SpannableString planStr = new SpannableString("全文");
-                    planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     SpannableStringBuilder spb = new SpannableStringBuilder();
                     spb.append(String.format("%s... ", text)).append(planStr);
                     timeView.setText(spb);
@@ -338,7 +338,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                             text = desc.substring(0, numChars - 4);
                         }
                         SpannableString planStr = new SpannableString("全文");
-                        planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color_highlight)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         SpannableStringBuilder spb = new SpannableStringBuilder();
                         spb.append(String.format("%s... ", text)).append(planStr);
                         descView.setText(spb);
