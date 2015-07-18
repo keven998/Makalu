@@ -236,7 +236,7 @@ public class PoiListActivity extends PeachBaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed(){
         if(canAdd) {
             if (checkAddDiff()) {
                 savePoiStrategy();
