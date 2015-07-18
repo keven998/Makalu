@@ -130,6 +130,7 @@ public class IMUtils {
         } else {
             ToastUtil.getInstance(context).showToast("请先登录");
             Intent intent = new Intent(context, LoginActivity.class);
+            intent.putExtra("isFromTalkShare",true);
             ((Activity) context).startActivityForResult(intent, IM_LOGIN_REQUEST_CODE);
         }
     }

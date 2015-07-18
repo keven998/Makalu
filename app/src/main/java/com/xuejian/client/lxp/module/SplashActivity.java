@@ -46,6 +46,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
     int REGESTER_REQUEST = 5;
     int LOGIN_REQUEST = 6;
     private Long NEWUSER = 1l;
+    public static SplashActivity instance=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +56,10 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         if (file == null) {
             SharedPreferencesUtil.saveValue(SplashActivity.this, "isLogin", false);
         }
-
         IMClient.initIM(getApplicationContext());
         initView();
         initData();
+        instance=this;
     }
 
     protected void initData() {
@@ -192,6 +193,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.sp_log:
                 Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class); //
+                logActivity.putExtra("isFromSplash",true);
                 startActivityForResult(logActivity, LOGIN_REQUEST);
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 break;
@@ -207,6 +209,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                 mainActivity.putExtra("FromBounce", true);
                 startActivity(mainActivity);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
                 break;
 
             default:
@@ -223,8 +226,8 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             DialogManager.getInstance().showLoadingDialog(this, "正在登录");
             imLogin(user);
         } else {
-            finish();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+           // finish();
+           // overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 

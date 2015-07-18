@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.my;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,6 +31,7 @@ import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.SplashActivity;
 
 public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
@@ -47,6 +49,7 @@ public class LoginActivity extends PeachBaseActivity {
     private boolean isBackWeixinLoginPage = true;
     private boolean isWeixinClickLogin = false;
     CustomLoadingDialog dialog;
+    private boolean isFromSplash,isFromTalkShare;
 
     //type
     private int LOGIN = 1;
@@ -72,7 +75,8 @@ public class LoginActivity extends PeachBaseActivity {
                 startActivityForResult(intent, REQUEST_CODE_REG);
             }
         });
-
+        isFromSplash = getIntent().getBooleanExtra("isFromSplash",false);
+        isFromTalkShare = getIntent().getBooleanExtra("isFromTalkShare",false);
         request_code = getIntent().getIntExtra("request_code", 0);
         if (request_code == REQUEST_CODE_REG) {
             Intent intent = new Intent(this, RegActivity.class);
@@ -159,9 +163,17 @@ public class LoginActivity extends PeachBaseActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityWithNoAnim(intent);
+                if(isFromTalkShare){
+                    finish();
+                }else {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityWithNoAnim(intent);
+                    finish();
+                    if (isFromSplash) {
+                        SplashActivity.instance.finish();
+                    }
+                }
                 // setResult(RESULT_OK);
                 // finishWithNoAnim();
             }
