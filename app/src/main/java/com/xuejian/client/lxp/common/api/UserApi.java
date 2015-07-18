@@ -63,21 +63,23 @@ public class UserApi extends BaseApi {
 
 
     //联系人
-    public final static String CONTACTS = "/users/contacts";
+//    public final static String CONTACTS = "/users/contacts";
+    public final static String CONTACTS = "/users/%s/contacts";
     //请求添加好友
     public final static String REQUEST_ADD_CONTACTS = "/users/request-contacts";
     //搜索联系人
     public final static String SEACH_CONTACT = "/users/search";
     public final static String SEACH_CONTACT_BY_TEL = "/users?tel=";
     public final static String SEACH_CONTACT_BY_NICKNAME = "/user?nickName=";
-
+    // 获取相册
+    public final static String ALBUMS = "/users/%s/albums";
     //搜索达人足迹
     public final static String SEARCH_EXPERT_FOOTPRINT = "/users/expert/tracks";
     //根据环信ID获取用户信息
     public final static String GET_CONTACT_BY_HX = "/users/easemob";
     //通讯录匹配
-    public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
-
+  //  public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
+    public final static String SEARCH_BY_ADDRESSBOOK = "/users/match";
     //根据足迹获取达人
     public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
 
@@ -413,7 +415,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getContact(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + CONTACTS);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS,AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -506,7 +508,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler deleteContact(String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.BASE_URL + CONTACTS + "/" + uid);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS,AccountManager.getCurrentUserId()) + "/" + uid);
 //        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -585,7 +587,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getUserPicAlbumn(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/albums");
+        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS,userId));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -603,43 +605,8 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler delUserAlbumPic(String userId, String picId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/albums/" + picId);
+        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS,userId) + picId);
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
-    }
-
-
-    /**
-     * 根据环信ID获取联系人
-     *
-     * @param users
-     * @param callback
-     * @return
-     */
-
-    public static PTRequestHandler getContactByHx(List<String> users, HttpCallBack callback) {
-        PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + GET_CONTACT_BY_HX);
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
-        JSONObject jsonObject = new JSONObject();
-        try {
-            JSONArray jsonArray = new JSONArray();
-            for (String user : users) {
-                jsonArray.put(user);
-            }
-            jsonObject.put("easemob", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        LogUtil.d(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
 
@@ -689,7 +656,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler searchByAddressBook(List<AddressBookbean> bookList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + SEARCH_BY_ADDRESSBOOK);
+        request.setUrl(SystemConfig.DEV_URL + SEARCH_BY_ADDRESSBOOK);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         request.setHeader("Content-Encoding", "gzip");
         setDefaultParams(request);

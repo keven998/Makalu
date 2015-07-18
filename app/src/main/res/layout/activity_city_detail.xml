@@ -228,7 +228,7 @@
                     android:background="@drawable/selector_bg_city_album_panel"
                     android:gravity="center"
                     android:text="～阅读更多·达人游记～"
-                    android:textColor="@color/app_theme_color_highlight"
+                    android:textColor="@color/app_theme_color"
                     android:textSize="12sp"
                     android:visibility="visible" />
             </FrameLayout>

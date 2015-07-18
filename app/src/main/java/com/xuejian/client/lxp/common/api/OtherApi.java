@@ -31,6 +31,8 @@ public class OtherApi extends BaseApi {
     public final static String UPLOAD_TOKEN = "/misc/put-policy/";
     //游记搜索
     public final static String TRAVEL_NOTES = "/travel-notes/search";
+ //   public final static String TRAVEL_NOTES = "/travelnotes";
+
     //收藏
     public final static String FAV = "/misc/favorites";
     //运营
@@ -49,7 +51,7 @@ public class OtherApi extends BaseApi {
     public static PTRequestHandler getCoverStory(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + COVER_STORY);
+        request.setUrl(SystemConfig.DEV_URL + COVER_STORY);
         request.putUrlParams("width", LocalDisplay.SCREEN_WIDTH_PIXELS + "");
         request.putUrlParams("height", LocalDisplay.SCREEN_HEIGHT_PIXELS + "");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");

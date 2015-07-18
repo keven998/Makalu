@@ -36,19 +36,20 @@ public class TravelApi extends BaseApi {
 
     //目的地推荐
     public final static String REC_DEST = "/recommend";
-    //国内目的地列表
+    //国内目的地列表  已修改
     public final static String IN_DESTINATIONS = "/geo/localities/domestic";
-    //国外目的地列表
+    //国外目的地列表  已修改
     public final static String OUT_DESTINATIONS = "/geo/localities/abroad";
-    //目的地详情
+    //目的地详情  已修改
     public final static String CITY_DETAIL = "/geo/localities/";
-    //目的地图集
+    //目的地图集  已修改
     public final static String CITY_GALLEY = "/geo/localities/%1$s/album";
     //目的地美食、购物介绍
     public final static String LOC_POI_GUIDE = "/guides/locality/%1$s/%2$s";
     //poi相关
     //景点
-    public final static String SPOT_DETAIL = "/poi/vs/";
+    //public final static String SPOT_DETAIL = "/poi/vs/";
+    public final static String SPOT_DETAIL = "/poi/viewspots/";
     //POI详情
     public final static String POI_DETAIL = "/poi/%1$s/";
     //POI列表
@@ -73,8 +74,34 @@ public class TravelApi extends BaseApi {
     public final static String SUGGEST = "/suggestions";
     //周边
     public final static String NEARBY = "/poi/nearby";
-
-
+//    //景点列表
+//    /app/poi/viewspots
+//    //单个景点的信息
+//    /app/poi/viewspots/:id
+//    //景点的用户评论
+//    /app/poi/viewspots/:id/comments
+//    //景点的详细介绍
+//    /app/poi/viewspots/:id/descriptions
+//    //单个景点的深度攻略（HTML页面）
+//    /app/poi/viewspots/:id/details
+//    //餐厅列表
+//    /app/poi/restaurants
+//    //单个餐厅的信息
+//    /app/poi/restaurants/:id
+//    //餐厅的评论
+//    /app/poi/restaurants/:id/comments
+//    //商场列表
+//    /app/poi/shopping
+//    //单个商场的信息
+//    /app/poi/shopping/:id
+//    //商场的评论
+//    /app/poi/shopping/:id/comments
+    //poi 列表
+    public final static String POI_LIST = "/poi/%s";
+    //单个POI的信息
+    public final static String POI_INFO = "/poi/%s/%s";
+    // 单个POI的评论
+    public final static String POI_COMMENTS = "/poi/%s/%s/comments";
     /**
      * 获取目的地推荐
      *
@@ -99,7 +126,7 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getInDestList(String lastModeify, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + IN_DESTINATIONS);
+        request.setUrl(SystemConfig.DEV_URL + IN_DESTINATIONS);
 //        request.putUrlParams("groupBy","true");
         setDefaultParams(request);
         if (!TextUtils.isEmpty(lastModeify)) {
@@ -118,7 +145,7 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getInDestListByGroup(String lastModeify, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + IN_DESTINATIONS);
+        request.setUrl(SystemConfig.DEV_URL + IN_DESTINATIONS);
         request.putUrlParams("groupBy", "true");
         setDefaultParams(request);
         if (!TextUtils.isEmpty(lastModeify)) {
@@ -137,7 +164,7 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getOutDestList(String lastModeify, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + OUT_DESTINATIONS);
+        request.setUrl(SystemConfig.DEV_URL + OUT_DESTINATIONS);
         setDefaultParams(request);
         if (!TextUtils.isEmpty(lastModeify)) {
             request.addHeader("Cache-Control", "private");
@@ -169,7 +196,7 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getCityDetail(String id, int imgWidth, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + CITY_DETAIL + id);
+        request.setUrl(SystemConfig.DEV_URL + CITY_DETAIL + id);
         request.putUrlParams("noteCnt", "3");
         request.putUrlParams("imgWidth", imgWidth + "");
         setDefaultParams(request);
@@ -185,7 +212,7 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getCityGalley(String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + String.format(CITY_GALLEY, id));
+        request.setUrl(SystemConfig.DEV_URL + String.format(CITY_GALLEY, id));
         request.putUrlParams("imgWidth", (int) (LocalDisplay.SCREEN_HEIGHT_PIXELS / 3 / 1.5) + "");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -201,7 +228,7 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getSpotDetail(String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + SPOT_DETAIL + id);
+        request.setUrl(SystemConfig.DEV_URL + SPOT_DETAIL + id);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -215,7 +242,15 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getPoiListByLoc(String type, String id, int page, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC, type) + id);
+      //  request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC, type) + id);
+
+        if (type.equals("vs"))type="viewspots";
+        if (type.equals("restaurant"))type=type+"s";
+        request.setUrl(SystemConfig.DEV_URL + String.format(POI_LIST, type));
+        request.putUrlParams("locality", id);
+
+
+
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
@@ -232,7 +267,11 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getPoiDetail(String type, String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + String.format(POI_DETAIL, type) + id);
+
+        if (type.equals("vs"))type="viewspots";
+        if (type.equals("restaurant"))type=type+"s";
+
+        request.setUrl(SystemConfig.DEV_URL + String.format(POI_DETAIL, type) + id);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
