@@ -237,12 +237,16 @@ public class PoiListActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (checkAddDiff()) {
-            savePoiStrategy();
-        } else {
-            Intent intent = new Intent();
-            intent.putParcelableArrayListExtra("poiList", hasAddList);
-            setResult(RESULT_OK, intent);
+        if(canAdd) {
+            if (checkAddDiff()) {
+                savePoiStrategy();
+            } else {
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("poiList", hasAddList);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        }else{
             finish();
         }
     }
