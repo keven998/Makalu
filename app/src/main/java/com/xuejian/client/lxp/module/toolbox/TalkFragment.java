@@ -246,6 +246,9 @@ public class TalkFragment extends PeachBaseFragment {
         if (conversations.get(0).getFriendId() == 10) {
             conversations.set(0, new ConversationBean(10001, 0, "single"));
         }
+        if (conversations.get(1).getFriendId() == 11) {
+            conversations.set(1, new ConversationBean(10000, 0, "single"));
+        }
         conversations.addAll(tempConversations);
         refresh();
     }
