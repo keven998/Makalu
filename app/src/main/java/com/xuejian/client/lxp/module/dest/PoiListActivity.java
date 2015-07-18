@@ -257,6 +257,9 @@ public class PoiListActivity extends PeachBaseActivity {
         StrategyManager.putRestaurantJson(PoiListActivity.this, jsonObject, strategy);
         StrategyManager.putShoppingJson(PoiListActivity.this, jsonObject, strategy);
 
+        ArrayList<LocBean> locs=new ArrayList<LocBean>();
+        locs.addAll(strategy.localities);
+
         DialogManager.getInstance().showLoadingDialog(PoiListActivity.this);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
             @Override
