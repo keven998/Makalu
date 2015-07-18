@@ -157,6 +157,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
                         Intent intent = new Intent(mContext, StrategyActivity.class);
                         intent.putExtra("id", bean.id);
+                        intent.putExtra("userId",userId);
                         startActivityForResult(intent, RESULT_PLAN_DETAIL);
                     }
                 }

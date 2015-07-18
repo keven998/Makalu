@@ -105,6 +105,8 @@ public class TravelApi extends BaseApi {
     public final static String POI_INFO = "/poi/%s/%s";
     // 单个POI的评论
     public final static String POI_COMMENTS = "/poi/%s/%s/comments";
+
+    public final static String USERS = "/users/";
     /**
      * 获取目的地推荐
      *
@@ -285,11 +287,12 @@ public class TravelApi extends BaseApi {
      *
      * @param callback
      * @return
+     * change to api-dev
      */
-    public static PTRequestHandler getGuideDetail(String id, HttpCallBack callback) {
+    public static PTRequestHandler getGuideDetail(String userId, String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + String.format(GUIDEBYID, id));
+        request.setUrl(SystemConfig.DEV_URL+USERS+userId + String.format(GUIDEBYID, id));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -301,6 +304,7 @@ public class TravelApi extends BaseApi {
      * @param locList
      * @param callback
      * @return
+     * change to api_dev
      */
     public static PTRequestHandler createGuide
     (String action,List<String> locList, boolean recommend, HttpCallBack callback) {
@@ -348,7 +352,7 @@ public class TravelApi extends BaseApi {
     (String id, String guideJson, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + GUIDE);
+        request.setUrl(SystemConfig.DEV_URL+USERS+AccountManager.CurrentUserId + GUIDE);
         request.putUrlParams("id", id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
@@ -367,18 +371,19 @@ public class TravelApi extends BaseApi {
      *
      * @param callback
      * @return
+     * change to api-dev
      */
     public static PTRequestHandler getStrategyPlannedList(String userId, int page, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + GUIDE);
+        request.setUrl(SystemConfig.DEV_URL+USERS+ userId+ GUIDE);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         if (!TextUtils.isEmpty(status)) {
             request.putUrlParams("status", status);
         }
         setDefaultParams(request);
-        request.setHeader("UserId", userId);
+        //request.setHeader("UserId", userId);
         return HttpManager.request(request, callback);
     }
 
@@ -387,6 +392,7 @@ public class TravelApi extends BaseApi {
      *
      * @param callback
      * @return
+     * change to api-dev
      */
     public static PTRequestHandler copyStrategy(long userId,String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -494,6 +500,7 @@ public class TravelApi extends BaseApi {
      * @param id
      * @param callback
      * @return
+     * change to api-dev
      */
     public static PTRequestHandler modifyGuideVisited
     (String id, String status, HttpCallBack callback) {
