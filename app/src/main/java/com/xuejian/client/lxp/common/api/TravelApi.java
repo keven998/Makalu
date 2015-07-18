@@ -246,7 +246,6 @@ public class TravelApi extends BaseApi {
 
         if (type.equals("vs"))type="viewspots";
         if (type.equals("restaurant"))type=type+"s";
-        if (type.equals("shopping"))type=type+"s";
         request.setUrl(SystemConfig.DEV_URL + String.format(POI_LIST, type));
         request.putUrlParams("locality", id);
 
@@ -271,7 +270,6 @@ public class TravelApi extends BaseApi {
 
         if (type.equals("vs"))type="viewspots";
         if (type.equals("restaurant"))type=type+"s";
-        if (type.equals("shopping"))type=type+"s";
 
         request.setUrl(SystemConfig.DEV_URL + String.format(POI_DETAIL, type) + id);
         setDefaultParams(request);

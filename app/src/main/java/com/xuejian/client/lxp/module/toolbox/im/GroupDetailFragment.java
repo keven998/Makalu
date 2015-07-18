@@ -429,7 +429,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 public void onClick(View v) {
                     if (!AccountManager.getCurrentUserId().equals(String.valueOf(itemData.getUserId()))) {
                         Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
-                        intent.putExtra("userId", itemData.getUserId().intValue());
+                        intent.putExtra("userId", itemData.getUserId());
                         intent.putExtra("userNick", itemData.getNickName());
                         startActivity(intent);
                     }

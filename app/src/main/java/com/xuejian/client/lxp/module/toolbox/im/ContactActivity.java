@@ -43,8 +43,6 @@ public class ContactActivity extends PeachBaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, contactListFragment).commit();
-
-
     }
 
     @Override
