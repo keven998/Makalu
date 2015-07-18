@@ -18,6 +18,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.module.SplashActivity;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -80,8 +81,8 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                             if (resetResult.code == 0) {
 //                                AccountManager.getInstance().saveLoginAccount(mContext, user);
                                 Intent intent = new Intent();
-                                intent.putExtra("user", resetResult.result);
-                                setResult(RESULT_OK, intent);
+                                intent.setClass(ResetPwdActivity.this, SplashActivity.class);
+                                startActivity(intent);
                                 finish();
                             } else {
                                 ToastUtil.getInstance(mContext).showToast(resetResult.err.message);

@@ -225,7 +225,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler resetPwd(String tel, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
-        //request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, AccountManager.getCurrentUserId()));
+        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, "_"));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
