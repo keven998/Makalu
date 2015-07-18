@@ -110,7 +110,7 @@ public class HttpUtils {
                         Log.i(Config.TAG, "ack Result : " + s);
                     }
                     for (int j = 0; j < resultArray.length(); j++) {
-                        Message msg = JSON.parseObject(resultArray.getJSONObject(j).getString("message"), Message.class);
+                        Message msg = JSON.parseObject(resultArray.getJSONObject(j).toString(), Message.class);
                         list.add(msg);
                     }
                     if (list.size() > 0) {

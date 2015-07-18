@@ -36,6 +36,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
@@ -359,7 +360,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
 
         ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
-        constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
+        int res=ConstellationUtil.calculateConstellation(bean.getBirthday());
+        if (res==0){
+            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
+        }else constellationIv.setImageResource(res);
+
 
         TextView tvMemo = (TextView) findViewById(R.id.tv_memo);
         if (!TextUtils.isEmpty(bean.getSignature())) {
@@ -613,4 +618,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public void onClick(View v) {
 
     }
+
+
+
 }

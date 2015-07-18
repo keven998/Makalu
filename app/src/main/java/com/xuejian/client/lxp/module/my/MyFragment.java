@@ -29,6 +29,7 @@ import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
@@ -143,7 +144,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             nickNameTv.setText(user.getNickName());
             idTv.setText("ID：" + user.getUserId());
             tvLevel.setText("LV" + level);
-            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
+            int res= ConstellationUtil.calculateConstellation(user.getBirthday());
+            if (res==0){
+                constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
+            }else constellationIv.setImageResource(res);
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
