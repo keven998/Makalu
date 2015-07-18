@@ -94,7 +94,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
 
             holder.status.setVisibility(View.VISIBLE);
             holder.status.setText("同意");
-            holder.status.setBackgroundResource(0);
             // 设置点击事件
             holder.status.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -76,7 +76,7 @@
             android:layout_marginRight="24dp"
             android:background="@drawable/accept_box"
             android:text="同意"
-            android:textColor="@color/second_font_color"
+            android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
     </RelativeLayout>
 

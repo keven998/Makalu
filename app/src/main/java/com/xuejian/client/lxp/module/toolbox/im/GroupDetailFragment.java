@@ -93,6 +93,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
         groupId = getArguments().getString("groupId");
         memberGv = (ListView) getView().findViewById(R.id.gv_members);
         addGroup = (TextView) getView().findViewById(R.id.tv_add_to_group);
+
         delGroupMember = (TextView) getView().findViewById(R.id.tv_del_to_group);
         delGroupMember.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,7 +257,10 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 return new MemberViewHolder();
             }
         });
-
+        long creater=UserDBManager.getInstance().getGroupCreater(Long.parseLong(groupId));
+        if (creater<0||creater!=Long.parseLong(AccountManager.CurrentUserId)){
+            delGroupMember.setVisibility(View.INVISIBLE);
+        }
         groupNameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

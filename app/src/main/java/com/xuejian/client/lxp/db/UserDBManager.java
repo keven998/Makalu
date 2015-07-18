@@ -74,7 +74,22 @@ public class UserDBManager {
         }
         mdb = null;
     }
-
+    public long getGroupCreater(long groupId){
+        mdb=getDB();
+        Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
+        String data = null;
+        while (cursor.moveToNext()) {
+            data = cursor.getString(0);
+        }
+        closeDB();
+        try {
+            JSONObject object =new JSONObject(data);
+            return object.getLong("creator");
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
 
     public List<Long> getGroupMemberId(long groupId) {
         mdb = getDB();
@@ -91,10 +106,12 @@ public class UserDBManager {
                 list.add(array.getLong(i));
             }
             cursor.close();
+            closeDB();
             return list;
         } catch (JSONException e) {
             cursor.close();
             e.printStackTrace();
+            closeDB();
             return null;
         }
     }
@@ -116,14 +133,17 @@ public class UserDBManager {
                     list.add(user);
                 }
                 cursor.close();
+                closeDB();
                 return list;
             } catch (JSONException e) {
                 e.printStackTrace();
                 cursor.close();
+                closeDB();
                 return null;
             }
         }
         cursor.close();
+        closeDB();
         return null;
     }
 
@@ -140,7 +160,10 @@ public class UserDBManager {
     public User getContactByUserId(long _id) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(_id)});
-        if (cursor.getCount() == 0) return null;
+        if (cursor.getCount() == 0) {
+            closeDB();
+            return null;
+        }
         cursor.moveToLast();
         long userId = cursor.getLong(0);
         String nickName = cursor.getString(1);
@@ -173,7 +196,10 @@ public class UserDBManager {
     public boolean isMyFriend(long userId) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(userId)});
-        if (cursor.getCount() == 0) return false;
+        if (cursor.getCount() == 0) {
+            closeDB();
+            return false;
+        }
         cursor.moveToLast();
         int type = cursor.getInt(0);
         cursor.close();
@@ -387,7 +413,10 @@ public class UserDBManager {
     public synchronized void updateGroupInfo(User user, String groupId) {
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
-        if (cursor.getCount() == 0) return;
+        if (cursor.getCount() == 0) {
+            closeDB();
+            return;
+        }
         cursor.moveToLast();
         String ext = cursor.getString(0);
         cursor.close();
@@ -405,6 +434,7 @@ public class UserDBManager {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            closeDB();
         }
         closeDB();
     }

@@ -141,7 +141,7 @@ public class TalkFragment extends PeachBaseFragment {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
-        if (!AccountManager.getInstance().isLogin()) {
+        if (AccountManager.getInstance().getLoginAccount(getActivity())==null) {
             return;
         }
         loadConversation();
@@ -215,7 +215,7 @@ public class TalkFragment extends PeachBaseFragment {
      * 刷新页面
      */
     public void refresh() {
-        if (!AccountManager.getInstance().isLogin()) return;
+        if (AccountManager.getInstance().getLoginAccount(getActivity())==null) return;
         // loadConversationsWithRecentChat();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
@@ -315,9 +315,9 @@ public class TalkFragment extends PeachBaseFragment {
         if (!hidden) {
             refresh();
         }
-        if (AccountManager.getInstance().isLogin())
+        if (AccountManager.getInstance().getLoginAccount(getActivity())!=null)
             loadConversation();
-        if (AccountManager.getInstance().isLogin()) {
+        if (AccountManager.getInstance().getLoginAccount(getActivity())!=null) {
             if (!hidden) {
                 refresh();
             }
