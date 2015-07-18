@@ -42,6 +42,7 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
+import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import org.json.JSONArray;
@@ -64,6 +65,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private User imUser;
     private TextView tv_send_action;
     private boolean isMyFriend;
+    private int EDIT_MEMO=101;
+    private TextView nameTv;
+    private String newMemo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +120,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 if (isMyFriend) {
-                    editMemo("123");
+                    Intent intent=new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
+                    intent.putExtra("isEditMemo",true);
+                    intent.putExtra("nickname",nameTv.getText().toString());
+                    startActivityForResult(intent,EDIT_MEMO);
+                    //editMemo("123");
                 } else {
                     addToFriend();
                 }
@@ -326,7 +334,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void updateView(final User bean) {
-        TextView nameTv = (TextView) findViewById(R.id.tv_title);
+        nameTv = (TextView) findViewById(R.id.tv_title);
         if (TextUtils.isEmpty(bean.getMemo())){
             nameTv.setText(bean.getNickName());
         }else {
@@ -619,6 +627,14 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==Activity.RESULT_OK){
+            if(requestCode==EDIT_MEMO){
+                newMemo=data.getStringExtra("memo");
+                nameTv.setText(newMemo);
+            }
+        }
+    }
 }
