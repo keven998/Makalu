@@ -289,7 +289,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
         findViewById(R.id.rl_run_time).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//// TODO: 15/7/2
+                if(!TextUtils.isEmpty(bean.descUrl)){
+                    Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                    intent.putExtra("enable_bottom_bar", false);
+                    intent.putExtra("url", bean.descUrl);
+                    intent.putExtra("title", bean.zhName);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -328,19 +334,37 @@ public class PoiDetailActivity extends PeachBaseActivity {
             findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(!TextUtils.isEmpty(bean.visitGuideUrl)){
+                        Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                        intent.putExtra("enable_bottom_bar", false);
+                        intent.putExtra("url", bean.visitGuideUrl);
+                        intent.putExtra("title", bean.zhName);
+                        startActivity(intent);
+                    }
                 }
             });
             findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(!TextUtils.isEmpty(bean.tipsUrl)){
+                        Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                        intent.putExtra("enable_bottom_bar", false);
+                        intent.putExtra("url", bean.tipsUrl);
+                        intent.putExtra("title", bean.zhName);
+                        startActivity(intent);
+                    }
                 }
             });
             findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(!TextUtils.isEmpty(bean.trafficInfoUrl)){
+                        Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                        intent.putExtra("enable_bottom_bar", false);
+                        intent.putExtra("url", bean.trafficInfoUrl);
+                        intent.putExtra("title", bean.zhName);
+                        startActivity(intent);
+                    }
                 }
             });
         } else {

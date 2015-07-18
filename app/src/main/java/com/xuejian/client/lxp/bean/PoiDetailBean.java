@@ -42,6 +42,10 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
     public int rank;
     public String lyPoiUrl;
     public String openTime;
+    public String trafficInfoUrl;
+    public String visitGuideUrl;
+    public String tipsUrl;
+    public String descUrl;
 
     public PoiDetailBean() {
     }

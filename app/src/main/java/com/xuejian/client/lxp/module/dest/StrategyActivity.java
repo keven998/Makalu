@@ -157,6 +157,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.strategy_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawer(GravityCompat.END);
                 IMUtils.onClickImShare(StrategyActivity.this);
             }
         });
@@ -164,6 +165,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.tv_edit_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawer(GravityCompat.END);
                 Intent intent = new Intent(StrategyActivity.this, ActivityPlanEditor.class);
                 intent.putExtra("strategy", strategy);
                 startActivity(intent);
@@ -579,6 +581,7 @@ public class StrategyActivity extends PeachBaseActivity {
             place.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    drawerLayout.closeDrawer(GravityCompat.END);
                     MobclickAgent.onEvent(mContext, "event_go_city_detail");
                     Intent intent = new Intent(mContext, CityDetailActivity.class);
                     intent.putExtra("id", destinations.get(position).id);

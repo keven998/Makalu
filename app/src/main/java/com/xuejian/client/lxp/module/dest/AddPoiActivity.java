@@ -26,7 +26,9 @@ import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.LocationBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
+import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -68,6 +70,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     LinearLayout hsViewLL;
     private String mType;
     private List<LocBean> locList;
+    private ArrayList<PoiDetailBean> allLoadLocList=new ArrayList<PoiDetailBean>();
     private ArrayList<PoiDetailBean> hasAddList;
     private int dayIndex;
     private String[] poiTypeArray, poiTypeValueArray, poiTypeValueArrays;
@@ -170,12 +173,7 @@ public class AddPoiActivity extends PeachBaseActivity {
                 finish();
             }
         });
-        iv_map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
         iv_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -483,9 +481,34 @@ public class AddPoiActivity extends PeachBaseActivity {
         });
         //   initSpinnerListener();
         mLvPoiList.doPullRefreshing(true, 500);
+
+        iv_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddPoiActivity.this, StrategyMapActivity.class);
+                intent.putParcelableArrayListExtra("allLoadLocList", allLoadLocList);
+                intent.putExtra("title",curLoc.zhName+resizeTypeName(mType));
+                intent.putExtra("isAllPoiLoc",true);
+                startActivity(intent);
+            }
+        });
 //        getPoiListByLoc(mType, curLoc.id, 0);
 
 //        mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
+    }
+
+    public String resizeTypeName(String type) {
+        if ("hotel".equals(type)) {
+            return "酒店";
+        } else if ("restaurant".equals(type)) {
+            return "美食";
+        } else if ("shopping".equals(type)) {
+            return "购物";
+        } else if ("vs".equals(type)) {
+            return "景点";
+        } else {
+            return "";
+        }
     }
 
     private void getPoiListByLoc(final String type, final String cityId, final int page) {
@@ -501,6 +524,7 @@ public class AddPoiActivity extends PeachBaseActivity {
                 if (poiListResult.code == 0) {
                     curPage = page;
                     bindView(poiListResult.result);
+                    collectAllLocs(poiListResult.result);
                 } else {
                     if (!isFinishing()) {
                         ToastUtil.getInstance(AddPoiActivity.this).showToast(getResources().getString(R.string.request_server_failed));
@@ -529,6 +553,13 @@ public class AddPoiActivity extends PeachBaseActivity {
 
             }
         });
+    }
+
+    private void collectAllLocs(List<PoiDetailBean> result){
+        allLoadLocList.addAll(result);
+        /*while(result.iterator().hasNext()){
+            allLoadLocList.add(result.iterator().next());
+        }*/
     }
 
     private void bindView(List<PoiDetailBean> result) {

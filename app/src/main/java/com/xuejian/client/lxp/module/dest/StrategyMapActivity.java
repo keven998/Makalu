@@ -47,6 +47,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.dialog.XDialog;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
@@ -82,8 +83,9 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     boolean isShow = false;
     private TextView tv_title, tv_subTitle, tv_select_day;
     private ImageView title_back, map_more;
-    private boolean isExpertFootPrint, isMyFootPrint;
+    private boolean isExpertFootPrint, isMyFootPrint,isAllPoiLoc;
     private ArrayList<LocBean> all_print_print;
+    private ArrayList<PoiDetailBean> all_place_loc=new ArrayList<PoiDetailBean>();
     private ArrayList<double[]> coords = new ArrayList<double[]>();
     private LinearLayout day_select;
     private String allDesString;
@@ -97,6 +99,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         allBeans = getIntent().getParcelableArrayListExtra("strategy");
         isExpertFootPrint = getIntent().getBooleanExtra("isExpertFootPrint", false);
         isMyFootPrint = getIntent().getBooleanExtra("isMyFootPrint", false);
+        isAllPoiLoc = getIntent().getBooleanExtra("isAllPoiLoc",false);
         title_back = (ImageView) findViewById(R.id.map_title_back);
         map_more = (ImageView) findViewById(R.id.map_more);
         tv_title = (TextView) findViewById(R.id.tv_title);
@@ -118,7 +121,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         });
 
         //titleHeaderBar.getTitleTextView().setText("地图");
-        if (!isExpertFootPrint && !isMyFootPrint) {
+        if (!isExpertFootPrint && !isMyFootPrint && !isAllPoiLoc) {
             if (allBeans.size() > 0) {
                 final int day_sums = allBeans.get(0).itinerary.get(allBeans.get(0).itinerary.size() - 1).dayIndex + 1;
                 tv_title.setText("第1天");
@@ -168,7 +171,11 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 });
             }
         } else {
-            tv_subTitle.setText("足迹");
+            if(isAllPoiLoc){
+                tv_subTitle.setText("位置");
+            }else {
+                tv_subTitle.setText("足迹");
+            }
             tv_title.setText(getIntent().getStringExtra("title"));
         }
         mapView = (AirMapView) findViewById(R.id.strategy_map);
@@ -196,7 +203,12 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     startActivityForResult(tracks_intent, SET_FOOTPRINT);
                 }
             });
-        } else {
+        } else if(isAllPoiLoc){
+            day_select.setVisibility(View.GONE);
+            all_place_loc = getIntent().getParcelableArrayListExtra("allLoadLocList");
+            loadAllPlaceFootPrintMap(all_place_loc);
+        }
+        else {
             if (allBeans.size() > 0) {
                 initData(0);
             }
@@ -226,6 +238,55 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         }
         return value;
     }
+
+    private void loadAllPlaceFootPrintMap(final ArrayList<PoiDetailBean> footPrint) {
+        all_locations.removeAllViews();
+        layout.removeAllViews();
+        coords.clear();
+        for (int k = 0; k < footPrint.size(); k++) {
+            View view = View.inflate(StrategyMapActivity.this, R.layout.strategy_map_locations_item, null);
+            TextView location = (TextView) view.findViewById(R.id.map_places);
+            TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
+            r_arrow.setVisibility(View.GONE);
+            location.setText(footPrint.get(k).zhName);
+            final int pos = k;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mapView.animateCenterZoom(new LatLng(footPrint.get(pos).location.coordinates[1]
+                            , footPrint.get(pos).location.coordinates[0]), 8);
+                }
+            });
+            layout.addView(view);
+            coords.add(footPrint.get(k).location.coordinates);
+        }
+        all_locations.addView(layout);
+        setUpAllPlacePrintMap(coords, footPrint);
+    }
+
+    private void setUpAllPlacePrintMap(final ArrayList<double[]> mCoords, final ArrayList<PoiDetailBean> prints) {
+        if (mCoords.size() > 0) {
+            mapViewBuilder = new DefaultAirMapViewBuilder(this);
+            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
+            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
+                @Override
+                public void onMapInitialized() {
+                    for (int k = 0; k < mCoords.size(); k++) {
+                        mapView.addMarker(new AirMapMarker(new LatLng(mCoords.get(k)[1], mCoords.get(k)[0]), k + 1)
+                                .setTitle(prints.get(k).zhName));
+                    }
+                    mapView.animateCenterZoom(new LatLng(mCoords.get(0)[1], mCoords.get(0)[0]), 12);
+                }
+            });
+            mapView.initialize(getSupportFragmentManager(), airMapInterface);
+            //mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        } else {
+            refreshNullMap();
+        }
+    }
+
+
+
 
     private void loadExpertFootPrintMap(final ArrayList<LocBean> footPrint) {
         all_locations.removeAllViews();
