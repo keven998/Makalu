@@ -114,7 +114,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         // 获取与此用户/群组的会话
         ConversationBean conversation = getItem(position);
         User user = null;
-        if (AccountManager.getInstance().isLogin()) {
+        if (AccountManager.getInstance().getLoginAccount(mContext)!=null) {
             user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(conversation.getFriendId() + ""));
         }
         // 获取用户username或者群组groupid
