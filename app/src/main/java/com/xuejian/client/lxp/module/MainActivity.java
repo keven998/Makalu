@@ -248,7 +248,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 }
             }
         });
-        if (AccountManager.getInstance().getLoginAccount(this)!=null) {
+        if (AccountManager.getInstance().getLoginAccount(MainActivity.this)!=null) {
             mTabHost.setCurrentTab(0);
         } else {
             mTabHost.setCurrentTab(1);
@@ -272,7 +272,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onResume() {
         super.onResume();
-        if (AccountManager.getInstance().getLoginAccount(this)!=null) {
+        if (AccountManager.getInstance().getLoginAccount(MainActivity.this)!=null){
             HandleImMessage.getInstance().registerMessageListener(this);
             //  if (!isConflict){
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");

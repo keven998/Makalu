@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.dest.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -201,7 +203,14 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     private class OutCountryViewHolder extends ViewHolderBase<CountryBean> {
         private TextView sectionTv;
         private FlowLayout cityListFl;
-        private DisplayImageOptions poptions = UILUtils.getDefaultOption();
+        private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.empty_photo)
+                .showImageOnLoading(R.drawable.empty_photo)
+                .showImageForEmptyUri(R.drawable.empty_photo)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
