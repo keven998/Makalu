@@ -3,6 +3,7 @@ package com.lv.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.lv.Utils.Config;
@@ -291,7 +292,12 @@ public class MessageDB {
             if (tipsType == 2001) {
                 addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
             } else if (tipsType == 2002) {
-                addTips(groupId, operator.getString("nickName") + "将" + tag.toString() + "移出讨论组", "group");
+                if (TextUtils.isEmpty(tag.toString())){
+                    addTips(groupId, operator.getString("nickName") + "退出了讨论组", "group");
+                }else {
+                    addTips(groupId, operator.getString("nickName") + "将" + tag.toString() + "移出了讨论组", "group");
+                }
+
             } else return 1;
         } catch (Exception e) {
             e.printStackTrace();

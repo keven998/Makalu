@@ -260,7 +260,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
     public void createStrategyByCityIds(List<String> cityIds, final boolean recommend) {
         DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        TravelApi.createGuide(cityIds, recommend, new HttpCallBack<String>() {
+        TravelApi.createGuide("create", cityIds, recommend, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -317,7 +317,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-
+                System.out.println(code);
             }
         });
     }
@@ -355,7 +355,7 @@ public class StrategyActivity extends PeachBaseActivity {
                             public void onClick(View v) {
                                 dialog.dismiss();
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                TravelApi.copyStrategy(result.id, new HttpCallBack<String>() {
+                                TravelApi.copyStrategy(result.userId,result.id, new HttpCallBack<String>() {
                                     @Override
                                     public void doSuccess(String resultStr, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -372,15 +372,20 @@ public class StrategyActivity extends PeachBaseActivity {
 
                                     @Override
                                     public void doFailure(Exception error, String msg, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        if (!isFinishing()) {
-                                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                        }
+
                                     }
 
                                     @Override
                                     public void doFailure(Exception error, String msg, String method, int code) {
-
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        if (code==404){
+                                            if (!isFinishing()) {
+                                                ToastUtil.getInstance(StrategyActivity.this).showToast("资源不存在");
+                                            }
+                                        }
+                                        else if (!isFinishing()) {
+                                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                        }
                                     }
                                 });
                             }

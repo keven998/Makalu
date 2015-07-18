@@ -69,8 +69,8 @@ public class UserApi extends BaseApi {
     public final static String REQUEST_ADD_CONTACTS = "/users/request-contacts";
     //搜索联系人
     public final static String SEACH_CONTACT = "/users/search";
-    public final static String SEACH_CONTACT_BY_TEL = "/users?tel=";
-    public final static String SEACH_CONTACT_BY_NICKNAME = "/user?nickName=";
+    public final static String SEACH_CONTACT_BY_TEL = "/users?query=";
+    public final static String SEACH_CONTACT_BY_NICKNAME = "/users?nickName=";
     // 获取相册
     public final static String ALBUMS = "/users/%s/albums";
     //搜索达人足迹
@@ -82,7 +82,7 @@ public class UserApi extends BaseApi {
     public final static String SEARCH_BY_ADDRESSBOOK = "/users/match";
     //根据足迹获取达人
     public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
-
+    public final static String LOGOUT = "/users/logout";
 //    //根据足迹获取达人
 //    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
 //    /app/users/:id/memo
@@ -121,7 +121,7 @@ public class UserApi extends BaseApi {
         try {
             jsonObject.put("tel", phone);
             jsonObject.put("dialCode", 86);
-            jsonObject.put("actionCode", Integer.parseInt(actionCode));
+            jsonObject.put("action", Integer.parseInt(actionCode));
             if (!TextUtils.isEmpty(uid)) {
                 jsonObject.put("userId", uid);
             }
@@ -149,7 +149,7 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            // jsonObject.put("tel", phone);
+             jsonObject.put("tel", phone);
             jsonObject.put("validationCode", captcha);
             jsonObject.put("action", Integer.parseInt(actionCode));
             //  if (!TextUtils.isEmpty(uid)) {
@@ -225,11 +225,12 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler resetPwd(String tel, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, AccountManager.getCurrentUserId()));
+        //request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
+            jsonObject.put("tel", tel);
             jsonObject.put("token", token);
             jsonObject.put("newPassword", pwd);
         } catch (JSONException e) {
@@ -508,7 +509,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler deleteContact(String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS,AccountManager.getCurrentUserId()) + "/" + uid);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()) + "/" + uid);
 //        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -525,13 +526,33 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler seachContact(String key, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-//        if ( RegexUtils.isMobileNO(key)) {
-//           request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_TEL+key);
-//        }else {
-//            request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_NICKNAME+key);
-//        }
-        request.setUrl(SystemConfig.BASE_URL + CONTACTS);
-        request.putUrlParams("Keyword", key);
+   //     if ( RegexUtils.isMobileNO(key)) {
+           request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_TEL+key);
+    //    }else {
+    //        request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_NICKNAME+key);
+    //    }
+    //    request.setUrl(SystemConfig.DEV_URL + CONTACTS);
+    //    request.putUrlParams("Keyword", key);
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+    public static PTRequestHandler logout(long userId ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + LOGOUT);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

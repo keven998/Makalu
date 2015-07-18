@@ -555,11 +555,28 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 dialog.dismiss();
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
-                AccountManager.getInstance().logout(mContext);
-                DialogManager.getInstance().dissMissLoadingDialog();
-                Intent intent = new Intent(mContext, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                UserApi.logout(AccountManager.getInstance().getLoginAccount(AccountActvity.this).getUserId(), new HttpCallBack() {
+                    @Override
+                    public void doSuccess(Object result, String method) {
+                        AccountManager.getInstance().logout(mContext);
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+
+
             }
         });
         dialog.setNegativeButton("取消", new View.OnClickListener() {
