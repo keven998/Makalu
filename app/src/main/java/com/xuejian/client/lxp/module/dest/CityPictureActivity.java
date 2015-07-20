@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -69,16 +70,13 @@ public class CityPictureActivity extends PeachBaseActivity {
     @ViewInject(R.id.vp_zoom_pic)
     private HackyViewPager zoomPicVp;
     @ViewInject(R.id.tv_title_bar_edit)
-    private TextView editPics;
-    //    @ViewInject(R.id.ll_container)
-//    private LinearLayout containView;
+    private CheckedTextView editPics;
     private PicAdapter picAdapter;
     private ImageZoomAnimator2 zoomAnimator;
     private String id;
     private boolean isUserPics;
     private boolean isTalentAlbum;
     private ArrayList<ImageBean> userPics = new ArrayList<ImageBean>();
-    private boolean isEditStatus = false;
     private File tempImage;
     private ArrayList<String> pic_ids = new ArrayList<String>();
 
@@ -95,42 +93,43 @@ public class CityPictureActivity extends PeachBaseActivity {
         ViewUtils.inject(this);
         isUserPics = getIntent().getBooleanExtra("isUserPics", false);
         isTalentAlbum = getIntent().getBooleanExtra("isTalentAlbum", false);
-        TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
-        if (isUserPics) {
-            titleView.setText(getIntent().getStringExtra("user_name"));
-            editPics.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!isEditStatus) {
-                        isEditStatus = true;
-                        editPics.setText("完成");
-                    } else {
-                        isEditStatus = false;
-                        editPics.setText("编辑");
-                    }
-                    picAdapter.notifyDataSetChanged();
-                }
-            });
-        } else {
-            editPics.setVisibility(View.GONE);
-            titleView.setText(getIntent().getStringExtra("title") + "画册");
-        }
 
-        findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
+        final TextView ltv = (TextView) findViewById(R.id.tv_title_bar_left);
+        ltv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+
+        TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
+        if (isUserPics) {
+            titleView.setText(getIntent().getStringExtra("user_name"));
+            editPics.setVisibility(View.VISIBLE);
+            editPics.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Boolean isChecked = !editPics.isChecked();
+                    editPics.setChecked(isChecked);
+                    if (isChecked) {
+                        editPics.setText("完成");
+                        ltv.setVisibility(View.GONE);
+                    } else {
+                        editPics.setText("编辑");
+                        ltv.setVisibility(View.VISIBLE);
+                    }
+                    picAdapter.notifyDataSetChanged();
+                }
+            });
+        } else {
+            titleView.setText(getIntent().getStringExtra("title") + "图集");
+        }
+
+
     }
 
     private void initData() {
         id = getIntent().getStringExtra("id");
-//        for(int i=0;i<20;i++){
-//            ImageBean bean = new ImageBean();
-//            bean.url="http://img0.bdstatic.com/img/image/shouye/taiwanlvyou1117.jpg";
-//            imageList.add(bean);
-//        }
         if (isUserPics || isTalentAlbum) {
             UserApi.getUserPicAlbumn(String.valueOf(id), new HttpCallBack<String>() {
                 @Override
@@ -230,10 +229,12 @@ public class CityPictureActivity extends PeachBaseActivity {
     private class PicAdapter extends BaseAdapter {
         private List<ImageBean> imageBeanList;
         private DisplayImageOptions picOptions;
+        private ImageLoader imageLoader;
 
         public PicAdapter(List<ImageBean> imageBeanList) {
             this.imageBeanList = imageBeanList;
             picOptions = UILUtils.getDefaultOption();
+            imageLoader = ImageLoader.getInstance();
         }
 
         @Override
@@ -278,8 +279,8 @@ public class CityPictureActivity extends PeachBaseActivity {
                     del_cell_pic.setVisibility(View.GONE);
                 } else {
                     ImageBean itemData = imageBeanList.get(position - 1);
-                    ImageLoader.getInstance().displayImage(itemData.url, cell_pic, picOptions);
-                    if (isEditStatus) {
+                    imageLoader.displayImage(itemData.url, cell_pic, picOptions);
+                    if (editPics.isChecked()) {
                         del_cell_pic.setVisibility(View.VISIBLE);
                     } else {
                         del_cell_pic.setVisibility(View.GONE);
@@ -287,7 +288,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                 }
             } else {
                 ImageBean itemData = imageBeanList.get(position);
-                ImageLoader.getInstance().displayImage(itemData.url, cell_pic, picOptions);
+                imageLoader.displayImage(itemData.url, cell_pic, picOptions);
             }
 
             del_cell_pic.setOnClickListener(new View.OnClickListener() {
