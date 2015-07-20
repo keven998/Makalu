@@ -16,8 +16,7 @@
         android:background="@drawable/plan_02_bg_day"
         android:gravity="center"
         android:textColor="@color/base_color_white"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tv_schedule_title"
