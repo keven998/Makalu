@@ -3,33 +3,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="15dp">
+    android:background="@color/app_backgroud">
     <TextView
         android:id="@+id/create_new_talk"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:paddingRight="20dp"
+        android:layout_height="65dp"
         android:textSize="18sp"
         android:paddingLeft="13dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         android:background="@color/base_color_white"
         android:textColor="@color/base_text_color_title"
+        android:drawableRight="@drawable/icon_arrow_right"
         android:text="创建新的聊天"/>
     <View
         android:layout_width="fill_parent"
         android:background="@color/base_divider_color"
+        android:layout_marginLeft="13dp"
         android:layout_height="0.5dp" />
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:paddingLeft="13dp"
         android:gravity="center_vertical"
-        android:background="@color/base_color_white"
+        android:background="@color/app_backgroud"
         android:textSize="13sp"
-        android:textColor="@color/base_text_color_subtitle"
+        android:textColor="@color/color_text_iii"
         android:text="最近聊天"/>
-    <View
+    <!--<View
         android:layout_width="fill_parent"
         android:background="@color/base_divider_color"
-        android:layout_height="0.5dp" />
+        android:layout_height="0.5dp" />-->
 
 </LinearLayout>
