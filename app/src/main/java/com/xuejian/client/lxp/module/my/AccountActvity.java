@@ -33,7 +33,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.util.LogUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -333,26 +332,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         trackStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, trackStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         trackStr.setSpan(new AbsoluteSizeSpan(14, true), 0, trackStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder ssb = new SpannableStringBuilder();
-        int countries = 0;
-        int cityCount = 0;
         final ArrayList<LocBean> trackCitys = new ArrayList<LocBean>();
-        try {
-            JSONObject jsonObject = new JSONObject(user.getTracks().toString());
-            Iterator iterator = jsonObject.keys();
-            while (iterator.hasNext()) {
-                countries++;
-                String key = (String) iterator.next();
-                int size = user.getTracks().get(key).size();
-                cityCount += size;
-                for (int i = 0; i < size; i++) {
-                    trackCitys.add(user.getTracks().get(key).get(i));
-                }
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        ssb.append(String.format("%d国%d城市", countries, cityCount)).append(trackStr);
+        ssb.append(String.format("%d国%d城市", user.getCountryCnt(), user.getTrackCnt())).append(trackStr);
         tv_foot_print.setText(ssb);
         tv_foot_print.setOnClickListener(new View.OnClickListener() {
             @Override

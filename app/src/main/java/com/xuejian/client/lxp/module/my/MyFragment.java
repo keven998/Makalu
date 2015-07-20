@@ -129,16 +129,17 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             int cityCount = 0;
             String level = "0";
             int guideCount = 0;
+            int picNum=0;
+            User info=null;
             if (AccountManager.getInstance().getLoginAccountInfo() != null) {
-                User info = AccountManager.getInstance().getLoginAccountInfo();
-                for (String key : info.getTracks().keySet()) {
-                    all_foot_print_list.addAll(info.getTracks().get(key));
-                }
-                cityCount = all_foot_print_list.size();
-                countryCount = info.getTracks().keySet().size();
+                info = AccountManager.getInstance().getLoginAccountInfo();
                 guideCount = info.getGuideCnt();
                 level = info.getLevel();
+                countryCount=info.getCountryCnt();
+                cityCount=info.getTrackCnt();
+                picNum=info.getAlbumCnt();
             }
+            tvPictureCount.setText(picNum + "图");
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
             nickNameTv.setText(user.getNickName());
@@ -157,7 +158,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .build();
             ImageLoader.getInstance().displayImage(user.getAvatarSmall(), avatarIv, options);
-            getUserPicsNum(user.getUserId());
+          //  getUserPicsNum(user.getUserId());
         }
     }
 

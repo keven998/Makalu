@@ -112,7 +112,7 @@ public class GuilderListActivity extends PeachBaseActivity {
             ExpertBean xEb = (ExpertBean) adapter.getItem(position);
             Intent intent = new Intent();
             intent.setClass(GuilderListActivity.this, HisMainPageActivity.class);
-            intent.putExtra("userId", xEb.userId);
+            intent.putExtra("userId", (long)xEb.userId);
             startActivity(intent);
         }
     }
@@ -279,8 +279,8 @@ public class GuilderListActivity extends PeachBaseActivity {
             }
 
             //足迹
-            String st1 = "99个城市\n";
-            String st2 = "泰国足迹";
+            String st1 = String.format("%d个城市\n",eb.localityCnt);
+            String st2 = String.format("%s足迹",countryName);
             SpannableString attrStr2 = new SpannableString(st2);
             attrStr2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, st2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             attrStr2.setSpan(new AbsoluteSizeSpan(13, true), 0, attrStr2.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);

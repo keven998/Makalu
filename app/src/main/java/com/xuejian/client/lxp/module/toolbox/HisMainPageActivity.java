@@ -51,7 +51,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -416,26 +415,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         trackStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, trackStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         trackStr.setSpan(new AbsoluteSizeSpan(14, true), 0, trackStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder ssb = new SpannableStringBuilder();
-        int countries = 0;
-        int cityCount = 0;
         final ArrayList<LocBean> trackCitys = new ArrayList<LocBean>();
-        try {
-            JSONObject jsonObject = new JSONObject(bean.getTracks().toString());
-            Iterator iterator = jsonObject.keys();
-            while (iterator.hasNext()) {
-                countries++;
-                String key = (String) iterator.next();
-                int size = bean.getTracks().get(key).size();
-                cityCount += size;
-                for (int i = 0; i < size; i++) {
-                    trackCitys.add(bean.getTracks().get(key).get(i));
-                }
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        ssb.append(String.format("%d国%d城市\n", countries, cityCount)).append(trackStr);
+        ssb.append(String.format("%d国%d城市\n", bean.getCountryCnt(), bean.getTrackCnt())).append(trackStr);
         tvTrack.setText(ssb);
         tvTrack.setOnClickListener(new View.OnClickListener() {
             @Override

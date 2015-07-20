@@ -79,7 +79,7 @@ public class UserApi extends BaseApi {
     //  public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
     public final static String SEARCH_BY_ADDRESSBOOK = "/users/match";
     //根据足迹获取达人
-    public final static String EXPERT_BY_TRACK = "/geo/countries/%s/experts";
+    public final static String EXPERT_BY_TRACK = "/geo/countries/%s/expert";
     public final static String LOGOUT = "/users/logout";
 //    //根据足迹获取达人
 //    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
@@ -713,7 +713,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler editMemo
             (String userId, String memo, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
+        request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contacts/"+userId+"/memo");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);

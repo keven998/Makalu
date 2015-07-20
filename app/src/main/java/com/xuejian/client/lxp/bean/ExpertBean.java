@@ -22,6 +22,7 @@ public class ExpertBean {
     public String birthday;
     public String zodiac;
     public String memo;
+    public int localityCnt;
     public String[] roles;
     public Map<String, ArrayList<LocBean>> tracks;
     public int guideCnt;
