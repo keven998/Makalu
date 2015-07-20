@@ -40,6 +40,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
     private boolean isEditMemo;
     private User user;
     private String nickname;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +50,35 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         ViewUtils.inject(this);
         isEditMemo=getIntent().getBooleanExtra("isEditMemo",false);
         if(isEditMemo){
+            userId=getIntent().getStringExtra("userId");
             tv_title_bar_title.setText("修改备注");
             nickname=getIntent().getStringExtra("nickname");
             tv_confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //editMemo(nickEt.getText());
-                    Intent intent=new Intent();
-                    intent.putExtra("memo",nickEt.getText().toString());
-                    setResult(RESULT_OK,intent);
-                    finish();
+
+                    UserApi.editMemo(userId, nickEt.getText().toString(), new HttpCallBack() {
+                        @Override
+                        public void doSuccess(Object result, String method) {
+                            Intent intent = new Intent();
+                            intent.putExtra("memo", nickEt.getText().toString());
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            Intent intent = new Intent();
+                            intent.putExtra("memo", "");
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                        }
+                    });
                 }
             });
         }else{

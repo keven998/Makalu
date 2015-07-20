@@ -43,7 +43,7 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/type_btn"
             android:ellipsize="end"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:maxEms="4"
             android:singleLine="true"
             android:textColor="@color/base_color_white"

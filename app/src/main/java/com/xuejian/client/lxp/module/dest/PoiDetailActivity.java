@@ -203,12 +203,12 @@ public class PoiDetailActivity extends PeachBaseActivity {
         RatingBar rb = (RatingBar) findViewById(R.id.rb_poi);
         rb.setRating(bean.getRating());
         TextView styleTV = (TextView) findViewById(R.id.tv_poi_style);
-//        if (bean.style.length>0){
-//            styleTV.setText(bean.style[0]);
-//        }
+        if (bean.style.size()>0){
+            styleTV.setText(bean.style.get(0));
+        }
 
         if (!bean.getFormatRank().equals("0")) {
-//            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
+ //          mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
         } else {
 
         }
@@ -238,7 +238,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             }
         }
-
+        descView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("content", desc);
+                intent.setClass(PoiDetailActivity.this, ReadMoreActivity.class);
+                startActivityWithNoAnim(intent);
+            }
+        });
 
         //地址
         String address;

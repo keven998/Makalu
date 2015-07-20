@@ -57,11 +57,13 @@ public class GuilderListActivity extends PeachBaseActivity {
     private int mCurrentPage = 0;
     private int PAGE_SIZE = 15;
     private String countryId;
-
+    private String countryName;
+    TextView stView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         countryId = getIntent().getStringExtra("countryId");
+        countryName= getIntent().getStringExtra("countryName");
         setContentView(R.layout.activity_expert);
 
         findViewById(R.id.expert_back).setOnClickListener(new View.OnClickListener() {
@@ -72,9 +74,9 @@ public class GuilderListActivity extends PeachBaseActivity {
         });
 
         TextView titleView = (TextView) findViewById(R.id.tv_title);
-        titleView.setText("~派派 · 阿尔及利亚 · 达人~");
-        TextView stView = (TextView) findViewById(R.id.tv_subtitle);
-        stView.setText("9999位");
+        titleView.setText(String.format("~派派 · %s · 达人~",countryName));
+        stView = (TextView) findViewById(R.id.tv_subtitle);
+        stView.setText("0位");
 
         initList();
     }
@@ -147,6 +149,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     }
 
     public void bindView(List<ExpertBean> result) {
+        stView.setText(result.size()+"位");
         if (mCurrentPage == 0) {
             if (adapter == null) {
                 adapter = new ExpertAdapter(GuilderListActivity.this);

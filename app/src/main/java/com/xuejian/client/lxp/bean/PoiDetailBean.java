@@ -2,7 +2,6 @@ package com.xuejian.client.lxp.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.xuejian.client.lxp.common.share.ICreateShareDialog;
@@ -10,10 +9,7 @@ import com.xuejian.client.lxp.common.share.ShareDialogBean;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by Rjm on 2014/11/22.
