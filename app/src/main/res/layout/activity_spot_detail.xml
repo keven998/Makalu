@@ -36,18 +36,37 @@
         android:layout_marginRight="14dp"
         android:layout_marginTop="10dp">
 
+        <FrameLayout
+            android:layout_width="103dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            >
+
         <TextView
             android:id="@+id/tv_poi_style"
             android:layout_width="103dp"
             android:layout_height="36dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/type_btn"
             android:ellipsize="end"
             android:gravity="center_vertical"
+            android:background="@drawable/type_btn"
             android:maxEms="4"
             android:singleLine="true"
             android:textColor="@color/base_color_white"
             android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_poi_level"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:gravity="center"
+            android:textSize="8sp"
+            android:textColor="@color/base_color_white"
+            android:text="N"
+            />
+
+        </FrameLayout>
 
         <RatingBar
             android:id="@+id/rb_poi"
@@ -119,6 +138,7 @@
         android:layout_height="54dp"
         android:background="@drawable/option_cell_selector"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:paddingLeft="14dp"
         android:paddingRight="5dp">
 
@@ -161,6 +181,7 @@
         android:layout_height="54dp"
         android:background="@drawable/option_cell_selector"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:paddingLeft="14dp"
         android:paddingRight="5dp">
 
@@ -205,6 +226,7 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/option_cell_selector"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:paddingLeft="14dp"
         android:paddingRight="5dp">
 
@@ -285,12 +307,12 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="10px"
         android:layout_marginLeft="14dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/color_line"/>
+        android:background="@drawable/dash_line"/>
 
 
 </LinearLayout>
