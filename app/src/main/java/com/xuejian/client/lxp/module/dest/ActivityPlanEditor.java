@@ -26,6 +26,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -411,6 +412,9 @@ public class ActivityPlanEditor extends FragmentActivity {
         final JSONObject jsonObject = new JSONObject();
         StrategyManager.putSaveGuideBaseInfo(jsonObject, ActivityPlanEditor.this, strategy);
         StrategyManager.putItineraryJson(ActivityPlanEditor.this, jsonObject, strategy, routeDayMap);
+
+        ArrayList<LocBean> locs=new ArrayList<LocBean>();
+        locs.addAll(strategy.localities);
 
         DialogManager.getInstance().showLoadingDialog(ActivityPlanEditor.this);
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {

@@ -79,11 +79,13 @@ public class StrategyActivity extends PeachBaseActivity {
     private ImageView iv_location;
     private ListView draw_list;
     private DrawAdapter adapter;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
+        userId=getIntent().getStringExtra("userId");
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData(savedInstanceState);
@@ -230,7 +232,7 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     public void getStrategyDataById(String itemId) {
-        TravelApi.getGuideDetail(itemId, new HttpCallBack<String>() {
+        TravelApi.getGuideDetail(userId, itemId, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
