@@ -44,7 +44,7 @@ public class TravelApi extends BaseApi {
     //目的地详情  已修改
     public final static String CITY_DETAIL = "/geo/localities/";
     //目的地图集  已修改
-    public final static String CITY_GALLEY = "/geo/localities/%1$s/album";
+    public final static String CITY_GALLEY = "/geo/localities/%1$s/albums";
     //目的地美食、购物介绍
     public final static String LOC_POI_GUIDE = "/guides/locality/%1$s/%2$s";
     //poi相关

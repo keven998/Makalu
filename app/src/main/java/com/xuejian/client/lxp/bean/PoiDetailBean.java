@@ -46,7 +46,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
     public String visitGuideUrl;
     public String tipsUrl;
     public String descUrl;
-
+    public String[] style;
     public PoiDetailBean() {
     }
 
@@ -145,6 +145,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
         dest.writeInt(this.rank);
         dest.writeString(this.lyPoiUrl);
         dest.writeString(this.openTime);
+        dest.writeArray(this.style);
     }
 
     private PoiDetailBean(Parcel in) {
@@ -172,6 +173,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
         this.rank = in.readInt();
         this.lyPoiUrl = in.readString();
         this.openTime = in.readString();
+        in.readStringArray(style);
     }
 
     public static final Creator<PoiDetailBean> CREATOR = new Creator<PoiDetailBean>() {

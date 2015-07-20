@@ -81,7 +81,7 @@ public class UserApi extends BaseApi {
   //  public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
     public final static String SEARCH_BY_ADDRESSBOOK = "/users/match";
     //根据足迹获取达人
-    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
+    public final static String EXPERT_BY_TRACK = "/geo/countries/%s/experts";
     public final static String LOGOUT = "/users/logout";
 //    //根据足迹获取达人
 //    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
@@ -364,8 +364,8 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler editUserInfo(User user, String avatar, String nickName, String signature, String gender, String residence,
                                                 String birthday, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + USERINFO + user.getUserId());
+        request.setHttpMethod(PTRequest.TRACE);
+        request.setUrl(SystemConfig.DEV_URL + USERINFO + user.getUserId());
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
 //        request.setHeader(PTHeader.HEADER_CHARSET, "utf-8");
         setDefaultParams(request);
@@ -642,27 +642,27 @@ public class UserApi extends BaseApi {
 
     public static PTRequestHandler getExpertById(String[] locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + EXPERT_BY_TRACK);
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL +String.format(EXPERT_BY_TRACK,locId[0]));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        JSONObject jsonObject = new JSONObject();
-        try {
-            JSONArray jsonArray = new JSONArray();
-            for (String id : locId) {
-                jsonArray.put(id);
-            }
-            jsonObject.put("locId", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        LogUtil.d(jsonObject.toString());
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            JSONArray jsonArray = new JSONArray();
+//            for (String id : locId) {
+//                jsonArray.put(id);
+//            }
+//            jsonObject.put("locId", jsonArray);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+//            request.setBodyEntity(entity);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        LogUtil.d(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
 

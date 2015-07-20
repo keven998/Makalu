@@ -68,7 +68,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private int EDIT_MEMO=101;
     private TextView nameTv;
     private String newMemo;
-
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -334,6 +334,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void updateView(final User bean) {
+        user=bean;
         nameTv = (TextView) findViewById(R.id.tv_title);
         if (TextUtils.isEmpty(bean.getMemo())){
             nameTv.setText(bean.getNickName());
@@ -633,7 +634,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if(resultCode==Activity.RESULT_OK){
             if(requestCode==EDIT_MEMO){
                 newMemo=data.getStringExtra("memo");
-                nameTv.setText(newMemo);
+                nameTv.setText(newMemo+"("+user.getNickName()+")");
             }
         }
     }
