@@ -204,7 +204,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
         rb.setRating(bean.getRating());
         TextView styleTV = (TextView) findViewById(R.id.tv_poi_style);
         styleTV.setText(bean.zhName);
+        TextView levelTv = (TextView) findViewById(R.id.tv_poi_level);
         if (!bean.getFormatRank().equals("0")) {
+            levelTv.setText(poiDetailBean.getFormatRank());
 //            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
         } else {
 
@@ -331,42 +333,48 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         //操作
         if ("vs".equals(bean.type)) {
-            findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!TextUtils.isEmpty(bean.visitGuideUrl)){
+            if(!TextUtils.isEmpty(bean.visitGuideUrl)){
+                findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                         intent.putExtra("enable_bottom_bar", false);
                         intent.putExtra("url", bean.visitGuideUrl);
                         intent.putExtra("title", bean.zhName);
                         startActivity(intent);
                     }
-                }
-            });
-            findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!TextUtils.isEmpty(bean.tipsUrl)){
+                });
+            }else{
+                findViewById(R.id.tv_travel).setEnabled(false);
+            }
+            if(!TextUtils.isEmpty(bean.tipsUrl)){
+                findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                         intent.putExtra("enable_bottom_bar", false);
                         intent.putExtra("url", bean.tipsUrl);
                         intent.putExtra("title", bean.zhName);
                         startActivity(intent);
                     }
-                }
-            });
-            findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!TextUtils.isEmpty(bean.trafficInfoUrl)){
+                });
+            }else{
+                findViewById(R.id.tv_tips).setEnabled(false);
+            }
+            if(!TextUtils.isEmpty(bean.trafficInfoUrl)){
+                findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                         intent.putExtra("enable_bottom_bar", false);
                         intent.putExtra("url", bean.trafficInfoUrl);
                         intent.putExtra("title", bean.zhName);
                         startActivity(intent);
                     }
-                }
-            });
+                });
+            }else{
+                findViewById(R.id.tv_traffic).setEnabled(false);
+            }
         } else {
             findViewById(R.id.ll_actions).setVisibility(View.GONE);
         }
