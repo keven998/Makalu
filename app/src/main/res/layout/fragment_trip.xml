@@ -74,7 +74,7 @@
                 android:drawableTop="@drawable/lxp_expert_helper"
                 android:gravity="center"
                 android:text="达人咨询"
-                android:textColor="@color/color_text_iii"
+                android:textColor="@color/checker_text_black_color"
                 android:textSize="16sp" />
 
         </FrameLayout>
@@ -94,7 +94,7 @@
                 android:drawableTop="@drawable/lxp_plan_helper"
                 android:gravity="center"
                 android:text="我的计划"
-                android:textColor="@color/color_text_iii"
+                android:textColor="@color/checker_text_black_color"
                 android:textSize="16sp" />
 
         </FrameLayout>
