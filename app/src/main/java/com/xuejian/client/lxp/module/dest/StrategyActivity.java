@@ -160,7 +160,17 @@ public class StrategyActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawer(GravityCompat.END);
-                IMUtils.onClickImShare(StrategyActivity.this);
+                final Handler handler = new Handler() {
+                    public void handleMessage(Message msg) {
+                        switch (msg.what) {
+                            case 1:
+                                IMUtils.onClickImShare(StrategyActivity.this);
+                        }
+                        super.handleMessage(msg);
+                    }
+                };
+                Message message = handler.obtainMessage(1);
+                handler.sendMessageDelayed(message, 300);
             }
         });
 
@@ -168,10 +178,14 @@ public class StrategyActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawer(GravityCompat.END);
-                Intent intent = new Intent(StrategyActivity.this, ActivityPlanEditor.class);
-                intent.putExtra("strategy", strategy);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+                new Handler(){
+                    public void handleMessage(Message msg){
+                        Intent intent = new Intent(StrategyActivity.this, ActivityPlanEditor.class);
+                        intent.putExtra("strategy", strategy);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+                    }
+                }.sendEmptyMessageDelayed(0,300);
             }
         });
     }
@@ -589,11 +603,15 @@ public class StrategyActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     drawerLayout.closeDrawer(GravityCompat.END);
-                    MobclickAgent.onEvent(mContext, "event_go_city_detail");
-                    Intent intent = new Intent(mContext, CityDetailActivity.class);
-                    intent.putExtra("id", destinations.get(position).id);
-                    intent.putExtra("isFromStrategy", true);
-                    startActivity(intent);
+                    new Handler(){
+                        public void handleMessage(Message msg){
+                            MobclickAgent.onEvent(mContext, "event_go_city_detail");
+                            Intent intent = new Intent(mContext, CityDetailActivity.class);
+                            intent.putExtra("id", destinations.get(position).id);
+                            intent.putExtra("isFromStrategy", true);
+                            startActivity(intent);
+                        }
+                    }.sendEmptyMessageDelayed(0,300);
                 }
             });
             return convertView;
