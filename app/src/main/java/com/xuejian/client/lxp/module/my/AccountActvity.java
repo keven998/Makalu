@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -32,6 +33,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.util.LogUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -410,7 +412,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.ll_zodiac:
-                DatePickerDialog dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog;
+                if(Build.BRAND.equals("Meizu")){
+                    dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         if (!birthTimeFlag) {
@@ -434,6 +438,32 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         }
                     }
                 }, 1990, 0, 0);
+                }else {
+                    dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            if (!birthTimeFlag) {
+                                monthOfYear++;
+                                String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                try {
+                                    Date date = format.parse(dateString);
+                                    if (date.after(new Date())) {
+                                        ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
+                                    } else {
+                                        setBirthDay(dateString);
+                                    }
+                                } catch (ParseException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                                birthTimeFlag = true;
+                            } else {
+                                birthTimeFlag = false;
+                            }
+                        }
+                    }, 1990, 0, 0);
+                }
 //                DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 //                    @Override
 //                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
