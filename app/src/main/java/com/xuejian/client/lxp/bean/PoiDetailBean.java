@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.xuejian.client.lxp.common.share.ICreateShareDialog;
@@ -9,14 +10,17 @@ import com.xuejian.client.lxp.common.share.ShareDialogBean;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Rjm on 2014/11/22.
  */
 public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable {
     public final static String RESTAURANT = "restaurant";
-    public final static String SHOPPING = "shopping";
+        public final static String SHOPPING = "shopping";
     public String distance = "";
 
     public boolean hasAdded = false;
@@ -46,7 +50,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
     public String visitGuideUrl;
     public String tipsUrl;
     public String descUrl;
-  //  public String[] style;
+    public ArrayList<String> style=new ArrayList<String>();
     public PoiDetailBean() {
     }
 
@@ -145,7 +149,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
         dest.writeInt(this.rank);
         dest.writeString(this.lyPoiUrl);
         dest.writeString(this.openTime);
-    //    dest.writeArray(this.style);
+        dest.writeSerializable(this.style);
     }
 
     private PoiDetailBean(Parcel in) {
@@ -173,7 +177,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
         this.rank = in.readInt();
         this.lyPoiUrl = in.readString();
         this.openTime = in.readString();
-    //    in.readStringArray(style);
+        this.style = (ArrayList<String>) in.readSerializable();
     }
 
     public static final Creator<PoiDetailBean> CREATOR = new Creator<PoiDetailBean>() {
