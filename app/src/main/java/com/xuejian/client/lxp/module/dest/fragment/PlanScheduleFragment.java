@@ -79,7 +79,7 @@ public class PlanScheduleFragment extends Fragment {
 
     }
 
-    class DSAdapter extends BaseAdapter {
+    private class DSAdapter extends BaseAdapter {
         private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
 
         public DSAdapter(ArrayList<ArrayList<PoiDetailBean>> data) {
