@@ -7,24 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by lxp_dqm07 on 2015/7/8.
@@ -37,13 +38,60 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
     private int lastPos = 0;
-    private String[] delta = {"亚洲", "欧洲", "美洲", "非洲", "大洋洲"};
-
+    private String[] delta = {"亚洲", "欧洲","北美洲" ,"美洲", "非洲", "大洋洲"};
+    List<String> lists;
+    ArrayList<ArrayList<CountryWithExpertsBean>> data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talentloc);
+        lists= Arrays.asList(delta);
+        initView();
+        initData();
+    }
 
+    private void initData() {
+        TravelApi.getExpertList(new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
+                //  CommonJson4List
+                resizeData(expertResult.result);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void resizeData(List<CountryWithExpertsBean> list) {
+       data=new ArrayList<ArrayList<CountryWithExpertsBean>>();
+        for (int i=0;i<6; i++){
+            data.add(new ArrayList<CountryWithExpertsBean>());
+        }
+        for (CountryWithExpertsBean bean : list) {
+            System.out.println(bean.continents.zhName);
+            System.out.println(lists.indexOf(bean.continents.zhName));
+            data.get(lists.indexOf(bean.continents.zhName)).add(bean);
+        }
+        ArrayList<ArrayList<CountryWithExpertsBean>> del=new ArrayList<>();
+        for (ArrayList<CountryWithExpertsBean> beans : data) {
+            if (beans.size()==0)del.add(beans);
+        }
+        data.removeAll(del);
+        adapter = new TalentLocAdapter(this);
+        listView.setAdapter(adapter);
+        getHeaderPos();
+    }
+
+    private void initView() {
         findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,18 +102,18 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         titleTextView.setText(delta[0]);
 
         listView = (ListView) findViewById(R.id.talent_loc_list);
-        adapter = new TalentLocAdapter(this);
-        listView.setAdapter(adapter);
+
         listView.setOnScrollListener(this);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent ExpertIntent = new Intent(TalentLocActivity.this, GuilderListActivity.class);
-                ExpertIntent.putExtra("countryId", "5434d70e10114e684bb1b4ee");
-                startActivity(ExpertIntent);
-            }
-        });
-        getHeaderPos();
+
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent expertIntent = new Intent(TalentLocActivity.this, GuilderListActivity.class);
+//                expertIntent.putExtra("countryId", "5434d70e10114e684bb1b4ee");
+//                startActivity(expertIntent);
+//            }
+//        });
+
     }
 
     @Override
@@ -126,18 +174,21 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     }
 
     private class TalentLocAdapter extends BaseSectionAdapter {
-
-        private ImageView bgImage;
-        private TextView numSum;
-        private TextView loc;
         private TextView header;
-        private DisplayImageOptions poptions = UILUtils.getDefaultOption();
+        private DisplayImageOptions poptions; ;
         private Context mCxt;
         private ImageLoader mImgLoader;
 
         public TalentLocAdapter(Context context) {
             mCxt = context;
             mImgLoader = ImageLoader.getInstance();
+            poptions= new DisplayImageOptions.Builder()
+                    .showImageOnFail(R.drawable.messages_bg_useravatar)
+                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageOnLoading(R.drawable.messages_bg_useravatar)
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .cacheOnDisc(true)
+                    .build();
         }
 
         @Override
@@ -161,8 +212,8 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         }
 
         @Override
-        public Object getItem(int section, int position) {
-            return null;
+        public CountryWithExpertsBean getItem(int section, int position) {
+            return data.get(section).get(position);
         }
 
         @Override
@@ -175,12 +226,34 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
             if (convertView == null) {
                 convertView = View.inflate(mCxt, R.layout.talent_loc_cell_content, null);
             }
-            bgImage = (ImageView) convertView.findViewById(R.id.talent_loc_img);
-            numSum = (TextView) convertView.findViewById(R.id.talent_loc_num);
-            loc = (TextView) convertView.findViewById(R.id.talent_loc_city);
-            mImgLoader.displayImage("http://lvyoubaobao.com/upload/sceneImg/tiantangongyuan6.jpg", bgImage, poptions);
-            numSum.setText("99位");
-            loc.setText("~派派 · 美国 · 达人~");
+
+            final CountryWithExpertsBean item=getItem(section,position);
+            ViewHolder holder = (ViewHolder) convertView.getTag();
+            if (holder == null) {
+                holder = new ViewHolder();
+                holder.rl_country = (FrameLayout) convertView.findViewById(R.id.fl_country);
+                holder.bgImage = (ImageView) convertView.findViewById(R.id.talent_loc_img);
+                holder.numSum = (TextView) convertView.findViewById(R.id.talent_loc_num);
+                holder.loc = (TextView) convertView.findViewById(R.id.talent_loc_city);
+                convertView.setTag(holder);
+            }
+            if (item.images.size() > 0) {
+                mImgLoader.displayImage(item.images.get(0).url,  holder.bgImage, poptions);
+            }else {
+                mImgLoader.displayImage("",  holder.bgImage, poptions);
+            }
+
+            holder.numSum.setText(String.format("%d位", item.expertUserCnt));
+            holder.loc.setText(String.format("~派派 · %s · 达人~", item.zhName));
+            holder.rl_country.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent expertIntent = new Intent(TalentLocActivity.this, GuilderListActivity.class);
+                    expertIntent.putExtra("countryId", item.id);
+                    expertIntent.putExtra("countryName", item.zhName);
+                    startActivity(expertIntent);
+                }
+            });
             return convertView;
         }
 
@@ -190,18 +263,23 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
                 convertView = View.inflate(mCxt, R.layout.talent_loc_cell_head, null);
             }
             header = (TextView) convertView.findViewById(R.id.talent_loc_head);
-            header.setText(delta[section]);
+            header.setText(getSectionStr(section));
             return convertView;
         }
 
         @Override
         public int getSectionCount() {
-            return delta.length;
+            return data.size();
         }
 
         @Override
         public int getCountInSection(int section) {
-            return (section + 1) * 2;
+            return data.get(section).size();
+        }
+
+        @Override
+        public String getSectionStr(int section) {
+            return data.get(section).get(0).continents.zhName;
         }
 
         @Override
@@ -212,6 +290,12 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         @Override
         public boolean shouldListHeaderFloat(int headerIndex) {
             return false;
+        }
+        private class ViewHolder {
+            private FrameLayout rl_country;
+            private ImageView bgImage;
+            private TextView numSum;
+            private TextView loc;
         }
     }
 }

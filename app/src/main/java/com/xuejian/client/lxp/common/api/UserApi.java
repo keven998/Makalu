@@ -714,7 +714,7 @@ public class UserApi extends BaseApi {
             (String userId, String memo, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + "/users/" + userId + "/memo");
+        request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contacts/"+userId+"/memo");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -730,7 +730,6 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
         return HttpManager.request(request, callback);
     }
 

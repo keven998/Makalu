@@ -241,7 +241,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             }
         }
-
+        descView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("content", desc);
+                intent.setClass(PoiDetailActivity.this, ReadMoreActivity.class);
+                startActivityWithNoAnim(intent);
+            }
+        });
 
         //地址
         String address;

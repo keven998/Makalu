@@ -123,7 +123,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     Intent intent=new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
                     intent.putExtra("isEditMemo",true);
                     intent.putExtra("nickname",nameTv.getText().toString());
-                    startActivityForResult(intent,EDIT_MEMO);
+                    intent.putExtra("userId",String.valueOf(userId));
+                    startActivityForResult(intent, EDIT_MEMO);
                     //editMemo("123");
                 } else {
                     addToFriend();
@@ -634,7 +635,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if(resultCode==Activity.RESULT_OK){
             if(requestCode==EDIT_MEMO){
                 newMemo=data.getStringExtra("memo");
-                nameTv.setText(newMemo+"("+user.getNickName()+")");
+                if (!TextUtils.isEmpty(newMemo)){
+                    nameTv.setText(newMemo+"("+user.getNickName()+")");
+                }
             }
         }
     }

@@ -77,6 +77,9 @@ public class TravelApi extends BaseApi {
     public final static String SUGGEST = "/suggestions";
     //周边
     public final static String NEARBY = "/poi/nearby";
+
+    //达人列表
+    public final static String EXPERT_LIST="/geo/countries";
 //    //景点列表
 //    /app/poi/viewspots
 //    //单个景点的信息
@@ -674,6 +677,14 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+    //达人列表
+    public static PTRequestHandler getExpertList(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + EXPERT_LIST);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
