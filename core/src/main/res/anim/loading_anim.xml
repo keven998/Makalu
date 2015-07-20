@@ -8,11 +8,11 @@
     <item android:duration="16" android:drawable="@drawable/l_005" />
     <item android:duration="16" android:drawable="@drawable/l_006" />
     <item android:duration="16" android:drawable="@drawable/l_007" />
-    <item android:duration="16" android:drawable="@drawable/l_008" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_008" />-->
     <item android:duration="16" android:drawable="@drawable/l_009" />
-    <!--<item android:duration="16" android:drawable="@drawable/l_010" />-->
+    <item android:duration="16" android:drawable="@drawable/l_010" />
     <item android:duration="16" android:drawable="@drawable/l_011" />
-    <item android:duration="16" android:drawable="@drawable/l_012" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_012" />-->
     <item android:duration="16" android:drawable="@drawable/l_013" />
     <item android:duration="16" android:drawable="@drawable/l_014" />
     <item android:duration="16" android:drawable="@drawable/l_015" />
@@ -20,11 +20,11 @@
     <item android:duration="16" android:drawable="@drawable/l_016" />
     <item android:duration="16" android:drawable="@drawable/l_018" />
     <item android:duration="16" android:drawable="@drawable/l_019" />
-    <item android:duration="16" android:drawable="@drawable/l_020" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_020" />-->
     <item android:duration="16" android:drawable="@drawable/l_021" />
-    <!--<item android:duration="16" android:drawable="@drawable/l_022" />-->
+    <item android:duration="16" android:drawable="@drawable/l_022" />
     <item android:duration="16" android:drawable="@drawable/l_023" />
-    <item android:duration="16" android:drawable="@drawable/l_024" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_024" />-->
     <item android:duration="16" android:drawable="@drawable/l_025" />
     <item android:duration="16" android:drawable="@drawable/l_026" />
     <item android:duration="16" android:drawable="@drawable/l_027" />
@@ -32,11 +32,11 @@
     <item android:duration="16" android:drawable="@drawable/l_029" />
     <item android:duration="16" android:drawable="@drawable/l_030" />
     <item android:duration="16" android:drawable="@drawable/l_031" />
-    <item android:duration="16" android:drawable="@drawable/l_032" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_032" />-->
     <item android:duration="16" android:drawable="@drawable/l_033" />
-    <!--<item android:duration="16" android:drawable="@drawable/l_034" />-->
+    <item android:duration="16" android:drawable="@drawable/l_034" />
     <item android:duration="16" android:drawable="@drawable/l_035" />
-    <item android:duration="16" android:drawable="@drawable/l_036" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_036" />-->
     <item android:duration="16" android:drawable="@drawable/l_037" />
     <item android:duration="16" android:drawable="@drawable/l_038" />
     <item android:duration="16" android:drawable="@drawable/l_039" />
@@ -44,11 +44,11 @@
     <item android:duration="16" android:drawable="@drawable/l_041" />
     <item android:duration="16" android:drawable="@drawable/l_042" />
     <item android:duration="16" android:drawable="@drawable/l_043" />
-    <item android:duration="16" android:drawable="@drawable/l_044" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_044" />-->
     <item android:duration="16" android:drawable="@drawable/l_045" />
-    <!--<item android:duration="16" android:drawable="@drawable/l_046" />-->
+    <item android:duration="16" android:drawable="@drawable/l_046" />
     <item android:duration="16" android:drawable="@drawable/l_047" />
-    <item android:duration="16" android:drawable="@drawable/l_048" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_048" />-->
     <item android:duration="16" android:drawable="@drawable/l_049" />
     <item android:duration="16" android:drawable="@drawable/l_050" />
     <item android:duration="16" android:drawable="@drawable/l_051" />
@@ -56,9 +56,9 @@
     <item android:duration="16" android:drawable="@drawable/l_053" />
     <item android:duration="16" android:drawable="@drawable/l_054" />
     <item android:duration="16" android:drawable="@drawable/l_055" />
-    <item android:duration="16" android:drawable="@drawable/l_056" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_056" />-->
     <item android:duration="16" android:drawable="@drawable/l_057" />
-   <!-- <item android:duration="16" android:drawable="@drawable/l_058" />-->
+    <item android:duration="16" android:drawable="@drawable/l_058" />
     <item android:duration="16" android:drawable="@drawable/l_059" />
-    <item android:duration="16" android:drawable="@drawable/l_060" />
+    <!--<item android:duration="16" android:drawable="@drawable/l_060" />-->
 </animation-list>
