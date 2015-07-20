@@ -75,10 +75,8 @@ public class UserApi extends BaseApi {
     public final static String ALBUMS = "/users/%s/albums";
     //搜索达人足迹
     public final static String SEARCH_EXPERT_FOOTPRINT = "/users/expert/tracks";
-    //根据环信ID获取用户信息
-    public final static String GET_CONTACT_BY_HX = "/users/easemob";
     //通讯录匹配
-  //  public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
+    //  public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
     public final static String SEARCH_BY_ADDRESSBOOK = "/users/match";
     //根据足迹获取达人
     public final static String EXPERT_BY_TRACK = "/geo/countries/%s/experts";
@@ -86,6 +84,9 @@ public class UserApi extends BaseApi {
 //    //根据足迹获取达人
 //    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
 //    /app/users/:id/memo
+
+    //获取足迹
+    public final static String TRACKS = "/users/%s/tracks";
 
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -149,7 +150,7 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-             jsonObject.put("tel", phone);
+            jsonObject.put("tel", phone);
             jsonObject.put("validationCode", captcha);
             jsonObject.put("action", Integer.parseInt(actionCode));
             //  if (!TextUtils.isEmpty(uid)) {
@@ -416,7 +417,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getContact(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS,AccountManager.getCurrentUserId()));
+        request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -526,17 +527,18 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler seachContact(String key, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-   //     if ( RegexUtils.isMobileNO(key)) {
-           request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_TEL+key);
-    //    }else {
-    //        request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_NICKNAME+key);
-    //    }
-    //    request.setUrl(SystemConfig.DEV_URL + CONTACTS);
-    //    request.putUrlParams("Keyword", key);
+        //     if ( RegexUtils.isMobileNO(key)) {
+        request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_TEL + key);
+        //    }else {
+        //        request.setUrl(SystemConfig.DEV_URL + SEACH_CONTACT_BY_NICKNAME+key);
+        //    }
+        //    request.setUrl(SystemConfig.DEV_URL + CONTACTS);
+        //    request.putUrlParams("Keyword", key);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
-    public static PTRequestHandler logout(long userId ,HttpCallBack callback) {
+
+    public static PTRequestHandler logout(long userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + LOGOUT);
@@ -608,7 +610,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getUserPicAlbumn(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS,userId));
+        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId));
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -626,7 +628,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler delUserAlbumPic(String userId, String picId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS,userId) + picId);
+        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + picId);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -643,7 +645,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getExpertById(String[] locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL +String.format(EXPERT_BY_TRACK,locId[0]));
+        request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_BY_TRACK, locId[0]));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
 //        JSONObject jsonObject = new JSONObject();

@@ -271,12 +271,16 @@ public class PoiListActivity extends PeachBaseActivity {
                     intent.putParcelableArrayListExtra("poiList", hasAddList);
                     setResult(RESULT_OK, intent);
                     finish();
+                }else {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    finish();
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                finish();
             }
 
             @Override

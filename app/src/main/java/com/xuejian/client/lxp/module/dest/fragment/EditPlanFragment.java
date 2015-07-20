@@ -37,7 +37,7 @@ public class EditPlanFragment extends Fragment {
     private PlanEditAdapter adapter;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private StrategyBean strategy;
-
+    private String userId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -72,6 +72,7 @@ public class EditPlanFragment extends Fragment {
         mDragListView = (DragSortListView) getView().findViewById(R.id.listview_day_plan_editor);
         //得到滑动listview并且设置监听器。
         strategy = getArguments().getParcelable("data");
+      //  userId= getArguments().getString("userId");
         resizeData(strategy.itinerary);
         mDragListView.setDropListener(onDrop);
         mDragListView.setRemoveListener(onRemove);

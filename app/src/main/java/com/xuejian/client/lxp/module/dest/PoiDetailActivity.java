@@ -203,9 +203,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
         RatingBar rb = (RatingBar) findViewById(R.id.rb_poi);
         rb.setRating(bean.getRating());
         TextView styleTV = (TextView) findViewById(R.id.tv_poi_style);
-        if (bean.style.length>0){
-            styleTV.setText(bean.style[0]);
-        }
+//        if (bean.style.length>0){
+//            styleTV.setText(bean.style[0]);
+//        }
 
         if (!bean.getFormatRank().equals("0")) {
 //            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));

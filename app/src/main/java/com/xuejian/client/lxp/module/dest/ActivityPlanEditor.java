@@ -425,6 +425,7 @@ public class ActivityPlanEditor extends FragmentActivity {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     Intent intent = new Intent(ActivityPlanEditor.this, StrategyActivity.class);
                     intent.putExtra("id", strategy.id);
+                    intent.putExtra("userId", String.valueOf(strategy.userId));
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
