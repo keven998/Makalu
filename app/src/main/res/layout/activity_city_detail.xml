@@ -31,33 +31,36 @@
                     android:id="@+id/top_Pic"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="center_horizontal">
 
                     <ImageView
                         android:id="@+id/iv_city_2"
-                        android:layout_width="@dimen/page_detail_pic_height"
-                        android:layout_height="@dimen/page_detail_pic_height"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_margin="10dp"
+                        android:layout_margin="7dp"
                         android:background="@drawable/city_bg_photo_default"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/iv_city_1"
-                        android:layout_width="@dimen/page_detail_pic_height"
-                        android:layout_height="@dimen/page_detail_pic_height"
-                        android:layout_margin="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="7dp"
                         android:layout_toLeftOf="@id/iv_city_2"
+                        android:layout_alignParentLeft="true"
                         android:background="@drawable/city_bg_photo_default"
                         android:scaleType="centerCrop" />
 
 
                     <ImageView
                         android:id="@+id/iv_city_3"
-                        android:layout_width="@dimen/page_detail_pic_height"
-                        android:layout_height="@dimen/page_detail_pic_height"
-                        android:layout_margin="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="7dp"
                         android:layout_toRightOf="@id/iv_city_2"
+                        android:layout_alignParentRight="true"
                         android:background="@drawable/city_bg_photo_default"
                         android:scaleType="centerCrop" />
 
@@ -90,34 +93,37 @@
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp">
 
                     <ImageView
                         android:id="@+id/iv_city_5"
-                        android:layout_width="@dimen/page_detail_pic_height"
-                        android:layout_height="@dimen/page_detail_pic_height"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_margin="10dp"
+                        android:layout_margin="7dp"
                         android:background="@drawable/city_bg_photo_default"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/iv_city_4"
-                        android:layout_width="@dimen/page_detail_pic_height"
-                        android:layout_height="@dimen/page_detail_pic_height"
-                        android:layout_margin="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="7dp"
                         android:layout_toLeftOf="@id/iv_city_5"
+                        android:layout_alignParentLeft="true"
                         android:background="@drawable/city_bg_photo_default"
                         android:scaleType="centerCrop" />
 
 
                     <ImageView
                         android:id="@+id/iv_city_6"
-                        android:layout_width="@dimen/page_detail_pic_height"
-                        android:layout_height="@dimen/page_detail_pic_height"
-                        android:layout_margin="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="7dp"
                         android:layout_toRightOf="@id/iv_city_5"
+                        android:layout_alignParentRight="true"
                         android:background="@drawable/city_bg_photo_default"
                         android:scaleType="centerCrop" />
 
@@ -157,16 +163,6 @@
                 android:layout_marginRight="8dp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/tv_spots"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:onClick="intentToSpots"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/btn_city_spot" />
 
                 <ImageView
                     android:id="@+id/tv_travel"
@@ -178,6 +174,17 @@
                     android:onClick="intentToTravel"
                     android:scaleType="fitCenter"
                     android:src="@drawable/btn_city_guide" />
+
+                <ImageView
+                    android:id="@+id/tv_spots"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="intentToSpots"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_city_spot" />
 
                 <ImageView
                     android:id="@+id/tv_restaurant"

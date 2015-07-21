@@ -57,4 +57,13 @@
 
     </LinearLayout>
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="6dp"
+        android:background="@color/color_line"
+        />
+
 </LinearLayout>

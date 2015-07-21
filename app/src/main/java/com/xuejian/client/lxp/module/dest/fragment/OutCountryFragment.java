@@ -203,14 +203,15 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     private class OutCountryViewHolder extends ViewHolderBase<CountryBean> {
         private TextView sectionTv;
         private FlowLayout cityListFl;
-        private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
+        private DisplayImageOptions poptions = UILUtils.getDefaultOption();
+        /*private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
                 .showImageOnFail(R.drawable.empty_photo)
                 .showImageOnLoading(R.drawable.empty_photo)
                 .showImageForEmptyUri(R.drawable.empty_photo)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();*/
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
