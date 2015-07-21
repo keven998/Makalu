@@ -2,14 +2,9 @@ package com.xuejian.client.lxp.module.dest;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -20,9 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.android.airmapview.AirMapInterface;
 import com.airbnb.android.airmapview.AirMapMarker;
@@ -31,30 +24,18 @@ import com.airbnb.android.airmapview.AirMapView;
 import com.airbnb.android.airmapview.AirMapViewTypes;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.GoogleChinaMapType;
-import com.airbnb.android.airmapview.listeners.OnCameraChangeListener;
-import com.airbnb.android.airmapview.listeners.OnCameraMoveListener;
-import com.airbnb.android.airmapview.listeners.OnInfoWindowClickListener;
-import com.airbnb.android.airmapview.listeners.OnLatLngScreenLocationCallback;
-import com.airbnb.android.airmapview.listeners.OnMapClickListener;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
-import com.airbnb.android.airmapview.listeners.OnMapMarkerClickListener;
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.dialog.XDialog;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,6 +181,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     Intent tracks_intent = new Intent(StrategyMapActivity.this, MyFootPrinterActivity.class);
                     tracks_intent.putParcelableArrayListExtra("myfootprint", all_print_print);
                     tracks_intent.putExtra("title", tv_title.getText().toString());
+                    tracks_intent.putExtra("isOwner",true);
                     startActivityForResult(tracks_intent, SET_FOOTPRINT);
                 }
             });

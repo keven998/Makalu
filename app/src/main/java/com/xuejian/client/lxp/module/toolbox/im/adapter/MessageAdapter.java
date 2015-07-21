@@ -124,7 +124,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int FOOD_MSG = 14;
     private static final int SHOP_MSG = 15;
     private static final int HOTEL_MSG = 16;
-
+    private static final int H5_MSG = 17;
     private static final int TIP_MSG = 99;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;

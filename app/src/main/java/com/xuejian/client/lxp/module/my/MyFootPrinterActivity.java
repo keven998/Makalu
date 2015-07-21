@@ -217,14 +217,24 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         printInfo = getIntent().getStringExtra("title");
+        boolean isOwner = getIntent().getBooleanExtra("isOwner",false);
         View rootView = View.inflate(mContext, R.layout.activity_my_footprinter, null);
         setContentView(rootView);
-
+        TextView subTitle= (TextView) findViewById(R.id.tv_subtitle);
+        TextView hasGone= (TextView) findViewById(R.id.hasGone);
         titleHeaderBar = (RelativeLayout) rootView.findViewById(R.id.my_footprinter_title);
         tv_title = (TextView) rootView.findViewById(R.id.tv_title);
         title_back = (TextView) rootView.findViewById(R.id.title_back);
         title_confirm = (TextView) rootView.findViewById(R.id.title_confirm);
-        tv_title.setText(printInfo);
+        if (isOwner){
+            subTitle.setVisibility(View.GONE);
+            tv_title.setVisibility(View.GONE);
+            hasGone.setVisibility(View.VISIBLE);
+            hasGone.setText("我去过");
+        }else {
+            tv_title.setText(printInfo);
+        }
+
 
         mapView = (AirMapView) rootView.findViewById(R.id.my_footprinter_map);
         hasSelectLoc = getIntent().getParcelableArrayListExtra("myfootprint");

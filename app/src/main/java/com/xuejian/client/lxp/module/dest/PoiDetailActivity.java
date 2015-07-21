@@ -78,7 +78,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.spot_detail_list);
-
         mCommentsList = (ListView) findViewById(R.id.spot_detail_list);
         headerView = View.inflate(this, R.layout.activity_spot_detail, null);
         mCommentsList.addHeaderView(headerView);

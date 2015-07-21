@@ -20,6 +20,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
@@ -51,9 +52,11 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     }
 
     private void initData() {
+        DialogManager.getInstance().showLoadingDialog(this);
         TravelApi.getExpertList(new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
                 //  CommonJson4List
                 resizeData(expertResult.result);
@@ -61,7 +64,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                DialogManager.getInstance().dissMissLoadingDialog();
             }
 
             @Override

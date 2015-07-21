@@ -51,7 +51,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by lxp_dqm07 on 2015/5/18.
@@ -521,18 +520,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 startActivity(intent2);
             }
         });
-    }
-
-    public void initFlDestion(List<LocBean> locBeans) {
-//        String destinations = "";
-//        if (locBeans.size() > 0) {
-//            for (int j = 0; j < locBeans.size(); j++) {
-//                destinations += (locBeans.get(j).zhName + "  ");
-//            }
-//            his_destinations.setText(destinations);
-//        } else {
-//            his_destinations.setText("还没有我的足迹");
-//        }
     }
 
     public void initScrollView(int userId) {
