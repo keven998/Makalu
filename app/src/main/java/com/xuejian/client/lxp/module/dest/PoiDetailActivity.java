@@ -210,9 +210,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         TextView levelTv = (TextView) findViewById(R.id.tv_poi_level);
         if (!bean.getFormatRank().equals("0")) {
             levelTv.setText(poiDetailBean.getFormatRank());
-//            mTvRank.setText(String.format("%s排名 %s", poiDetailBean.getPoiTypeName(), poiDetailBean.getFormatRank()));
         } else {
-
+            levelTv.setText("N");
         }
 
         //简介
