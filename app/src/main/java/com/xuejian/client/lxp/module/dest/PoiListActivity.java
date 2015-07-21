@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -73,6 +75,8 @@ public class PoiListActivity extends PeachBaseActivity {
     private String mKeyWord;
     private boolean isFromCityDetail;
     private String value;
+    private HorizontalScrollView hsv;
+    private LinearLayout ll;
 
 
     @Override
@@ -117,6 +121,16 @@ public class PoiListActivity extends PeachBaseActivity {
                 hasAddList = strategy.restaurant;
             }
             originAddList.addAll(hasAddList);
+            if(hasAddList.size()>0){
+                hsv.setVisibility(View.VISIBLE);
+                for(int i=0;i<hasAddList.size();i++){
+                    View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
+                    ll.addView(cityView);
+                    TextView poiNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
+                    poiNameTv.setText(hasAddList.get(i).zhName);
+                }
+                autoScrollPanel();
+            }
         }
         isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail", false);
         value = getIntent().getStringExtra("value");
@@ -150,15 +164,34 @@ public class PoiListActivity extends PeachBaseActivity {
         }
 
         mPoiAdapter = new PoiAdapter(this, canAdd);
-        mPoiAdapter.setAddStr("收集");
+        mPoiAdapter.setAddStr("收藏");
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override
             public void onPoiAdded(PoiDetailBean poi) {
+
                 hasAddList.add(poi);
+                if(canAdd) {
+                    if(hasAddList.size()>0){
+                        hsv.setVisibility(View.VISIBLE);
+                    }
+                    View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
+                    ll.addView(cityView);
+                    TextView poiNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
+                    poiNameTv.setText(poi.zhName);
+                    autoScrollPanel();
+                }
             }
 
             @Override
             public void onPoiRemoved(PoiDetailBean poi) {
+                if(canAdd) {
+                    int index = hasAddList.indexOf(poi);
+                    ll.removeViewAt(index);
+                    autoScrollPanel();
+                    if(hasAddList.size()==0){
+                        hsv.setVisibility(View.GONE);
+                    }
+                }
                 hasAddList.remove(poi);
             }
 
@@ -235,6 +268,16 @@ public class PoiListActivity extends PeachBaseActivity {
         loadPageData();
     }
 
+    private void autoScrollPanel() {
+        hsv.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hsv.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        }, 100);
+    }
+
+
     @Override
     public void onBackPressed(){
         if(canAdd) {
@@ -308,6 +351,8 @@ public class PoiListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_poi_list);
         PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
+        hsv = (HorizontalScrollView)findViewById(R.id.poi_list_hsv);
+        ll = (LinearLayout)findViewById(R.id.poi_list_ll);
         mPoiListLv = listView;
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
         listView.getRefreshableView().addHeaderView(headerView);

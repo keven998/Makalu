@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -11,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -23,7 +26,9 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -92,9 +97,16 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void initData() {
         locId = getIntent().getStringExtra("id");
         getCityDetailData(locId);
+
     }
 
     private void initView() {
+        WindowManager wm = (WindowManager) this
+                .getSystemService(Context.WINDOW_SERVICE);
+
+        int width = wm.getDefaultDisplay().getWidth();
+        int ivWidth = (width-LocalDisplay.dp2px(84))/3;
+
         travelLv = (ListView) findViewById(R.id.lv_city_detail);
         // mTravelLv = travelLv;
         mCityIv1 = (ImageView) findViewById(R.id.iv_city_1);
@@ -103,6 +115,22 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityIv4 = (ImageView) findViewById(R.id.iv_city_4);
         mCityIv5 = (ImageView) findViewById(R.id.iv_city_5);
         mCityIv6 = (ImageView) findViewById(R.id.iv_city_6);
+
+        mCityIv1.getLayoutParams().width=ivWidth;
+        mCityIv2.getLayoutParams().width=ivWidth;
+        mCityIv3.getLayoutParams().width=ivWidth;
+        mCityIv4.getLayoutParams().width=ivWidth;
+        mCityIv5.getLayoutParams().width=ivWidth;
+        mCityIv6.getLayoutParams().width=ivWidth;
+
+        mCityIv1.getLayoutParams().height=ivWidth;
+        mCityIv2.getLayoutParams().height=ivWidth;
+        mCityIv3.getLayoutParams().height=ivWidth;
+        mCityIv4.getLayoutParams().height=ivWidth;
+        mCityIv5.getLayoutParams().height=ivWidth;
+        mCityIv6.getLayoutParams().height=ivWidth;
+
+
         iv_create = (ImageView) findViewById(R.id.iv_create_plan);
         imageViews = new ImageView[]{mCityIv1, mCityIv2, mCityIv3, mCityIv4, mCityIv5, mCityIv6};
         mCityNameTv = (TextView) findViewById(R.id.tv_city_name);
@@ -141,16 +169,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
 
-        //全部游记
-        findViewById(R.id.tv_all_note).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_more_city_travel_notes");
-                Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
-                intent.putExtra("id", locId);
-                startActivity(intent);
-            }
-        });
+        findViewById(R.id.tv_all_note).setVisibility(View.GONE);
 
         findViewById(R.id.iv_nav_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,7 +209,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         });
     }
 
-    private void getTravelNotes(String locId) {
+    private void getTravelNotes(final String locId) {
         OtherApi.getTravelNoteByLocId(locId, 0, 3, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -199,6 +218,19 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 if (detailResult.code == 0) {
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
+                    if(detailResult.result.size()>0){
+                            //全部游记
+                        findViewById(R.id.tv_all_note).setVisibility(View.VISIBLE);
+                            findViewById(R.id.tv_all_note).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    MobclickAgent.onEvent(mContext, "event_more_city_travel_notes");
+                                    Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                                    intent.putExtra("id", locId);
+                                    startActivity(intent);
+                                }
+                            });
+                    }
                     setListViewHeightBasedOnChildren(travelLv);
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
@@ -244,9 +276,17 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //                showActionDialog();
 //            }
 //        });
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .showImageForEmptyUri(R.drawable.empty_photo)
+                .showImageOnFail(R.drawable.empty_photo)
+                .resetViewBeforeLoading(true)
+                .cacheOnDisk(true)
+                .displayer(new RoundedBitmapDisplayer(10)) // 设置成圆角图片
+                .build();
         if (detailBean.images != null && detailBean.images.size() > 0) {
             for (int i = 0; i < detailBean.images.size(); i++) {
-                ImageLoader.getInstance().displayImage(detailBean.images.get(i).url, imageViews[i], UILUtils.getDefaultOption());
+                ImageLoader.getInstance().displayImage(detailBean.images.get(i).url, imageViews[i], options);
                 if (i == 5) break;
             }
         }
@@ -290,6 +330,16 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     SpannableStringBuilder spb = new SpannableStringBuilder();
                     spb.append(String.format("%s... ", text)).append(planStr);
                     timeView.setText(spb);
+                    bestMonthTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent();
+                            intent.putExtra("content", detailBean.travelMonth);
+                            intent.putExtra("title","最佳季节");
+                            intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
+                            startActivityWithNoAnim(intent);
+                        }
+                    });
                 }
             }
         });
@@ -351,6 +401,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra("content", desc);
+                intent.putExtra("title","城市简介");
                 intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
                 startActivityWithNoAnim(intent);
             }

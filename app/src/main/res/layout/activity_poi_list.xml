@@ -118,6 +118,26 @@
             android:listSelector="@android:color/transparent"
             android:visibility="visible" />
 
+        <HorizontalScrollView
+            android:id="@+id/poi_list_hsv"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/app_backgroud"
+            android:layout_gravity="bottom"
+            android:scrollbarSize="0dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/poi_list_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
     </FrameLayout>
 
 </LinearLayout>
