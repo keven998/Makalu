@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:paddingRight="10dp"
+            android:gravity="center"
             android:autoLink="web"
             android:layout_alignWithParentIfMissing="true"
             android:layout_toRightOf="@id/iv_userhead"
