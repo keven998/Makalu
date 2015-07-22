@@ -28,21 +28,27 @@
                     android:scaleType="centerCrop"
                     />
 
-                <ImageView
-                    android:id="@+id/iv_avatar"
+                <FrameLayout
+                    android:id="@+id/fl_gender_bg"
                     android:layout_width="@dimen/page_more_avatar_frame_size"
                     android:layout_height="@dimen/page_more_avatar_frame_size"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:padding="6dp"
-                    android:scaleType="centerCrop" />
-                
+                    android:padding="17dp"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop" />
+                </FrameLayout>
+
                 <RelativeLayout android:id="@+id/rl_base_info"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="-30dp"
                     android:gravity="center_vertical"
-                    android:layout_below="@id/iv_avatar">
+                    android:layout_below="@+id/fl_gender_bg">
                     
                     <RelativeLayout android:id="@+id/rly_level"
                         android:layout_width="wrap_content"
@@ -62,16 +68,20 @@
                     <ImageView android:id="@+id/iv_constellation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@id/rly_level"
+                        android:layout_toLeftOf="@+id/rly_level"
                         android:scaleType="fitCenter"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="-32dp"/>
 
                 </RelativeLayout>
 
-                <LinearLayout android:layout_below="@id/rl_base_info"
+            </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_below="@+id/rl_base_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/shallow"
                     android:orientation="horizontal">
 
                     <RelativeLayout android:id="@+id/fl_plans_entry"
@@ -176,8 +186,6 @@
                     </RelativeLayout>
 
                 </LinearLayout>
-
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

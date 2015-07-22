@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,6 +58,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     @ViewInject(R.id.iv_avatar)
     private ImageView avatarIv;
+    @ViewInject(R.id.fl_gender_bg)
+    private FrameLayout fl_gender_bg;
     @ViewInject(R.id.iv_constellation)
     private ImageView constellationIv;
     @ViewInject(R.id.iv_more_header_frame_gender1)
@@ -114,15 +117,15 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         } else {
             if (user.getGender().equalsIgnoreCase("M")) {
                 genderFrame.setImageResource(R.drawable.ic_home_header_boy);
-                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
+                fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             } else if (user.getGender().equalsIgnoreCase("F")) {
                 genderFrame.setImageResource(R.drawable.ic_home_header_girl);
-                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
+                fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             } else {
                 genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-                avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
+                fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             }
             int countryCount = 0;
