@@ -30,10 +30,11 @@
 
                 <FrameLayout
                     android:id="@+id/fl_gender_bg"
+                    android:layout_marginTop="10dp"
                     android:layout_width="@dimen/page_more_avatar_frame_size"
                     android:layout_height="@dimen/page_more_avatar_frame_size"
                     android:layout_centerHorizontal="true"
-                    android:padding="17dp"
+                    android:padding="@dimen/page_more_avatar_frame_size_padding"
                     >
                     <ImageView
                         android:id="@+id/iv_avatar"

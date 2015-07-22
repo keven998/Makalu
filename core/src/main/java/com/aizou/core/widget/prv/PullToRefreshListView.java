@@ -11,6 +11,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.Adapter;
 import android.widget.ListView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.log.LogUtil;
 
 
@@ -250,13 +251,14 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
          * internally uses a FooterView which messes the positions up. For me we'll just subtract
          * one to account for it and rely on the inner condition which checks getBottom().
          */
-        if (lastVisiblePosition >= lastItemPosition - 1) {
+
+        if (lastVisiblePosition == lastItemPosition) {
             final int childIndex = lastVisiblePosition - mListView.getFirstVisiblePosition();
             final int childCount = mListView.getChildCount();
             final int index = Math.min(childIndex, childCount - 1);
             final View lastVisibleChild = mListView.getChildAt(index);
             if (lastVisibleChild != null) {
-                return lastVisibleChild.getBottom() > mListView.getBottom();
+                return lastVisibleChild.getBottom() <= mListView.getBottom();
             }
         }
 
