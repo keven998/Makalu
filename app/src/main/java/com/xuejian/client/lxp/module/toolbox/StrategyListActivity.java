@@ -446,8 +446,8 @@ public class StrategyListActivity extends PeachBaseActivity {
                         final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
                         cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                         cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
-                        cdialog.setTitle("完成签到");
-                        cdialog.setMessage("旅历＋1");
+                        cdialog.setTitle("提示");
+                        cdialog.setMessage("已标记去过，个人旅历＋1");
                         cdialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -503,7 +503,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-        dialog.setMessage("删除确认");
+        dialog.setMessage("提示");
         dialog.setPositiveButton("确认", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
