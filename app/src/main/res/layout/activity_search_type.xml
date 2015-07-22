@@ -54,7 +54,7 @@
             android:paddingRight="12dp"
             android:singleLine="true"
             android:text=""
-            android:drawableLeft="@drawable/search_total_place"
+            android:drawableLeft="@drawable/search_place"
             android:textColor="@color/selector_white_text_color"
             android:textSize="13sp" />
 

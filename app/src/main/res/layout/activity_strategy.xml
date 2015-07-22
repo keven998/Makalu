@@ -32,7 +32,7 @@
                     android:layout_height="48dp"
                     android:layout_gravity="top"
                     android:layout_marginTop="@dimen/content_top_margin"
-                    android:background="@color/base_color_white">
+                    android:background="@drawable/shallow">
 
                     <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
                         android:id="@+id/strategy_indicator"

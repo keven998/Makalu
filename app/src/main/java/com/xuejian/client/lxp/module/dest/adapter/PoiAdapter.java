@@ -1,8 +1,6 @@
 package com.xuejian.client.lxp.module.dest.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -23,7 +21,6 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 
 import java.util.ArrayList;
@@ -40,7 +37,7 @@ public class PoiAdapter extends BaseAdapter {
     public final static int POI = 1;
     private Context mContext;
     private boolean mIsCanAdd;
-    private List<PoiDetailBean> mPoiList = new ArrayList<PoiDetailBean>();
+    private List<PoiDetailBean> mPoiList;
     private OnPoiActionListener mOnPoiActionListener;
 
     private DisplayImageOptions picOptions;
@@ -49,6 +46,7 @@ public class PoiAdapter extends BaseAdapter {
     public PoiAdapter(Context context, boolean isCanAdd) {
         mContext = context;
         mIsCanAdd = isCanAdd;
+        mPoiList = new ArrayList<PoiDetailBean>();
         picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)

@@ -123,7 +123,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
             typeBeans.add(typeBean);
             titleTv.setText("全部城市");
         } else if (type.equals("vs")) {
-            cityFilterTv.setVisibility(View.GONE);
+           // cityFilterTv.setVisibility(View.VISIBLE);
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();

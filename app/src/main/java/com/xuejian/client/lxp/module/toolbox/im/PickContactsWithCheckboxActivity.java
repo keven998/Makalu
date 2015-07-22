@@ -477,10 +477,10 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     .resetViewBeforeLoading(true)
                     .showImageOnFail(R.drawable.messages_bg_useravatar)
                     .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageForEmptyUri(R.drawable.ic_home_avatar_unknown)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(4)))
+                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
@@ -667,7 +667,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(6)))
+                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 

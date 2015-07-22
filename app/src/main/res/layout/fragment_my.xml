@@ -72,6 +72,7 @@
                 <LinearLayout android:layout_below="@id/rl_base_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/shallow"
                     android:orientation="horizontal">
 
                     <RelativeLayout android:id="@+id/fl_plans_entry"

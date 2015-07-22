@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/app_theme_color">
+
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:minWidth="60dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp"
+            android:clickable="true"
+            android:drawableLeft="@drawable/selector_ic_nav_back"/>
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="17sp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:textColor="@color/base_text_color_title"/>
+
+        <Spinner
+            android:id="@+id/loc_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="3dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:paddingRight="5dp"
+            android:dropDownVerticalOffset="38dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/app_theme_color"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="11dp">
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
+            android:textColorHint="@color/base_text_color_text_placeholder"
+            android:hint="搜索"
+            android:textColor="@color/base_text_color_title"
+            android:drawablePadding="10dp"
+            android:background="@drawable/button_normal_shape"
+            android:drawableLeft="@drawable/ic_search" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="50dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_theme_secondary_selector"
+            android:layout_height="28dp"
+            android:textSize="14sp"
+            android:textColor="@color/base_color_white"
+            android:text="搜索" />
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+        <com.aizou.core.widget.prv.PullToRefreshListView
+            android:id="@+id/lv_poi_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:fadingEdge="none"
+            android:listSelector="@android:color/transparent"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+</LinearLayout>

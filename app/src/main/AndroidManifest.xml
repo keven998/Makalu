@@ -115,6 +115,9 @@
             android:name=".module.dest.ActivityPlanEditor"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".module.dest.SearchForPoi"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".module.dest.AddPoiActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

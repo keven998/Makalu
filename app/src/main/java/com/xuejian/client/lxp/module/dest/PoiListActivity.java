@@ -68,6 +68,7 @@ public class PoiListActivity extends PeachBaseActivity {
     private boolean canAdd;
     private List<LocBean> locList;
     private ArrayList<PoiDetailBean> hasAddList;
+    private ArrayList<PoiDetailBean> newPoiList;
     private ArrayList<PoiDetailBean> originAddList = new ArrayList<PoiDetailBean>();
     private StrategyBean strategy;
     private int curPage = 0;
@@ -77,7 +78,7 @@ public class PoiListActivity extends PeachBaseActivity {
     private String value;
     private HorizontalScrollView hsv;
     private LinearLayout ll;
-
+    public static final int SEARCH_CODE = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,7 @@ public class PoiListActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         canAdd = getIntent().getBooleanExtra("canAdd", false);
         strategy = getIntent().getParcelableExtra("strategy");
+        newPoiList = new ArrayList<>();
         if (!canAdd) {
             locList = getIntent().getParcelableArrayListExtra("locList");
         } else {
@@ -121,9 +123,9 @@ public class PoiListActivity extends PeachBaseActivity {
                 hasAddList = strategy.restaurant;
             }
             originAddList.addAll(hasAddList);
-            if(hasAddList.size()>0){
+            if (hasAddList.size() > 0) {
                 hsv.setVisibility(View.VISIBLE);
-                for(int i=0;i<hasAddList.size();i++){
+                for (int i = 0; i < hasAddList.size(); i++) {
                     View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
                     ll.addView(cityView);
                     TextView poiNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
@@ -170,8 +172,8 @@ public class PoiListActivity extends PeachBaseActivity {
             public void onPoiAdded(PoiDetailBean poi) {
 
                 hasAddList.add(poi);
-                if(canAdd) {
-                    if(hasAddList.size()>0){
+                if (canAdd) {
+                    if (hasAddList.size() > 0) {
                         hsv.setVisibility(View.VISIBLE);
                     }
                     View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
@@ -184,11 +186,11 @@ public class PoiListActivity extends PeachBaseActivity {
 
             @Override
             public void onPoiRemoved(PoiDetailBean poi) {
-                if(canAdd) {
+                if (canAdd) {
                     int index = hasAddList.indexOf(poi);
                     ll.removeViewAt(index);
                     autoScrollPanel();
-                    if(hasAddList.size()==0){
+                    if (hasAddList.size() == 0) {
                         hsv.setVisibility(View.GONE);
                     }
                 }
@@ -279,8 +281,8 @@ public class PoiListActivity extends PeachBaseActivity {
 
 
     @Override
-    public void onBackPressed(){
-        if(canAdd) {
+    public void onBackPressed() {
+        if (canAdd) {
             if (checkAddDiff()) {
                 savePoiStrategy();
             } else {
@@ -289,7 +291,7 @@ public class PoiListActivity extends PeachBaseActivity {
                 setResult(RESULT_OK, intent);
                 finish();
             }
-        }else{
+        } else {
             finish();
         }
     }
@@ -300,7 +302,7 @@ public class PoiListActivity extends PeachBaseActivity {
         StrategyManager.putRestaurantJson(PoiListActivity.this, jsonObject, strategy);
         StrategyManager.putShoppingJson(PoiListActivity.this, jsonObject, strategy);
 
-        ArrayList<LocBean> locs=new ArrayList<LocBean>();
+        ArrayList<LocBean> locs = new ArrayList<LocBean>();
         locs.addAll(strategy.localities);
 
         DialogManager.getInstance().showLoadingDialog(PoiListActivity.this);
@@ -314,7 +316,7 @@ public class PoiListActivity extends PeachBaseActivity {
                     intent.putParcelableArrayListExtra("poiList", hasAddList);
                     setResult(RESULT_OK, intent);
                     finish();
-                }else {
+                } else {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     finish();
                 }
@@ -351,8 +353,8 @@ public class PoiListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_poi_list);
         PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
-        hsv = (HorizontalScrollView)findViewById(R.id.poi_list_hsv);
-        ll = (LinearLayout)findViewById(R.id.poi_list_ll);
+        hsv = (HorizontalScrollView) findViewById(R.id.poi_list_hsv);
+        ll = (LinearLayout) findViewById(R.id.poi_list_ll);
         mPoiListLv = listView;
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
         listView.getRefreshableView().addHeaderView(headerView);
@@ -376,8 +378,10 @@ public class PoiListActivity extends PeachBaseActivity {
         tv_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sear_intent = new Intent(PoiListActivity.this, SearchAllActivity.class);
-                startActivityWithNoAnim(sear_intent);
+                Intent sear_intent = new Intent(PoiListActivity.this, SearchForPoi.class);
+                sear_intent.putExtra("type", type);
+                sear_intent.putExtra("loc", curLoc);
+                startActivityForResult(sear_intent, SEARCH_CODE);
             }
         });
     }
@@ -515,6 +519,35 @@ public class PoiListActivity extends PeachBaseActivity {
                     detailBean.hasAdded = hasAddList.contains(detailBean);
                 }
                 mPoiAdapter.notifyDataSetChanged();
+            } else if (requestCode == SEARCH_CODE) {
+                newPoiList = data.getParcelableArrayListExtra("newPoi");
+                if (newPoiList.size() > 0) {
+                    if (canAdd) {
+                        if (hasAddList.size() > 0) {
+                            for (PoiDetailBean bean : hasAddList) {
+                                if (newPoiList.contains(bean)) {
+                                    newPoiList.remove(bean);
+                                }
+                            }
+                        }
+                        for (PoiDetailBean bean : mPoiAdapter.getDataList()) {
+                           if (newPoiList.contains(bean)){
+                               bean.hasAdded=true;
+                           }
+                        }
+                        hasAddList.addAll(newPoiList);
+                        mPoiAdapter.notifyDataSetChanged();
+                        hsv.setVisibility(View.VISIBLE);
+                        for (PoiDetailBean bean : newPoiList) {
+                            View cityView = View.inflate(mContext, R.layout.dest_add_item, null);
+                            ll.addView(cityView);
+                            TextView poiNameTv = (TextView) cityView.findViewById(R.id.tv_city_name);
+                            poiNameTv.setText(bean.zhName);
+                            autoScrollPanel();
+                        }
+                    }
+                }
+
             }
         }
     }
