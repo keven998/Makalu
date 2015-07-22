@@ -173,8 +173,8 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (isScrollLoadEnabled() && hasMoreData()) {
-            if (scrollState == OnScrollListener.SCROLL_STATE_IDLE 
-                    || scrollState == OnScrollListener.SCROLL_STATE_FLING) {
+            if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
+                   || scrollState == OnScrollListener.SCROLL_STATE_FLING) {
                 if (isReadyForPullUp()) {
                     startLoading();
                 }
@@ -256,7 +256,7 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> implement
             final int index = Math.min(childIndex, childCount - 1);
             final View lastVisibleChild = mListView.getChildAt(index);
             if (lastVisibleChild != null) {
-                return lastVisibleChild.getBottom() <= mListView.getBottom();
+                return lastVisibleChild.getBottom() > mListView.getBottom();
             }
         }
 

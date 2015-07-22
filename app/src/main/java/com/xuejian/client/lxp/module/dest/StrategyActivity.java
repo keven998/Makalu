@@ -151,6 +151,8 @@ public class StrategyActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = getIntent();
                 intent.putExtra("strategy", getSaveStrategy());
+               // intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+               // ;
                 setResult(RESULT_OK, intent);
                 finish();
             }

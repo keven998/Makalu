@@ -136,6 +136,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private int SIGNATURE = 5;
     private int NICKNAME = 6;
     private int BINDPHONE = 7;
+    private int RESET_FOOTPRINT = 8;
     private boolean birthTimeFlag = false;
 
     @Override
@@ -339,9 +340,10 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AccountActvity.this, StrategyMapActivity.class);
-                intent.putExtra("isExpertFootPrint", true);
-                intent.putParcelableArrayListExtra("ExpertFootPrintBean", trackCitys);
-                startActivity(intent);
+                intent.putExtra("isMyFootPrint", true);
+                intent.putParcelableArrayListExtra("myfootprint", trackCitys);
+                intent.putExtra("title", tv_foot_print.getText().toString());
+                startActivityForResult(intent,RESET_FOOTPRINT);
             }
         });
 
@@ -1037,6 +1039,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             tv_nickname.setText(data.getExtras().getString("nickname"));
         } else if (requestCode == BINDPHONE) {
             //  bindPhoneTv.setText(data.getExtras().getString("bindphone"));
+        } else if (requestCode == RESET_FOOTPRINT){
+            //updateFootPrint from
         }
     }
 

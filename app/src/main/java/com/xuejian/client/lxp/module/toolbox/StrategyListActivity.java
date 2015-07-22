@@ -105,7 +105,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMyStrategyLv.doPullRefreshing(true, 0);
+        getStrategyListData(0, mContentType);
 //        MobclickAgent.onPageStart("page_plan_lists");
     }
 
@@ -276,7 +276,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (sb != null) {
                     PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
-
             } else if (requestCode == REQUEST_CODE_NEW_PLAN) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
