@@ -99,11 +99,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
             @Override
             public void onClick(View v) {
                 // CheckedTextView view = (CheckedTextView) v;
-                if (!isInDeleteMode) {
-                    isInDeleteMode = true;
-                } else {
-                    isInDeleteMode = false;
-                }
+                isInDeleteMode = !isInDeleteMode;
                 memberAdapter.notifyDataSetChanged();
             }
         });
@@ -115,9 +111,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
                         (new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("groupId", groupId)), REQUEST_CODE_ADD_USER);
             }
         });
-
         groupNameTv = (TextView) getView().findViewById(R.id.tv_groupName);
-
         CheckedTextView ctv = (CheckedTextView) getView().findViewById(R.id.ctv_msg_notify_setting);
         ctv.setChecked(SettingConfig.getInstance().getLxpNoticeSetting(getActivity().getApplicationContext(), groupId));
         ctv.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +130,6 @@ public class GroupDetailFragment extends PeachBaseFragment {
         }
 
         bindView();
-
         // 保证每次进详情看到的都是最新的group
         updateGroup();
 
@@ -163,7 +156,6 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 dialog.show();
             }
         });
-
     }
 
     @Override

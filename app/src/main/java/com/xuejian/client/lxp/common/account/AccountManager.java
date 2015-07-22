@@ -69,7 +69,9 @@ public class AccountManager {
     public void logout(final Context context) {
         SharePrefUtil.saveString(context, AccountManager.LOGIN_USER_PREF, "");
         AccountManager.getInstance().setContactList(null);
+        setLoginAccountInfo(null);
         this.isLogin = false;
+        user=null;
         IMClient.getInstance().logout();
         UserDBManager.getInstance().disconnectDB();
     }

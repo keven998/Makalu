@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.lv.bean.InventMessage;
@@ -50,7 +51,6 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
         });
         invents = new ArrayList<>();
         invents = IMClient.getInstance().getInventMessages();
-        System.out.println("invent size  " + invents.size());
         listView = (ListView) findViewById(R.id.list);
         //设置adapter
         adapter = new NewFriendsMsgAdapter(this, 1, invents);
@@ -82,9 +82,8 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_request) {
-//            InviteMessage message = msgs.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
-//            InviteMsgRepository.deleteInviteMsg(mContext, message.getFrom());
-//            msgs.remove(message);
+            InventMessage message = invents.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
+            IMClient.getInstance().deleteInventMessage(String.valueOf(message.getUserId()));
             adapter.notifyDataSetChanged();
             return true;
         }

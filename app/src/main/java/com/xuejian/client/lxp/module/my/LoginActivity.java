@@ -1,7 +1,6 @@
 package com.xuejian.client.lxp.module.my;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -167,8 +166,9 @@ public class LoginActivity extends PeachBaseActivity {
                     finish();
                 }else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("reLogin",true);
                     //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivityWithNoAnim(intent);
+                    startActivity(intent);
                     finish();
                     if (isFromSplash) {
                         SplashActivity.instance.finish();

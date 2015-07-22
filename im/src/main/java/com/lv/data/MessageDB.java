@@ -438,9 +438,9 @@ public class MessageDB {
 
     }
 
-    public synchronized void deleteInventMessage(String Id) {
+    public synchronized void deleteInventMessage(String UserId) {
         mdb = getDB();
-        mdb.delete(request_msg_table_name, "Id=?", new String[]{Id});
+        mdb.delete(request_msg_table_name, "UserId=?", new String[]{UserId});
         closeDB();
     }
 

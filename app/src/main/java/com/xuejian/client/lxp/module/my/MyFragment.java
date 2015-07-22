@@ -103,6 +103,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         User user = AccountManager.getInstance().getLoginAccount(getActivity());
         all_foot_print_list.clear();
         if (user == null) {
+            System.out.println("user null");
             avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
             nickNameTv.setText("旅行派");
             idTv.setText("未登录");
@@ -112,9 +113,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             tvLevel.setText("Lv0");
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-            avatarIv.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
+            fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
             constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
         } else {
+            System.out.println("user not null");
             if (user.getGender().equalsIgnoreCase("M")) {
                 genderFrame.setImageResource(R.drawable.ic_home_header_boy);
                 fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));

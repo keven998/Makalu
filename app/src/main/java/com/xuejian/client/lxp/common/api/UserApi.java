@@ -84,7 +84,8 @@ public class UserApi extends BaseApi {
 //    //根据足迹获取达人
 //    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
 //    /app/users/:id/memo
-
+    //消息免打扰
+    public final static String MUTE_CONVERSATION = "/users/%s/conversations/";
     //获取足迹
     public final static String TRACKS = "/users/%s/tracks";
 
@@ -732,6 +733,27 @@ public class UserApi extends BaseApi {
         LogUtil.d(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
-
+    public static PTRequestHandler muteConversation
+            (String userId, String conversation,boolean value,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.TRACE);
+        request.setUrl(SystemConfig.DEV_URL + String.format(MUTE_CONVERSATION,userId)+conversation);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("mute", value);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        return HttpManager.request(request, callback);
+    }
 
 }

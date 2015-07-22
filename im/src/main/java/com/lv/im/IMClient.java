@@ -530,6 +530,9 @@ public class IMClient {
     public List<InventMessage> getInventMessages(){
         return db.getInventMessages();
     }
+    public void deleteInventMessage(String UserId){
+        db.deleteInventMessage(UserId);
+    }
     public int getUnAcceptMsg(){
         return db.getUnAcceptMsg();
     }

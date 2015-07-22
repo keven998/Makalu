@@ -97,62 +97,68 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         registerReceiver(connectionReceiver, intentFilter);
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (!FromBounce) {
-            IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
-                @Override
-                public void onSuccess() {
-                    IMClient.getInstance().initAckAndFetch();
-                }
-
-                @Override
-                public void onFailed(int code) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.getInstance(MainActivity.this).showToast("push服务登录失败");
-                        }
-                    });
-                }
-            });
-            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-            if (talkFragment != null) {
-                talkFragment.loadConversation();
-            }
-            initData();
-            UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
-                @Override
-                public void doSuccess(Object result, String method) {
-                    CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
-                    if (Info.code == 0) {
-                        AccountManager.getInstance().setLoginAccountInfo(Info.result);
-                        MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
-                        if (myFragment != null) {
-                            myFragment.refreshLoginStatus();
-                        }
-                    }
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-
-                }
-
-                @Override
-                public void doFailure(Exception error, String msg, String method, int code) {
-
-                }
-            });
-            getInLocList();
-            getOutCountryList();
+        if (AccountManager.getInstance().getLoginAccount(this)!=null) {
+          initClient();
             //   DialogManager.getInstance().showLoadingDialog(this);
         }
     }
 
+    public void initClient(){
+        IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
+            @Override
+            public void onSuccess() {
+                IMClient.getInstance().initAckAndFetch();
+            }
+
+            @Override
+            public void onFailed(int code) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.getInstance(MainActivity.this).showToast("push服务登录失败");
+                    }
+                });
+            }
+        });
+        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+        if (talkFragment != null) {
+            talkFragment.loadConversation();
+        }
+        initData();
+        UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
+                if (Info.code == 0) {
+                    AccountManager.getInstance().setLoginAccountInfo(Info.result);
+                    MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+                    if (myFragment != null) {
+                        myFragment.refreshLoginStatus();
+                    }
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+        getInLocList();
+        getOutCountryList();
+    }
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getBooleanExtra("conflict", false)) {
             showConflictDialog(MainActivity.this);
+        }
+        if (intent.getBooleanExtra("reLogin", false)){
+            initClient();
         }
     }
 
