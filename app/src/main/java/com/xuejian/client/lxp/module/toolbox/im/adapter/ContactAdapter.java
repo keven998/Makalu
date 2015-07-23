@@ -27,6 +27,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -34,6 +35,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +125,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.avatarView = (ImageView) convertView.findViewById(R.id.avatar);
             vh.nickView = (TextView) convertView.findViewById(R.id.name);
             vh.sectionHeader = (TextView) convertView.findViewById(R.id.header);
+            vh.unreadMsgView = (TextView) convertView.findViewById(R.id.non_accept_number);
             vh.dividerView = convertView.findViewById(R.id.vw_divider);
             convertView.setTag(vh);
         } else {
@@ -154,6 +158,12 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
             //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);
             vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
+            if(IMClient.getInstance().getUnAcceptMsg()>0){
+                vh.unreadMsgView.setVisibility(View.VISIBLE);
+                vh.unreadMsgView.setText(IMClient.getInstance().getUnAcceptMsg()+"");
+            }else{
+                vh.unreadMsgView.setVisibility(View.GONE);
+            }
         } else if (username.equals(Constant.GROUP_USERNAME)) {
             //群聊item
             vh.nickView.setText(user.getNickName());
@@ -320,7 +330,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
         public View dividerView;
         public TextView nickView;
         //       public ImageView talkView;
-        //       public TextView unreadMsgView;
+        public TextView unreadMsgView;
     }
 
 }

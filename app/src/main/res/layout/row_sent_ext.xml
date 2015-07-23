@@ -36,7 +36,7 @@
             android:layout_alignWithParentIfMissing="true"
             android:layout_toLeftOf="@id/iv_userhead"
             android:padding="10dp"
-            android:background="@drawable/messages_bg_send">
+            android:background="@drawable/message_bg_send">
 
             <RelativeLayout
                 android:id="@+id/rl_image"

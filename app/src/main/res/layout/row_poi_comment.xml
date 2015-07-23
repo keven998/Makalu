@@ -31,7 +31,7 @@
         android:layout_marginLeft="9dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/iv_commenter_avatar"
-        android:background="@drawable/messages_bg_receive"
+        android:background="@drawable/message_bg_receive"
         android:ellipsize="middle"
         android:paddingBottom="10dp"
         android:paddingLeft="14dp"

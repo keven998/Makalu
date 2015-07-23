@@ -19,10 +19,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/color_text_i"
-                android:gravity="center_vertical"
-                android:textSize="12sp"
-                android:paddingLeft="18dp"
-                android:text="直辖市"/>
+                android:gravity="center"
+                android:textSize="12sp"/>
 
         </FrameLayout>
 
