@@ -125,7 +125,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int SHOP_MSG = 15;
     private static final int HOTEL_MSG = 16;
     private static final int H5_MSG = 17;
-    private static final int TIP_MSG = 99;
+    private static final int TIP_MSG = 200;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
     public static boolean isRead;
@@ -262,6 +262,7 @@ public class MessageAdapter extends BaseAdapter {
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
                         R.layout.row_sent_ext, null);
             default:
+
                 break;
         }
         return null;
@@ -336,6 +337,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     break;
                 default:
+                    System.out.println("type "+message.getType());
                     break;
             }
             convertView.setTag(holder);
@@ -622,6 +624,7 @@ public class MessageAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, StrategyActivity.class);
                     intent.putExtra("id", finalBean.id);
+                    intent.putExtra("userId", friendId);
                     activity.startActivity(intent);
                 }
             });

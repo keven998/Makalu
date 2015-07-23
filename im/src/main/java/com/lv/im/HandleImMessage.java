@@ -54,7 +54,7 @@ public class HandleImMessage {
          */
         public void onMsgArrive(MessageBean m, String groupId);
 
-        public void onCMDMessageArrive(MessageBean m);
+        public void onCMDMessageArrive(MessageBean m,String groupId);
     }
 
     /**
@@ -98,7 +98,7 @@ public class HandleImMessage {
                 case Config.TIP_MSG:
                     Message newCMDMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onCMDMessageArrive(Msg2Bean(newCMDMessage));
+                        handler.onCMDMessageArrive(Msg2Bean(newCMDMessage),String.valueOf(newCMDMessage.getGroupId()));
                     }
                     break;
                 case Config.TEXT_MSG:

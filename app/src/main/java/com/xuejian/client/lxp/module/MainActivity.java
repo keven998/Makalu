@@ -396,7 +396,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     @Override
-    public void onCMDMessageArrive(MessageBean m) {
+    public void onCMDMessageArrive(MessageBean m,String groupId) {
         try {
             if (m.getType() == 100) {
                 String cmd = m.getMessage();
@@ -498,7 +498,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onPause() {
         super.onPause();
-        HandleImMessage.getInstance().unregisterMessageListener(this);
+
     }
 
     @Override
@@ -513,6 +513,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             unregisterReceiver(connectionReceiver);
             connectionReceiver = null;
         }
+        HandleImMessage.getInstance().unregisterMessageListener(this);
     }
 
     private void getInLocList() {

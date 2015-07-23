@@ -67,7 +67,7 @@
        android:textSize="12sp"
        android:gravity="center"
        android:textColor="@color/color_text_iii"
-       android:text="收藏"
+       android:text="+收藏"
        />
 
 

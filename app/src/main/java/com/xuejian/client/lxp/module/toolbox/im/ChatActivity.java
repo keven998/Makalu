@@ -1045,8 +1045,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     }
 
     @Override
-    public void onCMDMessageArrive(MessageBean m) {
-
+    public void onCMDMessageArrive(MessageBean m, String groupId) {
+        if (("group".equals(chatType) &&  toChatUsername.equals(groupId))) {
+            GroupDetailFragment fragment= (GroupDetailFragment) getSupportFragmentManager().findFragmentByTag("GroupDrawer");
+            if (fragment!=null){
+                fragment.setUpGroupMemeber("update");
+            }
+        }
     }
 
     private PowerManager.WakeLock wakeLock;

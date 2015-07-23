@@ -57,7 +57,7 @@ public class MessageDB {
             "SenderId INTEGER)";
     private static final String REQUEST_SCHEMA = " (Id INTEGER PRIMARY KEY AUTOINCREMENT ,UserId INTEGER," +
             "nickName TEXT,avatarSmall TEXT,requestMsg TEXT,requestId TEXT,status INTEGER,time INTEGER，isRead INTEGER)";
-    public static final int TIPS_TYPE = 99;
+    public static final int TIPS_TYPE = 200;
     private String request_msg_table_name;
     private AtomicInteger mOpenCounter = new AtomicInteger();
     private SQLiteDatabase mdb;
@@ -472,6 +472,7 @@ public class MessageDB {
             values.put("Status", status);
             mdb.update(request_msg_table_name, values, "UserId=?", new String[]{String.valueOf(UserId)});
         }
+        cursor.close();
         closeDB();
     }
 

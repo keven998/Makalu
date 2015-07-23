@@ -13,6 +13,6 @@ public class CountryWithExpertsBean {
     public ArrayList<ImageBean> images = new ArrayList<ImageBean>();
     public ArrayList<LocBean> destinations = new ArrayList<LocBean>();
     public ContinentsBean continents;
-    public int expertUserCnt;
+    public int expertCnt;
 
 }

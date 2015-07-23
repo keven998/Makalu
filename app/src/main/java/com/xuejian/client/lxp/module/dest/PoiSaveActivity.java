@@ -2,9 +2,7 @@ package com.xuejian.client.lxp.module.dest;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +12,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.common.utils.video.Utils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.module.MainActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by lxp_dqm07 on 2015/7/11.
@@ -214,14 +205,13 @@ public class PoiSaveActivity extends PeachBaseActivity {
             save_btn = (TextView) view.findViewById(R.id.poi_save_btn);
 
             groupTitle.setText(destinations.get(i).zhName);
-            groupSum.setText("(" + content.get(i).size() + ")");
+            groupSum.setText("(" +"收藏" +content.get(i).size() + ")");
 
             save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ArrayList<LocBean> list = new ArrayList<LocBean>();
                     list.add(destinations.get(i));
-
                     Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
                     intent.putExtra("type", type);
                     intent.putExtra("canAdd", true);

@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:gravity="center_vertical"
-            android:hint="名称/手机/ID"
+            android:hint="手机号"
             android:imeOptions="actionNext"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"

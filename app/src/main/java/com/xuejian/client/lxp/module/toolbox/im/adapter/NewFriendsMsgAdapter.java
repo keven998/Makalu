@@ -15,6 +15,7 @@ package com.xuejian.client.lxp.module.toolbox.im.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.List;
 
@@ -78,6 +80,15 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
         }
 
         final InventMessage msg = getItem(position);
+
+        holder.avator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, HisMainPageActivity.class);
+                intent.putExtra("userId", msg.getUserId());
+                context.startActivity(intent);
+            }
+        });
         if (msg.getStatus() == 0) {
 //            if(msg.getGroupId() != null){ // 显示群聊提示
 //                holder.groupContainer.setVisibility(View.VISIBLE);
@@ -103,6 +114,11 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
                 }
             });
         } else if (msg.getStatus() == 1) {
+            holder.name.setText(msg.getNickName());
+            if (TextUtils.isEmpty(msg.getRequestMsg())) {
+                // 如果没写理由
+                holder.reason.setText("请求加你为好友");
+            } else holder.reason.setText(msg.getRequestMsg());
             holder.status.setText("已添加");
             holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
             holder.status.setBackgroundResource(0);
