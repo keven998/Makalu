@@ -71,6 +71,7 @@ import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
+import com.xuejian.client.lxp.module.toolbox.im.GroupDetailFragment;
 import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
 import com.xuejian.client.lxp.module.toolbox.im.VoicePlayClickListener;
 
@@ -443,11 +444,17 @@ public class MessageAdapter extends BaseAdapter {
                 User user = groupMembers.get(message.getSenderId());
                 if (user == null) {
                     user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
-                    if (user == null) {
-                        // user = IMUtils.getUserInfoFromMessage(context, message);
+                    try {
+                        if (user == null) {
+                            GroupDetailFragment fragment= (GroupDetailFragment) ((ChatActivity) activity).getSupportFragmentManager().findFragmentByTag("GroupDrawer");
+                            if (fragment!=null){
+                                fragment.setUpGroupMemeber("update");
+                            }
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                     groupMembers.put(message.getSenderId(), user);
-
                 }
                 if (user != null) {
                     holder.tv_userId.setText(user.getNickName());

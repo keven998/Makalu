@@ -2,6 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <stroke android:color="@color/btn_border_color" android:width="1dp"></stroke>
+    <solid android:color="@color/base_color_white"></solid>
     <corners android:radius="5dp"></corners>
 
 </shape>

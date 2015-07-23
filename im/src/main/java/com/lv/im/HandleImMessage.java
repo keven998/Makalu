@@ -54,7 +54,7 @@ public class HandleImMessage {
          */
         public void onMsgArrive(MessageBean m, String groupId);
 
-        public void onCMDMessageArrive(MessageBean m,String groupId);
+        public void onCMDMessageArrive(MessageBean m, String groupId);
     }
 
     /**
@@ -64,7 +64,9 @@ public class HandleImMessage {
      */
     public void registerMessageListener(MessageHandler listener) {
         if (!ehList.contains(listener)) ehList.add(listener);
-
+        if (Config.isDebug) {
+            System.out.println("ehList size: " + ehList.size());
+        }
     }
 
     /**
@@ -74,6 +76,9 @@ public class HandleImMessage {
      */
     public void unregisterMessageListener(MessageHandler listener) {
         ehList.remove(listener);
+        if (Config.isDebug) {
+            System.out.println("ehList size: " + ehList.size());
+        }
     }
 
     public void registerMessageListener(MessageHandler listener, String conversation) {
@@ -82,11 +87,17 @@ public class HandleImMessage {
         }
         openStateMap.put(listener, conversation);
         IMClient.getInstance().updateReadStatus(conversation);
+        if (Config.isDebug) {
+            System.out.println("ehList size: " + ehList.size());
+        }
     }
 
     public void unregisterMessageListener(MessageHandler listener, String conversation) {
         ehList.remove(listener);
         openStateMap.clear();
+        if (Config.isDebug) {
+            System.out.println("ehList size: " + ehList.size());
+        }
     }
 
     public static class MyHandler extends Handler {
@@ -98,7 +109,7 @@ public class HandleImMessage {
                 case Config.TIP_MSG:
                     Message newCMDMessage = (Message) message.obj;
                     for (MessageHandler handler : ehList) {
-                        handler.onCMDMessageArrive(Msg2Bean(newCMDMessage),String.valueOf(newCMDMessage.getGroupId()));
+                        handler.onCMDMessageArrive(Msg2Bean(newCMDMessage), String.valueOf(newCMDMessage.getGroupId()));
                     }
                     break;
                 case Config.TEXT_MSG:
@@ -172,31 +183,44 @@ public class HandleImMessage {
                 Log.i(Config.TAG, "result :" + result);
             }
             if (result == 0) {
-                if (messageBean.getMsgType() == 100) {
-                    android.os.Message cmd_msg = android.os.Message.obtain();
-                    cmd_msg.obj = messageBean;
-                    cmd_msg.what = Config.CMD_MSG;
-                    handler.sendMessage(cmd_msg);
-                    return;
-                }
-                if (Config.isDebug) {
-                    System.out.println("ehList size: " + ehList.size());
-                }
-                //  for (MessageHandler handler : ehList) {
-                if (ehList.size() > 0) {
-                    if (openStateMap.containsKey(ehList.get(0))) {
-                        if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))
-                            IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
-                        else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                    } else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                } else {
-                    notifyMsg(c, messageBean);
-                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                }
-
-                String content = messageBean.getContents();
-                JSONObject object = null;
                 try {
+                    if (messageBean.getMsgType() == 100) {
+                        android.os.Message cmd_msg = android.os.Message.obtain();
+                        cmd_msg.obj = messageBean;
+                        cmd_msg.what = Config.CMD_MSG;
+                        handler.sendMessage(cmd_msg);
+                        return;
+                    }
+                    if (Config.isDebug) {
+                        System.out.println("ehList size: " + ehList.size());
+                    }
+                    //  for (MessageHandler handler : ehList) {
+                    if (ehList.size() > 0) {
+                        for (MessageHandler handler : ehList) {
+                            if (openStateMap.containsKey(handler)) {
+                                if (messageBean.getConversation().equals(openStateMap.get(handler)))
+                                    IMClient.getInstance().updateReadStatus(openStateMap.get(handler));
+                                else
+                                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                            }
+                        }
+//                    if (openStateMap.containsKey(ehList.get(0))) {
+//                        if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))
+//                            IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
+//                        else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+//                    } else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                    }
+//                else {
+//                    notifyMsg(c, messageBean);
+//                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+//                }
+                    if (isBackground(c)) {
+                        notifyMsg(c, messageBean);
+                        IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                    }
+                    String content = messageBean.getContents();
+                    JSONObject object = null;
+
                     switch (messageBean.getMsgType()) {
                         case Config.TEXT_MSG:
                             android.os.Message handlermsg = android.os.Message.obtain();
@@ -286,7 +310,7 @@ public class HandleImMessage {
     };
 
     private static MessageBean Msg2Bean(Message msg) {
-        return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId(),msg.getAbbrev());
+        return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId(), msg.getAbbrev());
     }
 
     public void notifyMsg(Context c, Message message) {
@@ -317,5 +341,21 @@ public class HandleImMessage {
         ActivityManager var1 = (ActivityManager) var0.getSystemService(Context.ACTIVITY_SERVICE);
         List var2 = var1.getRunningTasks(1);
         return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo) var2.get(0)).baseActivity.getPackageName());
+    }
+    public static boolean isBackground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
+                    Log.i("后台", appProcess.processName);
+                    return true;
+                }else{
+                    Log.i("前台", appProcess.processName);
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }

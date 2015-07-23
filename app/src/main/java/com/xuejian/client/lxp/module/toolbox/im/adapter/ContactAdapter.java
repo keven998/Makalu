@@ -15,6 +15,7 @@ package com.xuejian.client.lxp.module.toolbox.im.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,7 +161,11 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.avatarView.setImageResource(R.drawable.my_group);
             vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         } else {
-            vh.nickView.setText(user.getNickName());
+            if (TextUtils.isEmpty(user.getMemo())){
+                vh.nickView.setText(user.getNickName());
+            }else {
+                vh.nickView.setText(user.getMemo()+"("+user.getNickName()+")");
+            }
             vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
 //            vh.talkView.setVisibility(View.VISIBLE);

@@ -318,9 +318,8 @@ public class TalkFragment extends PeachBaseFragment {
         if (!hidden) {
             refresh();
         }
-        if (AccountManager.getInstance().getLoginAccount(getActivity())!=null)
-            loadConversation();
         if (AccountManager.getInstance().getLoginAccount(getActivity())!=null) {
+            loadConversation();
             if (!hidden) {
                 refresh();
             }

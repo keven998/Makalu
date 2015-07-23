@@ -14,5 +14,6 @@ public class CountryWithExpertsBean {
     public ArrayList<LocBean> destinations = new ArrayList<LocBean>();
     public ContinentsBean continents;
     public int expertCnt;
+    public int rank;
 
 }

@@ -159,13 +159,21 @@ public class LoginActivity extends PeachBaseActivity {
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(mContext, user);
         AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
+        User wenwen=new User();
+        wenwen.setNickName("旅行问问");
+        wenwen.setUserId(10001l);
+        UserDBManager.getInstance().saveContact(wenwen);
+        User paipai=new User();
+        paipai.setNickName("派派");
+        paipai.setUserId(10000l);
+        UserDBManager.getInstance().saveContact(paipai);
         // 进入主页面
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                if(isFromTalkShare){
+                if (isFromTalkShare) {
                     finish();
-                }else {
+                } else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("reLogin", true);
                     //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

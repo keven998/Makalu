@@ -171,9 +171,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
                 if (user.getUserId()==10001){
-                    holder.avatar.setImageResource(R.drawable.icon_avatar_wenwen);
+                    finalHolder.avatar.setImageResource(R.drawable.icon_avatar_wenwen);
                 } else if (user.getUserId()==10000){
-                    holder.avatar.setImageResource(R.drawable.icon_avatar_paipai);
+                    finalHolder.avatar.setImageResource(R.drawable.icon_avatar_paipai);
                 } else{
                 finalHolder.avatar.setTag(user.getAvatarSmall());
                 ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);
@@ -206,9 +206,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //                    holder.name.setText("申请与通知");
 //                }
                 if (TextUtils.isEmpty(user.getMemo())) {
-                    holder.name.setText(user.getNickName());
+                    finalHolder.name.setText(user.getNickName());
                 } else {
-                    holder.name.setText(user.getNickName() + " " + user.getMemo());
+                    finalHolder.name.setText(user.getMemo()+"("+user.getNickName() + ")" );
                 }
             } else {
                 holder.name.setText("");

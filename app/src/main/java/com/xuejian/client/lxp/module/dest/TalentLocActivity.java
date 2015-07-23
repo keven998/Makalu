@@ -26,6 +26,8 @@ import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -39,7 +41,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
     private int lastPos = 0;
-    private String[] delta = { "欧洲","亚洲","北美洲" ,"美洲", "非洲", "大洋洲"};
+    private String[] delta = {"亚洲", "欧洲","北美洲" ,"美洲", "非洲", "大洋洲"};
     List<String> lists;
     ArrayList<ArrayList<CountryWithExpertsBean>> data;
     @Override
@@ -86,7 +88,11 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         }
         ArrayList<ArrayList<CountryWithExpertsBean>> del=new ArrayList<>();
         for (ArrayList<CountryWithExpertsBean> beans : data) {
-            if (beans.size()==0)del.add(beans);
+            if (beans.size()==0){
+                del.add(beans);
+            }else {
+                sortCountries(beans);
+            }
         }
         data.removeAll(del);
         adapter = new TalentLocAdapter(this);
@@ -301,4 +307,25 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
             private TextView loc;
         }
     }
+    private void sortCountries(List<CountryWithExpertsBean> conversationList) {
+        Collections.sort(conversationList, new Comparator<CountryWithExpertsBean>() {
+            @Override
+            public int compare(final CountryWithExpertsBean con1, final CountryWithExpertsBean con2) {
+
+                long LastTime2 = con2.rank;
+                long LastTime1 = con1.rank;
+                if (LastTime1 == 0 || LastTime2 == 0) {
+                    return -1;
+                }
+                if (LastTime2 == LastTime1) {
+                    return 0;
+                } else if (LastTime2 < LastTime1) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        });
+    }
+
 }
