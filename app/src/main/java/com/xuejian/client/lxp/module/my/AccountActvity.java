@@ -351,7 +351,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             tv_bind_phone.setText("已绑定");
         }
 
-        getUserPics(user.getUserId());
+        //getUserPics(user.getUserId());
 
     }
 
@@ -851,26 +851,28 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     if (info.isOK()) {
                                         LogUtil.d(response.toString());
-//                                        try {
+                                        try {
+                                            String imageUrl = response.getString("url");
+                                        /*//很明显这段的代码是更改用户的头像的作用
 
-                                        //很明显这段的代码是更改用户的头像的作用
-                                            /*String imageUrl = response.getString("url");
                                             String urlSmall = response.getString("urlSmall");
-                                            user.avatar = imageUrl;
-                                            user.avatarSmall = urlSmall;
+                                            user.setAvatar(imageUrl);
+                                            //user.avatar = imageUrl;
+                                            user.setAvatarSmall(urlSmall);
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);*/
 
-                                        //ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), addImageView, options);
-                                        pics.add(Uri.fromFile(file).toString());
+
+                                            changeUserAvatar(imageUrl);
+                                        /*pics.add(Uri.fromFile(file).toString());
                                         try {
                                             pic_ids.add(response.getString("id"));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        initScrollView(pics, pic_ids);
-                                       /* } catch () {
+                                        initScrollView(pics, pic_ids);*/
+                                        } catch (JSONException e) {
                                             e.printStackTrace();
-                                        }*/
+                                        }
                                     }
 
                                 }
@@ -915,8 +917,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
-                    user.setAvatarSmall(url);
+                    user.setAvatar(url);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
+                    ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
+                            .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                            .showImageOnFail(R.drawable.messages_bg_useravatar)
+                            .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                            .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                            .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
+                                    getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                            .build());
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }

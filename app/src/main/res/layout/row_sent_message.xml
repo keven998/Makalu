@@ -35,8 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/iv_userhead"
             android:autoLink="web"
-            android:background="@drawable/messages_bg_send"
-            android:gravity="right"
+            android:background="@drawable/message_bg_send"
+            android:gravity="right|center"
             android:paddingLeft="10dp"
             android:textColor="@color/base_color_white" />
 
