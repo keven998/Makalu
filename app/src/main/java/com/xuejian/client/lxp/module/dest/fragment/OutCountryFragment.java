@@ -223,7 +223,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
         @Override
         public void showData(int position, final CountryBean itemData) {
-            sectionTv.setText(itemData.zhName);
+            sectionTv.setText("- "+itemData.zhName+" -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.destinations) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
