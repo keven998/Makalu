@@ -836,7 +836,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     private void uploadAvatar(final File file) {
         final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext, "0%");
-        OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
+        OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);

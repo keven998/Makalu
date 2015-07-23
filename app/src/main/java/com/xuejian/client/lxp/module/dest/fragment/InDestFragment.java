@@ -434,15 +434,12 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         private TextView sectionTv;
         private FlowLayout cityListFl;
         private FrameLayout des_display_box;
-        private DisplayImageOptions poptions = UILUtils.getDefaultOption();
-        /*private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
+        //private DisplayImageOptions poptions = UILUtils.getDefaultOption();
+        private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.loading_picture)
-                .showImageOnLoading(R.drawable.loading_picture)
-                .showImageForEmptyUri(R.drawable.loading_picture)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();*/
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -511,4 +508,18 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         }
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
+    }
 }

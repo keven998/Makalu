@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -344,6 +345,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
         ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
+        FrameLayout fl_avatar= (FrameLayout) findViewById(R.id.fl_gender_bg);
         ImageLoader.getInstance().displayImage(bean.getAvatar(), avatarImage, new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
@@ -354,15 +356,15 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 .build());
         TextView tvLevel = (TextView) findViewById(R.id.tv_level);
         if (bean.getGender().equalsIgnoreCase("M")) {
-            avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
+            fl_avatar.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else if (bean.getGender().equalsIgnoreCase("F")) {
-            avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_girl);
+            fl_avatar.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else {
-            avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_unknown);
+            fl_avatar.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
         }
 
@@ -515,7 +517,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
                 intent2.putExtra("id", String.valueOf(userId));
-                intent2.putExtra("title", imUser.getNickName());
+                intent2.putExtra("title", user.getNickName());
                 intent2.putExtra("isTalentAlbum", true);
                 startActivity(intent2);
             }

@@ -514,7 +514,7 @@ public class CityPictureActivity extends PeachBaseActivity {
             if (tempImage != null) {
                 uploadAvatar(tempImage);
             }
-        } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
+        } else if (requestCode == SelectPicUtils.REQUEST_CODE_CAMERA) {
             if (tempImage != null) {
                 uploadAvatar(tempImage);
 
