@@ -301,7 +301,7 @@
                 android:drawableLeft="@drawable/ic_talk_normal"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="发起聊天"
+                android:text="发送消息"
                 android:textColor="@color/color_text_ii"
                 android:textSize="14sp" />
         </FrameLayout>
@@ -321,7 +321,7 @@
                 android:drawableLeft="@drawable/account_labbar_icon_follow_default"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="加为好友"
+                android:text="加为朋友"
                 android:textColor="@color/color_text_ii"
                 android:textSize="14sp" />
         </FrameLayout>

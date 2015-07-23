@@ -148,7 +148,7 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     private void showActionDialog() {
-        String[] names = {"新建聊天", "添加好友", "取消"};
+        String[] names = {"新建聊天", "添加朋友", "取消"};
         final MoreDialog dialog = new MoreDialog(getActivity());
         dialog.setMoreStyle(false, 3, names);
         dialog.getTv1().setOnClickListener(new View.OnClickListener() {

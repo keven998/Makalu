@@ -167,7 +167,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private void addToFriend() {
         if (me != null) {
             final PeachEditDialog editDialog = new PeachEditDialog(this);
-            editDialog.setTitle("好友验证");
+            editDialog.setTitle("朋友验证");
             editDialog.setMessage(String.format("Hi, 我是%s", me.getNickName()));
             editDialog.setPositiveButton("确定", new View.OnClickListener() {
                 @Override

@@ -13,7 +13,7 @@
             android:gravity="center"
             android:paddingTop="5dp"
             android:drawableTop="@drawable/tab_im_contacts"
-            android:text="好友"
+            android:text="朋友"
             android:paddingBottom="7dp"
             android:textColor="@color/im_tab_text_color"
             android:textSize="10sp"  />

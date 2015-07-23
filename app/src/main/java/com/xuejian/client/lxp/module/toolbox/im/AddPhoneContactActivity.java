@@ -52,7 +52,7 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         final TitleHeaderBar titleHeaderBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
 //        titleHeaderBar.setRightViewImageRes(R.drawable.add);
 
-        titleHeaderBar.getTitleTextView().setText("添加通讯录好友");
+        titleHeaderBar.getTitleTextView().setText("添加通讯录朋友");
         titleHeaderBar.enableBackKey(true);
     }
 

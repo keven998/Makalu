@@ -356,7 +356,7 @@ public class MessageDB {
                     return 1;
                 }
                 String nickName = object.getString("nickName");
-                addTips(String.valueOf(userId), nickName + "已同意你的好友请求，现在可以开始聊天", "single");
+                addTips(String.valueOf(userId), nickName + "已同意你的添加请求，现在可以开始聊天", "single");
                 closeDB();
                 return 0;
             } else {

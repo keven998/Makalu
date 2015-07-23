@@ -189,7 +189,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             }
         });
 
-        titleHeaderBar.getTitleTextView().setText("选择好友");
+        titleHeaderBar.getTitleTextView().setText("选择联系人");
         titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,7 +206,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
      */
     public void save(View v) {
         if (toBeAddContacts.size() == 0) {
-            ToastUtil.getInstance(mContext).showToast("请至少选择一位好友");
+            ToastUtil.getInstance(mContext).showToast("请至少选择一位联系人");
             return;
         }
         if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {

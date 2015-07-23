@@ -154,7 +154,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
         }
         //显示申请与通知item
         if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-            vh.nickView.setText("好友请求");
+            vh.nickView.setText("新朋友");
 //                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
             //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);

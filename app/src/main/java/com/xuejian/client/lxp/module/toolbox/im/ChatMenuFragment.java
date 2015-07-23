@@ -44,7 +44,7 @@ public class ChatMenuFragment extends Fragment {
             public void onClick(View v) {
                 final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
                 dialog.setTitle("提示");
-                dialog.setMessage("确定清空与此好友的聊天记录吗？");
+                dialog.setMessage("确定清空全部聊天记录");
                 dialog.setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
