@@ -502,7 +502,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-        dialog.setMessage("提示");
+        dialog.setMessage(String.format("删除\"%s\"", itemData.title));
         dialog.setPositiveButton("确认", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -458,7 +458,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             /*if(position==0){
                 des_display_box.setPadding(0,0,0,0);
             }*/
-            sectionTv.setText(itemData.section);
+            sectionTv.setText("- "+itemData.section+" -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
