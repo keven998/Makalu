@@ -24,6 +24,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.InputCheckUtils;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -60,6 +61,8 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     UserApi.editMemo(userId, nickEt.getText().toString(), new HttpCallBack() {
                         @Override
                         public void doSuccess(Object result, String method) {
+                            if (!TextUtils.isEmpty(userId))
+                            UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId)).setMemo(nickEt.getText().toString());
                             Intent intent = new Intent();
                             intent.putExtra("memo", nickEt.getText().toString());
                             setResult(RESULT_OK, intent);

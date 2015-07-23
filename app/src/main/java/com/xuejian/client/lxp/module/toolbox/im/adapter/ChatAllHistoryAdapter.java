@@ -70,6 +70,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
     private static final int FOOD_MSG = 14;
     private static final int SHOP_MSG = 15;
     private static final int HOTEL_MSG = 16;
+    private static final int TIPS_MSG = 200;
 
 
     private LayoutInflater inflater;
@@ -77,14 +78,15 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
     private Handler handler;
     private ImageSize avatarSize;
     private Context mContext;
+
     public ChatAllHistoryAdapter(Context context, int textViewResourceId, List<ConversationBean> objects) {
         super(context, textViewResourceId, objects);
-        mContext=context;
+        mContext = context;
         inflater = LayoutInflater.from(context);
         handler = new Handler();
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-              //  .showImageOnLoading()
+                        //  .showImageOnLoading()
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
@@ -114,7 +116,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         // 获取与此用户/群组的会话
         ConversationBean conversation = getItem(position);
         User user = null;
-        if (AccountManager.getInstance().getLoginAccount(mContext)!=null) {
+        if (AccountManager.getInstance().getLoginAccount(mContext) != null) {
             user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(conversation.getFriendId() + ""));
         }
         // 获取用户username或者群组groupid
@@ -170,13 +172,13 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
-                if (user.getUserId()==10001){
+                if (user.getUserId() == 10001) {
                     finalHolder.avatar.setImageResource(R.drawable.icon_avatar_wenwen);
-                } else if (user.getUserId()==10000){
+                } else if (user.getUserId() == 10000) {
                     finalHolder.avatar.setImageResource(R.drawable.icon_avatar_paipai);
-                } else{
-                finalHolder.avatar.setTag(user.getAvatarSmall());
-                ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);
+                } else {
+                    finalHolder.avatar.setTag(user.getAvatarSmall());
+                    ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);
                 }
 //                ImageLoader.getInstance().loadImage(imUser.getAvatar(), avatarSize, UILUtils.getDefaultOption(), new SimpleImageLoadingListener() {
 //                    @Override
@@ -208,7 +210,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 if (TextUtils.isEmpty(user.getMemo())) {
                     finalHolder.name.setText(user.getNickName());
                 } else {
-                    finalHolder.name.setText(user.getMemo()+"("+user.getNickName() + ")" );
+                    finalHolder.name.setText(user.getMemo() + "(" + user.getNickName() + ")");
                 }
             } else {
                 holder.name.setText("");
@@ -262,13 +264,23 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         String digest = "";
         //       int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
         if (isGroup) {
-//            if (extType != Constant.ExtType.TIPS) {
-//                String fromUserJson = message.getStringAttribute("fromUser", "");
-//                ExtFromUser fromUser = GsonTools.parseJsonToBean(fromUserJson, ExtFromUser.class);
-//                if (fromUser != null && !TextUtils.isEmpty(fromUser.nickName)) {
-//                    digest = fromUser.nickName + ":";
-//                }
-//
+//            switch (conversationBean.getType()) {
+//                case LOC_MSG: // 位置消息
+//                    if (conversationBean.getSendType() == TYPE_REV) {
+//                        // 从sdk中提到了ui中，使用更简单不犯错的获取string的方法
+//                        // digest = EasyUtils.getAppResourceString(context,
+//                        // "location_recv");
+//                        User user = UserDBManager.getInstance().getContactByUserId(conversationBean.getFriendId());
+//                        digest = getString(context, R.string.location_recv);
+//                        if (user != null) digest = String.format(digest, user.getNickName());
+//                        else digest = String.format(digest, conversationBean.getFriendId());
+//                        return digest;
+//                    } else {
+//                        // digest = EasyUtils.getAppResourceString(context,
+//                        // "location_prefix");
+//                        digest = getString(context, R.string.location_prefix);
+//                    }
+//                    break;
 //            }
         }
         switch (conversationBean.getType()) {
@@ -332,6 +344,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                break;
+            case TIPS_MSG:
+                digest = "[系统消息]";
                 break;
             default:
                 System.err.println("error, unknow type");

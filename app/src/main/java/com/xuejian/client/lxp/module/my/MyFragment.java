@@ -1,7 +1,10 @@
 package com.xuejian.client.lxp.module.my;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -44,6 +47,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -118,15 +122,21 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         } else {
             System.out.println("user not null");
             if (user.getGender().equalsIgnoreCase("M")) {
-                genderFrame.setImageResource(R.drawable.ic_home_header_boy);
+                /**
+                 * OOM Exception
+                 */
+                genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_boy));
+ //               genderFrame.setImageResource(R.drawable.ic_home_header_boy);
                 fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             } else if (user.getGender().equalsIgnoreCase("F")) {
-                genderFrame.setImageResource(R.drawable.ic_home_header_girl);
+                genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_girl));
+    //            genderFrame.setImageResource(R.drawable.ic_home_header_girl);
                 fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             } else {
-                genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
+                genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_unlogin));
+ //               genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
                 fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
                 tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             }
@@ -386,5 +396,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 }
             }
         }
+    }
+    public static Bitmap readBitMap(Context context, int resId) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPurgeable = true;
+        opt.inInputShareable = true;
+// 获取资源图片
+        InputStream is = context.getResources().openRawResource(resId);
+        return BitmapFactory.decodeStream(is, null, opt);
     }
 }

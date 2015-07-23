@@ -195,14 +195,19 @@ public class HandleImMessage {
                         System.out.println("ehList size: " + ehList.size());
                     }
                     //  for (MessageHandler handler : ehList) {
+                    boolean flag = false;
                     if (ehList.size() > 0) {
                         for (MessageHandler handler : ehList) {
                             if (openStateMap.containsKey(handler)) {
+                                flag=true;
                                 if (messageBean.getConversation().equals(openStateMap.get(handler)))
                                     IMClient.getInstance().updateReadStatus(openStateMap.get(handler));
                                 else
                                     IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                             }
+                        }
+                        if (!flag) {
+                            IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                         }
 //                    if (openStateMap.containsKey(ehList.get(0))) {
 //                        if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))

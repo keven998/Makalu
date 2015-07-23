@@ -250,5 +250,4 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             }
         });
     }
-
 }

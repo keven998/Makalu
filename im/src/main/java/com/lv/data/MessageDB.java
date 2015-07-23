@@ -334,18 +334,21 @@ public class MessageDB {
                 Cursor cursor = mdb.rawQuery("select status from " + request_msg_table_name + " where requestId=?", new String[]{requestId});
                 if (cursor.getCount() == 0) {
                     saveInventMessage(new InventMessage(userId, nickName, avatar, message, requestId, DEFAULT, TimeUtils.getTimestamp()));
+                    cursor.close();
                     closeDB();
                     return 0;
                 }
                 cursor.moveToLast();
                 int status = cursor.getInt(0);
                 if (status == DEFAULT) {
+                    cursor.close();
                     closeDB();
                     return 1;
                 } else {
                     ContentValues values = new ContentValues();
                     values.put("status", DEFAULT);
                     mdb.update(request_msg_table_name, values, "requestId=?", new String[]{requestId});
+                    cursor.close();
                     closeDB();
                     return 0;
                 }
