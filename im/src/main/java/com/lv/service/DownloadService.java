@@ -34,8 +34,9 @@ public class DownloadService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
       //  if (Config.ACTION_START.equals(intent.getAction())) {
-            Message message = (Message)intent.getSerializableExtra("msg");
-        //    if (!downlaodMap.containsKey(message.getUrl())) {
+            try {
+                Message message = (Message)intent.getSerializableExtra("msg");
+                //    if (!downlaodMap.containsKey(message.getUrl())) {
                 new DownloadTask1().execute(message);
                 downlaodMap.put(message.getUrl(),message);
                 if (Config.isDebug){
@@ -47,8 +48,12 @@ public class DownloadService extends Service {
 //                if (Config.isDebug){
 //                    Log.i(Config.TAG,"已下载 ");
 //                }
- //           }
-        }
+                    //           }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         return super.onStartCommand(intent, flags, startId);
     }
 

@@ -352,7 +352,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
                         getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
                 .build());
-
         TextView tvLevel = (TextView) findViewById(R.id.tv_level);
         if (bean.getGender().equalsIgnoreCase("M")) {
             avatarImage.setBackgroundResource(R.drawable.ic_home_avatar_border_boy);
@@ -387,7 +386,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             tvLocation.setText(bean.getResidence());
         }
         TextView tvAge = (TextView) findViewById(R.id.tv_age);
-        if (bean.getBirthday() == null) {
+        if (TextUtils.isEmpty(bean.getBirthday())) {
             tvAge.setText("未设置");
         } else {
             tvAge.setText(String.valueOf(getAge(bean.getBirthday())));
@@ -432,7 +431,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         noteStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, noteStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         noteStr.setSpan(new AbsoluteSizeSpan(14, true), 0, noteStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder nsb = new SpannableStringBuilder();
-        nsb.append(String.format("%d篇\n", 99)).append(noteStr);
+        nsb.append(String.format("%d篇\n", bean.getTravelNoteCnt())).append(noteStr);
         tvNotes.setText(nsb);
         tvNotes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -444,6 +443,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
 
     public int getAge(String birth) {
+        if (TextUtils.isEmpty(birth))return 0;
         int age = 0;
         String birthType = birth.substring(0, 4);
         int birthYear = Integer.parseInt(birthType);

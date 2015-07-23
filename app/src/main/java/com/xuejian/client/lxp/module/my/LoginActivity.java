@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
+import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
@@ -166,7 +167,7 @@ public class LoginActivity extends PeachBaseActivity {
                     finish();
                 }else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("reLogin",true);
+                    intent.putExtra("reLogin", true);
                     //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
@@ -307,7 +308,10 @@ public class LoginActivity extends PeachBaseActivity {
             ToastUtil.getInstance(mContext).showToast("我要账号和密码");
             return;
         }
-
+        if (!RegexUtils.isMobileNO(loginNameEt.getText().toString().trim())) {
+            ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
+            return;
+        }
         DialogManager.getInstance().showLoadingDialog(this);
         UserApi.signIn(loginNameEt.getText().toString().trim(), pwdEt.getText().toString().trim(), new HttpCallBack<String>() {
 

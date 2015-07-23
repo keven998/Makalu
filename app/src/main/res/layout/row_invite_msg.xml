@@ -28,7 +28,7 @@
             android:layout_toRightOf="@id/avatar"
             android:textColor="@color/base_text_color_title"
             android:textSize="15sp"
-            android:text="dfs"/>
+            />
 
         <!--
          <TextView
@@ -64,7 +64,7 @@
             android:singleLine="true"
             android:textColor="@color/base_text_color_text_hint"
             android:textSize="13sp"
-            android:text="fdsa"/>
+            />
 
         <Button
             android:id="@+id/user_state"

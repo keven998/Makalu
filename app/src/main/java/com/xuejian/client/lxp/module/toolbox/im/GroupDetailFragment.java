@@ -279,7 +279,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
         }
     }
 
-    private void setUpGroupMemeber(String type) {
+    public void setUpGroupMemeber(String type) {
         final List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
         final List<String> unkownMembers = new ArrayList<String>();
         memberAdapter.getDataList().clear();

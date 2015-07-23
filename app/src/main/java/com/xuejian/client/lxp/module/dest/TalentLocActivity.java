@@ -39,7 +39,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
     private int lastPos = 0;
-    private String[] delta = {"亚洲", "欧洲","北美洲" ,"美洲", "非洲", "大洋洲"};
+    private String[] delta = { "欧洲","亚洲","北美洲" ,"美洲", "非洲", "大洋洲"};
     List<String> lists;
     ArrayList<ArrayList<CountryWithExpertsBean>> data;
     @Override
@@ -246,7 +246,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
                 mImgLoader.displayImage("",  holder.bgImage, poptions);
             }
 
-            holder.numSum.setText(String.format("%d位", item.expertUserCnt));
+            holder.numSum.setText(String.format("%d位", item.expertCnt));
             holder.loc.setText(String.format("~派派 · %s · 达人~", item.zhName));
             holder.rl_country.setOnClickListener(new View.OnClickListener() {
                 @Override
