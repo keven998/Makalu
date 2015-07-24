@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
+import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -20,7 +21,7 @@ import com.xuejian.client.lxp.config.SettingConfig;
 public class ChatMenuFragment extends Fragment {
     String userId;
     private ChatActivity mActivity;
-
+    private String conversation;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_chat_menu, container, false);
@@ -38,6 +39,7 @@ public class ChatMenuFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         userId = getArguments().getString("userId");
+        conversation = getArguments().getString("conversation");
         getView().findViewById(R.id.clear_all_history).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -66,10 +68,35 @@ public class ChatMenuFragment extends Fragment {
         ctv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckedTextView ctv = (CheckedTextView) v;
-                Boolean isOpen = ctv.isChecked();
+                final CheckedTextView ctv = (CheckedTextView) v;
+                final Boolean isOpen = ctv.isChecked();
                 ctv.setChecked(!isOpen);
-                SettingConfig.getInstance().setLxpNoticeSetting(getActivity().getApplicationContext(), userId, !isOpen);
+                IMClient.getInstance().muteConversation(conversation, !isOpen, new HttpCallback() {
+                    @Override
+                    public void onSuccess() {
+                        System.out.println("设置成功");
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SettingConfig.getInstance().setLxpNoticeSetting(getActivity().getApplicationContext(), userId, !isOpen);
+                                System.out.println(SettingConfig.getInstance().getLxpNoticeSetting(getActivity().getApplicationContext(),userId));
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        System.out.println(code);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ctv.setChecked(isOpen);
+                            }
+                        });
+                    }
+                });
+
             }
         });
     }

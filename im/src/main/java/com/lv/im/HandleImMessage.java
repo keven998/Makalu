@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.lv.Listener.DequeueListener;
 import com.lv.Listener.MsgListener;
 import com.lv.Utils.Config;
+import com.lv.Utils.SharePrefUtil;
 import com.lv.Utils.TimeUtils;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
@@ -200,7 +201,7 @@ public class HandleImMessage {
                     if (ehList.size() > 0) {
                         for (MessageHandler handler : ehList) {
                             if (openStateMap.containsKey(handler)) {
-                                flag=true;
+                                flag = true;
                                 if (messageBean.getConversation().equals(openStateMap.get(handler)))
                                     IMClient.getInstance().updateReadStatus(openStateMap.get(handler));
                                 else
@@ -228,8 +229,12 @@ public class HandleImMessage {
 //                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
 //                }
                     if (isBackground(c)) {
-                        notifyMsg(c, messageBean);
-                        IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                        if ("group".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getGroupId()), false)) {
+                            notifyMsg(c, messageBean);
+                        } else if ("single".equals(messageBean.getChatType()) &&!SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getSenderId()), false)) {
+                            notifyMsg(c, messageBean);
+                        }
+           //             IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                     }
                     String content = messageBean.getContents();
                     JSONObject object = null;
@@ -355,6 +360,7 @@ public class HandleImMessage {
         List var2 = var1.getRunningTasks(1);
         return var0.getPackageName().equalsIgnoreCase(((ActivityManager.RunningTaskInfo) var2.get(0)).baseActivity.getPackageName());
     }
+
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
@@ -363,7 +369,7 @@ public class HandleImMessage {
                 if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
                     Log.i("后台", appProcess.processName);
                     return true;
-                }else{
+                } else {
                     Log.i("前台", appProcess.processName);
                     return false;
                 }

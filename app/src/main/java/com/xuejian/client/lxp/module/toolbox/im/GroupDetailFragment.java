@@ -23,6 +23,7 @@ import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.alibaba.fastjson.JSON;
+import com.lv.Listener.HttpCallback;
 import com.lv.Utils.Config;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -70,6 +71,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
     private User group;
     //清空所有聊天记录
     private ChatActivity mActivity;
+    private String conversation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         groupId = getArguments().getString("groupId");
+        conversation = getArguments().getString("conversation");
         memberGv = (ListView) getView().findViewById(R.id.gv_members);
         addGroup = (TextView) getView().findViewById(R.id.tv_add_to_group);
 
@@ -117,10 +120,33 @@ public class GroupDetailFragment extends PeachBaseFragment {
         ctv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckedTextView ctv = (CheckedTextView) v;
-                Boolean isOpen = ctv.isChecked();
+                final CheckedTextView ctv = (CheckedTextView) v;
+                final Boolean isOpen = ctv.isChecked();
                 ctv.setChecked(!isOpen);
-                SettingConfig.getInstance().setLxpNoticeSetting(getActivity().getApplicationContext(), groupId, !isOpen);
+                IMClient.getInstance().muteConversation(conversation, !isOpen, new HttpCallback() {
+                    @Override
+                    public void onSuccess() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                SettingConfig.getInstance().setLxpNoticeSetting(getActivity().getApplicationContext(), groupId, !isOpen);
+                            }
+                        });
+
+                    }
+                    @Override
+                    public void onFailed(int code) {
+                        System.out.println(code);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ctv.setChecked(isOpen);
+                            }
+                        });
+                    }
+                });
+
             }
         });
 

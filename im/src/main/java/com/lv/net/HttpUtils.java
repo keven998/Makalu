@@ -64,8 +64,19 @@ public class HttpUtils {
 
     }
 
+    public static Response HttpRequest_Patch(String url, String patchBody) throws Exception {
+        RequestBody body = RequestBody.create(json, patchBody);
+        Request request = new Request.Builder()
+                .addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+                .addHeader("Accept", "application/vnd.hedylogos.v1+json")
+                .url(url)
+                .patch(body)
+                .build();
+        return client.newCall(request).execute();
+    }
+
     public static void muteConversation(String conversation, boolean value, HttpCallback callback) {
-        final String url = Config.HOST + "/users/" + IMClient.getInstance().getCurrentUserId() + "/" + conversation;
+        final String url = Config.HOST + "/users/" + IMClient.getInstance().getCurrentUserId() + "/conversations/" + conversation;
         final JSONObject object = new JSONObject();
         try {
             object.put("mute", value);
@@ -74,7 +85,7 @@ public class HttpUtils {
         }
         exec.execute(() -> {
             try {
-                Response response = HttpRequest_Put(url, object.toString());
+                Response response = HttpRequest_Patch(url, object.toString());
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 } else callback.onFailed(response.code());

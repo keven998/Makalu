@@ -211,7 +211,7 @@ public class BaiduMapActivity extends ChatBaseActivity {
                 isFirstLoc = false;
                 LatLng ll = new LatLng(location.getLatitude(),
                         location.getLongitude());
-                MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll, 19);
+                MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll, 18);
                 mBaiduMap.animateMapStatus(u);
 
             }

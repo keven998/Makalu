@@ -436,6 +436,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             final Fragment fragment = new ChatMenuFragment();
             Bundle args = new Bundle();
             args.putString("userId", toChatUsername);
+            args.putString("conversation", conversation);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -457,6 +458,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             final Fragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId", toChatUsername);
+            args.putString("conversation", conversation);
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
