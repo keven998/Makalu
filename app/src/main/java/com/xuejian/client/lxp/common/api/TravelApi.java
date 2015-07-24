@@ -443,8 +443,8 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler modifyGuideTitle
     (String id, String title, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_GUIDE_INFO, id));
+        request.setHttpMethod(PTRequest.TRACE);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId())+"/"+id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -508,13 +508,13 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler modifyGuideVisited
     (String id, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + GUIDE);
+        request.setHttpMethod(PTRequest.TRACE);
+        request.setUrl(SystemConfig.DEV_URL +String.format(CREATE_GUIDE, AccountManager.getCurrentUserId())+"/"+id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", id);
+         //   jsonObject.put("id", id);
             jsonObject.put("status", status);
         } catch (JSONException e) {
             e.printStackTrace();

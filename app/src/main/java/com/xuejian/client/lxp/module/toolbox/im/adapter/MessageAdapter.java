@@ -338,7 +338,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     break;
                 default:
-                    System.out.println("type "+message.getType());
+                    System.out.println("type " + message.getType());
                     break;
             }
             convertView.setTag(holder);
@@ -446,12 +446,12 @@ public class MessageAdapter extends BaseAdapter {
                     user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                     try {
                         if (user == null) {
-                            GroupDetailFragment fragment= (GroupDetailFragment) ((ChatActivity) activity).getSupportFragmentManager().findFragmentByTag("GroupDrawer");
-                            if (fragment!=null){
+                            GroupDetailFragment fragment = (GroupDetailFragment) ((ChatActivity) activity).getSupportFragmentManager().findFragmentByTag("GroupDrawer");
+                            if (fragment != null) {
                                 fragment.setUpGroupMemeber("update");
                             }
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     groupMembers.put(message.getSenderId(), user);
@@ -803,12 +803,15 @@ public class MessageAdapter extends BaseAdapter {
 
         // 接收方向的消息
         if (message.getSendType() == TYPE_REV) {
+            System.out.println("getStatus " + message.getStatus());
             Bitmap defaultImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
             // "it is receive msg";
             if (message.getStatus() == 1) {
                 holder.iv.setImageBitmap(defaultImage);
-                showDownloadImageProgress(message, holder);
+                loadFailedImage(message, holder);
             } else if (message.getStatus() == 2) {
+                holder.iv.setImageBitmap(defaultImage);
+                loadFailedImage(message, holder);
                 return;
             } else if (message.getStatus() == 0) {
                 holder.pb.setVisibility(View.GONE);
@@ -1459,13 +1462,99 @@ public class MessageAdapter extends BaseAdapter {
         }, chatType);
     }
 
+    private void loadFailedImage(final MessageBean message, final ViewHolder holder) {
+        if (holder.pb != null)
+            holder.pb.setVisibility(View.GONE);
+        if (holder.tv != null)
+            holder.tv.setVisibility(View.INVISIBLE);
+        final String thumburl = getStringAttr(message, "thumb");
+        final String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
+        final String romotePath = getStringAttr(message, "full");
+        final String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
+
+        holder.iv.setClickable(true);
+        holder.iv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.pb != null)
+                    holder.pb.setVisibility(View.VISIBLE);
+                new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
+                    @Override
+                    public void onSuccess() {
+                        try {
+                            JSONObject object = new JSONObject(message.getMessage());
+                            object.put("thumbPath", filename);
+                            message.setMessage(object.toString());
+                            IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 0, message.getMessage(), Config.IMAGE_MSG);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.pb.setVisibility(View.GONE);
+                                    holder.tv.setVisibility(View.GONE);
+                                    message.setStatus(0);
+                                    notifyDataSetChanged();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onProgress(final int progress) {
+                    }
+
+                    @Override
+                    public void onFail() {
+                        IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 2, null, Config.IMAGE_MSG);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.GONE);
+                                holder.tv.setVisibility(View.GONE);
+                                message.setStatus(2);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
+
+
+    }
+
     private void showDownloadImageProgress(final MessageBean message, final ViewHolder holder) {
         if (holder.pb != null)
-            holder.pb.setVisibility(View.VISIBLE);
+            holder.pb.setVisibility(View.GONE);
         if (holder.tv != null)
             holder.tv.setVisibility(View.INVISIBLE);
         String thumburl = getStringAttr(message, "thumb");
         String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
+        System.out.println("开始继续下载 ");
+
+        //       String thumbpath = getStringAttr(message, "thumbPath");
+        final String romotePath = getStringAttr(message, "full");
+        final String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
+
+        holder.iv.setClickable(true);
+        holder.iv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, ShowBigImage.class);
+                File file = new File(BigImageFilename);
+                if (file.exists()) {
+                    Uri uri = Uri.fromFile(file);
+                    intent.putExtra("uri", uri);
+                    intent.putExtra("downloadFilePath", BigImageFilename);
+                } else {
+                    intent.putExtra("downloadFilePath", BigImageFilename);
+                    intent.putExtra("remotepath", romotePath);
+                }
+                ((BaseActivity) activity).startActivityWithNoAnim(intent);
+            }
+        });
 
         new DownloadImage(thumburl, filename).download(new DownloadImage.DownloadListener() {
             @Override
@@ -1484,13 +1573,6 @@ public class MessageAdapter extends BaseAdapter {
 
             @Override
             public void onProgress(final int progress) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.tv.setText(progress + "%");
-
-                    }
-                });
             }
 
             @Override

@@ -39,12 +39,20 @@ public class DownloadImage {
                     conn.connect();
                     InputStream is = conn.getInputStream();
                     int fileSize = conn.getContentLength();//根据响应获取文件大小
-
-                    if (fileSize <= 0) throw new RuntimeException("无法获知文件大小 ");
-                    if (is == null) throw new RuntimeException("stream is null");
+                    System.out.println("fileSize "+fileSize);
+                    if (fileSize <= 0){
+                       // throw new RuntimeException("无法获知文件大小 ");
+                        listener.onFail();
+                    }
+                    if (is == null){
+                      //  throw new RuntimeException("stream is null");
+                        listener.onFail();
+                    }
                     String path = filename.substring(0, filename.lastIndexOf("/"));
                     File file = new File(path);
-                    if (!file.exists()) file.mkdirs();
+                    if (!file.exists()){
+                        file.mkdirs();
+                    }
                     FileOutputStream fos = new FileOutputStream(filename);
                     //把数据存入路径+文件名
                     byte buf[] = new byte[1024];
