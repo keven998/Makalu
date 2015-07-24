@@ -182,7 +182,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
             save_btn = (TextView) view.findViewById(R.id.poi_save_btn);
 
             groupTitle.setText(destinations.get(i).zhName);
-            groupSum.setText("(" + "收藏" + content.get(i).size() + ")");
+            groupSum.setText("(" + content.get(i).size() + "收藏" + ")");
 
             save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
