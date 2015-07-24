@@ -27,6 +27,7 @@
             android:layout_alignParentLeft="true"
             android:drawableLeft="@drawable/selector_ic_nav_back"
             android:minWidth="60dp"
+            android:paddingRight="32dp"
             android:paddingLeft="12dp" />
 
         <TextView

@@ -47,6 +47,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
 
     private Context context;
     DisplayImageOptions options;
+    private ImageLoader imageLoader;
 
     public NewFriendsMsgAdapter(Context context, int textViewResourceId, List<InventMessage> objects) {
         super(context, textViewResourceId, objects);
@@ -57,8 +58,9 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheOnDisk(true)
                         // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(8))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(19))) // 设置成圆角图片
                 .build();
+        imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -99,8 +101,10 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
             if (TextUtils.isEmpty(msg.getRequestMsg())) {
                 // 如果没写理由
                 holder.reason.setText("请求加你为朋友");
-            } else holder.reason.setText(msg.getRequestMsg());
-            ImageLoader.getInstance().displayImage(msg.getAvatarSmall(), holder.avator, options);
+            } else {
+                holder.reason.setText(msg.getRequestMsg());
+            }
+            imageLoader.displayImage(msg.getAvatarSmall(), holder.avator, options);
             holder.name.setText(msg.getNickName());
 
             holder.status.setVisibility(View.VISIBLE);
@@ -118,12 +122,13 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
             if (TextUtils.isEmpty(msg.getRequestMsg())) {
                 // 如果没写理由
                 holder.reason.setText("请求加你为朋友");
-            } else holder.reason.setText(msg.getRequestMsg());
+            } else {
+                holder.reason.setText(msg.getRequestMsg());
+            }
             holder.status.setText("已添加");
-            holder.status.setTextColor(getContext().getResources().getColor(R.color.app_theme_color));
             holder.status.setBackgroundResource(0);
             holder.status.setEnabled(false);
-            ImageLoader.getInstance().displayImage(msg.getAvatarSmall(), holder.avator, options);
+            imageLoader.displayImage(msg.getAvatarSmall(), holder.avator, options);
 
             // 设置用户头像
         }
