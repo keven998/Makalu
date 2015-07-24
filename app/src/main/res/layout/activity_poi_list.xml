@@ -17,7 +17,8 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/bottom_white_bar_with_shadow"
             android:scrollbarSize="0dp"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/poi_list_ll"
