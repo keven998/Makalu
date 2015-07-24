@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -28,11 +29,13 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.widget.SideBar;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
@@ -105,9 +108,31 @@ public class ContactlistFragment extends Fragment {
                 }
             }
         });
-
+        registerForContextMenu(listView);
     }
-
+    @Override
+    public void onCreateContextMenu(android.view.ContextMenu menu, View v, android.view.ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (((AdapterView.AdapterContextMenuInfo) menuInfo).position > 0) {
+            getActivity().getMenuInflater().inflate(R.menu.edit_memo, menu);
+        }
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete_message) {
+            MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
+            int pos = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
+            User user=adapter.getItem(pos);
+            System.out.println(user.getNickName());
+            Intent intent=new Intent(getActivity(), ModifyNicknameActivity.class);
+            intent.putExtra("isEditMemo",true);
+            intent.putExtra("nickname",user.getNickName());
+            intent.putExtra("userId",String.valueOf(user.getUserId()));
+            startActivity(intent);
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {

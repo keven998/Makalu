@@ -49,11 +49,11 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_content_editor);
         ViewUtils.inject(this);
-        isEditMemo=getIntent().getBooleanExtra("isEditMemo",false);
-        if(isEditMemo){
-            userId=getIntent().getStringExtra("userId");
+        isEditMemo = getIntent().getBooleanExtra("isEditMemo", false);
+        if (isEditMemo) {
+            userId = getIntent().getStringExtra("userId");
             tv_title_bar_title.setText("修改备注");
-            nickname=getIntent().getStringExtra("nickname");
+            nickname = getIntent().getStringExtra("nickname");
             tv_confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -61,8 +61,12 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     UserApi.editMemo(userId, nickEt.getText().toString(), new HttpCallBack() {
                         @Override
                         public void doSuccess(Object result, String method) {
-                            if (!TextUtils.isEmpty(userId))
-                            UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId)).setMemo(nickEt.getText().toString());
+                            if (!TextUtils.isEmpty(userId)) {
+                                User user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
+                                user.setMemo(nickEt.getText().toString());
+                                UserDBManager.getInstance().saveContact(user);
+                            }
+
                             Intent intent = new Intent();
                             intent.putExtra("memo", nickEt.getText().toString());
                             setResult(RESULT_OK, intent);
@@ -84,7 +88,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                     });
                 }
             });
-        }else{
+        } else {
             tv_title_bar_title.setText("姓名设置");
             tv_confirm.setOnClickListener(new View.OnClickListener() {
                 @Override

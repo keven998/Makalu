@@ -38,13 +38,13 @@ public class PictureUtil {
     private static int maxWidth = 720;
     private static int maxHeight = 1080;
 
-    public static String reSizeImage(String OriginalPath ){
+    public static String reSizeImage(String OriginalPath) {
 
-        File path= new File(Config.imagepath);
+        File path = new File(Config.imagepath);
         if (!path.exists())
             path.mkdirs();
 
-        String imagePath= Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
+        String imagePath = Config.imagepath + TimeUtils.getTimestamp() + "_image.jpeg";
         BitmapFactory.Options opts = new BitmapFactory.Options();
         // 不读取像素数组到内存中，仅读取图片的信息
         opts.inJustDecodeBounds = true;
@@ -52,36 +52,31 @@ public class PictureUtil {
         // 从Options中获取图片的分辨率
         int imageHeight = opts.outHeight;
         int imageWidth = opts.outWidth;
-
-        // 获取Android屏幕的服务
-        //WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-        // 获取屏幕的分辨率，getHeight()、getWidth已经被废弃掉了
-        // 应该使用getSize()，但是这里为了向下兼容所以依然使用它们
         int windowHeight = 1920;
         int windowWidth = 1080;
         int scale = 1;
-if (imageWidth>windowHeight&&imageHeight>windowHeight) {
-    // 计算采样率
-    int scaleX = imageWidth / windowWidth;
-    int scaleY = imageHeight / windowHeight;
-    // 采样率依照最大的方向为准
-    if (scaleX > scaleY && scaleY >= 1) {
-        scale = scaleX;
-    }
-    if (scaleX < scaleY && scaleX >= 1) {
-        scale = scaleY;
-    }
-}
+        if (imageWidth > windowHeight && imageHeight > windowHeight) {
+            // 计算采样率
+            int scaleX = imageWidth / windowWidth;
+            int scaleY = imageHeight / windowHeight;
+            // 采样率依照最大的方向为准
+            if (scaleX > scaleY && scaleY >= 1) {
+                scale = scaleX;
+            }
+            if (scaleX < scaleY && scaleX >= 1) {
+                scale = scaleY;
+            }
+        }
         opts.inJustDecodeBounds = false;
         // 采样率
         opts.inSampleSize = scale;
         Bitmap bitmap = BitmapFactory.decodeFile(OriginalPath, opts);
-        if (saveBitmapToJpegFile(bitmap,imagePath,100))
+        if (saveBitmapToJpegFile(bitmap, imagePath, 100))
             return imagePath;
         return null;
     }
 
-    public static String getThumbImagePath(String path,int width,int height){
+    public static String getThumbImagePath(String path, int width, int height) {
         Bitmap bitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -106,18 +101,18 @@ if (imageWidth>windowHeight&&imageHeight>windowHeight) {
         bitmap = BitmapFactory.decodeFile(path, options);
         bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
                 ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-        String thumbImageName= path.substring(path.lastIndexOf("/") + 1, path.length());
-        String thumbPath=Config.imagepath+"th_"+thumbImageName;
-        File file=new File(thumbPath);
+        String thumbImageName = path.substring(path.lastIndexOf("/") + 1, path.length());
+        String thumbPath = Config.imagepath + "th_" + thumbImageName;
+        File file = new File(thumbPath);
         try {
-            FileOutputStream out=new FileOutputStream(file);
-            if(bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)){
+            FileOutputStream out = new FileOutputStream(file);
+            if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)) {
                 out.flush();
                 out.close();
             }
             bitmap.recycle();
             return thumbPath;
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -437,20 +432,18 @@ if (imageWidth>windowHeight&&imageHeight>windowHeight) {
             f.delete();
         }
         try {
-            FileOutputStream  out = new FileOutputStream(f);
+            FileOutputStream out = new FileOutputStream(f);
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
-                out.flush();
-                out.close();
-                bitmap.recycle();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            out.flush();
+            out.close();
+            bitmap.recycle();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
             return false;
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
 
 
 //        try {
@@ -464,7 +457,7 @@ if (imageWidth>windowHeight&&imageHeight>windowHeight) {
 //            exception.printStackTrace();
 //            return false;
 //        }
-     return true;
+        return true;
     }
 
     public static Bitmap resizeBitmap(Bitmap bitmap) {

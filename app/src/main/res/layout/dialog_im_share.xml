@@ -90,7 +90,7 @@
     android:paddingRight="10dp"
     android:paddingTop="10dp"
     android:textSize="12sp"
-    android:textColorHint="@color/color_disable"
+    android:textColorHint="@color/color_text_iii"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
     android:id="@+id/leave_msg"/>

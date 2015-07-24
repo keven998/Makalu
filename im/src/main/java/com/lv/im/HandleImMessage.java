@@ -191,6 +191,7 @@ public class HandleImMessage {
                         handler.sendMessage(cmd_msg);
                         return;
                     }
+
                     if (Config.isDebug) {
                         System.out.println("ehList size: " + ehList.size());
                     }
@@ -214,6 +215,13 @@ public class HandleImMessage {
 //                            IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
 //                        else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
 //                    } else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                    }
+                    if (messageBean.getMsgType() == 200) {
+                        android.os.Message cmd_msg = android.os.Message.obtain();
+                        cmd_msg.obj = messageBean;
+                        cmd_msg.what = Config.TIP_MSG;
+                        handler.sendMessage(cmd_msg);
+                        return;
                     }
 //                else {
 //                    notifyMsg(c, messageBean);

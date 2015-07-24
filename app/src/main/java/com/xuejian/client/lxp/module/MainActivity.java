@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.FragmentTabHost;
+import com.alibaba.fastjson.JSON;
 import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
@@ -29,6 +31,7 @@ import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.bean.GroupLocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -45,6 +48,8 @@ import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -244,7 +249,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             @Override
             public void onTabChanged(String s) {
                 if (s.equals(mTagArray[0])) {
-                    if (AccountManager.getInstance().getLoginAccount(MainActivity.this)==null) {
+                    if (AccountManager.getInstance().getLoginAccount(MainActivity.this) == null) {
                         mTabHost.setCurrentTab(1);
                         Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivityWithNoAnim(logIntent);
@@ -423,13 +428,77 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         break;
                 }
             } else if (m.getType() == 200) {
-
+                    List<Long> targetIds=new ArrayList<>();
+                    String cmd = m.getMessage();
+                    boolean beenKicked = false;
+                    JSONObject tips = new JSONObject(cmd);
+                    String GroupId = tips.getString("chatGroupId");
+                    int tipsType = tips.getInt("tipType");
+                    JSONObject operator = tips.getJSONObject("operator");
+                    JSONArray targets = tips.getJSONArray("targets");
+                    StringBuilder tag = new StringBuilder();
+                    for (int i = 0; i < targets.length(); i++) {
+                        if (i > 0) tag.append("、");
+                        if (targets.getJSONObject(i).getInt("userId")==Integer.parseInt(IMClient.getInstance().getCurrentUserId())){
+                            tag.append("你");
+                            beenKicked = true;
+                        }else {
+                            tag.append(targets.getJSONObject(i).getString("nickName"));
+                            targetIds.add(targets.getJSONObject(i).getLong("userId"));
+                        }
+                    }
+                    if (tipsType == 2001) {
+                     //   addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
+                    } else if (tipsType == 2002) {
+                        if (beenKicked){
+                            ToastUtil.getInstance(getApplicationContext()).showToast("你已被"+operator.getString("nickName")+"移出讨论组");
+                            return;
+                        }
+                        if (TextUtils.isEmpty(tag.toString())){
+                            setUpGroupMemeber(GroupId);
+                        } else {
+                            setUpGroupMemeber(GroupId);
+                        }
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        // IMUtils.HandleCMDInfoFromMessage(m);
+    public void setUpGroupMemeber(final String groupId) {
+            //fetch info
+            GroupApi.getGroupMemberInfo(groupId, new HttpCallBack() {
+                @Override
+                public void doSuccess(Object result, String method) {
+                    JSONObject object = null;
+                    JSONArray userList = null;
+                    List<User> list = new ArrayList<User>();
+                    try {
+                        object = new JSONObject(result.toString());
+                        userList = object.getJSONArray("result");
+                        for (int i = 0; i < userList.length(); i++) {
+                            String str = userList.get(i).toString();
+                            User user = JSON.parseObject(str, User.class);
+                            list.add(user);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    UserDBManager.getInstance().updateGroupMemberInfo(list, groupId);
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
     }
 
     /**
