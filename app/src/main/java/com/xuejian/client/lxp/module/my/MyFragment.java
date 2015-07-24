@@ -154,7 +154,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 cityCount=info.getTrackCnt();
                 picNum=info.getAlbumCnt();
             }
-            tvPictureCount.setText(picNum + "图");
+            tvPictureCount.setText(picNum + "张");
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
             nickNameTv.setText(user.getNickName());
@@ -355,7 +355,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     if (jsonObject.getInt("code") == 0) {
                         JSONArray object = jsonObject.getJSONArray("result");
                         picsNum = object.length();
-                        tvPictureCount.setText(picsNum + "图");
+                        tvPictureCount.setText(picsNum + "张");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -365,7 +365,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                tvPictureCount.setText(picsNum + "图");
+                tvPictureCount.setText(picsNum + "张");
                 ToastUtil.getInstance(getActivity()).showToast("好像没有网络额~");
             }
 
