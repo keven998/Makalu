@@ -49,8 +49,8 @@ import java.util.List;
 public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer {
 
     private LayoutInflater layoutInflater;
-    private EditText query;
-    private ImageButton clearSearch;
+//    private EditText query;
+//    private ImageButton clearSearch;
     private List<String> sections;
     private SparseIntArray positionOfSection;
     private SparseIntArray sectionOfPosition;
@@ -71,8 +71,6 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .showImageOnLoading(R.drawable.messages_bg_useravatar)
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-//				.decodingOptions(D)
-//                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(20)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
