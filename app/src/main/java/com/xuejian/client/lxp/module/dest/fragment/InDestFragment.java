@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -25,8 +26,10 @@ import com.aizou.core.widget.SideBar;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -67,6 +70,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     @InjectView(R.id.in_out_search_tv)
     EditText in_out_search;
 
+    ImageLoader loader=ImageLoader.getInstance();
     DynamicBox box;
     protected List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
@@ -104,6 +108,21 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 //                }
 //            }
 //        });
+        mLvInCity.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    loader.pause();
+                } else {
+                    loader.resume();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
         mSbIndex.setTextView(mDialog);
         mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color));
         initData();
@@ -441,6 +460,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 .resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
+
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View contentView = layoutInflater.inflate(R.layout.dest_in_item, null);
@@ -455,7 +475,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             /*if(position==0){
                 des_display_box.setPadding(0,0,0,0);
             }*/
-            sectionTv.setText("- "+itemData.section+" -");
+            sectionTv.setText("- " + itemData.section + " -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
@@ -470,8 +490,9 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
                 des_box_fl.setLayoutParams(lytp);
                 cityNameTv.setText(bean.zhName);
-                if (bean.images.size()>0)
-                ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
+                if (bean.images.size()>0) {
+                    loader.displayImage(bean.images.get(0).url, desBgImage, poptions);
+                }
                 if (!bean.isAdded) {
                     //if(isClickable) {
                     addIcon.setVisibility(View.GONE);

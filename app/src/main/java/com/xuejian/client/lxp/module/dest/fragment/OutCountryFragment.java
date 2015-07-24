@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -21,8 +22,11 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.google.android.gms.common.api.Api;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -35,6 +39,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
+import com.xuejian.client.lxp.common.widget.freeflow.core.FreeFlowContainer;
 import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
@@ -46,6 +51,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.Optional;
 
 /**
  * Created by Rjm on 2014/12/3.
@@ -59,6 +65,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     DynamicBox box;
     private Drawable add, selected;
     private boolean isClickable;
+    ImageLoader loader=ImageLoader.getInstance();
 
     public OutCountryFragment(boolean isClickable) {
         this.isClickable = isClickable;
@@ -81,6 +88,21 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             mLvOutCountry.addFooterView(view);
         }
         mLvOutCountry.setAdapter(outCountryAdapter);
+        mLvOutCountry.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView listView, int scrollState) {
+                // Pause disk cache access to ensure smoother scrolling
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    loader.pause();
+                } else {
+                    loader.resume();
+                }
+            }
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // TODO Auto-generated method stub
+            }
+        });
 
         initData();
         return rootView;
@@ -220,7 +242,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
         @Override
         public void showData(int position, final CountryBean itemData) {
-            sectionTv.setText("- "+itemData.zhName+" -");
+            sectionTv.setText("- " + itemData.zhName + " -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.destinations) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
@@ -236,8 +258,9 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
                 des_box_fl.setLayoutParams(lytp);
 
                 cityNameTv.setText(bean.zhName);
-                if (bean.images.size()>0)
-                    ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
+                if (bean.images.size()>0) {
+                    loader.displayImage(bean.images.get(0).url, desBgImage, poptions);
+                }
                 if (!bean.isAdded) {
                     // if(isClickable) {
                     addIcon.setVisibility(View.GONE);

@@ -87,7 +87,7 @@ public class UserApi extends BaseApi {
     //消息免打扰
     public final static String MUTE_CONVERSATION = "/users/%s/conversations/";
     //获取足迹
-    public final static String TRACKS = "/users/%s/tracks";
+    public final static String TRACKS = "/users/%s/footprints";
 
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -333,6 +333,17 @@ public class UserApi extends BaseApi {
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
+
+
+    public static PTRequestHandler getUserFootPrint(String userId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS,userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
 
     public static PTRequestHandler editUserAvatar(User user, String avatar, HttpCallBack callBack) {
         return editUserInfo(user, avatar, null, null, null, null, null, null, callBack);
