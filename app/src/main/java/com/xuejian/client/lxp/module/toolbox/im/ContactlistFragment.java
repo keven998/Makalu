@@ -99,9 +99,11 @@ public class ContactlistFragment extends Fragment {
                 if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
                     // 进入申请与通知页面
                     startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
+                    getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                 } else if (Constant.GROUP_USERNAME.equals(username)) {
                     // 进入群聊列表页面
                     startActivity(new Intent(getActivity(), GroupsActivity.class));
+                    getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                 } else {
                     startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId()));
                     getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);

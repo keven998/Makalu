@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -85,7 +86,7 @@ public class StrategyActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
-        userId=getIntent().getStringExtra("userId");
+        userId = getIntent().getStringExtra("userId");
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData(savedInstanceState);
@@ -151,8 +152,8 @@ public class StrategyActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = getIntent();
                 intent.putExtra("strategy", getSaveStrategy());
-               // intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-               // ;
+                // intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                // ;
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -180,14 +181,14 @@ public class StrategyActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawer(GravityCompat.END);
-                new Handler(){
-                    public void handleMessage(Message msg){
+                new Handler() {
+                    public void handleMessage(Message msg) {
                         Intent intent = new Intent(StrategyActivity.this, ActivityPlanEditor.class);
                         intent.putExtra("strategy", strategy);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                     }
-                }.sendEmptyMessageDelayed(0,300);
+                }.sendEmptyMessageDelayed(0, 300);
             }
         });
     }
@@ -367,13 +368,13 @@ public class StrategyActivity extends PeachBaseActivity {
 
                         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                         dialog.setTitle("提示");
-                        dialog.setMessage("保存到我的旅行计划");
+                        dialog.setMessage(String.format("复制\"%s\"到我的旅行计划", result.title));
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                TravelApi.copyStrategy(result.userId,result.id, new HttpCallBack<String>() {
+                                TravelApi.copyStrategy(result.userId, result.id, new HttpCallBack<String>() {
                                     @Override
                                     public void doSuccess(String resultStr, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -383,8 +384,10 @@ public class StrategyActivity extends PeachBaseActivity {
                                             User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
                                             intent.putExtra("userId", String.valueOf(user.getUserId()));
                                             intent.putExtra("user_name", user.getNickName());
+                                            intent.putExtra("new_copy", true);
                                             startActivity(intent);
-                                            finish();
+                                        } else {
+                                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
                                     }
 
@@ -396,12 +399,11 @@ public class StrategyActivity extends PeachBaseActivity {
                                     @Override
                                     public void doFailure(Exception error, String msg, String method, int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
-                                        if (code==404){
+                                        if (code == 404) {
                                             if (!isFinishing()) {
                                                 ToastUtil.getInstance(StrategyActivity.this).showToast("资源不存在");
                                             }
-                                        }
-                                        else if (!isFinishing()) {
+                                        } else if (!isFinishing()) {
                                             ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
                                     }
@@ -605,15 +607,15 @@ public class StrategyActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     drawerLayout.closeDrawer(GravityCompat.END);
-                    new Handler(){
-                        public void handleMessage(Message msg){
+                    new Handler() {
+                        public void handleMessage(Message msg) {
                             MobclickAgent.onEvent(mContext, "event_go_city_detail");
                             Intent intent = new Intent(mContext, CityDetailActivity.class);
                             intent.putExtra("id", destinations.get(position).id);
                             intent.putExtra("isFromStrategy", true);
                             startActivity(intent);
                         }
-                    }.sendEmptyMessageDelayed(0,300);
+                    }.sendEmptyMessageDelayed(0, 300);
                 }
             });
             return convertView;

@@ -103,7 +103,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 //            }
 //        });
 
-        titleHeaderBar.getTitleTextView().setText("添加好友");
+        titleHeaderBar.getTitleTextView().setText("添加朋友");
         titleHeaderBar.findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +149,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 //                            }
 
                         if (AccountManager.getInstance().getContactList(mContext).containsKey(seachResult.result.get(0).getUserId())) {
-                            ToastUtil.getInstance(mContext).showToast("该用户已是你的好友");
+                            ToastUtil.getInstance(mContext).showToast("该用户已是你的朋友");
                                /* User imUser = AccountManager.getInstance().getContactList(mContext).get(user.easemobUser);
                                 imUser.setNickName(user.nickName);
                                 imUser.setAvatar(user.avatar);

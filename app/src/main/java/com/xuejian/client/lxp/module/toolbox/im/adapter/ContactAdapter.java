@@ -49,8 +49,8 @@ import java.util.List;
 public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer {
 
     private LayoutInflater layoutInflater;
-    private EditText query;
-    private ImageButton clearSearch;
+//    private EditText query;
+//    private ImageButton clearSearch;
     private List<String> sections;
     private SparseIntArray positionOfSection;
     private SparseIntArray sectionOfPosition;
@@ -71,8 +71,6 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .showImageOnLoading(R.drawable.messages_bg_useravatar)
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-//				.decodingOptions(D)
-//                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(20)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
@@ -154,7 +152,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
         }
         //显示申请与通知item
         if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-            vh.nickView.setText("好友请求");
+            vh.nickView.setText("新朋友");
 //                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
 //                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
             //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);

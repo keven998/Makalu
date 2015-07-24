@@ -189,7 +189,7 @@ public class IMMainActivity extends ChatBaseActivity {
             }
         });
         Button btn1 = (Button) contentView.findViewById(R.id.btn_go_share);
-        btn1.setText("加好友");
+        btn1.setText("加朋友");
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -44,7 +44,7 @@
     <string name="video">[视频]</string>
     <string name="file">[文件]</string>
     <string name="voice_call">[语音通话]</string>
-    <string name="agree_add_contact">我通过了你的好友验证请求，现在我们可以开始聊天了</string>
+    <string name="agree_add_contact">我通过了你的验证请求，现在我们可以开始聊天了</string>
     <string name="has_add_contact">你已添加了%1$s，现在我们可以开始聊天了</string>
     <string name="invate_to_group">%1$s邀请 %2$s 加入了群聊</string>
     <string name="remove_user_from_group">%1$s将 %2$s 移出了群聊</string>

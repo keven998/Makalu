@@ -88,7 +88,7 @@
         android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="left|center_vertical"
         android:layout_marginTop="10dp"
-        android:text="添加通讯录好友"/>
+        android:text="添加通讯录朋友"/>
 
     <TextView android:id="@+id/tv_weixin_contacts"
         android:layout_width="match_parent"
@@ -101,6 +101,6 @@
         android:drawableRight="@drawable/icon_arrow_right"
         android:gravity="left|center_vertical"
         android:layout_marginTop="1dp"
-        android:text="邀请微信好友"/>
+        android:text="邀请微信朋友"/>
 
 </LinearLayout>

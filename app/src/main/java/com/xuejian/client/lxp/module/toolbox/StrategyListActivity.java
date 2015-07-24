@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +75,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private boolean isOwner;
     private User user;
     private int mContentType = 0;
+    private boolean newCopy; //复制补丁
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         resetMemberValue(getIntent());
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getStringExtra("chatType");
+        newCopy = getIntent().getBooleanExtra("new_copy", false);
         initView();
         initData();
     }
@@ -113,6 +118,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     protected void onPause() {
         super.onPause();
 //        MobclickAgent.onPageEnd("page_plan_lists");
+        newCopy = false;
     }
 
     private void initView() {
@@ -157,7 +163,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         StrategyBean bean = (StrategyBean) mStrategyListAdapter.getDataList().get(position);
                         Intent intent = new Intent(mContext, StrategyActivity.class);
                         intent.putExtra("id", bean.id);
-                        intent.putExtra("userId",userId);
+                        intent.putExtra("userId", userId);
                         startActivityForResult(intent, RESULT_PLAN_DETAIL);
                     }
                 }
@@ -232,7 +238,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void setupViewFromCache() {
-        if (isOwner) {
+        if (isOwner && !newCopy) {
             String data = PreferenceUtils.getCacheData(this, String.format("%s_plans", userId));
             if (!TextUtils.isEmpty(data)) {
                 List<StrategyBean> lists = GsonTools.parseJsonToBean(data,
@@ -400,7 +406,14 @@ public class StrategyListActivity extends PeachBaseActivity {
         public void showData(final int position, final StrategyBean itemData) {
             tv_tian.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
-            mNameTv.setText(itemData.title);
+            if (newCopy) {
+                SpannableString planStr = new SpannableString(String.format("(新复制)%s", itemData.title));
+                planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mNameTv.setText(planStr);
+            } else {
+                mNameTv.setText(itemData.title);
+            }
+
             mTimeTv.setText("创建：" + new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
             if (itemData.status.equals("traveled")) {
                 rl_plan.setBackgroundResource(R.drawable.plan_bg_gray);
@@ -446,7 +459,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                         cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
                         cdialog.setTitle("提示");
-                        cdialog.setMessage("已标记去过，个人旅历＋1");
+                        cdialog.setMessage("已去过，旅历＋1");
                         cdialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
