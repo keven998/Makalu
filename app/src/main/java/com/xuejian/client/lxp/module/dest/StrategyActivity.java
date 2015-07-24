@@ -367,13 +367,13 @@ public class StrategyActivity extends PeachBaseActivity {
 
                         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                         dialog.setTitle("提示");
-                        dialog.setMessage("保存到我的旅行计划");
+                        dialog.setMessage(String.format("复制\"%s\"到我的旅行计划", result.title));
                         dialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
                                 DialogManager.getInstance().showLoadingDialog(mContext);
-                                TravelApi.copyStrategy(result.userId,result.id, new HttpCallBack<String>() {
+                                TravelApi.copyStrategy(result.userId, result.id, new HttpCallBack<String>() {
                                     @Override
                                     public void doSuccess(String resultStr, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -396,12 +396,11 @@ public class StrategyActivity extends PeachBaseActivity {
                                     @Override
                                     public void doFailure(Exception error, String msg, String method, int code) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
-                                        if (code==404){
+                                        if (code == 404) {
                                             if (!isFinishing()) {
                                                 ToastUtil.getInstance(StrategyActivity.this).showToast("资源不存在");
                                             }
-                                        }
-                                        else if (!isFinishing()) {
+                                        } else if (!isFinishing()) {
                                             ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
                                     }
