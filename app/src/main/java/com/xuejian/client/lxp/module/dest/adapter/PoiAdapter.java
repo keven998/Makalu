@@ -51,9 +51,9 @@ public class PoiAdapter extends BaseAdapter {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.empty_photo)
-                .showImageOnLoading(R.drawable.empty_photo)
-                .showImageForEmptyUri(R.drawable.empty_photo)
+//                .showImageOnFail(R.drawable.empty_photo)
+//                .showImageOnLoading(R.drawable.empty_photo)
+//                .showImageForEmptyUri(R.drawable.empty_photo)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
@@ -122,8 +122,7 @@ public class PoiAdapter extends BaseAdapter {
                 convertView.setTag(spotViewHolder);
                 if (!mIsCanAdd) {
                     spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn);
-                    spotViewHolder.mBtnAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
-                    spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
+                    spotViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.selector_white_text_color));
                     //spotViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
                 } else {
                     spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
@@ -134,7 +133,7 @@ public class PoiAdapter extends BaseAdapter {
                 convertView.setTag(poiViewHolder);
                 if (!mIsCanAdd) {
                     poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn);
-                    poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.base_color_white));
+                    poiViewHolder.mBtnAdd.setTextColor(context.getResources().getColor(R.color.selector_white_text_color));
                     //poiViewHolder.mBtnAdd.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_poi_location, 0);
                 } else {
                     poiViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
@@ -160,7 +159,7 @@ public class PoiAdapter extends BaseAdapter {
             if (TextUtils.isEmpty(poiDetailBean.timeCostDesc)) {
                 spotViewHolder.mSpotCosttimeTv.setText("");
             } else {
-                spotViewHolder.mSpotCosttimeTv.setText("参考游玩 " + poiDetailBean.timeCostDesc);
+                spotViewHolder.mSpotCosttimeTv.setText("建议游玩:" + poiDetailBean.timeCostDesc);
             }
 
             //spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
@@ -173,13 +172,12 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 if (poiDetailBean.hasAdded) {
                     spotViewHolder.mBtnAdd.setText("已" + mAddStr);
-                    spotViewHolder.mBtnAdd.setTextColor(Color.rgb(150, 150, 150));
-                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_disable);
+                    spotViewHolder.mBtnAdd.setChecked(true);
                 } else {
                     spotViewHolder.mBtnAdd.setText(mAddStr);
-                    spotViewHolder.mBtnAdd.setTextColor(Color.rgb(153, 204, 102));
-                    spotViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_normal);
+                    spotViewHolder.mBtnAdd.setChecked(false);
                 }
+
                 spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -222,12 +220,10 @@ public class PoiAdapter extends BaseAdapter {
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
                     poiViewHolder.mBtnAdd.setText("已" + mAddStr);
-                    poiViewHolder.mBtnAdd.setTextColor(Color.rgb(150,150,150));
-                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_disable);
+                    poiViewHolder.mBtnAdd.setChecked(true);
                 } else {
                     poiViewHolder.mBtnAdd.setText(mAddStr);
-                    poiViewHolder.mBtnAdd.setTextColor(Color.rgb(153,204,102));
-                    poiViewHolder.mBtnAdd.setBackgroundResource(R.drawable.cell_selecter_btn_normal);
+                    poiViewHolder.mBtnAdd.setChecked(false);
                 }
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override

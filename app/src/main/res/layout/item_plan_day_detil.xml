@@ -16,17 +16,16 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/poi_save_level_bg"
-            />
+            android:src="@drawable/poi_save_level_bg" />
 
 
         <TextView
             android:id="@+id/tv_poi_level"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxEms="4"
-            android:gravity="center"
             android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:maxEms="4"
             android:textColor="@color/app_theme_color"
             android:textSize="8sp" />
 
@@ -39,34 +38,24 @@
         android:layout_height="60dp"
         android:layout_marginLeft="6dp"
         android:layout_toRightOf="@+id/tv_poi_save_level"
+        android:background="@color/app_backgroud"
         android:scaleType="centerCrop" />
 
-    <!--<Button-->
-        <!--android:id="@+id/btn_send1"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="32dp"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:background="@drawable/selecter_theme_btn_radius_4"-->
-        <!--android:text="收藏"-->
-        <!--android:textColor="@color/base_color_white"-->
-        <!--android:textSize="13sp"-->
-        <!--android:visibility="gone"-->
-        <!--/>-->
     <CheckedTextView
         android:id="@+id/btn_send"
         android:layout_width="54dp"
-        android:layout_height="26dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
-        android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:background="@drawable/cell_selecter_btn"
+        android:gravity="center"
         android:text="收藏"
-        android:visibility="gone"
-        android:textColor="@color/app_theme_color"
-        android:textSize="10sp"/>
+        android:clickable="true"
+        android:textColor="@color/theme_color"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/tv_poi_title"
         android:layout_width="match_parent"
@@ -75,35 +64,21 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toLeftOf="@id/btn_send"
         android:layout_toRightOf="@id/iv_poi_img"
         android:ellipsize="end"
         android:gravity="left"
-        android:layout_marginTop="15dp"
         android:singleLine="true"
         android:textColor="@color/color_text_ii"
         android:textSize="16sp" />
-
-    <!--<TextView
-        android:id="@+id/tv_poi_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/iv_poi_img"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/iv_poi_img"
-        android:drawableLeft="@drawable/plan_bottom_flower"
-        android:drawablePadding="1dp"
-        android:gravity="left"
-        android:maxEms="4"
-        android:textColor="@color/app_theme_color"
-        android:textSize="13sp" />-->
 
     <TextView
         android:id="@+id/tv_poi_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_poi_title"
         android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@id/tv_poi_title"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="7dp"
@@ -119,8 +94,8 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@id/iv_poi_img"
-        android:background="@color/color_line"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:background="@color/color_line" />
 
 </RelativeLayout>
 

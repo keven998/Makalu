@@ -37,8 +37,6 @@ public class PoiSaveActivity extends PeachBaseActivity {
     private StrategyBean strategy;
     private ArrayList<LocBean> destinations;
     private TitleHeaderBar bar;
-    private LinearLayout add_btn;
-    private TextView saveTypeName;
     private ArrayList<ArrayList<PoiDetailBean>> content = new ArrayList<ArrayList<PoiDetailBean>>();
     private String type;
     private int requestType;
@@ -47,30 +45,19 @@ public class PoiSaveActivity extends PeachBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.poi_save_activity);
+
         strategy = getIntent().getParcelableExtra("strategy");
         destinations = getIntent().getParcelableArrayListExtra("destinations");
-        setContentView(R.layout.poi_save_activity);
+
         bar = (TitleHeaderBar) findViewById(R.id.poi_save_titleBar);
-        saveTypeName = (TextView) findViewById(R.id.save_type_name);
-        add_btn = (LinearLayout) findViewById(R.id.save_btn);
-        bar.getTitleTextView().setText(getIntent().getStringExtra("title") + "收藏");
-        saveTypeName.setText("收藏" + getIntent().getStringExtra("title"));
+        bar.getTitleTextView().setText("收藏的" + getIntent().getStringExtra("title"));
 
 
         if (getIntent().getStringExtra("title").equals("购物")) {
             resizeData(strategy.shopping);
             type = TravelApi.PeachType.SHOPPING;
             requestType = ADD_SHOPPING_REQUEST_CODE;
-            add_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
-                    intent.putExtra("type", TravelApi.PeachType.SHOPPING);
-                    intent.putExtra("canAdd", true);
-                    intent.putExtra("strategy", strategy);
-                    startActivityForResult(intent, ADD_SHOPPING_REQUEST_CODE);
-                }
-            });
             bar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -85,16 +72,6 @@ public class PoiSaveActivity extends PeachBaseActivity {
             resizeData(strategy.restaurant);
             type = TravelApi.PeachType.RESTAURANTS;
             requestType = ADD_REST_REQUEST_CODE;
-            add_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
-                    intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
-                    intent.putExtra("canAdd", true);
-                    intent.putExtra("strategy", strategy);
-                    startActivityForResult(intent, ADD_REST_REQUEST_CODE);
-                }
-            });
             bar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -205,7 +182,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
             save_btn = (TextView) view.findViewById(R.id.poi_save_btn);
 
             groupTitle.setText(destinations.get(i).zhName);
-            groupSum.setText("(" +"收藏" +content.get(i).size() + ")");
+            groupSum.setText("(" + "收藏" + content.get(i).size() + ")");
 
             save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override

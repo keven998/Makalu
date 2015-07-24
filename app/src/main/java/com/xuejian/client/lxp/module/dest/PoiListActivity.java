@@ -260,7 +260,7 @@ public class PoiListActivity extends PeachBaseActivity {
 //        });
 
         if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-            mTitle.setText(String.format("吃在%s", curLoc.zhName));
+            mTitle.setText(String.format("%s美食", curLoc.zhName));
             //  mTvPoiWantType.setImageResource(R.drawable.jingdian_food_eat);
         } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
             mTitle.setText(String.format("%s购物", curLoc.zhName));

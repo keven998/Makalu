@@ -117,6 +117,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
                     acceptInvitation(holder.status, msg);
                 }
             });
+            holder.status.setEnabled(true);
         } else if (msg.getStatus() == 1) {
             holder.name.setText(msg.getNickName());
             if (TextUtils.isEmpty(msg.getRequestMsg())) {
@@ -125,9 +126,9 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
             } else {
                 holder.reason.setText(msg.getRequestMsg());
             }
+            holder.status.setEnabled(false);
             holder.status.setText("已添加");
             holder.status.setBackgroundResource(0);
-            holder.status.setEnabled(false);
             imageLoader.displayImage(msg.getAvatarSmall(), holder.avator, options);
 
             // 设置用户头像
