@@ -63,10 +63,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private User imUser;
     private TextView tv_send_action;
     private boolean isMyFriend;
-    private int EDIT_MEMO=101;
+    private int EDIT_MEMO = 101;
     private TextView nameTv;
     private String newMemo;
     User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,10 +119,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 if (isMyFriend) {
-                    Intent intent=new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
-                    intent.putExtra("isEditMemo",true);
-                    intent.putExtra("nickname",nameTv.getText().toString());
-                    intent.putExtra("userId",String.valueOf(userId));
+                    Intent intent = new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
+                    intent.putExtra("isEditMemo", true);
+                    intent.putExtra("nickname", nameTv.getText().toString());
+                    intent.putExtra("userId", String.valueOf(userId));
                     startActivityForResult(intent, EDIT_MEMO);
                     //editMemo("123");
                 } else {
@@ -333,12 +334,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void updateView(final User bean) {
-        user=bean;
+        user = bean;
         nameTv = (TextView) findViewById(R.id.tv_title);
-        if (TextUtils.isEmpty(bean.getMemo())){
+        if (TextUtils.isEmpty(bean.getMemo())) {
             nameTv.setText(bean.getNickName());
-        }else {
-            nameTv.setText(bean.getMemo()+"("+bean.getNickName()+")");
+        } else {
+            nameTv.setText(bean.getMemo() + "(" + bean.getNickName() + ")");
         }
 
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
@@ -367,10 +368,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
 
         ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
-        int res=ConstellationUtil.calculateConstellation(bean.getBirthday());
-        if (res==0){
+        int res = ConstellationUtil.calculateConstellation(bean.getBirthday());
+        if (res == 0) {
             constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
-        }else constellationIv.setImageResource(res);
+        } else constellationIv.setImageResource(res);
 
 
         TextView tvMemo = (TextView) findViewById(R.id.tv_memo);
@@ -443,7 +444,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
 
     public int getAge(String birth) {
-        if (TextUtils.isEmpty(birth))return 0;
+        if (TextUtils.isEmpty(birth)) return 0;
         int age = 0;
         String birthType = birth.substring(0, 4);
         int birthYear = Integer.parseInt(birthType);
@@ -600,11 +601,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==Activity.RESULT_OK){
-            if(requestCode==EDIT_MEMO){
-                newMemo=data.getStringExtra("memo");
-                if (!TextUtils.isEmpty(newMemo)){
-                    nameTv.setText(newMemo+"("+user.getNickName()+")");
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == EDIT_MEMO) {
+                newMemo = data.getStringExtra("memo");
+                if (!TextUtils.isEmpty(newMemo)) {
+                    nameTv.setText(newMemo + "(" + user.getNickName() + ")");
                 }
             }
         }
