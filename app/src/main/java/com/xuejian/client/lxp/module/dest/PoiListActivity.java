@@ -46,8 +46,6 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class PoiListActivity extends PeachBaseActivity {
-    @InjectView(R.id.loc_spinner)
-    Spinner mLocSpinner;
     @InjectView(R.id.tv_city_poi_desc)
     TextView mTvCityPoiDesc;
     PoiAdapter mPoiAdapter;
@@ -73,8 +71,8 @@ public class PoiListActivity extends PeachBaseActivity {
     private StrategyBean strategy;
     private int curPage = 0;
     private LocBean curLoc;
-    private String mKeyWord;
-    private boolean isFromCityDetail;
+    //    private String mKeyWord;
+//    private boolean isFromCityDetail;
     private String value;
     private HorizontalScrollView hsv;
     private LinearLayout ll;
@@ -134,14 +132,8 @@ public class PoiListActivity extends PeachBaseActivity {
                 autoScrollPanel();
             }
         }
-        isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail", false);
+//        isFromCityDetail = getIntent().getBooleanExtra("isFromCityDetail", false);
         value = getIntent().getStringExtra("value");
-
-//        if (locList.size() > 1) {
-//            mLocSpinner.setVisibility(View.VISIBLE);
-//        } else {
-//            mLocSpinner.setVisibility(View.GONE);
-//        }
         if (canAdd) {
             mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -531,9 +523,9 @@ public class PoiListActivity extends PeachBaseActivity {
                             }
                         }
                         for (PoiDetailBean bean : mPoiAdapter.getDataList()) {
-                           if (newPoiList.contains(bean)){
-                               bean.hasAdded=true;
-                           }
+                            if (newPoiList.contains(bean)) {
+                                bean.hasAdded = true;
+                            }
                         }
                         hasAddList.addAll(newPoiList);
                         mPoiAdapter.notifyDataSetChanged();

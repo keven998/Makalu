@@ -1,131 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/app_theme_color">
-
-        <TextView
-            android:id="@+id/tv_title_bar_left"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:minWidth="60dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="20dp"
-            android:clickable="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"/>
-
-        <TextView
-            android:id="@+id/tv_title_bar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textSize="17sp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
-            android:textColor="@color/base_color_white"/>
-        <TextView
-            android:id="@+id/tv_search"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:minWidth="60dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="20dp"
-            android:clickable="true"
-            android:drawableRight="@drawable/expert_search"/>
-        <Spinner
-            android:id="@+id/loc_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginRight="3dp"
-            android:background="@null"
-            android:paddingRight="5dp"
-            android:overlapAnchor="false"
-            android:spinnerMode="dropdown"
-            android:dropDownVerticalOffset="0dp"
-            android:visibility="gone"
-            android:dropDownWidth="65dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.8dp"
-            android:background="@color/app_theme_color"
-            android:layout_alignParentBottom="true"
-            />
-
-    </RelativeLayout>
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:background="@color/base_color_white"-->
-        <!--android:focusable="true"-->
-        <!--android:focusableInTouchMode="true"-->
-        <!--android:padding="11dp">-->
-
-        <!--<EditText-->
-            <!--android:id="@+id/et_search"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textColorHint="@color/base_text_color_text_placeholder"-->
-            <!--android:hint="搜索"-->
-            <!--android:textColor="@color/base_text_color_title"-->
-            <!--android:drawablePadding="10dp"-->
-            <!--android:background="@drawable/button_normal_shape"-->
-            <!--android:drawableLeft="@drawable/ic_search" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_search"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:background="@drawable/btn_theme_secondary_selector"-->
-            <!--android:layout_height="28dp"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textColor="@color/base_color_white"-->
-            <!--android:text="搜索" />-->
-    <!--</LinearLayout>-->
-
-
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-
-        <com.aizou.core.widget.prv.PullToRefreshListView
-            android:id="@+id/lv_poi_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@color/color_line"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:visibility="visible" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/content_top_margin">
 
         <HorizontalScrollView
             android:id="@+id/poi_list_hsv"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/app_backgroud"
-            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bottom_white_bar_with_shadow"
             android:scrollbarSize="0dp"
-            android:visibility="gone">
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/poi_list_ll"
@@ -138,6 +30,60 @@
 
         </HorizontalScrollView>
 
-    </FrameLayout>
+        <com.aizou.core.widget.prv.PullToRefreshListView
+            android:id="@+id/lv_poi_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@color/color_line"
+            android:fadingEdge="none"
+            android:listSelector="@android:color/transparent"
+            android:layout_above="@id/poi_list_hsv"
+            android:layout_alignWithParentIfMissing="true"
+            android:visibility="visible" />
 
-</LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@drawable/bg_navigation_bar">
+
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:clickable="true"
+            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:minWidth="60dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp" />
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/base_color_white"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:drawableRight="@drawable/expert_search"
+            android:minWidth="60dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="13dp" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>
