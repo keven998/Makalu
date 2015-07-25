@@ -19,20 +19,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <FrameLayout
+                    android:id="@+id/fl_gender_bg"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="@dimen/page_more_avatar_frame_size"
+                    android:layout_height="@dimen/page_more_avatar_frame_size"
+                    android:layout_centerHorizontal="true"
+                    android:padding="@dimen/page_more_avatar_frame_size_padding"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop" />
+                </FrameLayout>
+
+               <!-- <ImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="@dimen/page_more_avatar_frame_size"
                     android:layout_height="@dimen/page_more_avatar_frame_size"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:padding="@dimen/page_more_avatar_frame_size_padding"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop" />-->
 
                 <RelativeLayout
                     android:id="@+id/rl_base_info"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_below="@id/iv_avatar"
+                    android:layout_below="@id/fl_gender_bg"
                     android:layout_marginTop="-30dp"
                     android:gravity="center_vertical">
 
@@ -68,7 +84,7 @@
                 <RelativeLayout
                     android:layout_width="80dp"
                     android:layout_height="64dp"
-                    android:layout_alignBottom="@id/iv_avatar"
+                    android:layout_alignBottom="@id/fl_gender_bg"
                     android:layout_alignParentLeft="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="20dp">
@@ -104,7 +120,7 @@
                 <RelativeLayout
                     android:layout_width="80dp"
                     android:layout_height="64dp"
-                    android:layout_alignBottom="@id/iv_avatar"
+                    android:layout_alignBottom="@id/fl_gender_bg"
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="20dp">

@@ -25,6 +25,8 @@ import com.airbnb.android.airmapview.AirMapViewTypes;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.GoogleChinaMapType;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.MarkerOptions;
@@ -34,9 +36,16 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.bean.TracksBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.UserApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.XDialog;
+import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +75,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     private ImageView title_back, map_more;
     private boolean isExpertFootPrint, isMyFootPrint,isAllPoiLoc;
     private ArrayList<LocBean> all_print_print;
+    private List<LocBean> my_footprint=new ArrayList<LocBean>();
     private ArrayList<PoiDetailBean> all_place_loc=new ArrayList<PoiDetailBean>();
     private ArrayList<double[]> coords = new ArrayList<double[]>();
     private LinearLayout day_select;
@@ -173,13 +183,13 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         } else if (isMyFootPrint) {
             day_select.setVisibility(View.GONE);
             all_print_print = getIntent().getParcelableArrayListExtra("myfootprint");
-            loadExpertFootPrintMap(all_print_print);
+            initMyPrint();
             map_more.setVisibility(View.VISIBLE);
             map_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent tracks_intent = new Intent(StrategyMapActivity.this, MyFootPrinterActivity.class);
-                    tracks_intent.putParcelableArrayListExtra("myfootprint", all_print_print);
+                    tracks_intent.putExtra("myfootprint", (Serializable) my_footprint);
                     tracks_intent.putExtra("title", tv_title.getText().toString());
                     tracks_intent.putExtra("isOwner",true);
                     startActivityForResult(tracks_intent, SET_FOOTPRINT);
@@ -195,6 +205,35 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 initData(0);
             }
         }
+    }
+
+    private void initMyPrint(){
+        DialogManager.getInstance().showLoadingDialog(this);
+        UserApi.getUserFootPrint(AccountManager.getCurrentUserId(), new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson4List<LocBean> locs=CommonJson4List.fromJson(result.toString(),LocBean.class);
+                if(locs.code==0){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    my_footprint.addAll(locs.result);
+                    loadExpertFootPrintMap(my_footprint);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(StrategyMapActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                loadExpertFootPrintMap(my_footprint);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(StrategyMapActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                loadExpertFootPrintMap(my_footprint);
+            }
+        });
     }
 
     @Override
@@ -270,7 +309,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
 
 
 
-    private void loadExpertFootPrintMap(final ArrayList<LocBean> footPrint) {
+    private void loadExpertFootPrintMap(final List<LocBean> footPrint) {
         all_locations.removeAllViews();
         layout.removeAllViews();
         coords.clear();
@@ -296,7 +335,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     }
 
 
-    private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords, final ArrayList<LocBean> prints) {
+    private void setUpExpertFootPrintMap(final ArrayList<double[]> mCoords, final List<LocBean> prints) {
         if (mCoords.size() > 0) {
             mapViewBuilder = new DefaultAirMapViewBuilder(this);
             airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();

@@ -2,9 +2,11 @@ package com.xuejian.client.lxp.module.dest.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -25,8 +27,10 @@ import com.aizou.core.widget.SideBar;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -434,15 +438,13 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         private TextView sectionTv;
         private FlowLayout cityListFl;
         private FrameLayout des_display_box;
-        private DisplayImageOptions poptions = UILUtils.getDefaultOption();
-        /*private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
+        //private DisplayImageOptions poptions = UILUtils.getDefaultOption();
+        private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.loading_picture)
-                .showImageOnLoading(R.drawable.loading_picture)
-                .showImageForEmptyUri(R.drawable.loading_picture)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();*/
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
@@ -458,7 +460,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             /*if(position==0){
                 des_display_box.setPadding(0,0,0,0);
             }*/
-            sectionTv.setText("- "+itemData.section+" -");
+            sectionTv.setText("- " + itemData.section + " -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.locList) {
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
@@ -473,8 +475,9 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 
                 des_box_fl.setLayoutParams(lytp);
                 cityNameTv.setText(bean.zhName);
-                if (bean.images.size()>0)
-                ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
+                if (bean.images.size()>0) {
+                    ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
+                }
                 if (!bean.isAdded) {
                     //if(isClickable) {
                     addIcon.setVisibility(View.GONE);
@@ -511,4 +514,18 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         }
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
+    }
 }

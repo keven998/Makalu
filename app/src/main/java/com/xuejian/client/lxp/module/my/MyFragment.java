@@ -210,9 +210,11 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
                 } else {
-                    ArrayList<String> pic = new ArrayList<>();
-                    pic.add(user1.getAvatar());
-                    showSelectedPics(pic);
+                    if(user1.getAvatar()!=null) {
+                        ArrayList<String> pic = new ArrayList<>();
+                        pic.add(user1.getAvatar());
+                        showSelectedPics(pic);
+                    }
                 }
                 break;
 
