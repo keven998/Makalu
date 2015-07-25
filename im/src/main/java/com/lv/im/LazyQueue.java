@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.lv.Listener.DequeueListener;
 import com.lv.Listener.FetchListener;
-import com.lv.Utils.Config;
+import com.lv.utils.Config;
 import com.lv.bean.Message;
 
 import java.util.Date;

@@ -24,7 +24,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.alibaba.fastjson.JSON;
 import com.lv.Listener.HttpCallback;
-import com.lv.Utils.Config;
+import com.lv.utils.Config;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

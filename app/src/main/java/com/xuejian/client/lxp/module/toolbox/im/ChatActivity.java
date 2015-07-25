@@ -64,8 +64,8 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.DotView;
 import com.lv.Audio.MediaRecordFunc;
-import com.lv.Utils.Config;
-import com.lv.Utils.TimeUtils;
+import com.lv.utils.Config;
+import com.lv.utils.TimeUtils;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -1114,7 +1114,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     } else {
                         try {
                             final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
-                            long time = com.lv.Utils.CommonUtils.getAmrDuration(new File(path));
+                            long time = com.lv.utils.CommonUtils.getAmrDuration(new File(path));
                             if (time > 1000) {
                                 sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
                             } else {

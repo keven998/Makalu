@@ -8,8 +8,8 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.lv.Utils.Config;
-import com.lv.Utils.CryptUtils;
+import com.lv.utils.Config;
+import com.lv.utils.CryptUtils;
 import com.lv.bean.Message;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;

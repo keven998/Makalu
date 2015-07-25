@@ -23,7 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lv.Utils.Config;
+import com.lv.utils.Config;
 import com.lv.bean.MessageBean;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.common.utils.ImageCache;

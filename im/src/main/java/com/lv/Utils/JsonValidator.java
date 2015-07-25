@@ -1,4 +1,4 @@
-package com.lv.Utils;
+package com.lv.utils;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;

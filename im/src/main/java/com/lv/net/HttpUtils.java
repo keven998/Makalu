@@ -5,7 +5,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.lv.Listener.FetchListener;
 import com.lv.Listener.HttpCallback;
-import com.lv.Utils.Config;
+import com.lv.utils.Config;
 import com.lv.bean.Message;
 import com.lv.bean.SendMessageBean;
 import com.lv.im.IMClient;

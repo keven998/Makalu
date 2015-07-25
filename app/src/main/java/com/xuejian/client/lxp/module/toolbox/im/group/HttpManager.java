@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.lv.Utils.Config;
+import com.lv.utils.Config;
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.db.User;

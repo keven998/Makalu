@@ -2,7 +2,7 @@ package com.lv.im;
 
 import android.util.Log;
 
-import com.lv.Utils.Config;
+import com.lv.utils.Config;
 import com.lv.bean.Message;
 
 /**

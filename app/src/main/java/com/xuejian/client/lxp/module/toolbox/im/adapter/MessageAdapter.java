@@ -41,8 +41,8 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.lv.Listener.HttpCallback;
 import com.lv.Listener.UploadListener;
-import com.lv.Utils.Config;
-import com.lv.Utils.CryptUtils;
+import com.lv.utils.Config;
+import com.lv.utils.CryptUtils;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -1518,7 +1518,6 @@ public class MessageAdapter extends BaseAdapter {
                         });
                     }
                 });
-
             }
         });
 

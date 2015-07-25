@@ -3,8 +3,8 @@ package com.lv.Audio;
 import android.media.MediaRecorder;
 import android.os.Environment;
 
-import com.lv.Utils.Config;
-import com.lv.Utils.TimeUtils;
+import com.lv.utils.Config;
+import com.lv.utils.TimeUtils;
 
 import java.io.File;
 

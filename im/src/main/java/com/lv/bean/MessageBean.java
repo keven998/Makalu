@@ -1,6 +1,6 @@
 package com.lv.bean;
 
-import com.lv.Utils.TimeUtils;
+import com.lv.utils.TimeUtils;
 import com.lv.im.IMClient;
 
 /**

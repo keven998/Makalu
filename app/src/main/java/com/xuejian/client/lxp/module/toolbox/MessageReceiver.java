@@ -8,8 +8,8 @@ import android.util.Log;
 
 import com.igexin.sdk.PushConsts;
 import com.lv.Listener.MsgListener;
-import com.lv.Utils.Config;
-import com.lv.Utils.JsonValidator;
+import com.lv.utils.Config;
+import com.lv.utils.JsonValidator;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 

@@ -1,4 +1,4 @@
-package com.lv.Utils;
+package com.lv.utils;
 
 import android.content.Context;
 import android.content.Intent;

@@ -6,9 +6,9 @@ import android.media.ThumbnailUtils;
 import android.util.Log;
 
 import com.lv.Listener.UploadListener;
-import com.lv.Utils.Config;
-import com.lv.Utils.PictureUtil;
-import com.lv.Utils.TimeUtils;
+import com.lv.utils.Config;
+import com.lv.utils.PictureUtil;
+import com.lv.utils.TimeUtils;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.qiniu.android.http.ResponseInfo;

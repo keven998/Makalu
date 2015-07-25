@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.lv.Utils.Config;
-import com.lv.Utils.CryptUtils;
+import com.lv.utils.Config;
+import com.lv.utils.CryptUtils;
 import com.xuejian.client.lxp.common.utils.HanziToPinyin;
 
 import org.json.JSONArray;

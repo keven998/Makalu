@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lv.Utils;
+package com.lv.utils;
 
 import android.text.TextUtils;
 import android.util.Log;

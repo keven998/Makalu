@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.lv.Utils.Config;
-import com.lv.Utils.CryptUtils;
-import com.lv.Utils.TimeUtils;
+import com.lv.utils.Config;
+import com.lv.utils.CryptUtils;
+import com.lv.utils.TimeUtils;
 import com.lv.bean.ConversationBean;
 import com.lv.bean.InventMessage;
 import com.lv.bean.MessageBean;

@@ -25,7 +25,7 @@
                     android:layout_height="@dimen/page_more_avatar_frame_size"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
-                    android:padding="5dp"
+                    android:padding="@dimen/page_more_avatar_frame_size_padding"
                     android:scaleType="centerCrop" />
 
                 <RelativeLayout
