@@ -65,7 +65,6 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     DynamicBox box;
     private Drawable add, selected;
     private boolean isClickable;
-    ImageLoader loader=ImageLoader.getInstance();
 
     public OutCountryFragment(boolean isClickable) {
         this.isClickable = isClickable;
@@ -88,21 +87,6 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             mLvOutCountry.addFooterView(view);
         }
         mLvOutCountry.setAdapter(outCountryAdapter);
-        mLvOutCountry.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView listView, int scrollState) {
-                // Pause disk cache access to ensure smoother scrolling
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    loader.pause();
-                } else {
-                    loader.resume();
-                }
-            }
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                // TODO Auto-generated method stub
-            }
-        });
 
         initData();
         return rootView;
@@ -245,21 +229,19 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             sectionTv.setText("- " + itemData.zhName + " -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.destinations) {
-                View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
-
-                AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS) / 3,
-                        (LocalDisplay.SCREEN_WIDTH_PIXELS) / 3);
-
-                final FrameLayout des_box_fl = (FrameLayout) contentView.findViewById(R.id.des_box_fl);
-                final TextView cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
-                final ImageView desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
-                final ImageView addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
+                   View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
+                    AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS) / 3,
+                            (LocalDisplay.SCREEN_WIDTH_PIXELS) / 3);
+                    FrameLayout des_box_fl = (FrameLayout) contentView.findViewById(R.id.des_box_fl);
+                    TextView cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
+                    ImageView desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
+                   final ImageView addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
 
                 des_box_fl.setLayoutParams(lytp);
 
                 cityNameTv.setText(bean.zhName);
                 if (bean.images.size()>0) {
-                    loader.displayImage(bean.images.get(0).url, desBgImage, poptions);
+                    ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
                 }
                 if (!bean.isAdded) {
                     // if(isClickable) {
@@ -297,6 +279,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
 
         }
     }
+
 
     @Override
     public void onPause() {

@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.dest.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -70,7 +71,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     @InjectView(R.id.in_out_search_tv)
     EditText in_out_search;
 
-    ImageLoader loader=ImageLoader.getInstance();
     DynamicBox box;
     protected List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
@@ -108,21 +108,6 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
 //                }
 //            }
 //        });
-        mLvInCity.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    loader.pause();
-                } else {
-                    loader.resume();
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
-            }
-        });
         mSbIndex.setTextView(mDialog);
         mSbIndex.setTextColor(getResources().getColor(R.color.app_theme_color));
         initData();
@@ -491,7 +476,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 des_box_fl.setLayoutParams(lytp);
                 cityNameTv.setText(bean.zhName);
                 if (bean.images.size()>0) {
-                    loader.displayImage(bean.images.get(0).url, desBgImage, poptions);
+                    ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
                 }
                 if (!bean.isAdded) {
                     //if(isClickable) {
