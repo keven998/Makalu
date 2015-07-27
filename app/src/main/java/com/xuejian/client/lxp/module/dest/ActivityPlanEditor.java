@@ -150,8 +150,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         private int origHeight = -1;
 
         public SectionController(DragSortListView dslv, EditorAdapter adapter) {
-            super(dslv, R.id.tv_plan_editor, DragSortController.ON_LONG_PRESS, DragSortController.CLICK_REMOVE);
-            setBackgroundColor(Color.TRANSPARENT);
+            super(dslv, R.id.tv_plan_editor, DragSortController.ON_DOWN, DragSortController.CLICK_REMOVE);
             setRemoveEnabled(false);
             mDSlv = dslv;
             mAdapter = adapter;
@@ -161,6 +160,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         public View onCreateFloatView(int position) {
             mPos = position;
             View v = mAdapter.getView(position, null, mDSlv);
+            v.setBackgroundResource(R.drawable.bg_move_floatview);
             return v;
         }
 
@@ -444,13 +444,13 @@ public class ActivityPlanEditor extends FragmentActivity {
     }
 
     public void addNewDayRouter(int position, boolean isBefore) {
-        final int sectionPos;
+//        final int sectionPos;
         if (isBefore) {
             routeDayMap.add(position, new ArrayList<PoiDetailBean>());
-            sectionPos = position;
+//            sectionPos = position;
         } else {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
-            sectionPos = position + 1;
+//            sectionPos = position + 1;
         }
         strategy.itineraryDays++;
         editorAdapter.notifyDataSetChanged();
