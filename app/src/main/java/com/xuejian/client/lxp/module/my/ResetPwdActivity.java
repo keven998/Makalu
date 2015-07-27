@@ -92,14 +92,19 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
                             DialogManager.getInstance().dissMissLoadingDialog();
-                            if (!isFinishing()) {
-                                ToastUtil.getInstance(ResetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                            }
+
                         }
 
                         @Override
                         public void doFailure(Exception error, String msg, String method, int code) {
-
+                            if (code== 404){
+                                if (!isFinishing()) {
+                                    ToastUtil.getInstance(ResetPwdActivity.this).showToast("手机号尚未注册");
+                                }
+                            }
+                            else if (!isFinishing()) {
+                                ToastUtil.getInstance(ResetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                            }
                         }
                     });
                 }

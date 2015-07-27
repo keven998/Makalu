@@ -394,10 +394,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
-        if (Integer.parseInt(groupId)!=0&&!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)){
+        if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this)&&Integer.parseInt(groupId)!=0&&!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)){
             vibrator.vibrate(500);
         }
-        else if (Integer.parseInt(groupId)==0&&!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
+        else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this)&&Integer.parseInt(groupId)==0&&!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
             vibrator.vibrate(500);
         }
         //  notifyNewMessage(m);

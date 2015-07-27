@@ -170,6 +170,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {
+          //          if (searchAllResult.result.s)
                     bindView(keyword, searchAllResult.result);
                 }
             }
@@ -232,6 +233,10 @@ public class SearchAllActivity extends PeachBaseActivity {
             searchTypeBean.type = "shopping";
             searchTypeBean.resultList = result.shopping;
             typeBeans.add(searchTypeBean);
+        }
+        if (typeBeans.size()==0){
+            ToastUtil.getInstance(SearchAllActivity.this).showToast(String.format("没有找到“%s”的相关结果",keyword));
+            return;
         }
         boolean isSend;
         isSend = !TextUtils.isEmpty(toId);

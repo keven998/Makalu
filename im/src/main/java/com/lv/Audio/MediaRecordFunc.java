@@ -61,7 +61,7 @@ public class MediaRecordFunc {
                             return 1000;
                         } catch (IOException ex) {
                             ex.printStackTrace();
-                            return 1004;
+                            return 1010;
                         }
             }
 

@@ -135,6 +135,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
                         });
 
                     }
+
                     @Override
                     public void onFailed(int code) {
                         System.out.println(code);
@@ -233,6 +234,8 @@ public class GroupDetailFragment extends PeachBaseFragment {
     public void clearGroupHistory() {
 
         IMClient.getInstance().cleanMessageHistory(groupId);
+        ChatActivity.messageList.clear();
+        ((ChatActivity) getActivity()).refresh();
         // EMChatManager.getInstance().clearConversation(group.getGroupId());
         //adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
     }
@@ -275,8 +278,8 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 return new MemberViewHolder();
             }
         });
-        long creater=UserDBManager.getInstance().getGroupCreater(Long.parseLong(groupId));
-        if (creater<0||creater!=Long.parseLong(AccountManager.CurrentUserId)){
+        long creater = UserDBManager.getInstance().getGroupCreater(Long.parseLong(groupId));
+        if (creater < 0 || creater != Long.parseLong(AccountManager.CurrentUserId)) {
             delGroupMember.setVisibility(View.INVISIBLE);
         }
         groupNameTv.setOnClickListener(new View.OnClickListener() {

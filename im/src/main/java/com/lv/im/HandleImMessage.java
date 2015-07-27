@@ -228,7 +228,7 @@ public class HandleImMessage {
 //                    notifyMsg(c, messageBean);
 //                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
 //                }
-                    if (isBackground(c)) {
+                    if (SharePrefUtil.getLxqPushSetting(c)&&isBackground(c)) {
                         if ("group".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getGroupId()), false)) {
                             notifyMsg(c, messageBean);
                         } else if ("single".equals(messageBean.getChatType()) &&!SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getSenderId()), false)) {

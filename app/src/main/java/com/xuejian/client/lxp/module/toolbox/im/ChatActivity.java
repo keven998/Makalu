@@ -213,7 +213,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Intent intent = getIntent();
-
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
@@ -626,6 +625,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             intent.putExtra("user_name", user.getNickName());
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
+            intent.putExtra("conversation",conversation);
             intent.putExtra("userId", AccountManager.getCurrentUserId());
             intent.putExtra("isShare", true);
             intent.setAction("action.chat");
@@ -1078,8 +1078,16 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingContainer.setVisibility(View.VISIBLE);
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
-                        MediaRecordFunc.getInstance().startRecordAndFile(handler);
-                        isRecord = true;
+                        int code = MediaRecordFunc.getInstance().startRecordAndFile(handler);
+                        if (code==1010){
+                            ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
+                            isRecord=false;
+                            recordingContainer.setVisibility(View.INVISIBLE);
+                            if (wakeLock.isHeld())
+                                wakeLock.release();
+                            v.setPressed(false);
+                            return false;
+                        }else isRecord = true;
                     } catch (Exception e) {
                         e.printStackTrace();
                         isRecord = false;
@@ -1358,6 +1366,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     protected void onNewIntent(Intent intent) {
         // 点击notification bar进入聊天页面，保证只有一个聊天页面
         long username = intent.getLongExtra("userId", 0);
+        toChatUsername = intent.getStringExtra("friend_id");
+        conversation = intent.getStringExtra("conversation");
+        chatType = intent.getStringExtra("chatType");
         if (toChatUsername.equals(String.valueOf(username)))
             super.onNewIntent(intent);
         else {

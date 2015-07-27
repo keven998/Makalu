@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -34,16 +32,16 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/11/24.
  */
 public class SpotListActivity extends PeachBaseActivity {
-    @InjectView(R.id.loc_spinner)
-    Spinner mLocSpinner;
+//    @InjectView(R.id.loc_spinner)
+//    Spinner mLocSpinner;
     PoiAdapter mPoiAdapter;
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
     //    @InjectView(R.id.et_search)
 //    EditText mEtSearch;
-//    @InjectView(R.id.btn_search)
-//    Button mBtnSearch;
+    @InjectView(R.id.tv_search)
+    TextView tv_search;
     @InjectView(R.id.tv_title_bar_title)
     TextView mTitle;
     private PullToRefreshListView mPoiListLv;
@@ -55,7 +53,7 @@ public class SpotListActivity extends PeachBaseActivity {
     private int curPage = 0;
     private LocBean curLoc;
     private String mKeyWord;
-
+    public static final int SEARCH_CODE = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +94,11 @@ public class SpotListActivity extends PeachBaseActivity {
 //        } else {
 //            mBtnOk.setVisibility(View.INVISIBLE);
 //        }
-        if (locList.size() > 1) {
-            mLocSpinner.setVisibility(View.VISIBLE);
-        } else {
-            mLocSpinner.setVisibility(View.GONE);
-        }
+//        if (locList.size() > 1) {
+//            mLocSpinner.setVisibility(View.VISIBLE);
+//        } else {
+//            mLocSpinner.setVisibility(View.GONE);
+//        }
         if (canAdd) {
             mTvTitleBarLeft.setText("完成");
             mTvTitleBarLeft.setOnClickListener(new View.OnClickListener() {
@@ -157,21 +155,21 @@ public class SpotListActivity extends PeachBaseActivity {
         mLocSpinnerAdapter = new StringSpinnerAdapter(mContext, cityStrList);
         curLoc = locList.get(0);
 
-        mLocSpinner.setAdapter(mLocSpinnerAdapter);
-        mLocSpinner.setSelection(0, true);
-        mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
-                curLoc = locList.get(position);
-                mPoiListLv.doPullRefreshing(true, 200);
-                mTitle.setText(String.format("%s景点", curLoc.zhName));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//        mLocSpinner.setAdapter(mLocSpinnerAdapter);
+//        mLocSpinner.setSelection(0, true);
+//        mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
+//                curLoc = locList.get(position);
+//                mPoiListLv.doPullRefreshing(true, 200);
+//                mTitle.setText(String.format("%s景点", curLoc.zhName));
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
 //        mBtnSearch.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -212,6 +210,15 @@ public class SpotListActivity extends PeachBaseActivity {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 getPoiListData(type, curLoc.id, curPage + 1);
+            }
+        });
+        tv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sear_intent = new Intent(SpotListActivity.this, SearchForPoi.class);
+                sear_intent.putExtra("type", type);
+                sear_intent.putExtra("loc", curLoc);
+                startActivityForResult(sear_intent, SEARCH_CODE);
             }
         });
     }

@@ -50,28 +50,6 @@ public class IMUtils {
     public final static int IM_SHARE_REQUEST_CODE = 200;
     public final static int IM_LOGIN_REQUEST_CODE = 300;
 
-    public static User setUserHead(User user) {
-//        String username=user.getNickName();
-        String headerName = user.getNickName();
-//        if (!TextUtils.isEmpty(user.getNick())) {
-//            headerName = user.getNick();
-//        } else {
-//            headerName = user.getUsername();
-//        }
-//        if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-//            user.setHeader("");
-//        } else if (Character.isDigit(headerName.charAt(0))) {
-//            user.setHeader("#");
-//        } else {
-        user.setHeader(com.xuejian.client.lxp.common.utils.HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
-                0, 1).toUpperCase());
-        char header = user.getHeader().toLowerCase().charAt(0);
-        if (header < 'a' || header > 'z') {
-            user.setHeader("#");
-            //   }
-        }
-        return user;
-    }
 
     static String getStrng(Context context, int resId) {
         return context.getResources().getString(resId);
@@ -96,30 +74,6 @@ public class IMUtils {
         }
 
     }
-//    public static IMUser getUserInfoFromMessage(Context context,EMMessage message){
-//        String fromUser = message.getStringAttribute(Constant.FROM_USER,"");
-//        if(!TextUtils.isEmpty(fromUser)){
-//            ExtFromUser user = GsonTools.parseJsonToBean(fromUser, ExtFromUser.class);
-//            IMUser imUser = IMUserRepository.getContactByUserName(context, message.getFrom());
-//            if(imUser!=null){
-//                imUser.setNick(user.nickName);
-//                imUser.setAvatar(user.avatar);
-//                imUser.setUserId(user.userId);
-//                imUser.setAvatarSmall(user.avatar);
-//            }else{
-//                imUser = new IMUser();
-//                imUser.setUsername(message.getFrom());
-//                imUser.setNick(user.nickName);
-//                imUser.setUserId(user.userId);
-//                imUser.setAvatar(user.avatar);
-//                imUser.setAvatarSmall(user.avatar);
-//
-//            }
-//            IMUserRepository.saveContact(context, imUser);
-//            return imUser;
-//        }
-//        return null;
-//    }
 
     public static void onClickImShare(Context context) {
         User user = AccountManager.getInstance().getLoginAccount(context);

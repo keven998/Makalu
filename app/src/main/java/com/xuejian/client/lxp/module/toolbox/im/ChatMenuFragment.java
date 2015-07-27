@@ -107,6 +107,8 @@ public class ChatMenuFragment extends Fragment {
     public void clearMessageHistory() {
 
         IMClient.getInstance().cleanMessageHistory(userId);
+        ChatActivity.messageList.clear();
+        ((ChatActivity) getActivity()).refresh();
         // EMChatManager.getInstance().clearConversation(group.getGroupId());
         //adapter.refresh(EMChatManager.getInstance().getConversation(toChatUsername));
     }

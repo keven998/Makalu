@@ -12,8 +12,10 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
+import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ValidationBean;
@@ -24,6 +26,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -110,7 +113,9 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
             case R.id.btn_next:
                 if (TextUtils.isEmpty(smsEt.getText().toString())) {
                     ToastUtil.getInstance(mContext).showToast("请输入验证码");
-                } else {
+                } else if (!RegexUtils.isVerfyCode(smsEt.getText().toString())){
+                    ToastUtil.getInstance(mContext).showToast("请正确输入验证码");
+                }  else{
                     if (!CommonUtils.isNetWorkConnected(mContext)) {
                         ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                         return;
@@ -123,11 +128,10 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                 if (userResult.code == 0) {
+                                    imLogin(userResult.result);
                                     Intent accountIntent = new Intent(VerifyPhoneActivity.this, AccountActvity.class);
                                     startActivityWithNoAnim(accountIntent);
-
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("注册成功");
-
                                     Intent intent = getIntent();
                                     intent.putExtra("user", userResult.result);
                                     setResult(RESULT_OK, intent);
@@ -204,4 +208,24 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                 break;
         }
     }
+    private void imLogin(final User user) {
+        //初始化数据库，方便后面操作
+        UserDBManager.getInstance().initDB(user.getUserId() + "");
+        UserDBManager.getInstance().saveContact(user);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
+        //3、存入内存
+        AccountManager.getInstance().setLogin(true);
+        AccountManager.getInstance().saveLoginAccount(this, user);
+        AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
+//        // 进入主页面
+//        runOnUiThread(new Runnable() {
+//            public void run() {
+//                DialogManager.getInstance().dissMissLoadingDialog();
+//                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+//                finish();
+//                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//            }
+//        });
+    }
+
 }

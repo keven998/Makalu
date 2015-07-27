@@ -10,9 +10,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -50,6 +48,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,7 +75,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private User user;
     private int mContentType = 0;
     private boolean newCopy; //复制补丁
-
+    private String conversation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -84,6 +83,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         resetMemberValue(getIntent());
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getStringExtra("chatType");
+        conversation = getIntent().getStringExtra("conversation");
         newCopy = getIntent().getBooleanExtra("new_copy", false);
         initView();
         initData();
@@ -191,6 +191,14 @@ public class StrategyListActivity extends PeachBaseActivity {
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isShare){
+                    Intent intent =new Intent();
+                    intent .putExtra("friend_id",toId);
+                    intent.putExtra("conversation",conversation);
+                    intent.putExtra("chatType",chatType);
+                    intent.setClass(StrategyListActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                }
                 finish();
             }
         });

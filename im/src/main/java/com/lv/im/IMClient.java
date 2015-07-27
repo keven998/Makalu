@@ -145,13 +145,18 @@ public class IMClient {
                 ackAndFetch(new FetchListener() {
                     @Override
                     public void OnMsgArrive(List<Message> list) {
-//                        if (Config.isDebug){
-//                            Log.i(Config.TAG,"ACK  result");
-//                        }
-//                        for (Message msg : list) {
-//                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
-//                        }
-//                        LazyQueue.getInstance().TempDequeue();
+                        /**
+                         *
+                         * 风险
+                         *
+                         */
+                        if (Config.isDebug){
+                            Log.i(Config.TAG,"ACK  result");
+                        }
+                        for (Message msg : list) {
+                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
+                        }
+                        LazyQueue.getInstance().TempDequeue();
                         isRunning = false;
                     }
                 });

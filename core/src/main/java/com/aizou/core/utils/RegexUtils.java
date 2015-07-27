@@ -14,13 +14,19 @@ public class RegexUtils {
      * @return
      */
     public static boolean isMobileNO(String mobiles) {
-//      Pattern p = Pattern
-//              .compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9])|(18[1,0-1]))\\d{8}$");
-        Pattern p = Pattern.compile("^1\\d{10}$");
+      Pattern p = Pattern
+              .compile("^((13[0-9])|(15[[0-9]])|(18[0-9])|(17[0-9])|(14[0-9])|(19[0-9]))\\d{8}$");
+//        Pattern p = Pattern.compile("^1\\d{10}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();
     }
-
+    public static boolean isVerfyCode(String mobiles) {
+        Pattern p = Pattern
+                .compile("^([0-9])\\d{6}$");
+//        Pattern p = Pattern.compile("^1\\d{10}$");
+        Matcher m = p.matcher(mobiles);
+        return m.matches();
+    }
     public static boolean isPwdOk(String pwd){
         //密码：6-12数字，英文组合
         Pattern p = Pattern.compile("^[0-9a-zA-Z_]{6,12}$");

@@ -120,7 +120,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
             constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
         } else {
-            System.out.println("user not null");
             if (user.getGender().equalsIgnoreCase("M")) {
                 /**
                  * OOM Exception

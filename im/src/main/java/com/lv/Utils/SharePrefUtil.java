@@ -21,4 +21,15 @@ public class SharePrefUtil {
             sp = context.getSharedPreferences(SP_NAME, 0);
         return sp.getBoolean(key, defValue);
     }
+    public final static String LXQ_PREF = "lxq_pref";
+    public final static String AD_PREF = "ad_pref";
+
+    public static boolean getLxqPushSetting(Context context) {
+        return SharePrefUtil.getBoolean(context, LXQ_PREF, true);
+    }
+
+    public void setLxqPushSetting(Context context, boolean lxqpush) {
+        SharePrefUtil.saveBoolean(context, LXQ_PREF, lxqpush);
+    }
+
 }

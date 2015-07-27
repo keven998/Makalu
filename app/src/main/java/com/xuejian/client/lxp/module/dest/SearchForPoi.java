@@ -51,6 +51,7 @@ public class SearchForPoi extends PeachBaseActivity {
     private int curPage = 0;
     private LocBean curLoc;
     private String mKeyWord;
+    private boolean isCanAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +65,13 @@ public class SearchForPoi extends PeachBaseActivity {
         AddList = new ArrayList<>();
         curLoc = getIntent().getParcelableExtra("loc");
         mType = getIntent().getStringExtra("type");
+        isCanAdd = getIntent().getBooleanExtra("isCanAdd", false);
         if ("restaurant".equals(mType)) {
             mTitle.setText("美食搜索");
         }else if ("shopping".equals(mType)) {
             mTitle.setText("购物搜索");
+        }else if ("vs".equals(mType)) {
+            mTitle.setText("景点搜索");
         }
     }
 
@@ -75,7 +79,7 @@ public class SearchForPoi extends PeachBaseActivity {
         ButterKnife.inject(this);
         PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
         mPoiListLv = listView;
-        mPoiAdapter = new PoiAdapter(SearchForPoi.this, true);
+        mPoiAdapter = new PoiAdapter(SearchForPoi.this, isCanAdd);
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(false);
         listView.setScrollLoadEnabled(true);
@@ -142,7 +146,6 @@ public class SearchForPoi extends PeachBaseActivity {
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
-                System.out.println(searchAllResult.result.restaurant.get(0).zhName);
                 if (searchAllResult.code == 0) {
                     curPage = page;
                     bindSearchView(type, searchAllResult.result);
@@ -174,7 +177,6 @@ public class SearchForPoi extends PeachBaseActivity {
             mPoiAdapter.getDataList().clear();
         }
         boolean hasMore = true;
-        System.out.println(type);
         if (type.equals("restaurant")) {
 //            if (hasAddList != null) {
 //                for (PoiDetailBean detailBean : result.restaurant) {
@@ -195,6 +197,17 @@ public class SearchForPoi extends PeachBaseActivity {
             mPoiAdapter.getDataList().addAll(result.shopping);
             mPoiAdapter.notifyDataSetChanged();
             if (result.shopping.size() < BaseApi.PAGE_SIZE) {
+                hasMore = false;
+            }
+        }else if (type.equals("vs")) {
+//            if (hasAddList != null) {
+//                for (PoiDetailBean detailBean : result.shopping) {
+//                    detailBean.hasAdded = hasAddList.contains(detailBean);
+//                }
+//            }
+            mPoiAdapter.getDataList().addAll(result.vs);
+            mPoiAdapter.notifyDataSetChanged();
+            if (result.vs.size() < BaseApi.PAGE_SIZE) {
                 hasMore = false;
             }
         }

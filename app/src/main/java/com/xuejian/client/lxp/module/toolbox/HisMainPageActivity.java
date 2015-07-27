@@ -67,6 +67,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private int EDIT_MEMO = 101;
     private TextView nameTv;
     private String newMemo;
+    private boolean notLogin;
     User user;
 
     @Override
@@ -75,14 +76,18 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         setContentView(R.layout.activity_hismainpage);
         userId = getIntent().getLongExtra("userId", 0);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
-        imUser = UserDBManager.getInstance().getContactByUserId(userId);
+        if (me!=null){
+            imUser = UserDBManager.getInstance().getContactByUserId(userId);
+        }else notLogin=true;
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
+        if (!notLogin){
+            isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
+        }
         View handleView = findViewById(R.id.tv_handle_action);
         if (me != null) {
             if (userId != 10000 && isMyFriend) {

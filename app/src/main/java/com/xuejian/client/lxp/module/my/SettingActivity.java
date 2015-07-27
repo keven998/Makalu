@@ -85,10 +85,14 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 MobclickAgent.onEvent(mContext, "event_clear_cache");
                 clearCache();
                 break;
-
             default:
                 break;
         }
+    }
+
+    private void notice(boolean value) {
+        SettingConfig.getInstance().setLxqPushSetting(SettingActivity.this,value);
+
     }
 
     private void clearCache() {

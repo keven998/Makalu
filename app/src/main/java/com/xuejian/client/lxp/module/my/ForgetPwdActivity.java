@@ -14,15 +14,19 @@ import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CheckValidationBean;
 import com.xuejian.client.lxp.bean.ValidationBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -140,6 +144,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<CheckValidationBean> chechResult = CommonJson.fromJson(result, CheckValidationBean.class);
                         if (chechResult.code == 0) {
+
                             Intent intent = new Intent(mContext, ResetPwdActivity.class);
                             intent.putExtra("token", chechResult.result.token);
                             intent.putExtra("phone", phoneEt.getText().toString().trim());

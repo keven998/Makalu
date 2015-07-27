@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -373,6 +372,7 @@ public class PoiListActivity extends PeachBaseActivity {
                 Intent sear_intent = new Intent(PoiListActivity.this, SearchForPoi.class);
                 sear_intent.putExtra("type", type);
                 sear_intent.putExtra("loc", curLoc);
+                sear_intent.putExtra("isCanAdd",true);
                 startActivityForResult(sear_intent, SEARCH_CODE);
             }
         });
