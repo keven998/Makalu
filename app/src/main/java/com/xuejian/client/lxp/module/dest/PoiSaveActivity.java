@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -40,6 +39,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
     private ArrayList<ArrayList<PoiDetailBean>> content = new ArrayList<ArrayList<PoiDetailBean>>();
     private String type;
     private int requestType;
+    private boolean isOwner;
 
 
     @Override
@@ -49,7 +49,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         strategy = getIntent().getParcelableExtra("strategy");
         destinations = getIntent().getParcelableArrayListExtra("destinations");
-
+        isOwner=getIntent().getBooleanExtra("isOwner",false);
         bar = (TitleHeaderBar) findViewById(R.id.poi_save_titleBar);
         bar.getTitleTextView().setText("收藏的" + getIntent().getStringExtra("title"));
 
@@ -183,7 +183,9 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
             groupTitle.setText(destinations.get(i).zhName);
             groupSum.setText("(" + content.get(i).size() + "收藏" + ")");
-
+            if (!isOwner){
+                save_btn.setVisibility(View.INVISIBLE);
+            }
             save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

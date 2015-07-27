@@ -26,9 +26,7 @@ import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.LocationBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
-import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -70,7 +68,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     LinearLayout hsViewLL;
     private String mType;
     private List<LocBean> locList;
-    private ArrayList<PoiDetailBean> allLoadLocList=new ArrayList<PoiDetailBean>();
+    private ArrayList<PoiDetailBean> allLoadLocList = new ArrayList<PoiDetailBean>();
     private ArrayList<PoiDetailBean> hasAddList;
     private int dayIndex;
     private String[] poiTypeArray, poiTypeValueArray, poiTypeValueArrays;
@@ -85,6 +83,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     private PopupWindow mPop;
     private ImageView selected;
     private int globalFlag = 0;
+    private static final int SEARCH_CODE = 105;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +176,11 @@ public class AddPoiActivity extends PeachBaseActivity {
         iv_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent sear_intent = new Intent(AddPoiActivity.this, SearchForPoi.class);
+                sear_intent.putExtra("type", mType);
+                sear_intent.putExtra("loc", curLoc);
+                sear_intent.putExtra("isCanAdd", true);
+                startActivityForResult(sear_intent, SEARCH_CODE);
             }
         });
 //        mBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -443,7 +446,8 @@ public class AddPoiActivity extends PeachBaseActivity {
         loc_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!((CheckedTextView)view).isChecked())((CheckedTextView)view).setChecked(true);
+                if (!((CheckedTextView) view).isChecked())
+                    ((CheckedTextView) view).setChecked(true);
                 curLoc = locList.get(position);
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();
@@ -464,7 +468,8 @@ public class AddPoiActivity extends PeachBaseActivity {
         type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!((CheckedTextView)view).isChecked())((CheckedTextView)view).setChecked(true);
+                if (!((CheckedTextView) view).isChecked())
+                    ((CheckedTextView) view).setChecked(true);
                 mType = poiTypeValueArrays[position];
                 mPoiAdapter.getDataList().clear();
                 mPoiAdapter.notifyDataSetChanged();
@@ -487,8 +492,8 @@ public class AddPoiActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AddPoiActivity.this, StrategyMapActivity.class);
                 intent.putParcelableArrayListExtra("allLoadLocList", allLoadLocList);
-                intent.putExtra("title",curLoc.zhName+resizeTypeName(mType));
-                intent.putExtra("isAllPoiLoc",true);
+                intent.putExtra("title", curLoc.zhName + resizeTypeName(mType));
+                intent.putExtra("isAllPoiLoc", true);
                 startActivity(intent);
             }
         });
@@ -555,7 +560,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         });
     }
 
-    private void collectAllLocs(List<PoiDetailBean> result){
+    private void collectAllLocs(List<PoiDetailBean> result) {
         allLoadLocList.addAll(result);
         /*while(result.iterator().hasNext()){
             allLoadLocList.add(result.iterator().next());
@@ -588,12 +593,42 @@ public class AddPoiActivity extends PeachBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CODE_SEARCH_POI) {
-                hasAddList = data.getParcelableArrayListExtra("poiList");
-                for (PoiDetailBean detailBean : mPoiAdapter.getDataList()) {
-                    detailBean.hasAdded = hasAddList.contains(detailBean);
+            if (requestCode == SEARCH_CODE) {
+                ArrayList<PoiDetailBean> list = new ArrayList<>();
+                list = data.getParcelableArrayListExtra("newPoi");
+//                hasAddList.addAll(list);
+//                for (PoiDetailBean detailBean : mPoiAdapter.getDataList()) {
+//                    detailBean.hasAdded = hasAddList.contains(detailBean);
+//                }
+//                mPoiAdapter.notifyDataSetChanged();
+
+
+                if (list.size() > 0) {
+                    if (hasAddList.size() > 0) {
+                        for (PoiDetailBean bean : hasAddList) {
+                            if (list.contains(bean)) {
+                                list.remove(bean);
+                            }
+                        }
+                    }
+                    for (PoiDetailBean bean : mPoiAdapter.getDataList()) {
+                        if (list.contains(bean)) {
+                            bean.hasAdded = true;
+                        }
+                    }
+                    hasAddList.addAll(list);
+                    mPoiAdapter.notifyDataSetChanged();
+                    for (PoiDetailBean bean : list) {
+                        View cityView = View.inflate(mContext, R.layout.poi_select_name, null);
+                        TextView poiNameTv = (TextView) cityView.findViewById(R.id.names);
+                        poiNameTv.setText(bean.zhName);
+                        poiNameTv.setTextColor(getResources().getColor(R.color.color_text_ii));
+                        hsViewLL.addView(cityView);
+                        autoScrollPanel();
+                    }
                 }
-                mPoiAdapter.notifyDataSetChanged();
+
+
             }
         }
     }

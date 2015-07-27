@@ -15,7 +15,7 @@ public class RegexUtils {
      */
     public static boolean isMobileNO(String mobiles) {
       Pattern p = Pattern
-              .compile("^((13[0-9])|(15[[0-9]])|(18[0-9])|(17[0-9])|(14[0-9])|(19[0-9]))\\d{8}$");
+              .compile("^((10[0-9])|(13[0-9])|(15[[0-9]])|(18[0-9])|(17[0-9])|(14[0-9])|(19[0-9]))\\d{8}$");
 //        Pattern p = Pattern.compile("^1\\d{10}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();

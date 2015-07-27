@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -81,6 +80,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private ListView draw_list;
     private DrawAdapter adapter;
     private String userId;
+    private boolean isOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -357,7 +357,8 @@ public class StrategyActivity extends PeachBaseActivity {
             iv_location.setVisibility(View.VISIBLE);
             mTvCopyGuide.setVisibility(View.GONE);
         } else {
-            if (user.getUserId() != result.userId) {
+            isOwner=(user.getUserId()==result.userId);
+            if (!isOwner) {
                 mIvMore.setVisibility(View.GONE);
                 iv_location.setVisibility(View.GONE);
                 mTvCopyGuide.setVisibility(View.VISIBLE);
@@ -536,6 +537,9 @@ public class StrategyActivity extends PeachBaseActivity {
             } else {
                 if (collectionFragment == null) {
                     collectionFragment = new CollectionFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putBoolean("isOwner",isOwner);
+                    collectionFragment.setArguments(bundle);
                 }
 
                 return collectionFragment;

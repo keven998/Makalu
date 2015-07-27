@@ -115,7 +115,6 @@ public class PoiAdapter extends BaseAdapter {
         final Context context = mContext;
         if (convertView == null) {
             if (type == SPOT) {
-                System.out.println("12431414 ==");
                 convertView = View.inflate(context, R.layout.item_plan_day_detil, null);
                 spotViewHolder = new SpotViewHolder(convertView);
                 convertView.setTag(spotViewHolder);
@@ -148,7 +147,6 @@ public class PoiAdapter extends BaseAdapter {
 
         if (type == SPOT) {
 
-            System.out.println("12431414 ==");
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, spotViewHolder.mSpotImageIv, picOptions);
             } else {

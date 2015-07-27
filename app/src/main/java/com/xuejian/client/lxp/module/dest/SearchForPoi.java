@@ -57,6 +57,7 @@ public class SearchForPoi extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_for_poi);
+        isCanAdd = getIntent().getBooleanExtra("isCanAdd", false);
         initView();
         initData();
     }
@@ -65,7 +66,7 @@ public class SearchForPoi extends PeachBaseActivity {
         AddList = new ArrayList<>();
         curLoc = getIntent().getParcelableExtra("loc");
         mType = getIntent().getStringExtra("type");
-        isCanAdd = getIntent().getBooleanExtra("isCanAdd", false);
+        System.out.println("iscanADD " +isCanAdd);
         if ("restaurant".equals(mType)) {
             mTitle.setText("美食搜索");
         }else if ("shopping".equals(mType)) {
