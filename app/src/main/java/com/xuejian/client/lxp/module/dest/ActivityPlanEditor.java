@@ -454,6 +454,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         }
         strategy.itineraryDays++;
         editorAdapter.notifyDataSetChanged();
+        mDragListView.setSelection(editorAdapter.getSectionCount()-1);
         EditPlanFragment editFragment = (EditPlanFragment) getSupportFragmentManager().findFragmentByTag("edit_menu");
         if (editFragment != null) {
             editFragment.update(routeDayMap);

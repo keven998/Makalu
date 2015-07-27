@@ -93,6 +93,13 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
             tv_confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (user != null && user.getNickName().equals(nickEt.getText().toString().trim())) {
+                        Intent intent = new Intent();
+                        intent.putExtra("nickname", nickEt.getText().toString().trim());
+                        setResult(RESULT_OK, intent);
+                        finish();
+                        return;
+                    }
                     if (!RegexUtils.checkNickName(nickEt.getText().toString().trim())) {
                         ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("请输入1-12位中英文昵称");
                         return;

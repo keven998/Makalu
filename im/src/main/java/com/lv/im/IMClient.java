@@ -49,11 +49,12 @@ public class IMClient {
     private int count;
     public static HashMap<String, ArrayList<Long>> taskMap = new HashMap<>();
     private static List<String> invokeStatus = new ArrayList<>();
-    private static ConcurrentHashMap<String,Integer> prograssMap=new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Integer> prograssMap = new ConcurrentHashMap<>();
     private Timer timer;
     private boolean isRunning;
     public int p;
     public static long lastSusseccFetch;
+
     public boolean isLogin() {
         return isLogin;
     }
@@ -150,8 +151,8 @@ public class IMClient {
                          * 风险
                          *
                          */
-                        if (Config.isDebug){
-                            Log.i(Config.TAG,"ACK  result");
+                        if (Config.isDebug) {
+                            Log.i(Config.TAG, "ACK  result");
                         }
                         for (Message msg : list) {
                             LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
@@ -216,8 +217,8 @@ public class IMClient {
     }
 
     public int getUnReadCount() {
-        count=0;
-        if (convercationList!=null){
+        count = 0;
+        if (convercationList != null) {
             for (ConversationBean c : convercationList) {
                 count += c.getIsRead();
             }
@@ -452,7 +453,9 @@ public class IMClient {
         lastMsgMap.put(newMsg.getSenderId() + "", newMsg.getServerId());
         add2ackList(message.getId());
     }
-
+    public void addToConversation(String chatId,String chatType){
+        db.add2Conversion(Long.parseLong(chatId),0,"con_"+CryptUtils.getMD5String(chatId),0,null,chatType);
+    }
     private MessageBean Msg2Bean(Message msg) {
         return new MessageBean(msg.getMsgId(), Config.STATUS_SUCCESS, msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());
     }
@@ -479,7 +482,7 @@ public class IMClient {
         if (result == 0) {
             setLastMsg(message.getConversation(), message.getMsgId());
         }
-        IMClient.lastSusseccFetch=message.getTimestamp();
+        IMClient.lastSusseccFetch = message.getTimestamp();
         add2ackList(message.getId());
         return result;
     }
@@ -520,36 +523,44 @@ public class IMClient {
     public void addTips(String chatId, String tips, String chatType) {
         db.addTips(chatId, tips, chatType);
     }
-    public void savePrograss(String id,int prograss){
+
+    public void savePrograss(String id, int prograss) {
         prograssMap.put(id, prograss);
     }
-    public int getProgress(String id){
-        if (prograssMap.containsKey(id)){
+
+    public int getProgress(String id) {
+        if (prograssMap.containsKey(id)) {
             return prograssMap.get(id);
-        }
-        else {
-            prograssMap.put(id,0);
+        } else {
+            prograssMap.put(id, 0);
             return 0;
         }
     }
-    public List<InventMessage> getInventMessages(){
+
+    public List<InventMessage> getInventMessages() {
         return db.getInventMessages();
     }
-    public void deleteInventMessage(String UserId){
+
+    public void deleteInventMessage(String UserId) {
         db.deleteInventMessage(UserId);
     }
-    public int getUnAcceptMsg(){
+
+    public int getUnAcceptMsg() {
         return db.getUnAcceptMsg();
     }
-    public void updateInventMsgStatus(long userId,int status){
-        db.updateInventMessageStatus(userId,status);
+
+    public void updateInventMsgStatus(long userId, int status) {
+        db.updateInventMessageStatus(userId, status);
     }
-    public void muteConversation(String conversation,boolean value,HttpCallback callback){
+
+    public void muteConversation(String conversation, boolean value, HttpCallback callback) {
         HttpUtils.muteConversation(conversation, value, callback);
     }
-    public static void login(String  UserId,HttpCallback callback){
-        HttpUtils.login(UserId,callback);
+
+    public static void login(String UserId, HttpCallback callback) {
+        HttpUtils.login(UserId, callback);
     }
+
     public void logout() {
         isLogin = false;
         db.disconnectDB();

@@ -216,9 +216,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
+        IMClient.getInstance().addToConversation(toChatUsername,chatType);
         user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
         initView();
         setUpView();
+
+
         if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }

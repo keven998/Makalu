@@ -489,6 +489,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                     } else {
                         cancleVisited(itemData);
                         mStrategyListAdapter.notifyDataSetChanged();
+                        mMyStrategyLv.doPullRefreshing(true, 300);
 //                        final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
 //                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
 //                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);

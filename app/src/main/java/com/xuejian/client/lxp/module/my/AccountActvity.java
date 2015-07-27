@@ -767,7 +767,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         tv_gender.setText("帅锅");
                     } else if (gender.equalsIgnoreCase("F")) {
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
-                        tv_gender.setText("镁铝");
+                        tv_gender.setText("美女");
                     } else {
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                     }

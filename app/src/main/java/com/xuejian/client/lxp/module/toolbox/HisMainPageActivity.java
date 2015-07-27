@@ -470,6 +470,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 CommonJson<User> expertInfo = CommonJson.fromJson(result, User.class);
                 if (expertInfo.code == 0) {
                     updateView(expertInfo.result);
+                }else {
+                    finish();
                 }
             }
 

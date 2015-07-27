@@ -141,7 +141,7 @@ public class SearchForPoi extends PeachBaseActivity {
         });
     }
 
-    private void searchSearchTypeData(String keyWord, final String type, String locId, final int page) {
+    private void searchSearchTypeData(final String keyWord, final String type, String locId, final int page) {
         TravelApi.searchForType(keyWord, type, locId, page, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -149,7 +149,7 @@ public class SearchForPoi extends PeachBaseActivity {
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {
                     curPage = page;
-                    bindSearchView(type, searchAllResult.result);
+                    bindSearchView(type, searchAllResult.result,keyWord);
                 }
                 if (curPage == 0) {
                     mPoiListLv.onPullDownRefreshComplete();
@@ -173,7 +173,7 @@ public class SearchForPoi extends PeachBaseActivity {
         });
     }
 
-    private void bindSearchView(String type, SearchAllBean result) {
+    private void bindSearchView(String type, SearchAllBean result,String keyword) {
         if (curPage == 0) {
             mPoiAdapter.getDataList().clear();
         }
@@ -212,6 +212,10 @@ public class SearchForPoi extends PeachBaseActivity {
                 hasMore = false;
             }
         }
+        if (mPoiAdapter.getDataList().size()==0){
+            ToastUtil.getInstance(SearchForPoi.this).showToast(String.format("没有找到“%s”的相关结果",keyword));
+        }
+
         if (result == null
                 || !hasMore) {
             mPoiListLv.setHasMoreData(false);

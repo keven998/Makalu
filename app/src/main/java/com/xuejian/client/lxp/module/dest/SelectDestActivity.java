@@ -17,7 +17,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -145,6 +144,10 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             @Override
             public void onClick(View view) {
                 MobclickAgent.onEvent(mContext, "event_select_done_go_next");
+                if (allAddCityList.size()==0){
+                    ToastUtil.getInstance(SelectDestActivity.this).showToast("请选择目的地");
+                    return;
+                }
                 User user = AccountManager.getInstance().getLoginAccount(mContext);
                 if (user != null) {
                     if (requestCode == StrategyActivity.EDIT_LOC_REQUEST_CODE) {

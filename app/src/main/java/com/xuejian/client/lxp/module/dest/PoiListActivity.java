@@ -372,7 +372,7 @@ public class PoiListActivity extends PeachBaseActivity {
                 Intent sear_intent = new Intent(PoiListActivity.this, SearchForPoi.class);
                 sear_intent.putExtra("type", type);
                 sear_intent.putExtra("loc", curLoc);
-                sear_intent.putExtra("isCanAdd",true);
+                sear_intent.putExtra("isCanAdd",canAdd);
                 startActivityForResult(sear_intent, SEARCH_CODE);
             }
         });
