@@ -16,6 +16,7 @@ import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.config.SettingConfig;
@@ -131,6 +132,10 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     }
 
     private void update() {
+        if (!CommonUtils.isNetWorkConnected(SettingActivity.this)){
+            ToastUtil.getInstance(SettingActivity.this).showToast("请检查网络连接");
+            return;
+        }
         DialogManager.getInstance().showLoadingDialog(SettingActivity.this, "正在检查更新");
         OtherApi.checkUpdate(new HttpCallBack<String>() {
             @Override

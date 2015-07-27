@@ -137,12 +137,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private int NICKNAME = 6;
     private int BINDPHONE = 7;
     private int RESET_FOOTPRINT = 8;
-    private boolean birthTimeFlag = false;
+    private boolean birthTimeFlag;
+    private boolean fromReg;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
+        fromReg = getIntent().getBooleanExtra("fromReg",false);
         initView();
         refreshUserInfo();
     }
@@ -165,6 +168,17 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("编辑资料");
         titleBar.enableBackKey(true);
+        titleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fromReg){
+                    Intent intent = new Intent();
+                    intent.setClass(AccountActvity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+                finish();
+            }
+        });
     }
 
     public void getUserPics(Long userId) {
@@ -296,8 +310,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else if (user.getGender().equalsIgnoreCase("F")) {
             iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
             tv_gender.setText("美女");
-        } else {
+        }else if (user.getGender().equalsIgnoreCase("S")){
             iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+            tv_gender.setText("保密");
+        }else {
+            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+            tv_gender.setText("一言难尽");
         }
 
 //        ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
@@ -768,8 +786,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     } else if (gender.equalsIgnoreCase("F")) {
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
                         tv_gender.setText("美女");
-                    } else {
+                    }else if (user.getGender().equalsIgnoreCase("S")){
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                        tv_gender.setText("保密");
+                    }else {
+                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                        tv_gender.setText("一言难尽");
                     }
 
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");

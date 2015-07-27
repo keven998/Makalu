@@ -113,7 +113,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             idTv.setText("未登录");
             tvPictureCount.setText("0图");
             tvPlansCount.setText("0条");
-            tvTracksCount.setText("0");
+            tvTracksCount.setText("0国0城市");
             tvLevel.setText("Lv0");
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
@@ -300,6 +300,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
     private void showSelectedPics(ArrayList<String> pics) {
+        if (pics.size()==0){
+            return;
+        }
         IntentUtils.intentToPicGallery2(getActivity(), pics, 0);
     }
 
