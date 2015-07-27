@@ -92,7 +92,7 @@ public class EditPlanFragment extends Fragment {
         private int origHeight = -1;
 
         public SectionController(DragSortListView dslv, PlanEditAdapter adapter) {
-            super(dslv, R.id.rl_drag, DragSortController.ON_LONG_PRESS, DragSortController.CLICK_REMOVE);
+            super(dslv, R.id.rl_drag, DragSortController.ON_DOWN, DragSortController.CLICK_REMOVE);
             setBackgroundColor(Color.TRANSPARENT);
             setRemoveEnabled(false);
             setRemoveMode(DragSortController.CLICK_REMOVE);
@@ -105,6 +105,7 @@ public class EditPlanFragment extends Fragment {
         public View onCreateFloatView(int position) {
             mPos = position;
             View v = mAdapter.getView(position, null, mDSlv);
+            v.setBackgroundResource(R.drawable.bg_move_floatview);
             return v;
         }
 

@@ -154,6 +154,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         public View onCreateFloatView(int position) {
             mPos = position;
             View v = mAdapter.getView(position, null, mDslv);
+            v.setBackgroundResource(R.drawable.bg_move_floatview);
             return v;
         }
 
