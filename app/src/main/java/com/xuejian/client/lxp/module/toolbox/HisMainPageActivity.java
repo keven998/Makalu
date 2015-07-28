@@ -436,7 +436,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tvTrack.getText().toString());
-                intent.putExtra("id",bean.getUserId());
+                intent.putExtra("id",String.valueOf(userId));
                 startActivity(intent);
             }
         });
