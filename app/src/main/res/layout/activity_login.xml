@@ -29,8 +29,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/shape_white_dialog">
-
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/et_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,6 +42,7 @@
             android:paddingRight="10dp"
             android:paddingTop="10dp"
             android:cursorVisible="true"
+            android:completionThreshold="3"
             android:singleLine="true"
             android:textColor="@color/color_text_i"
             android:textColorHint="@color/color_disable"

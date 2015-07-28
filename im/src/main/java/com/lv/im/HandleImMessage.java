@@ -347,11 +347,11 @@ public class HandleImMessage {
         //必须设置pendingintent，否则在2.3的机器上会有bug
         Intent intent = new Intent("android.intent.action.notify");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(c, 11, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 10001, intent, PendingIntent.FLAG_ONE_SHOT);
         mBuilder.setContentIntent(pendingIntent);
 
         Notification notification = mBuilder.build();
-        notificationManager.notify(11, notification);
+        notificationManager.notify(10001, notification);
         //   notificationManager.cancel(11);
     }
 

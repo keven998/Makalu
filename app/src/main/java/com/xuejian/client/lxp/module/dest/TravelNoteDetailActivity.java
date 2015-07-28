@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.module.dest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
@@ -165,5 +166,11 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
             });
             return connectionDialog;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IMUtils.onShareResult(mContext, noteBean, requestCode, resultCode, data, null);
     }
 }

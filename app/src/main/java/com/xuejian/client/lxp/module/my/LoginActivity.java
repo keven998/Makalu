@@ -8,6 +8,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
+import com.lv.utils.SharePrefUtil;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -38,7 +41,7 @@ public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
     @ViewInject(R.id.et_account)
-    private EditText loginNameEt;
+    private AutoCompleteTextView loginNameEt;
     @ViewInject(R.id.et_password)
     private EditText pwdEt;
 
@@ -106,6 +109,14 @@ public class LoginActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
+        String phoneNum = SharePrefUtil.getPhoneNum(this,"lastPhone");
+        if (phoneNum!=null){
+            String [] arr={""};
+            arr[0]=phoneNum;
+            ArrayAdapter arrayAdapter = new ArrayAdapter<String>(this, R.layout.item_login_input,arr);
+            loginNameEt.setAdapter(arrayAdapter);
+        }
+
         findViewById(R.id.tv_weixin_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,10 +336,11 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void doSuccess(String result, String method) {
-
                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                 if (userResult.code == 0) {
+                    SharePrefUtil.savePhoneNum(LoginActivity.this,"lastPhone",loginNameEt.getText().toString().trim());
                     imLogin(userResult.result, LOGIN);
+
                 } else {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
@@ -356,6 +368,10 @@ public class LoginActivity extends PeachBaseActivity {
 
 
     public void weixinLogin() {
+        if (!WeixinApi.getInstance().isWXinstalled(this)){
+            ToastUtil.getInstance(mContext).showToast("尚未安装微信");
+            return;
+        }
         isWeixinClickLogin = true;
         ShareUtils.configPlatforms(this);
         dialog = DialogManager.getInstance().showLoadingDialog(mContext, "正在授权");

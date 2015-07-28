@@ -119,46 +119,13 @@ public class IMShareActivity extends PeachBaseActivity {
     private List<ConversationBean> loadConversationsWithRecentChat() {
         // 获取所有会话，包括陌生人
         List<ConversationBean> list = IMClient.getInstance().getConversationList();
-//        Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
-//        List<PeachConversation> conversationList = new ArrayList<PeachConversation>();
-//        //过滤掉messages seize为0的conversation
-//        Iterator<EMConversation> conversationIt = conversations.values().iterator();
-//        while (conversationIt.hasNext()){
-//            final EMConversation conversation = conversationIt.next();
-//            if(conversation.getLastMessage()==null)
-//                continue;
-//            if(conversation.getIsGroup()){
-//                PeachConversation peachConversation = new PeachConversation();
-//                peachConversation.emConversation = conversation;
-//                conversationList.add(peachConversation);
-//                EMGroup group=EMGroupManager.getInstance().getGroup(conversation.getUserName());
-//                if(group==null){
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                EMGroup emGroup =EMGroupManager.getInstance().getGroupFromServer(conversation.getUserName());
-//                                EMGroupManager.getInstance().createOrUpdateLocalGroup(emGroup);
-//                            } catch (EaseMobException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }).start();
-//                }
-//
-//            }else if(!TextUtils.isEmpty(conversation.getUserName())){
-//                IMUser user = IMUserRepository.getMyFriendByUserName(mContext, conversation.getUserName());
-//                if(user!=null){
-//                    PeachConversation peachConversation = new PeachConversation();
-//                    peachConversation.emConversation = conversation;
-//                    peachConversation.imUser = user;
-//                    conversationList.add(peachConversation);
-//                }else{
-//                    conversationIt.remove();
-//                }
-//            }
-//        }
-        // 排序
+        List<ConversationBean> del = new ArrayList<>();
+        for (ConversationBean bean : list) {
+            if (bean.getFriendId()==10000||bean.getFriendId()==10001){
+                del.add(bean);
+            }
+        }
+        list.removeAll(del);
         sortConversationByLastChatTime(list);
         return list;
     }

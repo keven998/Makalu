@@ -15,12 +15,14 @@ public class SharePrefUtil {
             sp = context.getSharedPreferences(SP_NAME, 0);
         sp.edit().putBoolean(key, value).commit();
     }
+
     public static boolean getBoolean(Context context, String key,
                                      boolean defValue) {
         if (sp == null)
             sp = context.getSharedPreferences(SP_NAME, 0);
         return sp.getBoolean(key, defValue);
     }
+
     public final static String LXQ_PREF = "lxq_pref";
     public final static String AD_PREF = "ad_pref";
 
@@ -32,4 +34,16 @@ public class SharePrefUtil {
         SharePrefUtil.saveBoolean(context, LXQ_PREF, lxqpush);
     }
 
+    public static void savePhoneNum(Context context, String key, String value) {
+        if (sp == null)
+            sp = context.getSharedPreferences(SP_NAME, 0);
+        sp.edit().putString(key, value).commit();
+    }
+
+    public static String getPhoneNum(Context context, String key
+    ) {
+        if (sp == null)
+            sp = context.getSharedPreferences(SP_NAME, 0);
+        return sp.getString(key, null);
+    }
 }

@@ -14,12 +14,14 @@
 package com.xuejian.client.lxp.module.toolbox.im;
 
 import android.animation.LayoutTransition;
+import android.app.NotificationManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -64,11 +66,11 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.DotView;
 import com.lv.Audio.MediaRecordFunc;
-import com.lv.utils.Config;
-import com.lv.utils.TimeUtils;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
+import com.lv.utils.Config;
+import com.lv.utils.TimeUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
@@ -216,7 +218,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
-        IMClient.getInstance().addToConversation(toChatUsername,chatType);
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(10001);
         user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
         initView();
         setUpView();
@@ -712,12 +715,30 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             ToastUtil.getInstance(ChatActivity.this).showToast("系统不支持拍照");
             return;
         }
+        if (!isCameraCanUse()){
+            ToastUtil.getInstance(ChatActivity.this).showToast("权限被禁止，请开启权限后重试");
+            return;
+        }
         cameraFile = new File(Config.imagepath, TimeUtils.getTimestamp() + "_image.jpeg");
         cameraFile.getParentFile().mkdirs();
         startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
                 REQUEST_CODE_CAMERA);
     }
+    public  boolean isCameraCanUse() {
+        boolean canUse = true;
+        Camera mCamera = null;
+        try {
+            mCamera = Camera.open();
+        } catch (Exception e) {
+            canUse = false;
+        }
+        if (canUse) {
+            mCamera.release();
+            mCamera = null;
+        }
 
+        return canUse;
+    }
     /**
      * 选择文件
      */

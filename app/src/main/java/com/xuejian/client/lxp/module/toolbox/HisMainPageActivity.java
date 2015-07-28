@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
+import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -69,6 +70,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private String newMemo;
     private boolean notLogin;
     User user;
+    View handleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if (!notLogin){
             isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
         }
-        View handleView = findViewById(R.id.tv_handle_action);
+        handleView = findViewById(R.id.tv_handle_action);
         if (me != null) {
             if (userId != 10000 && isMyFriend) {
                 handleView.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +100,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     }
                 });
             } else {
+
+                handleView.setVisibility(View.INVISIBLE);
+
                 handleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -214,6 +219,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     private void startTalk() {
         if (me != null) {
+            IMClient.getInstance().addToConversation(String.valueOf(userId),"single");
             Intent intent = new Intent(this, ChatActivity.class);
             intent.putExtra("friend_id", String.valueOf(userId));
             intent.putExtra("chatType", "single");
@@ -262,33 +268,34 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
-        } else {
-            btn.setText("屏蔽");
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext, "event_delete_it");
-                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
-                    deleteDialog.setTitle("提示");
-                    deleteDialog.setMessage("确认屏蔽");
-                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // deleteContact(imUser);
-                            deleteDialog.dismiss();
-                        }
-                    });
-                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            deleteDialog.dismiss();
-                        }
-                    });
-                    deleteDialog.show();
-
-                    dialog.dismiss();
-                }
-            });
+        }
+        else {
+//            btn.setText("屏蔽");
+//            btn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    MobclickAgent.onEvent(mContext, "event_delete_it");
+//                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
+//                    deleteDialog.setTitle("提示");
+//                    deleteDialog.setMessage("确认屏蔽");
+//                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            // deleteContact(imUser);
+//                            deleteDialog.dismiss();
+//                        }
+//                    });
+//                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            deleteDialog.dismiss();
+//                        }
+//                    });
+//                    deleteDialog.show();
+//
+//                    dialog.dismiss();
+//                }
+//            });
         }
         contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,8 +360,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
         FrameLayout fl_avatar= (FrameLayout) findViewById(R.id.fl_gender_bg);
         ImageLoader.getInstance().displayImage(bean.getAvatar(), avatarImage, new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                .showImageOnFail(R.drawable.messages_bg_useravatar)
+                .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
+                .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
@@ -447,6 +454,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
             }
         });
+        tvNotes.setVisibility(View.INVISIBLE);
     }
 
 

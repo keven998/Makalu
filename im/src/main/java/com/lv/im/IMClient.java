@@ -151,14 +151,14 @@ public class IMClient {
                          * 风险
                          *
                          */
-                        if (Config.isDebug) {
-                            Log.i(Config.TAG, "ACK  result");
-                        }
-                        for (Message msg : list) {
-                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
-                        }
-                        LazyQueue.getInstance().TempDequeue();
-                        isRunning = false;
+//                        if (Config.isDebug) {
+//                            Log.i(Config.TAG, "ACK  result");
+//                        }
+//                        for (Message msg : list) {
+//                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
+//                        }
+//                        LazyQueue.getInstance().TempDequeue();
+//                        isRunning = false;
                     }
                 });
             }

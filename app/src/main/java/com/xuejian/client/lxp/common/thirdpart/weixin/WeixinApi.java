@@ -25,7 +25,10 @@ public class WeixinApi {
         return mListener;
     }
 
-
+    public boolean isWXinstalled(Activity activity){
+         IWXAPI wxAPi = WXAPIFactory.createWXAPI(activity, SnsAccountsUtils.WeiXinConstants.APP_ID);
+        return wxAPi.isWXAppInstalled();
+    }
     public void auth(Activity activity, WeixinAuthListener listener) {
         mListener = listener;
         IWXAPI wxAPi = WXAPIFactory.createWXAPI(activity, SnsAccountsUtils.WeiXinConstants.APP_ID);
@@ -34,6 +37,7 @@ public class WeixinApi {
         req.scope = "snsapi_userinfo";
         req.state = "wechat_sdk_demo_test";
         wxAPi.sendReq(req);
+
     }
 
     public interface WeixinAuthListener {
@@ -43,4 +47,5 @@ public class WeixinApi {
 
         void onCancel();
     }
+
 }

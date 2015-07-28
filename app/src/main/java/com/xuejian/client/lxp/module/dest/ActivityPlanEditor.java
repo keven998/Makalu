@@ -3,7 +3,6 @@ package com.xuejian.client.lxp.module.dest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,6 +32,7 @@ import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.StrategyManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
@@ -261,8 +261,23 @@ public class ActivityPlanEditor extends FragmentActivity {
             holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    routeDayMap.get(section).remove(position);
-                    notifyDataSetChanged();
+                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(ActivityPlanEditor.this);
+                    deleteDialog.setTitle("提示");
+                    deleteDialog.setMessage("删除景点");
+                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            routeDayMap.get(section).remove(position);
+                            notifyDataSetChanged();
+                        }
+                    });
+                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.show();
                 }
             });
             return convertView;
