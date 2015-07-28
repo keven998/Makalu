@@ -141,6 +141,10 @@ public class IMUtils {
                                         }
                                     });
                                 }
+                                @Override
+                                public void onSuccess(String result){
+
+                                }
                             }, chatType);
                         }
                     }
@@ -154,6 +158,10 @@ public class IMUtils {
 
                             }
                         });
+                    }
+                    @Override
+                    public void onSuccess(String result){
+
                     }
                 });
 //
