@@ -1526,6 +1526,9 @@ public class MessageAdapter extends BaseAdapter {
                 message.setStatus(2);
                 updateSendedView(message, holder);
             }
+            @Override
+            public void onSuccess(String result) {
+            }
         }, chatType);
     }
 

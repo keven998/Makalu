@@ -36,7 +36,6 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.indicator.slidebar.ColorBar;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.aizou.core.widget.popupmenu.PopupMenuCompat;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -183,7 +182,6 @@ public class IMMainActivity extends ChatBaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(mContext, "event_create_new_talk");
                 startActivityForResult(new Intent(IMMainActivity.this, PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
                 dialog.dismiss();
             }
@@ -193,7 +191,6 @@ public class IMMainActivity extends ChatBaseActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(mContext, "event_add_new_friend");
                 startActivity(new Intent(IMMainActivity.this, AddContactActivity.class));
                 dialog.dismiss();
             }

@@ -8,7 +8,6 @@ import android.widget.CheckedTextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.UpdateBean;
@@ -78,12 +77,10 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_version_update:
-                MobclickAgent.onEvent(mContext, "event_check_version_update");
                 update();
                 break;
 
             case R.id.ll_clear_cache:
-                MobclickAgent.onEvent(mContext, "event_clear_cache");
                 clearCache();
                 break;
             default:

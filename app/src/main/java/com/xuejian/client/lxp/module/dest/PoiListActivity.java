@@ -14,7 +14,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -425,12 +424,10 @@ public class PoiListActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-                    MobclickAgent.onEvent(mContext, "event_delicacy_strategy");
                     intent.putExtra("url", result.detailUrl);
 //                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
                     intent.putExtra("title", "美食攻略");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-                    MobclickAgent.onEvent(mContext, "event_shopping_strategy");
                     intent.putExtra("url", result.detailUrl);
 //                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
                     intent.putExtra("title", "购物攻略");

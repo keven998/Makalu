@@ -17,7 +17,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -60,7 +59,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
     @Override
     public void onDestAdded(final LocBean locBean, boolean isEdit, String type) {
-        MobclickAgent.onEvent(mContext, "event_select_city");
         if (allAddCityList.contains(locBean)) {
             ToastUtil.getInstance(mContext).showToast("已添加");
             return;
@@ -143,7 +141,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(mContext, "event_select_done_go_next");
                 if (allAddCityList.size()==0){
                     ToastUtil.getInstance(SelectDestActivity.this).showToast("请选择目的地");
                     return;
@@ -207,7 +204,6 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {
                 if (currentItem == 1) {
-                    MobclickAgent.onEvent(mContext, "event_go_aboard");
                 }
             }
         });

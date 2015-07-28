@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -29,7 +28,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -40,7 +38,6 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
@@ -224,7 +221,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                             findViewById(R.id.tv_all_note).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    MobclickAgent.onEvent(mContext, "event_more_city_travel_notes");
                                     Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
                                     intent.putExtra("id", locId);
                                     startActivity(intent);
@@ -293,7 +289,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         findViewById(R.id.ly1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_city_photoes");
                 Intent intent = new Intent(mContext, CityPictureActivity.class);
                 intent.putExtra("id", locDetailBean.id);
                 intent.putExtra("title", locDetailBean.zhName);
@@ -433,7 +428,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     public void intentToTravel(View view) {
         if (locDetailBean != null) {
-            MobclickAgent.onEvent(mContext, "event_city_information");
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
             intent.putExtra("enable_bottom_bar", true);
@@ -445,7 +439,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     public void intentToSpots(View view) {
-        MobclickAgent.onEvent(mContext, "event_city_spots");
         Intent intent = new Intent(mContext, SpotListActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
         locList.add(locDetailBean);
@@ -455,7 +448,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     public void intentToFood(View view) {
-        MobclickAgent.onEvent(mContext, "event_city_delicacy");
         Intent intent = new Intent(mContext, PoiListActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
         locList.add(locDetailBean);
@@ -467,7 +459,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     public void intentToShopping(View view) {
-        MobclickAgent.onEvent(mContext, "event_city_shopping");
         Intent intent = new Intent(mContext, PoiListActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
         locList.add(locDetailBean);
@@ -511,7 +502,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         contentView.findViewById(R.id.btn_go_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {*/
-        MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_city");
         Intent intent = new Intent(this, SelectDestActivity.class);
         ArrayList<LocBean> locList = new ArrayList<LocBean>();
         locList.add(locDetailBean);

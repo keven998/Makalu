@@ -560,7 +560,15 @@ public class IMClient {
     public static void login(String UserId, HttpCallback callback) {
         HttpUtils.login(UserId, callback);
     }
-
+    public void getConversationAttrs(String userId, List<String> chatIds, final HttpCallback callback){
+        HttpUtils.getConversationAttrs(userId, chatIds, callback);
+    }
+    public List<String> getConversationIds(){
+        return db.getConversationIds();
+    }
+    public void getConversationAttr(String userId,String friendId,HttpCallback callback){
+        HttpUtils.getConversationAttr(userId,friendId,callback);
+    }
     public void logout() {
         isLogin = false;
         db.disconnectDB();

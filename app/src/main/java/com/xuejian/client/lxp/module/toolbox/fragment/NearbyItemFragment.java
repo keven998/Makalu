@@ -13,7 +13,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -75,7 +74,6 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
             @Override
             public void onPoiNavi(PoiDetailBean poi) {
                 if (poi.location != null && poi.location.coordinates != null) {
-                    MobclickAgent.onEvent(getActivity(), "event_go_navigation");
                     Uri mUri = Uri.parse("geo:" + poi.location.coordinates[1] + "," + poi.location.coordinates[0] + "?q=" + poi.zhName);
                     Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
                     if (CommonUtils.checkIntent(getActivity(), mIntent)) {

@@ -27,7 +27,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -134,7 +133,6 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(getActivity(), "event_add_shopping_schedule");
                 if (mOnEditModeChangeListener != null) {
                     if (!isInEditMode) {
                         isInEditMode = true;

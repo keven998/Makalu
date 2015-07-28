@@ -146,6 +146,10 @@ public class GroupDetailFragment extends PeachBaseFragment {
                             }
                         });
                     }
+
+                    @Override
+                    public void onSuccess(String result) {
+                    }
                 });
 
             }

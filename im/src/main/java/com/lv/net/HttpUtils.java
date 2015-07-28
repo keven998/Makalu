@@ -5,11 +5,11 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.lv.Listener.FetchListener;
 import com.lv.Listener.HttpCallback;
-import com.lv.utils.Config;
 import com.lv.bean.Message;
 import com.lv.bean.SendMessageBean;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
+import com.lv.utils.Config;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -62,6 +62,16 @@ public class HttpUtils {
                 .build();
         return client.newCall(request).execute();
 
+    }
+
+    public static Response HttpRequest_Get(String url) throws Exception {
+        Request request = new Request.Builder()
+                .addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+                .addHeader("Accept", "application/vnd.hedylogos.v1+json")
+                .url(url)
+                .get()
+                .build();
+        return client.newCall(request).execute();
     }
 
     public static Response HttpRequest_Patch(String url, String patchBody) throws Exception {
@@ -304,6 +314,44 @@ public class HttpUtils {
                     Log.i(Config.TAG, "TokenGet Error :" + response.code());
                     listener.OnFailed();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void getConversationAttrs(String userId, List<String> chatIds, final HttpCallback callback) {
+        exec.execute(() -> {
+            String cids = "";
+            for (int i = 0; i < chatIds.size(); i++) {
+                if (i != 0) cids += ",";
+                cids += chatIds.get(i);
+            }
+            String url = Config.HOST + String.format(Config.CONS_URL, userId) + cids;
+            System.out.println(url);
+            try {
+                Response response = HttpRequest_Get(url);
+                if (response.isSuccessful()) {
+                    String result = response.body().string();
+                    callback.onSuccess();
+                    callback.onSuccess(result);
+                } else callback.onFailed(response.code());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    public static void getConversationAttr(String userId,String friendId, final HttpCallback callback) {
+        exec.execute(() -> {
+            String url = Config.HOST + String.format(Config.CON_URL, userId) + friendId;
+            System.out.println(url);
+            try {
+                Response response = HttpRequest_Get(url);
+                if (response.isSuccessful()) {
+                    String result = response.body().string();
+                    callback.onSuccess();
+                    callback.onSuccess(result);
+                } else callback.onFailed(response.code());
             } catch (Exception e) {
                 e.printStackTrace();
             }

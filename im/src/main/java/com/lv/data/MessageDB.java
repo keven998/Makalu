@@ -563,7 +563,18 @@ public class MessageDB {
         cursor.close();
         closeDB();
     }
-
+    public synchronized List<String> getConversationIds(){
+        mdb = getDB();
+        List<String> list = new ArrayList<String>();
+        Cursor c = mdb.rawQuery("SELECT Friend_Id FROM " + con_table_name, null);
+        while (c.moveToNext()) {
+            int friend_id = c.getInt(0);
+            list.add(String.valueOf(friend_id));
+        }
+        c.close();
+        closeDB();
+        return list;
+    }
     public List<ConversationBean> getConversationList() {
         mdb = getDB();
         List<ConversationBean> list = new ArrayList<ConversationBean>();

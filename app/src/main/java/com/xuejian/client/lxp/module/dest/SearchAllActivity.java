@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -244,7 +243,6 @@ public class SearchAllActivity extends PeachBaseActivity {
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
-                MobclickAgent.onEvent(mContext, "event_click_more_search_result");
                 Intent intent = new Intent(mContext, SearchTypeActivity.class);
                 intent.putExtra("type", type);
                 intent.putExtra("keyWord", keyword);
@@ -255,7 +253,6 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             @Override
             public void onItemOnClick(String type, String id, Object object) {
-                MobclickAgent.onEvent(mContext, "event_click_search_result_item");
                 IntentUtils.intentToDetail(SearchAllActivity.this, type, id);
             }
 

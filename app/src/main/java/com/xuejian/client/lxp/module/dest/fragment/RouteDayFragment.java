@@ -21,7 +21,6 @@ import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -326,7 +325,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                MobclickAgent.onEvent(getActivity(), "event_delete_select_item");
                                 final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                                 deleteDialog.setTitle("提示");
                                 deleteDialog.setMessage("确定删除");
@@ -357,7 +355,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                MobclickAgent.onEvent(getActivity(), "event_delete_select_item");
                                 final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                                 deleteDialog.setTitle("提示");
                                 deleteDialog.setMessage("确定删除");
@@ -573,7 +570,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
 
         @Override
         public void drop(int from, int to) {
-            MobclickAgent.onEvent(getActivity(), "event_reorder_items");
             int fromSection = getSection(from);
             int fromPostion = getPositionInSection(from);
             int toSection = getSection(to);
@@ -652,7 +648,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                MobclickAgent.onEvent(getActivity(), "event_add_plan_in_agenda");
                 Intent intent = new Intent(getActivity(), AddPoiActivity.class);
                 intent.putParcelableArrayListExtra("locList", strategy.localities);
                 intent.putExtra("dayIndex", section);
@@ -674,7 +669,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                MobclickAgent.onEvent(getActivity(), "event_delete_day_agenda");
                 final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                 deleteDialog.setTitle("提示");
                 deleteDialog.setMessage("删除这天安排");
@@ -751,7 +745,6 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     }
 
     public void addNewDayRouter(int position, boolean isBefore) {
-        MobclickAgent.onEvent(getActivity(), "event_add_day");
         final int sectionPos;
         if (isBefore) {
             routeDayMap.add(position, new ArrayList<PoiDetailBean>());

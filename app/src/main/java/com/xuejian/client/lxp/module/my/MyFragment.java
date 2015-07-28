@@ -23,7 +23,6 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -230,7 +229,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.tv_feedback:
-                MobclickAgent.onEvent(getActivity(), "event_feedback");
                 Intent feedback = new Intent(getActivity(), FeedbackActivity.class);
                 startActivity(feedback);
                 break;

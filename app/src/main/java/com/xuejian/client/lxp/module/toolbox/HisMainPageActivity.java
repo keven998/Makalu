@@ -27,7 +27,6 @@ import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -78,16 +77,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         setContentView(R.layout.activity_hismainpage);
         userId = getIntent().getLongExtra("userId", 0);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
-        if (me!=null){
+        if (me != null) {
             imUser = UserDBManager.getInstance().getContactByUserId(userId);
-        }else notLogin=true;
+        } else notLogin = true;
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        if (!notLogin){
+        if (!notLogin) {
             isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
         }
         handleView = findViewById(R.id.tv_handle_action);
@@ -218,10 +217,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     private void startTalk() {
         if (me != null) {
-            IMClient.getInstance().addToConversation(String.valueOf(userId),"single");
+            IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
             Intent intent = new Intent(this, ChatActivity.class);
             intent.putExtra("friend_id", String.valueOf(userId));
             intent.putExtra("chatType", "single");
+            intent.putExtra("newCon",true);
             startActivity(intent);
         } else {
             Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
@@ -245,7 +245,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext, "event_delete_it");
                     final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
                     deleteDialog.setTitle("提示");
                     deleteDialog.setMessage("删除确认");
@@ -267,8 +266,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
-        }
-        else {
+        } else {
 //            btn.setText("屏蔽");
 //            btn.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -357,7 +355,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
         ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
-        FrameLayout fl_avatar= (FrameLayout) findViewById(R.id.fl_gender_bg);
+        FrameLayout fl_avatar = (FrameLayout) findViewById(R.id.fl_gender_bg);
         ImageLoader.getInstance().displayImage(bean.getAvatar(), avatarImage, new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
                 .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
@@ -436,7 +434,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tvTrack.getText().toString());
-                intent.putExtra("id",String.valueOf(userId));
+                intent.putExtra("id", String.valueOf(userId));
                 startActivity(intent);
             }
         });
@@ -477,7 +475,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 CommonJson<User> expertInfo = CommonJson.fromJson(result, User.class);
                 if (expertInfo.code == 0) {
                     updateView(expertInfo.result);
-                }else {
+                } else {
                     finish();
                 }
             }
@@ -510,6 +508,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+
             }
 
             @Override

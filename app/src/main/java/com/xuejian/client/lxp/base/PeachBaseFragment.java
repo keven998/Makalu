@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 
 import java.lang.reflect.Field;
@@ -59,12 +58,10 @@ public class PeachBaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getName());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getName());
     }
 }

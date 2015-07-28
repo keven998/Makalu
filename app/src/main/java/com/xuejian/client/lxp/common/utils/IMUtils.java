@@ -84,7 +84,7 @@ public class IMUtils {
         } else {
             ToastUtil.getInstance(context).showToast("请先登录");
             Intent intent = new Intent(context, LoginActivity.class);
-            intent.putExtra("isFromTalkShare",true);
+            intent.putExtra("isFromTalkShare", true);
             ((Activity) context).startActivityForResult(intent, IM_LOGIN_REQUEST_CODE);
         }
     }
@@ -136,6 +136,10 @@ public class IMUtils {
                                                 }
                                             });
                                         }
+                                        @Override
+                                        public void onSuccess(String result) {
+
+                                        }
                                     }, chatType);
                                 }
                             }
@@ -150,7 +154,13 @@ public class IMUtils {
                                     }
                                 });
                             }
+
+                            @Override
+                            public void onSuccess(String result) {
+
+                            }
                         });
+
 //                        IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
 //
 //                            @Override

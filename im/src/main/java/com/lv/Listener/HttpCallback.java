@@ -5,5 +5,6 @@ package com.lv.Listener;
  */
 public interface HttpCallback {
     public void onSuccess();
+    public void onSuccess(String result);
     public void onFailed(int code);
 }

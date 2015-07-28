@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 
 import com.lv.bean.MessageBean;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -36,14 +35,12 @@ public class BaseActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         isFroground = true;
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isFroground = false;
-        MobclickAgent.onPause(this);
     }
 
     @Override

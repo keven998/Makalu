@@ -21,7 +21,6 @@ import android.widget.ListView;
 
 import com.lv.bean.ConversationBean;
 import com.lv.im.IMClient;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
@@ -150,7 +149,6 @@ public class ChatAllHistoryFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
-            MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
             //  PeachConversation peachConversation = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
             //  EMConversation tobeDeleteCons = peachConversation.emConversation;
             // 删除此会话

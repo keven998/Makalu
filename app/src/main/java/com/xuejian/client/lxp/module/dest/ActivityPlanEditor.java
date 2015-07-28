@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.section.BaseSectionAdapter;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -369,7 +368,6 @@ public class ActivityPlanEditor extends FragmentActivity {
 
         @Override
         public void drop(int from, int to) {
-            MobclickAgent.onEvent(ActivityPlanEditor.this, "event_reorder_items");
             int fromSection = getSection(from);
             int fromPostion = getPositionInSection(from);
             int toSection = getSection(to);

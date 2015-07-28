@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -117,7 +116,6 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
      *
      */
     public void searchContact() {
-        MobclickAgent.onEvent(mContext, "event_search_friend");
         final String name = editText.getText().toString();
 //        String saveText = searchBtn.getText().toString();
 //        if (getString(R.string.button_search).equals(saveText)) {
@@ -203,13 +201,11 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_contact:
-                MobclickAgent.onEvent(mContext, "event_add_friend_from_contacts");
                 Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
                 startActivity(phoneIntent);
                 break;
 
             case R.id.tv_weixin_contacts:
-                MobclickAgent.onEvent(mContext, "event_notify_weichat_friends");
                 ShareUtils.shareAppToWx(this, String.format("我正在用旅行派，搜索: %s 加我", AccountManager.getInstance().getLoginAccount(this).getNickName()));
                 break;
         }

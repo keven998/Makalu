@@ -66,12 +66,12 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.DotView;
 import com.lv.Audio.MediaRecordFunc;
+import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 import com.lv.utils.Config;
 import com.lv.utils.TimeUtils;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -82,6 +82,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
+import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -90,6 +91,10 @@ import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -218,7 +223,32 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        boolean newCon = intent.getBooleanExtra("newCon", false);
+        if (newCon) {
+            IMClient.getInstance().getConversationAttr(AccountManager.getCurrentUserId(), toChatUsername, new HttpCallback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onSuccess(String result) {
+                    try {
+                        JSONObject res = new JSONObject(result);
+                        JSONArray array = res.getJSONArray("result");
+                        SettingConfig.getInstance().setLxpNoticeSetting(ChatActivity.this, String.valueOf(array.getJSONObject(0).getInt("targetId")), array.getJSONObject(0).getBoolean("muted"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailed(int code) {
+
+                }
+            });
+        }
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(10001);
         user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
         initView();
@@ -626,18 +656,16 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             String s = mEditTextContent.getText().toString();
             sendText(s, 0);
         } else if (id == R.id.btn_my_guide) {
-            MobclickAgent.onEvent(mContext, "event_share_plan_extra");
             Intent intent = new Intent(mContext, StrategyListActivity.class);
             intent.putExtra("user_name", user.getNickName());
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
-            intent.putExtra("conversation",conversation);
+            intent.putExtra("conversation", conversation);
             intent.putExtra("userId", AccountManager.getCurrentUserId());
             intent.putExtra("isShare", true);
             intent.setAction("action.chat");
             startActivity(intent);
         } else if (id == R.id.btn_dest) {
-            MobclickAgent.onEvent(mContext, "event_share_search_extra");
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
@@ -715,7 +743,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             ToastUtil.getInstance(ChatActivity.this).showToast("系统不支持拍照");
             return;
         }
-        if (!isCameraCanUse()){
+        if (!isCameraCanUse()) {
             ToastUtil.getInstance(ChatActivity.this).showToast("权限被禁止，请开启权限后重试");
             return;
         }
@@ -724,7 +752,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
                 REQUEST_CODE_CAMERA);
     }
-    public  boolean isCameraCanUse() {
+
+    public boolean isCameraCanUse() {
         boolean canUse = true;
         Camera mCamera = null;
         try {
@@ -739,6 +768,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         return canUse;
     }
+
     /**
      * 选择文件
      */
@@ -1072,9 +1102,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     @Override
     public void onCMDMessageArrive(MessageBean m, String groupId) {
-        if (("group".equals(chatType) &&  toChatUsername.equals(groupId))) {
-            GroupDetailFragment fragment= (GroupDetailFragment) getSupportFragmentManager().findFragmentByTag("GroupDrawer");
-            if (fragment!=null){
+        if (("group".equals(chatType) && toChatUsername.equals(groupId))) {
+            GroupDetailFragment fragment = (GroupDetailFragment) getSupportFragmentManager().findFragmentByTag("GroupDrawer");
+            if (fragment != null) {
                 fragment.setUpGroupMemeber("update");
             }
         }
@@ -1103,15 +1133,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
                         int code = MediaRecordFunc.getInstance().startRecordAndFile(handler);
-                        if (code==1010){
+                        if (code == 1010) {
                             ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
-                            isRecord=false;
+                            isRecord = false;
                             recordingContainer.setVisibility(View.INVISIBLE);
                             if (wakeLock.isHeld())
                                 wakeLock.release();
                             v.setPressed(false);
                             return false;
-                        }else isRecord = true;
+                        } else isRecord = true;
                     } catch (Exception e) {
                         e.printStackTrace();
                         isRecord = false;

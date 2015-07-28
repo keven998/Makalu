@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.log.LogUtil;
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -204,11 +203,8 @@ public class ShareAccountActivity extends PeachBaseActivity {
                             .isAuthenticated(mContext, shareAccount.platform)) {
 //						showLoadingDialog("正在获取授权");
                         if (shareAccount.platform == SHARE_MEDIA.QQ) {
-                            MobclickAgent.onEvent(mContext, "event_bind_qq_account");
                         } else if (shareAccount.platform == SHARE_MEDIA.SINA) {
-                            MobclickAgent.onEvent(mContext, "event_bind_weibo_account");
                         } else if (shareAccount.platform == SHARE_MEDIA.DOUBAN) {
-                            MobclickAgent.onEvent(mContext, "event_bind_douban_account");
                         }
                         mController.doOauthVerify(mContext, shareAccount.platform,
                                 new UMAuthListener() {

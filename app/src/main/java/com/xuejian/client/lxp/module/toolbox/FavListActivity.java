@@ -22,7 +22,6 @@ import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.FavoritesBean;
@@ -121,7 +120,6 @@ public class FavListActivity extends PeachBaseActivity {
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MobclickAgent.onEvent(mContext, "event_do_filter");
                 curType = favTypeValueArray[position];
 //                initData(curType, 0);
                 mFavLv.onPullUpRefreshComplete();
@@ -329,6 +327,9 @@ public class FavListActivity extends PeachBaseActivity {
                                             }
                                         });
                                     }
+                                    @Override
+                                    public void onSuccess(String result) {
+                                    }
                                 });
                             }
 
@@ -357,7 +358,6 @@ public class FavListActivity extends PeachBaseActivity {
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext, "event_delete_favorite");
                     deleteItem(item);
                 }
             });

@@ -10,6 +10,8 @@ public class Config {
     public static final String GET_GROUP = HOST+"/groups/";
     public static final String SEND_URL = HOST+"/chats";
     public static final String ACK_URL = HOST+"/users/";
+    public static final String CONS_URL="/users/%s/conversations?targetIds=";
+    public static final String CON_URL="/users/%s/conversations/";
     public static final String MSG_DBNAME = "IM_SDK.db";
     public static final String USER_DBNAME = "USER.db";
     public static final String DB_PATH = "/data/data/com.xuejian.client.lxp/";

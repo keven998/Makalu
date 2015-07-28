@@ -14,7 +14,6 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.module.dest.TravelNoteDetailActivity;
@@ -105,7 +104,6 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(activity, "event_city_travel_note_item");
                 Intent intent = new Intent(activity, TravelNoteDetailActivity.class);
                 intent.putExtra("travelNote", itemData);
                 intent.putExtra("id", itemData.id);

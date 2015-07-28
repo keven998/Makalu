@@ -24,7 +24,6 @@ import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.amap.api.maps2d.AMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -252,7 +251,6 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {
                 if (currentItem == 1) {
-                    MobclickAgent.onEvent(mContext, "event_go_aboard");
                 }
             }
         });

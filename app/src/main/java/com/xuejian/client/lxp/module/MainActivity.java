@@ -102,17 +102,43 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         registerReceiver(connectionReceiver, intentFilter);
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (AccountManager.getInstance().getLoginAccount(this)!=null) {
-          initClient();
+        if (AccountManager.getInstance().getLoginAccount(this) != null) {
+            initClient();
             //   DialogManager.getInstance().showLoadingDialog(this);
         }
     }
 
-    public void initClient(){
+    public void initClient() {
+        IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), IMClient.getInstance().getConversationIds(), new HttpCallback() {
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject res = new JSONObject(result);
+                    JSONArray array = res.getJSONArray("result");
+                    for (int i = 0; i < array.length(); i++) {
+                        SettingConfig.getInstance().setLxpNoticeSetting(MainActivity.this, String.valueOf(array.getJSONObject(i).getInt("targetId")), array.getJSONObject(i).getBoolean("muted"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int code) {
+            }
+        });
         IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
             @Override
             public void onSuccess() {
                 IMClient.getInstance().initAckAndFetch();
+            }
+
+            @Override
+            public void onSuccess(String result) {
             }
 
             @Override
@@ -156,13 +182,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         getInLocList();
         getOutCountryList();
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getBooleanExtra("conflict", false)) {
             showConflictDialog(MainActivity.this);
         }
-        if (intent.getBooleanExtra("reLogin", false)){
+        if (intent.getBooleanExtra("reLogin", false)) {
             initClient();
         }
     }
@@ -186,7 +213,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         userlist.put(myUser.getUserId(), myUser);
                     }
                     // 存入db
-                    User wenwen=new User();
+                    User wenwen = new User();
                     wenwen.setNickName("旅行问问");
                     wenwen.setUserId(10001l);
                     wenwen.setType(1);
@@ -259,7 +286,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 }
             }
         });
-        if (AccountManager.getInstance().getLoginAccount(MainActivity.this)!=null) {
+        if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             mTabHost.setCurrentTab(0);
         } else {
             mTabHost.setCurrentTab(1);
@@ -283,7 +310,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onResume() {
         super.onResume();
-        if (AccountManager.getInstance().getLoginAccount(MainActivity.this)!=null){
+        if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             HandleImMessage.getInstance().registerMessageListener(this);
             //  if (!isConflict){
             TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
@@ -292,7 +319,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 talkFragment.updateUnreadAddressLable();
             }
             updateUnreadMsgCount();
-        }else unreadMsg.setVisibility(View.GONE);
+        } else unreadMsg.setVisibility(View.GONE);
     }
 
     @Override
@@ -394,17 +421,16 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
-        if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this)&&Integer.parseInt(groupId)!=0&&!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)){
+        if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
             vibrator.vibrate(500);
-        }
-        else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this)&&Integer.parseInt(groupId)==0&&!SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
+        } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
             vibrator.vibrate(500);
         }
         //  notifyNewMessage(m);
     }
 
     @Override
-    public void onCMDMessageArrive(MessageBean m,String groupId) {
+    public void onCMDMessageArrive(MessageBean m, String groupId) {
         try {
             if (m.getType() == 100) {
                 String cmd = m.getMessage();
@@ -431,38 +457,38 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         break;
                 }
             } else if (m.getType() == 200) {
-                    List<Long> targetIds=new ArrayList<>();
-                    String cmd = m.getMessage();
-                    boolean beenKicked = false;
-                    JSONObject tips = new JSONObject(cmd);
-                    String GroupId = tips.getString("chatGroupId");
-                    int tipsType = tips.getInt("tipType");
-                    JSONObject operator = tips.getJSONObject("operator");
-                    JSONArray targets = tips.getJSONArray("targets");
-                    StringBuilder tag = new StringBuilder();
-                    for (int i = 0; i < targets.length(); i++) {
-                        if (i > 0) tag.append("、");
-                        if (targets.getJSONObject(i).getInt("userId")==Integer.parseInt(IMClient.getInstance().getCurrentUserId())){
-                            tag.append("你");
-                            beenKicked = true;
-                        }else {
-                            tag.append(targets.getJSONObject(i).getString("nickName"));
-                            targetIds.add(targets.getJSONObject(i).getLong("userId"));
-                        }
+                List<Long> targetIds = new ArrayList<>();
+                String cmd = m.getMessage();
+                boolean beenKicked = false;
+                JSONObject tips = new JSONObject(cmd);
+                String GroupId = tips.getString("chatGroupId");
+                int tipsType = tips.getInt("tipType");
+                JSONObject operator = tips.getJSONObject("operator");
+                JSONArray targets = tips.getJSONArray("targets");
+                StringBuilder tag = new StringBuilder();
+                for (int i = 0; i < targets.length(); i++) {
+                    if (i > 0) tag.append("、");
+                    if (targets.getJSONObject(i).getInt("userId") == Integer.parseInt(IMClient.getInstance().getCurrentUserId())) {
+                        tag.append("你");
+                        beenKicked = true;
+                    } else {
+                        tag.append(targets.getJSONObject(i).getString("nickName"));
+                        targetIds.add(targets.getJSONObject(i).getLong("userId"));
                     }
-                    if (tipsType == 2001) {
-                     //   addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
-                    } else if (tipsType == 2002) {
-                        if (beenKicked){
-                            ToastUtil.getInstance(getApplicationContext()).showToast("你已被"+operator.getString("nickName")+"移出讨论组");
-                            return;
-                        }
-                        if (TextUtils.isEmpty(tag.toString())){
-                            setUpGroupMemeber(GroupId);
-                        } else {
-                            setUpGroupMemeber(GroupId);
-                        }
+                }
+                if (tipsType == 2001) {
+                    //   addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
+                } else if (tipsType == 2002) {
+                    if (beenKicked) {
+                        ToastUtil.getInstance(getApplicationContext()).showToast("你已被" + operator.getString("nickName") + "移出讨论组");
+                        return;
                     }
+                    if (TextUtils.isEmpty(tag.toString())) {
+                        setUpGroupMemeber(GroupId);
+                    } else {
+                        setUpGroupMemeber(GroupId);
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -470,38 +496,38 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     public void setUpGroupMemeber(final String groupId) {
-            //fetch info
-            GroupApi.getGroupMemberInfo(groupId, new HttpCallBack() {
-                @Override
-                public void doSuccess(Object result, String method) {
-                    JSONObject object = null;
-                    JSONArray userList = null;
-                    List<User> list = new ArrayList<User>();
-                    try {
-                        object = new JSONObject(result.toString());
-                        userList = object.getJSONArray("result");
-                        for (int i = 0; i < userList.length(); i++) {
-                            String str = userList.get(i).toString();
-                            User user = JSON.parseObject(str, User.class);
-                            list.add(user);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        //fetch info
+        GroupApi.getGroupMemberInfo(groupId, new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                JSONObject object = null;
+                JSONArray userList = null;
+                List<User> list = new ArrayList<User>();
+                try {
+                    object = new JSONObject(result.toString());
+                    userList = object.getJSONArray("result");
+                    for (int i = 0; i < userList.length(); i++) {
+                        String str = userList.get(i).toString();
+                        User user = JSON.parseObject(str, User.class);
+                        list.add(user);
                     }
-
-                    UserDBManager.getInstance().updateGroupMemberInfo(list, groupId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
+                UserDBManager.getInstance().updateGroupMemberInfo(list, groupId);
+            }
 
-                }
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
 
-                @Override
-                public void doFailure(Exception error, String msg, String method, int code) {
+            }
 
-                }
-            });
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     /**
@@ -534,25 +560,26 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (talkFragment != null) {
                     talkFragment.netStateChange("");
                 }
+                IMClient.getInstance().initAckAndFetch();
             }
         }
     };
 
 
     public void updateUnreadMsgCount() {
-            int unreadMsgCountTotal = 0;
-            // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+
-            unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
-            if (unreadMsgCountTotal > 0) {
-                unreadMsg.setVisibility(View.VISIBLE);
-                if (unreadMsgCountTotal < 100) {
-                    unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
-                } else {
-                    unreadMsg.setText("...");
-                }
+        int unreadMsgCountTotal = 0;
+        // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+
+        unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
+        if (unreadMsgCountTotal > 0) {
+            unreadMsg.setVisibility(View.VISIBLE);
+            if (unreadMsgCountTotal < 100) {
+                unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
             } else {
-                unreadMsg.setVisibility(View.GONE);
+                unreadMsg.setText("...");
             }
+        } else {
+            unreadMsg.setVisibility(View.GONE);
+        }
     }
 
     @Override

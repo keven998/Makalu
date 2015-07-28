@@ -34,7 +34,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentBean;
@@ -321,7 +320,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
             findViewById(R.id.rl_ticket).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(mContext, "event_go_booking_room");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("enable_bottom_bar", true);
                     intent.putExtra("url", bean.lyPoiUrl);

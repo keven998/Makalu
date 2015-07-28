@@ -95,6 +95,9 @@ public class ChatMenuFragment extends Fragment {
                             }
                         });
                     }
+                    @Override
+                    public void onSuccess(String result) {
+                    }
                 });
 
             }

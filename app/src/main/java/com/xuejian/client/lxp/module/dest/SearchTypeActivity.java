@@ -14,7 +14,6 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -103,7 +102,6 @@ public class SearchTypeActivity extends PeachBaseActivity {
         cityFilterTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(mContext, "event_filter_city");
                 Intent intent = new Intent(mContext, SearchDestForPoiActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_SEARCH_LOC);
             }
@@ -271,7 +269,9 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
                                         }
                                     });
-
+                                }
+                                @Override
+                                public void onSuccess(String result) {
                                 }
                             });
                         }

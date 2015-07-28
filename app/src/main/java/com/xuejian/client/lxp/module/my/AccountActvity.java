@@ -42,7 +42,6 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -377,7 +376,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_nickname:
-                MobclickAgent.onEvent(mContext, "event_update_nick");
                 Intent nickNameIntent = new Intent(mContext, ModifyNicknameActivity.class);
                 startActivityForResult(nickNameIntent, NICKNAME);
                 break;
@@ -389,7 +387,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                break;
 
             case R.id.ll_gender:
-                MobclickAgent.onEvent(mContext, "event_update_gender");
                 Intent sexIntent = new Intent(mContext, ModifyStatusOrSexActivity.class);
                 sexIntent.putExtra("type", "sex");
                 startActivityForResult(sexIntent, SEX);
@@ -402,7 +399,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                break;
 
             case R.id.iv_avatar:
-                MobclickAgent.onEvent(mContext, "event_update_avatar");
                 showSelectPicDialog();
                 break;
 
@@ -430,7 +426,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                     setBirthDay(dateString);
                                 }
                             } catch (ParseException e) {
-                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
                             birthTimeFlag = true;
@@ -515,13 +510,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.ll_modify_pwd:
-                MobclickAgent.onEvent(mContext, "event_update_password");
                 Intent modifyPwdIntent = new Intent(mContext, ModifyPwdActivity.class);
                 startActivity(modifyPwdIntent);
                 break;
 
             case R.id.ll_bind_phone:
-                MobclickAgent.onEvent(mContext, "event_update_phone");
                 Intent bindPhoneIntent = new Intent(mContext, PhoneBindActivity.class);
                 startActivityForResult(bindPhoneIntent, BINDPHONE);
                 break;
@@ -535,7 +528,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.btn_logout:
-                MobclickAgent.onEvent(mContext, "event_logout");
                 warnLogout();
                 break;
         }

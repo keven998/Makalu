@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.widget.SideBar;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
@@ -122,7 +121,6 @@ public class ContactlistFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
-            MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
             int pos = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
             User user=adapter.getItem(pos);
             System.out.println(user.getNickName());

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.lv.bean.ConversationBean;
 import com.lv.im.IMClient;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -154,7 +153,6 @@ public class TalkFragment extends PeachBaseFragment {
         dialog.getTv1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(getActivity(), "event_create_new_talk");
                 startActivityForResult(new Intent(getActivity(), PickContactsWithCheckboxActivity.class).putExtra("request", NEW_CHAT_REQUEST_CODE), NEW_CHAT_REQUEST_CODE);
                 getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
                 dialog.dismiss();
@@ -163,7 +161,6 @@ public class TalkFragment extends PeachBaseFragment {
         dialog.getTv3().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(getActivity(), "event_add_new_friend");
                 startActivity(new Intent(getActivity(), AddContactActivity.class));
                 getActivity().overridePendingTransition(R.anim.push_bottom_in, 0);
                 dialog.dismiss();
@@ -193,7 +190,6 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
-            MobclickAgent.onEvent(getActivity(), "event_delete_talk_item");
             int pos = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
             ConversationBean Conversation = adapter.getItem(pos);
             IMClient.getInstance().deleteConversation(Conversation.getFriendId() + "");
@@ -314,7 +310,6 @@ public class TalkFragment extends PeachBaseFragment {
         super.onResume();
         //返回页面的动画样式
         //getActivity().overridePendingTransition(R.anim.push_bottom_out,R.anim.push_bottom_in);
-        MobclickAgent.onPageStart("page_talk_lists");
         if (!hidden) {
             refresh();
         }
@@ -333,7 +328,6 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_talk_lists");
     }
 
     @Override

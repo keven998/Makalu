@@ -14,7 +14,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -186,7 +185,6 @@ public class PoiAdapter extends BaseAdapter {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
-                            MobclickAgent.onEvent(mContext, "event_add_desination_as_schedule");
                             poiDetailBean.hasAdded = true;
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);
@@ -233,7 +231,6 @@ public class PoiAdapter extends BaseAdapter {
                                 mOnPoiActionListener.onPoiRemoved(poiDetailBean);
                             }
                         } else {
-                            MobclickAgent.onEvent(mContext, "event_add_desination_as_schedule");
                             poiDetailBean.hasAdded = true;
                             if (mOnPoiActionListener != null) {
                                 mOnPoiActionListener.onPoiAdded(poiDetailBean);

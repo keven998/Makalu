@@ -27,7 +27,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -173,7 +172,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(mContext, "event_create_new_trip_plan_mine");
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
                     }
@@ -520,7 +518,6 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void deleteItem(final StrategyBean itemData) {
-        MobclickAgent.onEvent(mContext, "event_delete_trip_plan");
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         dialog.setTitleIcon(R.drawable.ic_dialog_tip);

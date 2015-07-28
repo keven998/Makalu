@@ -20,7 +20,6 @@ import com.aizou.core.utils.LocalDisplay;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.RecDestBean;
@@ -62,7 +61,6 @@ public class RecDestFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(getActivity(), "event_go_search");
                 Intent intent = new Intent(getActivity(), SearchAllActivity.class);
                 startActivityWithNoAnim(intent);
                 getActivity().overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
@@ -149,7 +147,6 @@ public class RecDestFragment extends PeachBaseFragment {
             @Override
             public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
                 if (!proxy.isHeader) {
-                    MobclickAgent.onEvent(getActivity(), "event_click_destination_cell");
                     RecDestBean.RecDestItem itemData = (RecDestBean.RecDestItem) proxy.data;
                     if (itemData.linkType.equals("html")) {
                         Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);

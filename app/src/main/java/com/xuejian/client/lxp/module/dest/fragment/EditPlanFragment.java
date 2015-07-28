@@ -16,7 +16,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -232,7 +231,6 @@ public class EditPlanFragment extends Fragment {
             viewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(getActivity(), "event_delete_day_agenda");
                     final PeachMessageDialog deleteDialog = new PeachMessageDialog(getActivity());
                     deleteDialog.setTitle("提示");
                     deleteDialog.setMessage("删除这天安排");

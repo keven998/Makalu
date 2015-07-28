@@ -24,7 +24,6 @@ import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CopyStrategyBean;
@@ -613,7 +612,6 @@ public class StrategyActivity extends PeachBaseActivity {
                     drawerLayout.closeDrawer(GravityCompat.END);
                     new Handler() {
                         public void handleMessage(Message msg) {
-                            MobclickAgent.onEvent(mContext, "event_go_city_detail");
                             Intent intent = new Intent(mContext, CityDetailActivity.class);
                             intent.putExtra("id", destinations.get(position).id);
                             intent.putExtra("isFromStrategy", true);
