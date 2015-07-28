@@ -105,6 +105,8 @@ public class HandleImMessage {
         @Override
         public void handleMessage(android.os.Message message) {
             super.handleMessage(message);
+            Message m = (Message) message.obj;
+            IMClient.lastSusseccFetch = m.getTimestamp();
             switch (message.what) {
                 case Config.CMD_MSG:
                 case Config.TIP_MSG:

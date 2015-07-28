@@ -8,6 +8,7 @@ import com.lv.utils.Config;
 import com.lv.bean.Message;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -132,6 +133,18 @@ public class LazyQueue {
             Log.i(Config.TAG, "TempDequeue()");
         }
         IMClient.getInstance().setBLOCK(false);
+    }
+
+    public void fetchDequeue(List<Message>list ){
+        while (true){
+            if (!IMClient.getInstance().isBLOCK()){
+                for (Message message : list) {
+                    add2Temp(message.getConversation(),message);
+                }
+                TempDequeue();
+                break;
+            }
+        }
     }
 
     /**
