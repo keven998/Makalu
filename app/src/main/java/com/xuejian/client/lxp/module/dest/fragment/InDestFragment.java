@@ -3,10 +3,15 @@ package com.xuejian.client.lxp.module.dest.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -39,6 +44,7 @@ import com.xuejian.client.lxp.bean.InDestBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.imageloader.SyncImageLoader;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.HanziToPinyin;
@@ -76,6 +82,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     InCityAdapter inCityAdapter;
     private boolean isClickable;
     OnDestActionListener mOnDestActionListener;
+    private LruCache<String,Bitmap> mMemoryCache;
 
     public InDestFragment(boolean isClickable) {
         this.isClickable = isClickable;
@@ -86,6 +93,13 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         View rootView = inflater.inflate(R.layout.fragment_in_dest, container, false);
         ButterKnife.inject(this, rootView);
         box = new DynamicBox(getActivity(), mLvInCity);
+        int maxMemory = (int)(Runtime.getRuntime().maxMemory()/1024);
+        int cacheSize = maxMemory/8;
+        mMemoryCache = new LruCache<String,Bitmap>(cacheSize){
+            protected int sizeOf(String key,Bitmap bitmap){
+                return bitmap.getByteCount()/1024;
+            }
+        };
         inCityAdapter = new InCityAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
@@ -474,6 +488,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
                 final ImageView addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
 
                 des_box_fl.setLayoutParams(lytp);
+                contentView.setTag(position);
                 cityNameTv.setText(bean.zhName);
                 if (bean.images.size()>0) {
                     ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
@@ -513,6 +528,8 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             }
         }
     }
+
+
 
 
     @Override

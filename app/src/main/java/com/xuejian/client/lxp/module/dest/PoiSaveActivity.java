@@ -86,6 +86,13 @@ public class PoiSaveActivity extends PeachBaseActivity {
         eListView.setGroupIndicator(null);
         adapter = new PoiSaveAdapter();
         eListView.setAdapter(adapter);
+
+        //循环打开默认有child的元素
+        for(int i=0;i<adapter.getGroupCount();i++){
+            if(adapter.getChildrenCount(i)>0){
+                eListView.expandGroup(i);
+            }
+        }
     }
 
 
@@ -204,7 +211,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
         }
 
         @Override
-        public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
+        public View getChildView(int i, final int i1, boolean b, View view, ViewGroup viewGroup) {
             if (view == null) {
                 view = View.inflate(mContext, R.layout.item_plan_day_detil, null);
             }
@@ -223,6 +230,16 @@ public class PoiSaveActivity extends PeachBaseActivity {
             childTitle.setText(value.get(i1).zhName);
             childLevel.setText(value.get(i1).getFormatRank());
             childTime.setText(value.get(i1).getPoiTypeName());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(PoiSaveActivity.this,PoiDetailActivity.class);
+                    intent.putExtra("id",value.get(i1).id);
+                    intent.putExtra("type",value.get(i1).type);
+                    startActivity(intent);
+                }
+            });
+
             return view;
         }
 

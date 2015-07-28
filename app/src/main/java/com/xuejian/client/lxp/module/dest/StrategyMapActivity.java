@@ -178,12 +178,13 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         layout.setGravity(Gravity.CENTER_VERTICAL);
         if (isExpertFootPrint) {
             day_select.setVisibility(View.GONE);
-            all_print_print = getIntent().getParcelableArrayListExtra("ExpertFootPrintBean");
-            loadExpertFootPrintMap(all_print_print);
+            String id = getIntent().getStringExtra("id");
+            initMyPrint(id);
+            //loadExpertFootPrintMap(all_print_print);
         } else if (isMyFootPrint) {
             day_select.setVisibility(View.GONE);
             all_print_print = getIntent().getParcelableArrayListExtra("myfootprint");
-            initMyPrint();
+            initMyPrint(AccountManager.getCurrentUserId());
             map_more.setVisibility(View.VISIBLE);
             map_more.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -207,9 +208,9 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         }
     }
 
-    private void initMyPrint(){
+    private void initMyPrint(String id){
         DialogManager.getInstance().showLoadingDialog(this);
-        UserApi.getUserFootPrint(AccountManager.getCurrentUserId(), new HttpCallBack() {
+        UserApi.getUserFootPrint(id, new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
                 CommonJson4List<LocBean> locs=CommonJson4List.fromJson(result.toString(),LocBean.class);
