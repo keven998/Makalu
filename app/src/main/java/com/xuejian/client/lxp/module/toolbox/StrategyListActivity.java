@@ -1,5 +1,8 @@
 package com.xuejian.client.lxp.module.toolbox;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +44,7 @@ import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
@@ -296,7 +300,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mMyStrategyLv.doPullRefreshing(true, 0);
             }
         }
-        IMUtils.onShareResult(mContext, temp, requestCode, resultCode, data, null);
+        //IMUtils.onShareResult(mContext, temp, requestCode, resultCode, data, null);
     }
 
     private void initData() {
@@ -446,7 +450,10 @@ public class StrategyListActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     temp = itemData;
-                    IMUtils.onClickImShare(StrategyListActivity.this);
+                    //IMUtils.onClickImShare(StrategyListActivity.this);
+                    IMUtils.showSendDialog(mContext, temp, chatType, toId, conversation, null);
+
+
                 }
             });
             mDelete.setOnClickListener(new View.OnClickListener() {
@@ -516,6 +523,9 @@ public class StrategyListActivity extends PeachBaseActivity {
             });
         }
     }
+
+
+
 
     private void deleteItem(final StrategyBean itemData) {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);

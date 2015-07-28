@@ -51,12 +51,15 @@ public class SearchAllActivity extends PeachBaseActivity {
     String chatType;
     Object temp;
     String currentType;
+    String conversation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_all);
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getStringExtra("chatType");
+        conversation = getIntent().getStringExtra("conversation");
         ButterKnife.inject(this);
 
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -248,6 +251,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                 intent.putExtra("keyWord", keyword);
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toId);
+                intent.putExtra("conversation",conversation);
                 startActivity(intent);
             }
 
@@ -261,7 +265,11 @@ public class SearchAllActivity extends PeachBaseActivity {
                 System.out.print(type);
                     currentType=type;
                     temp=object;
-                IMUtils.onClickImShare(mContext);
+                //IMUtils.onClickImShare(mContext);
+                if ("locality".equals(currentType)){
+                    IMUtils.showSendDialog(mContext, (LocBean)temp, chatType, toId, conversation, null);
+                }else
+                    IMUtils.showSendDialog(mContext, (PoiDetailBean)temp, chatType, toId, conversation, null);
 //                IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
 //                            @Override
 //                            public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
