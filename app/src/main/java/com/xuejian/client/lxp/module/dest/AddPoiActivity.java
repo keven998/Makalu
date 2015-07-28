@@ -117,13 +117,21 @@ public class AddPoiActivity extends PeachBaseActivity {
         mPoiAdapter = new PoiAdapter(mContext, true);
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override
-            public void onPoiAdded(PoiDetailBean poi) {
+            public void onPoiAdded(final PoiDetailBean poi) {
                 hasAddList.add(poi);
                 //mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
-                View view = View.inflate(AddPoiActivity.this, R.layout.poi_select_name, null);
+                View view = View.inflate(AddPoiActivity.this, R.layout.poi_bottom_cell_with_del, null);
+                FrameLayout del_fl = (FrameLayout) view.findViewById(R.id.poi_del_fl);
                 TextView location = (TextView) view.findViewById(R.id.names);
-                location.setTextColor(getResources().getColor(R.color.color_text_ii));
                 location.setText(poi.zhName);
+                del_fl.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onPoiRemoved(poi);
+                        poi.hasAdded=false;
+                        mPoiAdapter.notifyDataSetChanged();
+                    }
+                });
                 hsViewLL.addView(view);
                 if (hasAddList.size() > 0) {
                     bottomFrame.setVisibility(View.VISIBLE);
@@ -415,10 +423,25 @@ public class AddPoiActivity extends PeachBaseActivity {
             bottomFrame.setVisibility(View.VISIBLE);
         }
         for (int i = 0; i < hasAddList.size(); i++) {
-            View view = View.inflate(AddPoiActivity.this, R.layout.poi_select_name, null);
+            final int pos = i;
+            View view = View.inflate(AddPoiActivity.this, R.layout.poi_bottom_cell_with_del, null);
+            final FrameLayout del_fl = (FrameLayout)view.findViewById(R.id.poi_del_fl);
             TextView location = (TextView) view.findViewById(R.id.names);
-            location.setTextColor(getResources().getColor(R.color.color_text_ii));
             location.setText(hasAddList.get(i).zhName);
+            del_fl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    hsViewLL.removeView(del_fl);
+                    hasAddList.get(pos).hasAdded=false;
+                    hasAddList.remove(hasAddList.get(pos));
+                    if (hasAddList.size() == 0) {
+                        bottomFrame.setVisibility(View.GONE);
+                    }
+
+                    mPoiAdapter.notifyDataSetChanged();
+                    autoScrollPanel();
+                }
+            });
             hsViewLL.addView(view);
         }
         autoScrollPanel();

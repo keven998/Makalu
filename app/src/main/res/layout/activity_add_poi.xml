@@ -18,7 +18,8 @@
             android:layout_alignParentLeft="true"
             android:gravity="center"
             android:paddingLeft="10dp"
-            android:text="取消"
+            android:paddingRight="20dp"
+            android:text="完成"
             android:textColor="@color/base_color_white" />
 
         <TextView
@@ -115,7 +116,7 @@
             android:id="@+id/lv_poi_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="50dp"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
@@ -135,9 +136,9 @@
             <HorizontalScrollView
                 android:id="@+id/add_poi_scroll_panel"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="52dp"
                 android:layout_gravity="bottom"
-                android:background="@color/base_color_white"
+                android:background="@drawable/bottom_white_bar_with_shadow"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -147,15 +148,10 @@
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="6dp"
                     android:background="@color/base_color_white"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingRight="10dp" />
             </HorizontalScrollView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/base_border_color" />
 
         </FrameLayout>
 

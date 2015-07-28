@@ -102,7 +102,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             } else {
 
                 handleView.setVisibility(View.INVISIBLE);
-
                 handleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -437,7 +436,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tvTrack.getText().toString());
-                intent.putParcelableArrayListExtra("ExpertFootPrintBean", trackCitys);
+                intent.putExtra("id",bean.getUserId());
                 startActivity(intent);
             }
         });
