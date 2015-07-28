@@ -41,10 +41,10 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
 import com.lv.Listener.HttpCallback;
 import com.lv.Listener.UploadListener;
-import com.lv.utils.Config;
-import com.lv.utils.CryptUtils;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
+import com.lv.utils.Config;
+import com.lv.utils.CryptUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -79,6 +79,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
@@ -821,7 +822,7 @@ public class MessageAdapter extends BaseAdapter {
                 String romotePath = getStringAttr(message, "full");
                 String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
                 if (thumbpath != null) {
-                    showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message);
+                    showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message, holder);
                 }
 
 
@@ -850,9 +851,9 @@ public class MessageAdapter extends BaseAdapter {
         String localPath = getStringAttr(message, "localPath");
         String thumbPath = getThumbImagepath(message);
         if (localPath != null && new File(localPath).exists()) {
-            showImageView(thumbPath, holder.iv, localPath, null, message);
+            showImageView(thumbPath, holder.iv, localPath, null, message, holder);
         } else {
-            showImageView(thumbPath, holder.iv, localPath, IMAGE_DIR, message);
+            showImageView(thumbPath, holder.iv, localPath, IMAGE_DIR, message, holder);
         }
 
         switch (message.getStatus()) {
@@ -1105,7 +1106,16 @@ public class MessageAdapter extends BaseAdapter {
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
         isRead = (boolean) getVoiceFilepath(message, "isRead");
-        holder.tv.setText(((int) Math.floor(Double.valueOf(durtime))+1)+ "´´");
+        holder.tv.setText(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP)+ "´´");
+        if (filepath==null){
+            loadFailedVoice(message,holder);
+            return;
+        }
+        File file =new File(filepath);
+        if (!file.exists()){
+            loadFailedVoice(message,holder);
+            return;
+        }
         holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(friendId, message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
         holder.rl_voice_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -1239,6 +1249,63 @@ public class MessageAdapter extends BaseAdapter {
             default:
                 break;
         }
+    }
+
+    private void loadFailedVoice(final MessageBean message,final ViewHolder holder) {
+        if (holder.pb!=null){
+            holder.pb.setVisibility(View.INVISIBLE);
+        }
+        final String thumburl = getStringAttr(message, "url");
+        final String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".amr";
+
+        holder.rl_voice_content.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.pb.setVisibility(View.VISIBLE);
+                new DownloadVoice(thumburl,filename).download(new DownloadVoice.DownloadListener() {
+                    @Override
+                    public void onSuccess() {
+                        try {
+                            JSONObject object = new JSONObject(message.getMessage());
+                            object.put("path", filename);
+                            message.setMessage(object.toString());
+                            IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 0, message.getMessage(), Config.AUDIO_MSG);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.pb.setVisibility(View.GONE);
+                                  //  holder.tv.setVisibility(View.GONE);
+                                    message.setStatus(0);
+                                    notifyDataSetChanged();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onProgress(int progress) {
+
+                    }
+
+                    @Override
+                    public void onFail() {
+                        IMClient.getInstance().updateMessage(friendId, message.getLocalId(), null, null, 0, 2, null, Config.AUDIO_MSG);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.GONE);
+                              //  holder.tv.setVisibility(View.GONE);
+                                message.setStatus(2);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
     }
 
     private Object getVoiceFilepath(MessageBean message, String name) {
@@ -1701,9 +1768,19 @@ public class MessageAdapter extends BaseAdapter {
      * @return the image exists or not
      */
     private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, final String remoteDir,
-                                  final MessageBean message) {
+                                  final MessageBean message, ViewHolder holder) {
         String remote = remoteDir;
         Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
+        if (thumbernailPath == null) {
+            loadFailedImage(message, holder);
+            return true;
+        }
+        File file = new File(thumbernailPath);
+        if (!file.exists()) {
+            loadFailedImage(message, holder);
+            return true;
+        }
+
         if (bitmap != null) {
             iv.setImageBitmap(bitmap);
             iv.setClickable(true);
