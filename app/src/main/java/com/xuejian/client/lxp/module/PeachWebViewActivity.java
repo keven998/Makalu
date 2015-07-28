@@ -1,10 +1,12 @@
 package com.xuejian.client.lxp.module;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,6 +49,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             public void onClick(View view) {
                 if (mWebView.canGoBack()) {
                     mWebView.goBack();
+                  //  resetGoback();
                 } else {
                     finish();
                 }
@@ -70,7 +73,26 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         go_forward.setOnClickListener(this);
         refresh.setOnClickListener(this);
         share.setOnClickListener(this);
+        mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.loadUrl(mCurrentUrl);
+       // resetForward();
+       // resetGoback();
+    }
+
+    public void resetForward(){
+        if(!mWebView.canGoForward()){
+            go_forward.setEnabled(false);
+        }else{
+            go_forward.setEnabled(true);
+        }
+    }
+
+    public void resetGoback(){
+        if(!mWebView.canGoBack()){
+            go_back.setEnabled(false);
+        }else{
+            go_back.setEnabled(true);
+        }
     }
 
 
@@ -109,5 +131,23 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             return true;
         } else
             return super.onKeyDown(keyCode, event);
+    }
+
+
+    class MyWebViewClient extends WebViewClient {
+        @Override
+        public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+            go_back.setEnabled(mWebView.canGoBack());
+            go_forward.setEnabled(mWebView.canGoForward());
+        }
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            //设置程序的标题为网页的标题
+        }
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            go_back.setEnabled(mWebView.canGoBack());
+            go_forward.setEnabled(mWebView.canGoForward());
+        }
     }
 }

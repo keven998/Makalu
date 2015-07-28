@@ -93,12 +93,14 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     }
                 });
             } else {
-                handleView.setOnClickListener(new View.OnClickListener() {
+                handleView.setVisibility(View.GONE);
+                /*handleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showActionDialog(2);
+
                     }
-                });
+                });*/
             }
         } else {
             handleView.setVisibility(View.GONE);
@@ -258,7 +260,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 }
             });
         } else {
-            btn.setText("屏蔽");
+            btn.setVisibility(View.GONE);
+            /*btn.setText("屏蔽");
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -283,7 +286,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
                     dialog.dismiss();
                 }
-            });
+            });*/
         }
         contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -425,7 +428,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tvTrack.getText().toString());
-                intent.putParcelableArrayListExtra("ExpertFootPrintBean", trackCitys);
+                intent.putExtra("id",bean.getUserId());
                 startActivity(intent);
             }
         });
