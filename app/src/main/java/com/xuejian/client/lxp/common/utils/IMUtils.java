@@ -35,6 +35,7 @@ import com.xuejian.client.lxp.common.share.ShareDialogBean;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.my.LoginActivity;
+import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.IMShareActivity;
 
 import org.json.JSONException;
@@ -87,6 +88,87 @@ public class IMUtils {
             intent.putExtra("isFromTalkShare",true);
             ((Activity) context).startActivityForResult(intent, IM_LOGIN_REQUEST_CODE);
         }
+    }
+
+    public static void showSendDialog(final Context context, ICreateShareDialog iCreateShareDialog, final String chatType,final String toId,final String conversation, final IMUtils.OnDialogShareCallBack callback){
+        IMUtils.showImShareDialog(context, iCreateShareDialog, new IMUtils.OnDialogShareCallBack() {
+            @Override
+            public void onDialogShareOk(final Dialog dialog, final int type, final String content, final String leave_msg) {
+                DialogManager.getInstance().showLoadingDialog(context);
+                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
+                    @Override
+                    public void onSuccess() {
+                        if (TextUtils.isEmpty(leave_msg)) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            ((Activity) context).runOnUiThread(new Runnable() {
+                                public void run() {
+                                    ToastUtil.getInstance(context).showToast("已发送~");
+                                    Intent intent=new Intent(context, ChatActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    intent.putExtra("conversation",conversation);
+                                    intent.putExtra("chatType",chatType);
+                                    intent.putExtra("friend_id",toId);
+                                    context.startActivity(intent);
+
+                                }
+                            });
+                        } else {
+                            MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), leave_msg, toId, chatType);
+                            IMClient.getInstance().sendTextMessage(messageBean, toId, null, new HttpCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(context).showToast("已发送~");
+                                            Intent intent=new Intent(context, ChatActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("conversation",conversation);
+                                            intent.putExtra("chatType",chatType);
+                                            intent.putExtra("friend_id",toId);
+                                            context.startActivity(intent);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailed(int code) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(context).showToast("好像发送失败了");
+
+                                        }
+                                    });
+                                }
+                            }, chatType);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            public void run() {
+                                ToastUtil.getInstance(context).showToast("好像发送失败了");
+
+                            }
+                        });
+                    }
+                });
+//
+                if (callback != null) {
+                    callback.onDialogShareOk(dialog, type, content, leave_msg);
+                }
+            }
+
+            @Override
+            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                if (callback != null) {
+                    callback.onDialogShareCancle(dialog, type, content);
+                }
+            }
+        });
     }
 
     public static void onShareResult(final Context context, ICreateShareDialog iCreateShareDialog, int requestCode, int resultCode, Intent data, final OnDialogShareCallBack callback) {

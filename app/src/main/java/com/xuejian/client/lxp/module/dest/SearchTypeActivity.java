@@ -29,6 +29,7 @@ import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
+import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.util.ArrayList;
 
@@ -55,6 +56,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
     SearchTypeBean typeBean;
     String toId;
     String chatType;
+    String conversation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
         type = getIntent().getStringExtra("type");
         keyWord = getIntent().getStringExtra("keyWord");
         toId = getIntent().getStringExtra("toId");
+        conversation = getIntent().getStringExtra("conversation");
         chatType = getIntent().getStringExtra("chatType");
         if (type.equals("loc")) {
             cityFilterTv.setVisibility(View.GONE);
@@ -258,6 +261,12 @@ public class SearchTypeActivity extends PeachBaseActivity {
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             ToastUtil.getInstance(mContext).showToast("已发送~");
+                                            Intent intent=new Intent(mContext, ChatActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("conversation",conversation);
+                                            intent.putExtra("chatType",chatType);
+                                            intent.putExtra("friend_id",toId);
+                                            startActivity(intent);
                                         }
                                     });
                                 }

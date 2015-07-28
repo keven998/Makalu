@@ -232,6 +232,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         initData();
     }
 
+
+
     public void getUserInfo(int userId) {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getUserInfo(String.valueOf(userId), new HttpCallBack<String>() {
@@ -641,6 +643,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
+            intent.putExtra("conversation",conversation);
             intent.putExtra("isShare", true);
             intent.setAction("action.chat");
             startActivityWithNoAnim(intent);
@@ -1399,6 +1402,5 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             startActivity(intent);
             finish();
         }
-
     }
 }
