@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -155,13 +156,15 @@ public class SearchAllActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("page_search_destination");
+        MobclickAgent.onPageStart("page_lxp_search");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_search_destination");
+        MobclickAgent.onPageEnd("page_lxp_search");
+        MobclickAgent.onPause(this);
     }
 
     private void searchAll(final String keyword) {
@@ -172,7 +175,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {
-          //          if (searchAllResult.result.s)
+                    //          if (searchAllResult.result.s)
                     bindView(keyword, searchAllResult.result);
                 }
             }
@@ -196,10 +199,11 @@ public class SearchAllActivity extends PeachBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==RESULT_OK){
-            if ("locality".equals(currentType)){
-                IMUtils.onShareResult(mContext, (LocBean)temp, requestCode, resultCode, data, null);
-            }else  IMUtils.onShareResult(mContext, (PoiDetailBean)temp, requestCode, resultCode, data, null);
+        if (resultCode == RESULT_OK) {
+            if ("locality".equals(currentType)) {
+                IMUtils.onShareResult(mContext, (LocBean) temp, requestCode, resultCode, data, null);
+            } else
+                IMUtils.onShareResult(mContext, (PoiDetailBean) temp, requestCode, resultCode, data, null);
 
         }
     }
@@ -236,8 +240,8 @@ public class SearchAllActivity extends PeachBaseActivity {
             searchTypeBean.resultList = result.shopping;
             typeBeans.add(searchTypeBean);
         }
-        if (typeBeans.size()==0){
-            ToastUtil.getInstance(SearchAllActivity.this).showToast(String.format("没有找到“%s”的相关结果",keyword));
+        if (typeBeans.size() == 0) {
+            ToastUtil.getInstance(SearchAllActivity.this).showToast(String.format("没有找到“%s”的相关结果", keyword));
             return;
         }
         boolean isSend;
@@ -246,12 +250,13 @@ public class SearchAllActivity extends PeachBaseActivity {
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
+                MobclickAgent.onEvent(SearchAllActivity.this,"button_item_all_search_result");
                 Intent intent = new Intent(mContext, SearchTypeActivity.class);
                 intent.putExtra("type", type);
                 intent.putExtra("keyWord", keyword);
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toId);
-                intent.putExtra("conversation",conversation);
+                intent.putExtra("conversation", conversation);
                 startActivity(intent);
             }
 
@@ -262,14 +267,15 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             @Override
             public void onSendClick(String type, String id, Object object) {
+                MobclickAgent.onEvent(SearchAllActivity.this,"button_item_lxp_send_search_result");
                 System.out.print(type);
-                    currentType=type;
-                    temp=object;
+                currentType = type;
+                temp = object;
                 //IMUtils.onClickImShare(mContext);
-                if ("locality".equals(currentType)){
-                    IMUtils.showSendDialog(mContext, (LocBean)temp, chatType, toId, conversation, null);
-                }else
-                    IMUtils.showSendDialog(mContext, (PoiDetailBean)temp, chatType, toId, conversation, null);
+                if ("locality".equals(currentType)) {
+                    IMUtils.showSendDialog(mContext, (LocBean) temp, chatType, toId, conversation, null);
+                } else
+                    IMUtils.showSendDialog(mContext, (PoiDetailBean) temp, chatType, toId, conversation, null);
 //                IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
 //                            @Override
 //                            public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {

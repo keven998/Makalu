@@ -24,6 +24,7 @@ import com.aizou.core.utils.GsonTools;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CopyStrategyBean;
@@ -94,14 +95,16 @@ public class StrategyActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("page_plan_detail");
+        MobclickAgent.onPageStart("page_lxp_plan_agenda");
+        MobclickAgent.onResume(this);
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_plan_detail");
+        MobclickAgent.onPageEnd("page_lxp_plan_agenda");
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -118,6 +121,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.tv_add_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_change_select_city");
                 Intent intent = new Intent(mContext, SelectDestActivity.class);
                 intent.putExtra("locList", destinations);
                 intent.putExtra("guide_id", strategy.id);
@@ -137,6 +141,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.iv_location).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(StrategyActivity.this,"navigation_item_lxp_plan_mapview");
                 Intent intent = new Intent(StrategyActivity.this, StrategyMapActivity.class);
                 ArrayList<StrategyBean> list = new ArrayList<StrategyBean>() {
                 };
@@ -161,6 +166,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.strategy_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_lxp_share");
                 drawerLayout.closeDrawer(GravityCompat.END);
                 final Handler handler = new Handler() {
                     public void handleMessage(Message msg) {
@@ -179,6 +185,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.tv_edit_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_edit_plan");
                 drawerLayout.closeDrawer(GravityCompat.END);
                 new Handler() {
                     public void handleMessage(Message msg) {
@@ -356,7 +363,7 @@ public class StrategyActivity extends PeachBaseActivity {
             iv_location.setVisibility(View.VISIBLE);
             mTvCopyGuide.setVisibility(View.GONE);
         } else {
-            isOwner=(user.getUserId()==result.userId);
+            isOwner = (user.getUserId() == result.userId);
             if (!isOwner) {
                 mIvMore.setVisibility(View.GONE);
                 iv_location.setVisibility(View.GONE);
@@ -364,8 +371,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //todo:复制路线
-
+                        MobclickAgent.onEvent(StrategyActivity.this,"navigation_item_copy_plan");
                         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                         dialog.setTitle("提示");
                         dialog.setMessage(String.format("复制\"%s\"到我的旅行计划", result.title));
@@ -427,6 +433,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 dtv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_change_name");
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                         editDialog.setTitle("修改计划名");
                         editDialog.setMessage(result.title);
@@ -474,6 +481,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
                             drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
                         } else {
+                            MobclickAgent.onEvent(StrategyActivity.this,"navigiation_item_lxp_plan_setting");
                             drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
                         }
                     }
@@ -528,16 +536,18 @@ public class StrategyActivity extends PeachBaseActivity {
         @Override
         public Fragment getFragmentForPage(int position) {
             if (position == 0) {
+                MobclickAgent.onEvent(StrategyActivity.this,"tab_item_trip_detail");
                 if (routeDayFragment == null) {
                     routeDayFragment = new PlanScheduleFragment();
                 }
 
                 return routeDayFragment;
             } else {
+                MobclickAgent.onEvent(StrategyActivity.this,"tab_item_trip_favorite");
                 if (collectionFragment == null) {
                     collectionFragment = new CollectionFragment();
-                    Bundle bundle=new Bundle();
-                    bundle.putBoolean("isOwner",isOwner);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isOwner", isOwner);
                     collectionFragment.setArguments(bundle);
                 }
 

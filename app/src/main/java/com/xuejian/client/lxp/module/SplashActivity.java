@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.CoverStoryBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -58,6 +59,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         }
         IMClient.initIM(getApplicationContext());
         initView();
+        MobclickAgent.updateOnlineConfig(this);
         initData();
         instance=this;
     }

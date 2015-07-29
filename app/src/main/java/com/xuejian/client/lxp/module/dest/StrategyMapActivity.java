@@ -31,17 +31,16 @@ import com.aizou.core.utils.LocalDisplay;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
-import com.xuejian.client.lxp.bean.TracksBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.XDialog;
-import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
 
@@ -498,13 +497,15 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     @Override
     protected void onResume() {
         super.onResume();
-        // mapView.onResume();
+        MobclickAgent.onPageStart("page_profile_tracks");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // mapView.onPause();
+        MobclickAgent.onPageStart("page_profile_tracks");
+        MobclickAgent.onPause(this);
     }
 
     @Override

@@ -43,12 +43,13 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.lv.utils.Config;
 import com.lv.im.IMClient;
+import com.lv.utils.Config;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.api.GroupApi;
@@ -166,13 +167,15 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("page_choose_talk_to");
+         MobclickAgent.onPageStart("page_create_new_talk");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_choose_talk_to");
+         MobclickAgent.onPageEnd("page_create_new_talk");
+        MobclickAgent.onPause(this);
     }
 
     private void initTitleBar() {

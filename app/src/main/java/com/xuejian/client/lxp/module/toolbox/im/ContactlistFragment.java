@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.widget.SideBar;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
@@ -96,6 +97,7 @@ public class ContactlistFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String username = adapter.getItem(position).getNickName();
                 if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
+                    MobclickAgent.onEvent(getActivity(),"cell_item_new_friends_request");
                     // 进入申请与通知页面
                     startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
                     getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
@@ -111,6 +113,7 @@ public class ContactlistFragment extends Fragment {
         });
         registerForContextMenu(listView);
     }
+
     @Override
     public void onCreateContextMenu(android.view.ContextMenu menu, View v, android.view.ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -118,16 +121,17 @@ public class ContactlistFragment extends Fragment {
             getActivity().getMenuInflater().inflate(R.menu.edit_memo, menu);
         }
     }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_message) {
             int pos = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
-            User user=adapter.getItem(pos);
+            User user = adapter.getItem(pos);
             System.out.println(user.getNickName());
-            Intent intent=new Intent(getActivity(), ModifyNicknameActivity.class);
-            intent.putExtra("isEditMemo",true);
-            intent.putExtra("nickname",user.getNickName());
-            intent.putExtra("userId",String.valueOf(user.getUserId()));
+            Intent intent = new Intent(getActivity(), ModifyNicknameActivity.class);
+            intent.putExtra("isEditMemo", true);
+            intent.putExtra("nickname", user.getNickName());
+            intent.putExtra("userId", String.valueOf(user.getUserId()));
             startActivity(intent);
             return true;
         }
@@ -146,7 +150,7 @@ public class ContactlistFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("page_friends_lists");
+        MobclickAgent.onPageStart("page_friends_lists");
         if (!hidden) {
             refresh();
         }
@@ -157,7 +161,7 @@ public class ContactlistFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_friends_lists");
+        MobclickAgent.onPageEnd("page_friends_lists");
     }
 
     @Override

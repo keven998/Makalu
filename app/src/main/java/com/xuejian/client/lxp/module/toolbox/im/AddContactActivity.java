@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -82,13 +83,15 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("page_add_friend");
+        MobclickAgent.onPageStart("page_add_friend");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_add_friend");
+        MobclickAgent.onPageEnd("page_add_friend");
+        MobclickAgent.onPause(this);
     }
 
     private void initTitleBar() {
@@ -113,7 +116,6 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
 
     /**
      * 查找contact
-     *
      */
     public void searchContact() {
         final String name = editText.getText().toString();
@@ -201,11 +203,13 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_contact:
+                MobclickAgent.onEvent(AddContactActivity.this,"cell_item_add_lxp_friends_from_contacts");
                 Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
                 startActivity(phoneIntent);
                 break;
 
             case R.id.tv_weixin_contacts:
+                MobclickAgent.onEvent(AddContactActivity.this,"cell_item_add_lxp_friends_from_weichat");
                 ShareUtils.shareAppToWx(this, String.format("我正在用旅行派，搜索: %s 加我", AccountManager.getInstance().getLoginAccount(this).getNickName()));
                 break;
         }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -27,6 +28,7 @@ public class TripFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.lxp_search_bg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(),"card_item_lxp_search");
                 Intent sear_intent = new Intent(getActivity(), SearchAllActivity.class);
                 startActivityWithNoAnim(sear_intent);
                 getActivity().overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
@@ -36,6 +38,7 @@ public class TripFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.lxp_helper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(),"card_item_lxp_guide");
                 Intent ExpertIntent = new Intent(getActivity(), TalentLocActivity.class);
                 startActivity(ExpertIntent);
             }
@@ -44,6 +47,7 @@ public class TripFragment extends PeachBaseFragment {
         rootView.findViewById(R.id.lxp_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(),"card_item_lxp_plan");
                 final User user = AccountManager.getInstance().getLoginAccount(getActivity());
                 if (user != null) {
                     Intent intent = new Intent(getActivity(), StrategyListActivity.class);
@@ -58,6 +62,18 @@ public class TripFragment extends PeachBaseFragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_home_trip_tools");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_home_trip_tools");
     }
 
     @Override

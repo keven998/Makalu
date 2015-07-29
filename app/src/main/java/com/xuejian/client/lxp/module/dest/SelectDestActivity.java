@@ -17,6 +17,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -224,13 +225,15 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("page_destinations");
+       MobclickAgent.onPageStart("page_select_plan_city");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_destinations");
+         MobclickAgent.onPageEnd("page_select_plan_city");
+        MobclickAgent.onPause(this);
     }
 
     @Override

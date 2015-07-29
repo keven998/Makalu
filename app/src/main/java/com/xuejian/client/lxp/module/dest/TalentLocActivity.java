@@ -16,6 +16,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
@@ -82,8 +83,6 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
             data.add(new ArrayList<CountryWithExpertsBean>());
         }
         for (CountryWithExpertsBean bean : list) {
-            System.out.println(bean.continents.zhName);
-            System.out.println(lists.indexOf(bean.continents.zhName));
             data.get(lists.indexOf(bean.continents.zhName)).add(bean);
         }
         ArrayList<ArrayList<CountryWithExpertsBean>> del=new ArrayList<>();
@@ -128,11 +127,15 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_lxp_guide_distribute");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("page_lxp_guide_distribute");
+        MobclickAgent.onPause(this);
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -40,7 +41,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
     private String type;
     private int requestType;
     private boolean isOwner;
-
+    String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +50,12 @@ public class PoiSaveActivity extends PeachBaseActivity {
 
         strategy = getIntent().getParcelableExtra("strategy");
         destinations = getIntent().getParcelableArrayListExtra("destinations");
-        isOwner=getIntent().getBooleanExtra("isOwner",false);
+        isOwner=getIntent().getBooleanExtra("isOwner", false);
         bar = (TitleHeaderBar) findViewById(R.id.poi_save_titleBar);
         bar.getTitleTextView().setText("收藏的" + getIntent().getStringExtra("title"));
 
-
-        if (getIntent().getStringExtra("title").equals("购物")) {
+        title =getIntent().getStringExtra("title");
+        if ("购物".equals(title)) {
             resizeData(strategy.shopping);
             type = TravelApi.PeachType.SHOPPING;
             requestType = ADD_SHOPPING_REQUEST_CODE;
@@ -196,6 +197,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
             save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    MobclickAgent.onEvent(PoiSaveActivity.this,"button_item_add_favorite");
                     ArrayList<LocBean> list = new ArrayList<LocBean>();
                     list.add(destinations.get(i));
                     Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
@@ -252,11 +254,26 @@ public class PoiSaveActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if ("购物".equals(title)) {
+            MobclickAgent.onPageStart("page_plan_favorite_pois_lists_type_shoppping");
+        }else {
+            MobclickAgent.onPageStart("page_plan_favorite_pois_lists_type_delicy");
+        }
+
+        MobclickAgent.onResume(this);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if ("购物".equals(title)) {
+            MobclickAgent.onPageEnd("page_plan_favorite_pois_lists_type_shoppping");
+        }else {
+            MobclickAgent.onPageEnd("page_plan_favorite_pois_lists_type_delicy");
+        }
+
+        MobclickAgent.onPause(this);
     }
 
     @Override

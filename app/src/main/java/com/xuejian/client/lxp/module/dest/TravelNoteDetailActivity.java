@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -76,6 +77,20 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_tavel_notes_detail");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_tavel_notes_detail");
+        MobclickAgent.onPause(this);
+    }
+
     private void showActionDialog() {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
@@ -85,6 +100,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(TravelNoteDetailActivity.this,"navigation_item_travel_notes_lxp_share");
                 IMUtils.onClickImShare(act);
                 dialog.dismiss();
             }

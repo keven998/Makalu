@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -44,6 +45,18 @@ public class CollectionFragment extends Fragment {
         System.out.println("isOwner "+isOwner);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_lxp_plan_favorite");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_lxp_plan_favorite");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +68,7 @@ public class CollectionFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) {
+                    MobclickAgent.onEvent(getActivity(),"cell_item_plan_favorite_delicy");
                     Intent foodIntent = new Intent(getActivity(), PoiSaveActivity.class);
                     foodIntent.putExtra("title", "美食");
                     foodIntent.putParcelableArrayListExtra("destinations", destinations);
@@ -62,6 +76,7 @@ public class CollectionFragment extends Fragment {
                     foodIntent.putExtra("isOwner",isOwner);
                     getActivity().startActivityForResult(foodIntent, FOR_FOOD_COLLECTION);
                 } else if (i == 1) {
+                    MobclickAgent.onEvent(getActivity(),"cell_item_plan_favorite_shopping");
                     Intent shopIntent = new Intent(getActivity(), PoiSaveActivity.class);
                     shopIntent.putExtra("title", "购物");
                     shopIntent.putParcelableArrayListExtra("destinations", destinations);

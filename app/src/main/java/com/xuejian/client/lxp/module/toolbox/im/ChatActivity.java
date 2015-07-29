@@ -72,6 +72,7 @@ import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 import com.lv.utils.Config;
 import com.lv.utils.TimeUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -263,7 +264,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     }
 
 
-
     public void getUserInfo(int userId) {
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
         UserApi.getUserInfo(String.valueOf(userId), new HttpCallBack<String>() {
@@ -430,6 +430,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_lxp_chatting");
+        MobclickAgent.onResume(this);
         LogUtil.d("resume");
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
     }
@@ -486,6 +488,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
                         drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
                     } else {
+                        MobclickAgent.onEvent(ChatActivity.this,"navigation_item_chat_setting");
                         drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
                     }
                 }
@@ -658,6 +661,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             String s = mEditTextContent.getText().toString();
             sendText(s, 0);
         } else if (id == R.id.btn_my_guide) {
+            MobclickAgent.onEvent(ChatActivity.this,"chat_item_lxpplan");
             Intent intent = new Intent(mContext, StrategyListActivity.class);
             intent.putExtra("user_name", user.getNickName());
             intent.putExtra("chatType", chatType);
@@ -668,10 +672,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             intent.setAction("action.chat");
             startActivity(intent);
         } else if (id == R.id.btn_dest) {
+            MobclickAgent.onEvent(ChatActivity.this,"chat_item_lxpsearch");
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
-            intent.putExtra("conversation",conversation);
+            intent.putExtra("conversation", conversation);
             intent.putExtra("isShare", true);
             intent.setAction("action.chat");
             startActivityWithNoAnim(intent);
@@ -713,6 +718,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else if (id == R.id.btn_picture) {
             selectPicFromLocal(); // 点击图片图标
         } else if (id == R.id.btn_location) { // 位置
+            MobclickAgent.onEvent(ChatActivity.this,"chat_item_lxplocation");
             startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
         } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
             hideKeyboard();
@@ -1292,7 +1298,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_talking");
+        MobclickAgent.onPageEnd("page_lxp_chatting");
+        MobclickAgent.onPause(this);
         if (wakeLock.isHeld())
             wakeLock.release();
         if (VoicePlayClickListener.isPlaying && VoicePlayClickListener.currentPlayListener != null) {

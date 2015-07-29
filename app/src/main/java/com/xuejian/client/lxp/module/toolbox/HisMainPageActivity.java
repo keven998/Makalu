@@ -27,6 +27,7 @@ import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -414,6 +415,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_plan");
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
                 intent.putExtra("userId", String.valueOf(userId));
                 startActivity(intent);
@@ -431,6 +433,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_tracks");
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tvTrack.getText().toString());
@@ -448,7 +451,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_travel_notes");
             }
         });
         tvNotes.setVisibility(View.INVISIBLE);
@@ -529,6 +532,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_album");
                 Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
                 intent2.putExtra("id", String.valueOf(userId));
                 intent2.putExtra("title", user.getNickName());
@@ -596,11 +600,15 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_user_profile");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("page_user_profile");
+        MobclickAgent.onPause(this);
     }
 
     @Override

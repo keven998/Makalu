@@ -28,6 +28,7 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -82,13 +83,15 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("page_city_detail");
+         MobclickAgent.onPageStart("page_city_detail");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("page_city_detail");
+        MobclickAgent.onPageEnd("page_city_detail");
+        MobclickAgent.onPause(this);
     }
 
     private void initData() {
@@ -142,6 +145,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(CityDetailActivity.this,"navigation_item_lxp_city_share");
                 IMUtils.onClickImShare(CityDetailActivity.this);
             }
         });
@@ -250,6 +254,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         iv_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(CityDetailActivity.this,"navigation_item_lxp_city_create_plan");
                 Intent intent = new Intent( );
                 intent.setClass(CityDetailActivity.this,SelectDestActivity.class);
                 ArrayList<LocBean> locList = new ArrayList<LocBean>();
@@ -289,6 +294,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         findViewById(R.id.ly1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(CityDetailActivity.this,"card_item_city_pictures");
                 Intent intent = new Intent(mContext, CityPictureActivity.class);
                 intent.putExtra("id", locDetailBean.id);
                 intent.putExtra("title", locDetailBean.zhName);
@@ -473,17 +479,21 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_travel:
+                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_travel_tips");
                 intentToTravel(v);
                 break;
             case R.id.tv_spots:
+                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_spots");
                 intentToSpots(v);
                 break;
 
             case R.id.tv_restaurant:
+                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_delicious");
                 intentToFood(v);
                 break;
 
             case R.id.tv_shopping:
+                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_shoppings");
                 intentToShopping(v);
                 break;
         }

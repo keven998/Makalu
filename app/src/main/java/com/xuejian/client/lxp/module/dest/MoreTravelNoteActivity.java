@@ -10,6 +10,7 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
@@ -75,6 +76,19 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_travel_notes_lists");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_travel_notes_lists");
+        MobclickAgent.onPause(this);
+    }
 
     private void getTravelNoteList(final int page) {
         OtherApi.getTravelNoteByLocId(locId, page, BaseApi.PAGE_SIZE, new HttpCallBack<String>() {

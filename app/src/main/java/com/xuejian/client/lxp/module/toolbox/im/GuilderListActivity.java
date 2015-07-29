@@ -32,6 +32,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ExpertBean;
@@ -103,6 +104,20 @@ public class GuilderListActivity extends PeachBaseActivity {
             }
         });
         getExpertData(0, PAGE_SIZE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_lxp_guide_lists");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_lxp_guide_lists");
+        MobclickAgent.onPause(this);
     }
 
     public class DarenClick implements AdapterView.OnItemClickListener {

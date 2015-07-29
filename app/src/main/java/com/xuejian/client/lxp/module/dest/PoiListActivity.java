@@ -14,6 +14,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -86,21 +87,23 @@ public class PoiListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-//           MobclickAgent.onPageStart("page_delicacy_lists");
-//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-//           MobclickAgent.onPageStart("page_shopping_lists");
-//        }
+        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+           MobclickAgent.onPageStart("page_poi_lists_type_delicy");
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+           MobclickAgent.onPageStart("page_poi_lists_type_shopping");
+        }
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-//            MobclickAgent.onPageEnd("page_delicacy_lists");
-//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-//            MobclickAgent.onPageEnd("page_shopping_lists");
-//        }
+        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+            MobclickAgent.onPageEnd("page_poi_lists_type_delicy");
+        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+            MobclickAgent.onPageEnd("page_poi_lists_type_shopping");
+        }
+        MobclickAgent.onPause(this);
     }
 
     private void initData() {

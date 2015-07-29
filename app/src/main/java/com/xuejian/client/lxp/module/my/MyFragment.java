@@ -23,6 +23,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -187,6 +188,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_home_mine");
         new Thread() {
             public void run() {
                 handler.post(runnableUi);
@@ -197,6 +199,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("page_home_mine");
     }
 
     @Override
@@ -238,6 +241,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 break;
 
             case R.id.tv_edit_profile:
+                MobclickAgent.onEvent(getActivity(),"navigation_item_edit_profile");
                 User user = AccountManager.getInstance().getLoginAccount(getActivity());
                 if (user == null) {
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);

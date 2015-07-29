@@ -34,6 +34,7 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentBean;
@@ -105,25 +106,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-//            MobclickAgent.onPageStart("page_delicacy_detail");
-//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-//            MobclickAgent.onPageStart("page_shopping_detail");
-//        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
-//            MobclickAgent.onPageStart("page_hotel_detail");
-//        }
+        MobclickAgent.onPageStart("page_poi_detai");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
-//            MobclickAgent.onPageEnd("page_delicacy_detail");
-//        } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
-//            MobclickAgent.onPageEnd("page_shopping_detail");
-//        }else if (type.equals(TravelApi.PeachType.HOTEL)) {
-//            MobclickAgent.onPageEnd("page_hotel_detail");
-//        }
+        MobclickAgent.onPageEnd("page_poi_detai");
+        MobclickAgent.onPause(this);
     }
 
 
@@ -165,7 +156,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         findViewById(R.id.iv_chat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                MobclickAgent.onEvent(mContext, "event_spot_share_to_talk");
+                MobclickAgent.onEvent(mContext, "navigation_item_poi_lxp_share");
                 IMUtils.onClickImShare(PoiDetailActivity.this);
             }
         });
@@ -201,7 +192,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         RatingBar rb = (RatingBar) findViewById(R.id.rb_poi);
         rb.setRating(bean.getRating());
         TextView styleTV = (TextView) findViewById(R.id.tv_poi_style);
-        if (bean.style.size()>0){
+        if (bean.style.size() > 0) {
             styleTV.setText(bean.style.get(0));
         }
         TextView levelTv = (TextView) findViewById(R.id.tv_poi_level);
@@ -298,7 +289,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         findViewById(R.id.rl_run_time).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TextUtils.isEmpty(bean.descUrl)){
+                if (!TextUtils.isEmpty(bean.descUrl)) {
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("enable_bottom_bar", false);
                     intent.putExtra("url", bean.descUrl);
@@ -339,10 +330,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
         //操作
         if ("vs".equals(bean.type)) {
-            if(!TextUtils.isEmpty(bean.visitGuideUrl)){
+            if (!TextUtils.isEmpty(bean.visitGuideUrl)) {
                 findViewById(R.id.tv_travel).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MobclickAgent.onEvent(PoiDetailActivity.this,"button_item_poi_travel_notes");
                         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                         intent.putExtra("enable_bottom_bar", false);
                         intent.putExtra("url", bean.visitGuideUrl);
@@ -350,13 +342,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
                         startActivity(intent);
                     }
                 });
-            }else{
+            } else {
                 findViewById(R.id.tv_travel).setEnabled(false);
             }
-            if(!TextUtils.isEmpty(bean.tipsUrl)){
+            if (!TextUtils.isEmpty(bean.tipsUrl)) {
                 findViewById(R.id.tv_tips).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MobclickAgent.onEvent(PoiDetailActivity.this,"button_item_poi_travel_tips");
                         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                         intent.putExtra("enable_bottom_bar", false);
                         intent.putExtra("url", bean.tipsUrl);
@@ -364,13 +357,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
                         startActivity(intent);
                     }
                 });
-            }else{
+            } else {
                 findViewById(R.id.tv_tips).setEnabled(false);
             }
-            if(!TextUtils.isEmpty(bean.trafficInfoUrl)){
+            if (!TextUtils.isEmpty(bean.trafficInfoUrl)) {
                 findViewById(R.id.tv_traffic).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MobclickAgent.onEvent(PoiDetailActivity.this,"button_item_poi_travel_traffic");
                         Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                         intent.putExtra("enable_bottom_bar", false);
                         intent.putExtra("url", bean.trafficInfoUrl);
@@ -378,7 +372,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                         startActivity(intent);
                     }
                 });
-            }else{
+            } else {
                 findViewById(R.id.tv_traffic).setEnabled(false);
             }
         } else {
@@ -393,6 +387,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             footerView.findViewById(R.id.all_evaluation).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(PoiDetailActivity.this,"cell_item_poi_all_comments");
                     Intent intent = new Intent(mContext, MoreCommentActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("poi", poiDetailBean);

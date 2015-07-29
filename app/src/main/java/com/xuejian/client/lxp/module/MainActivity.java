@@ -25,6 +25,7 @@ import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -310,6 +311,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             HandleImMessage.getInstance().registerMessageListener(this);
             //  if (!isConflict){
@@ -597,7 +599,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onPause() {
         super.onPause();
-
+        MobclickAgent.onPause(this);
     }
 
     @Override

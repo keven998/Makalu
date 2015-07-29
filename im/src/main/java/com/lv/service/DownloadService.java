@@ -52,6 +52,9 @@ public class DownloadService extends Service {
                 }
             }catch (Exception e){
                 e.printStackTrace();
+                if (Config.isDebug) {
+                    Log.i(Config.TAG, "消息丢失！ ");
+                }
             }
 
         return super.onStartCommand(intent, flags, startId);
