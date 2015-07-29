@@ -41,8 +41,11 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.XDialog;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
+import com.xuejian.client.lxp.module.my.MyFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,10 +75,10 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     boolean isShow = false;
     private TextView tv_title, tv_subTitle, tv_select_day;
     private ImageView title_back, map_more;
-    private boolean isExpertFootPrint, isMyFootPrint,isAllPoiLoc;
+    private boolean isExpertFootPrint, isMyFootPrint, isAllPoiLoc;
     private ArrayList<LocBean> all_print_print;
-    private List<LocBean> my_footprint=new ArrayList<LocBean>();
-    private ArrayList<PoiDetailBean> all_place_loc=new ArrayList<PoiDetailBean>();
+    private List<LocBean> my_footprint = new ArrayList<LocBean>();
+    private ArrayList<PoiDetailBean> all_place_loc = new ArrayList<PoiDetailBean>();
     private ArrayList<double[]> coords = new ArrayList<double[]>();
     private LinearLayout day_select;
     private String allDesString;
@@ -89,7 +92,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         allBeans = getIntent().getParcelableArrayListExtra("strategy");
         isExpertFootPrint = getIntent().getBooleanExtra("isExpertFootPrint", false);
         isMyFootPrint = getIntent().getBooleanExtra("isMyFootPrint", false);
-        isAllPoiLoc = getIntent().getBooleanExtra("isAllPoiLoc",false);
+        isAllPoiLoc = getIntent().getBooleanExtra("isAllPoiLoc", false);
         title_back = (ImageView) findViewById(R.id.map_title_back);
         map_more = (ImageView) findViewById(R.id.map_more);
         tv_title = (TextView) findViewById(R.id.tv_title);
@@ -121,10 +124,10 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     public void onClick(View v) {
                         LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 //自定义布局
-                        final XDialog xDialog=new XDialog(StrategyMapActivity.this);
+                        final XDialog xDialog = new XDialog(StrategyMapActivity.this);
                         WindowManager.LayoutParams wlmp = xDialog.getWindow().getAttributes();
                         wlmp.gravity = Gravity.TOP | Gravity.RIGHT;
-                        ListView lv=xDialog.getListView();
+                        ListView lv = xDialog.getListView();
                         adapter = new MapsDayAdapter(day_sums, DealWithDays(tv_title.getText().toString()));
                         lv.setAdapter(adapter);
                         xDialog.show();
@@ -161,9 +164,9 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 });
             }
         } else {
-            if(isAllPoiLoc){
+            if (isAllPoiLoc) {
                 tv_subTitle.setText("位置");
-            }else {
+            } else {
                 tv_subTitle.setText("足迹");
             }
             tv_title.setText(getIntent().getStringExtra("title"));
@@ -191,29 +194,28 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     Intent tracks_intent = new Intent(StrategyMapActivity.this, MyFootPrinterActivity.class);
                     tracks_intent.putExtra("myfootprint", (Serializable) my_footprint);
                     tracks_intent.putExtra("title", tv_title.getText().toString());
-                    tracks_intent.putExtra("isOwner",true);
+                    tracks_intent.putExtra("isOwner", true);
                     startActivityForResult(tracks_intent, SET_FOOTPRINT);
                 }
             });
-        } else if(isAllPoiLoc){
+        } else if (isAllPoiLoc) {
             day_select.setVisibility(View.GONE);
             all_place_loc = getIntent().getParcelableArrayListExtra("allLoadLocList");
             loadAllPlaceFootPrintMap(all_place_loc);
-        }
-        else {
+        } else {
             if (allBeans.size() > 0) {
                 initData(0);
             }
         }
     }
 
-    private void initMyPrint(String id){
+    private void initMyPrint(String id) {
         DialogManager.getInstance().showLoadingDialog(this);
         UserApi.getUserFootPrint(id, new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
-                CommonJson4List<LocBean> locs=CommonJson4List.fromJson(result.toString(),LocBean.class);
-                if(locs.code==0){
+                CommonJson4List<LocBean> locs = CommonJson4List.fromJson(result.toString(), LocBean.class);
+                if (locs.code == 0) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     my_footprint.addAll(locs.result);
                     loadExpertFootPrintMap(my_footprint);
@@ -243,9 +245,36 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
             if (requestCode == SET_FOOTPRINT) {
                 //ArrayList<LocBean> result=new ArrayList<LocBean>();
                 all_print_print = data.getParcelableArrayListExtra("footprint");
+                updateUserinfo();
                 loadExpertFootPrintMap(all_print_print);
             }
         }
+    }
+
+    public void updateUserinfo() {
+        UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
+                if (Info.code == 0) {
+                    AccountManager.getInstance().setLoginAccountInfo(Info.result);
+                    MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+                    if (myFragment != null) {
+                        myFragment.refreshLoginStatus();
+                    }
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     private String normalizeNumber(int pos) {
@@ -305,8 +334,6 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
             refreshNullMap();
         }
     }
-
-
 
 
     private void loadExpertFootPrintMap(final List<LocBean> footPrint) {
@@ -560,8 +587,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 convertView = View.inflate(StrategyMapActivity.this, R.layout.maps_days_cell, null);
 
             }
-            TextView days_title=(TextView)convertView.findViewById(R.id.days_title);
-            days_title.setText(normalizeNumber(position+1)+".Day");
+            TextView days_title = (TextView) convertView.findViewById(R.id.days_title);
+            days_title.setText(normalizeNumber(position + 1) + ".Day");
             //selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
             //if(position==(whichDay-1)){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}
             return convertView;

@@ -268,7 +268,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         title_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateFootPrint(originalAllAddCityList);
+              //  updateFootPrint(originalAllAddCityList);
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("footprint", originalAllAddCityList);
                 setResult(RESULT_OK, intent);

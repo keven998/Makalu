@@ -300,7 +300,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler updateUserFootPrint(String userId, String type, String[] id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + USERINFO + userId + "/tracks");
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS,AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();

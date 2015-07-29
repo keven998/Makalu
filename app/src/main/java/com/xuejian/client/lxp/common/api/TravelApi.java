@@ -79,8 +79,8 @@ public class TravelApi extends BaseApi {
     public final static String NEARBY = "/poi/nearby";
 
     //达人列表
-    public final static String EXPERT_LIST="/geo/countries";
-//    //景点列表
+    public final static String EXPERT_LIST = "/geo/countries";
+    //    //景点列表
 //    /app/poi/viewspots
 //    //单个景点的信息
 //    /app/poi/viewspots/:id
@@ -110,6 +110,7 @@ public class TravelApi extends BaseApi {
     public final static String POI_COMMENTS = "/poi/%s/%s/comments";
 
     public final static String USERS = "/users/";
+
     /**
      * 获取目的地推荐
      *
@@ -250,13 +251,12 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler getPoiListByLoc(String type, String id, int page, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-      //  request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC, type) + id);
+        //  request.setUrl(SystemConfig.BASE_URL + String.format(POI_LIST_BY_LOC, type) + id);
 
-        if (type.equals("vs"))type="viewspots";
-        if (type.equals("restaurant"))type=type+"s";
+        if (type.equals("vs")) type = "viewspots";
+        if (type.equals("restaurant")) type = type + "s";
         request.setUrl(SystemConfig.DEV_URL + String.format(POI_LIST, type));
         request.putUrlParams("locality", id);
-
 
 
         request.putUrlParams("page", String.valueOf(page));
@@ -276,8 +276,8 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
 
-        if (type.equals("vs"))type="viewspots";
-        if (type.equals("restaurant"))type=type+"s";
+        if (type.equals("vs")) type = "viewspots";
+        if (type.equals("restaurant")) type = type + "s";
 
         request.setUrl(SystemConfig.DEV_URL + String.format(POI_DETAIL, type) + id);
         setDefaultParams(request);
@@ -289,13 +289,12 @@ public class TravelApi extends BaseApi {
      * 根据攻略ID获取攻略详情
      *
      * @param callback
-     * @return
-     * change to api-dev
+     * @return change to api-dev
      */
     public static PTRequestHandler getGuideDetail(String userId, String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL+USERS+userId + String.format(GUIDEBYID, id));
+        request.setUrl(SystemConfig.DEV_URL + USERS + userId + String.format(GUIDEBYID, id));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -306,11 +305,10 @@ public class TravelApi extends BaseApi {
      *
      * @param locList
      * @param callback
-     * @return
-     * change to api_dev
+     * @return change to api_dev
      */
     public static PTRequestHandler createGuide
-    (String action,List<String> locList, boolean recommend, HttpCallBack callback) {
+    (String action, List<String> locList, boolean recommend, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()));
@@ -324,11 +322,11 @@ public class TravelApi extends BaseApi {
                 jsonArray.put(locId);
             }
             jsonObject.put("locId", jsonArray);
-      //      if (recommend) {
-                jsonObject.put("initViewSpots", recommend);
-    //        } else {
-                jsonObject.put("action", action);
-     //       }
+            //      if (recommend) {
+            jsonObject.put("initViewSpots", recommend);
+            //        } else {
+            jsonObject.put("action", action);
+            //       }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -354,9 +352,9 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler saveGuide
     (String id, String guideJson, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL+ GUIDE);
-        request.putUrlParams("id", id);
+
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         try {
@@ -365,6 +363,21 @@ public class TravelApi extends BaseApi {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+
+
+
+//        request.setHttpMethod(PTRequest.POST);
+//        request.setUrl(SystemConfig.DEV_URL+ GUIDE);
+//        request.putUrlParams("id", id);
+//        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+//        setDefaultParams(request);
+//        try {
+//            StringEntity entity = new StringEntity(guideJson, "utf-8");
+//            request.setBodyEntity(entity);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
         LogUtil.d(guideJson);
         return HttpManager.request(request, callback);
     }
@@ -373,13 +386,12 @@ public class TravelApi extends BaseApi {
      * 获取攻略列表
      *
      * @param callback
-     * @return
-     * change to api-dev
+     * @return change to api-dev
      */
     public static PTRequestHandler getStrategyPlannedList(String userId, int page, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL+USERS+ userId+ GUIDE);
+        request.setUrl(SystemConfig.DEV_URL + USERS + userId + GUIDE);
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         if (!TextUtils.isEmpty(status)) {
@@ -394,10 +406,9 @@ public class TravelApi extends BaseApi {
      * 复制攻略
      *
      * @param callback
-     * @return
-     * change to api-dev
+     * @return change to api-dev
      */
-    public static PTRequestHandler copyStrategy(long userId,String id, HttpCallBack callback) {
+    public static PTRequestHandler copyStrategy(long userId, String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, String.valueOf(userId)));
@@ -444,7 +455,7 @@ public class TravelApi extends BaseApi {
     (String id, String title, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.TRACE);
-        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId())+"/"+id);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -502,19 +513,18 @@ public class TravelApi extends BaseApi {
      *
      * @param id
      * @param callback
-     * @return
-     * change to api-dev
+     * @return change to api-dev
      */
     public static PTRequestHandler modifyGuideVisited
     (String id, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.TRACE);
-        request.setUrl(SystemConfig.DEV_URL +String.format(CREATE_GUIDE, AccountManager.getCurrentUserId())+"/"+id);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-         //   jsonObject.put("id", id);
+            //   jsonObject.put("id", id);
             jsonObject.put("status", status);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -541,8 +551,8 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler modifyGuideLoc
     (String id, List<LocBean> locList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + MODIFY_GUIDE_LOC);
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -567,6 +577,35 @@ public class TravelApi extends BaseApi {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+
+
+//        request.setHttpMethod(PTRequest.POST);
+//        request.setUrl(SystemConfig.DEV_URL + MODIFY_GUIDE_LOC);
+//        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+//        setDefaultParams(request);
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("id", id);
+//            JSONArray locArray = new JSONArray();
+//            JSONObject locObject;
+//            for (LocBean loc : locList) {
+//                locObject = new JSONObject();
+//                locObject.put("id", loc.id);
+//                locObject.put("zhName", loc.zhName);
+//                locObject.put("enName", loc.enName);
+//                locArray.put(locObject);
+//            }
+//            jsonObject.put("localities", locArray);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+//            request.setBodyEntity(entity);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
         LogUtil.d(jsonObject.toString());
 
         return HttpManager.request(request, callback);
@@ -680,6 +719,7 @@ public class TravelApi extends BaseApi {
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
+
     //达人列表
     public static PTRequestHandler getExpertList(HttpCallBack callback) {
         PTRequest request = new PTRequest();

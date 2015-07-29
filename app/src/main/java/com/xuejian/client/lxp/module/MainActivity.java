@@ -562,6 +562,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 if (talkFragment != null) {
                     talkFragment.netStateChange("");
                 }
+                //IMClient.initIM(getApplicationContext());
                 IMClient.getInstance().initAckAndFetch();
             }
         }
