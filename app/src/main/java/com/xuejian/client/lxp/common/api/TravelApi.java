@@ -564,7 +564,9 @@ public class TravelApi extends BaseApi {
                 locObject = new JSONObject();
                 locObject.put("id", loc.id);
                 locObject.put("zhName", loc.zhName);
-                locObject.put("enName", loc.enName);
+                if(TextUtils.isEmpty(loc.enName)){
+                    locObject.put("enName", "");
+                }else  locObject.put("enName", loc.enName);
                 locArray.put(locObject);
             }
             jsonObject.put("localities", locArray);

@@ -37,7 +37,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
     ListViewDataAdapter mTravelNoteAdapter;
     int mPage = 0;
     String locId;
-
+    String keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_more_travelnote);
         ButterKnife.inject(this);
         locId = getIntent().getStringExtra("id");
-
+        keyword = getIntent().getStringExtra("keyword");
         mTitleBar.getTitleTextView().setText("全部游记");
         mTitleBar.enableBackKey(true);
 
@@ -64,12 +64,14 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         mMoreTravelNoteLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getTravelNoteList(0);
+              //  getTravelNoteList(0);
+                getTravelNoteListByKeyword(0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getTravelNoteList(mPage + 1);
+               // getTravelNoteList(mPage + 1);
+                getTravelNoteListByKeyword(mPage + 1);
             }
         });
         mMoreTravelNoteLv.doPullRefreshing(true, 100);
@@ -89,7 +91,39 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         MobclickAgent.onPageEnd("page_travel_notes_lists");
         MobclickAgent.onPause(this);
     }
+    private void getTravelNoteListByKeyword(final int page) {
+        OtherApi.getTravelNoteByKeyword(keyword, page, BaseApi.PAGE_SIZE, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
+                if (detailResult.code == 0) {
+                    mPage = page;
+                    bindView(detailResult.result);
+                } else {
+//                  ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                }
+                mMoreTravelNoteLv.onPullUpRefreshComplete();
+                mMoreTravelNoteLv.onPullDownRefreshComplete();
+            }
 
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!isFinishing()) {
+                    mMoreTravelNoteLv.onPullUpRefreshComplete();
+                    mMoreTravelNoteLv.onPullDownRefreshComplete();
+                    ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+
+    }
     private void getTravelNoteList(final int page) {
         OtherApi.getTravelNoteByLocId(locId, page, BaseApi.PAGE_SIZE, new HttpCallBack<String>() {
             @Override

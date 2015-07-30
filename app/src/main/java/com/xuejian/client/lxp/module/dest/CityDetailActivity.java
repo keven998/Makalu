@@ -188,7 +188,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
                 if (detailResult.code == 0) {
                     bindView(detailResult.result);
-                    getTravelNotes(id);
+                  //  getTravelNotes(id);
+                    getTravelNotesbyKeyword(detailResult.result.zhName);
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                     DialogManager.getInstance().dissMissModelessLoadingDialog();
@@ -209,7 +210,46 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
     }
+    private void getTravelNotesbyKeyword(final String keyword) {
+        OtherApi.getTravelNoteByKeyword(keyword, 0, 3, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
+                if (detailResult.code == 0) {
+                    travelAdapter.getDataList().clear();
+                    travelAdapter.getDataList().addAll(detailResult.result);
+                    if (detailResult.result.size() > 0) {
+                        //全部游记
+                        findViewById(R.id.tv_all_note).setVisibility(View.VISIBLE);
+                        findViewById(R.id.tv_all_note).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                                intent.putExtra("keyword",keyword);
+                                intent.putExtra("id", locId);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                    setListViewHeightBasedOnChildren(travelLv);
+                } else {
+//                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                }
+            }
 
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+//                ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
     private void getTravelNotes(final String locId) {
         OtherApi.getTravelNoteByLocId(locId, 0, 3, new HttpCallBack<String>() {
             @Override

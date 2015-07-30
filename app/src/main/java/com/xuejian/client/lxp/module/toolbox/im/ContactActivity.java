@@ -15,9 +15,7 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by rjm on 2015/3/30.
- */
+
 public class ContactActivity extends PeachBaseActivity {
     @InjectView(R.id.title_bar)
     TitleHeaderBar titleBar;

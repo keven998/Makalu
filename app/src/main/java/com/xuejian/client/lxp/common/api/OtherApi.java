@@ -28,11 +28,12 @@ public class OtherApi extends BaseApi {
     //封面图片
     public final static String COVER_STORY = "/misc/cover-stories";
     //获取上传token;
-    public final static String UPLOAD_TOKEN = "/misc/put-policy/";
+     //public final static String UPLOAD_TOKEN = "/misc/put-policy/";
+    public final static String UPLOAD_TOKEN = "/misc/upload-tokens/";
     //游记搜索
     public final static String TRAVEL_NOTES = "/travel-notes/search";
  //   public final static String TRAVEL_NOTES = "/travelnotes";
-
+ public final static String TRAVEL_NOTES_Key = "/travelnotes";
     //收藏
     public final static String FAV = "/misc/favorites";
     //运营
@@ -77,7 +78,25 @@ public class OtherApi extends BaseApi {
     public static PTRequestHandler getUploadToken(String scenario, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + UPLOAD_TOKEN + scenario);
+        request.setUrl(SystemConfig.DEV_URL + UPLOAD_TOKEN + scenario);
+     //   request.setUrl(SystemConfig.DEV_URL + UPLOAD_TOKEN );
+
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("scenario", scenario);
+//            jsonObject.put("userId", AccountManager.getCurrentUserId());
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+//            request.setBodyEntity(entity);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        LogUtil.d(jsonObject.toString());
+
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -121,13 +140,15 @@ public class OtherApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getTravelNoteByKeyword(String keyword, int page, HttpCallBack callback) {
+    public static PTRequestHandler getTravelNoteByKeyword(String keyword, int page, int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + TRAVEL_NOTES);
-        request.putUrlParams("keyword", keyword);
+        request.setUrl(SystemConfig.DEV_URL + TRAVEL_NOTES_Key);
+        request.putUrlParams("query", keyword);
+        request.putUrlParams("sortby", "posttime");
+        request.putUrlParams("sort", "desc");
         request.putUrlParams("page", String.valueOf(page));
-        request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
+        request.putUrlParams("pageSize", String.valueOf(pageSize));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);

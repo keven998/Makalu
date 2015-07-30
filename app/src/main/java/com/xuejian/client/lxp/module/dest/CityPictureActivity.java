@@ -40,6 +40,7 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.LocAlbum;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
@@ -289,7 +290,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
             if (isUserPics) {
                 if (position == 0) {
-                    cell_pic.setBackgroundResource(R.drawable.add_pictuer);
+                    cell_pic.setBackgroundResource(R.drawable.picture_add);
                     //cell_pic.setImageDrawable(getResources().getDrawable(R.drawable.add_pictuer));
                     del_cell_pic.setVisibility(View.GONE);
                 } else {
@@ -413,6 +414,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                 pic_ids.remove(pic_index);
                 userPics.remove(pic_index);
                 picAdapter.notifyDataSetChanged();
+                AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(userPics.size());
                 ToastUtil.getInstance(mContext).showToast("删除成功");
             }
 
@@ -454,7 +456,6 @@ public class CityPictureActivity extends PeachBaseActivity {
                                         LogUtil.d(response.toString());
                                         ImageBean ib = new ImageBean();
                                         ib.url = Uri.fromFile(file).toString();
-
                                         //上传图片，最新的图片置首位显示处理
                                         ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
                                         for (int i = 0; i < userPics.size(); i++) {
@@ -468,6 +469,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                                                 userPics.add(newUserPics.get(j - 1));
                                             }
                                         }
+                                        AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(userPics.size());
                                         //userPics.add(ib);
                                         try {
                                             //上传图片，最新的图片置首位显示处理

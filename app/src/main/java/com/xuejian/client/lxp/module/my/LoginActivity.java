@@ -369,7 +369,7 @@ public class LoginActivity extends PeachBaseActivity {
 
     public void weixinLogin() {
         if (!WeixinApi.getInstance().isWXinstalled(this)){
-            ToastUtil.getInstance(mContext).showToast("尚未安装微信");
+            ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
             return;
         }
         isWeixinClickLogin = true;

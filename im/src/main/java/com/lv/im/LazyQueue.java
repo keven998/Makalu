@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class LazyQueue {
-    long max_time = 2000;
+    long max_time = 500;
     private static LazyQueue instance;
     static Map<String, SortList> LazyMap = new ConcurrentHashMap<>();
     static Map<String, SortList> TempMap = new ConcurrentHashMap<>();
@@ -25,7 +25,7 @@ public class LazyQueue {
     boolean isRunning;
     DequeueListener listener;
     Timer timer;
-
+    boolean isTempDequeue;
     private LazyQueue() {
     }
 
@@ -102,6 +102,22 @@ public class LazyQueue {
         if (Config.isDebug) {
             Log.i(Config.TAG, "Dequeue() ");
         }
+        if (!isTempDequeue){
+            TempDequeue();
+        }else {
+           Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                   while (true){
+                       if (!isTempDequeue){
+                           TempDequeue();
+                           break;
+                       }
+                   }
+                }
+            }, new Date(System.currentTimeMillis() + 1000));
+        }
     }
 
     FetchListener flistener = (list) -> {
@@ -115,6 +131,7 @@ public class LazyQueue {
      * Block队列出队
      */
     public void TempDequeue() {
+        isTempDequeue = true;
         for (Map.Entry<String, SortList> entry : TempMap.entrySet()) {
             SortList list = entry.getValue();
             while (list.size() > 0) {
@@ -133,6 +150,7 @@ public class LazyQueue {
             Log.i(Config.TAG, "TempDequeue()");
         }
         IMClient.getInstance().setBLOCK(false);
+        isTempDequeue=false;
     }
 
     public void fetchDequeue(List<Message>list ){

@@ -30,9 +30,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by Rjm on 2014/10/28.
- */
 public class AddPhoneContactActivity extends ChatBaseActivity {
 
     private ListView mListView;

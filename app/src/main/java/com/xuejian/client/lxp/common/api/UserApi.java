@@ -45,7 +45,8 @@ public class UserApi extends BaseApi {
 
 
     //第三方登录
-    public final static String AUTH_SIGNUP = "/users/auth-signup";
+    //public final static String AUTH_SIGNUP = "/users/auth-signup";
+   // public final static String AUTH_SIGNUP = "/users/auth-signup";
 
     //  注册
     // public final static String SIGNUP = "/users/signup";
@@ -92,12 +93,13 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.BASE_URL + AUTH_SIGNUP);
+        request.setUrl(SystemConfig.DEV_URL + SIGNIN);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("code", code);
+            jsonObject.put("authCode", code);
+            jsonObject.put("provider", "weixin");
         } catch (JSONException e) {
             e.printStackTrace();
         }
