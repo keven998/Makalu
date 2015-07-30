@@ -16,6 +16,7 @@ import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
+import com.lv.utils.SharePrefUtil;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ValidationBean;
@@ -27,6 +28,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.MainActivity;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -129,8 +131,8 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                                 if (userResult.code == 0) {
                                     imLogin(userResult.result);
-                                    Intent accountIntent = new Intent(VerifyPhoneActivity.this, AccountActvity.class);
-                                    accountIntent.putExtra("fromReg",true);
+                                    Intent accountIntent = new Intent(VerifyPhoneActivity.this, MainActivity.class);
+                                    SharePrefUtil.saveBoolean(getApplicationContext(),"firstReg",true);
                                     startActivityWithNoAnim(accountIntent);
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("注册成功");
                                     Intent intent = getIntent();

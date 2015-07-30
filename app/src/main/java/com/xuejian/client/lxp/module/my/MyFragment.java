@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.utils.SharePrefUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -85,8 +86,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     private View rootView;
     private int picsNum = 0;
-
-
+    private boolean firstReg;
+    private TextView notice;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
@@ -100,7 +101,15 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.rl_picture_entry).setOnClickListener(this);
         rootView.findViewById(R.id.fl_plans_entry).setOnClickListener(this);
         rootView.findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
+        notice = (TextView) rootView.findViewById(R.id.unread_msg_notify);
+        if (firstReg)notice.setVisibility(View.VISIBLE);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        firstReg= SharePrefUtil.getBoolean(getActivity(),"firstReg",false);
     }
 
     public void refreshLoginStatus() {
@@ -247,6 +256,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
                 } else {
+                    if (firstReg){
+                        notice.setVisibility(View.GONE);
+                        SharePrefUtil.saveBoolean(getActivity(),"firstReg",false);
+                    }
                     Intent accountIntent = new Intent(getActivity(), AccountActvity.class);
                     startActivity(accountIntent);
                 }

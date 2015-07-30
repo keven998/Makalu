@@ -340,6 +340,19 @@
             android:text="编辑"
             android:textColor="@color/selector_white_text_color"
             android:textSize="16sp" />
-
+        <TextView
+            android:id="@+id/unread_msg_notify"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/bg_unread_msg"
+            android:gravity="center"
+            android:minWidth="20dp"
+            android:textColor="@color/base_color_white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 </FrameLayout>

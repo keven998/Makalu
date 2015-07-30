@@ -145,7 +145,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
-        fromReg = getIntent().getBooleanExtra("fromReg",false);
         initView();
         refreshUserInfo();
     }
@@ -171,11 +170,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         titleBar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fromReg){
-                    Intent intent = new Intent();
-                    intent.setClass(AccountActvity.this,MainActivity.class);
-                    startActivity(intent);
-                }
                 finish();
             }
         });

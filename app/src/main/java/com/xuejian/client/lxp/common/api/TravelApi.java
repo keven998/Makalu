@@ -551,7 +551,7 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler modifyGuideLoc
     (String id, List<LocBean> locList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.PUT);
+        request.setHttpMethod(PTRequest.TRACE);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);

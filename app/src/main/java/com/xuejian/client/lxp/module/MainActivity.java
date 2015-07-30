@@ -4,21 +4,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
+import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.FragmentTabHost;
 import com.alibaba.fastjson.JSON;
 import com.lv.Listener.HttpCallback;
@@ -40,6 +45,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -76,11 +82,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //    private String[] tabTitle = {"Talk", "旅游", "我"};
 
     private TextView unreadMsg;
-
+    private TextView regNotice;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "My"};
     private boolean FromBounce;
     private Vibrator vibrator;
+    private boolean fromReg;
+    PopupWindow mPop;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +99,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             finish();
             return;
         }
+        fromReg = SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false);
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();
@@ -273,6 +282,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
         }
+
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
@@ -302,8 +312,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (index == 0) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
+        if (fromReg && index == 2) {
+            regNotice = (TextView) view.findViewById(R.id.unread_msg_notify);
+            regNotice.setTextColor(Color.RED);
+            regNotice.setVisibility(View.VISIBLE);
+        }
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
         imageView.setCompoundDrawablesWithIntrinsicBounds(mImageViewArray[index], 0, 0, 0);
+        imageView.setChecked(true);
         //imageView.setText(tabTitle[index]);
         return view;
     }
@@ -372,48 +388,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
     }
-
-    /**
-     * cmd消息BroadcastReceiver
-     */
-    private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            //获取cmd message对象
-//            String msgId = intent.getStringExtra("msgid");
-//            EMMessage message = intent.getParcelableExtra("message");
-//            //获取消息body
-//            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-//            String aciton = cmdMsgBody.action;//获取自定义action
-//            //获取扩展属性
-//            try {
-//                int cmdType = message.getIntAttribute("CMDType");
-//                String content = message.getStringAttribute("content");
-//                //接受到好友请求
-//                if (cmdType == 1) {
-//                    // 刷新bottom bar消息未读数
-//                    updateUnreadAddressLable();
-//
-//                }
-//                //对方同意了加好友请求(好友添加)
-//                else if (cmdType == 2) {
-//                    // updateUnreadMsgCount();
-//                    refreshChatHistoryFragment();
-//
-//
-//                }
-//                //删除好友
-//                else if (cmdType == 3) {
-//                    // 刷新ui
-//                    refreshChatHistoryFragment();
-//                }
-//
-//            } catch (EaseMobException e) {
-//                e.printStackTrace();
-//            }
-        }
-    };
 
 
     @Override
@@ -679,4 +653,36 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         });
     }
+
+    public void showAD() {
+        LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//自定义布局
+        ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
+                R.layout.text_diaplay, null, true);
+        TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
+
+        TextView tv = (TextView) menuView.findViewById(R.id.msg);
+        tv.setText("AD");
+        mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
+                FlowLayout.LayoutParams.MATCH_PARENT, true);
+        mPop.setContentView(menuView);//设置包含视图
+        mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
+        mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
+        mPop.setAnimationStyle(R.style.PopAnimation);
+        mPop.showAtLocation(findViewById(R.id.realtabcontent), Gravity.BOTTOM, 0, 0);
+        pop_dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPop.dismiss();
+            }
+        });
+
+    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if(hasFocus){
+//            showAD();
+//        }
+//    }
 }

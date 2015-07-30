@@ -25,6 +25,7 @@
         android:minWidth="20dp"
         android:textColor="@color/base_color_white"
         android:textSize="12sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
