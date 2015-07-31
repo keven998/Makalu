@@ -49,10 +49,15 @@ public class CustomLoadingDialog extends ProgressDialog {
     }
 
     private void initView() {
-        setContentView(R.layout.view_custom_loading_dialog);
-        progress_dialog_content = (TextView) findViewById(R.id.progress_dialog_content);
-        progressIv = (ImageView) findViewById(R.id.pb_iv);
-        ((AnimationDrawable) progressIv.getBackground()).start();
+        try {
+            setContentView(R.layout.view_custom_loading_dialog);
+            progress_dialog_content = (TextView) findViewById(R.id.progress_dialog_content);
+            progressIv = (ImageView) findViewById(R.id.pb_iv);
+            ((AnimationDrawable) progressIv.getDrawable()).start();
+        }catch (Exception e){
+            dismiss();
+        }
+
     }
 
     @Override

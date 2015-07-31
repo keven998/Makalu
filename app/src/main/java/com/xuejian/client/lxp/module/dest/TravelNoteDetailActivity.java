@@ -55,7 +55,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
         }else{
             url = noteBean.detailUrl;
         }*/
-        mWebView.loadUrl(url);
+        mWebView.loadUrl(id);
         findViewById(R.id.ly_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

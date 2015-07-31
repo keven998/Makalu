@@ -46,7 +46,7 @@ public class IntentUtils {
     public static void intentToNoteDetail(Activity act, TravelNoteBean bean) {
         Intent intent = new Intent();
         intent.setClass(act, TravelNoteDetailActivity.class);
-        intent.putExtra("id", bean.id);
+        intent.putExtra("id", bean.detailUrl);
         intent.putExtra("travelNote", bean);
         act.startActivity(intent);
     }

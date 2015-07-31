@@ -173,9 +173,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
                 if (user.getUserId() == 10001) {
-                    finalHolder.avatar.setImageResource(R.drawable.icon_avatar_wenwen);
+                    finalHolder.avatar.setImageResource(R.drawable.lvxingwenwen);
                 } else if (user.getUserId() == 10000) {
-                    finalHolder.avatar.setImageResource(R.drawable.icon_avatar_paipai);
+                    finalHolder.avatar.setImageResource(R.drawable.lvxingpaipai);
                 } else {
                     finalHolder.avatar.setTag(user.getAvatarSmall());
                     ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);

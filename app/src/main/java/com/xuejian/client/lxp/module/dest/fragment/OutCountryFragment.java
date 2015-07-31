@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -22,11 +21,8 @@ import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
-import com.google.android.gms.common.api.Api;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -34,12 +30,10 @@ import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
-import com.xuejian.client.lxp.common.widget.freeflow.core.FreeFlowContainer;
 import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
@@ -51,7 +45,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Optional;
 
 /**
  * Created by Rjm on 2014/12/3.
@@ -229,18 +222,19 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             sectionTv.setText("- " + itemData.zhName + " -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.destinations) {
-                   View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
-                    AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS) / 3,
-                            (LocalDisplay.SCREEN_WIDTH_PIXELS) / 3);
-                    FrameLayout des_box_fl = (FrameLayout) contentView.findViewById(R.id.des_box_fl);
-                    TextView cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
-                    ImageView desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
-                   final ImageView addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
+                System.out.println(bean.zhName);
+                View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
+                AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS) / 3,
+                        (LocalDisplay.SCREEN_WIDTH_PIXELS) / 3);
+                FrameLayout des_box_fl = (FrameLayout) contentView.findViewById(R.id.des_box_fl);
+                TextView cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
+                ImageView desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
+                final ImageView addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
 
                 des_box_fl.setLayoutParams(lytp);
 
                 cityNameTv.setText(bean.zhName);
-                if (bean.images.size()>0) {
+                if (bean.images.size() > 0) {
                     ImageLoader.getInstance().displayImage(bean.images.get(0).url, desBgImage, poptions);
                 }
                 if (!bean.isAdded) {
