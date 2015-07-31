@@ -87,7 +87,6 @@ import java.util.TimerTask;
 
 public class MessageAdapter extends BaseAdapter {
 
-    private final static String TAG = "msg";
 
     private static final int MESSAGE_TYPE_RECV_TXT = 0;
     private static final int MESSAGE_TYPE_SENT_TXT = 1;
@@ -264,10 +263,9 @@ public class MessageAdapter extends BaseAdapter {
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
                         R.layout.row_sent_ext, null);
             default:
-
                 break;
         }
-        return null;
+       return inflater.inflate(R.layout.row_chat_tips, null);
     }
 
     @SuppressLint("NewApi")
@@ -342,7 +340,7 @@ public class MessageAdapter extends BaseAdapter {
                     System.out.println("type " + message.getType());
                     break;
             }
-            convertView.setTag(holder);
+           convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -355,27 +353,9 @@ public class MessageAdapter extends BaseAdapter {
                 handleCommonMessage(position, convertView, message, holder);
                 break;
             case TEXT_MSG: // 文本
-//                if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
-//                    int extType = message.getIntAttribute(Constant.EXT_TYPE, 0);
-//                    if (extType == 0) {
                 handleGroupMessage(position, convertView, message, holder);
                 handleTextMessage(message, holder, position);
                 handleCommonMessage(position, convertView, message, holder);
-//                    } else if (extType < 100) {
-//                        handleGroupMessage(position, convertView, message, holder);
-//                        handleExtMessage(message, holder, position);
-//                        handleCommonMessage(position, convertView, message, holder);
-//                    } else if (extType == Constant.ExtType.TIPS) {
-//                        handleTipsMessage(message, holder, position);
-//                    }
-//
-//                } else {
-//                    // 语音电话
-//                    handleGroupMessage(position, convertView, message, holder);
-//                    handleVoiceCallMessage(message, holder, position);
-//                    handleCommonMessage(position, convertView, message, holder);
-                //               }
-
                 break;
             case LOC_MSG: // 位置
                 handleGroupMessage(position, convertView, message, holder);
@@ -401,21 +381,9 @@ public class MessageAdapter extends BaseAdapter {
                 handleExtMessage(message, holder, position);
                 handleCommonMessage(position, convertView, message, holder);
                 break;
-//            case VIDEO: // 视频
-//                handleGroupMessage(position, convertView, message, holder);
-//                handleVideoMessage(message, holder, position, convertView);
-//                handleCommonMessage(position, convertView, message, holder);
-//                break;
-//            case FILE: // 一般文件
-//                handleGroupMessage(position, convertView, message, holder);
-//                handleFileMessage(message, holder, position, convertView);
-//                handleCommonMessage(position, convertView, message, holder);
-//                break;
             default:
                 break;
         }
-
-
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         if (position == 0) {
             timestamp.setText(CommonUtils.getTimestampString(new Date(message.getCreateTime())));
@@ -441,7 +409,6 @@ public class MessageAdapter extends BaseAdapter {
         // 群聊时，显示接收的消息的发送人的名称
         if (message.getSendType() == TYPE_REV) {
             if ("group".equals(chatType)) {
-                // demo用username代替nick
                 User user = groupMembers.get(message.getSenderId());
                 if (user == null) {
                     user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
@@ -616,8 +583,7 @@ public class MessageAdapter extends BaseAdapter {
     private void handleExtMessage(MessageBean message, final ViewHolder holder, final int position) {
         final int extType = message.getType();
         final String conent = message.getMessage();
-        ExtMessageBean bean = null;
-        bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
+        ExtMessageBean bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
         final ExtMessageBean finalBean = bean;
         holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         if (extType == PLAN_MSG) {

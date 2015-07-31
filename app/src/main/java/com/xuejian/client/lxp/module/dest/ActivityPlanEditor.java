@@ -103,8 +103,11 @@ public class ActivityPlanEditor extends FragmentActivity {
         findViewById(R.id.btn_add_day).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(ActivityPlanEditor.this,"button_item_add_day");
+                MobclickAgent.onEvent(ActivityPlanEditor.this, "button_item_add_day");
                 addNewDayRouter(routeDayMap.size(), false);
+                if (editorAdapter.getCount()>=1){
+                    mDragListView.setSelection(editorAdapter.getCount()-1);
+                }
             }
         });
         fragment = new EditPlanFragment();

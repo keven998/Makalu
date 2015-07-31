@@ -115,9 +115,11 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
             case R.id.btn_next:
                 if (TextUtils.isEmpty(smsEt.getText().toString())) {
                     ToastUtil.getInstance(mContext).showToast("请输入验证码");
-                } else if (!RegexUtils.isVerfyCode(smsEt.getText().toString())){
+                }
+                else if (!RegexUtils.isVerfyCode(smsEt.getText().toString())){
                     ToastUtil.getInstance(mContext).showToast("请正确输入验证码");
-                }  else{
+                }
+                else{
                     if (!CommonUtils.isNetWorkConnected(mContext)) {
                         ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                         return;

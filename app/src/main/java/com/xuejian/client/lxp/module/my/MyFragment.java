@@ -35,6 +35,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
+import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
@@ -88,6 +89,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private int picsNum = 0;
     private boolean firstReg;
     private TextView notice;
+    private String Sex;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
@@ -129,24 +131,28 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
             constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
         } else {
-            if (user.getGender().equalsIgnoreCase("M")) {
-                /**
-                 * OOM Exception
-                 */
-                genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_boy));
- //               genderFrame.setImageResource(R.drawable.ic_home_header_boy);
-                fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
-                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
-            } else if (user.getGender().equalsIgnoreCase("F")) {
-                genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_girl));
-    //            genderFrame.setImageResource(R.drawable.ic_home_header_girl);
-                fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
-                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
-            } else {
-                genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_unlogin));
- //               genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-                fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
-                tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
+           if (!user.getGender().equals(Sex)){
+               Sex=user.getGender();
+               System.out.println("refresh");
+               if (user.getGender().equalsIgnoreCase("M")) {
+                   /**
+                    * OOM Exception
+                    */
+                   genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_boy));
+                   //               genderFrame.setImageResource(R.drawable.ic_home_header_boy);
+                   fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
+                   tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
+               } else if (user.getGender().equalsIgnoreCase("F")) {
+                   genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_girl));
+                   //            genderFrame.setImageResource(R.drawable.ic_home_header_girl);
+                   fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
+                   tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
+               } else {
+                   genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_unlogin));
+                   //               genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
+                   fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
+                   tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
+               }
             }
             int countryCount = 0;
             int cityCount = 0;
@@ -417,12 +423,23 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         }
     }
     public static Bitmap readBitMap(Context context, int resId) {
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inPreferredConfig = Bitmap.Config.RGB_565;
-        opt.inPurgeable = true;
-        opt.inInputShareable = true;
-// 获取资源图片
-        InputStream is = context.getResources().openRawResource(resId);
-        return BitmapFactory.decodeStream(is, null, opt);
+        try {
+            Bitmap bitmap = ImageCache.getInstance().get(String.valueOf(resId));
+            if (bitmap==null){
+                System.out.println("bitmap = null");
+                BitmapFactory.Options opt = new BitmapFactory.Options();
+                opt.inPreferredConfig = Bitmap.Config.RGB_565;
+                opt.inPurgeable = true;
+                opt.inInputShareable = true;
+                InputStream is = context.getResources().openRawResource(resId);
+                bitmap = BitmapFactory.decodeStream(is, null, opt);
+                ImageCache.getInstance().put(String.valueOf(resId),bitmap);
+            }
+            System.out.println("load cache bitmap");
+            return bitmap;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

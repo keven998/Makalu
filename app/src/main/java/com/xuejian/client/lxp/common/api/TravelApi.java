@@ -156,6 +156,7 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + IN_DESTINATIONS);
         request.putUrlParams("groupBy", "true");
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
         setDefaultParams(request);
         if (!TextUtils.isEmpty(lastModeify)) {
             request.addHeader("Cache-Control", "private");
@@ -174,6 +175,8 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + OUT_DESTINATIONS);
+        request.putUrlParams("groupBy", "true");
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
         setDefaultParams(request);
         if (!TextUtils.isEmpty(lastModeify)) {
             request.addHeader("Cache-Control", "private");

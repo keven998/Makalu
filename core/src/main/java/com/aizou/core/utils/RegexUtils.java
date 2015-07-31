@@ -22,7 +22,7 @@ public class RegexUtils {
     }
     public static boolean isVerfyCode(String mobiles) {
         Pattern p = Pattern
-                .compile("^([0-9])\\d{6}$");
+                .compile("^([0-9])\\d{5}$");
 //        Pattern p = Pattern.compile("^1\\d{10}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();
