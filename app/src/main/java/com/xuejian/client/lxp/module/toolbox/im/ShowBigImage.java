@@ -76,12 +76,16 @@ public class ShowBigImage extends ChatBaseActivity {
 //			System.err.println("showbigimage file exists. directly show it");
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            // int screenWidth = metrics.widthPixels;
-            // int screenHeight =metrics.heightPixels;
+             int screenWidth = metrics.widthPixels;
+             int screenHeight =metrics.heightPixels;
             bitmap = ImageCache.getInstance().get(uri.getPath());
             if (bitmap == null) {
-                LoadLocalBigImgTask task = new LoadLocalBigImgTask(this, uri.getPath(), image, loadLocalPb, ImageUtils.SCALE_IMAGE_WIDTH,
-                        ImageUtils.SCALE_IMAGE_HEIGHT);
+                LoadLocalBigImgTask task = new LoadLocalBigImgTask(this, uri.getPath(), image, loadLocalPb,
+//                        ImageUtils.SCALE_IMAGE_WIDTH,
+//                        ImageUtils.SCALE_IMAGE_HEIGHT
+                        screenWidth,
+                        screenHeight
+                );
                 if (android.os.Build.VERSION.SDK_INT > 10) {
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 } else {

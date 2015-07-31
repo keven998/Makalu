@@ -256,7 +256,8 @@ public class PoiAdapter extends BaseAdapter {
 //                    }
 //                });
             }
-            poiViewHolder.mPoiPriceTv.setText(poiDetailBean.getPoiTypeName());
+            if (poiDetailBean.style.size()>0)
+            poiViewHolder.mPoiPriceTv.setText(poiDetailBean.style.get(0));
 //            poiViewHolder.mPoiAddressTv.setText(poiDetailBean.address);
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mPoiImageIv, picOptions);

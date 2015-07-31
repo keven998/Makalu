@@ -194,6 +194,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         TextView styleTV = (TextView) findViewById(R.id.tv_poi_style);
         if (bean.style.size() > 0) {
             styleTV.setText(bean.style.get(0));
+        }else {
+            styleTV.setText(bean.zhName);
         }
         TextView levelTv = (TextView) findViewById(R.id.tv_poi_level);
         if (!bean.getFormatRank().equals("0")) {

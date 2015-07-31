@@ -88,6 +88,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                         //  .showImageOnLoading()
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
+                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                 .cacheOnDisc(true)
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(28))) // 设置成圆角图片
