@@ -262,11 +262,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             }
         });
-
+        TextView tp = (TextView) findViewById(R.id.tv_phone);
         //电话
         if (bean.tel != null && bean.tel.size() > 0) {
             final String phoneNum = bean.tel.get(0);
-            TextView tp = (TextView) findViewById(R.id.tv_phone);
+
             tp.setText(phoneNum);
             findViewById(R.id.rl_phone).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -278,7 +278,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            findViewById(R.id.rl_phone).setVisibility(View.GONE);
+            tp.setText("未知");
         }
 
         //开放时间

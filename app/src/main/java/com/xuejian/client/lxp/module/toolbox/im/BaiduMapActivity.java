@@ -41,6 +41,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.CoordinateConverter;
 import com.lv.utils.Config;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
@@ -83,8 +84,28 @@ public class BaiduMapActivity extends ChatBaseActivity {
             location();
         } else {
             double longtitude = intent.getDoubleExtra("longitude", 0);
-            showMap(latitude, longtitude, null);
+            LatLng ll = commonToBd(latitude, longtitude);
+            showMap(ll.latitude, ll.longitude, null);
         }
+    }
+
+    public LatLng commonToBd(double latitude, double longtitude) {
+        CoordinateConverter converter = new CoordinateConverter();
+        converter.from(CoordinateConverter.CoordType.COMMON);
+// sourceLatLng待转换坐标
+        LatLng sourceLatLng = new LatLng(latitude, longtitude);
+        converter.coord(sourceLatLng);
+        return converter.convert();
+    }
+
+    public LatLng bdToCommon(double latitude, double longtitude) {
+        LatLng sourceLatLng = new LatLng(latitude, longtitude);
+// 将GPS设备采集的原始GPS坐标转换成百度坐标
+        CoordinateConverter converter = new CoordinateConverter();
+        converter.from(CoordinateConverter.CoordType.GPS);
+// sourceLatLng待转换坐标
+        converter.coord(sourceLatLng);
+        return converter.convert();
     }
 
     private Rect getScreenSize() {
@@ -127,7 +148,8 @@ public class BaiduMapActivity extends ChatBaseActivity {
         mLocClient.registerLocationListener(myListener);
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true);// 打开gps
-        option.setCoorType("bd09ll"); // 设置坐标类型
+      //  option.setCoorType("bd09ll"); // 设置坐标类型
+        option.setCoorType("gcj02");
         option.setScanSpan(1000);
         option.setAddrType("all");
         mLocClient.setLocOption(option);
@@ -222,6 +244,7 @@ public class BaiduMapActivity extends ChatBaseActivity {
     }
 
     public void showMap(double latitude, double longtitude, String address) {
+
         sendButton.setVisibility(View.GONE);
         BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
                 .fromResource(R.drawable.icon_marka);

@@ -454,7 +454,7 @@ public class IMClient {
         add2ackList(message.getId());
     }
     public void addToConversation(String chatId,String chatType){
-        db.add2Conversion(Long.parseLong(chatId),0,"con_"+CryptUtils.getMD5String(chatId),0,null,chatType);
+        db.add2Conversion(Long.parseLong(chatId),TimeUtils.getTimestamp(),"con_"+CryptUtils.getMD5String(chatId),0,null,chatType);
     }
     private MessageBean Msg2Bean(Message msg) {
         return new MessageBean(msg.getMsgId(), Config.STATUS_SUCCESS, msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId());

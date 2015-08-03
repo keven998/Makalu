@@ -656,11 +656,13 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler getExpertById(String[] locId, HttpCallBack callback) {
+    public static PTRequestHandler getExpertById(String[] locId,int page , int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_BY_TRACK, locId[0]));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        request.putUrlParams("page", String.valueOf(page));
+        request.putUrlParams("pageSize", String.valueOf(pageSize));
         setDefaultParams(request);
 //        JSONObject jsonObject = new JSONObject();
 //        try {

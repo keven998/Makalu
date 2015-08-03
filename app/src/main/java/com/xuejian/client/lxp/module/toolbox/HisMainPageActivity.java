@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
+import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -39,13 +40,13 @@ import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
+import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
-import com.xuejian.client.lxp.module.my.VerifyPhoneActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import org.json.JSONArray;
@@ -208,12 +209,44 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     private void startTalk() {
         if (me != null) {
-            IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
-            Intent intent = new Intent(this, ChatActivity.class);
-            intent.putExtra("friend_id", String.valueOf(userId));
-            intent.putExtra("chatType", "single");
-            intent.putExtra("newCon",true);
-            startActivity(intent);
+            IMClient.getInstance().getConversationAttr(AccountManager.getCurrentUserId(), String.valueOf(userId), new HttpCallback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onSuccess(String result) {
+                    try {
+
+                        JSONObject res = new JSONObject(result);
+                        JSONArray array = res.getJSONArray("result");
+                        SettingConfig.getInstance().setLxpNoticeSetting(HisMainPageActivity.this, String.valueOf(array.getJSONObject(0).getInt("targetId")), array.getJSONObject(0).getBoolean("muted"));
+                        System.out.println(result);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
+                    Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
+                    intent.putExtra("friend_id", String.valueOf(userId));
+                    intent.putExtra("chatType", "single");
+                 //   intent.putExtra("newCon", true);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    System.out.println(code);
+                    IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
+                    Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
+                    intent.putExtra("friend_id", String.valueOf(userId));
+                    intent.putExtra("chatType", "single");
+                 //   intent.putExtra("newCon", true);
+                    startActivity(intent);
+                }
+            });
+
+
         } else {
             Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
             startActivityWithNoAnim(intent);

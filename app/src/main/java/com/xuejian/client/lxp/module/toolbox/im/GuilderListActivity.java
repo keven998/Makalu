@@ -56,7 +56,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     private ExpertAdapter adapter;
     private int EXPERT_DES = 1;
     private int mCurrentPage = 0;
-    private int PAGE_SIZE = 15;
+    private int PAGE_SIZE = 6;
     private String countryId;
     private String countryName;
     TextView stView;
@@ -135,7 +135,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     public void getExpertData(final int page, final int pageSize) {
         String[] countryIds = {countryId};
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        UserApi.getExpertById(countryIds, new HttpCallBack<String>() {
+        UserApi.getExpertById(countryIds,page,pageSize, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
@@ -311,7 +311,7 @@ public class GuilderListActivity extends PeachBaseActivity {
         String[] strs = new String[1];
         strs[0] = locId;
         DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        UserApi.getExpertById(strs, new HttpCallBack<String>() {
+        UserApi.getExpertById(strs,0,20, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
