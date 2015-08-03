@@ -54,7 +54,11 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
     }
 
     private void initData() {
-        DialogManager.getInstance().showLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         contactListInMobile = PhoneContactUtils.getPhoneContact(mContext);
         UserApi.searchByAddressBook(contactListInMobile, new HttpCallBack<String>() {
             @Override
@@ -169,7 +173,11 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                             ToastUtil.getInstance(mContext).showToast("那是自己");
                             return;
                         }
-                        DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
+                        try {
+                            DialogManager.getInstance().showLoadingDialog(AddPhoneContactActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         UserApi.getUserInfo(String.valueOf(itemData.userId), new HttpCallBack<String>() {
                             @Override
                             public void doSuccess(String result, String method) {

@@ -110,7 +110,11 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
                         mSearchResultAdapter.notifyDataSetChanged();
                         return true;
                     } else {
-                        DialogManager.getInstance().showLoadingDialog(SearchDestForPoiActivity.this);
+                        try {
+                            DialogManager.getInstance().showLoadingDialog(SearchDestForPoiActivity.this);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         searchSearchLocData(mKeyWord, 0);
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);

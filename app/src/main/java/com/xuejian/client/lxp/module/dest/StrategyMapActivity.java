@@ -210,7 +210,11 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
     }
 
     private void initMyPrint(String id) {
-        DialogManager.getInstance().showLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         UserApi.getUserFootPrint(id, new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {

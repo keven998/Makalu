@@ -55,7 +55,11 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     }
 
     private void initData() {
-        DialogManager.getInstance().showLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         TravelApi.getExpertList(new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {

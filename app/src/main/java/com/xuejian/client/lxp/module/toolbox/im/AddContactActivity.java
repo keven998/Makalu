@@ -131,7 +131,11 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
         //服务器存在此用户，显示此用户和添加按钮
 //			searchedUserLayout.setVisibility(View.VISIBLE);
 //			nameText.setText(toAddUsername);
-        DialogManager.getInstance().showLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         UserApi.seachContact(toAddUsername, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

@@ -775,10 +775,10 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     } else if (gender.equalsIgnoreCase("F")) {
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
                         tv_gender.setText("美女");
-                    }else if (user.getGender().equalsIgnoreCase("S")){
+                    } else if (user.getGender().equalsIgnoreCase("S")) {
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                         tv_gender.setText("保密");
-                    }else {
+                    } else {
                         iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                         tv_gender.setText("一言难尽");
                     }
@@ -929,7 +929,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
                     user.setAvatar(url);
-                    AccountManager.getInstance().saveLoginAccount(mContext, user);
+                    try {
+                        AccountManager.getInstance().getLoginAccountInfo().setAvatar(url);
+                        AccountManager.getInstance().saveLoginAccount(mContext, user);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
                             .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                             .showImageOnFail(R.drawable.messages_bg_useravatar)

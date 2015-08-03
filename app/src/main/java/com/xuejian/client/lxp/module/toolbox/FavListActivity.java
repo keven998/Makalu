@@ -305,7 +305,11 @@ public class FavListActivity extends PeachBaseActivity {
                         IMUtils.showImShareDialog(mContext, item, new IMUtils.OnDialogShareCallBack() {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
-                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                try {
+                                    DialogManager.getInstance().showLoadingDialog(mContext);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
                                     @Override
                                     public void onSuccess() {
@@ -417,7 +421,11 @@ public class FavListActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(FavListActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     OtherApi.deleteFav(item.itemId, new HttpCallBack<String>() {
                         @Override
                         public void doSuccess(String result, String method) {

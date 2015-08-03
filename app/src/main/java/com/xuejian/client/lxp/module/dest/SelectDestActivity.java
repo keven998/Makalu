@@ -149,7 +149,11 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 User user = AccountManager.getInstance().getLoginAccount(mContext);
                 if (user != null) {
                     if (requestCode == StrategyActivity.EDIT_LOC_REQUEST_CODE) {
-                        DialogManager.getInstance().showLoadingDialog(SelectDestActivity.this);
+                        try {
+                            DialogManager.getInstance().showLoadingDialog(SelectDestActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         TravelApi.modifyGuideLoc(guideId, allAddCityList, new HttpCallBack<String>() {
                             @Override
                             public void doSuccess(String result, String method) {

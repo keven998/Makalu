@@ -247,7 +247,11 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 for (User user : toBeAddContacts) {
                     ids.put(user.getUserId());
                 }
-                DialogManager.getInstance().showLoadingDialog(PickContactsWithCheckboxActivity.this);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(PickContactsWithCheckboxActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 GroupManager.getGroupManager().createGroup(ChatName.toString(), null, null, ids, new HttpCallBack() {
                     @Override
                     public void doSuccess(Object result, String method) {

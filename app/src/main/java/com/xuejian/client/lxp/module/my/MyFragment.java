@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -186,7 +187,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .cacheOnDisk(true)
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .build();
-            ImageLoader.getInstance().displayImage(user.getAvatarSmall(), avatarIv, options);
+            if (info!=null){
+                ImageLoader.getInstance().displayImage(info.getAvatar(), avatarIv, options);
+            }else ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, options);
+
           //  getUserPicsNum(user.getUserId());
         }
     }
@@ -226,7 +230,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
                 } else {
-                    if(user1.getAvatar()!=null) {
+                    if(TextUtils.isEmpty(user1.getAvatar())) {
                         ArrayList<String> pic = new ArrayList<>();
                         pic.add(user1.getAvatar());
                         showSelectedPics(pic);

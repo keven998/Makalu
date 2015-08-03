@@ -297,8 +297,11 @@ public class PoiListActivity extends PeachBaseActivity {
 
         ArrayList<LocBean> locs = new ArrayList<LocBean>();
         locs.addAll(strategy.localities);
-
-        DialogManager.getInstance().showLoadingDialog(PoiListActivity.this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(PoiListActivity.this);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {

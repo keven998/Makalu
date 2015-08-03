@@ -95,7 +95,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 String uid = null;
                 if (user != null) {
@@ -144,7 +148,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(PhoneBindActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.BIND_PHONE, user.getUserId(), new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {

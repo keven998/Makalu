@@ -331,7 +331,11 @@ public class LoginActivity extends PeachBaseActivity {
             ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         UserApi.signIn(loginNameEt.getText().toString().trim(), pwdEt.getText().toString().trim(), new HttpCallBack<String>() {
 
             @Override

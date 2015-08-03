@@ -391,12 +391,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                System.out.println(s.toString()+ " "+start + " " +count + " " + after);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+               System.out.println(s.toString());
             }
         });
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -661,9 +661,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             String s = mEditTextContent.getText().toString();
             sendText(s, 0);
         } else if (id == R.id.btn_my_guide) {
-            MobclickAgent.onEvent(ChatActivity.this,"chat_item_lxpplan");
+            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
             Intent intent = new Intent(mContext, StrategyListActivity.class);
-            intent.putExtra("user_name", user.getNickName());
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
             intent.putExtra("conversation", conversation);
@@ -1189,7 +1188,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             if (time > 1000) {
                                 sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
                             } else {
-                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短");
+                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短",500);
                                 MediaRecordFunc.getInstance().cancleRecord();
                             }
                         } catch (Exception e) {

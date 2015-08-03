@@ -51,6 +51,8 @@
                 android:layout_height="wrap_content"
                 android:scaleType="fitStart"
                 mask:mask="@drawable/chatfrom_image_mask"
+                android:visibility="visible"
+                mask:image="@drawable/default_image"
                 mask:minWidth="120dp" />
 
             <LinearLayout

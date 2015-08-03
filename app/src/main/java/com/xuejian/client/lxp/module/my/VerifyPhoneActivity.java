@@ -125,7 +125,11 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                         return;
                     }
                     if (actionCode.equals(UserApi.ValidationCode.REG_CODE)) {
-                        DialogManager.getInstance().showLoadingDialog(VerifyPhoneActivity.this);
+                        try {
+                            DialogManager.getInstance().showLoadingDialog(VerifyPhoneActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         UserApi.signUp(tel, pwd, smsEt.getText().toString().trim(), new HttpCallBack<String>() {
                             @Override
                             public void doSuccess(String result, String method) {
@@ -174,7 +178,11 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(VerifyPhoneActivity.this);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(VerifyPhoneActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 String uid = null;
                 if (user != null) {

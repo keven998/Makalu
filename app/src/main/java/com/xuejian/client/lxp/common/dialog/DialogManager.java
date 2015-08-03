@@ -153,10 +153,15 @@ public class DialogManager {
      * 创建通讯提示框
      */
     private CustomLoadingDialog createLoadingDialog(Context con, String message, OnCancelListener cancleListener) {
-        CustomLoadingDialog dlg = new CustomLoadingDialog(con, message);
-        dlg.show();
-        dlg.setCancelable(true);
-        return dlg;
+        try {
+            CustomLoadingDialog dlg = new CustomLoadingDialog(con, message);
+            dlg.show();
+            dlg.setCancelable(true);
+            return dlg;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

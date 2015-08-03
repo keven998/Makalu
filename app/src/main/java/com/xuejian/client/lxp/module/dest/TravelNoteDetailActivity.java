@@ -149,7 +149,11 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
             customView.findViewById(R.id.fav).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DialogManager.getInstance().showLoadingDialog(getActivity());
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(getActivity());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     OtherApi.addFav(id, "travelNote", new HttpCallBack<String>() {
                         @Override
                         public void doSuccess(String result, String method) {

@@ -249,7 +249,11 @@ public class GroupDetailFragment extends PeachBaseFragment {
      * 退出群组
      */
     public void exitGroup() {
-        DialogManager.getInstance().showLoadingDialog(getActivity());
+        try {
+            DialogManager.getInstance().showLoadingDialog(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         GroupManager.getGroupManager().quitGroup(groupId, new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {

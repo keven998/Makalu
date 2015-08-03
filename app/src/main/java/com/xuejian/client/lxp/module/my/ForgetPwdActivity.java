@@ -14,19 +14,15 @@ import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CheckValidationBean;
 import com.xuejian.client.lxp.bean.ValidationBean;
-import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.db.UserDBManager;
 
 /**
  * Created by Rjm on 2014/10/13.
@@ -88,7 +84,11 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(ForgetPwdActivity.this);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(ForgetPwdActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.FIND_PWD, null, new HttpCallBack<String>() {
                     @Override
@@ -137,7 +137,11 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(ForgetPwdActivity.this);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(ForgetPwdActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 UserApi.checkValidation(phoneEt.getText().toString().trim(), smsEt.getText().toString(), UserApi.ValidationCode.FIND_PWD, 0, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
@@ -164,7 +168,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                         System.out.println("code " + code);
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (code == HttpManager.PWD_ERROR) {
-                            ToastUtil.getInstance(ForgetPwdActivity.this).showToast("验证失败");
+                            ToastUtil.getInstance(ForgetPwdActivity.this).showToast("验证码错误");
                         } else if (!isFinishing())
                             ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }

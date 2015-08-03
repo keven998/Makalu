@@ -125,7 +125,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
             typeBeans.add(typeBean);
             titleTv.setText("全部城市");
         } else if (type.equals("vs")) {
-           // cityFilterTv.setVisibility(View.VISIBLE);
+            // cityFilterTv.setVisibility(View.VISIBLE);
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();
@@ -150,7 +150,11 @@ public class SearchTypeActivity extends PeachBaseActivity {
             typeBeans.add(typeBean);
             titleTv.setText("全部购物");
         }
-        DialogManager.getInstance().showLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         searchSearchTypeData(0);
     }
 
@@ -249,11 +253,15 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
                 @Override
                 public void onSendClick(String type, String id, Object object) {
-                    MobclickAgent.onEvent(SearchTypeActivity.this,"button_item_pois_lxp_send");
+                    MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
                     IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
                         @Override
                         public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
-                            DialogManager.getInstance().showLoadingDialog(mContext);
+                            try {
+                                DialogManager.getInstance().showLoadingDialog(mContext);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
                                 @Override
                                 public void onSuccess() {
@@ -261,11 +269,11 @@ public class SearchTypeActivity extends PeachBaseActivity {
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             ToastUtil.getInstance(mContext).showToast("已发送~");
-                                            Intent intent=new Intent(mContext, ChatActivity.class);
+                                            Intent intent = new Intent(mContext, ChatActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                            intent.putExtra("conversation",conversation);
-                                            intent.putExtra("chatType",chatType);
-                                            intent.putExtra("friend_id",toId);
+                                            intent.putExtra("conversation", conversation);
+                                            intent.putExtra("chatType", chatType);
+                                            intent.putExtra("friend_id", toId);
                                             startActivity(intent);
                                         }
                                     });
@@ -281,6 +289,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
                                         }
                                     });
                                 }
+
                                 @Override
                                 public void onSuccess(String result) {
                                 }

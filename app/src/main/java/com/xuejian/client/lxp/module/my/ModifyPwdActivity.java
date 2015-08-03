@@ -70,7 +70,11 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
                         ToastUtil.getInstance(ModifyPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         return;
                     }
-                    DialogManager.getInstance().showLoadingDialog(ModifyPwdActivity.this);
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(ModifyPwdActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     UserApi.modifyPwd(oldPwdEt.getText().toString().trim(), newPwdEt.getText().toString().trim(), user.getUserId() + "", new HttpCallBack<String>() {
                         @Override
                         public void doSuccess(String result, String method) {

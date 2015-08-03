@@ -232,7 +232,11 @@ public class StrategyActivity extends PeachBaseActivity {
             } else {
                 boolean hasCache = setupViewFromCache(id);
                 if (!hasCache) {
-                    DialogManager.getInstance().showLoadingDialog(this);
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 getStrategyDataById(id);
             }
@@ -379,7 +383,11 @@ public class StrategyActivity extends PeachBaseActivity {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
-                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                try {
+                                    DialogManager.getInstance().showLoadingDialog(mContext);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 TravelApi.copyStrategy(result.userId, result.id, new HttpCallBack<String>() {
                                     @Override
                                     public void doSuccess(String resultStr, String method) {
@@ -436,12 +444,16 @@ public class StrategyActivity extends PeachBaseActivity {
                         MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_change_name");
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                         editDialog.setTitle("修改计划名");
-                        editDialog.setMessage(result.title);
+                        editDialog.setMessage(dtv.getText().toString());
                         editDialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 editDialog.dismiss();
-                                DialogManager.getInstance().showLoadingDialog(mContext);
+                                try {
+                                    DialogManager.getInstance().showLoadingDialog(mContext);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 TravelApi.modifyGuideTitle(result.id, editDialog.getMessage(), new HttpCallBack<String>() {
                                     @Override
                                     public void doSuccess(String result, String method) {

@@ -144,7 +144,11 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
      * @param msg
      */
     private void acceptInvitation(final Button button, final InventMessage msg) {
-        DialogManager.getInstance().showLoadingDialog((Activity) context);
+        try {
+            DialogManager.getInstance().showLoadingDialog(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         UserApi.addContact(msg.getRequestId(), null, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

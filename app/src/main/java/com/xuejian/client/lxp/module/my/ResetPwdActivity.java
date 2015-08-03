@@ -72,7 +72,11 @@ public class ResetPwdActivity extends PeachBaseActivity implements View.OnClickL
                 if (!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入6-12位新密码");
                 } else {
-                    DialogManager.getInstance().showLoadingDialog(this);
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     UserApi.resetPwd(mPhone, newPwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {
                         @Override
                         public void doSuccess(String result, String method) {

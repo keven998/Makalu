@@ -449,8 +449,11 @@ public class ActivityPlanEditor extends FragmentActivity {
 
         ArrayList<LocBean> locs=new ArrayList<LocBean>();
         locs.addAll(strategy.localities);
-
-        DialogManager.getInstance().showLoadingDialog(ActivityPlanEditor.this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(ActivityPlanEditor.this);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {

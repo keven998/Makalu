@@ -168,7 +168,11 @@ public class SearchAllActivity extends PeachBaseActivity {
     }
 
     private void searchAll(final String keyword) {
-        DialogManager.getInstance().showLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         TravelApi.searchAll(keyword, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

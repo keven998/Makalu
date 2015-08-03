@@ -45,6 +45,7 @@ import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
+import com.xuejian.client.lxp.module.my.VerifyPhoneActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import org.json.JSONArray;
@@ -125,21 +126,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if (isMyFriend) {
             tv_send_action.setText("备注");
         }
-        findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isMyFriend) {
-                    Intent intent = new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
-                    intent.putExtra("isEditMemo", true);
-                    intent.putExtra("nickname", nameTv.getText().toString());
-                    intent.putExtra("userId", String.valueOf(userId));
-                    startActivityForResult(intent, EDIT_MEMO);
-                    //editMemo("123");
-                } else {
-                    addToFriend();
-                }
-            }
-        });
 
         initData(userId);
 //        UserApi.editMemo(100000+"", "hihi", new HttpCallBack() {
@@ -184,7 +170,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 @Override
                 public void onClick(View v) {
                     editDialog.dismiss();
-                    DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(HisMainPageActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     UserApi.requestAddContact(String.valueOf(userId), editDialog.getMessage(), new HttpCallBack() {
                         @Override
                         public void doSuccess(Object result, String method) {
@@ -347,11 +337,35 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public void updateView(final User bean) {
         user = bean;
         nameTv = (TextView) findViewById(R.id.tv_title);
-        if (TextUtils.isEmpty(bean.getMemo())) {
+
+        if (isMyFriend&&imUser!=null){
+            if (TextUtils.isEmpty(imUser.getMemo())) {
+                nameTv.setText(bean.getNickName());
+            } else {
+                nameTv.setText(imUser.getMemo() + "(" + bean.getNickName() + ")");
+            }
+        }else {
             nameTv.setText(bean.getNickName());
-        } else {
-            nameTv.setText(bean.getMemo() + "(" + bean.getNickName() + ")");
         }
+
+        findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isMyFriend) {
+                    if (!TextUtils.isEmpty(nameTv.getText().toString())){
+                        Intent intent = new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
+                        intent.putExtra("isEditMemo", true);
+                        intent.putExtra("nickname", bean.getNickName());
+                        intent.putExtra("userId", String.valueOf(userId));
+                        startActivityForResult(intent, EDIT_MEMO);
+                    }
+                    //editMemo("123");
+                } else {
+                    addToFriend();
+                }
+            }
+        });
+
 
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));

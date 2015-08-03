@@ -94,7 +94,11 @@ public class IMUtils {
         IMUtils.showImShareDialog(context, iCreateShareDialog, new IMUtils.OnDialogShareCallBack() {
             @Override
             public void onDialogShareOk(final Dialog dialog, final int type, final String content, final String leave_msg) {
-                DialogManager.getInstance().showLoadingDialog(context);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(context);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
                     @Override
                     public void onSuccess() {
@@ -190,7 +194,11 @@ public class IMUtils {
                 showImShareDialog(context, iCreateShareDialog, new OnDialogShareCallBack() {
                     @Override
                     public void onDialogShareOk(final Dialog dialog, final int type, final String content, final String leave_msg) {
-                        DialogManager.getInstance().showLoadingDialog(context);
+                        try {
+                            DialogManager.getInstance().showLoadingDialog(context);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
                             @Override
                             public void onSuccess() {

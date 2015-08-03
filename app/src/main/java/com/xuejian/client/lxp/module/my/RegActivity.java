@@ -80,7 +80,11 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(RegActivity.this);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(RegActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 UserApi.sendValidation(phoneEt.getText().toString().trim(), UserApi.ValidationCode.REG_CODE, null, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {

@@ -103,8 +103,11 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void resetMemberValue(Intent intent) {
         userId = intent.getStringExtra("userId");
-        isOwner = (AccountManager.getInstance().getLoginAccount(this) != null) && userId.equals(AccountManager.getCurrentUserId());
-        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
+        if (AccountManager.getInstance().getLoginAccount(StrategyListActivity.this)!=null){
+            isOwner = (AccountManager.getInstance().getLoginAccount(this) != null) && userId.equals(AccountManager.getCurrentUserId());
+            user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
+        }
+
     }
 
     @Override
@@ -539,7 +542,11 @@ public class StrategyListActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(mContext);
+                try {
+                    DialogManager.getInstance().showLoadingDialog(mContext);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
@@ -550,7 +557,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                             int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
                             AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt - 1);
                         } else {
-                            DialogManager.getInstance().showLoadingDialog(mContext);
                             if (!isFinishing())
                                 ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                         }
@@ -592,7 +598,11 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void backToTop(final StrategyBean itemData1) {
-        DialogManager.getInstance().showLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Long time = System.currentTimeMillis();
         TravelApi.modifyGuideTop(itemData1.id, time, new HttpCallBack<String>() {
             @Override
@@ -606,7 +616,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                     addToTop(itemData1);
                     cachePage();
                 } else {
-                    DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())
                         ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -632,7 +641,11 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void haveBeenVisited(final StrategyBean beenBean) {
-        DialogManager.getInstance().showLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String visited = "traveled";
         TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
             @Override
@@ -642,7 +655,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (visitedResult.code == 0) {
                     deleteThisItem(beenBean);
                 } else {
-                    DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())
                         ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -663,7 +675,11 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
     private void cancleVisited(final StrategyBean beenBean) {
-        DialogManager.getInstance().showLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String planned = "planned";
         TravelApi.modifyGuideVisited(beenBean.id, planned, new HttpCallBack<String>() {
             @Override
@@ -673,7 +689,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (visitedResult.code == 0) {
                     deleteThisItem(beenBean);
                 } else {
-                    DialogManager.getInstance().showLoadingDialog(mContext);
                     if (!isFinishing())
                         ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
