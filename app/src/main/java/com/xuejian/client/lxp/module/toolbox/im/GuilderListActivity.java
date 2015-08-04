@@ -101,7 +101,7 @@ public class GuilderListActivity extends PeachBaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
-                getExpertData(mCurrentPage + 1, PAGE_SIZE);
+          //   getExpertData(mCurrentPage + 1, PAGE_SIZE);
             }
         });
         getExpertData(0, PAGE_SIZE);
@@ -262,7 +262,7 @@ public class GuilderListActivity extends PeachBaseActivity {
                 vh.nickView = (TextView) convertView.findViewById(R.id.expert_name);
                 vh.consView = (TextView) convertView.findViewById(R.id.expert_zod);
                 vh.ageView = (TextView) convertView.findViewById(R.id.expert_age);
-
+                vh.expert_level = (TextView) convertView.findViewById(R.id.expert_level);
                 convertView.setTag(vh);
             } else {
                 vh = (ViewHolder) convertView.getTag();
@@ -293,7 +293,7 @@ public class GuilderListActivity extends PeachBaseActivity {
             } else {
                 vh.consView.setText("");
             }
-
+            vh.expert_level.setText(String.valueOf(eb.level));
             //足迹
             String st1 = String.format("%d个城市\n",eb.localityCnt);
             String st2 = String.format("%s足迹",countryName);
@@ -359,7 +359,7 @@ public class GuilderListActivity extends PeachBaseActivity {
     private class ViewHolder {
         ImageView avatarView;
         TextView titleView;
-        TextView scoreView;
+        TextView expert_level;
         TextView residenceView;
         TextView consView;
         TextView nickView;

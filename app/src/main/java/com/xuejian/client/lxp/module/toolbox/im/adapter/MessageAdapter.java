@@ -319,6 +319,7 @@ public class MessageAdapter extends BaseAdapter {
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv_map_desc = (TextView) convertView.findViewById(R.id.tv_map_desc);
                     break;
                 case TIP_MSG:
                     holder.tv_tips = (TextView) convertView.findViewById(R.id.tv_tips);
@@ -1409,7 +1410,7 @@ public class MessageAdapter extends BaseAdapter {
         String desc = getStringAttr(message, "address");
         String path = getStringAttr(message, "path");
         String remote = getStringAttr(message, "snapshot");
-        holder.tv.setText(desc);
+        holder.tv_map_desc.setText(desc);
 
         Bitmap bitmap = ImageCache.getInstance().get(path);
         if (bitmap != null) {
@@ -1855,7 +1856,7 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_ack;
         // 显示送达回执状态
         TextView tv_delivered;
-
+        TextView tv_map_desc;
 
         TextView tv_file_name;
         TextView tv_file_size;

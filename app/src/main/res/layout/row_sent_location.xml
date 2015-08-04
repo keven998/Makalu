@@ -14,8 +14,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity"
-        android:layout_marginBottom="@dimen/margin_chat_activity">
+        android:layout_marginBottom="@dimen/margin_chat_activity"
+        android:layout_marginTop="@dimen/margin_chat_activity">
 
         <ImageView
             android:id="@+id/iv_userhead"
@@ -23,11 +23,11 @@
             android:layout_height="@dimen/size_avatar"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:padding="1dp"
-            android:src="@drawable/messages_bg_useravatar"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:background="@drawable/ic_home_talklist_default_avatar"
-            android:scaleType="fitXY" />
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/messages_bg_useravatar" />
 
         <LinearLayout
             android:id="@+id/ll_location"
@@ -35,17 +35,35 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg" >
+            android:background="@drawable/chatto_bg">
 
-            <TextView
-                android:id="@+id/tv_location"
-                style="@style/chat_content_date_style"
+            <FrameLayout
                 android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:background="@drawable/location_msg"
-                android:gravity="bottom|center_horizontal"
-                android:scaleType="fitCenter"
-            android:textColor="@android:color/white" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    style="@style/chat_content_date_style"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:background="@drawable/location_msg"
+                    android:gravity="bottom|center_horizontal"
+                    android:scaleType="fitCenter"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/tv_map_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/map_text_bg"
+                    android:gravity="center"
+                    android:minHeight="30dp"
+                    android:textSize="12sp"
+                    android:layout_gravity="bottom"
+                    android:textColor="@color/base_color_white" />
+
+            </FrameLayout>
+
         </LinearLayout>
 
         <ImageView
@@ -57,18 +75,17 @@
             android:clickable="true"
             android:src="@drawable/msg_state_failed_resend"
             android:visibility="gone" />
-        
+
         <TextView
             android:id="@+id/tv_ack"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/ll_location"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
-            android:layout_toLeftOf="@id/ll_location"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tv_delivered"
@@ -76,12 +93,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_chatcontent"
             android:text="@string/text_delivered_msg"
             android:textSize="12sp"
-            android:layout_toLeftOf="@id/tv_chatcontent"
-            android:visibility="invisible"
-            />
-        
+            android:visibility="invisible" />
+
         <ProgressBar
             android:id="@+id/pb_sending"
             android:layout_width="25dp"

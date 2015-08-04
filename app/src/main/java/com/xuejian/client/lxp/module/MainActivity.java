@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
@@ -114,13 +115,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
         if (AccountManager.getInstance().getLoginAccount(this) != null) {
-            if (IMClient.getInstance().isDbEmpty()){
+            if (IMClient.getInstance().isDbEmpty()) {
                 imLogin(AccountManager.getInstance().getLoginAccount(this));
             }
             initClient();
             //   DialogManager.getInstance().showLoadingDialog(this);
         }
     }
+
     private void imLogin(final User user) {
         //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
@@ -132,29 +134,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
         // 进入主页面
     }
+
     public void initClient() {
-        IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), IMClient.getInstance().getConversationIds(), new HttpCallback() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    JSONObject res = new JSONObject(result);
-                    JSONArray array = res.getJSONArray("result");
-                    for (int i = 0; i < array.length(); i++) {
-                        SettingConfig.getInstance().setLxpNoticeSetting(MainActivity.this, String.valueOf(array.getJSONObject(i).getInt("targetId")), array.getJSONObject(i).getBoolean("muted"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailed(int code) {
-            }
-        });
+        Handler handler = new Handler();
         IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
             @Override
             public void onSuccess() {
@@ -179,6 +161,33 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (talkFragment != null) {
             talkFragment.loadConversation();
         }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), IMClient.getInstance().getConversationIds(), new HttpCallback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            JSONObject res = new JSONObject(result);
+                            JSONArray array = res.getJSONArray("result");
+                            for (int i = 0; i < array.length(); i++) {
+                                SettingConfig.getInstance().setLxpNoticeSetting(MainActivity.this, String.valueOf(array.getJSONObject(i).getInt("targetId")), array.getJSONObject(i).getBoolean("muted"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                    }
+                });
+            }
+        }, 5000);
         initData();
         UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
             @Override
@@ -195,16 +204,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-
             }
         });
-       // getInLocList();
-       // getOutCountryList();
+        // getInLocList();
+        // getOutCountryList();
     }
 
     @Override

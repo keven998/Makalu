@@ -47,14 +47,34 @@
             android:layout_below="@+id/tv_userid"
             android:background="@drawable/chatfrom_bg" >
 
-            <TextView
-                android:id="@+id/tv_location"
-                style="@style/chat_content_date_style"
+            <FrameLayout
                 android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:background="@drawable/location_msg"
-                android:gravity="center"
-                android:textColor="@android:color/white" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    style="@style/chat_content_date_style"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:background="@drawable/location_msg"
+                    android:gravity="center"
+                    android:scaleType="centerCrop"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/tv_map_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/map_text_bg"
+                    android:gravity="center"
+                    android:minHeight="30dp"
+                    android:textSize="12sp"
+                    android:layout_gravity="bottom"
+                    android:textColor="@color/base_color_white" />
+
+            </FrameLayout>
+
+
         </LinearLayout>
 
     </RelativeLayout>

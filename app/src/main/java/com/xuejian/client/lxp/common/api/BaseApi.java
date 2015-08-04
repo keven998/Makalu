@@ -12,7 +12,7 @@ import com.xuejian.client.lxp.db.User;
  * Created by Rjm on 2014/10/16.
  */
 public class BaseApi {
-    public final static int PAGE_SIZE = 15;
+    public final static int PAGE_SIZE = 10;
 
     public static void testHttps() {
         PTRequest request = new PTRequest();

@@ -119,13 +119,30 @@
                 android:textColor="@color/color_text_i"
                 android:textSize="16sp" />
 
-            <ImageView
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:scaleType="center"
-                android:src="@drawable/expert_level" />
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="center"
+                    android:src="@drawable/poi_save_level_bg" />
+
+                <TextView
+                    android:id="@+id/expert_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingBottom="3dp"
+                    android:textColor="@color/app_theme_color"
+                    android:textSize="8sp" />
+            </FrameLayout>
+
 
         </LinearLayout>
 
