@@ -11,6 +11,10 @@ public class ConstellationUtil {
             R.drawable.aries,R.drawable.taurus,R.drawable.gemini,R.drawable.cancer,
             R.drawable.leo,R.drawable.virgo,R.drawable.libra,R.drawable.scorpio,
             R.drawable.sagittarius};
+    private static String ZhName[]=new String[]{"摩羯座","水瓶座","双鱼座",
+            "白羊座","金牛座","双子座","巨蟹座",
+           "狮子座","处女座","天秤座","天蝎座",
+            "射手座"};
     public  enum Constellation {
         Capricorn(0, "capricorn"), Aquarius(1, "aquarius"), Pisces(2, "pisces"), Aries(3,
                 "aries"), Taurus(4, "taurus"), Gemini(5, "gemini"), Cancer(6, "cancer"), Leo(
@@ -55,4 +59,18 @@ public class ConstellationUtil {
         month = day < constellationEdgeDay[month - 1]?month - 1:month;
         return month > 0?res[constellationArr[month - 1].code]: res[constellationArr[11].code];
     }
+    public static String calculateConstellationZHname(String birthday) {
+        if (birthday == null || birthday.trim().length() == 0)
+            return "";
+        String[] birthdayElements = birthday.split("-");
+        if (birthdayElements.length != 3)
+            return "";
+        int month = Integer.parseInt(birthdayElements[1]);
+        int day = Integer.parseInt(birthdayElements[2]);
+        if (month == 0 || day == 0 || month > 12)
+            return "";
+        month = day < constellationEdgeDay[month - 1]?month - 1:month;
+        return month > 0?ZhName[constellationArr[month - 1].code]: ZhName[constellationArr[11].code];
+    }
+
 }

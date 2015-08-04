@@ -40,6 +40,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.text.SimpleDateFormat;
@@ -288,7 +289,7 @@ public class GuilderListActivity extends PeachBaseActivity {
                 vh.ageView.setText("");
             }
             if (!TextUtils.isEmpty(eb.birthday)) {
-                vh.consView.setText("射手座");
+                vh.consView.setText(ConstellationUtil.calculateConstellationZHname(eb.birthday));
             } else {
                 vh.consView.setText("");
             }
