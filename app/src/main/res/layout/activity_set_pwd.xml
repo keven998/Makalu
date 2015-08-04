@@ -8,8 +8,8 @@
     <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/main_color" />
+        android:layout_height="46dp"
+        android:background="@color/app_theme_color" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,18 +22,32 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_marginTop="20dp"
+            android:background="@drawable/shape_theme_dialog"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/color_text_ii"
                 android:text="设置密码"/>
 
             <EditText
                 android:id="@+id/et_pwd"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="请输入6位以上密码"
-                android:inputType="textPassword"/>
+                android:background="@null"
+                android:cursorVisible="true"
+                android:gravity="center_vertical"
+                android:hint="请输入六位以上密码"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:singleLine="true"
+                android:textColor="@color/color_text_i"
+                android:textColorHint="@color/color_disable"
+                android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -49,6 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:background="@drawable/common_border"
                 android:text="设置"/>
 
             </LinearLayout>

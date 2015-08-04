@@ -15,73 +15,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="220dp"
-            android:layout_height="60dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/guide_text_1" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/guide_01" />
 
-        <RelativeLayout
-            android:layout_width="320dp"
-            android:layout_height="270dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/ic_guide_phone">
-
-            <ImageView
-                android:id="@+id/iv_guide_earth"
-                android:layout_width="170dp"
-                android:layout_height="170dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="-70dp"
-                android:background="@drawable/ic_guide_earth" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="3dp"
-                android:background="@drawable/ic_guide_plan" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="60dp"
-                android:layout_marginLeft="70dp"
-                android:background="@drawable/ic_guide_plane" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/base_divider_color" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_guide_dot1" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_guide_dot" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_guide_dot" />
-        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

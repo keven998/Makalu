@@ -429,6 +429,7 @@ public class TravelApi extends BaseApi {
             e.printStackTrace();
         }
         setDefaultParams(request);
+        LogUtil.d(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
 

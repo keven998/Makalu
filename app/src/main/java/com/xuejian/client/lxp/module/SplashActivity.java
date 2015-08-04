@@ -39,7 +39,7 @@ import com.xuejian.client.lxp.module.my.RegActivity;
  */
 public class SplashActivity extends Activity implements View.OnClickListener {
     private final int SPLASH_DISPLAY_LENGHT = 1500; // 延迟启动
-    private boolean showSplash = false;
+    private boolean showSplash = true;
     private ImageView splashIv;
     private Button sp_log, sp_reg;
     private TextView sp_bounce;

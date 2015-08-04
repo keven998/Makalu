@@ -110,14 +110,28 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(connectionReceiver, intentFilter);
-
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+
         if (AccountManager.getInstance().getLoginAccount(this) != null) {
+            if (IMClient.getInstance().isDbEmpty()){
+                imLogin(AccountManager.getInstance().getLoginAccount(this));
+            }
             initClient();
             //   DialogManager.getInstance().showLoadingDialog(this);
         }
     }
-
+    private void imLogin(final User user) {
+        //初始化数据库，方便后面操作
+        UserDBManager.getInstance().initDB(user.getUserId() + "");
+        UserDBManager.getInstance().saveContact(user);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
+        //3、存入内存
+        AccountManager.getInstance().setLogin(true);
+        AccountManager.getInstance().saveLoginAccount(this, user);
+        AccountManager.setCurrentUserId(String.valueOf(user.getUserId()));
+        // 进入主页面
+    }
     public void initClient() {
         IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), IMClient.getInstance().getConversationIds(), new HttpCallback() {
             @Override

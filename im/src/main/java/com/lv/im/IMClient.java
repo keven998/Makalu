@@ -569,6 +569,9 @@ public class IMClient {
     public void getConversationAttr(String userId,String friendId,HttpCallback callback){
         HttpUtils.getConversationAttr(userId,friendId,callback);
     }
+    public boolean isDbEmpty(){
+        return db==null;
+    }
     public void logout() {
         isLogin = false;
         db.disconnectDB();

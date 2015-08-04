@@ -127,7 +127,7 @@ public class UserApi extends BaseApi {
             jsonObject.put("dialCode", 86);
             jsonObject.put("action", Integer.parseInt(actionCode));
             if (!TextUtils.isEmpty(uid)) {
-                jsonObject.put("userId", uid);
+                jsonObject.put("userId", Integer.parseInt(uid));
             }
 
         } catch (JSONException e) {
@@ -202,16 +202,16 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler bindPhone(String phone, String uid, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL + String.format(BIND_PHONE, uid));
+        request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
             jsonObject.put("token", token);
-//            if (!TextUtils.isEmpty(pwd)) {
-//                jsonObject.put("pwd", pwd);
-//            }
+            if (!TextUtils.isEmpty(pwd)) {
+                jsonObject.put("newPassword", pwd);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

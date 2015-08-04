@@ -668,7 +668,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             intent.putExtra("conversation", conversation);
             intent.putExtra("userId", AccountManager.getCurrentUserId());
             intent.putExtra("isShare", true);
-            intent.setAction("action.chat");
+          //  intent.setAction("action.chat");
             startActivity(intent);
         } else if (id == R.id.btn_dest) {
             MobclickAgent.onEvent(ChatActivity.this,"chat_item_lxpsearch");

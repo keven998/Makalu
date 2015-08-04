@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -290,7 +289,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         MobclickAgent.onPause(this);
     }
 
-    private void bindView(final User user) {
+    private void bindView(final User user,final long userId) {
         tv_nickname.setText(user.getNickName());
         ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
@@ -337,8 +336,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AccountActvity.this, StrategyListActivity.class);
-                intent.putExtra("userId", String.valueOf(user.getUserId()));
-                intent.putExtra("user_name", user.getNickName());
+                intent.putExtra("userId", String.valueOf(userId));
                 startActivity(intent);
             }
         });
@@ -364,8 +362,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         if (!TextUtils.isEmpty(user.getTel())) {
             tv_bind_phone.setText("已绑定");
         }
-
-        //getUserPics(user.getUserId());
+        tv_photo.setText(user.getAlbumCnt() + "张");
+      //  getUserPics(user.getUserId());
 
     }
 
@@ -406,9 +404,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.ll_zodiac:
-                DatePickerDialog dialog;
-                if(Build.BRAND.equals("Meizu")){
-                    dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+ //               if(Build.BRAND.equals("Meizu")){
+                DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         if (!birthTimeFlag) {
@@ -431,32 +428,32 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         }
                     }
                 }, 1990, 0, 0);
-                }else {
-                    dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            if (!birthTimeFlag) {
-                                monthOfYear++;
-                                String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
-                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                try {
-                                    Date date = format.parse(dateString);
-                                    if (date.after(new Date())) {
-                                        ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
-                                    } else {
-                                        setBirthDay(dateString);
-                                    }
-                                } catch (ParseException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-                                birthTimeFlag = true;
-                            } else {
-                                birthTimeFlag = false;
-                            }
-                        }
-                    }, 1990, 0, 0);
-                }
+//                }else {
+//                    dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
+//                        @Override
+//                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                            if (!birthTimeFlag) {
+//                                monthOfYear++;
+//                                String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+//                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                                try {
+//                                    Date date = format.parse(dateString);
+//                                    if (date.after(new Date())) {
+//                                        ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
+//                                    } else {
+//                                        setBirthDay(dateString);
+//                                    }
+//                                } catch (ParseException e) {
+//                                    // TODO Auto-generated catch block
+//                                    e.printStackTrace();
+//                                }
+//                                birthTimeFlag = true;
+//                            } else {
+//                                birthTimeFlag = false;
+//                            }
+//                        }
+//                    }, 1990, 0, 0);
+//                }
 //                DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 //                    @Override
 //                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -532,7 +529,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
     private void refreshUserInfo() {
-        User user = AccountManager.getInstance().getLoginAccount(this);
+       final User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
             if (user.getGender().equalsIgnoreCase("M")) {
                 iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
@@ -548,7 +545,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
-                        bindView(userResult.result);
+                        bindView(userResult.result,user.getUserId());
                     }
 
                 }

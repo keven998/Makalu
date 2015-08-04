@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -84,13 +85,18 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        if (!isFinishing())
-                            ToastUtil.getInstance(SetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+
                     }
 
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        if (code == HttpManager.PERMISSION_ERROR){
+                            ToastUtil.getInstance(SetPwdActivity.this).showToast("验证码失效");
+                        }
+                        else {
+                           if (!isFinishing()) ToastUtil.getInstance(SetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                        }
 
                     }
                 });

@@ -262,6 +262,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
+                    tv_title.setText(Info.result.getCountryCnt()+"国"+Info.result.getTrackCnt()+"城市");
                     MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
                     if (myFragment != null) {
                         myFragment.refreshLoginStatus();
