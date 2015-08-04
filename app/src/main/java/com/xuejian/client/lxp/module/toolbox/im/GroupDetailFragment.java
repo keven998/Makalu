@@ -123,17 +123,15 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 final CheckedTextView ctv = (CheckedTextView) v;
                 final Boolean isOpen = ctv.isChecked();
                 ctv.setChecked(!isOpen);
-                IMClient.getInstance().muteConversation(conversation, !isOpen, new HttpCallback() {
+                IMClient.getInstance().muteConversation(groupId, !isOpen, new HttpCallback() {
                     @Override
                     public void onSuccess() {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
                                 SettingConfig.getInstance().setLxpNoticeSetting(getActivity().getApplicationContext(), groupId, !isOpen);
                             }
                         });
-
                     }
 
                     @Override

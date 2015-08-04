@@ -12,6 +12,7 @@ import com.lv.utils.Config;
 import com.lv.utils.JsonValidator;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
+import com.xuejian.client.lxp.common.account.AccountManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,9 @@ public class MessageReceiver extends BroadcastReceiver {
                             String message = object.getString("message");
                             for (String key : routeMap.keySet()) {
                                 if (key.equals(routeKey)) {
+                                    if ("IM".equals(key)&& AccountManager.getInstance().getLoginAccount(context)==null){
+                                        return;
+                                    }
                                     for (MsgListener listener : routeMap.get(routeKey)) {
                                         if (Config.isDebug) {
                                             Log.i(Config.TAG, "patch Message " + routeKey);

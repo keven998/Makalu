@@ -71,7 +71,7 @@ public class ChatMenuFragment extends Fragment {
                 final CheckedTextView ctv = (CheckedTextView) v;
                 final Boolean isOpen = ctv.isChecked();
                 ctv.setChecked(!isOpen);
-                IMClient.getInstance().muteConversation(conversation, !isOpen, new HttpCallback() {
+                IMClient.getInstance().muteConversation(userId, !isOpen, new HttpCallback() {
                     @Override
                     public void onSuccess() {
                         System.out.println("设置成功");

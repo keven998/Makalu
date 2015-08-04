@@ -55,6 +55,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lxp_dqm07 on 2015/5/18.
@@ -209,20 +210,19 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     private void startTalk() {
         if (me != null) {
-            IMClient.getInstance().getConversationAttr(AccountManager.getCurrentUserId(), String.valueOf(userId), new HttpCallback() {
+            List<String> uids=new ArrayList<>();
+            uids.add(String.valueOf(userId));
+            IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(),uids, new HttpCallback() {
                 @Override
                 public void onSuccess() {
-
                 }
-
                 @Override
                 public void onSuccess(String result) {
                     try {
-
+                        System.out.println(result);
                         JSONObject res = new JSONObject(result);
                         JSONArray array = res.getJSONArray("result");
                         SettingConfig.getInstance().setLxpNoticeSetting(HisMainPageActivity.this, String.valueOf(array.getJSONObject(0).getInt("targetId")), array.getJSONObject(0).getBoolean("muted"));
-                        System.out.println(result);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -230,7 +230,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
                     intent.putExtra("friend_id", String.valueOf(userId));
                     intent.putExtra("chatType", "single");
-                 //   intent.putExtra("newCon", true);
                     startActivity(intent);
                 }
 
@@ -241,7 +240,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
                     intent.putExtra("friend_id", String.valueOf(userId));
                     intent.putExtra("chatType", "single");
-                 //   intent.putExtra("newCon", true);
+                    //   intent.putExtra("newCon", true);
                     startActivity(intent);
                 }
             });

@@ -119,14 +119,14 @@ public class ImageUtils {
 //        return var5.getAbsolutePath();
     }
 
-    public static Bitmap decodeScaleImage(String var0, int var1, int var2) {
-        BitmapFactory.Options var3 = getBitmapOptions(var0);
-        int var4 = calculateInSampleSize(var3, var1, var2);
-        Log.d("img", "original wid" + var3.outWidth + " original height:" + var3.outHeight + " sample:" + var4);
-        var3.inSampleSize = var4;
-        var3.inJustDecodeBounds = false;
-        Bitmap var5 = BitmapFactory.decodeFile(var0, var3);
-        int var6 = readPictureDegree(var0);
+    public static Bitmap decodeScaleImage(String path, int width, int height) {
+        BitmapFactory.Options option = getBitmapOptions(path);
+        int var4 = calculateInSampleSize(option, width, height);
+        Log.d("img", "original wid" + option.outWidth + " original height:" + option.outHeight + " sample:" + var4);
+        option.inSampleSize = var4;
+        option.inJustDecodeBounds = false;
+        Bitmap var5 = BitmapFactory.decodeFile(path, option);
+        int var6 = readPictureDegree(path);
         Bitmap var7 = null;
         if (var5 != null && var6 != 0) {
             var7 = rotaingImageView(var6, var5);
@@ -149,17 +149,18 @@ public class ImageUtils {
         return var4;
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options var0, int var1, int var2) {
-        int var3 = var0.outHeight;
-        int var4 = var0.outWidth;
-        int var5 = 1;
-        if (var3 > var2 || var4 > var1) {
-            int var6 = Math.round((float) var3 / (float) var2);
-            int var7 = Math.round((float) var4 / (float) var1);
-            var5 = var6 > var7 ? var6 : var7;
+    public static int calculateInSampleSize(BitmapFactory.Options option, int width, int height) {
+        int realHeight = option.outHeight;
+        int realWidth = option.outWidth;
+        int sample = 1;
+        if (realHeight > height || realWidth > width) {
+            int var6 = Math.round((float) realHeight / (float) height);
+            int var7 = Math.round((float) realWidth / (float) width);
+             sample = var6 > var7 ? var6 : var7;
+      //      sample = var6 < var7 ? var6 : var7;
         }
 
-        return var5;
+        return sample;
     }
 
     public static String getThumbnailImage(String var0, int var1) {

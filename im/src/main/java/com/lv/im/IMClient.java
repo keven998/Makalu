@@ -566,12 +566,15 @@ public class IMClient {
     public List<String> getConversationIds(){
         return db.getConversationIds();
     }
+
     public void getConversationAttr(String userId,String friendId,HttpCallback callback){
         HttpUtils.getConversationAttr(userId,friendId,callback);
     }
+
     public boolean isDbEmpty(){
         return db==null;
     }
+
     public void logout() {
         isLogin = false;
         db.disconnectDB();

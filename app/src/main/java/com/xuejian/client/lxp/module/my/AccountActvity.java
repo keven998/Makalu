@@ -408,26 +408,28 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (!birthTimeFlag) {
-                            monthOfYear++;
-                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                            try {
-                                Date date = format.parse(dateString);
-                                if (date.after(new Date())) {
-                                    ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
-                                } else {
-                                    setBirthDay(dateString);
-                                }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            birthTimeFlag = true;
-                        } else {
-                            birthTimeFlag = false;
-                        }
+//                        if (!birthTimeFlag) {
+//                            monthOfYear++;
+//                            String dateString = year + "-" + monthOfYear + "-" + dayOfMonth;
+//                            System.out.println("datastring  "+dateString);
+//                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                            try {
+//                                Date date = format.parse(dateString);
+//                                if (date.after(new Date())) {
+//                                    ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
+//                                } else {
+//                                    setBirthDay(dateString);
+//                                }
+//                            } catch (ParseException e) {
+//                                e.printStackTrace();
+//                            }
+//                            birthTimeFlag = true;
+//                        } else {
+//                            birthTimeFlag = false;
+//                        }
                     }
                 }, 1990, 0, 0);
+               final DatePicker datePicker =dialog.getDatePicker();
 //                }else {
 //                    dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
 //                        @Override
@@ -483,7 +485,19 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        editBirthdayToInterface(getBirthDay());
+                        String dateString =  datePicker.getYear() + "-" +  (datePicker.getMonth()+1)+ "-" +  datePicker.getDayOfMonth();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        try {
+                            Date date = format.parse(dateString);
+                            if (date.after(new Date())) {
+                                ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
+                            } else {
+                                setBirthDay(dateString);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        editBirthdayToInterface(dateString);
                     }
                 });
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
@@ -1122,7 +1136,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setResidence(residence);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
-                    //residentTv.setText(residence);
+                    tv_resident.setText(residence);
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
             }

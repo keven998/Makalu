@@ -12,10 +12,10 @@ public class ConstellationUtil {
             R.drawable.leo,R.drawable.virgo,R.drawable.libra,R.drawable.scorpio,
             R.drawable.sagittarius};
     public  enum Constellation {
-        Capricorn(1, "capricorn"), Aquarius(2, "aquarius"), Pisces(3, "pisces"), Aries(4,
-                "aries"), Taurus(5, "taurus"), Gemini(6, "gemini"), Cancer(7, "cancer"), Leo(
-                8, "leo"), Virgo(9, "virgo"), Libra(10, "libra"), Scorpio(11, "scorpio"), Sagittarius(
-                12, "sagittarius");
+        Capricorn(0, "capricorn"), Aquarius(1, "aquarius"), Pisces(2, "pisces"), Aries(3,
+                "aries"), Taurus(4, "taurus"), Gemini(5, "gemini"), Cancer(6, "cancer"), Leo(
+                7, "leo"), Virgo(8, "virgo"), Libra(9, "libra"), Scorpio(10, "scorpio"), Sagittarius(
+                11, "sagittarius");
 
         private Constellation(int code, String chineseName) {
             this.code = code;
@@ -40,8 +40,7 @@ public class ConstellationUtil {
             Constellation.Capricorn
     };
 
-    public static final int[] constellationEdgeDay = { 21, 20, 21, 21, 22, 22,
-            23, 24, 24, 24, 23, 22 };
+    public static final int[] constellationEdgeDay = { 20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 23, 22 };
 
     public static int calculateConstellation(String birthday) {
         if (birthday == null || birthday.trim().length() == 0)

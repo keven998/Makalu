@@ -52,6 +52,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.ExtMessageBean;
+import com.xuejian.client.lxp.bean.H5MessageBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -65,6 +66,7 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -125,7 +127,8 @@ public class MessageAdapter extends BaseAdapter {
     private static final int FOOD_MSG = 14;
     private static final int SHOP_MSG = 15;
     private static final int HOTEL_MSG = 16;
-    private static final int H5_MSG = 17;
+    private static final int QA_MSG = 17;
+    private static final int H5_MSG = 18;
     private static final int TIP_MSG = 200;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
@@ -215,6 +218,7 @@ public class MessageAdapter extends BaseAdapter {
             case FOOD_MSG:
             case SHOP_MSG:
             case HOTEL_MSG:
+            case H5_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
         return -1;// invalid
@@ -260,12 +264,14 @@ public class MessageAdapter extends BaseAdapter {
             case FOOD_MSG:
             case SHOP_MSG:
             case HOTEL_MSG:
+            case H5_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
                         R.layout.row_sent_ext, null);
             default:
                 break;
         }
-       return inflater.inflate(R.layout.row_chat_tips, null);
+        return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
+                R.layout.row_sent_ext, null);
     }
 
     @SuppressLint("NewApi")
@@ -324,6 +330,7 @@ public class MessageAdapter extends BaseAdapter {
                 case FOOD_MSG:
                 case SHOP_MSG:
                 case HOTEL_MSG:
+                case H5_MSG:
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                     holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
                     holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
@@ -337,10 +344,20 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     break;
                 default:
-                    System.out.println("type " + message.getType());
+                    holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
+                    holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+                    holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
+                    holder.tv_attr = (TextView) convertView.findViewById(R.id.tv_attr);
+                    holder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
+                    holder.rl_content = (RelativeLayout) convertView.findViewById(R.id.rl_chatcontent);
+                    holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
+                    holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
+                    holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     break;
             }
-           convertView.setTag(holder);
+            convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -377,11 +394,15 @@ public class MessageAdapter extends BaseAdapter {
             case FOOD_MSG:
             case SHOP_MSG:
             case HOTEL_MSG:
+            case H5_MSG:
                 handleGroupMessage(position, convertView, message, holder);
                 handleExtMessage(message, holder, position);
                 handleCommonMessage(position, convertView, message, holder);
                 break;
             default:
+                handleGroupMessage(position, convertView, message, holder);
+                handleExtMessage(message, holder, position);
+                handleCommonMessage(position, convertView, message, holder);
                 break;
         }
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
@@ -468,21 +489,6 @@ public class MessageAdapter extends BaseAdapter {
                 }
             }
         }
-//        } else {
-//            // 如果是文本或者地图消息并且不是group messgae，显示的时候给对方发送已读回执
-//            if ((message.getType() == Type.TXT || message.getType() == Type.LOCATION) && !message.isAcked && chatType != ChatType.GroupChat) {
-//                // 不是语音通话记录
-//                if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
-//                    try {
-//                        EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-//                        // 发送已读回执
-//                        message.isAcked = true;
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }
 
     }
 
@@ -697,6 +703,28 @@ public class MessageAdapter extends BaseAdapter {
 
                 }
             });
+        } else if (extType == H5_MSG) {
+          final  H5MessageBean h5MessageBean = GsonTools.parseJsonToBean(conent, H5MessageBean.class);
+            holder.tv_attr.setVisibility(View.GONE);
+//            } else {
+//                holder.tv_attr.setVisibility(View.VISIBLE);
+//                holder.tv_attr.setText(bean.timeCost);
+//            }
+            holder.tv_name.setText(h5MessageBean.title);
+            holder.tv_desc.setText(h5MessageBean.desc);
+
+            //         holder.tv_type.setText("景点");
+            ImageLoader.getInstance().displayImage(h5MessageBean.image, holder.iv_image, UILUtils.getRadiusOption(3));
+            holder.rl_content.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, PeachWebViewActivity.class);
+                    intent.putExtra("mCurrentUrl", h5MessageBean.url);
+                    activity.startActivity(intent);
+                }
+            });
+
         } else {
             holder.tv.setText("本版本不支持此消息类型，请升级最新版本！");
         }
@@ -771,45 +799,28 @@ public class MessageAdapter extends BaseAdapter {
         // 接收方向的消息
         if (message.getSendType() == TYPE_REV) {
             System.out.println("getStatus " + message.getStatus());
-            Bitmap defaultImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
+            Bitmap defaultImage=ImageCache.getInstance().get(String.valueOf(R.drawable.default_image));
+            if (defaultImage==null){
+                ImageCache.getInstance().put(String.valueOf(R.drawable.default_image), BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image));
+            }
             // "it is receive msg";
             if (message.getStatus() == 1) {
-                holder.iv.setImageBitmap(defaultImage);
+                //   holder.iv.setImageBitmap(defaultImage);
                 loadFailedImage(message, holder);
             } else if (message.getStatus() == 2) {
-                holder.iv.setImageBitmap(defaultImage);
+                //    holder.iv.setImageBitmap(defaultImage);
                 loadFailedImage(message, holder);
                 return;
             } else if (message.getStatus() == 0) {
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
-                holder.iv.setImageBitmap(defaultImage);
+                //    holder.iv.setImageBitmap(defaultImage);
                 String thumbpath = getStringAttr(message, "thumbPath");
                 String romotePath = getStringAttr(message, "full");
                 String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
                 if (thumbpath != null) {
                     showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message, holder);
                 }
-
-
-//                // "!!!! not back receive, show image directly");
-//                holder.pb.setVisibility(View.GONE);
-//                holder.tv.setVisibility(View.GONE);
-//                holder.iv.setImageBitmap(defaultImage);
-//                String url=null;
-//                try {
-//                    url=new JSONObject(message.getMessage()).getString("url");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                if (url!= null) {
-//                    // String filePath = imgBody.getLocalUrl();
-//                    String remotePath = imgBody.getRemoteUrl();
-//                    String filePath = ImageUtils.getImagePath(remotePath);
-//                    String thumbRemoteUrl = imgBody.getThumbnailUrl();
-//                    String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
-//                    showImageView(thumbnailPath, holder.iv, filePath, imgBody.getRemoteUrl(), message);
-//                }
             }
             return;
         }
@@ -1072,14 +1083,14 @@ public class MessageAdapter extends BaseAdapter {
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
         isRead = (boolean) getVoiceFilepath(message, "isRead");
-        holder.tv.setText(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP)+ "´´");
-        if (filepath==null){
-            loadFailedVoice(message,holder);
+        holder.tv.setText(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP) + "´´");
+        if (filepath == null) {
+            loadFailedVoice(message, holder);
             return;
         }
-        File file =new File(filepath);
-        if (!file.exists()){
-            loadFailedVoice(message,holder);
+        File file = new File(filepath);
+        if (!file.exists()) {
+            loadFailedVoice(message, holder);
             return;
         }
         holder.rl_voice_content.setOnClickListener(new VoicePlayClickListener(friendId, message, holder.iv, holder.iv_read_status, this, activity, friendId, chatType, isRead, filepath));
@@ -1217,8 +1228,8 @@ public class MessageAdapter extends BaseAdapter {
         }
     }
 
-    private void loadFailedVoice(final MessageBean message,final ViewHolder holder) {
-        if (holder.pb!=null){
+    private void loadFailedVoice(final MessageBean message, final ViewHolder holder) {
+        if (holder.pb != null) {
             holder.pb.setVisibility(View.INVISIBLE);
         }
         final String thumburl = getStringAttr(message, "url");
@@ -1228,7 +1239,7 @@ public class MessageAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 holder.pb.setVisibility(View.VISIBLE);
-                new DownloadVoice(thumburl,filename).download(new DownloadVoice.DownloadListener() {
+                new DownloadVoice(thumburl, filename).download(new DownloadVoice.DownloadListener() {
                     @Override
                     public void onSuccess() {
                         try {
@@ -1240,7 +1251,7 @@ public class MessageAdapter extends BaseAdapter {
                                 @Override
                                 public void run() {
                                     holder.pb.setVisibility(View.GONE);
-                                  //  holder.tv.setVisibility(View.GONE);
+                                    //  holder.tv.setVisibility(View.GONE);
                                     message.setStatus(0);
                                     notifyDataSetChanged();
                                 }
@@ -1262,7 +1273,7 @@ public class MessageAdapter extends BaseAdapter {
                             @Override
                             public void run() {
                                 holder.pb.setVisibility(View.GONE);
-                              //  holder.tv.setVisibility(View.GONE);
+                                //  holder.tv.setVisibility(View.GONE);
                                 message.setStatus(2);
                                 notifyDataSetChanged();
                             }
@@ -1393,23 +1404,22 @@ public class MessageAdapter extends BaseAdapter {
      * 处理位置消息
      */
     private void handleLocationMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
-        TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
         double lat = getDoubleAttr(message, "lat");
         double lng = getDoubleAttr(message, "lng");
         String desc = getStringAttr(message, "address");
         String path = getStringAttr(message, "path");
         String remote = getStringAttr(message, "snapshot");
-        locationView.setText(desc);
+        holder.tv.setText(desc);
 
         Bitmap bitmap = ImageCache.getInstance().get(path);
         if (bitmap != null) {
-            locationView.setBackgroundDrawable(new BitmapDrawable(bitmap));
+            holder.tv.setBackgroundDrawable(new BitmapDrawable(bitmap));
         } else
-            new LoadImageTask().execute(path, null, remote, chatType, null, activity, message, locationView);
+            new LoadImageTask().execute(path, null, remote, chatType, null, activity, message, holder.tv);
 
 
-        locationView.setOnClickListener(new MapClickListener(lat, lng, desc));
-        locationView.setOnLongClickListener(new OnLongClickListener() {
+        holder.tv.setOnClickListener(new MapClickListener(lat, lng, desc));
+        holder.tv.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 activity.startActivityForResult(
@@ -1492,6 +1502,7 @@ public class MessageAdapter extends BaseAdapter {
                 message.setStatus(2);
                 updateSendedView(message, holder);
             }
+
             @Override
             public void onSuccess(String result) {
             }
@@ -1505,9 +1516,6 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv.setVisibility(View.INVISIBLE);
         final String thumburl = getStringAttr(message, "thumb");
         final String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
-        final String romotePath = getStringAttr(message, "full");
-        final String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
-
         holder.iv.setClickable(true);
         holder.iv.setOnClickListener(new OnClickListener() {
             @Override

@@ -396,7 +396,10 @@ public class UserApi extends BaseApi {
                 jsonObject.put("signature", signature);
             }
             if (!TextUtils.isEmpty(gender)) {
-                jsonObject.put("gender", gender);
+                if (gender.equals("U")){
+                    jsonObject.put("gender", null);
+                }
+                else jsonObject.put("gender", gender);
             }
             if (!TextUtils.isEmpty(residence)) {
                 jsonObject.put("residence", residence);
@@ -642,7 +645,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler delUserAlbumPic(String userId, String picId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + picId);
+        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/"+picId);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }

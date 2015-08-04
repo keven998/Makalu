@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:background="@color/base_color_white"
         android:gravity="center_vertical|left"
+        android:hint="支持6-12位英文数字组合"
         android:paddingBottom="12dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"

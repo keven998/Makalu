@@ -116,9 +116,11 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                         if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(ForgetPwdActivity.this).showToast("发送短信过于频繁！");
-                        } else if (!isFinishing())
+                        } else if (code == HttpManager.PARAMETER_ERROR) {
+                            if (!isFinishing())
+                                ToastUtil.getInstance(ForgetPwdActivity.this).showToast("号码尚未注册！");
+                        }else if (!isFinishing())
                             ToastUtil.getInstance(ForgetPwdActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-
                     }
                 });
 
