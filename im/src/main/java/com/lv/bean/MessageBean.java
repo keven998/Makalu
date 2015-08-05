@@ -19,6 +19,15 @@ public class MessageBean {
     private long SenderId;//如果是群聊显示发送者的 id，单聊不显示
     private String abbrev;
 
+    public long getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(long receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    private long receiverId;
     public int getProgress() {
         return progress;
     }
@@ -35,6 +44,18 @@ public class MessageBean {
     public MessageBean(String content) {
         this(0, 0, 1, content, TimeUtils.getTimestamp(), 0, null, Long.parseLong(IMClient.getInstance().getCurrentUserId()),null);
     }
+    public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId,long _receiverId) {
+        ServerId = serverId;
+        Status = status;
+        Type = type;
+        Message = message;
+        CreateTime = createTime;
+        SendType = sendType;
+        Metadata = metadata;
+        SenderId = senderId;
+        receiverId = _receiverId;
+    }
+
     public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId) {
         ServerId = serverId;
         Status = status;

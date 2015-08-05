@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.lv.utils.Config;
-import com.lv.utils.CryptUtils;
-import com.lv.utils.TimeUtils;
 import com.lv.bean.ConversationBean;
 import com.lv.bean.InventMessage;
 import com.lv.bean.MessageBean;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
+import com.lv.utils.Config;
+import com.lv.utils.CryptUtils;
+import com.lv.utils.TimeUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -171,8 +171,13 @@ public class MessageDB {
          * 单聊
          */
         else if ("single".equals(chatType)) {
-            table_name = "chat_" + CryptUtils.getMD5String(entity.getSenderId() + "");
-            chater = entity.getSenderId() + "";
+            if (String.valueOf(entity.getSenderId()).equals(IMClient.getInstance().getCurrentUserId())){
+             table_name = "chat_" + CryptUtils.getMD5String(entity.getReceiverId() + "");
+                chater = entity.getReceiverId() + "";
+            }else {
+                table_name = "chat_" + CryptUtils.getMD5String(entity.getSenderId() + "");
+                chater = entity.getSenderId() + "";
+            }
         }
         /**
          * 群聊

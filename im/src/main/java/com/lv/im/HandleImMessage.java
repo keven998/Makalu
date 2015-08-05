@@ -152,7 +152,6 @@ public class HandleImMessage {
         public void OnMessage(Context context, String message) {
             c = context;
             Message newmsg = JSON.parseObject(message, Message.class);
-            newmsg.setSendType(1);
             /**
              * 处理消息重组、丢失
              */
@@ -174,7 +173,17 @@ public class HandleImMessage {
             } else if (messageBean.getTimestamp() < lastTime) {
                 messageBean.setTimestamp(TimeUtils.getTimestamp());
             }
-            messageBean.setSendType(1);
+            boolean isFromSelf = false;
+            try {
+                isFromSelf = messageBean.getSenderId() == Long.parseLong(IMClient.getInstance().getCurrentUserId());
+                if (isFromSelf) {
+                    messageBean.setSendType(0);
+                } else {
+                    messageBean.setSendType(1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             int result = IMClient.getInstance().saveReceiveMsg(messageBean);
             if (Config.isDebug) {
                 Log.i(Config.TAG, "result :" + result);
@@ -193,26 +202,29 @@ public class HandleImMessage {
                         System.out.println("ehList size: " + ehList.size());
                     }
                     //  for (MessageHandler handler : ehList) {
-                    boolean flag = false;
-                    if (ehList.size() > 0) {
-                        for (MessageHandler handler : ehList) {
-                            if (openStateMap.containsKey(handler)) {
-                                flag = true;
-                                if (messageBean.getConversation().equals(openStateMap.get(handler)))
-                                    IMClient.getInstance().updateReadStatus(openStateMap.get(handler));
-                                else
-                                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                    if (!isFromSelf) {
+                        boolean flag = false;
+                        if (ehList.size() > 0) {
+                            for (MessageHandler handler : ehList) {
+                                if (openStateMap.containsKey(handler)) {
+                                    flag = true;
+                                    if (messageBean.getConversation().equals(openStateMap.get(handler)))
+                                        IMClient.getInstance().updateReadStatus(openStateMap.get(handler));
+                                    else
+                                        IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                                }
                             }
-                        }
-                        if (!flag) {
-                            IMClient.getInstance().increaseUnRead(messageBean.getConversation());
-                        }
+                            if (!flag) {
+                                IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                            }
 //                    if (openStateMap.containsKey(ehList.get(0))) {
 //                        if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))
 //                            IMClient.getInstance().updateReadStatus(openStateMap.get(ehList.get(0)));
 //                        else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
 //                    } else IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                        }
                     }
+
                     if (messageBean.getMsgType() == 200) {
                         android.os.Message cmd_msg = android.os.Message.obtain();
                         cmd_msg.obj = messageBean;
@@ -224,13 +236,13 @@ public class HandleImMessage {
 //                    notifyMsg(c, messageBean);
 //                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
 //                }
-                    if (SharePrefUtil.getLxqPushSetting(c)&&isBackground(c)) {
+                    if (SharePrefUtil.getLxqPushSetting(c) && isBackground(c)) {
                         if ("group".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getGroupId()), false)) {
                             notifyMsg(c, messageBean);
-                        } else if ("single".equals(messageBean.getChatType()) &&!SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getSenderId()), false)) {
+                        } else if ("single".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getSenderId()), false)) {
                             notifyMsg(c, messageBean);
                         }
-           //             IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                        //             IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                     }
                     String content = messageBean.getContents();
                     JSONObject object = null;

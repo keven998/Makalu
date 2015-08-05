@@ -477,7 +477,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             Intent intent = new Intent(mContext, PeachWebViewActivity.class);
             intent.putExtra("url", locDetailBean.playGuide);
             intent.putExtra("enable_bottom_bar", true);
-            intent.putExtra("title", "旅游指南");//String.format("玩转%s", mCityNameTv.getText()));
+            intent.putExtra("title", "旅行指南");//String.format("玩转%s", mCityNameTv.getText()));
             startActivity(intent);
         } else {
             Log.e("CLICK", "没有数据");

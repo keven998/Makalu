@@ -46,6 +46,16 @@ public class Message implements Serializable {
     private String abbrev;
     private String ChatType;//聊天类型
 
+    public long getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(long receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    private long receiverId;
+
     public int getStatus() {
         return status;
     }
@@ -75,7 +85,7 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public Message(String id, String conversation, int msgId, int msgType, long senderId, String senderAvatar, String senderName, String contents, long timestamp, int sendType, long groupId, String chatType, String abbrev) {
+    public Message(String id, String conversation, int msgId, int msgType, long senderId, String senderAvatar, String senderName, String contents, long timestamp, int sendType, long groupId, String chatType, String abbrev,long receiverId) {
         this.id = id;
         this.conversation = conversation;
         this.msgId = msgId;
@@ -89,6 +99,7 @@ public class Message implements Serializable {
         this.GroupId = groupId;
         this.ChatType = chatType;
         this.abbrev = abbrev;
+        this.receiverId = receiverId;
     }
 
     public String getId() {

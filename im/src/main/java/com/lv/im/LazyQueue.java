@@ -207,7 +207,7 @@ public class LazyQueue {
                 Log.i(Config.TAG, "checkOrder:first msg ");
             }
             return true;
-        } else if (messageBean.getMsgId() - 1 == lastid) {
+        } else if (messageBean.getMsgId() - 1 == lastid||messageBean.getMsgId()==lastid) {
             if (Config.isDebug) {
                 Log.i(Config.TAG, "checkOrder:正序 ");
             }

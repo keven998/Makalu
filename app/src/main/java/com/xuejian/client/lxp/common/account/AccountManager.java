@@ -27,6 +27,15 @@ public class AccountManager {
     public static String currentUserNick = "";
     private static AccountManager instance;
 
+    public static String getChannelId() {
+        return ChannelId;
+    }
+
+    public static void setChannelId(String channelId) {
+        ChannelId = channelId;
+    }
+
+    public static String ChannelId;
     public static AccountManager getInstance() {
         if (instance == null) {
             instance = new AccountManager();
