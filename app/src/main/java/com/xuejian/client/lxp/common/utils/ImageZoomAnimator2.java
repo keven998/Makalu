@@ -62,13 +62,18 @@ public class ImageZoomAnimator2 {
         zoomContainer.setVisibility(View.VISIBLE);
         zoomViewPager.setCurrentItem(position, false);
         SmoothPhotoView photeView = (SmoothPhotoView) zoomViewPager.findViewWithTag(position);
-        if (photeView.getDrawable() == null) {
-            File file = ImageLoader.getInstance().getDiskCache().get(imageUrls.get(position).url);
-            if ((file != null) && file.exists()) {
-                Bitmap bitmap = ImageLoader.getInstance().loadImageSync(Uri.fromFile(file).toString());
-                photeView.setImageBitmap(bitmap);
+   //     try{
+            if (photeView.getDrawable() == null) {
+                File file = ImageLoader.getInstance().getDiskCache().get(imageUrls.get(position).url);
+                if ((file != null) && file.exists()) {
+                    Bitmap bitmap = ImageLoader.getInstance().loadImageSync(Uri.fromFile(file).toString());
+                    photeView.setImageBitmap(bitmap);
+                }
             }
-        }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+
 
         View view = fromViewGroup.findViewWithTag(position);
         if (view != null) {

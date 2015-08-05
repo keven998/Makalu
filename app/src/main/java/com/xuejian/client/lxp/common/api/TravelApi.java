@@ -401,7 +401,6 @@ public class TravelApi extends BaseApi {
             request.putUrlParams("status", status);
         }
         setDefaultParams(request);
-        //request.setHeader("UserId", userId);
         return HttpManager.request(request, callback);
     }
 
@@ -414,7 +413,8 @@ public class TravelApi extends BaseApi {
     public static PTRequestHandler copyStrategy(long userId, String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, String.valueOf(userId)));
+        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("guideId", id);
@@ -430,6 +430,7 @@ public class TravelApi extends BaseApi {
         }
         setDefaultParams(request);
         LogUtil.d(jsonObject.toString());
+        System.out.println(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
 

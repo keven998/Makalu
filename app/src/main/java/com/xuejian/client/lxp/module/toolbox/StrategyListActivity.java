@@ -76,6 +76,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private int mContentType = 0;
     private boolean newCopy; //复制补丁
     private String conversation;
+    private String copyId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -85,6 +86,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         chatType = getIntent().getStringExtra("chatType");
         conversation = getIntent().getStringExtra("conversation");
         newCopy = getIntent().getBooleanExtra("new_copy", false);
+        copyId = getIntent().getStringExtra("copyId");
         initView();
         initData();
     }
@@ -420,7 +422,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         public void showData(final int position, final StrategyBean itemData) {
             tv_tian.setText(String.valueOf(itemData.dayCnt));
             mCitysTv.setText(itemData.summary);
-            if (newCopy) {
+            if (newCopy&&itemData.id.equals(copyId)) {
                 SpannableString planStr = new SpannableString(String.format("(新复制)%s", itemData.title));
                 planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mNameTv.setText(planStr);

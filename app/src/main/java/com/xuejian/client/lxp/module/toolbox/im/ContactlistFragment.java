@@ -227,6 +227,11 @@ public class ContactlistFragment extends Fragment {
         }
         contactList.clear();
         contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
+        List<User> del = new ArrayList<>();
+        for (User user : contactList) {
+            if (user.getUserId()==10000||user.getUserId()==10001)del.add(user);
+        }
+        contactList.removeAll(del);
         // 排序
         Collections.sort(contactList, new Comparator<User>() {
 
