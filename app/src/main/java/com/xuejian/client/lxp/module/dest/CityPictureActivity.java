@@ -2,7 +2,6 @@ package com.xuejian.client.lxp.module.dest;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
@@ -86,7 +85,8 @@ public class CityPictureActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        initData();
+        id = getIntent().getStringExtra("id");
+        initData(id);
 
     }
 
@@ -144,8 +144,8 @@ public class CityPictureActivity extends PeachBaseActivity {
 
     }
 
-    private void initData() {
-        id = getIntent().getStringExtra("id");
+    private void initData(String id) {
+
         if (isUserPics || isTalentAlbum) {
             UserApi.getUserPicAlbumn(String.valueOf(id), new HttpCallBack<String>() {
                 @Override
@@ -162,6 +162,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                                 ib.url = imgArray.getJSONObject(0).getString("url");
                                 userPics.add(ib);
                             }
+                            AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(object.length());
                             picAdapter = new PicAdapter(userPics);
                             mCityPicGv.setAdapter(picAdapter);
                             ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
@@ -251,6 +252,10 @@ public class CityPictureActivity extends PeachBaseActivity {
             this.imageBeanList = imageBeanList;
             picOptions = UILUtils.getDefaultOption();
             imageLoader = ImageLoader.getInstance();
+        }
+        public void addAll(List<ImageBean> list){
+            imageBeanList.clear();
+            imageBeanList.addAll(list);
         }
 
         @Override
@@ -454,43 +459,46 @@ public class CityPictureActivity extends PeachBaseActivity {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     if (info.isOK()) {
                                         LogUtil.d(response.toString());
-                                        ImageBean ib = new ImageBean();
-                                        ib.url = Uri.fromFile(file).toString();
-                                        //上传图片，最新的图片置首位显示处理
-                                        ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
-                                        for (int i = 0; i < userPics.size(); i++) {
-                                            newUserPics.add(userPics.get(i));
-                                        }
                                         userPics.clear();
-                                        for (int j = 0; j <= newUserPics.size(); j++) {
-                                            if (j == 0) {
-                                                userPics.add(ib);
-                                            } else {
-                                                userPics.add(newUserPics.get(j - 1));
-                                            }
-                                        }
-                                        AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(userPics.size());
-                                        //userPics.add(ib);
-                                        try {
-                                            //上传图片，最新的图片置首位显示处理
-                                            ArrayList<String> newPicId = new ArrayList<String>();
-                                            for (int i = 0; i < pic_ids.size(); i++) {
-                                                newPicId.add(pic_ids.get(i));
-                                            }
-                                            pic_ids.clear();
-                                            for (int j = 0; j <= newPicId.size(); j++) {
-                                                if (j == 0) {
-                                                    pic_ids.add(response.getString("id"));
-                                                } else {
-                                                    pic_ids.add(newPicId.get(j - 1));
-                                                }
-                                            }
-
-                                            //pic_ids.add(response.getString("id"));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        picAdapter.notifyDataSetChanged();
+                                        initData(id);
+//                                        ImageBean ib = new ImageBean();
+//                                        ib.url = Uri.fromFile(file).toString();
+//                                        //上传图片，最新的图片置首位显示处理
+//                                        ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
+//                                        for (int i = 0; i < userPics.size(); i++) {
+//                                            newUserPics.add(userPics.get(i));
+//                                        }
+//                                        userPics.clear();
+//                                        for (int j = 0; j <= newUserPics.size(); j++) {
+//                                            if (j == 0) {
+//                                                userPics.add(ib);
+//                                            } else {
+//                                                userPics.add(newUserPics.get(j - 1));
+//                                            }
+//                                        }
+//                                        AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(userPics.size());
+//                                        //userPics.add(ib);
+//                                        try {
+//                                            //上传图片，最新的图片置首位显示处理
+//                                            ArrayList<String> newPicId = new ArrayList<String>();
+//                                            for (int i = 0; i < pic_ids.size(); i++) {
+//                                                newPicId.add(pic_ids.get(i));
+//                                            }
+//                                            pic_ids.clear();
+//                                            for (int j = 0; j <= newPicId.size(); j++) {
+//                                                if (j == 0) {
+//                                                    pic_ids.add(response.getString("id"));
+//                                                } else {
+//                                                    pic_ids.add(newPicId.get(j - 1));
+//                                                }
+//                                            }
+//
+//                                            //pic_ids.add(response.getString("id"));
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                        picAdapter.addAll(userPics);
+//                                        picAdapter.notifyDataSetChanged();
                                     }
 
                                 }

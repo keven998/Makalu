@@ -13,10 +13,10 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
+import com.aizou.core.utils.SharePrefUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
-import com.lv.utils.SharePrefUtil;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ValidationBean;
@@ -138,7 +138,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 if (userResult.code == 0) {
                                     imLogin(userResult.result);
                                     Intent accountIntent = new Intent(VerifyPhoneActivity.this, MainActivity.class);
-                                    SharePrefUtil.saveBoolean(getApplicationContext(),"firstReg",true);
+                                    SharePrefUtil.saveBoolean(getApplicationContext(), "firstReg", true);
                                     startActivityWithNoAnim(accountIntent);
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("注册成功");
                                     Intent intent = getIntent();

@@ -332,81 +332,83 @@ public class UserDBManager {
     }
 
     public synchronized void saveContactList(List<User> list) {
-        if (list.size() == 0) return;
+        if (list==null) return;
         mdb = getDB();
         ContentValues values1 = new ContentValues();
         values1.put("Type", 0);
         mdb.update(fri_table_name, values1, null, null);
-        mdb.beginTransaction();
-        for (User user : list) {
-            if (user.getNickName() == null || "".equals(user.getNickName())) {
-                user.setHeader("#");
-            } else if (" ".equals(user.getNickName().substring(0, 1))) {
-                user.setHeader("#");
-            } else {
-                String headerName = user.getNickName();
-                user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
-                        0, 1).toUpperCase());
-                char header = user.getHeader().toLowerCase().charAt(0);
-                if (header < 'a' || header > 'z') {
+        if (list.size()>0){
+            mdb.beginTransaction();
+            for (User user : list) {
+                if (user.getNickName() == null || "".equals(user.getNickName())) {
                     user.setHeader("#");
+                } else if (" ".equals(user.getNickName().substring(0, 1))) {
+                    user.setHeader("#");
+                } else {
+                    String headerName = user.getNickName();
+                    user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(
+                            0, 1).toUpperCase());
+                    char header = user.getHeader().toLowerCase().charAt(0);
+                    if (header < 'a' || header > 'z') {
+                        user.setHeader("#");
+                    }
                 }
-            }
-            Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
-            if (cursor.getCount() == 0) {
-                ContentValues values = new ContentValues();
-                values.put("userId", user.getUserId());
-                values.put("nickName", user.getNickName());
-                values.put("avatar", user.getAvatar());
-                values.put("avatarSmall", user.getAvatarSmall());
-                values.put("gender", user.getGender());
-                values.put("signature", user.getSignature());
-                values.put("tel", user.getTel());
-                values.put("secToken", user.getSecToken());
-                values.put("countryCode", user.getCountryCode());
-                values.put("email", user.getEmail());
-                values.put("memo", user.getMemo());
-                values.put("travelStatus", user.getTravelStatus());
-                values.put("residence", user.getResidence());
-                values.put("level", user.getLevel());
-                values.put("zodiac", user.getZodiac());
-                values.put("birthday", user.getBirthday());
-                //   values.put("tracks",tracksToString(user.getTracks()));
-                values.put("guideCnt", user.getGuideCnt());
-                values.put("Type", user.getType());
-                values.put("ext", user.getExt());
-                values.put("header", user.getHeader());
-                mdb.insert(fri_table_name, null, values);
-            } else {
-                ContentValues values = new ContentValues();
-                if (user.getUserId() != null) values.put("userId", user.getUserId());
-                if (user.getNickName() != null) values.put("nickName", user.getNickName());
-                if (user.getAvatar() != null) values.put("avatar", user.getAvatar());
-                if (user.getAvatarSmall() != null) values.put("avatarSmall", user.getAvatarSmall());
-                if (user.getGender() != null) values.put("gender", user.getGender());
-                if (user.getSignature() != null) values.put("signature", user.getSignature());
-                if (user.getTel() != null) values.put("tel", user.getTel());
-                if (user.getSecToken() != null) values.put("secToken", user.getSecToken());
-                if (user.getCountryCode() != null) values.put("countryCode", user.getCountryCode());
-                if (user.getEmail() != null) values.put("email", user.getEmail());
-                if (user.getMemo() != null) values.put("memo", user.getMemo());
-                if (user.getTravelStatus() != null)
+                Cursor cursor = mdb.rawQuery("select * from " + fri_table_name + " where userId=?", new String[]{String.valueOf(user.getUserId())});
+                if (cursor.getCount() == 0) {
+                    ContentValues values = new ContentValues();
+                    values.put("userId", user.getUserId());
+                    values.put("nickName", user.getNickName());
+                    values.put("avatar", user.getAvatar());
+                    values.put("avatarSmall", user.getAvatarSmall());
+                    values.put("gender", user.getGender());
+                    values.put("signature", user.getSignature());
+                    values.put("tel", user.getTel());
+                    values.put("secToken", user.getSecToken());
+                    values.put("countryCode", user.getCountryCode());
+                    values.put("email", user.getEmail());
+                    values.put("memo", user.getMemo());
                     values.put("travelStatus", user.getTravelStatus());
-                if (user.getResidence() != null) values.put("residence", user.getResidence());
-                if (user.getLevel() != null) values.put("level", user.getLevel());
-                if (user.getZodiac() != null) values.put("zodiac", user.getZodiac());
-                if (user.getBirthday() != null) values.put("birthday", user.getBirthday());
+                    values.put("residence", user.getResidence());
+                    values.put("level", user.getLevel());
+                    values.put("zodiac", user.getZodiac());
+                    values.put("birthday", user.getBirthday());
+                    //   values.put("tracks",tracksToString(user.getTracks()));
+                    values.put("guideCnt", user.getGuideCnt());
+                    values.put("Type", user.getType());
+                    values.put("ext", user.getExt());
+                    values.put("header", user.getHeader());
+                    mdb.insert(fri_table_name, null, values);
+                } else {
+                    ContentValues values = new ContentValues();
+                    if (user.getUserId() != null) values.put("userId", user.getUserId());
+                    if (user.getNickName() != null) values.put("nickName", user.getNickName());
+                    if (user.getAvatar() != null) values.put("avatar", user.getAvatar());
+                    if (user.getAvatarSmall() != null) values.put("avatarSmall", user.getAvatarSmall());
+                    if (user.getGender() != null) values.put("gender", user.getGender());
+                    if (user.getSignature() != null) values.put("signature", user.getSignature());
+                    if (user.getTel() != null) values.put("tel", user.getTel());
+                    if (user.getSecToken() != null) values.put("secToken", user.getSecToken());
+                    if (user.getCountryCode() != null) values.put("countryCode", user.getCountryCode());
+                    if (user.getEmail() != null) values.put("email", user.getEmail());
+                    if (user.getMemo() != null) values.put("memo", user.getMemo());
+                    if (user.getTravelStatus() != null)
+                        values.put("travelStatus", user.getTravelStatus());
+                    if (user.getResidence() != null) values.put("residence", user.getResidence());
+                    if (user.getLevel() != null) values.put("level", user.getLevel());
+                    if (user.getZodiac() != null) values.put("zodiac", user.getZodiac());
+                    if (user.getBirthday() != null) values.put("birthday", user.getBirthday());
 //            values.put("tracks",tracksToString(user.getTracks()));
-                if (user.getGuideCnt() != 0) values.put("guideCnt", user.getGuideCnt());
-                if (user.getType() != null) values.put("Type", user.getType());
-                if (user.getExt() != null) values.put("ext", user.getExt());
-                if (user.getHeader() != null) values.put("header", user.getHeader());
-                mdb.update(fri_table_name, values, "userId=?", new String[]{String.valueOf(user.getUserId())});
+                    if (user.getGuideCnt() != 0) values.put("guideCnt", user.getGuideCnt());
+                    if (user.getType() != null) values.put("Type", user.getType());
+                    if (user.getExt() != null) values.put("ext", user.getExt());
+                    if (user.getHeader() != null) values.put("header", user.getHeader());
+                    mdb.update(fri_table_name, values, "userId=?", new String[]{String.valueOf(user.getUserId())});
+                }
+                cursor.close();
             }
-            cursor.close();
+            mdb.setTransactionSuccessful();
+            mdb.endTransaction();
         }
-        mdb.setTransactionSuccessful();
-        mdb.endTransaction();
         closeDB();
     }
 

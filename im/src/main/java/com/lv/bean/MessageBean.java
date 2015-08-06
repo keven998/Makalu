@@ -42,7 +42,7 @@ public class MessageBean {
     }
 
     public MessageBean(String content) {
-        this(0, 0, 1, content, TimeUtils.getTimestamp(), 0, null, Long.parseLong(IMClient.getInstance().getCurrentUserId()),null);
+        this(0, 0, 1, content, TimeUtils.getTimestamp(), 0, null, Long.parseLong(IMClient.getInstance().getCurrentUserId()),null,0);
     }
     public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId,long _receiverId) {
         ServerId = serverId;
@@ -67,7 +67,7 @@ public class MessageBean {
         SenderId = senderId;
     }
 
-    public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId, String abbrev) {
+    public MessageBean(int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId, String abbrev,long receiverId) {
         ServerId = serverId;
         Status = status;
         Type = type;
@@ -77,6 +77,7 @@ public class MessageBean {
         Metadata = metadata;
         SenderId = senderId;
         this.abbrev = abbrev;
+        this.receiverId = receiverId;
     }
 
     public MessageBean(long localId, int serverId, int status, int type, String message, long createTime, int sendType, String metadata, long senderId) {

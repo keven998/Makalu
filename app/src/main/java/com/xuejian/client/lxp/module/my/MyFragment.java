@@ -41,6 +41,7 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
@@ -88,7 +89,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     private View rootView;
     private int picsNum = 0;
-    private boolean firstReg;
     private TextView notice;
     private String Sex;
     @Override
@@ -105,14 +105,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.fl_plans_entry).setOnClickListener(this);
         rootView.findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
         notice = (TextView) rootView.findViewById(R.id.unread_msg_notify);
-        if (firstReg)notice.setVisibility(View.VISIBLE);
+        if (SharePrefUtil.getBoolean(getActivity(),"firstReg",false))notice.setVisibility(View.VISIBLE);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        firstReg= SharePrefUtil.getBoolean(getActivity(),"firstReg",false);
     }
 
     public void refreshLoginStatus() {
@@ -230,7 +229,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
                 } else {
-                    if(TextUtils.isEmpty(user1.getAvatar())) {
+                    if(!TextUtils.isEmpty(user1.getAvatar())) {
                         ArrayList<String> pic = new ArrayList<>();
                         pic.add(user1.getAvatar());
                         showSelectedPics(pic);
@@ -266,8 +265,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     Intent logIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(logIntent);
                 } else {
-                    if (firstReg){
+                    if (SharePrefUtil.getBoolean(getActivity(),"firstReg",false)){
                         notice.setVisibility(View.GONE);
+                        MainActivity activity = (MainActivity) getActivity();
+                        if (activity!=null){
+                            activity.setNoticeInvisiable();
+                        }
                         SharePrefUtil.saveBoolean(getActivity(),"firstReg",false);
                     }
                     Intent accountIntent = new Intent(getActivity(), AccountActvity.class);

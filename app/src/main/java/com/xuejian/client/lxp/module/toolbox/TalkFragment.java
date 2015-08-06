@@ -328,7 +328,6 @@ public class TalkFragment extends PeachBaseFragment {
             if (!hidden) {
                 refresh();
             }
-            loadConversation();
             if (listView.getAdapter().getCount() <= 0) {
                 //setEmptyView();
             }

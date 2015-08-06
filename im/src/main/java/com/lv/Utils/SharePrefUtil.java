@@ -10,13 +10,13 @@ public class SharePrefUtil {
     private final static String SP_NAME = "config";
     private static SharedPreferences sp;
 
-    public static void saveBoolean(Context context, String key, boolean value) {
+    public synchronized static void saveBoolean(Context context, String key, boolean value) {
         if (sp == null)
             sp = context.getSharedPreferences(SP_NAME, 0);
         sp.edit().putBoolean(key, value).commit();
     }
 
-    public static boolean getBoolean(Context context, String key,
+    public synchronized static boolean getBoolean(Context context, String key,
                                      boolean defValue) {
         if (sp == null)
             sp = context.getSharedPreferences(SP_NAME, 0);
@@ -27,11 +27,11 @@ public class SharePrefUtil {
     public final static String AD_PREF = "ad_pref";
 
     public static boolean getLxqPushSetting(Context context) {
-        return SharePrefUtil.getBoolean(context, LXQ_PREF, true);
+        return getBoolean(context, LXQ_PREF, true);
     }
 
     public void setLxqPushSetting(Context context, boolean lxqpush) {
-        SharePrefUtil.saveBoolean(context, LXQ_PREF, lxqpush);
+        saveBoolean(context, LXQ_PREF, lxqpush);
     }
 
     public static void savePhoneNum(Context context, String key, String value) {

@@ -236,14 +236,19 @@ public class HandleImMessage {
 //                    notifyMsg(c, messageBean);
 //                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
 //                }
-                    if (SharePrefUtil.getLxqPushSetting(c) && isBackground(c)) {
-                        if ("group".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getGroupId()), false)) {
-                            notifyMsg(c, messageBean);
-                        } else if ("single".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getSenderId()), false)) {
-                            notifyMsg(c, messageBean);
+                    try {
+                        if (SharePrefUtil.getLxqPushSetting(c) && isBackground(c)) {
+                            if ("group".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getGroupId()), false)) {
+                                notifyMsg(c, messageBean);
+                            } else if ("single".equals(messageBean.getChatType()) && !SharePrefUtil.getBoolean(c, String.valueOf(messageBean.getSenderId()), false)) {
+                                notifyMsg(c, messageBean);
+                            }
+                            //             IMClient.getInstance().increaseUnRead(messageBean.getConversation());
                         }
-                        //             IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+
                     String content = messageBean.getContents();
                     JSONObject object = null;
 
@@ -336,7 +341,7 @@ public class HandleImMessage {
     };
 
     private static MessageBean Msg2Bean(Message msg) {
-        return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId(), msg.getAbbrev());
+        return new MessageBean(msg.getMsgId(), msg.getStatus(), msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId(), msg.getAbbrev(),msg.getReceiverId());
     }
 
     public void notifyMsg(Context c, Message message) {

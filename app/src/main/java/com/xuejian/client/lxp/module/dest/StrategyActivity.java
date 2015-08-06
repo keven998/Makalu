@@ -397,6 +397,7 @@ public class StrategyActivity extends PeachBaseActivity {
                                             Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
                                             User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
                                             intent.putExtra("userId", String.valueOf(user.getUserId()));
+                                            intent.putExtra("copyId",modifyResult.result.id);
                                             intent.putExtra("new_copy", true);
                                             startActivity(intent);
                                         } else {
