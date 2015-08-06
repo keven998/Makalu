@@ -591,7 +591,6 @@ public class MessageAdapter extends BaseAdapter {
      * @param position
      */
     private void handleExtMessage(MessageBean message, final ViewHolder holder, final int position) {
-        message.setType(18);
         final int extType = message.getType();
         final String conent = message.getMessage();
 
@@ -844,7 +843,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.tv.setVisibility(View.GONE);
                 //    holder.iv.setImageBitmap(defaultImage);
                 String thumbpath = getStringAttr(message, "thumbPath");
-                String romotePath = getStringAttr(message, "full");
+                String romotePath = getStringAttr(message, "origin");
                 String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
                 if (thumbpath != null) {
                     showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message, holder);

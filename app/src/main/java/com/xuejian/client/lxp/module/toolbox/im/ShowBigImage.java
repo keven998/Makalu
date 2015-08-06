@@ -16,12 +16,16 @@ package com.xuejian.client.lxp.module.toolbox.im;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.xuejian.client.lxp.R;
@@ -39,7 +43,7 @@ import java.io.File;
  * 下载显示大图
  *
  */
-public class ShowBigImage extends ChatBaseActivity {
+public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListener{
 
     private ProgressDialog pd;
     private PhotoView image;
@@ -53,7 +57,9 @@ public class ShowBigImage extends ChatBaseActivity {
     private boolean isDownloaded;
     private ProgressBar loadLocalPb;
     private String downloadFilePath;
-
+    private final Rect mRect = new Rect();
+    private BitmapRegionDecoder mDecoder;
+    private ImageView mView;
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,7 @@ public class ShowBigImage extends ChatBaseActivity {
         String remotepath = getIntent().getExtras().getString("remotepath");
         String secret = getIntent().getExtras().getString("secret");
         downloadFilePath = getIntent().getStringExtra("downloadFilePath");
+
 
         //本地存在，直接显示本地的图片
         if (uri != null && new File(uri.getPath()).exists()) {
@@ -93,8 +100,19 @@ public class ShowBigImage extends ChatBaseActivity {
                 }
             } else {
                 image.setImageBitmap(bitmap);
+
+
+//                try {
+//                    InputStream is = BitmapFactory.d
+//                    mDecoder = BitmapRegionDecoder.newInstance(is, true);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+
             }
         } else if (remotepath != null) { //去服务器下载图片
+            System.out.println(remotepath);
             downloadImage(remotepath, downloadFilePath);
         } else {
             image.setImageResource(default_res);
@@ -126,7 +144,11 @@ public class ShowBigImage extends ChatBaseActivity {
                         getWindowManager().getDefaultDisplay().getMetrics(metrics);
                         int screenWidth = metrics.widthPixels;
                         int screenHeight = metrics.heightPixels;
-                        bitmap = ImageUtils.decodeScaleImage(filename, screenWidth, screenHeight);
+                        try {
+                            bitmap = ImageUtils.decodeScaleImage(filename, screenWidth, screenHeight);
+                        }catch (Exception e){
+                        }
+
                         if (bitmap == null) {
                             image.setImageResource(default_res);
                         } else {
@@ -190,5 +212,40 @@ public class ShowBigImage extends ChatBaseActivity {
         if (isDownloaded)
             setResult(RESULT_OK);
         finish();
+    }
+
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        final int action = event.getAction() & MotionEvent.ACTION_MASK;
+        final int x = (int) event.getX();
+        final int y = (int) event.getY();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+                setImageRegion(x, y);
+                break;
+        }
+        return true;
+    }
+
+    private void setImageRegion(int left, int top) {
+//        BitmapFactory.Options opts = new BitmapFactory.Options();
+        final int width = mView.getWidth();
+        final int height = mView.getHeight();
+
+        final int imgWidth = mDecoder.getWidth();
+        final int imgHeight = mDecoder.getHeight();
+
+        int right = left + width;
+        int bottom = top + height;
+        if(right > imgWidth) right = imgWidth;
+        if(bottom > imgHeight) bottom = imgHeight;
+        if(left < 0) left = 0;
+        if(top < 0) top = 0;
+
+        mRect.set(left, top, right, bottom);
+        Bitmap bm = mDecoder.decodeRegion(mRect, null);
+        mView.setImageBitmap(bm);
     }
 }

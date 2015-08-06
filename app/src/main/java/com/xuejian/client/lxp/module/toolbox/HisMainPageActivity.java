@@ -224,7 +224,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 @Override
                 public void onSuccess(String result) {
                     try {
-                        System.out.println(result);
                         JSONObject res = new JSONObject(result);
                         JSONArray array = res.getJSONArray("result");
                         SettingConfig.getInstance().setLxpNoticeSetting(HisMainPageActivity.this, String.valueOf(array.getJSONObject(0).getInt("targetId")), array.getJSONObject(0).getBoolean("muted"));
@@ -245,7 +244,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
                     intent.putExtra("friend_id", String.valueOf(userId));
                     intent.putExtra("chatType", "single");
-                    //   intent.putExtra("newCon", true);
                     startActivity(intent);
                 }
             });

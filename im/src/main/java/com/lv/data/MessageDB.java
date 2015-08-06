@@ -580,7 +580,7 @@ public class MessageDB {
         closeDB();
         return list;
     }
-    public List<ConversationBean> getConversationList() {
+    public synchronized List<ConversationBean> getConversationList() {
         mdb = getDB();
         List<ConversationBean> list = new ArrayList<ConversationBean>();
         Cursor c = mdb.rawQuery("SELECT * FROM " + con_table_name, null);

@@ -144,7 +144,7 @@ public class DownloadService extends Service {
                     if (msgType==2) {
                         Bitmap bm = BitmapFactory.decodeStream(input);
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newfile));
-                        bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                        bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
                         bos.close();
                         bm.recycle();
