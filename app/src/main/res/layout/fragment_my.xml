@@ -209,7 +209,7 @@
                     android:paddingBottom="8dp"
                     android:text="好友推荐"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14" />
 
                 <View
                     android:layout_width="match_parent"
@@ -232,7 +232,7 @@
                     android:paddingBottom="8dp"
                     android:text="意见反馈"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -256,7 +256,7 @@
                     android:paddingBottom="8dp"
                     android:text="关于我们"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14" />
 
                 <View
                     android:layout_width="match_parent"
@@ -280,7 +280,7 @@
                     android:paddingBottom="8dp"
                     android:text="应用设置"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14" />
 
                 <View
                     android:layout_width="match_parent"

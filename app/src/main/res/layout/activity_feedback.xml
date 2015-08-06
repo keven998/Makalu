@@ -17,32 +17,35 @@
         android:gravity="center"
         android:textColor="@color/base_text_color_text_hint"
         android:text="你的意见和建议，是我们改进的动力"
-        android:textSize="13sp" />
+        android:textSize="@dimen/text_size_15" />
 
     <EditText
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/base_color_white"
-        android:layout_marginTop="10dp"
         android:padding="8dp"
-        android:lines="4"
-        android:minLines="4"
+        android:layout_margin="15dp"
+        android:lines="6"
+        android:minLines="6"
         android:hint="请输入意见和建议"
         android:textColorHint="#aaaaaa"
         android:gravity="left|top"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_size_15"
         android:textColor="@color/base_text_color_title"/>
 
-    <Button
+    <TextView
         android:id="@+id/btn_ok"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:text="发送"
-        android:textSize="15sp"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="@dimen/text_size_15"
         android:textColor="@color/base_color_white"
         android:background="@drawable/theme_button_selctor"/>
 
