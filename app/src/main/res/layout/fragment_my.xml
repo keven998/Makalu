@@ -46,7 +46,7 @@
 
                 <RelativeLayout android:id="@+id/rl_base_info"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="-30dp"
                     android:gravity="center_vertical"
                     android:layout_below="@+id/fl_gender_bg">
@@ -95,7 +95,7 @@
                         <TextView android:id="@+id/tv_plans_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/text_size_16"
                             android:layout_centerInParent="true"
                             android:paddingLeft="12dp"
                             android:paddingRight="12dp"
@@ -107,9 +107,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/text_size_14"
                             android:layout_centerInParent="true"
-                            android:paddingTop="23dp"
+                            android:paddingTop="15dp"
                             android:text="计划"
                             android:textColor="@color/color_text_iii"/>
 
@@ -125,7 +125,7 @@
                         <TextView android:id="@+id/tv_pictures_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/text_size_16"
                             android:layout_centerInParent="true"
                             android:paddingBottom="23dp"
                             android:paddingLeft="12dp"
@@ -138,13 +138,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/text_size_14"
                             android:layout_centerInParent="true"
-                            android:paddingTop="23dp"
+                            android:paddingTop="15dp"
                             android:text="相册"
                             android:textColor="@color/color_text_iii"/>
 
-                        <View android:layout_width="0.6dp"
+                        <View android:layout_width="1px"
                             android:layout_height="32dp"
                             android:background="@color/color_line"
                             android:layout_centerVertical="true"
@@ -161,7 +161,7 @@
                         <TextView android:id="@+id/tv_tracks_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/text_size_16"
                             android:layout_centerInParent="true"
                             android:paddingBottom="23dp"
                             android:singleLine="true"
@@ -173,13 +173,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/text_size_14"
                             android:layout_centerInParent="true"
-                            android:paddingTop="23dp"
+                            android:paddingTop="15dp"
                             android:text="足迹"
                             android:textColor="@color/color_text_iii"/>
 
-                        <View android:layout_width="0.6dp"
+                        <View android:layout_width="1px"
                             android:layout_height="32dp"
                             android:layout_centerVertical="true"
                             android:background="@color/color_line"
@@ -209,11 +209,11 @@
                     android:paddingBottom="8dp"
                     android:text="好友推荐"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="0.6dp"
+                    android:layout_height="1px"
                     android:layout_marginLeft="10dp"
                     android:background="@color/color_line" />
 
@@ -232,11 +232,11 @@
                     android:paddingBottom="8dp"
                     android:text="意见反馈"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14"/>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="0.6dp"
+                    android:layout_height="1px"
                     android:layout_marginLeft="10dp"
                     android:background="@color/color_line" />
 
@@ -256,11 +256,11 @@
                     android:paddingBottom="8dp"
                     android:text="关于我们"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="0.6dp"
+                    android:layout_height="1px"
                     android:layout_marginLeft="10dp"
                     android:background="@color/color_line" />
 
@@ -280,11 +280,11 @@
                     android:paddingBottom="8dp"
                     android:text="应用设置"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_14" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="0.6dp"
+                    android:layout_height="1px"
                     android:layout_marginLeft="10dp"
                     android:background="@color/color_line" />
 

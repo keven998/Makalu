@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -22,7 +23,7 @@ public class FeedbackActivity extends PeachBaseActivity {
 //	private View mTitlebar;
 
     private EditText contentEt;
-    private Button okBtn;
+    private TextView okBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class FeedbackActivity extends PeachBaseActivity {
         contentEt = (EditText) findViewById(R.id.et_content);
 //		emailEt = (EditText) findViewById(R.id.et_email);
 //		phoneEt = (EditText) findViewById(R.id.et_phone);
-        okBtn = (Button) findViewById(R.id.btn_ok);
+        okBtn = (TextView) findViewById(R.id.btn_ok);
         okBtn.setOnClickListener(new OnClickListener() {
 
             @Override
