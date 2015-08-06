@@ -182,6 +182,7 @@ public class TalkFragment extends PeachBaseFragment {
             }
         });
         dialog.show();
+
     }
 
     public void netStateChange(String state) {
