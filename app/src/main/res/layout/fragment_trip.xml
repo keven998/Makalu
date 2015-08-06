@@ -46,7 +46,7 @@
             android:layout_marginBottom="22dp"
             android:text="~旅行·搜搜~"
             android:textColor="@color/color_text_ii"
-            android:textSize="17sp" />
+            android:textSize="@dimen/text_size_16" />
 
     </FrameLayout>
 
@@ -75,7 +75,8 @@
                 android:gravity="center"
                 android:text="达人咨询"
                 android:textColor="@color/checker_text_black_color"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_size_16" />
+
 
         </FrameLayout>
 
@@ -95,7 +96,7 @@
                 android:gravity="center"
                 android:text="我的计划"
                 android:textColor="@color/checker_text_black_color"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_size_16"  />
 
         </FrameLayout>
 

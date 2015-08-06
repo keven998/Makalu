@@ -31,7 +31,7 @@
             android:textColor="@color/base_text_color_title"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dp"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_14" />
 
     </FrameLayout>
 
