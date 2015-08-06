@@ -1075,18 +1075,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else {
             m.setSendType(1);
             messageList.add(m);
-
-//
-//            MessageBean messageBean =new MessageBean();
-//            messageBean.setMessage("{\"title\": \"梦婷带我们看世界\", \"desc\":\"哈哈，好大啊\", \"image\": \"http://taozi-uploads.qiniudn.com/avt_100057_1434164018376.jpg?\", \"url\": \"http://api.lvxingpai.com/app/eula\"}\n" +
-//                    "    \n" +
-//                    "}");
-//            messageBean.setStatus(0);
-//            messageBean.setSendType(1);
-//            messageBean.setCreateTime(System.currentTimeMillis());
-//            messageBean.setSenderId(100014);
-//            messageBean.setType(18);
-//            messageList.add(messageBean);
             adapter.refresh();
             int curSelection = listView.getFirstVisiblePosition();
             if (curSelection > listView.getCount() / 2) {

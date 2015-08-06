@@ -78,7 +78,7 @@ public class UserApi extends BaseApi {
     public final static String SEARCH_EXPERT_FOOTPRINT = "/users/expert/tracks";
     //通讯录匹配
     //  public final static String SEARCH_BY_ADDRESSBOOK = "/users/search-by-address-book";
-    public final static String SEARCH_BY_ADDRESSBOOK = "/users/match";
+    public final static String SEARCH_BY_ADDRESSBOOK = "/users/%s/match";
     //根据足迹获取达人
     public final static String EXPERT_BY_TRACK = "/geo/countries/%s/expert";
     public final static String LOGOUT = "/users/logout";
@@ -698,7 +698,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler searchByAddressBook(List<AddressBookbean> bookList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + SEARCH_BY_ADDRESSBOOK);
+        request.setUrl(SystemConfig.DEV_URL + String.format(SEARCH_BY_ADDRESSBOOK,AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         request.setHeader("Content-Encoding", "gzip");
         setDefaultParams(request);
@@ -710,11 +710,12 @@ public class UserApi extends BaseApi {
                 jsonObject = new JSONObject();
                 jsonObject.put("entryId", addressBookbean.entryId);
                 jsonObject.put("sourceId", addressBookbean.sourceId);
-                jsonObject.put("tel", addressBookbean.tel);
+                jsonObject.put("tel", addressBookbean.tel.trim());
                 jsonObject.put("name", addressBookbean.name);
                 jsonArray.put(jsonObject);
             }
             rootObject.put("contacts", jsonArray);
+            rootObject.put("action","addressbook");
             try {
                 StringEntity entity = new StringEntity(rootObject.toString(), "utf-8");
 //                request.setBodyEntity( entity);
