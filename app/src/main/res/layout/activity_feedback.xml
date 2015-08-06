@@ -17,7 +17,7 @@
         android:gravity="center"
         android:textColor="@color/base_text_color_text_hint"
         android:text="你的意见和建议，是我们改进的动力"
-        android:textSize="@dimen/text_size_15" />
+        android:textSize="@dimen/text_size_14" />
 
     <EditText
         android:id="@+id/et_content"
@@ -31,21 +31,21 @@
         android:hint="请输入意见和建议"
         android:textColorHint="#aaaaaa"
         android:gravity="left|top"
-        android:textSize="@dimen/text_size_15"
+        android:textSize="@dimen/text_size_14"
         android:textColor="@color/base_text_color_title"/>
 
     <TextView
         android:id="@+id/btn_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:text="发送"
         android:gravity="center"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="@dimen/text_size_15"
+        android:textSize="@dimen/text_size_14"
         android:textColor="@color/base_color_white"
         android:background="@drawable/theme_button_selctor"/>
 
