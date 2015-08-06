@@ -36,7 +36,7 @@
             android:maxWidth="160dp"
             android:singleLine="true"
             android:textColor="@color/color_text_i"
-            android:textSize="19sp"/>
+            android:textSize="@dimen/text_size_16"/>
 
         <TextView
             android:id="@+id/unread_msg_number"
