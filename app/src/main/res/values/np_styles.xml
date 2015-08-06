@@ -8,7 +8,7 @@
         <item name="progress">0</item>
 
         <item name="progress_unreached_color">@android:color/transparent</item>
-        <item name="progress_reached_color">@color/color_enter</item>
+        <item name="progress_reached_color">@color/app_theme_color</item>
 
         <item name="progress_text_size">10sp</item>
         <item name="progress_text_color">#3498DB</item>
