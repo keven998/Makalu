@@ -53,7 +53,9 @@
                 mask:mask="@drawable/chatfrom_image_mask"
                 android:visibility="visible"
                 mask:image="@drawable/default_image"
-                mask:minWidth="120dp" />
+                mask:minWidth="120dp"
+                android:maxHeight="400dp"
+                />
 
             <LinearLayout
                 android:id="@+id/ll_loading"
