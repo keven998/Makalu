@@ -843,7 +843,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.tv.setVisibility(View.GONE);
                 //    holder.iv.setImageBitmap(defaultImage);
                 String thumbpath = getStringAttr(message, "thumbPath");
-                String romotePath = getStringAttr(message, "origin");
+                String romotePath = getStringAttr(message, "full");
                 String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
                 if (thumbpath != null) {
                     showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message, holder);

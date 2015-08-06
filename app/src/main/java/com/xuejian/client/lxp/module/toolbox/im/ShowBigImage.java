@@ -23,9 +23,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.xuejian.client.lxp.R;
@@ -43,7 +41,7 @@ import java.io.File;
  * 下载显示大图
  *
  */
-public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListener{
+public class ShowBigImage extends ChatBaseActivity {
 
     private ProgressDialog pd;
     private PhotoView image;
@@ -59,7 +57,6 @@ public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListen
     private String downloadFilePath;
     private final Rect mRect = new Rect();
     private BitmapRegionDecoder mDecoder;
-    private ImageView mView;
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +82,7 @@ public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListen
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
              int screenWidth = metrics.widthPixels;
              int screenHeight =metrics.heightPixels;
+
             bitmap = ImageCache.getInstance().get(uri.getPath());
             if (bitmap == null) {
                 LoadLocalBigImgTask task = new LoadLocalBigImgTask(this, uri.getPath(), image, loadLocalPb,
@@ -100,23 +98,13 @@ public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListen
                 }
             } else {
                 image.setImageBitmap(bitmap);
-
-
-//                try {
-//                    InputStream is = BitmapFactory.d
-//                    mDecoder = BitmapRegionDecoder.newInstance(is, true);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-
             }
         } else if (remotepath != null) { //去服务器下载图片
             System.out.println(remotepath);
             downloadImage(remotepath, downloadFilePath);
         } else {
             image.setImageResource(default_res);
-        }
+         }
 
         image.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
@@ -147,6 +135,7 @@ public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListen
                         try {
                             bitmap = ImageUtils.decodeScaleImage(filename, screenWidth, screenHeight);
                         }catch (Exception e){
+                            e.printStackTrace();
                         }
 
                         if (bitmap == null) {
@@ -155,7 +144,6 @@ public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListen
                             image.setImageBitmap(bitmap);
                             ImageCache.getInstance().put(url, bitmap);
                             isDownloaded = true;
-
                         }
                         if (pd != null) {
                             pd.dismiss();
@@ -215,24 +203,11 @@ public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListen
     }
 
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        final int action = event.getAction() & MotionEvent.ACTION_MASK;
-        final int x = (int) event.getX();
-        final int y = (int) event.getY();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                setImageRegion(x, y);
-                break;
-        }
-        return true;
-    }
 
     private void setImageRegion(int left, int top) {
 //        BitmapFactory.Options opts = new BitmapFactory.Options();
-        final int width = mView.getWidth();
-        final int height = mView.getHeight();
+        final int width = image.getWidth();
+        final int height = image.getHeight();
 
         final int imgWidth = mDecoder.getWidth();
         final int imgHeight = mDecoder.getHeight();
@@ -246,6 +221,6 @@ public class ShowBigImage extends ChatBaseActivity implements View.OnTouchListen
 
         mRect.set(left, top, right, bottom);
         Bitmap bm = mDecoder.decodeRegion(mRect, null);
-        mView.setImageBitmap(bm);
+        image.setImageBitmap(bm);
     }
 }

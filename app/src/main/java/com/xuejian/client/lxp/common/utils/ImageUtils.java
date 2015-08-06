@@ -125,7 +125,6 @@ public class ImageUtils {
         Log.d("img", "original wid" + option.outWidth + " original height:" + option.outHeight + " sample:" + var4);
         option.inSampleSize = var4;
         option.inJustDecodeBounds = false;
-        option.inPreferredConfig = Bitmap.Config.ARGB_4444;
         Bitmap var5 = BitmapFactory.decodeFile(path, option);
         int var6 = readPictureDegree(path);
         Bitmap var7 = null;
@@ -155,7 +154,7 @@ public class ImageUtils {
         int realHeight = option.outHeight;
         int realWidth = option.outWidth;
         if (realHeight>realWidth*5){
-            return 4;
+            return 5;
         }
         int sample = 1;
         if (realHeight > height || realWidth > width) {
