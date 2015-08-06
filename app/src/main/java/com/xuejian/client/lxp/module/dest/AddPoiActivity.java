@@ -642,11 +642,21 @@ public class AddPoiActivity extends PeachBaseActivity {
                     hasAddList.addAll(list);
                     mPoiAdapter.notifyDataSetChanged();
                     for (PoiDetailBean bean : list) {
-                        View cityView = View.inflate(mContext, R.layout.poi_select_name, null);
-                        TextView poiNameTv = (TextView) cityView.findViewById(R.id.names);
-                        poiNameTv.setText(bean.zhName);
-                        poiNameTv.setTextColor(getResources().getColor(R.color.color_text_ii));
-                        hsViewLL.addView(cityView);
+                        View view = View.inflate(AddPoiActivity.this, R.layout.poi_bottom_cell_with_del, null);
+                        FrameLayout del_fl = (FrameLayout) view.findViewById(R.id.poi_del_fl);
+                        TextView location = (TextView) view.findViewById(R.id.names);
+                        location.setText(bean.zhName);
+
+
+
+
+
+
+//                        View cityView = View.inflate(mContext, R.layout.poi_select_name, null);
+//                        TextView poiNameTv = (TextView) cityView.findViewById(R.id.names);
+//                        poiNameTv.setText(bean.zhName);
+//                        poiNameTv.setTextColor(getResources().getColor(R.color.color_text_ii));
+                        hsViewLL.addView(view);
                         autoScrollPanel();
                     }
                 }

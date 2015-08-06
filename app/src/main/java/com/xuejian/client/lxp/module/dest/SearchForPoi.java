@@ -66,12 +66,12 @@ public class SearchForPoi extends PeachBaseActivity {
         AddList = new ArrayList<>();
         curLoc = getIntent().getParcelableExtra("loc");
         mType = getIntent().getStringExtra("type");
-        System.out.println("iscanADD " +isCanAdd);
+        System.out.println("iscanADD " + isCanAdd);
         if ("restaurant".equals(mType)) {
             mTitle.setText("美食搜索");
-        }else if ("shopping".equals(mType)) {
+        } else if ("shopping".equals(mType)) {
             mTitle.setText("购物搜索");
-        }else if ("vs".equals(mType)) {
+        } else if ("vs".equals(mType)) {
             mTitle.setText("景点搜索");
         }
     }
@@ -118,7 +118,7 @@ public class SearchForPoi extends PeachBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("newPoi", AddList);
-                setResult(RESULT_OK,intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -141,6 +141,15 @@ public class SearchForPoi extends PeachBaseActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra("newPoi", AddList);
+        setResult(RESULT_OK, intent);
+        finish();
+        super.onBackPressed();
+    }
+
     private void searchSearchTypeData(final String keyWord, final String type, String locId, final int page) {
         TravelApi.searchForType(keyWord, type, locId, page, new HttpCallBack<String>() {
             @Override
@@ -149,7 +158,7 @@ public class SearchForPoi extends PeachBaseActivity {
                 CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                 if (searchAllResult.code == 0) {
                     curPage = page;
-                    bindSearchView(type, searchAllResult.result,keyWord);
+                    bindSearchView(type, searchAllResult.result, keyWord);
                 }
                 if (curPage == 0) {
                     mPoiListLv.onPullDownRefreshComplete();
@@ -173,7 +182,7 @@ public class SearchForPoi extends PeachBaseActivity {
         });
     }
 
-    private void bindSearchView(String type, SearchAllBean result,String keyword) {
+    private void bindSearchView(String type, SearchAllBean result, String keyword) {
         if (curPage == 0) {
             mPoiAdapter.getDataList().clear();
         }
@@ -200,7 +209,7 @@ public class SearchForPoi extends PeachBaseActivity {
             if (result.shopping.size() < BaseApi.PAGE_SIZE) {
                 hasMore = false;
             }
-        }else if (type.equals("vs")) {
+        } else if (type.equals("vs")) {
 //            if (hasAddList != null) {
 //                for (PoiDetailBean detailBean : result.shopping) {
 //                    detailBean.hasAdded = hasAddList.contains(detailBean);
@@ -212,8 +221,8 @@ public class SearchForPoi extends PeachBaseActivity {
                 hasMore = false;
             }
         }
-        if (mPoiAdapter.getDataList().size()==0){
-            ToastUtil.getInstance(SearchForPoi.this).showToast(String.format("没有找到“%s”的相关结果",keyword));
+        if (mPoiAdapter.getDataList().size() == 0) {
+            ToastUtil.getInstance(SearchForPoi.this).showToast(String.format("没有找到“%s”的相关结果", keyword));
         }
 
         if (result == null

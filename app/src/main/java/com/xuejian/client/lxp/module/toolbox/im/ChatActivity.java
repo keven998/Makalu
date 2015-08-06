@@ -66,7 +66,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.DotView;
 import com.lv.Audio.MediaRecordFunc;
-import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -83,7 +82,6 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
 import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
-import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -92,10 +90,6 @@ import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -224,31 +218,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
-        boolean newCon = intent.getBooleanExtra("newCon", false);
-        if (newCon) {
-            IMClient.getInstance().getConversationAttr(AccountManager.getCurrentUserId(), toChatUsername, new HttpCallback() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onSuccess(String result) {
-                    try {
-                        JSONObject res = new JSONObject(result);
-                        JSONArray array = res.getJSONArray("result");
-                        SettingConfig.getInstance().setLxpNoticeSetting(ChatActivity.this, String.valueOf(array.getJSONObject(0).getInt("targetId")), array.getJSONObject(0).getBoolean("muted"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailed(int code) {
-
-                }
-            });
-        }
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(10001);
         user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
@@ -391,12 +360,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                System.out.println(s.toString()+ " "+start + " " +count + " " + after);
+                System.out.println(s.toString() + " " + start + " " + count + " " + after);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-               System.out.println(s.toString());
+                System.out.println(s.toString());
             }
         });
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -488,7 +457,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
                         drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
                     } else {
-                        MobclickAgent.onEvent(ChatActivity.this,"navigation_item_chat_setting");
+                        MobclickAgent.onEvent(ChatActivity.this, "navigation_item_chat_setting");
                         drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
                     }
                 }
@@ -655,23 +624,29 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     @Override
     public void onClick(View view) {
-
+        if (isFastClick()) {
+            return;
+        }
         int id = view.getId();
         if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
             String s = mEditTextContent.getText().toString();
             sendText(s, 0);
         } else if (id == R.id.btn_my_guide) {
             MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
-            Intent intent = new Intent(mContext, StrategyListActivity.class);
-            intent.putExtra("chatType", chatType);
-            intent.putExtra("toId", toChatUsername);
-            intent.putExtra("conversation", conversation);
-            intent.putExtra("userId", AccountManager.getCurrentUserId());
-            intent.putExtra("isShare", true);
-          //  intent.setAction("action.chat");
-            startActivity(intent);
+            try {
+                Intent intent = new Intent(mContext, StrategyListActivity.class);
+                intent.putExtra("chatType", chatType);
+                intent.putExtra("toId", toChatUsername);
+                intent.putExtra("conversation", conversation);
+                intent.putExtra("userId", AccountManager.getCurrentUserId());
+                intent.putExtra("isShare", true);
+                //  intent.setAction("action.chat");
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (id == R.id.btn_dest) {
-            MobclickAgent.onEvent(ChatActivity.this,"chat_item_lxpsearch");
+            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpsearch");
             Intent intent = new Intent(mContext, SearchAllActivity.class);
             intent.putExtra("chatType", chatType);
             intent.putExtra("toId", toChatUsername);
@@ -717,7 +692,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else if (id == R.id.btn_picture) {
             selectPicFromLocal(); // 点击图片图标
         } else if (id == R.id.btn_location) { // 位置
-            MobclickAgent.onEvent(ChatActivity.this,"chat_item_lxplocation");
+            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
             startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
         } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
             hideKeyboard();
@@ -1100,6 +1075,18 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else {
             m.setSendType(1);
             messageList.add(m);
+
+//
+//            MessageBean messageBean =new MessageBean();
+//            messageBean.setMessage("{\"title\": \"梦婷带我们看世界\", \"desc\":\"哈哈，好大啊\", \"image\": \"http://taozi-uploads.qiniudn.com/avt_100057_1434164018376.jpg?\", \"url\": \"http://api.lvxingpai.com/app/eula\"}\n" +
+//                    "    \n" +
+//                    "}");
+//            messageBean.setStatus(0);
+//            messageBean.setSendType(1);
+//            messageBean.setCreateTime(System.currentTimeMillis());
+//            messageBean.setSenderId(100014);
+//            messageBean.setType(18);
+//            messageList.add(messageBean);
             adapter.refresh();
             int curSelection = listView.getFirstVisiblePosition();
             if (curSelection > listView.getCount() / 2) {
@@ -1128,6 +1115,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    if (isFastClick()) {
+                        return false;
+                    }
                     if (!CommonUtils.isExitsSdcard()) {
                         Toast.makeText(ChatActivity.this, "发送语音需要sd卡支持！", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1188,7 +1178,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             if (time > 1000) {
                                 sendVoice(path, null, (Long.valueOf(time).intValue() / 1000.0) + "", false);
                             } else {
-                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短",500);
+                                ToastUtil.getInstance(getApplicationContext()).showToast("录音时间太短", 500);
                                 MediaRecordFunc.getInstance().cancleRecord();
                             }
                         } catch (Exception e) {
@@ -1434,4 +1424,22 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             finish();
         }
     }
+
+    private static long mLastClickTime;
+
+
+    public static boolean isFastClick() {
+        // 当前时间
+        long currentTime = System.currentTimeMillis();
+// 两次点击的时间差
+        long time = currentTime - mLastClickTime;
+        if (0 < time && time < 700) {
+            return true;
+        }
+
+
+        mLastClickTime = currentTime;
+        return false;
+    }
+
 }

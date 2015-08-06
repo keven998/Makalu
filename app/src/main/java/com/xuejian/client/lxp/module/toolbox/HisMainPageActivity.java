@@ -71,7 +71,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private int EDIT_MEMO = 101;
     private TextView nameTv;
     private String newMemo;
-    private boolean notLogin;
     User user;
     View handleView;
 
@@ -81,16 +80,21 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         setContentView(R.layout.activity_hismainpage);
         userId = getIntent().getLongExtra("userId", 0);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
-        if (me != null) {
-            imUser = UserDBManager.getInstance().getContactByUserId(userId);
-        } else notLogin = true;
+        try {
+            if (me != null) {
+                imUser = UserDBManager.getInstance().getContactByUserId(userId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        if (!notLogin) {
+        if (me != null) {
             isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
         }
         handleView = findViewById(R.id.tv_handle_action);
@@ -210,12 +214,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     private void startTalk() {
         if (me != null) {
-            List<String> uids=new ArrayList<>();
+            List<String> uids = new ArrayList<>();
             uids.add(String.valueOf(userId));
-            IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(),uids, new HttpCallback() {
+            IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), uids, new HttpCallback() {
                 @Override
                 public void onSuccess() {
                 }
+
                 @Override
                 public void onSuccess(String result) {
                     try {
@@ -274,7 +279,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            deleteContact(imUser);
+                            deleteContact(userId);
                             deleteDialog.dismiss();
                         }
                     });
@@ -335,16 +340,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void deleteContact(final User tobeDeleteUser) {
+    private void deleteContact(final long userId) {
         DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
-        UserApi.deleteContact(String.valueOf(tobeDeleteUser.getUserId()), new HttpCallBack() {
+        UserApi.deleteContact(String.valueOf(userId), new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> deleteResult = CommonJson.fromJson((String) result, ModifyResult.class);
                 if (deleteResult.code == 0) {
-                    UserDBManager.getInstance().deleteContact(tobeDeleteUser.getUserId());
-                    AccountManager.getInstance().getContactList(HisMainPageActivity.this).remove(tobeDeleteUser.getUserId());
+                    UserDBManager.getInstance().deleteContact(userId);
+                    AccountManager.getInstance().getContactList(HisMainPageActivity.this).remove(userId);
                     finish();
                 } else if (!TextUtils.isEmpty(deleteResult.err.message)) {
                     ToastUtil.getInstance(HisMainPageActivity.this).showToast(deleteResult.err.message);
@@ -369,22 +374,27 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public void updateView(final User bean) {
         user = bean;
         nameTv = (TextView) findViewById(R.id.tv_title);
-
-        if (isMyFriend&&imUser!=null){
-            if (TextUtils.isEmpty(imUser.getMemo())) {
-                nameTv.setText(bean.getNickName());
+        try {
+            if (isMyFriend && imUser != null) {
+                if (TextUtils.isEmpty(imUser.getMemo())) {
+                    nameTv.setText(bean.getNickName());
+                } else {
+                    nameTv.setText(imUser.getMemo() + "(" + bean.getNickName() + ")");
+                }
             } else {
-                nameTv.setText(imUser.getMemo() + "(" + bean.getNickName() + ")");
+                nameTv.setText(bean.getNickName());
             }
-        }else {
+        } catch (Exception e) {
+            e.printStackTrace();
             nameTv.setText(bean.getNickName());
         }
+
 
         findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isMyFriend) {
-                    if (!TextUtils.isEmpty(nameTv.getText().toString())){
+                    if (!TextUtils.isEmpty(nameTv.getText().toString())) {
                         Intent intent = new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
                         intent.putExtra("isEditMemo", true);
                         intent.putExtra("nickname", bean.getNickName());
@@ -461,7 +471,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_plan");
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
                 intent.putExtra("userId", String.valueOf(userId));
                 startActivity(intent);
@@ -479,7 +489,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_tracks");
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tvTrack.getText().toString());
@@ -497,7 +507,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_travel_notes");
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_travel_notes");
             }
         });
         tvNotes.setVisibility(View.INVISIBLE);
@@ -578,7 +588,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this,"button_item_album");
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_album");
                 Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
                 intent2.putExtra("id", String.valueOf(userId));
                 intent2.putExtra("title", user.getNickName());

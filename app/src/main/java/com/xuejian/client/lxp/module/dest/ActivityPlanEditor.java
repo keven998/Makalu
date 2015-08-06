@@ -169,7 +169,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         private int origHeight = -1;
 
         public SectionController(DragSortListView dslv, EditorAdapter adapter) {
-            super(dslv, R.id.tv_plan_editor, DragSortController.ON_DOWN, DragSortController.CLICK_REMOVE);
+            super(dslv, R.id.tv_plan_editor, DragSortController.ON_LONG_PRESS, 0);
             setRemoveEnabled(false);
             mDSlv = dslv;
             mAdapter = adapter;
@@ -286,6 +286,7 @@ public class ActivityPlanEditor extends FragmentActivity {
                     deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            deleteDialog.dismiss();
                             routeDayMap.get(section).remove(position);
                             notifyDataSetChanged();
                         }

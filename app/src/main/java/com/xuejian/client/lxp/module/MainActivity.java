@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -88,7 +90,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private String mTagArray[] = {"Talk", "Travel", "My"};
     private boolean FromBounce;
     private Vibrator vibrator;
-    private boolean fromReg;
     PopupWindow mPop;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             finish();
             return;
         }
-        fromReg = SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false);
+        try {
+            ApplicationInfo appInfo = this.getPackageManager()
+                    .getApplicationInfo(getPackageName(),
+                            PackageManager.GET_META_DATA);
+            appInfo.metaData.getString("CHANNEL_ID");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();
@@ -136,6 +145,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     public void initClient() {
+//        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+//        if (talkFragment != null) {
+//            talkFragment.loadConversation();
+//        }
         Handler handler = new Handler();
         IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
             @Override
@@ -157,10 +170,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 });
             }
         });
-        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-        if (talkFragment != null) {
-            talkFragment.loadConversation();
-        }
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -249,6 +259,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     wenwen.setUserId(10001l);
                     wenwen.setType(1);
                     UserDBManager.getInstance().saveContact(wenwen);
+                    User paipai = new User();
+                    paipai.setNickName("派派");
+                    paipai.setUserId(10000l);
+                    paipai.setType(1);
+                    UserDBManager.getInstance().saveContact(paipai);
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);
                     AccountManager.getInstance().setContactList(userlist);
@@ -333,7 +348,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (index == 0) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
-        if (fromReg && index == 2) {
+        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false)&& index == 2) {
             regNotice = (TextView) view.findViewById(R.id.unread_msg_notify);
             regNotice.setTextColor(Color.RED);
             regNotice.setVisibility(View.VISIBLE);
@@ -344,20 +359,25 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         //imageView.setText(tabTitle[index]);
         return view;
     }
-
+    public void setNoticeInvisiable(){
+        if (regNotice!=null){
+            regNotice.setVisibility(View.GONE);
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
         if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             HandleImMessage.getInstance().registerMessageListener(this);
-            //  if (!isConflict){
-            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-            if (talkFragment != null) {
-                talkFragment.loadConversation();
-                talkFragment.updateUnreadAddressLable();
-            }
-            updateUnreadMsgCount();
+
+//            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+//            if (talkFragment != null) {
+//                talkFragment.loadConversation();
+//                talkFragment.updateUnreadAddressLable();
+//            }
+//            updateUnreadMsgCount();
+
         } else unreadMsg.setVisibility(View.GONE);
     }
 
@@ -413,15 +433,18 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     @Override
     public void onMsgArrive(MessageBean m, String groupId) {
+        System.out.println(m.getMessage());
         TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
         if (talkFragment != null) {
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
-        if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
-            vibrator.vibrate(500);
-        } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
-            vibrator.vibrate(500);
+        if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
+            if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
+                vibrator.vibrate(500);
+            } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
+                vibrator.vibrate(500);
+            }
         }
         //  notifyNewMessage(m);
     }

@@ -142,7 +142,6 @@ public class MessageAdapter extends BaseAdapter {
     private String chatType;
     private String conversation;
     private HashMap<Long, Timer> timers = new HashMap<>();
-    String progress1;
 
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
@@ -220,8 +219,9 @@ public class MessageAdapter extends BaseAdapter {
             case HOTEL_MSG:
             case H5_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
+            default:
+                return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
-        return -1;// invalid
     }
 
     public int getViewTypeCount() {
@@ -528,6 +528,9 @@ public class MessageAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View v) {
+                    if (ChatActivity.isFastClick()){
+                        return;
+                    }
                     Intent intent = new Intent(context, HisMainPageActivity.class);
                     intent.putExtra("userId", message.getSenderId());
                     context.startActivity(intent);
@@ -590,8 +593,26 @@ public class MessageAdapter extends BaseAdapter {
     private void handleExtMessage(MessageBean message, final ViewHolder holder, final int position) {
         final int extType = message.getType();
         final String conent = message.getMessage();
-        ExtMessageBean bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
+        H5MessageBean bean1 = null;
+        if (message.getType()==H5_MSG){
+            try {
+                bean1 = GsonTools.parseJsonToBean(conent, H5MessageBean.class);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        ExtMessageBean bean=null;
+        try {
+            bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        final  H5MessageBean h5MessageBean=bean1;
         final ExtMessageBean finalBean = bean;
+        if (bean==null){
+            holder.tv_desc.setText("本版本不支持此消息类型，请升级最新版本！");
+            return;
+        }
         holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         if (extType == PLAN_MSG) {
             holder.tv_attr.setVisibility(View.VISIBLE);
@@ -705,7 +726,7 @@ public class MessageAdapter extends BaseAdapter {
                 }
             });
         } else if (extType == H5_MSG) {
-          final  H5MessageBean h5MessageBean = GsonTools.parseJsonToBean(conent, H5MessageBean.class);
+
             holder.tv_attr.setVisibility(View.GONE);
 //            } else {
 //                holder.tv_attr.setVisibility(View.VISIBLE);
@@ -727,7 +748,7 @@ public class MessageAdapter extends BaseAdapter {
             });
 
         } else {
-            holder.tv.setText("本版本不支持此消息类型，请升级最新版本！");
+            holder.tv_desc.setText("本版本不支持此消息类型，请升级最新版本！");
         }
         holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
             @Override
