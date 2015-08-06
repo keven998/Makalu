@@ -58,7 +58,7 @@
             android:singleLine="true"
             android:textColor="@color/base_text_color_title"
             android:textColorHint="@color/base_text_color_text_hint"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_14" />
 
         <TextView
             android:id="@+id/btn_search"
@@ -69,7 +69,7 @@
             android:paddingRight="20dp"
             android:text="取消"
             android:textColor="@color/selector_white_text_color"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_14" />
     </LinearLayout>
 
 </RelativeLayout>

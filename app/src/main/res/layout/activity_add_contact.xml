@@ -62,13 +62,13 @@
             android:textColor="@color/base_text_color_title"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dp"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_14" />
 
         <Button android:id="@+id/search_contact"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:layout_marginRight="10dp"
-            android:textSize="13sp"
+            android:textSize="@dimen/text_size_14"
             android:layout_marginLeft="10dp"
             android:text="搜索"
             android:background="@drawable/btn_theme_secondary_selector"
