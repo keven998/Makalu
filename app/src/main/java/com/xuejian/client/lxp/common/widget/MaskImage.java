@@ -40,8 +40,8 @@ public class MaskImage extends ImageView {
             int height = minWidth * bm.getHeight() / bm.getWidth();
             original = Bitmap.createScaledBitmap(bm, minWidth, height, true);
             orginalHeight=original.getHeight();
-            if(orginalHeight>800){
-                orginalHeight=800;
+            if(orginalHeight>600){
+                orginalHeight=600;
             }
         }
         NinePatchDrawable maskDrawable = (NinePatchDrawable) getResources().getDrawable(mMaskSource);

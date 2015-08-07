@@ -528,7 +528,7 @@ public class MessageAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    if (ChatActivity.isFastClick()){
+                    if (ChatActivity.isFastClick()) {
                         return;
                     }
                     Intent intent = new Intent(context, HisMainPageActivity.class);
@@ -594,30 +594,30 @@ public class MessageAdapter extends BaseAdapter {
         final int extType = message.getType();
         final String conent = message.getMessage();
 
-        ExtMessageBean bean =null;
-        H5MessageBean h5Bean =null;
-        if (extType==H5_MSG){
+        ExtMessageBean bean = null;
+        H5MessageBean h5Bean = null;
+        if (extType == H5_MSG) {
             try {
                 h5Bean = GsonTools.parseJsonToBean(conent, H5MessageBean.class);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
 
             }
-        }else {
+        } else {
             try {
                 bean = GsonTools.parseJsonToBean(conent, ExtMessageBean.class);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        if (bean==null&&h5Bean==null){
+        if (bean == null && h5Bean == null) {
             holder.tv_desc.setText("本版本不支持此消息类型，请升级最新版本！");
             return;
         }
 
 
         final ExtMessageBean finalBean = bean;
-        final H5MessageBean h5MessageBean=h5Bean;
+        final H5MessageBean h5MessageBean = h5Bean;
         holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         if (extType == PLAN_MSG) {
             holder.tv_attr.setVisibility(View.VISIBLE);
@@ -822,14 +822,9 @@ public class MessageAdapter extends BaseAdapter {
                 return true;
             }
         });
-
+        holder.iv.setImageResource(R.drawable.default_image);
         // 接收方向的消息
         if (message.getSendType() == TYPE_REV) {
-            System.out.println("getStatus " + message.getStatus());
-            Bitmap defaultImage=ImageCache.getInstance().get(String.valueOf(R.drawable.default_image));
-            if (defaultImage==null){
-                ImageCache.getInstance().put(String.valueOf(R.drawable.default_image), BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image));
-            }
             // "it is receive msg";
             if (message.getStatus() == 1) {
                 //   holder.iv.setImageBitmap(defaultImage);
