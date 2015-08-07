@@ -222,7 +222,6 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             sectionTv.setText("- " + itemData.zhName + " -");
             cityListFl.removeAllViews();
             for (final LocBean bean : itemData.destinations) {
-                System.out.println(bean.zhName);
                 View contentView = View.inflate(getActivity(), R.layout.dest_select_city, null);
                 AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS) / 3,
                         (LocalDisplay.SCREEN_WIDTH_PIXELS) / 3);

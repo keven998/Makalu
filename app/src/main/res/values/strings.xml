@@ -28,4 +28,7 @@
     <string name="empty_string">empty</string>
     <string name="retry">Retry</string>
 
+
+    <string name="baidu">baidu</string>
+    <string name="android_market">androidMarket</string>
 </resources>

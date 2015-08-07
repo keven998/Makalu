@@ -99,7 +99,6 @@ public class MessageDB {
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
         }
         if (Config.isDebug) {
-            System.out.println("开启数量" + mOpenCounter.get());
         }
         return db;
     }
@@ -110,7 +109,6 @@ public class MessageDB {
         }
         mdb = null;
         if (Config.isDebug) {
-            System.out.println("关闭数量" + mOpenCounter.get());
         }
     }
 

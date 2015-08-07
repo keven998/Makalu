@@ -66,7 +66,6 @@ public class SearchForPoi extends PeachBaseActivity {
         AddList = new ArrayList<>();
         curLoc = getIntent().getParcelableExtra("loc");
         mType = getIntent().getStringExtra("type");
-        System.out.println("iscanADD " + isCanAdd);
         if ("restaurant".equals(mType)) {
             mTitle.setText("美食搜索");
         } else if ("shopping".equals(mType)) {

@@ -39,7 +39,6 @@ public class DownloadImage {
                     conn.connect();
                     InputStream is = conn.getInputStream();
                     int fileSize = conn.getContentLength();//根据响应获取文件大小
-                    System.out.println("fileSize "+fileSize);
                     if (fileSize <= 0){
                        // throw new RuntimeException("无法获知文件大小 ");
                         listener.onFail();

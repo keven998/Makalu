@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
-import com.aizou.core.utils.RegexUtils;
 import com.aizou.core.utils.SharePrefUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -116,9 +115,9 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                 if (TextUtils.isEmpty(smsEt.getText().toString())) {
                     ToastUtil.getInstance(mContext).showToast("请输入验证码");
                 }
-                else if (!RegexUtils.isVerfyCode(smsEt.getText().toString())){
-                    ToastUtil.getInstance(mContext).showToast("请正确输入验证码");
-                }
+//                else if (!RegexUtils.isVerfyCode(smsEt.getText().toString())){
+//                    ToastUtil.getInstance(mContext).showToast("请正确输入验证码");
+//                }
                 else{
                     if (!CommonUtils.isNetWorkConnected(mContext)) {
                         ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
@@ -223,6 +222,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
     }
     private void imLogin(final User user) {
         //初始化数据库，方便后面操作
+        IMClient.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
         IMClient.getInstance().initDB(String.valueOf(user.getUserId()));

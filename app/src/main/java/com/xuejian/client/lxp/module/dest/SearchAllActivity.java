@@ -272,7 +272,6 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void onSendClick(String type, String id, Object object) {
                 MobclickAgent.onEvent(SearchAllActivity.this,"button_item_lxp_send_search_result");
-                System.out.print(type);
                 currentType = type;
                 temp = object;
                 //IMUtils.onClickImShare(mContext);

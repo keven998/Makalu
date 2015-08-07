@@ -355,25 +355,30 @@ public class IMClient {
     }
 
     public MessageBean CreateImageMessage(String userId, String path, String friendId, String chatTpe) {
-
-        String sdkPath = PictureUtil.reSizeImage(path);
-        String thumbnailPath = PictureUtil.getThumbImagePath(sdkPath, 160, 160);
-        JSONObject object = new JSONObject();
         try {
-            object.put("localPath", sdkPath);
-            object.put("thumbPath", thumbnailPath);
-        } catch (JSONException e) {
+            String sdkPath = PictureUtil.reSizeImage(path);
+            String thumbnailPath = PictureUtil.getThumbImagePath(sdkPath, 160, 160);
+            JSONObject object = new JSONObject();
+            try {
+                object.put("localPath", sdkPath);
+                object.put("thumbPath", thumbnailPath);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            SendMessageBean message = new SendMessageBean(Integer.parseInt(userId), friendId, Config.IMAGE_MSG, object.toString());
+            MessageBean messageBean = imessage2Bean(message);
+            if (Config.isDebug) {
+                System.out.println("message " + messageBean.getMessage());
+            }
+            long localId = db.saveMsg(friendId, messageBean, chatTpe);
+            MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(userId));
+            m.setLocalId((int) localId);
+            return m;
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        SendMessageBean message = new SendMessageBean(Integer.parseInt(userId), friendId, Config.IMAGE_MSG, object.toString());
-        MessageBean messageBean = imessage2Bean(message);
-        if (Config.isDebug) {
-            System.out.println("message " + messageBean.getMessage());
-        }
-        long localId = db.saveMsg(friendId, messageBean, chatTpe);
-        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, Config.IMAGE_MSG, messageBean.getMessage(), TimeUtils.getTimestamp(), 0, null, Long.parseLong(userId));
-        m.setLocalId((int) localId);
-        return m;
+
     }
 
     public void sendImageMessage(String userId, MessageBean messageBean, String friendId, UploadListener listener, String chatTpe) {
@@ -453,11 +458,13 @@ public class IMClient {
         lastMsgMap.put(newMsg.getSenderId() + "", newMsg.getServerId());
         add2ackList(message.getId());
     }
-    public void addToConversation(String chatId,String chatType){
-        db.add2Conversion(Long.parseLong(chatId),TimeUtils.getTimestamp(),"con_"+CryptUtils.getMD5String(chatId),0,null,chatType);
+
+    public void addToConversation(String chatId, String chatType) {
+        db.add2Conversion(Long.parseLong(chatId), TimeUtils.getTimestamp(), "con_" + CryptUtils.getMD5String(chatId), 0, null, chatType);
     }
+
     private MessageBean Msg2Bean(Message msg) {
-        return new MessageBean(msg.getMsgId(), Config.STATUS_SUCCESS, msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId(),msg.getReceiverId());
+        return new MessageBean(msg.getMsgId(), Config.STATUS_SUCCESS, msg.getMsgType(), msg.getContents(), msg.getTimestamp(), msg.getSendType(), null, msg.getSenderId(), msg.getReceiverId());
     }
 
     public void ackAndFetch(FetchListener listener) {
@@ -482,7 +489,7 @@ public class IMClient {
         if (result == 0) {
             setLastMsg(message.getConversation(), message.getMsgId());
         }
- //       IMClient.lastSusseccFetch = message.getTimestamp();
+        //       IMClient.lastSusseccFetch = message.getTimestamp();
         add2ackList(message.getId());
         return result;
     }
@@ -560,19 +567,21 @@ public class IMClient {
     public static void login(String UserId, HttpCallback callback) {
         HttpUtils.login(UserId, callback);
     }
-    public void getConversationAttrs(String userId, List<String> chatIds, final HttpCallback callback){
+
+    public void getConversationAttrs(String userId, List<String> chatIds, final HttpCallback callback) {
         HttpUtils.getConversationAttrs(userId, chatIds, callback);
     }
-    public List<String> getConversationIds(){
+
+    public List<String> getConversationIds() {
         return db.getConversationIds();
     }
 
-    public void getConversationAttr(String userId,String friendId,HttpCallback callback){
-        HttpUtils.getConversationAttr(userId,friendId,callback);
+    public void getConversationAttr(String userId, String friendId, HttpCallback callback) {
+        HttpUtils.getConversationAttr(userId, friendId, callback);
     }
 
-    public boolean isDbEmpty(){
-        return db==null;
+    public boolean isDbEmpty() {
+        return db == null;
     }
 
     public void logout() {

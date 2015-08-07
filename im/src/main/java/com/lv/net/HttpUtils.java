@@ -93,8 +93,6 @@ public class HttpUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(url);
-        System.out.println(object.toString());
         exec.execute(() -> {
             try {
                 Response response = HttpRequest_Patch(url, object.toString());
@@ -330,7 +328,6 @@ public class HttpUtils {
                 cids += chatIds.get(i);
             }
             String url = Config.HOST + String.format(Config.CONS_URL, userId) + cids;
-            System.out.println(url);
             try {
                 Response response = HttpRequest_Get(url);
                 if (response.isSuccessful()) {
@@ -346,12 +343,10 @@ public class HttpUtils {
     public static void getConversationAttr(String userId,String friendId, final HttpCallback callback) {
         exec.execute(() -> {
             String url = Config.HOST + String.format(Config.CON_URL, userId) + friendId;
-            System.out.println(url);
             try {
                 Response response = HttpRequest_Get(url);
                 if (response.isSuccessful()) {
                     String result = response.body().string();
-                    System.out.println(result);
                     callback.onSuccess();
                     callback.onSuccess(result);
                 } else callback.onFailed(response.code());

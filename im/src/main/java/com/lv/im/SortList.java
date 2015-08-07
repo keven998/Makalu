@@ -63,14 +63,11 @@ public class SortList {
 
     public void display() {
         if (first == null)
-            System.out.println("empty");
         System.out.print("first -> last : ");
         Data cur = first;
         while (cur != null) {
-            System.out.print(cur.value + " -> ");
             cur = cur.next;
         }
-        System.out.print("\n");
     }
 
     public int size() {

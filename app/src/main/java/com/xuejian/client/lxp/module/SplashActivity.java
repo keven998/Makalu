@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.utils.SharedPreferencesUtil;
@@ -73,9 +72,9 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
-                .showImageOnFail(R.drawable.bg_splash)
-                .showImageForEmptyUri(R.drawable.bg_splash)
-                .showImageOnLoading(R.drawable.bg_splash)
+                .showImageOnFail(R.drawable.splash_bg_baidu)
+                .showImageForEmptyUri(R.drawable.splash_bg_baidu)
+                .showImageOnLoading(R.drawable.splash_bg_baidu)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         // 延长2秒后进入主界面
 
@@ -147,7 +146,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                     }
 
                 } else {
-                    ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
+                  //  ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
                 }
             }
 

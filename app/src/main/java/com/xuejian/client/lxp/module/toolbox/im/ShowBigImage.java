@@ -100,7 +100,6 @@ public class ShowBigImage extends ChatBaseActivity {
                 image.setImageBitmap(bitmap);
             }
         } else if (remotepath != null) { //去服务器下载图片
-            System.out.println(remotepath);
             downloadImage(remotepath, downloadFilePath);
         } else {
             image.setImageResource(default_res);

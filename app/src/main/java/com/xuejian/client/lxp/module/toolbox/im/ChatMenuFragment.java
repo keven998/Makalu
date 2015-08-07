@@ -74,12 +74,10 @@ public class ChatMenuFragment extends Fragment {
                 IMClient.getInstance().muteConversation(userId, !isOpen, new HttpCallback() {
                     @Override
                     public void onSuccess() {
-                        System.out.println("设置成功");
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 SettingConfig.getInstance().setLxpNoticeSetting(getActivity().getApplicationContext(), userId, !isOpen);
-                                System.out.println(SettingConfig.getInstance().getLxpNoticeSetting(getActivity().getApplicationContext(),userId));
                             }
                         });
 

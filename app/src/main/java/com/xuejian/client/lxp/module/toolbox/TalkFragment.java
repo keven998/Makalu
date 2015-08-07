@@ -234,7 +234,11 @@ public class TalkFragment extends PeachBaseFragment {
         List<ConversationBean> del = new ArrayList<>();
         conversations.clear();
         tempConversations.clear();
-        tempConversations.addAll(IMClient.getInstance().getConversationList());
+        try {
+            tempConversations.addAll(IMClient.getInstance().getConversationList());
+        }catch (Exception e){
+           e.printStackTrace();
+        }
         conversations.add(0, new ConversationBean(10, 0, "single"));
         conversations.add(1, new ConversationBean(11, 0, "single"));
         for (ConversationBean bean : tempConversations) {

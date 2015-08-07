@@ -127,7 +127,6 @@ public class ContactlistFragment extends Fragment {
         if (item.getItemId() == R.id.delete_message) {
             int pos = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
             User user = adapter.getItem(pos);
-            System.out.println(user.getNickName());
             Intent intent = new Intent(getActivity(), ModifyNicknameActivity.class);
             intent.putExtra("isEditMemo", true);
             intent.putExtra("nickname", user.getNickName());

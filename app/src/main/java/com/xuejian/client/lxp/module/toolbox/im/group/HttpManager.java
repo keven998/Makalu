@@ -383,7 +383,6 @@ public class HttpManager {
             obj.put("avatar", "");
             obj.put("desc", "");
             obj.put("members", array);
-            System.out.println(obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -31,7 +31,6 @@ public class GroupManager {
             obj.put("avatar", avatar);
             obj.put("desc", desc);
             obj.put("members", groupMember);
-            System.out.println(obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

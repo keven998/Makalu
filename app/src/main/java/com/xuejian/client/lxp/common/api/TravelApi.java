@@ -430,7 +430,6 @@ public class TravelApi extends BaseApi {
         }
         setDefaultParams(request);
         LogUtil.d(jsonObject.toString());
-        System.out.println(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
 

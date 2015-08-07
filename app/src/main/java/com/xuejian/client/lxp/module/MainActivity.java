@@ -134,6 +134,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     private void imLogin(final User user) {
         //初始化数据库，方便后面操作
+        IMClient.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
         IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
@@ -433,7 +434,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     @Override
     public void onMsgArrive(MessageBean m, String groupId) {
-        System.out.println(m.getMessage());
         TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
         if (talkFragment != null) {
             talkFragment.loadConversation();

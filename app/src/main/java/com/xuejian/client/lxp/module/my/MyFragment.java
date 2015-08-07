@@ -118,7 +118,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         User user = AccountManager.getInstance().getLoginAccount(getActivity());
         all_foot_print_list.clear();
         if (user == null) {
-            System.out.println("user null");
             avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
             nickNameTv.setText("旅行派");
             idTv.setText("未登录");
@@ -133,7 +132,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         } else {
            if (!user.getGender().equals(Sex)){
                Sex=user.getGender();
-               System.out.println("refresh");
                if (user.getGender().equalsIgnoreCase("M")) {
                    /**
                     * OOM Exception
@@ -433,7 +431,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         try {
             Bitmap bitmap = ImageCache.getInstance().get(String.valueOf(resId));
             if (bitmap==null){
-                System.out.println("bitmap = null");
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
                 opt.inPurgeable = true;
@@ -442,7 +439,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 bitmap = BitmapFactory.decodeStream(is, null, opt);
                 ImageCache.getInstance().put(String.valueOf(resId),bitmap);
             }
-            System.out.println("load cache bitmap");
             return bitmap;
         }catch (Exception e){
             e.printStackTrace();

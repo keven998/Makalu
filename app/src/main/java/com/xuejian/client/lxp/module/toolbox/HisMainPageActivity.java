@@ -216,39 +216,46 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         if (me != null) {
             List<String> uids = new ArrayList<>();
             uids.add(String.valueOf(userId));
-            IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), uids, new HttpCallback() {
-                @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onSuccess(String result) {
-                    try {
-                        JSONObject res = new JSONObject(result);
-                        JSONArray array = res.getJSONArray("result");
-                        SettingConfig.getInstance().setLxpNoticeSetting(HisMainPageActivity.this, String.valueOf(array.getJSONObject(0).getInt("targetId")), array.getJSONObject(0).getBoolean("muted"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+            try {
+                IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), uids, new HttpCallback() {
+                    @Override
+                    public void onSuccess() {
                     }
-                    IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
-                    Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
-                    intent.putExtra("friend_id", String.valueOf(userId));
-                    intent.putExtra("chatType", "single");
-                    startActivity(intent);
-                }
 
-                @Override
-                public void onFailed(int code) {
-                    System.out.println(code);
-                    IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
-                    Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
-                    intent.putExtra("friend_id", String.valueOf(userId));
-                    intent.putExtra("chatType", "single");
-                    startActivity(intent);
-                }
-            });
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            JSONObject res = new JSONObject(result);
+                            JSONArray array = res.getJSONArray("result");
+                            SettingConfig.getInstance().setLxpNoticeSetting(HisMainPageActivity.this, String.valueOf(array.getJSONObject(0).getInt("targetId")), array.getJSONObject(0).getBoolean("muted"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
+                        Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
+                        intent.putExtra("friend_id", String.valueOf(userId));
+                        intent.putExtra("chatType", "single");
+                        startActivity(intent);
+                    }
 
-
+                    @Override
+                    public void onFailed(int code) {
+                        System.out.println(code);
+                        IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
+                        Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
+                        intent.putExtra("friend_id", String.valueOf(userId));
+                        intent.putExtra("chatType", "single");
+                        startActivity(intent);
+                    }
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+                IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
+                Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
+                intent.putExtra("friend_id", String.valueOf(userId));
+                intent.putExtra("chatType", "single");
+                startActivity(intent);
+            }
         } else {
             Intent intent = new Intent(HisMainPageActivity.this, LoginActivity.class);
             startActivityWithNoAnim(intent);

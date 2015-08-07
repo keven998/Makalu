@@ -360,12 +360,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                System.out.println(s.toString() + " " + start + " " + count + " " + after);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                System.out.println(s.toString());
             }
         });
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -839,6 +837,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             adapter.refresh();
             listView.setSelection(listView.getCount() - 1);
             setResult(RESULT_OK);
+        }else {
+            ToastUtil.getInstance(ChatActivity.this).showToast("图片解析失败");
         }
     }
 
@@ -1075,6 +1075,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else {
             m.setSendType(1);
             messageList.add(m);
+//            MessageBean messageBean =new MessageBean();
+//            messageBean.setMessage("{\"title\":\"title\",\"desc\":\"desc\",\"image\":\"http://7xirnn.com1.z0.glb.clouddn.com/2ed2cb7c-ac84-4720-9aa0-b5bb8dba6795!thumb?e=1439527658&token=jU6KkDZdGYODmrPVh5sbBIkJX65y-Cea991uWpWZ:QmwHGiZqUA-Cg0p4hgxNLY8f6F4=\",\"url\":\"http://m.creatby.com/manage/book/b10qbu/\"}");
+//            messageBean.setType(18);
+//            messageBean.setSenderId(100014);
+//            messageBean.setSendType(1);
+//            messageBean.setCreateTime(System.currentTimeMillis());
+//            messageList.add(messageBean);
             adapter.refresh();
             int curSelection = listView.getFirstVisiblePosition();
             if (curSelection > listView.getCount() / 2) {

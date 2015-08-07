@@ -262,6 +262,9 @@ public class UserDBManager {
     }
 
     public synchronized void saveContact(User user) {
+        if (user==null){
+            return;
+        }
         mdb = getDB();
         if (user.getNickName() == null || "".equals(user.getNickName())) {
             user.setHeader("#");
@@ -413,6 +416,9 @@ public class UserDBManager {
     }
 
     public synchronized void updateGroupInfo(User user, String groupId) {
+        if (user==null){
+            return;
+        }
         mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
         if (cursor.getCount() == 0) {
@@ -442,6 +448,9 @@ public class UserDBManager {
     }
 
     public synchronized void updateGroupMemberInfo(List<User> list, String groupId) {
+        if (list==null){
+            return;
+        }
         JSONArray array = new JSONArray();
         for (User user : list) {
             array.put(user.getUserId());

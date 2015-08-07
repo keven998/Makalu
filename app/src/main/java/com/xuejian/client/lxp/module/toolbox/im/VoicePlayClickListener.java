@@ -118,6 +118,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
             mediaPlayer.start();
             showAnimation();
             IMClient.getInstance().updateReadStatus(friendId, message.getLocalId(), true);
+            MessageAdapter.isRead=true;
             MessageAdapter.updateVoiceReadStatus(message);
             try {
                 //如果是接收的消息
@@ -137,6 +138,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
                 isRead = false;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

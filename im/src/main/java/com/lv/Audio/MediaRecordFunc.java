@@ -71,7 +71,6 @@ public class MediaRecordFunc {
     }
 
     private boolean createMediaRecord() {
-        System.out.println("createMediaRecord");
         mMediaRecorder = new MediaRecorder();
 
 		/* setAudioSource/setVedioSource */

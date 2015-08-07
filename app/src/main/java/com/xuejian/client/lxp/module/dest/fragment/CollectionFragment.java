@@ -42,7 +42,6 @@ public class CollectionFragment extends Fragment {
         strategy = getStrategy();
         destinations = getDestinations();
         isOwner = getArguments().getBoolean("isOwner");
-        System.out.println("isOwner "+isOwner);
     }
 
     @Override

@@ -64,6 +64,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
+import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
@@ -708,7 +709,6 @@ public class MessageAdapter extends BaseAdapter {
             } else {
                 holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_default, 0, 0, 0);
             }
-
             holder.tv_desc.setText(bean.address);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
             holder.rl_content.setOnClickListener(new OnClickListener() {
@@ -727,7 +727,6 @@ public class MessageAdapter extends BaseAdapter {
                             IntentUtils.intentToDetail(activity, TravelApi.PeachType.SHOPPING, finalBean.id);
                             break;
                     }
-
                 }
             });
         } else if (extType == H5_MSG) {
@@ -747,11 +746,11 @@ public class MessageAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setClass(activity, PeachWebViewActivity.class);
-                    intent.putExtra("mCurrentUrl", h5MessageBean.url);
+                    intent.putExtra("url", h5MessageBean.url);
+                    intent.putExtra("title", h5MessageBean.title);
                     activity.startActivity(intent);
                 }
             });
-
         } else {
             holder.tv_desc.setText("本版本不支持此消息类型，请升级最新版本！");
         }
@@ -838,7 +837,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.tv.setVisibility(View.GONE);
                 //    holder.iv.setImageBitmap(defaultImage);
                 String thumbpath = getStringAttr(message, "thumbPath");
-                String romotePath = getStringAttr(message, "full");
+                String romotePath = getStringAttr(message, "origin");
                 String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
                 if (thumbpath != null) {
                     showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message, holder);
@@ -1101,7 +1100,6 @@ public class MessageAdapter extends BaseAdapter {
      * @param convertView
      */
     private void handleVoiceMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
-
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
         isRead = (boolean) getVoiceFilepath(message, "isRead");
@@ -1597,7 +1595,6 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv.setVisibility(View.INVISIBLE);
         String thumburl = getStringAttr(message, "thumb");
         String filename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(thumburl) + ".jpeg";
-        System.out.println("开始继续下载 ");
 
         //       String thumbpath = getStringAttr(message, "thumbPath");
         final String romotePath = getStringAttr(message, "full");
