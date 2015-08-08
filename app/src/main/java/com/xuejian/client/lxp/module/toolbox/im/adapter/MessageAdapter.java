@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -64,7 +63,6 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
-import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
@@ -837,7 +835,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.tv.setVisibility(View.GONE);
                 //    holder.iv.setImageBitmap(defaultImage);
                 String thumbpath = getStringAttr(message, "thumbPath");
-                String romotePath = getStringAttr(message, "origin");
+                String romotePath = getStringAttr(message, "full");
                 String BigImageFilename = Config.DownLoadImage_path + CryptUtils.getMD5String(message.getSenderId() + "") + "/" + CryptUtils.getMD5String(romotePath) + ".jpeg";
                 if (thumbpath != null) {
                     showImageView(thumbpath, holder.iv, BigImageFilename, romotePath, message, holder);
@@ -1103,7 +1101,12 @@ public class MessageAdapter extends BaseAdapter {
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
         isRead = (boolean) getVoiceFilepath(message, "isRead");
-        holder.tv.setText(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP) + "´´");
+        if (!TextUtils.isEmpty(durtime)){
+            holder.tv.setText(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP) + "´´");
+        }else {
+            holder.tv.setText("0´´");
+        }
+
         if (filepath == null) {
             loadFailedVoice(message, holder);
             return;
