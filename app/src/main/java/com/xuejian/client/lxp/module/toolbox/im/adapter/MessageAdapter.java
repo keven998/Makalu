@@ -81,6 +81,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
@@ -1786,17 +1787,20 @@ public class MessageAdapter extends BaseAdapter {
             iv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity, ShowBigImage.class);
-                    File file = new File(localFullSizePath);
-                    if (file.exists()) {
-                        Uri uri = Uri.fromFile(file);
-                        intent.putExtra("uri", uri);
-                        intent.putExtra("downloadFilePath", localFullSizePath);
-                    } else {
-                        intent.putExtra("downloadFilePath", localFullSizePath);
-                        intent.putExtra("remotepath", remoteDir);
-                    }
-                    ((BaseActivity) activity).startActivityWithNoAnim(intent);
+                    ArrayList<String> pics = IMClient.getInstance().getPics(friendId);
+                    int pos = pics.indexOf(remoteDir);
+                    IntentUtils.intentToPicGallery2(activity,pics , pos);
+//                    Intent intent = new Intent(activity, ShowBigImage.class);
+//                    File file = new File(localFullSizePath);
+//                    if (file.exists()) {
+//                        Uri uri = Uri.fromFile(file);
+//                        intent.putExtra("uri", uri);
+//                        intent.putExtra("downloadFilePath", localFullSizePath);
+//                    } else {
+//                        intent.putExtra("downloadFilePath", localFullSizePath);
+//                        intent.putExtra("remotepath", remoteDir);
+//                    }
+//                    ((BaseActivity) activity).startActivityWithNoAnim(intent);
                 }
             });
             return true;

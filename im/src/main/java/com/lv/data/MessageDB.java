@@ -715,4 +715,24 @@ public class MessageDB {
         m.setType(TIPS_TYPE);
         saveMsg(String.valueOf(chatId), m, chatType);
     }
+    public ArrayList<String> getAllPics(String chatId){
+        ArrayList<String> pics =new ArrayList<>();
+        if (TextUtils.isEmpty(chatId))return pics;
+        String table_name = "chat_" + CryptUtils.getMD5String(chatId);
+        mdb = getDB();
+        Cursor cursor = mdb.rawQuery("select Message from "+table_name+" where Type=?",new String[]{String.valueOf(2)});
+        while (cursor.moveToNext()){
+            String message = cursor.getString(0);
+            try {
+                JSONObject object = new JSONObject(message);
+                String url = object.getString("full");
+                pics.add(url);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        cursor.close();
+        closeDB();
+        return pics;
+    }
 }

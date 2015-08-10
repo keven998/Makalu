@@ -40,6 +40,7 @@ import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
+import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -417,6 +418,19 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
         ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
+        if (!TextUtils.isEmpty(bean.getAvatar())){
+            avatarImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ArrayList<String> pics =new ArrayList<>();
+                    pics.add(bean.getAvatar());
+                    showSelectedPics(pics);
+                }
+            });
+        }else {
+            avatarImage.setClickable(false);
+        }
+
         FrameLayout fl_avatar = (FrameLayout) findViewById(R.id.fl_gender_bg);
         ImageLoader.getInstance().displayImage(bean.getAvatar(), avatarImage, new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
@@ -518,7 +532,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvNotes.setVisibility(View.INVISIBLE);
     }
 
-
+    private void showSelectedPics(ArrayList<String> pics) {
+        if (pics.size()==0){
+            return;
+        }
+        IntentUtils.intentToPicGallery2(HisMainPageActivity.this, pics, 0);
+    }
     public int getAge(String birth) {
         if (TextUtils.isEmpty(birth)) return 0;
         int age = 0;

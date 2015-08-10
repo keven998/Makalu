@@ -583,6 +583,9 @@ public class IMClient {
     public boolean isDbEmpty() {
         return db == null;
     }
+    public ArrayList<String> getPics(String chatId){
+        return db.getAllPics(chatId);
+    }
 
     public void logout() {
         isLogin = false;
