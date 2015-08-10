@@ -4,12 +4,16 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
+import com.aizou.core.utils.RegexUtils;
 import com.xuejian.client.lxp.bean.AddressBookbean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.utils.video.Utils;
 import com.xuejian.client.lxp.db.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rjm on 2014/10/28.
@@ -71,5 +75,23 @@ public class PhoneContactUtils {
 
     }
 
+
+    public static ArrayList<AddressBookbean> getPhoneContactByKeyWord(Context context,List<AddressBookbean> allMember,String keyword) {
+        ArrayList<AddressBookbean> contactList = new ArrayList<AddressBookbean>();
+        try {
+            if(allMember!=null && allMember.size()>0){
+                    for(int i=0;i<allMember.size();i++){
+                        if(allMember.get(i)!=null && allMember.get(i).tel.replaceAll(" ","").equals(keyword) || allMember.get(i).name.contains(keyword)){
+                            contactList.add(allMember.get(i));
+                        }
+                    }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        return contactList;
+    }
 
 }
