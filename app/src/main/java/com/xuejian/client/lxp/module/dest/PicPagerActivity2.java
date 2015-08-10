@@ -37,6 +37,7 @@ public class PicPagerActivity2 extends PeachBaseActivity {
         mViewPager.setAdapter(new ImagePagerAdapter());
         mViewPager.setCurrentItem(pos);
         if (savedInstanceState != null) {
+
         }
     }
 

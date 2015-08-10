@@ -1103,6 +1103,10 @@ public class MessageAdapter extends BaseAdapter {
         String durtime = getVoiceFilepath(message, "duration") + "";
         isRead = (boolean) getVoiceFilepath(message, "isRead");
         if (!TextUtils.isEmpty(durtime)){
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.rl_voice_content.getLayoutParams();
+        int width = getContentLength(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP).intValue());
+        params.width=CommonUtils.dip2px(activity,width);
+        holder.rl_voice_content.setLayoutParams(params);
             holder.tv.setText(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP) + "´´");
         }else {
             holder.tv.setText("0´´");
@@ -1928,5 +1932,8 @@ public class MessageAdapter extends BaseAdapter {
         }
 
     }
-
+    public int getContentLength(int sec){
+        if (sec>=60)return 280;
+        return 220/60*sec+(60);
+    }
 }

@@ -134,7 +134,7 @@ public class DownloadService extends Service {
                     input = conn.getInputStream();
                     if (msgType==1){
                         output = new FileOutputStream(newfile);
-                        byte buffer[] = new byte[1024];
+                        byte buffer[] = new byte[512];
                         while(input.read(buffer) != -1){
                             output.write(buffer);
                         }
