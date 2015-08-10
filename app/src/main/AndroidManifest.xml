@@ -496,7 +496,7 @@
         <!--54376b1bfd98c554cf025d0c-->
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="androidMarket" />
+            android:value="${UMENG_CHANNEL_VALUE}" />
 
         <!-- 个推配置-->
         <!-- 个推SDK配置开始 -->

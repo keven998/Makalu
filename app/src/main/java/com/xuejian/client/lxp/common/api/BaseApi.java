@@ -1,5 +1,7 @@
 package com.xuejian.client.lxp.common.api;
 
+import android.text.TextUtils;
+
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.http.entity.PTHeader;
@@ -42,7 +44,9 @@ public class BaseApi {
         if (user != null) {
             request.setHeader("UserId", user.getUserId() + "");
         }
-        request.setHeader("ChannelId", "androidMarket");
+        if (!TextUtils.isEmpty(PeachApplication.ChannelId)){
+            request.setHeader("ChannelId", PeachApplication.ChannelId);
+        }
         request.setHeader("Accept", "application/vnd.lvxingpai.v1+json");
         request.setHeader("Platform", "Android " + android.os.Build.VERSION.RELEASE);
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);

@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -101,15 +99,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             finish();
             return;
         }
-        try {
-            ApplicationInfo appInfo = this.getPackageManager()
-                    .getApplicationInfo(getPackageName(),
-                            PackageManager.GET_META_DATA);
-            appInfo.metaData.getString("CHANNEL_ID");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();

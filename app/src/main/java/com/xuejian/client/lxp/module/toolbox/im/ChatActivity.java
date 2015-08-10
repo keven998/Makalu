@@ -1381,6 +1381,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             loadmorePB.setVisibility(View.GONE);
                             return;
                         }
+              //          System.out.println("messageList "+messageList.size());
                         if (messageList.size() != 0) {
                             // 刷新ui
                             adapter.notifyDataSetChanged();

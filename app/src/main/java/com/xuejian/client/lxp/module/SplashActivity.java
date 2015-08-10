@@ -72,9 +72,9 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
-                .showImageOnFail(R.drawable.splash_bg_baidu)
-                .showImageForEmptyUri(R.drawable.splash_bg_baidu)
-                .showImageOnLoading(R.drawable.splash_bg_baidu)
+                .showImageOnFail(R.drawable.bg_splash)
+                .showImageForEmptyUri(R.drawable.bg_splash)
+                .showImageOnLoading(R.drawable.bg_splash)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         // 延长2秒后进入主界面
 

@@ -1,6 +1,8 @@
 package com.xuejian.client.lxp.config;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
 import android.support.v4.BuildConfig;
 
@@ -19,6 +21,8 @@ import java.io.File;
  */
 public class PeachApplication extends BaseApplication {
 
+    public static String ChannelId ;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -29,6 +33,7 @@ public class PeachApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         initPeachConfig();
+        initChannelId();
         initImageLoader();
     }
 
@@ -53,5 +58,16 @@ public class PeachApplication extends BaseApplication {
             SystemConfig.BASE_URL = SystemConfig.RELEASE_BASE_URL;
         }
 
+    }
+
+    public void initChannelId(){
+        try {
+            ApplicationInfo appInfo = this.getPackageManager()
+                    .getApplicationInfo(getPackageName(),
+                            PackageManager.GET_META_DATA);
+           ChannelId = appInfo.metaData.getString("UMENG_CHANNEL");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

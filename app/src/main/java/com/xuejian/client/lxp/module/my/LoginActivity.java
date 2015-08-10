@@ -78,6 +78,9 @@ public class LoginActivity extends PeachBaseActivity {
                 startActivityForResult(intent, REQUEST_CODE_REG);
             }
         });
+        if (SplashActivity.instance!=null){
+            SplashActivity.instance.finish();
+        }
         isFromSplash = getIntent().getBooleanExtra("isFromSplash",false);
         isFromTalkShare = getIntent().getBooleanExtra("isFromTalkShare",false);
         request_code = getIntent().getIntExtra("request_code", 0);
