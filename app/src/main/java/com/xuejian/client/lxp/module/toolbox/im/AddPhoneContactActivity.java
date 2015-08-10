@@ -1,10 +1,18 @@
 package com.xuejian.client.lxp.module.toolbox.im;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +34,7 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,12 +44,30 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
     private ListView mListView;
     List<AddressBookbean> contactListInMobile;
     ListViewDataAdapter<AddressBookbean> contactAdapter;
-
+    private EditText edit_note;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_phone_contact);
         mListView = (ListView) findViewById(R.id.lv_phone_contact);
+        edit_note = (EditText)this.findViewById(R.id.edit_note);
+
+        edit_note.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    InputMethodManager imm = (InputMethodManager)textView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if(imm.isActive()){
+                        imm.hideSoftInputFromInputMethod(textView.getApplicationWindowToken(),0);
+                    }
+                    final String requestStr = edit_note.getText().toString();
+                    refreshData(requestStr);
+                }
+
+                return false;
+            }
+        });
+
         initTitleBar();
         initData();
     }
@@ -53,6 +80,66 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         titleHeaderBar.enableBackKey(true);
     }
 
+    private void refreshData(String keyword){
+        try {
+            DialogManager.getInstance().showLoadingDialog(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(contactListInMobile==null || contactListInMobile.size()==0){
+            contactListInMobile = PhoneContactUtils.getPhoneContact(mContext);
+        }
+        final ArrayList<AddressBookbean> keyWordResult= PhoneContactUtils.getPhoneContactByKeyWord(mContext,contactListInMobile,keyword);
+        UserApi.searchByAddressBook(keyWordResult, new HttpCallBack<String>(){
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson4List<AddressBookbean> contactResult = CommonJson4List.fromJson(result, AddressBookbean.class);
+                if (contactResult.code == 0) {
+                    int size = keyWordResult.size();
+                    for (int i = 0; i < size; i++) {
+                        AddressBookbean bookbean = keyWordResult.get(i);
+                        AddressBookbean bookResult = contactResult.result.get(i);
+                        bookbean.isUser = bookResult.isUser;
+                        bookbean.isContact = bookResult.isContact;
+                        bookbean.userId = bookResult.userId;
+                    }
+//                    keyWordResult = contactResult.result;
+                    contactAdapter = new ListViewDataAdapter<AddressBookbean>(new ViewHolderCreator<AddressBookbean>() {
+                        @Override
+                        public ViewHolderBase<AddressBookbean> createViewHolder() {
+                            return new PhoneContactViewHolder();
+                        }
+                    });
+                    Collections.sort(keyWordResult, new Comparator<AddressBookbean>() {
+                        @Override
+                        public int compare(AddressBookbean lhs, AddressBookbean rhs) {
+                            if (lhs == null || rhs == null) {
+                                return 0;
+                            } else {
+                                return rhs.getSort() - lhs.getSort();
+                            }
+                        }
+                    });
+                    mListView.setAdapter(contactAdapter);
+                    contactAdapter.getDataList().addAll(keyWordResult);
+                    contactAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(AddPhoneContactActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
     private void initData() {
         try {
             DialogManager.getInstance().showLoadingDialog(this);
@@ -73,7 +160,6 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
                         bookbean.isUser = bookResult.isUser;
                         bookbean.isContact = bookResult.isContact;
                         bookbean.userId = bookResult.userId;
-
                     }
 //                    contactListInMobile = contactResult.result;
                     contactAdapter = new ListViewDataAdapter<AddressBookbean>(new ViewHolderCreator<AddressBookbean>() {
