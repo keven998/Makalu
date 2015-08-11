@@ -64,6 +64,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     PullToRefreshListView mMyStrategyLv;
     ImageButton mEditBtn;
+    RelativeLayout create_plan;
     StrategyBean temp;
     ListViewDataAdapter mStrategyListAdapter;
     boolean isShare;
@@ -98,7 +99,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         mContentType = 0;
         mCurrentPage = 0;
         if (!isOwner) {
-            mEditBtn.setVisibility(View.GONE);
+            create_plan.setVisibility(View.GONE);
         }
         getStrategyListData(0, mContentType);
     }
@@ -130,10 +131,8 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
-
         mMyStrategyLv = (PullToRefreshListView) findViewById(R.id.my_strategy_lv);
-        mEditBtn = (ImageButton) findViewById(R.id.edit_btn);
-
+        create_plan = (RelativeLayout) findViewById(R.id.create_plan);
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
@@ -147,7 +146,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
         });
         if (!isOwner) {
-            mEditBtn.setVisibility(View.GONE);
+            create_plan.setVisibility(View.GONE);
         }
 
         listView.getRefreshableView().setAdapter(mStrategyListAdapter);
@@ -176,7 +175,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 }
 
         );
-        mEditBtn.setOnClickListener(
+        create_plan.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -404,7 +403,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         public View createView(LayoutInflater layoutInflater) {
             View convertView = layoutInflater.inflate(R.layout.row_my_strategy, null);
             tv_tian = (TextView) convertView.findViewById(R.id.tian);
-            tv_day = (TextView) convertView.findViewById(R.id.day_tv);
+         //   tv_day = (TextView) convertView.findViewById(R.id.day_tv);
             mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
             mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
             mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
@@ -420,7 +419,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
         @Override
         public void showData(final int position, final StrategyBean itemData) {
-            tv_tian.setText(String.valueOf(itemData.dayCnt));
+            tv_tian.setText(String.format("%s天", String.valueOf(itemData.dayCnt)));
             mCitysTv.setText(itemData.summary);
             if (newCopy&&itemData.id.equals(copyId)) {
                 SpannableString planStr = new SpannableString(String.format("(新复制)%s", itemData.title));
@@ -432,10 +431,10 @@ public class StrategyListActivity extends PeachBaseActivity {
 
             mTimeTv.setText("创建：" + new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
             if (itemData.status.equals("traveled")) {
-                rl_plan.setBackgroundResource(R.drawable.plan_bg_gray);
+                rl_plan.setBackgroundResource(R.drawable.plan_status_travelled);
                 mCheckStatus.setVisibility(View.VISIBLE);
             } else {
-                rl_plan.setBackgroundResource(R.drawable.selector_plan_item);
+                rl_plan.setBackgroundResource(R.drawable.plan_status_planned);
                 mCheckStatus.setVisibility(View.GONE);
             }
 

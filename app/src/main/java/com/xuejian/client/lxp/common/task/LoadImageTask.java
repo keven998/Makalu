@@ -23,8 +23,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lv.utils.Config;
 import com.lv.bean.MessageBean;
+import com.lv.utils.Config;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.ImageUtils;
@@ -66,7 +66,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
         }
     }
 
-    protected void onPostExecute(Bitmap image) {
+    protected void onPostExecute(final Bitmap image) {
         if (message.getType() == Config.LOC_MSG) {
             if (image != null) {
                 tv.setBackgroundDrawable(new BitmapDrawable(image));

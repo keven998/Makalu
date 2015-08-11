@@ -7,71 +7,65 @@
         android:id="@+id/rl_plan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_plan_item">
-
-        <TextView
-            android:id="@+id/tian"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="12dp"
-            android:gravity="right"
-            android:textColor="@color/base_color_white"
-            android:textSize="21sp" />
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:background="@drawable/plan_status_planned">
 
         <TextView
             android:id="@+id/name_tv"
             android:layout_width="@dimen/my_plan_title_width"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tian"
             android:layout_marginLeft="15dp"
             android:ellipsize="end"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
             android:singleLine="true"
             android:textColor="@color/base_color_white"
-            android:textSize="11sp" />
-
+            android:textSize="16sp" />
         <TextView
-            android:id="@+id/day_tv"
+            android:id="@+id/tian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_toRightOf="@id/tian"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="27dp"
+            android:layout_below="@+id/name_tv"
+            android:layout_marginTop="12dp"
             android:gravity="right"
-            android:singleLine="true"
-            android:text="天"
-            android:textColor="@color/base_color_white"
-            android:textSize="21sp" />
+            android:textColor="@color/color_text_ii"
+            android:textSize="22sp" />
 
 
         <TextView
             android:id="@+id/citys_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/name_tv"
-            android:layout_marginLeft="15dp"
+            android:layout_below="@id/tian"
+            android:layout_marginLeft="27dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/base_color_white"
-            android:textSize="15sp" />
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/citys_tv"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
+            android:paddingBottom="20dp"
             android:singleLine="true"
-            android:textColor="@color/base_color_white"
-            android:textSize="10sp" />
+            android:textColor="@color/color_text_ii"
+            android:textSize="12sp" />
 
         <RelativeLayout
             android:id="@+id/rl_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingRight="10dp"
             android:layout_alignParentRight="true">
 
             <ImageView
@@ -82,8 +76,8 @@
                 android:paddingBottom="24dp"
                 android:paddingLeft="7dp"
                 android:paddingRight="25dp"
-                android:paddingTop="14dp"
-                android:scaleType="fitCenter"
+                android:paddingTop="7dp"
+                android:scaleType="center"
                 android:src="@drawable/selector_ic_plan_sign" />
 
 
@@ -95,8 +89,8 @@
                 android:paddingBottom="24dp"
                 android:paddingLeft="24dp"
                 android:paddingRight="15dp"
-                android:paddingTop="14dp"
-                android:scaleType="fitCenter"
+                android:paddingTop="7dp"
+                android:scaleType="center"
                 android:src="@drawable/selector_ic_plan_delete" />
         </RelativeLayout>
 
@@ -125,29 +119,22 @@
                 android:textSize="13sp" />
         </RelativeLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_below="@id/rl_action"
-            android:layout_centerHorizontal="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/plan_bg_page_spot_zhedang" />
 
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <ImageView
             android:id="@+id/iv_check_status"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="86dp"
+            android:layout_marginRight="102dp"
+            android:layout_marginTop="53dp"
             android:scaleType="fitCenter"
             android:src="@drawable/plan_bg_page_dao" />
     </RelativeLayout>

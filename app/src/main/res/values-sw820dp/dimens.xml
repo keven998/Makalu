@@ -8,6 +8,6 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
 
     <dimen name="my_plan_img_height">118dp</dimen>
-    <dimen name="my_plan_title_width">256dp</dimen>
+    <dimen name="my_plan_title_width">160dp</dimen>
 
 </resources>

@@ -15,7 +15,7 @@
     <dimen name="alpha_indexing_text_size_selected">18dp</dimen>
 
     <dimen name="my_plan_img_height">92dp</dimen>
-    <dimen name="my_plan_title_width">200dp</dimen>
+    <dimen name="my_plan_title_width">150dp</dimen>
 
     <dimen name="talent_loc_cell_height">232dp</dimen>
 

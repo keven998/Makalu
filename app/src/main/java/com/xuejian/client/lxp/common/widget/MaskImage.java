@@ -20,6 +20,7 @@ import com.xuejian.client.lxp.R;
 public class MaskImage extends ImageView {
     int mMaskSource = 0;
     int minWidth;
+
     public MaskImage(Context context) {
         super(context);
     }
@@ -39,14 +40,18 @@ public class MaskImage extends ImageView {
         if (minWidth > bm.getWidth()) {
             int height = minWidth * bm.getHeight() / bm.getWidth();
             original = Bitmap.createScaledBitmap(bm, minWidth, height, true);
-            orginalHeight=original.getHeight();
-            if(orginalHeight>600){
-                orginalHeight=600;
+            orginalHeight = original.getHeight();
+            if (orginalHeight > 600) {
+                orginalHeight = 600;
             }
         }
         NinePatchDrawable maskDrawable = (NinePatchDrawable) getResources().getDrawable(mMaskSource);
-        maskDrawable.setBounds(0, 0, original.getWidth(), orginalHeight);
-        Bitmap mask = Bitmap.createBitmap(original.getWidth(),orginalHeight, Bitmap.Config.ARGB_8888);
+        if (orginalHeight>0){
+            maskDrawable.setBounds(0, 0, original.getWidth(), orginalHeight);
+        }else {
+            maskDrawable.setBounds(0, 0, original.getWidth(), original.getHeight());
+        }
+        Bitmap mask = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas maskCancas = new Canvas(mask);
         maskDrawable.draw(maskCancas);
         Bitmap result = Bitmap.createBitmap(mask.getWidth(), mask.getHeight(), Bitmap.Config.ARGB_8888);
