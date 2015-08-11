@@ -137,7 +137,7 @@ public class IMClient {
         if (Config.isDebug) {
             Log.i(Config.TAG, "ACK  频率" + frequency);
         }
-        if (frequency == 0) frequency = 30 * 1000;
+        if (frequency == 0) frequency = 20 * 1000;
         isRunning = true;
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -151,18 +151,41 @@ public class IMClient {
                          * 风险
                          *
                          */
-//                        if (Config.isDebug) {
-//                            Log.i(Config.TAG, "ACK  result");
-//                        }
-//                        for (Message msg : list) {
-//                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
-//                        }
-//                        LazyQueue.getInstance().TempDequeue();
-//                        isRunning = false;
+                        for (Message msg : list) {
+                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
+                        }
+                        LazyQueue.getInstance().TempDequeue();
+                        isRunning = false;
                     }
                 });
             }
-        }, frequency);
+        },frequency,frequency);
+
+
+
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                ackAndFetch(new FetchListener() {
+//                    @Override
+//                    public void OnMsgArrive(List<Message> list) {
+//                        /**
+//                         *
+//                         * 风险
+//                         *
+//                         */
+////                        if (Config.isDebug) {
+////                            Log.i(Config.TAG, "ACK  result");
+////                        }
+////                        for (Message msg : list) {
+////                            LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
+////                        }
+////                        LazyQueue.getInstance().TempDequeue();
+////                        isRunning = false;
+//                    }
+//                });
+//            }
+//        }, frequency);
     }
 
     public void clearackList() {

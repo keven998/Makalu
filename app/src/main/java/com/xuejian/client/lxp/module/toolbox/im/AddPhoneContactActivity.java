@@ -1,17 +1,12 @@
 package com.xuejian.client.lxp.module.toolbox.im;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,22 +46,41 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
         setContentView(R.layout.activity_add_phone_contact);
         mListView = (ListView) findViewById(R.id.lv_phone_contact);
         edit_note = (EditText)this.findViewById(R.id.edit_note);
-
-        edit_note.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        findViewById(R.id.search_contact).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
-                    InputMethodManager imm = (InputMethodManager)textView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if(imm.isActive()){
-                        imm.hideSoftInputFromInputMethod(textView.getApplicationWindowToken(),0);
-                    }
-                    final String requestStr = edit_note.getText().toString();
-                    refreshData(requestStr);
-                }
-
-                return false;
+            public void onClick(View v) {
+                final String requestStr = edit_note.getText().toString();
+                refreshData(requestStr);
             }
         });
+        edit_note.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+//        edit_note.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+//                if(actionId == EditorInfo.IME_ACTION_DONE){
+//                    InputMethodManager imm = (InputMethodManager)textView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    if(imm.isActive()){
+//                        imm.hideSoftInputFromInputMethod(textView.getApplicationWindowToken(),0);
+//                    }
+//                    final String requestStr = edit_note.getText().toString();
+//                    refreshData(requestStr);
+//                }
+//
+//                return false;
+//            }
+//        });
 
         initTitleBar();
         initData();

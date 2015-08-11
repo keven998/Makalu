@@ -45,5 +45,5 @@ public class Config {
     public static final String mapPath = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/map/";
     public static final String audioPath = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/audio/";
     public static final String TAG="lvFM";
-    public static final boolean isDebug=false;
+    public static final boolean isDebug=true;
 }

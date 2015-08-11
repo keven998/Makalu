@@ -99,7 +99,15 @@ public class CommonUtils {
         }
         return display.getWidth();
     }
-
+    public static int getScreenHeight(Activity context) {
+        Display display = context.getWindowManager().getDefaultDisplay();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            Point size = new Point();
+            display.getSize(size);
+            return size.y;
+        }
+        return display.getHeight();
+    }
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
 
         float[] results = new float[1];
