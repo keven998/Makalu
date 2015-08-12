@@ -720,16 +720,29 @@ public class MessageDB {
         if (TextUtils.isEmpty(chatId))return pics;
         String table_name = "chat_" + CryptUtils.getMD5String(chatId);
         mdb = getDB();
-        Cursor cursor = mdb.rawQuery("select Message from "+table_name+" where Type=?",new String[]{String.valueOf(2)});
+        Cursor cursor = mdb.rawQuery("select Message,SendType from "+table_name+" where Type=?",new String[]{String.valueOf(2)});
         while (cursor.moveToNext()){
             String message = cursor.getString(0);
-            try {
-                JSONObject object = new JSONObject(message);
-                String url = object.getString("full");
-                pics.add(url);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            int sendType = cursor.getInt(1);
+            if (sendType==1){
+                try {
+                    JSONObject object = new JSONObject(message);
+                    String url = object.getString("full");
+                    pics.add(url);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                try {
+                    JSONObject object = new JSONObject(message);
+                    String url = object.getString("localPath");
+                    url = "file://"+url;
+                    pics.add(url);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+
         }
         cursor.close();
         closeDB();

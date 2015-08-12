@@ -1102,13 +1102,13 @@ public class MessageAdapter extends BaseAdapter {
         String filepath = (String) getVoiceFilepath(message, "path");
         String durtime = getVoiceFilepath(message, "duration") + "";
         isRead = (boolean) getVoiceFilepath(message, "isRead");
-        if (!TextUtils.isEmpty(durtime)){
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.rl_voice_content.getLayoutParams();
-        int width = getContentLength(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP).intValue());
-        params.width=CommonUtils.dip2px(activity,width);
-        holder.rl_voice_content.setLayoutParams(params);
+        if (!TextUtils.isEmpty(durtime)) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.rl_voice_content.getLayoutParams();
+            int width = getContentLength(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP).intValue());
+            params.width = CommonUtils.dip2px(activity, width);
+            holder.rl_voice_content.setLayoutParams(params);
             holder.tv.setText(new BigDecimal(durtime).setScale(0, BigDecimal.ROUND_HALF_UP) + "´´");
-        }else {
+        } else {
             holder.tv.setText("0´´");
         }
 
@@ -1443,7 +1443,7 @@ public class MessageAdapter extends BaseAdapter {
         if (bitmap != null) {
             holder.tv.setBackgroundDrawable(new BitmapDrawable(bitmap));
         } else
-            new LoadImageTask().execute(path, null, remote, chatType, null, activity, message, holder.tv);
+            new LoadImageTask().execute(path, null, remote, chatType, null, activity, message, holder.tv,friendId);
 
 
         holder.tv.setOnClickListener(new MapClickListener(lat, lng, desc));
@@ -1792,8 +1792,16 @@ public class MessageAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     ArrayList<String> pics = IMClient.getInstance().getPics(friendId);
-                    int pos = pics.indexOf(remoteDir);
-                    IntentUtils.intentToPicGallery2(activity,pics , pos);
+                    for (String pic : pics) {
+                        System.out.println(pic);
+                    }
+                    int pos = 0;
+                    if (message.getSendType() == 1) {
+                        pos = pics.indexOf(remoteDir);
+                    } else {
+                        pos = pics.indexOf("file://"+localFullSizePath);
+                    }
+                    IntentUtils.intentToPicGallery2(activity, pics, pos);
 //                    Intent intent = new Intent(activity, ShowBigImage.class);
 //                    File file = new File(localFullSizePath);
 //                    if (file.exists()) {
@@ -1809,7 +1817,7 @@ public class MessageAdapter extends BaseAdapter {
             });
             return true;
         } else {
-            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message, null);
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message, null,friendId);
             return true;
         }
 
@@ -1932,8 +1940,9 @@ public class MessageAdapter extends BaseAdapter {
         }
 
     }
-    public int getContentLength(int sec){
-        if (sec>=60)return 280;
-        return 210/60*sec+(70);
+
+    public int getContentLength(int sec) {
+        if (sec >= 60) return 280;
+        return 210 / 60 * sec + (70);
     }
 }
