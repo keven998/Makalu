@@ -1934,6 +1934,6 @@ public class MessageAdapter extends BaseAdapter {
     }
     public int getContentLength(int sec){
         if (sec>=60)return 280;
-        return 220/60*sec+(60);
+        return 210/60*sec+(70);
     }
 }

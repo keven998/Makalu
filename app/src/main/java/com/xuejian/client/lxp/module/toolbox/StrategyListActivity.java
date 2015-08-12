@@ -445,11 +445,11 @@ public class StrategyListActivity extends PeachBaseActivity {
             if (isShare) {
                 rl_action.setVisibility(View.GONE);
                 rl_send.setVisibility(View.VISIBLE);
-                if (!itemData.status.equals("traveled")) {
-                    ctv.setBackgroundResource(R.color.app_theme_color);
-                } else {
-                    ctv.setBackgroundResource(R.color.light_grey);
-                }
+//                if (!itemData.status.equals("traveled")) {
+//                    ctv.setBackgroundResource(R.color.app_theme_color);
+//                } else {
+//                    ctv.setBackgroundResource(R.color.light_grey);
+//                }
             }
             rl_send.setOnClickListener(new View.OnClickListener() {
                 @Override

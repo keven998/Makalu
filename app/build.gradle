@@ -27,7 +27,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 5
-        versionName "2.0"
+        versionName "2.0.1"
         multiDexEnabled true
     }
     buildTypes {
@@ -38,13 +38,11 @@ android {
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        def fileName = "lvxingpai_v${defaultConfig.versionName}_0811_0_${variant.productFlavors[0].name}.apk"
+                        def fileName = "lvxingpai_v${defaultConfig.versionName}_0812_0_${variant.productFlavors[0].name}.apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
                 }
             }
-
-
         }
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
