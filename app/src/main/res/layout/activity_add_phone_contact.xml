@@ -27,13 +27,14 @@
             android:paddingLeft="10dp"
             android:background="@drawable/button_normal_shape"
             android:hint="昵称或手机号"
-            android:imeOptions="actionSearch"
             android:singleLine="true"
             android:textColorHint="@color/base_text_color_text_placeholder"
             android:textColor="@color/base_text_color_title"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dp"
-            android:textSize="@dimen/text_size_14" />
+            android:textSize="@dimen/text_size_14"
+            android:imeOptions="actionDone"
+            />
 
         <Button android:id="@+id/search_contact"
             android:layout_width="wrap_content"
