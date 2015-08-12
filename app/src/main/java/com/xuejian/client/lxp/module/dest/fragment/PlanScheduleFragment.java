@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -56,21 +55,10 @@ public class PlanScheduleFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*int[] location = new int[2];
-                view.getLocationInWindow(location);
-                Log.e("x坐标", location[0] + "-----------------------");
-                Log.e("y坐标", location[1] + "-----------------------");
-                WindowManager windowManager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
-                int windowheight=windowManager.getDefaultDisplay().getHeight();
-                float startX=windowManager.getDefaultDisplay().getWidth()/2.0f;
-                float startY=(location[1]+view.getHeight()/2.0f)/(windowheight*1.0f);*/
-
                 final Intent intent = new Intent(getActivity(), DayAgendaActivity.class);
                 intent.putExtra("strategy", strategy);
                 intent.putExtra("current_day", position);
-                ActivityTransitionLauncher.with(getActivity()).from(view).launch(intent);
                 getActivity().overridePendingTransition(0,0);
-                //getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
             }
         });
         return rootView;
