@@ -17,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -58,7 +57,8 @@ public class PlanScheduleFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(), DayAgendaActivity.class);
                 intent.putExtra("strategy", strategy);
                 intent.putExtra("current_day", position);
-                getActivity().overridePendingTransition(0,0);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(0, 0);
             }
         });
         return rootView;
