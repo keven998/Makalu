@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.kogitune.activity_transition.ExitActivityTransition;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -42,7 +41,6 @@ public class DayAgendaActivity extends FragmentActivity {
     private TextView tv_editplan;
     private FrameLayout place_detail_panel;
     private AnimatedDoorLayout mAnimated;
-    private ExitActivityTransition exitTransition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

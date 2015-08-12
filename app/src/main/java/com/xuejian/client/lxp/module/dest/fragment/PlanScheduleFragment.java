@@ -58,6 +58,7 @@ public class PlanScheduleFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(), DayAgendaActivity.class);
                 intent.putExtra("strategy", strategy);
                 intent.putExtra("current_day", position);
+                startActivity(intent);
                 getActivity().overridePendingTransition(0,0);
             }
         });

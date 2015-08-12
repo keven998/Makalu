@@ -114,21 +114,21 @@ public class AnimatedDoorLayout extends ViewGroup {
             super.dispatchDraw(canvas);
             return;
         }
-
+        System.out.println("mOriginalHeight "+mOriginalHeight);
         int delta;
         if(mDoorType == VERTICAL_DOOR) {
-            delta = (int) ((mOriginalHeight/2)*mProgress);
+            delta = (int)(((mOriginalHeight/2)*mProgress));
         } else {
             delta = (int) ((mOriginalWidth/2)*mProgress);
         }
-
+        System.out.println("first "+delta);
         //1st door
         canvas.save();
-        if(mDoorType == VERTICAL_DOOR) {
-            mRect.set(0, 0, mOriginalWidth, delta);
-        } else {
-            mRect.set(0, 0, delta, mOriginalHeight);
-        }
+  //      if(mDoorType == VERTICAL_DOOR) {
+            mRect.set(0, (mOriginalHeight/2)-delta, mOriginalWidth, (mOriginalHeight/2));
+ //       } else {
+  //          mRect.set(0, 0, delta, mOriginalHeight);
+  //      }
         if (IS_JBMR2) {
             canvas.drawBitmap(mFullBitmap, mRect, mRect, null);
         } else {
@@ -140,7 +140,7 @@ public class AnimatedDoorLayout extends ViewGroup {
         //2nd door
         canvas.save();
         if(mDoorType == VERTICAL_DOOR) {
-            mRect.set(0, mOriginalHeight - delta, mOriginalWidth, mOriginalHeight);
+            mRect.set(0, (mOriginalHeight/2), mOriginalWidth, (mOriginalHeight/2)+delta);
         } else {
             mRect.set(mOriginalWidth - delta, 0, mOriginalWidth, mOriginalHeight);
         }
