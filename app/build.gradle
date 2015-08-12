@@ -111,4 +111,6 @@ dependencies {
     compile 'com.orhanobut:dialogplus:1.7@aar'
     //compile(name:'play-services-base-6.5.87', ext:'aar')
     compile files('libs/baidumapapi_v3_4_0.jar')
+    compile 'io.reactivex:rxandroid:0.25.0'
+    compile 'io.reactivex:rxjava:1.0.13'
 }

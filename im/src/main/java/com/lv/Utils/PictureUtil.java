@@ -61,16 +61,24 @@ public class PictureUtil {
             int scaleY = imageHeight / windowHeight;
             // 采样率依照最大的方向为准
             if (scaleX > scaleY && scaleY >= 1) {
-                scale = scaleX;
+                scale = scaleY;
             }
             if (scaleX < scaleY && scaleX >= 1) {
-                scale = scaleY;
+                scale = scaleX;
             }
         }
         opts.inJustDecodeBounds = false;
         // 采样率
         opts.inSampleSize = scale;
-        Bitmap bitmap = BitmapFactory.decodeFile(OriginalPath, opts);
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeFile(OriginalPath, opts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            opts.inJustDecodeBounds = false;
+            opts.inSampleSize = scale * 2;
+            bitmap = BitmapFactory.decodeFile(OriginalPath, opts);
+        }
         if (saveBitmapToJpegFile(bitmap, imagePath, 100))
             return imagePath;
         return null;
