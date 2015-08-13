@@ -170,7 +170,7 @@ public class PoiAdapter extends BaseAdapter {
             if (mIsCanAdd) {
                 spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 if (poiDetailBean.hasAdded) {
-                    spotViewHolder.mBtnAdd.setText("已" + mAddStr);
+                    spotViewHolder.mBtnAdd.setText("取消");
                     spotViewHolder.mBtnAdd.setChecked(true);
                 } else {
                     spotViewHolder.mBtnAdd.setText(mAddStr);
@@ -218,7 +218,7 @@ public class PoiAdapter extends BaseAdapter {
             poiViewHolder.mTvPoiName.setText(poiDetailBean.zhName);
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
-                    poiViewHolder.mBtnAdd.setText("已" + mAddStr);
+                    poiViewHolder.mBtnAdd.setText("取消");
                     poiViewHolder.mBtnAdd.setChecked(true);
                 } else {
                     poiViewHolder.mBtnAdd.setText(mAddStr);

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,19 +110,17 @@ public class AnimatedDoorLayout extends ViewGroup {
 
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         if(isInEditMode() || mProgress >= 1f) {
             super.dispatchDraw(canvas);
             return;
         }
-        System.out.println("mOriginalHeight "+mOriginalHeight);
         int delta;
         if(mDoorType == VERTICAL_DOOR) {
             delta = (int)(((mOriginalHeight/2)*mProgress));
         } else {
             delta = (int) ((mOriginalWidth/2)*mProgress);
         }
-        System.out.println("first "+delta);
         //1st door
         canvas.save();
   //      if(mDoorType == VERTICAL_DOOR) {
