@@ -31,9 +31,12 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
+import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,6 +57,9 @@ public class SearchAllActivity extends PeachBaseActivity {
     String currentType;
     String conversation;
 
+    private final List<Tag> mTags = new ArrayList<Tag>();
+    private final String[] titles = {"北京攻略","北京游记","故宫","如家","7天","天安门","颐和园","八达岭长城","北海","前门"};
+    private TagListView history_tag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +125,9 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             }
         });
-
         View emptyView = findViewById(R.id.empty_text);
+
+
         mSearchAllLv.setEmptyView(emptyView);
         mSearchAllLv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -144,9 +151,20 @@ public class SearchAllActivity extends PeachBaseActivity {
                 imm.showSoftInput(mEtSearch, InputMethodManager.SHOW_IMPLICIT);
             }
         }, 600);
+        history_tag = (TagListView)findViewById(R.id.history_tag);
+        setUpData();
+        history_tag.setTags(mTags);
     }
 
-
+    private void setUpData(){
+        for(int i=0;i<titles.length;i++){
+            Tag tag = new Tag();
+            tag.setId(i);
+            tag.setChecked(true);
+            tag.setTitle(titles[i]);
+            mTags.add(tag);
+        }
+    }
     @Override
     public void onBackPressed() {
         finishWithNoAnim();

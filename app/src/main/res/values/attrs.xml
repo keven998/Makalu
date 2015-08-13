@@ -45,4 +45,19 @@
         <attr name="bottomLeftRadius" format="dimension"/>
         <attr name="bottomRightRadius" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="TagParentFlowLayout">
+        <attr name="horizontalSpace" format="dimension"/>
+        <attr name="verticalSpace" format="dimension"/>
+        <attr name="orien" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
+        <attr name="debug_Draw" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="TagParentFlowLayout_LP">
+        <attr name="layout_new_Line" format="boolean"/>
+        <attr name="layout_horizontalSpace" format="dimension"/>
+        <attr name="layout_verticalSpace" format="dimension"/>
+    </declare-styleable>
 </resources>
