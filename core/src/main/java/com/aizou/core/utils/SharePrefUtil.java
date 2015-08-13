@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
  */
 public class SharePrefUtil {
 	private final static String SP_NAME = "config";
+	private final static String HISTORY_NAME = "history";
 	private static SharedPreferences sp;
 
 	/**
@@ -37,6 +38,12 @@ public class SharePrefUtil {
 			sp = context.getSharedPreferences(SP_NAME, 0);
 		sp.edit().putString(key, value).commit();
 		
+	}
+	public static void saveHistory(Context context, String value) {
+		if (sp == null)
+			sp = context.getSharedPreferences(HISTORY_NAME, 0);
+		sp.edit().putString("his", value).commit();
+
 	}
 	
 	public static void clear(Context context){
@@ -97,6 +104,13 @@ public class SharePrefUtil {
 			sp = context.getSharedPreferences(SP_NAME, 0);
 		return sp.getString(key, defValue);
 	}
+
+	public static String getHistory(Context context) {
+		if (sp == null)
+			sp = context.getSharedPreferences(HISTORY_NAME, 0);
+		return sp.getString("his", "");
+	}
+
 
 	/**
 	 * 获取int值

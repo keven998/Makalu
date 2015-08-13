@@ -502,6 +502,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         } catch (Exception e) {
             e.printStackTrace();
         }
+        TalkFragment fragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+        if (fragment!=null){
+            fragment.refresh();
+        }
     }
 
     public void setUpGroupMemeber(final String groupId) {

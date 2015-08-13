@@ -13,11 +13,13 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.SharePrefUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -33,6 +35,7 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
+import com.xuejian.client.lxp.common.widget.TagView.TagView;
 import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
 
 import java.util.ArrayList;
@@ -51,6 +54,10 @@ public class SearchAllActivity extends PeachBaseActivity {
     TextView mBtnSearch;
     @InjectView(R.id.search_all_lv)
     ListView mSearchAllLv;
+    @InjectView(R.id.cleanHistory)
+    TextView cleanHistory;
+    @InjectView(R.id.history_pannel)
+    FrameLayout history_pannel;
     String toId;
     String chatType;
     Object temp;
@@ -58,8 +65,8 @@ public class SearchAllActivity extends PeachBaseActivity {
     String conversation;
 
     private final List<Tag> mTags = new ArrayList<Tag>();
-    private final String[] titles = {"北京攻略","北京游记","故宫","如家","7天","天安门","颐和园","八达岭长城","北海","前门"};
     private TagListView history_tag;
+    private String [] keys;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +75,14 @@ public class SearchAllActivity extends PeachBaseActivity {
         chatType = getIntent().getStringExtra("chatType");
         conversation = getIntent().getStringExtra("conversation");
         ButterKnife.inject(this);
-
+        cleanHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                history_tag.cleanTags();
+                history_pannel.setVisibility(View.GONE);
+                SharePrefUtil.saveHistory(SearchAllActivity.this,"");
+            }
+        });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,20 +165,37 @@ public class SearchAllActivity extends PeachBaseActivity {
                 imm.showSoftInput(mEtSearch, InputMethodManager.SHOW_IMPLICIT);
             }
         }, 600);
-        history_tag = (TagListView)findViewById(R.id.history_tag);
+        history_tag = (TagListView) findViewById(R.id.history_tag);
         setUpData();
         history_tag.setTags(mTags);
+        history_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
+            @Override
+            public void onTagClick(TagView tagView, Tag tag) {
+                if (keys!=null&&keys.length>0){
+                    mEtSearch.setText(keys[tag.getId()]);
+                }
+
+            }
+        });
     }
 
-    private void setUpData(){
-        for(int i=0;i<titles.length;i++){
-            Tag tag = new Tag();
-            tag.setId(i);
-            tag.setChecked(true);
-            tag.setTitle(titles[i]);
-            mTags.add(tag);
+    private void setUpData() {
+        keys= getSearchHistory();
+        if (keys.length>0&&!TextUtils.isEmpty(keys[0])){
+            for (int i = keys.length-1; i >=0; i--) {
+                System.out.println(keys[i]);
+                Tag tag = new Tag();
+                tag.setId(i);
+                tag.setChecked(true);
+                tag.setTitle(keys[i]);
+                mTags.add(tag);
+            }
+        }else {
+            history_pannel.setVisibility(View.GONE);
         }
+
     }
+
     @Override
     public void onBackPressed() {
         finishWithNoAnim();
@@ -186,9 +217,14 @@ public class SearchAllActivity extends PeachBaseActivity {
     }
 
     private void searchAll(final String keyword) {
+        if(TextUtils.isEmpty(keyword)){
+            ToastUtil.getInstance(this).showToast("请输入关键词");
+            return;
+        }
+        saveHistory(keyword);
         try {
             DialogManager.getInstance().showLoadingDialog(this);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         TravelApi.searchAll(keyword, new HttpCallBack<String>() {
@@ -217,7 +253,25 @@ public class SearchAllActivity extends PeachBaseActivity {
         });
 
     }
+    private String[] getSearchHistory(){
+        String save_Str = SharePrefUtil.getHistory(this);
+        return save_Str.split(",");
+    }
 
+    private void saveHistory(String keyword) {
+
+        String save_Str = SharePrefUtil.getHistory(this);
+        String[] hisArrays = save_Str.split(",");
+        for (String s : hisArrays) {
+            if(s.equals(keyword))
+            {
+                return;
+            }
+        }
+        StringBuilder sb = new StringBuilder(save_Str);
+        sb.append(keyword + ",");
+        SharePrefUtil.saveHistory(this, sb.toString());
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -272,7 +326,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
-                MobclickAgent.onEvent(SearchAllActivity.this,"button_item_all_search_result");
+                MobclickAgent.onEvent(SearchAllActivity.this, "button_item_all_search_result");
                 Intent intent = new Intent(mContext, SearchTypeActivity.class);
                 intent.putExtra("type", type);
                 intent.putExtra("keyWord", keyword);
@@ -289,7 +343,7 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             @Override
             public void onSendClick(String type, String id, Object object) {
-                MobclickAgent.onEvent(SearchAllActivity.this,"button_item_lxp_send_search_result");
+                MobclickAgent.onEvent(SearchAllActivity.this, "button_item_lxp_send_search_result");
                 currentType = type;
                 temp = object;
                 //IMUtils.onClickImShare(mContext);

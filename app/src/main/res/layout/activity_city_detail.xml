@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:background="@color/app_backgroud"
             android:orientation="vertical"
-            android:paddingBottom="5dp"
+            android:paddingBottom="35dp"
             android:paddingTop="12dp">
 
             <LinearLayout
@@ -289,5 +289,51 @@
 
 
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/user_profile_bar"
+        android:orientation="horizontal">
 
+        <FrameLayout
+            android:id="@+id/fl_send_message"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_profile_bar_item_entry">
+
+            <TextView
+                android:id="@+id/tv_hasGone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_talk_normal"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="去过"
+                android:textColor="@color/color_text_ii"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_send_action"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_profile_bar_item_entry">
+
+            <TextView
+                android:id="@+id/tv_like"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/account_labbar_icon_follow_default"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="喜欢"
+                android:textColor="@color/color_text_ii"
+                android:textSize="14sp" />
+        </FrameLayout>
+    </LinearLayout>
 </FrameLayout>

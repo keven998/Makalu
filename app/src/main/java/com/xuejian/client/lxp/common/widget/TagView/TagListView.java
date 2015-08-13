@@ -1,8 +1,5 @@
 package com.xuejian.client.lxp.common.widget.TagView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -11,6 +8,9 @@ import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
 
 import com.xuejian.client.lxp.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TagListView extends TagParentFlowLayout implements OnClickListener {
 
@@ -189,7 +189,10 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
             addTag((Tag) lists.get(i), b);
         }
     }
-
+    public void cleanTags(){
+        removeAllViews();
+        mTags.clear();
+    }
     public static abstract interface OnTagCheckedChangedListener {
         public abstract void onTagCheckedChanged(TagView tagView, Tag tag);
     }
