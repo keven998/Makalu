@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
+    <TextView
+        android:id="@+id/city_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:singleLine="true"
+        android:textColor="@color/color_text_ii"
+        android:textSize="@dimen/text_size_14"
+        />
+    <ImageView
+        android:id="@+id/des_selected_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="right|center_vertical"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="bottom"
+        />
+</FrameLayout>

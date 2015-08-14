@@ -8,13 +8,14 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.share.ShareDialogBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rjm on 2014/11/14.
  */
-public class LocBean implements Parcelable, ICreateShareDialog {
+public class LocBean implements Parcelable, ICreateShareDialog{
     public boolean isAdded;
     public String header;
     public String id;
@@ -32,6 +33,8 @@ public class LocBean implements Parcelable, ICreateShareDialog {
     public String playGuide;
     public String diningTitles;
     public String shoppingTitles;
+    public String country;
+    public boolean isChecked;
 
 
     public LocBean() {
@@ -92,6 +95,8 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         dest.writeInt(this.imageCnt);
         dest.writeByte(isFavorite ? (byte) 1 : (byte) 0);
         dest.writeString(this.playGuide);
+        dest.writeString(this.country);
+        dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
     }
 
     private LocBean(Parcel in) {
@@ -110,14 +115,16 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         this.imageCnt = in.readInt();
         this.isFavorite = in.readByte() != 0;
         this.playGuide = in.readString();
+        this.country=in.readString();
+        this.isChecked=in.readByte()!=0;
     }
 
     public static final Creator<LocBean> CREATOR = new Creator<LocBean>() {
-        public LocBean createFromParcel(Parcel source) {
+        public LocBean createFromParcel(Parcel source){
             return new LocBean(source);
         }
 
-        public LocBean[] newArray(int size) {
+        public LocBean[] newArray(int size){
             return new LocBean[size];
         }
     };
