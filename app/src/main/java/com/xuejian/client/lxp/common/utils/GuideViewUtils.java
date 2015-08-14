@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.common.utils;
 
 import android.app.Activity;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
@@ -29,6 +30,7 @@ public class GuideViewUtils {
     private static GuideViewUtils instance = null;
     private List<Integer> picList = new ArrayList<>();
     private RelativeLayout view;
+
     private GuideViewUtils() {
     }
 
@@ -57,27 +59,32 @@ public class GuideViewUtils {
                     params.width = CommonUtils.getScreenWidth(context);
                     params.height = CommonUtils.getScreenHeight(context);
                     // 设置动画
-               //     params.windowAnimations = R.style.view_anim;
+                    //     params.windowAnimations = R.style.view_anim;
 
                     // 添加到当前的窗口上
                     windowManager.addView(view, params);
                     break;
             }
-        };
+        }
+
+        ;
     };
 
-    public void initGuide(final Activity context, final String guideName,String content, int topMargin,int rightMargin, int res) {
+    public void initGuide(final Activity context, final String guideName, String content, int topMargin, int rightMargin, int res) {
+        if (CommonUtils.getSystemProperty().equals("V6") || (android.os.Build.MODEL.equals("Xiaomi") && Build.VERSION.SDK_INT >= 19)) {
+            return;
+        }
         this.context = context;
         this.guideName = guideName;
         windowManager = context.getWindowManager();
         view = (RelativeLayout) context.getLayoutInflater().inflate(R.layout.guide_view, null);
         TextView textView = (TextView) view.findViewById(R.id.tv_guide_text);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) textView.getLayoutParams();
-        if (topMargin!=-1)params.topMargin = topMargin;
-   //    (int) context.getResources().getDimension(R.dimen.title_bar_height);
-        if (rightMargin!=-1)params.rightMargin = rightMargin;
+        if (topMargin != -1) params.topMargin = topMargin;
+        // (int) context.getResources().getDimension(R.dimen.title_bar_height);
+        if (rightMargin != -1) params.rightMargin = rightMargin;
         textView.setLayoutParams(params);
-        if (res!=-1)textView.setBackgroundResource(res);
+        if (res != -1) textView.setBackgroundResource(res);
         textView.setText(content);
         handler.sendEmptyMessageDelayed(1, 700);
 
@@ -86,7 +93,7 @@ public class GuideViewUtils {
             @Override
             public void onClick(View arg0) {
                 windowManager.removeView(view);
-                SharePrefUtil.saveBoolean(context,guideName,true);
+                SharePrefUtil.saveBoolean(context, guideName, true);
             }
         });
     }

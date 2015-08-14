@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:background="@color/app_backgroud"
             android:orientation="vertical"
-            android:paddingBottom="35dp"
+            android:paddingBottom="40dp"
             android:paddingTop="12dp">
 
             <LinearLayout
@@ -301,14 +301,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selector_profile_bar_item_entry">
+            android:background="@drawable/selector_ic_city_button">
 
             <TextView
                 android:id="@+id/tv_hasGone"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_talk_normal"
+                android:drawableLeft="@drawable/icon_city_hasgone"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:text="去过"
@@ -321,14 +321,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selector_profile_bar_item_entry">
+            android:background="@drawable/selector_ic_city_button">
 
             <TextView
                 android:id="@+id/tv_like"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/account_labbar_icon_follow_default"
+                android:drawableLeft="@drawable/selector_ic_like"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:text="喜欢"

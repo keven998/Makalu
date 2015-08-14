@@ -99,9 +99,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             finish();
             return;
         }
-//        SharePrefUtil.saveBoolean(this,"plan_guide1",false);
-//        SharePrefUtil.saveBoolean(this,"plan_guide2",false);
-//        SharePrefUtil.saveBoolean(this,"plan_guide3",false);
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();
@@ -718,11 +715,4 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         });
 
     }
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//        if(hasFocus){
-//            showAD();
-//        }
-//    }
 }

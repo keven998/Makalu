@@ -83,7 +83,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-         MobclickAgent.onPageStart("page_city_detail");
+        MobclickAgent.onPageStart("page_city_detail");
         MobclickAgent.onResume(this);
     }
 
@@ -176,6 +176,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        findViewById(R.id.tv_hasGone).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        findViewById(R.id.tv_like).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

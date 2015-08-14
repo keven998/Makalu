@@ -38,7 +38,10 @@ import com.xuejian.client.lxp.bean.StartCity;
 import org.apache.http.Header;
 import org.apache.http.util.EncodingUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
@@ -346,5 +349,20 @@ public class CommonUtils {
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+    public static String getSystemProperty() {
+        String line = null;
+        BufferedReader reader = null;
+        try {
+            Process p = Runtime.getRuntime().exec("getprop ro.miui.ui.version.name");
+            reader = new BufferedReader(new InputStreamReader(p.getInputStream()), 1024);
+            line = reader.readLine();
+            return line;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        return "UNKNOWN";
     }
 }
