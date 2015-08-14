@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -34,6 +35,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.GuideViewUtils;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.module.dest.fragment.EditPlanFragment;
@@ -119,7 +121,15 @@ public class ActivityPlanEditor extends FragmentActivity {
         ft.add(fragment, "edit_menu");
         ft.replace(R.id.menu_frame, fragment).commit();
     }
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            if (!SharePrefUtil.getBoolean(this, "plan_guide3", false)) {
+                GuideViewUtils.getInstance().initGuide(this, "plan_guide3", "添加行程到行程计划", (int) getResources().getDimension(R.dimen.title_bar_height)+65, -1,-1);
+            }
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();

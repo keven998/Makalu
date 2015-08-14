@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.utils.SharePrefUtil;
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -39,7 +40,9 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
+import com.xuejian.client.lxp.common.utils.GuideViewUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
@@ -74,12 +77,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private String newMemo;
     User user;
     View handleView;
-
+    private boolean isFromExperts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
         userId = getIntent().getLongExtra("userId", 0);
+        isFromExperts = getIntent().getBooleanExtra("isFromExperts",false);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
         try {
             if (me != null) {
@@ -530,6 +534,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
         tvNotes.setVisibility(View.INVISIBLE);
+        if (!SharePrefUtil.getBoolean(this, "expert_guide1", false)&&isFromExperts) {
+            GuideViewUtils.getInstance().initGuide(this, "plan_guide1", "有问题可以向达人请教噢", CommonUtils.getScreenHeight(this)-300,CommonUtils.getScreenWidth(this)/2-20,R.drawable.guide_view_bg_down);
+        }
     }
 
     private void showSelectedPics(ArrayList<String> pics) {

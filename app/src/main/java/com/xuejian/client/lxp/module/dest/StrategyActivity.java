@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
@@ -38,6 +39,8 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.GuideViewUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
@@ -81,7 +84,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private DrawAdapter adapter;
     private String userId;
     private boolean isOwner;
-
+    private int count;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -113,6 +116,18 @@ public class StrategyActivity extends PeachBaseActivity {
         outState.putParcelable("strategy", strategy);
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            System.out.println("hasFocus");
+            if (!SharePrefUtil.getBoolean(this, "plan_guide1", false)) {
+                System.out.println("display");
+                GuideViewUtils.getInstance().initGuide(this, "plan_guide1", "点击这里修改计划", (int) getResources().getDimension(R.dimen.title_bar_height), -1,-1);
+            }
+        }
+    }
+
     private void initView() {
         setContentView(R.layout.activity_strategy);
         iv_location = (ImageView) findViewById(R.id.iv_location);
@@ -121,7 +136,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.tv_add_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_change_select_city");
+                MobclickAgent.onEvent(StrategyActivity.this, "cell_item_plan_change_select_city");
                 Intent intent = new Intent(mContext, SelectDestActivity.class);
                 intent.putExtra("locList", destinations);
                 intent.putExtra("guide_id", strategy.id);
@@ -141,7 +156,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.iv_location).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(StrategyActivity.this,"navigation_item_lxp_plan_mapview");
+                MobclickAgent.onEvent(StrategyActivity.this, "navigation_item_lxp_plan_mapview");
                 Intent intent = new Intent(StrategyActivity.this, StrategyMapActivity.class);
                 ArrayList<StrategyBean> list = new ArrayList<StrategyBean>() {
                 };
@@ -166,7 +181,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.strategy_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_lxp_share");
+                MobclickAgent.onEvent(StrategyActivity.this, "cell_item_plan_lxp_share");
                 drawerLayout.closeDrawer(GravityCompat.END);
                 final Handler handler = new Handler() {
                     public void handleMessage(Message msg) {
@@ -185,7 +200,7 @@ public class StrategyActivity extends PeachBaseActivity {
         findViewById(R.id.tv_edit_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_edit_plan");
+                MobclickAgent.onEvent(StrategyActivity.this, "cell_item_plan_edit_plan");
                 drawerLayout.closeDrawer(GravityCompat.END);
                 new Handler() {
                     public void handleMessage(Message msg) {
@@ -375,7 +390,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(StrategyActivity.this,"navigation_item_copy_plan");
+                        MobclickAgent.onEvent(StrategyActivity.this, "navigation_item_copy_plan");
                         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
                         dialog.setTitle("提示");
                         dialog.setMessage(String.format("复制\"%s\"到我的旅行计划", result.title));
@@ -397,7 +412,7 @@ public class StrategyActivity extends PeachBaseActivity {
                                             Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
                                             User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
                                             intent.putExtra("userId", String.valueOf(user.getUserId()));
-                                            intent.putExtra("copyId",modifyResult.result.id);
+                                            intent.putExtra("copyId", modifyResult.result.id);
                                             intent.putExtra("new_copy", true);
                                             startActivity(intent);
                                         } else {
@@ -441,7 +456,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 dtv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(StrategyActivity.this,"cell_item_plan_change_name");
+                        MobclickAgent.onEvent(StrategyActivity.this, "cell_item_plan_change_name");
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                         editDialog.setTitle("修改计划名");
                         editDialog.setMessage(dtv.getText().toString());
@@ -493,7 +508,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
                             drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
                         } else {
-                            MobclickAgent.onEvent(StrategyActivity.this,"navigiation_item_lxp_plan_setting");
+                            MobclickAgent.onEvent(StrategyActivity.this, "navigiation_item_lxp_plan_setting");
                             drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
                         }
                     }
@@ -502,6 +517,17 @@ public class StrategyActivity extends PeachBaseActivity {
         }
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
         indicatorViewPager.setCurrentItem(curIndex, false);
+        indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
+            @Override
+            public void onIndicatorPageChange(int preItem, int currentItem) {
+                System.out.println("currentItem "+currentItem);
+                if (currentItem == 1&&count++==1) {
+                    if (!SharePrefUtil.getBoolean(StrategyActivity.this, "plan_guide2", false)) {
+                        GuideViewUtils.getInstance().initGuide(StrategyActivity.this, "plan_guide2", "添加备选心愿到收藏", (int) getResources().getDimension(R.dimen.title_bar_height)+65, CommonUtils.getScreenWidth(StrategyActivity.this)/2-100,-1);
+                    }
+                }
+            }
+        });
     }
 
     @Override

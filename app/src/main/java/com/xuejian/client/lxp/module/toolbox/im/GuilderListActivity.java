@@ -128,7 +128,8 @@ public class GuilderListActivity extends PeachBaseActivity {
             ExpertBean xEb = (ExpertBean) adapter.getItem(position);
             Intent intent = new Intent();
             intent.setClass(GuilderListActivity.this, HisMainPageActivity.class);
-            intent.putExtra("userId", (long)xEb.userId);
+            intent.putExtra("userId", (long) xEb.userId);
+            intent.putExtra("isFromExperts",true);
             startActivity(intent);
         }
     }

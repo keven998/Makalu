@@ -6,9 +6,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.aizou.core.utils.SharePrefUtil;
+import com.xuejian.client.lxp.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +25,10 @@ public class GuideViewUtils {
     private Activity context;
     private ImageView imgView;
     private WindowManager windowManager;
+    private String guideName;
     private static GuideViewUtils instance = null;
     private List<Integer> picList = new ArrayList<>();
+    private RelativeLayout view;
     private GuideViewUtils() {
     }
 
@@ -54,28 +60,33 @@ public class GuideViewUtils {
                //     params.windowAnimations = R.style.view_anim;
 
                     // 添加到当前的窗口上
-                    windowManager.addView(imgView, params);
+                    windowManager.addView(view, params);
                     break;
             }
         };
     };
 
-    public void initGuide(Activity context, int drawableRourcesId) {
+    public void initGuide(final Activity context, final String guideName,String content, int topMargin,int rightMargin, int res) {
         this.context = context;
+        this.guideName = guideName;
         windowManager = context.getWindowManager();
-        imgView = new ImageView(context);
-        imgView.setLayoutParams(new ViewGroup.LayoutParams(
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT));
-        imgView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imgView.setImageResource(drawableRourcesId);
-        handler.sendEmptyMessageDelayed(1, 1000);
+        view = (RelativeLayout) context.getLayoutInflater().inflate(R.layout.guide_view, null);
+        TextView textView = (TextView) view.findViewById(R.id.tv_guide_text);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+        if (topMargin!=-1)params.topMargin = topMargin;
+   //    (int) context.getResources().getDimension(R.dimen.title_bar_height);
+        if (rightMargin!=-1)params.rightMargin = rightMargin;
+        textView.setLayoutParams(params);
+        if (res!=-1)textView.setBackgroundResource(res);
+        textView.setText(content);
+        handler.sendEmptyMessageDelayed(1, 700);
 
-        imgView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-                windowManager.removeView(imgView);
+                windowManager.removeView(view);
+                SharePrefUtil.saveBoolean(context,guideName,true);
             }
         });
     }
