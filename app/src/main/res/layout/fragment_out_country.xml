@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
+
     <ListView
+        android:id="@+id/lv_country_name"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@null"
+        android:divider="@color/color_line"
+        android:dividerHeight="1px"
+        android:overScrollMode="never"
+        android:fadingEdge="none"
+        android:listSelector="@color/app_backgroud"
+        android:scrollbars="none"/>
+    <GridView
         android:id="@+id/lv_out_country"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:cacheColorHint="@null"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:overScrollMode="never"
-        android:fadingEdge="none"
         android:listSelector="@android:color/transparent"
-        android:scrollbars="none"/>
-</FrameLayout>
+        android:scrollbars="none"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+
+        />
+
+
+</LinearLayout>

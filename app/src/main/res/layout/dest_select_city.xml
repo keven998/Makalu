@@ -11,18 +11,18 @@
         android:scaleType="centerCrop"
         />
 
-    <ImageView
+    <!--<ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/select_city"
-        />
+        />-->
 
     <TextView
         android:id="@+id/des_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/base_color_white"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="10dp"
         />

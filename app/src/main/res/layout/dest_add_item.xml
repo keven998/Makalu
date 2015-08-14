@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/color_text_ii"
         android:clickable="true"
-        android:textSize="16sp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:textSize="14sp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"/>
 

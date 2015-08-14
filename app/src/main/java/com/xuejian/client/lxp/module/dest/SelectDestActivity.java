@@ -282,14 +282,14 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.tab_select_dest, container, false);
+                convertView = inflater.inflate(R.layout.tab_rectangle_select, container, false);
             }
-            TextView textView = (TextView) convertView.findViewById(R.id.tv_title);
+            TextView textView = (TextView) convertView.findViewById(R.id.desty_title);
             textView.setText(tabNames[position]);
             if (position == 0) {
-                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg);
+                textView.setBackgroundResource(R.drawable.lefttwo_wgrey_seletor);
             } else if (position == 1) {
-                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg_01);
+                textView.setBackgroundResource(R.drawable.righttwo_wgrey_seletor);
             }
             return convertView;
         }
