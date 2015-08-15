@@ -215,7 +215,11 @@ public class HandleImMessage {
                                 }
                             }
                             if (!flag) {
-                                IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                                try {
+                                    IMClient.getInstance().increaseUnRead(messageBean.getConversation());
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
                             }
 //                    if (openStateMap.containsKey(ehList.get(0))) {
 //                        if (messageBean.getConversation().equals(openStateMap.get(ehList.get(0))))

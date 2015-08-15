@@ -28,6 +28,9 @@ public class UserDBManager {
     private static UserDBManager instance;
     private SQLiteDatabase mdb;
     private AtomicInteger mOpenCounter = new AtomicInteger();
+    private static int FRIEND = 1;
+    private static int GROUP = 8;
+    private static int QUIT_GROUP = 16;
 
     private UserDBManager() {
     }
@@ -74,18 +77,20 @@ public class UserDBManager {
         }
         mdb = null;
     }
-    public long getGroupCreater(long groupId){
-        mdb=getDB();
+
+    public long getGroupCreater(long groupId) {
+        mdb = getDB();
         Cursor cursor = mdb.rawQuery("select ext from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
         String data = null;
         while (cursor.moveToNext()) {
             data = cursor.getString(0);
         }
         closeDB();
+        System.out.println(data);
         try {
-            JSONObject object =new JSONObject(data);
+            JSONObject object = new JSONObject(data);
             return object.getLong("creator");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
@@ -261,8 +266,30 @@ public class UserDBManager {
         return (type & 2) == 2;
     }
 
+    public synchronized void quiteGroup(String groupId) {
+        mdb = getDB();
+        Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
+        cursor.moveToLast();
+        int type = cursor.getInt(0);
+        cursor.close();
+        type = type | 16;
+        ContentValues values = new ContentValues();
+        values.put("Type", type);
+        mdb.update(fri_table_name, values, "userId=?", new String[]{String.valueOf(groupId)});
+        closeDB();
+    }
+
+    public synchronized boolean isGroupMember(String groupId){
+        mdb = getDB();
+        Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
+        int type = cursor.getInt(0);
+        cursor.close();
+        closeDB();
+        return (type&QUIT_GROUP)==0;
+    }
+
     public synchronized void saveContact(User user) {
-        if (user==null){
+        if (user == null) {
             return;
         }
         mdb = getDB();
@@ -335,12 +362,12 @@ public class UserDBManager {
     }
 
     public synchronized void saveContactList(List<User> list) {
-        if (list==null) return;
+        if (list == null) return;
         mdb = getDB();
         ContentValues values1 = new ContentValues();
         values1.put("Type", 0);
         mdb.update(fri_table_name, values1, null, null);
-        if (list.size()>0){
+        if (list.size() > 0) {
             mdb.beginTransaction();
             for (User user : list) {
                 if (user.getNickName() == null || "".equals(user.getNickName())) {
@@ -386,12 +413,14 @@ public class UserDBManager {
                     if (user.getUserId() != null) values.put("userId", user.getUserId());
                     if (user.getNickName() != null) values.put("nickName", user.getNickName());
                     if (user.getAvatar() != null) values.put("avatar", user.getAvatar());
-                    if (user.getAvatarSmall() != null) values.put("avatarSmall", user.getAvatarSmall());
+                    if (user.getAvatarSmall() != null)
+                        values.put("avatarSmall", user.getAvatarSmall());
                     if (user.getGender() != null) values.put("gender", user.getGender());
                     if (user.getSignature() != null) values.put("signature", user.getSignature());
                     if (user.getTel() != null) values.put("tel", user.getTel());
                     if (user.getSecToken() != null) values.put("secToken", user.getSecToken());
-                    if (user.getCountryCode() != null) values.put("countryCode", user.getCountryCode());
+                    if (user.getCountryCode() != null)
+                        values.put("countryCode", user.getCountryCode());
                     if (user.getEmail() != null) values.put("email", user.getEmail());
                     if (user.getMemo() != null) values.put("memo", user.getMemo());
                     if (user.getTravelStatus() != null)
@@ -416,7 +445,7 @@ public class UserDBManager {
     }
 
     public synchronized void updateGroupInfo(User user, String groupId) {
-        if (user==null){
+        if (user == null) {
             return;
         }
         mdb = getDB();
@@ -448,7 +477,7 @@ public class UserDBManager {
     }
 
     public synchronized void updateGroupMemberInfo(List<User> list, String groupId) {
-        if (list==null){
+        if (list == null) {
             return;
         }
         JSONArray array = new JSONArray();

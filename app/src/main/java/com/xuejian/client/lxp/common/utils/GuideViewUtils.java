@@ -71,7 +71,8 @@ public class GuideViewUtils {
     };
 
     public void initGuide(final Activity context, final String guideName, String content, int topMargin, int rightMargin, int res) {
-        if (CommonUtils.getSystemProperty().equals("V6") || (android.os.Build.MODEL.equals("Xiaomi") && Build.VERSION.SDK_INT >= 19)) {
+        if (CommonUtils.getSystemProperty().equals("V6") || (android.os.Build.BRAND.equals("Xiaomi") && Build.VERSION.SDK_INT >= 18)) {
+            SharePrefUtil.saveBoolean(context, guideName, true);
             return;
         }
         this.context = context;
@@ -86,7 +87,7 @@ public class GuideViewUtils {
         textView.setLayoutParams(params);
         if (res != -1) textView.setBackgroundResource(res);
         textView.setText(content);
-        handler.sendEmptyMessageDelayed(1, 700);
+        handler.sendEmptyMessageDelayed(1, 300);
 
         view.setOnClickListener(new View.OnClickListener() {
 

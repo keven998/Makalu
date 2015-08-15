@@ -120,9 +120,7 @@ public class StrategyActivity extends PeachBaseActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            System.out.println("hasFocus");
             if (!SharePrefUtil.getBoolean(this, "plan_guide1", false)) {
-                System.out.println("display");
                 GuideViewUtils.getInstance().initGuide(this, "plan_guide1", "点击这里修改计划", (int) getResources().getDimension(R.dimen.title_bar_height), -1,-1);
             }
         }
@@ -520,7 +518,6 @@ public class StrategyActivity extends PeachBaseActivity {
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {
-                System.out.println("currentItem "+currentItem);
                 if (currentItem == 1&&count++==1) {
                     if (!SharePrefUtil.getBoolean(StrategyActivity.this, "plan_guide2", false)) {
                         GuideViewUtils.getInstance().initGuide(StrategyActivity.this, "plan_guide2", "添加备选心愿到收藏", (int) getResources().getDimension(R.dimen.title_bar_height)+65, CommonUtils.getScreenWidth(StrategyActivity.this)/2-100,-1);

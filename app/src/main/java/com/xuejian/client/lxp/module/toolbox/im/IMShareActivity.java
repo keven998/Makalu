@@ -206,8 +206,14 @@ public class IMShareActivity extends PeachBaseActivity {
                 // 群聊消息，显示群聊头像
                 final List<User> members = UserDBManager.getInstance().getGroupMember(itemData.getFriendId());
                 final List<Bitmap> membersAvatars = new ArrayList<>();
+                int s = 0;
+                try{
+                    s = Math.min(members.size(), 4);
+                }catch (Exception e){
+                    e.printStackTrace();
 
-                final int size = Math.min(members.size(), 4);
+                }
+                final int size = s;
                 //   群聊消息，显示群聊头像
 
                 if (size != 0) {

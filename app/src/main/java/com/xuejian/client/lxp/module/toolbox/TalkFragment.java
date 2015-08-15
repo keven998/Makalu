@@ -221,6 +221,7 @@ public class TalkFragment extends PeachBaseFragment {
      * 刷新页面
      */
     public void refresh() {
+        System.out.println("refresh");
         if (AccountManager.getInstance().getLoginAccount(getActivity())==null) return;
         // loadConversationsWithRecentChat();
         if (adapter != null) {

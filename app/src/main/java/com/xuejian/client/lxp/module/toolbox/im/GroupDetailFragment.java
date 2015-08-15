@@ -247,7 +247,9 @@ public class GroupDetailFragment extends PeachBaseFragment {
      * 退出群组
      */
     public void exitGroup() {
+
         try {
+            IMClient.getInstance().deleteConversation(groupId);
             DialogManager.getInstance().showLoadingDialog(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,12 +257,18 @@ public class GroupDetailFragment extends PeachBaseFragment {
         GroupManager.getGroupManager().quitGroup(groupId, new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
-                IMClient.getInstance().deleteConversation(groupId);
-                if (getActivity() != null && !getActivity().isFinishing()) {
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
-                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        UserDBManager.getInstance().quiteGroup(groupId);
+                        if (getActivity() != null) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            //  getActivity().setResult(Activity.RESULT_OK);
+                            getActivity().finish();
+                        }
+                    }
+                });
+
             }
 
             @Override
