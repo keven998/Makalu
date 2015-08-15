@@ -352,10 +352,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("resultCode", resultCode + "-------------------");
-        Log.e("RESULT_OK",RESULT_OK+"-------------------");
-        if (resultCode == RESULT_OK) {
-            Log.e("resultCode", "0000000000-------------------");
+        if(resultCode==RESULT_OK){
             if (requestCode == REQUEST_CODE_SEARCH_LOC) {
                 LocBean locBean = data.getParcelableExtra("loc");
                 onDestAdded(locBean, true, null);
@@ -371,11 +368,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 setResult(RESULT_OK, data);
                 finishWithNoAnim();
             }else if(requestCode == REQUEST_CODE_SELECT_LOC){
-                Log.e("我我我","dfdfdfd-------------------");
-                ArrayList<LocBean> choosedCities =data.getParcelableArrayListExtra("choosedCities");
-                Log.e("choosedCities",choosedCities+"-----------");
-                Log.e("choosedCities",choosedCities.size()+"-----------");
-
+                ArrayList<LocBean>  choosedCities =data.getParcelableArrayListExtra("choosedCities");
                 if(choosedCities!=null && choosedCities.size()>0){
                     for(int i=0;i<choosedCities.size();i++){
                         onDestAdded(choosedCities.get(i), true, null);
@@ -387,5 +380,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
 
             }
         }
+
+
     }
 }

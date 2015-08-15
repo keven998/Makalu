@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Rjm on 2014/11/14.
  */
-public class LocBean implements Parcelable, ICreateShareDialog{
+public class LocBean implements Parcelable, ICreateShareDialog {
     public boolean isAdded;
     public String header;
     public String id;
@@ -115,16 +115,16 @@ public class LocBean implements Parcelable, ICreateShareDialog{
         this.imageCnt = in.readInt();
         this.isFavorite = in.readByte() != 0;
         this.playGuide = in.readString();
-        this.country=in.readString();
-        this.isChecked=in.readByte()!=0;
+        this.country = in.readString();
+        this.isChecked = (in.readByte() != 0);
     }
 
     public static final Creator<LocBean> CREATOR = new Creator<LocBean>() {
-        public LocBean createFromParcel(Parcel source){
+        public LocBean createFromParcel(Parcel source) {
             return new LocBean(source);
         }
 
-        public LocBean[] newArray(int size){
+        public LocBean[] newArray(int size) {
             return new LocBean[size];
         }
     };

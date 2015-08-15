@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -53,7 +54,7 @@ import butterknife.InjectView;
 /**
  * Created by xuyongchen on 15/8/14.
  */
-public class SearchSomeCityActivity extends PeachBaseActivity {
+public class SearchSomeCityActivity extends Activity {
     @InjectView(R.id.search_city_text)
     EditText searchCityText;
     @InjectView(R.id.search_city_button)
@@ -85,7 +86,7 @@ public class SearchSomeCityActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 if (searchCityButton.getText().toString().trim().equals("取消")) {
-                    finishWithNoAnim();
+                    //finishWithNoAnim();
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     if (TextUtils.isEmpty(searchCityText.getText())) {
@@ -303,24 +304,19 @@ public class SearchSomeCityActivity extends PeachBaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Log.e("choosedCities", "111111111------------------");
         ArrayList<LocBean> tempCity = new ArrayList<LocBean>();
+        boolean flag = false;
         for(int i=0;i<cityListAdapter.getDataList().size();i++){
             if(cityListAdapter.getDataList().get(i).isChecked){
+                flag=true;
                 tempCity.add(cityListAdapter.getDataList().get(i));
             }
         }
-
-        for(int i=0;i<tempCity.size();i++){
-            Log.e("choosedCities",tempCity.get(i).zhName+"------------------");
-        }
-        Log.e("choosedCities", "22222222222------------------");
-        Log.e("tempCity",tempCity.size()+ "tempCity------------------");
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra("choosedCities", tempCity);
+        intent.putParcelableArrayListExtra("choosedCities",tempCity);
         setResult(RESULT_OK, intent);
         finish();
+        super.onBackPressed();
     }
 
     @Override
