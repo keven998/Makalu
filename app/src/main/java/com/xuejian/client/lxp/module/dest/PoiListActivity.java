@@ -159,7 +159,7 @@ public class PoiListActivity extends PeachBaseActivity {
         }
 
         mPoiAdapter = new PoiAdapter(this, canAdd);
-        mPoiAdapter.setAddStr("收藏");
+        mPoiAdapter.setAddStr("想去");
         mPoiAdapter.setOnPoiActionListener(new PoiAdapter.OnPoiActionListener() {
             @Override
             public void onPoiAdded(PoiDetailBean poi) {

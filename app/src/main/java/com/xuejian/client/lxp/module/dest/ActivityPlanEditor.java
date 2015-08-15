@@ -126,7 +126,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             if (!SharePrefUtil.getBoolean(this, "plan_guide3", false)) {
-                GuideViewUtils.getInstance().initGuide(this, "plan_guide3", "添加行程到行程计划", (int) getResources().getDimension(R.dimen.title_bar_height)+65, -1,-1);
+                GuideViewUtils.getInstance().initGuide(this, "plan_guide3", "添加行程到计划", (int) getResources().getDimension(R.dimen.title_bar_height)+65, -1,-1);
             }
         }
     }

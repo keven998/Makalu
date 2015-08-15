@@ -161,7 +161,7 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
                             CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (deleteResult.code == 0) {
                                 dismiss();
-                                ToastUtil.getInstance(getActivity()).showToast("收藏成功");
+//                                ToastUtil.getInstance(getActivity()).showToast("收藏成功");
                             } else {
                                 if (isAdded())
                                     ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
