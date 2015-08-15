@@ -60,7 +60,7 @@
             android:layout_marginTop="7dp"
             android:background="@drawable/selector_color_iii"
             android:gravity="center"
-            android:text="＋收藏"
+            android:text="＋想去"
             android:textColor="@color/color_text_iii"
             android:textSize="13sp" />
 

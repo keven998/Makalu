@@ -71,7 +71,7 @@ public class ShowBigImage extends ChatBaseActivity {
 
         Uri uri = getIntent().getParcelableExtra("uri");
         String remotepath = getIntent().getExtras().getString("remotepath");
-        String secret = getIntent().getExtras().getString("secret");
+//        String secret = getIntent().getExtras().getString("secret");
         downloadFilePath = getIntent().getStringExtra("downloadFilePath");
 
 

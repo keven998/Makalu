@@ -113,7 +113,6 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final CountryBean currentCountryBean = outContryNameAdapter.getDataList().get(position);
-                Log.e("currentCountryBean",currentCountryBean+"----------------");
                 ArrayList<LocBean> citys = currentCountryBean.destinations;
                 if(citys==null){
                     citys=new ArrayList<LocBean>();
@@ -141,7 +140,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         getOutCountryList();
     }
 
-    private void getOutCountryList() {
+    private void getOutCountryList(){
         String lastModify = PreferenceUtils.getCacheData(getActivity(), "outcountry_last_modify");
         TravelApi.getOutDestList(lastModify, new HttpCallBack<String>() {
             @Override

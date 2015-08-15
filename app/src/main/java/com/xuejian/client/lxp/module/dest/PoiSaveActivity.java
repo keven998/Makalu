@@ -52,7 +52,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         isOwner=getIntent().getBooleanExtra("isOwner", false);
         bar = (TitleHeaderBar) findViewById(R.id.poi_save_titleBar);
-        bar.getTitleTextView().setText("收藏的" + getIntent().getStringExtra("title"));
+        bar.getTitleTextView().setText("想去的" + getIntent().getStringExtra("title"));
 
         title =getIntent().getStringExtra("title");
         if ("购物".equals(title)) {
@@ -190,7 +190,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
             save_btn = (TextView) view.findViewById(R.id.poi_save_btn);
 
             groupTitle.setText(destinations.get(i).zhName);
-            groupSum.setText("(" + content.get(i).size() + "收藏" + ")");
+            groupSum.setText("(" + content.get(i).size() + "想去" + ")");
             if (!isOwner){
                 save_btn.setVisibility(View.INVISIBLE);
             }

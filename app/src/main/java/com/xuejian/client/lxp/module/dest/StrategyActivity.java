@@ -367,8 +367,8 @@ public class StrategyActivity extends PeachBaseActivity {
     private void bindView(final StrategyBean result) {
         destinations = result.localities;
         strategy = result;
-        final TextView dtv = (TextView) findViewById(R.id.jh_title);
-        dtv.setText(result.title);
+        TextView dtv = (TextView) findViewById(R.id.jh_title);
+//        dtv.setText(result.title);
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
         final User user = AccountManager.getInstance().getLoginAccount(this);
@@ -457,7 +457,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         MobclickAgent.onEvent(StrategyActivity.this, "cell_item_plan_change_name");
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                         editDialog.setTitle("修改计划名");
-                        editDialog.setMessage(dtv.getText().toString());
+                        editDialog.setMessage(result.title);
                         editDialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -473,7 +473,7 @@ public class StrategyActivity extends PeachBaseActivity {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (modifyResult.code == 0) {
-                                            dtv.setText(editDialog.getMessage());
+//                                            dtv.setText(editDialog.getMessage());
                                         } else {
                                             if (!isFinishing()) {
                                                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
@@ -538,7 +538,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"计划", "收藏"};
+        private String[] tabNames = {"行程", "想去"};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
 

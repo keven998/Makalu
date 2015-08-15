@@ -24,7 +24,7 @@
         android:textColor="@color/main_menu_text_color"
         android:textSize="13sp"
         android:gravity="center"
-        android:text="收藏"
+        android:text="想去"
         android:paddingLeft="20dp"
         android:paddingBottom="40dp"
         android:paddingTop="40dp"

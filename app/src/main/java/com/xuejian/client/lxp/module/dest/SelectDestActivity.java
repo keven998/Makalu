@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,7 +46,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     public final static int REQUEST_CODE_SEARCH_LOC = 101;
     public final static int REQUEST_CODE_LOGIN = 102;
     public final static int REQUEST_CODE_NEW_PLAN = 103;
-
+    public final static int REQUEST_CODE_SELECT_LOC=104;
     private int requestCode;
     private RelativeLayout mBottomPanel;
     private FixedIndicatorView inOutIndicator;
@@ -57,7 +61,8 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     private ArrayList<String> allSelectedPics = new ArrayList<String>();
     HorizontalScrollView mScrollPanel;
     LinearLayout citysLl;
-
+    private EditText desty_et_search;
+    private TextView desty_btn_search;
     @Override
     public void onDestAdded(final LocBean locBean, boolean isEdit, String type) {
         if (allAddCityList.contains(locBean)) {
@@ -135,7 +140,8 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
         citysLl = (LinearLayout) rootView.findViewById(R.id.ll_citys);
         mScrollPanel = (HorizontalScrollView) rootView.findViewById(R.id.scroll_panel);
         mBottomPanel = (RelativeLayout) rootView.findViewById(R.id.bottom_panel);
-
+        desty_et_search = (EditText)rootView.findViewById(R.id.desty_et_search);
+        desty_btn_search = (TextView)rootView.findViewById(R.id.desty_btn_search);
         next = (TextView) rootView.findViewById(R.id.tv_confirm);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
@@ -224,12 +230,47 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             }
 
         }
+
+        desty_et_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                desty_btn_search.setText("取消");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length()>0){
+                    desty_btn_search.setText("搜索");
+                }else{
+                    desty_btn_search.setText("取消");
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        desty_btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final String keyWords=desty_et_search.getText().toString();
+                if(keyWords!=null && keyWords.trim().length()>0){
+                    Intent intent = new Intent(mContext,SearchSomeCityActivity.class);
+                    intent.putExtra("keyWords",keyWords);
+                    startActivityForResult(intent, REQUEST_CODE_SELECT_LOC);
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-       MobclickAgent.onPageStart("page_select_plan_city");
+        MobclickAgent.onPageStart("page_select_plan_city");
         MobclickAgent.onResume(this);
     }
 
@@ -311,7 +352,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if(resultCode==RESULT_OK){
             if (requestCode == REQUEST_CODE_SEARCH_LOC) {
                 LocBean locBean = data.getParcelableExtra("loc");
                 onDestAdded(locBean, true, null);
@@ -326,7 +367,20 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             } else if (requestCode == REQUEST_CODE_NEW_PLAN) {
                 setResult(RESULT_OK, data);
                 finishWithNoAnim();
+            }else if(requestCode == REQUEST_CODE_SELECT_LOC){
+                ArrayList<LocBean>  choosedCities =data.getParcelableArrayListExtra("choosedCities");
+                if(choosedCities!=null && choosedCities.size()>0){
+                    for(int i=0;i<choosedCities.size();i++){
+                        onDestAdded(choosedCities.get(i), true, null);
+                        for (OnDestActionListener onDestActionListener : mOnDestActionListeners) {
+                            onDestActionListener.onDestAdded(choosedCities.get(i), true, null);
+                        }
+                    }
+                }
+
             }
         }
+
+
     }
 }
