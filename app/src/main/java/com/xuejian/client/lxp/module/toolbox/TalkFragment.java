@@ -27,6 +27,8 @@ import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -45,6 +47,7 @@ import butterknife.InjectView;
 
 public class TalkFragment extends PeachBaseFragment {
     public static final int NEW_CHAT_REQUEST_CODE = 101;
+    private static final int Edit_CHAT_REQUEST_CODE = 102;
     @InjectView(R.id.tv_title_add)
     TextView tvTitleAdd;
     @InjectView(R.id.unread_address_number)
@@ -59,7 +62,7 @@ public class TalkFragment extends PeachBaseFragment {
     private boolean hidden;
     private List<ConversationBean> conversations = new ArrayList<>();
     private List<ConversationBean> tempConversations = new ArrayList<>();
-
+    private ConversationBean curconversation;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_talk, null);
@@ -101,30 +104,30 @@ public class TalkFragment extends PeachBaseFragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ConversationBean conversation = adapter.getItem(position);
+                curconversation = adapter.getItem(position);
 //                String username = conversation.getFriendId() + "";
-                if (String.valueOf(conversation.getFriendId()).equals(AccountManager.getCurrentUserId()))
+                if (String.valueOf(curconversation.getFriendId()).equals(AccountManager.getCurrentUserId()))
                     //  if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
 //                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
                 else {
-                    if (conversation.getFriendId()==10000){
+                    if (curconversation.getFriendId()==10000){
                         MobclickAgent.onEvent(getActivity(),"cell_item_paipai");
-                    }else if (conversation.getFriendId()==10001){
+                    }else if (curconversation.getFriendId()==10001){
                         MobclickAgent.onEvent(getActivity(),"cell_item_wenwen");
                     }
 
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    intent.putExtra("friend_id", conversation.getFriendId() + "");
-                    intent.putExtra("chatType", conversation.getChatType());
-                    if (conversation.getConversation() != null) {
-                        intent.putExtra("conversation", conversation.getConversation());
+                    intent.putExtra("friend_id", curconversation.getFriendId() + "");
+                    intent.putExtra("chatType", curconversation.getChatType());
+                    if (curconversation.getConversation() != null) {
+                        intent.putExtra("conversation", curconversation.getConversation());
                     }
-                    if (conversation.getHASH() != null) {
-                        intent.putExtra("name", conversation.getHASH());
+                    if (curconversation.getHASH() != null) {
+                        intent.putExtra("name", curconversation.getHASH());
                     }
-                    startActivity(intent);
+                    startActivityForResult(intent,Edit_CHAT_REQUEST_CODE);
                 }
             }
         });
@@ -363,6 +366,15 @@ public class TalkFragment extends PeachBaseFragment {
                         intent.putExtra("Name", toName);
                         startActivity(intent);
                     }
+                    break;
+                case Edit_CHAT_REQUEST_CODE:
+                    if(data!=null && curconversation!=null){
+                        String groupName = data.getStringExtra("changedTitle");
+                        if(groupName!=null){
+                                refresh();
+                        }
+                    }
+                    break;
             }
         }
 

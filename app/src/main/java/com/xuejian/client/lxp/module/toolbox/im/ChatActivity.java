@@ -178,7 +178,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String chatType;
     public static List<MessageBean> messageList = new LinkedList<>();
     private User user;
-
+    TextView titleView;
+    private String changedTitle=null;
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -432,7 +433,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
 
-        TextView titleView = (TextView) findViewById(R.id.tv_na_title);
+        titleView = (TextView) findViewById(R.id.tv_na_title);
 
         if (user == null) {
             titleView.setText(toChatUsername);
@@ -617,6 +618,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
     }
 
+    public void setTitleText(String titleText){
+        if ("single".equals(chatType)) {
+
+        }else{
+            changedTitle=titleText;
+            titleView.setText(titleText);
+        }
+    }
     /**
      * 消息图标点击事件
      */
@@ -1345,6 +1354,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     @Override
     public void onBackPressed() {
+
         if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
             drawerLayout.closeDrawer(GravityCompat.END);
         } else if (mExtraPanel.getVisibility() == View.VISIBLE) {
@@ -1354,6 +1364,20 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             iv_emoticons_normal.setVisibility(View.VISIBLE);
             iv_emoticons_checked.setVisibility(View.GONE);
         } else {
+
+            if ("single".equals(chatType)) {
+
+            }else {
+                if(changedTitle!=null && changedTitle.trim().length()>0){
+                    user.setNickName(changedTitle);
+                    UserDBManager.getInstance().saveContact(user);
+                    Intent intent = new Intent();
+                    intent.putExtra("changedTitle",changedTitle);
+                    setResult(RESULT_OK,intent);
+                }
+
+            }
+
             finish();
         }
     }
