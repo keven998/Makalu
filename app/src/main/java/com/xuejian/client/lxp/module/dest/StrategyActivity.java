@@ -458,7 +458,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         MobclickAgent.onEvent(StrategyActivity.this, "cell_item_plan_change_name");
                         final PeachEditDialog editDialog = new PeachEditDialog(mContext);
                         editDialog.setTitle("修改计划名");
-                        editDialog.setMessage(result.title);
+                        editDialog.setMessage(strategy.title);
                         editDialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -482,6 +482,7 @@ public class StrategyActivity extends PeachBaseActivity {
                                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (modifyResult.code == 0) {
 //                                            dtv.setText(editDialog.getMessage());
+                                            strategy.title=editTitle;
                                         } else {
                                             if (!isFinishing()) {
                                                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
