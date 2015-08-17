@@ -91,10 +91,10 @@ public class IMClient {
         return client;
     }
 
-    public void initDB(String userId) {
+    public void initDB(String userId,int version,int currentVersion) {
         MessageDB.initDB(userId);
         db = MessageDB.getInstance();
-        MessageDB.getInstance().init();
+        MessageDB.getInstance().init(version,currentVersion);
         isLogin = true;
     }
 
@@ -582,7 +582,9 @@ public class IMClient {
     public void updateInventMsgStatus(long userId, int status) {
         db.updateInventMessageStatus(userId, status);
     }
-
+    public void updateInventMsgReadStatus(int isRead) {
+        db.updateInventMsgReadStatus(isRead);
+    }
     public void muteConversation(String conversation, boolean value, HttpCallback callback) {
         HttpUtils.muteConversation(conversation, value, callback);
     }

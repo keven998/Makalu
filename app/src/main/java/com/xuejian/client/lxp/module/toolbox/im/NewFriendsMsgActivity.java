@@ -55,8 +55,8 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
         //设置adapter
         adapter = new NewFriendsMsgAdapter(this, 1, invents);
         listView.setAdapter(adapter);
-        registerForContextMenu(listView);
-
+         registerForContextMenu(listView);
+        IMClient.getInstance().updateInventMsgReadStatus(1);
     }
 
     @Override
@@ -73,10 +73,11 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        // if(((AdapterContextMenuInfo)menuInfo).position > 0){ m,
+     //   super.onCreateContextMenu(menu, v, menuInfo);
+        System.out.println("onCreateContextMenu");
+    //   if(((AdapterView.AdapterContextMenuInfo)menuInfo).position > 0){
         getMenuInflater().inflate(R.menu.delete_request, menu);
-        // }
+    //    }
     }
 
     @Override
@@ -84,8 +85,9 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
         if (item.getItemId() == R.id.delete_request) {
             InventMessage message = invents.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
             IMClient.getInstance().deleteInventMessage(String.valueOf(message.getUserId()));
+            invents.remove(message);
             adapter.notifyDataSetChanged();
-            return true;
+            return false;
         }
         return super.onContextItemSelected(item);
     }

@@ -67,12 +67,15 @@ public class MessageReceiver extends BroadcastReceiver {
                             String message = object.getString("message");
                             for (String key : routeMap.keySet()) {
                                 if (key.equals(routeKey)) {
-                                    if ("IM".equals(key)){
-                                        if (AccountManager.getInstance().getLoginAccount(context)==null)return;
+                                    if ("IM".equals(key)) {
+                                        if (AccountManager.getInstance().getLoginAccount(context) == null)
+                                            return;
                                         try {
-                                            CommonJson< Message > m = CommonJson.fromJson(message, Message.class);
-                                            if (!UserDBManager.getInstance().isGroupMember(String.valueOf(m.result.getGroupId())))return;
-                                        }catch (Exception e){
+                                            CommonJson<Message> m = CommonJson.fromJson(message, Message.class);
+                                            if ("group".equals(m.result.getChatType()) &&
+                                                    !UserDBManager.getInstance().isGroupMember(String.valueOf(m.result.getGroupId())))
+                                                return;
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                     }

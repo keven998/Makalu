@@ -165,8 +165,9 @@ public class LoginActivity extends PeachBaseActivity {
         //初始化数据库，方便后面操作
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
-        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
-
+        int version = com.aizou.core.utils.SharePrefUtil.getInt(this, "dbversion", 0);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()),1,version);
+        com.aizou.core.utils.SharePrefUtil.saveInt(this, "dbversion", 1);
         //登录的时候需要新建用户名密码token表，方便用户自动登录的时候查询用户密码登录
 
         //3、存入内存

@@ -126,7 +126,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         IMClient.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
-        IMClient.getInstance().initDB(String.valueOf(user.getUserId()));
+        int version = SharePrefUtil.getInt(this, "dbversion", 0);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()),1,version);
+        SharePrefUtil.saveInt(this, "dbversion", 1);
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
         AccountManager.getInstance().saveLoginAccount(this, user);

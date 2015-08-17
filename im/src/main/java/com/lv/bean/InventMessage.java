@@ -5,7 +5,7 @@ package com.lv.bean;
  */
 public class InventMessage {
 
-    public InventMessage(long userId, String nickName, String avatarSmall, String requestMsg, String requestId, int status, long time) {
+    public InventMessage(long userId, String nickName, String avatarSmall, String requestMsg, String requestId, int status, long time, int isRead) {
         UserId = userId;
         this.nickName = nickName;
         this.avatarSmall = avatarSmall;
@@ -13,8 +13,9 @@ public class InventMessage {
         this.requestId = requestId;
         this.status = status;
         this.time = time;
+        this.isRead = isRead;
     }
-    public InventMessage(int Id, long userId, String nickName, String avatarSmall, String requestMsg, String requestId, int status, long time) {
+    public InventMessage(int Id, long userId, String nickName, String avatarSmall, String requestMsg, String requestId, int status, long time, int isRead) {
         this.Id=Id;
         UserId = userId;
         this.nickName = nickName;
@@ -23,6 +24,7 @@ public class InventMessage {
         this.requestId = requestId;
         this.status = status;
         this.time = time;
+        this.isRead = isRead;
     }
 
     private int Id;
@@ -98,4 +100,5 @@ public class InventMessage {
     private String requestId;
     private int status;
     private long time;
+    private int isRead;
 }
