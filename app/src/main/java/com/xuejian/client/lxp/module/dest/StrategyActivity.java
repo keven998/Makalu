@@ -22,6 +22,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
+import com.aizou.core.utils.StringUtil;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
@@ -461,13 +462,20 @@ public class StrategyActivity extends PeachBaseActivity {
                         editDialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                final String editTitle = editDialog.getMessage();
+                                if(TextUtils.isEmpty(editTitle) || editTitle.trim().length()==0){
+                                    return;
+                                }
                                 editDialog.dismiss();
                                 try {
                                     DialogManager.getInstance().showLoadingDialog(mContext);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                TravelApi.modifyGuideTitle(result.id, editDialog.getMessage(), new HttpCallBack<String>() {
+
+
+                                TravelApi.modifyGuideTitle(result.id, editTitle, new HttpCallBack<String>() {
                                     @Override
                                     public void doSuccess(String result, String method) {
                                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -518,9 +526,9 @@ public class StrategyActivity extends PeachBaseActivity {
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {
-                if (currentItem == 1&&count++==1) {
+                if (currentItem == 1 && count++ == 1) {
                     if (!SharePrefUtil.getBoolean(StrategyActivity.this, "plan_guide2", false)) {
-                        GuideViewUtils.getInstance().initGuide(StrategyActivity.this, "plan_guide2", "添加备选心愿到收藏", (int) getResources().getDimension(R.dimen.title_bar_height)+65, CommonUtils.getScreenWidth(StrategyActivity.this)/2-100,-1);
+                        GuideViewUtils.getInstance().initGuide(StrategyActivity.this, "plan_guide2", "添加备选心愿到收藏", (int) getResources().getDimension(R.dimen.title_bar_height) + 65, CommonUtils.getScreenWidth(StrategyActivity.this) / 2 - 100, -1);
                     }
                 }
             }
