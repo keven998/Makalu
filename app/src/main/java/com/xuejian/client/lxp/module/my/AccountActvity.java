@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -74,6 +75,7 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -404,6 +406,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 break;
 
             case R.id.ll_zodiac:
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar = Calendar.getInstance();
+                try{
+                    Date date = format.parse(user.getBirthday());
+                    calendar.setTime(date);
+
+                }catch(Exception ex){
+
+                }
+
  //               if(Build.BRAND.equals("Meizu")){
                 DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -428,7 +440,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                            birthTimeFlag = false;
 //                        }
                     }
-                }, 1990, 0, 0);
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
                final DatePicker datePicker =dialog.getDatePicker();
 //                }else {
 //                    dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
@@ -487,17 +499,19 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         dialog.dismiss();
                         String dateString =  datePicker.getYear() + "-" +  (datePicker.getMonth()+1)+ "-" +  datePicker.getDayOfMonth();
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        String  submitStr = dateString;
                         try {
                             Date date = format.parse(dateString);
+                            submitStr=format.format(date);
                             if (date.after(new Date())) {
                                 ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
                             } else {
-                                setBirthDay(dateString);
+                                setBirthDay(submitStr);
                             }
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        editBirthdayToInterface(dateString);
+                        editBirthdayToInterface(submitStr);
                     }
                 });
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
