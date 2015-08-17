@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -158,7 +159,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void doFailure(Exception error, String msg, String method, int code) {
                                 DialogManager.getInstance().dissMissLoadingDialog();
-                                if (code == HttpManager.PERMISSION_ERROR) {
+                                if (code == HttpManager.PWD_ERROR) {
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("验证码错误");
                                 } else if (code == HttpManager.RESOURSE_CONFLICT) {
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("手机号已存在");
