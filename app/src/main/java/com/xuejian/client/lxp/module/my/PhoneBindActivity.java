@@ -91,6 +91,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;
                 }
+
                 if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
                     return;
@@ -141,8 +142,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
                     return;
                 }
-                if (TextUtils.isEmpty(smsEt.getText().toString())) {
-                    ToastUtil.getInstance(mContext).showToast("请输入验证码");
+
+                String confirmCode = smsEt.getText().toString();
+                if(TextUtils.isEmpty(confirmCode) || confirmCode.trim().length()==0){
+                    ToastUtil.getInstance(this).showToast("请输入正确的验证码");
+                    return;
                 }
                 if (!CommonUtils.isNetWorkConnected(mContext)) {
                     ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
