@@ -86,7 +86,6 @@ public class UserDBManager {
             data = cursor.getString(0);
         }
         closeDB();
-        System.out.println(data);
         try {
             JSONObject object = new JSONObject(data);
             return object.getLong("creator");

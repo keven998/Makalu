@@ -111,6 +111,7 @@ public class TravelApi extends BaseApi {
 
     public final static String USERS = "/users/";
 
+    public final static String RECOMMEND_KEYWORD ="/misc/hot-searches";
     /**
      * 获取目的地推荐
      *
@@ -229,7 +230,13 @@ public class TravelApi extends BaseApi {
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
-
+    public static PTRequestHandler getRecommendKeywords(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD);
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
 
     /**
      * 获取景点详情

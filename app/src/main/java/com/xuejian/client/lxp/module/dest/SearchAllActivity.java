@@ -23,6 +23,7 @@ import com.aizou.core.utils.SharePrefUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.KeywordBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.SearchAllBean;
@@ -30,6 +31,7 @@ import com.xuejian.client.lxp.bean.SearchTypeBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
@@ -58,6 +60,8 @@ public class SearchAllActivity extends PeachBaseActivity {
     TextView cleanHistory;
     @InjectView(R.id.history_pannel)
     FrameLayout history_pannel;
+    @InjectView(R.id.recomend_tag)
+    TagListView recomend_tag;
     String toId;
     String chatType;
     Object temp;
@@ -65,6 +69,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     String conversation;
 
     private final List<Tag> mTags = new ArrayList<Tag>();
+    private final List<Tag> mKeyTags = new ArrayList<Tag>();
     private TagListView history_tag;
     private String [] keys;
     @Override
@@ -183,7 +188,6 @@ public class SearchAllActivity extends PeachBaseActivity {
         keys= getSearchHistory();
         if (keys.length>0&&!TextUtils.isEmpty(keys[0])){
             for (int i = keys.length-1; i >=0; i--) {
-                System.out.println(keys[i]);
                 Tag tag = new Tag();
                 tag.setId(i);
                 tag.setChecked(true);
@@ -193,7 +197,39 @@ public class SearchAllActivity extends PeachBaseActivity {
         }else {
             history_pannel.setVisibility(View.GONE);
         }
+        TravelApi.getRecommendKeywords(new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(),KeywordBean.class);
+                for (int i =0;i< keyList.result.size();i++) {
+                    Tag tag = new Tag();
+                    tag.setId(i);
+                    tag.setChecked(true);
+                    tag.setTitle(keyList.result.get(i).zhName);
+                    mKeyTags.add(tag);
+                }
+                recomend_tag.setTags(mKeyTags);
+                recomend_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
+                    @Override
+                    public void onTagClick(TagView tagView, Tag tag) {
+                        if (mKeyTags!=null&&mKeyTags.size()>0){
+                            mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
+                        }
 
+                    }
+                });
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     @Override

@@ -96,12 +96,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="12dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:paddingTop="16.0dip"
-                f:horizontalSpacing="8dp"
+                f:horizontalSpace="8dp"
                 f:orientation="horizontal"
-                f:verticalSpacing="6dp" />
+                f:verticalSpace="6dp" />
         </LinearLayout>
     </FrameLayout>
 
