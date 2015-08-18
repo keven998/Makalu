@@ -14,10 +14,13 @@
 package com.xuejian.client.lxp.module.toolbox.im;
 
 import android.animation.LayoutTransition;
+import android.app.AppOpsManager;
 import android.app.NotificationManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -229,7 +232,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }
-
         initData();
     }
 
@@ -1127,6 +1129,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         return false;
                     }
                     try {
+                        if (Build.VERSION.SDK_INT>=19&&CommonUtils.checkOp(ChatActivity.this, 27)==1){
+                            ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
+                            return false;
+                        }
                         v.setPressed(true);
                         wakeLock.acquire();
                         if (VoicePlayClickListener.isPlaying)
@@ -1134,9 +1140,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingContainer.setVisibility(View.VISIBLE);
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
-//                        AppOpsManager manager = (AppOpsManager) getSystemService(APP_OPS_SERVICE);
-//                        manager.
-                        int code = MediaRecordFunc.getInstance().startRecordAndFile(handler);
+                        int code= MediaRecordFunc.getInstance().startRecordAndFile(handler);
                         if (code == 1010) {
                             ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
                             isRecord = false;
@@ -1462,6 +1466,25 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         mLastClickTime = currentTime;
         return false;
+    }
+
+    public int checkOp(){
+        if (Build.VERSION.SDK_INT>19){
+            int uid =0;
+            try {
+                PackageManager pm = getPackageManager();
+                ApplicationInfo ai = pm.getApplicationInfo("com.xuejian.client.lxp", PackageManager.GET_ACTIVITIES);
+                uid =ai.uid;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            AppOpsManager manager = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
+            int result = manager.checkOp("27", uid, "com.xuejian.client.lxp");
+            System.out.println(uid+" "+result);
+        }
+
+
+        return 0;
     }
 
 }

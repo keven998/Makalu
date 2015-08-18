@@ -74,7 +74,7 @@ public class SearchSomeCityActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if (searchCityButton.getText().toString().trim().equals("取消")) {
-                    //finishWithNoAnim();
+                    finish();
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     if (TextUtils.isEmpty(searchCityText.getText())) {

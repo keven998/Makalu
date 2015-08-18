@@ -22,7 +22,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
-import com.aizou.core.utils.StringUtil;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
@@ -529,7 +528,7 @@ public class StrategyActivity extends PeachBaseActivity {
             public void onIndicatorPageChange(int preItem, int currentItem) {
                 if (currentItem == 1 && count++ == 1) {
                     if (!SharePrefUtil.getBoolean(StrategyActivity.this, "plan_guide2", false)) {
-                        GuideViewUtils.getInstance().initGuide(StrategyActivity.this, "plan_guide2", "添加备选心愿到收藏", (int) getResources().getDimension(R.dimen.title_bar_height) + 65, CommonUtils.getScreenWidth(StrategyActivity.this) / 2 - 100, -1);
+                        GuideViewUtils.getInstance().initGuide(StrategyActivity.this, "plan_guide2", "添加备选心愿到想去", (int) getResources().getDimension(R.dimen.title_bar_height) + 65, CommonUtils.getScreenWidth(StrategyActivity.this) / 2 - 100, -1);
                     }
                 }
             }

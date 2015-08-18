@@ -23,6 +23,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -43,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -364,5 +367,29 @@ public class CommonUtils {
 
         }
         return "UNKNOWN";
+    }
+    public static int checkOp(Context context, int op){
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 19){
+            Object object = context.getSystemService(Context.APP_OPS_SERVICE);
+            Class c = object.getClass();
+            try {
+                Class[] cArg = new Class[3];
+                cArg[0] = int.class;
+                cArg[1] = int.class;
+                cArg[2] = String.class;
+                Method lMethod = c.getDeclaredMethod("checkOp", cArg);
+                return (Integer) lMethod.invoke(object, op, Binder.getCallingUid(), context.getPackageName());
+            } catch(NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return -1;
     }
 }

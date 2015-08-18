@@ -2,7 +2,12 @@ package com.xuejian.client.lxp.module.toolbox;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -43,6 +48,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.GuideViewUtils;
+import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
@@ -57,6 +63,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -446,15 +453,15 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 .build());
         TextView tvLevel = (TextView) findViewById(R.id.tv_level);
         if (bean.getGender().equalsIgnoreCase("M")) {
-            fl_avatar.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
+            fl_avatar.setForeground( readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_boy));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else if (bean.getGender().equalsIgnoreCase("F")) {
-            fl_avatar.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
+            fl_avatar.setForeground( readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_girl));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else {
-            fl_avatar.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
+            fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_unknown));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
         }
 
@@ -718,6 +725,25 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     nameTv.setText(newMemo + "(" + user.getNickName() + ")");
                 }
             }
+        }
+    }
+
+    public static Drawable readBitMap(Context context, int resId) {
+        try {
+            Bitmap bitmap = ImageCache.getInstance().get(String.valueOf(resId));
+            if (bitmap==null){
+                BitmapFactory.Options opt = new BitmapFactory.Options();
+                opt.inPreferredConfig = Bitmap.Config.RGB_565;
+                opt.inPurgeable = true;
+                opt.inInputShareable = true;
+                InputStream is = context.getResources().openRawResource(resId);
+                bitmap = BitmapFactory.decodeStream(is, null, opt);
+                ImageCache.getInstance().put(String.valueOf(resId),bitmap);
+            }
+            return new BitmapDrawable(bitmap);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }

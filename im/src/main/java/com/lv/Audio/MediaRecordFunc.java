@@ -34,35 +34,40 @@ public class MediaRecordFunc {
                 return 1002;
             } else {
                 if (mMediaRecorder == null)
-                    if (!createMediaRecord())return 1004;
-                        try {
-                            mMediaRecorder.prepare();
-                            mMediaRecorder.start();
-                            // 让录制状态为true
-                            isRecord = true;
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    while (true) {
-                                        try {
-                                            if (isRecord) {
-                                                Message var1 = Message.obtain();
-                                                var1.what = mMediaRecorder.getMaxAmplitude() * 13 / 32767;
-                                                handler.sendMessage(var1);
-                                                SystemClock.sleep(100L);
-                                                continue;
-                                            }
-                                        } catch (Exception var2) {
-                                            var2.printStackTrace();
-                                        }
-                                        return;
+                    if (!createMediaRecord()) return 1004;
+                try {
+                    try {
+                        mMediaRecorder.prepare();
+                    }catch (Throwable e){
+                        return 1010;
+                    }
+
+                    mMediaRecorder.start();
+                    // 让录制状态为true
+                    isRecord = true;
+                    new Thread(new Runnable() {
+                        public void run() {
+                            while (true) {
+                                try {
+                                    if (isRecord) {
+                                        Message var1 = Message.obtain();
+                                        var1.what = mMediaRecorder.getMaxAmplitude() * 13 / 32767;
+                                        handler.sendMessage(var1);
+                                        SystemClock.sleep(100L);
+                                        continue;
                                     }
+                                } catch (Exception var2) {
+                                    var2.printStackTrace();
                                 }
-                            }).start();
-                            return 1000;
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                            return 1010;
+                                return;
+                            }
                         }
+                    }).start();
+                    return 1000;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                     return 1010;
+                }
             }
 
         } else {
@@ -114,12 +119,21 @@ public class MediaRecordFunc {
         return AudioFileFunc.getFileSize(AudioFileFunc.getAMRFilePath());
     }
 
+    public void checkOp() {
+
+    }
+
     private void close() {
-        if (mMediaRecorder != null) {
-            isRecord = false;
-            mMediaRecorder.stop();
-            mMediaRecorder.release();
-            mMediaRecorder = null;
+        try {
+            if (mMediaRecorder != null) {
+                isRecord = false;
+                mMediaRecorder.stop();
+                mMediaRecorder.release();
+                mMediaRecorder = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 }
