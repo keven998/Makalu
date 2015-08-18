@@ -308,7 +308,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/icon_city_hasgone"
+                android:drawableLeft="@drawable/selector_ic_has_visited"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:text="去过"

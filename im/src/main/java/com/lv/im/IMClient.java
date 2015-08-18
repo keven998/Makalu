@@ -119,9 +119,13 @@ public class IMClient {
 
     public void add2ackList(String id) {
         acklist.put(id);
-        if (!isRunning) {
-            ack(countFrequency.getFrequency() * 5);
-        }
+//        if (!isRunning) {
+//            ack(countFrequency.getFrequency() * 5);
+//        }
+
+
+
+
 //        if (acklist.length() > 10) {
 //            HttpUtils.FetchNewMsg(User.getUser().getCurrentUser(), (list) -> {
 //                for (Message msg : list) {
@@ -503,6 +507,7 @@ public class IMClient {
                 LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
             }
             LazyQueue.getInstance().TempDequeue();
+            ack(20*1000);
         });
     }
 

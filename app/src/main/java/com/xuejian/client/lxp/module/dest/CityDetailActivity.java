@@ -75,7 +75,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     PopupWindow mPop;
     private CheckedTextView tv_traveled;
     private CheckedTextView tv_like;
-
+    boolean isLike;
+    boolean isTraveled;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -317,21 +318,24 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private void bindView(final LocBean detailBean) {
         final String[] ids = new String[1];
         ids[0] = detailBean.id;
-        String action = "";
-        if (detailBean.like) {
-            action = "unlike";
-        } else {
-            action = "like";
-        }
+        isLike = detailBean.like;
+        isTraveled = detailBean.traveled;
         tv_like.setChecked(detailBean.like);
-        final String ac = action;
         tv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String action = "";
+                if (isLike) {
+                    action = "unlike";
+                } else {
+                    action = "like";
+                }
+                final String ac = action;
                 UserApi.like(ac, "locality", detailBean.id, new HttpCallBack() {
                     @Override
                     public void doSuccess(Object result, String method) {
-                        tv_like.setChecked(!detailBean.like);
+                        tv_like.setChecked(!isLike);
+                        isLike=!isLike;
                     }
 
                     @Override
@@ -349,10 +353,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         tv_traveled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserApi.updateUserFootPrint(AccountManager.getCurrentUserId(), "add", ids, new HttpCallBack() {
+                String footprintAction = "";
+                if (isTraveled) {
+                    footprintAction = "del";
+                } else {
+                    footprintAction = "add";
+                }
+                final String tac = footprintAction;
+                UserApi.updateUserFootPrint(AccountManager.getCurrentUserId(), tac, ids, new HttpCallBack() {
                     @Override
                     public void doSuccess(Object result, String method) {
-                        ToastUtil.getInstance(CityDetailActivity.this).showToast("已添加");
+                        tv_traveled.setChecked(!isTraveled);
+                        isTraveled=!isTraveled;
                     }
 
                     @Override

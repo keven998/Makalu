@@ -17,7 +17,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -211,7 +210,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.tv_phone_contact:
                 if(CommonUtils.checkOp(AddContactActivity.this,4)==1){
-                    Toast.makeText(AddContactActivity.this,"通讯录权限被禁止，请打开权限!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddContactActivity.this,"通讯录权限被禁止，请打开权限后重试",Toast.LENGTH_SHORT).show();
                 }else{
                     MobclickAgent.onEvent(AddContactActivity.this, "cell_item_add_lxp_friends_from_contacts");
                     Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
