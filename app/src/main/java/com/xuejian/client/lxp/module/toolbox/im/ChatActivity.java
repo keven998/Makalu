@@ -237,7 +237,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
 
     public void getUserInfo(int userId) {
-        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissModelessLoadingDialog();
+        }
         UserApi.getUserInfo(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -1482,8 +1486,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             int result = manager.checkOp("27", uid, "com.xuejian.client.lxp");
             System.out.println(uid+" "+result);
         }
-
-
         return 0;
     }
 

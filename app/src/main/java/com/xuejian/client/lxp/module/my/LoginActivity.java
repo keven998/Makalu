@@ -382,13 +382,17 @@ public class LoginActivity extends PeachBaseActivity {
         }
         isWeixinClickLogin = true;
         ShareUtils.configPlatforms(this);
-        dialog = DialogManager.getInstance().showLoadingDialog(mContext, "正在授权");
+        try {
+            dialog =  DialogManager.getInstance().showLoadingDialog(mContext, "正在授权");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         WeixinApi.getInstance().auth(this, new WeixinApi.WeixinAuthListener() {
             @Override
             public void onComplete(String code) {
                 isBackWeixinLoginPage = false;
                 ToastUtil.getInstance(mContext).showToast("授权成功");
-                dialog.setContent("正在登录");
+                if (dialog!=null)dialog.setContent("正在登录");
                 UserApi.authSignUp(code, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
@@ -446,11 +450,19 @@ public class LoginActivity extends PeachBaseActivity {
         if (requestCode == REQUEST_CODE_REG && resultCode == RESULT_OK) {
             User user = (User) data.getSerializableExtra("user");
             loginNameEt.setText(user.getTel());
-            DialogManager.getInstance().showLoadingDialog(this, "正在登录");
+            try {
+                DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
+            }catch (Exception e){
+                DialogManager.getInstance().dissMissLoadingDialog();
+            }
             imLogin(user, REGISTER);
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
             User user = (User) data.getSerializableExtra("user");
-            DialogManager.getInstance().showLoadingDialog(this, "正在登录");
+            try {
+                DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
+            }catch (Exception e){
+                DialogManager.getInstance().dissMissLoadingDialog();
+            }
             imLogin(user, FINDPASSWORD);
         }
     }

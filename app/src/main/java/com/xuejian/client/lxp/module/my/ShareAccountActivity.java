@@ -274,7 +274,11 @@ public class ShareAccountActivity extends PeachBaseActivity {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
-                                DialogManager.getInstance().showLoadingDialog(mContext, "解除绑定");
+                                try {
+                                    DialogManager.getInstance().showLoadingDialog(mContext, "解除绑定");
+                                }catch (Exception e){
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                }
                                 mController.deleteOauth(mContext, shareAccount.platform,
                                         new SocializeClientListener() {
 

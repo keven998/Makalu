@@ -112,7 +112,11 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                         return;
                     }
 
-                    DialogManager.getInstance().showLoadingDialog(ModifyNicknameActivity.this, "请稍后");
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                    }catch (Exception e){
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                    }
                     UserApi.editUserNickName(user, nickEt.getText().toString().trim(), new HttpCallBack<String>() {
                         @Override
                         public void doSuccess(String result, String method) {

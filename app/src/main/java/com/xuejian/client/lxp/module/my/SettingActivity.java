@@ -104,7 +104,11 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                try {
+                    DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                }catch (Exception e){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -136,7 +140,11 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             ToastUtil.getInstance(SettingActivity.this).showToast("请检查网络连接");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(SettingActivity.this, "正在检查更新");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "正在检查更新");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         OtherApi.checkUpdate(new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

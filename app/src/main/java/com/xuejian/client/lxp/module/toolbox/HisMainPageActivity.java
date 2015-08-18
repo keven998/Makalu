@@ -358,7 +358,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     private void deleteContact(final long userId) {
-        DialogManager.getInstance().showLoadingDialog(this, "正在删除...");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "正在删除...");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         UserApi.deleteContact(String.valueOf(userId), new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
@@ -564,7 +568,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void getUserInfo(long userid) {
-        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissModelessLoadingDialog();
+        }
         UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

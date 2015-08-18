@@ -119,7 +119,11 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
 
     private void getDetailData() {
-        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissModelessLoadingDialog();
+        }
         TravelApi.getPoiDetail(type, id, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

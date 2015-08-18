@@ -100,7 +100,11 @@ public class ExpertFragment extends PeachBaseFragment {
         } else if (position == 1) {
             flag = true;
         }
-        DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+        try {
+            DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissModelessLoadingDialog();
+        }
         UserApi.searchExpertFootPrint(flag, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

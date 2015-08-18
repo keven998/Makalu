@@ -123,7 +123,11 @@ public class SpotDetailActivity extends PeachBaseActivity {
 
     private void initData() {
         mSpotId = getIntent().getStringExtra("id");
-        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissModelessLoadingDialog();
+        }
         getSpotDetailData();
     }
 

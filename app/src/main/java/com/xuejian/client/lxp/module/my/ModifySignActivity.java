@@ -53,7 +53,11 @@ public class ModifySignActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(mContext).showToast("呃～好像没找到网络");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                try {
+                    DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                }catch (Exception e){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
                 UserApi.editUserSignature(user, signEt.getText().toString().trim(), new HttpCallBack<String>() {
 
 

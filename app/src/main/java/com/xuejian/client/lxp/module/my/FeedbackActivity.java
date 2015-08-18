@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -65,7 +64,11 @@ public class FeedbackActivity extends PeachBaseActivity {
     }
 
     private void feedback() {
-        DialogManager.getInstance().showLoadingDialog(mContext, "正在发送");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "正在发送");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         OtherApi.feedback(contentEt.getText().toString().trim(), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

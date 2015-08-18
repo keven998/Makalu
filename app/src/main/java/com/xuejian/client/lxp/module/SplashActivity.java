@@ -224,7 +224,12 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REGESTER_REQUEST && resultCode == RESULT_OK) {
             User user = (User) data.getSerializableExtra("user");
-            DialogManager.getInstance().showLoadingDialog(this, "正在登录");
+            try {
+                DialogManager.getInstance().showLoadingDialog(this, "正在登录");
+            }catch (Exception e){
+                DialogManager.getInstance().dissMissLoadingDialog();
+            }
+
             imLogin(user);
         } else {
            // finish();

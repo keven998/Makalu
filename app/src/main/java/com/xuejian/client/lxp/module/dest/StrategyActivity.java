@@ -301,7 +301,12 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     public void createStrategyByCityIds(List<String> cityIds, final boolean recommend) {
-        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
+
         TravelApi.createGuide("create", cityIds, recommend, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

@@ -414,7 +414,11 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == LoginActivity.REQUEST_CODE_REG) {
                 User user = (User) data.getSerializableExtra("user");
-                DialogManager.getInstance().showLoadingDialog(getActivity(), "正在登录");
+                try {
+                    DialogManager.getInstance().showLoadingDialog(getActivity(), "正在登录");
+                }catch (Exception e){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
                 imLogin(user);
             } else if (requestCode == CODE_PLANS) {
                 final User user2 = AccountManager.getInstance().getLoginAccount(getActivity());

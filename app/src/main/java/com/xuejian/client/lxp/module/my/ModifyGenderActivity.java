@@ -60,7 +60,11 @@ public class ModifyGenderActivity extends PeachBaseActivity {
                     ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
                     return;
                 }
-                DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                try {
+                   DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+                }catch (Exception e){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
                 UserApi.editUserGender(user, gender, new HttpCallBack<String>() {
 
 

@@ -42,7 +42,6 @@ public class GuideViewUtils {
         }
         return instance;
     }
-
     private Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
@@ -67,7 +66,6 @@ public class GuideViewUtils {
             }
         }
 
-        ;
     };
 
     public void initGuide(final Activity context, final String guideName, String content, int topMargin, int rightMargin, int res) {
@@ -82,7 +80,6 @@ public class GuideViewUtils {
         TextView textView = (TextView) view.findViewById(R.id.tv_guide_text);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) textView.getLayoutParams();
         if (topMargin != -1) params.topMargin = topMargin;
-        // (int) context.getResources().getDimension(R.dimen.title_bar_height);
         if (rightMargin != -1) params.rightMargin = rightMargin;
         textView.setLayoutParams(params);
         if (res != -1) textView.setBackgroundResource(res);

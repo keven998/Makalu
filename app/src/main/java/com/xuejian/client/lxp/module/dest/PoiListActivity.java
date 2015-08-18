@@ -384,7 +384,11 @@ public class PoiListActivity extends PeachBaseActivity {
     }
 
     private void loadPageData() {
-        DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        try {
+            DialogManager.getInstance().showModelessLoadingDialog(mContext);
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissModelessLoadingDialog();
+        }
         getPoiGuide(type, curLoc.id);
         getPoiListData(type, curLoc.id, 0);
     }

@@ -199,7 +199,11 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void getCityDetailData(final String id) {
-        DialogManager.getInstance().showModelessLoadingDialog(this);
+        try {
+            DialogManager.getInstance().showModelessLoadingDialog(this);
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissModelessLoadingDialog();
+        }
         TravelApi.getCityDetail(id, (int) (LocalDisplay.SCREEN_WIDTH_PIXELS / 1.5), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

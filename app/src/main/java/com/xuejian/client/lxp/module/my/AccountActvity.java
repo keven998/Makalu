@@ -13,7 +13,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -599,7 +598,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
+                try {
+                    DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
+                }catch (Exception e){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
                 UserApi.logout(AccountManager.getInstance().getLoginAccount(AccountActvity.this).getUserId(), new HttpCallBack() {
                     @Override
                     public void doSuccess(Object result, String method) {
@@ -698,7 +701,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             ToastUtil.getInstance(this).showToast("无网络连接，请检查网络");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(this, "请稍后");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         UserApi.delUserAlbumPic(String.valueOf(user.getUserId()), picId, new HttpCallBack<String>() {
 
             @Override
@@ -783,7 +790,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         UserApi.editUserGender(user, gender, new HttpCallBack<String>() {
 
 
@@ -944,7 +955,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         UserApi.editUserAvatar(user, url, new HttpCallBack<String>() {
 
 
@@ -1100,7 +1115,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         UserApi.editUserStatus(user, sstatus, new HttpCallBack<String>() {
 
 
@@ -1139,7 +1158,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         UserApi.editUserResidence(user, residence, new HttpCallBack<String>() {
 
 
@@ -1179,7 +1202,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             ToastUtil.getInstance(mContext).showToast("无网络连接，请检查网络");
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        }catch (Exception e){
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
         UserApi.editUserBirthday(user, birth, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
