@@ -110,6 +110,7 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
     }
 
 
+
     @Override
     public void onClick(View v) {
     }
