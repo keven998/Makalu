@@ -342,6 +342,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
 
 
     private void loadExpertFootPrintMap(final List<LocBean> footPrint) {
+        if (footPrint==null)return;
         all_locations.removeAllViews();
         layout.removeAllViews();
         coords.clear();

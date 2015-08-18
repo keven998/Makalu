@@ -3,13 +3,10 @@ package com.xuejian.client.lxp.module.dest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,26 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.bean.GroupLocBean;
 import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
-import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 
-import org.apache.http.Header;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,7 +157,7 @@ public class SearchSomeCityActivity extends Activity {
                     final View layoutview = View.inflate(SearchSomeCityActivity.this, R.layout.poi_bottom_cell_with_del, null);
                     FrameLayout del_fl = (FrameLayout) layoutview.findViewById(R.id.poi_del_fl);
                     TextView location = (TextView) layoutview.findViewById(R.id.names);
-                    location.setText(locBean.zhName + "," + locBean.country);
+                    location.setText(locBean.zhName + "," + locBean.destCountry);
                     del_fl.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -236,7 +224,7 @@ public class SearchSomeCityActivity extends Activity {
 
         @Override
         public void showData(int position, final LocBean itemData) {
-            city_result.setText(itemData.zhName+","+itemData.country);
+            city_result.setText(itemData.zhName+","+itemData.destCountry);
             if (!itemData.isChecked) {
                 des_selected_icon.setImageResource(R.drawable.search_add);
             } else {
@@ -250,7 +238,7 @@ public class SearchSomeCityActivity extends Activity {
     private void searchCities(String keyWords){
         cityListAdapter.getDataList().clear();
         for(LocBean locBean : searchCities){
-            if((locBean.country!=null && locBean.country.contains(keyWords) || locBean.zhName.contains(keyWords))){
+            if((locBean.destCountry !=null && locBean.destCountry.contains(keyWords) || locBean.zhName.contains(keyWords))){
                 cityListAdapter.getDataList().add(locBean);
             }
         }
@@ -267,9 +255,9 @@ public class SearchSomeCityActivity extends Activity {
                     countris.addAll(countryListResult.result);
                     for (CountryBean  countryBean:countris){
                         for(LocBean locBean : countryBean.destinations){
-                            locBean.country = countryBean.zhName;
+                            locBean.destCountry = countryBean.zhName;
                             searchCities.add(locBean);
-                            if(keyWords!=null && keyWords.trim().length()>0 && (locBean.zhName.contains(keyWords)|| locBean.country.contains(keyWords))){
+                            if(keyWords!=null && keyWords.trim().length()>0 && (locBean.zhName.contains(keyWords)|| locBean.destCountry.contains(keyWords))){
                                 cityListAdapter.getDataList().add(locBean);
                             }
                         }
@@ -287,9 +275,9 @@ public class SearchSomeCityActivity extends Activity {
                     groupLocBeans.addAll(locListResult.result);
                     for (GroupLocBean  groupLocBean:groupLocBeans){
                         for(LocBean locBean : groupLocBean.destinations){
-                            locBean.country = "中国";
+                            locBean.destCountry = "中国";
                             searchCities.add(locBean);
-                            if(keyWords!=null && keyWords.trim().length()>0 && (locBean.zhName.contains(keyWords)|| locBean.country.contains(keyWords))){
+                            if(keyWords!=null && keyWords.trim().length()>0 && (locBean.zhName.contains(keyWords)|| locBean.destCountry.contains(keyWords))){
                                 cityListAdapter.getDataList().add(locBean);
                             }
                         }

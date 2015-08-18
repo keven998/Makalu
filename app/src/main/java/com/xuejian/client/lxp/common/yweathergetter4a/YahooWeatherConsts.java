@@ -31,7 +31,7 @@ public class YahooWeatherConsts {
     public static final String XML_TAG_WOEID_NEIGHBORHOOD = "neighborhood";
     public static final String XML_TAG_WOEID_CITY = "city";
     public static final String XML_TAG_WOEID_COUNTY = "county";
-    public static final String XML_TAG_WOEID_COUNTRY = "country";
+    public static final String XML_TAG_WOEID_COUNTRY = "destCountry";
     public static final String XML_TAG_WOEID_COUNTRYCODE = "countrycode";
     public static final String XML_TAG_WOEID_STATE = "state";
     public static final String XML_TAG_WOEID_STATECODE = "statecode";

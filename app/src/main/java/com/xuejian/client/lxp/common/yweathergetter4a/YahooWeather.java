@@ -142,7 +142,7 @@ public class YahooWeather implements com.xuejian.client.lxp.common.yweathergette
      *
      * @param context            app's context
      * @param cityAreaOrLocation A city name, like "Shanghai"; an area name, like "Mountain View";
-     *                           a pair of city and country, like "Tokyo, Japan"; a location or view spot, like "Eiffel Tower";
+     *                           a pair of city and destCountry, like "Tokyo, Japan"; a location or view spot, like "Eiffel Tower";
      *                           Yahoo's apis will find a closest position for you.
      * @param result             A {@link WeatherInfo} instance.
      */
@@ -309,7 +309,7 @@ public class YahooWeather implements com.xuejian.client.lxp.common.yweathergette
             Node locationNode = doc.getElementsByTagName("yweather:location").item(0);
             weatherInfo.setLocationCity(locationNode.getAttributes().getNamedItem("city").getNodeValue());
             weatherInfo.setLocationRegion(locationNode.getAttributes().getNamedItem("region").getNodeValue());
-            weatherInfo.setLocationCountry(locationNode.getAttributes().getNamedItem("country").getNodeValue());
+            weatherInfo.setLocationCountry(locationNode.getAttributes().getNamedItem("destCountry").getNodeValue());
 
             Node windNode = doc.getElementsByTagName("yweather:wind").item(0);
             weatherInfo.setWindChill(windNode.getAttributes().getNamedItem("chill").getNodeValue());

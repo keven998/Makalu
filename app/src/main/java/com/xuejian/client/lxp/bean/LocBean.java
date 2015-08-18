@@ -8,7 +8,6 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.share.ShareDialogBean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +32,10 @@ public class LocBean implements Parcelable, ICreateShareDialog {
     public String playGuide;
     public String diningTitles;
     public String shoppingTitles;
-    public String country;
+    public String destCountry;
     public boolean isChecked;
-
+    public boolean like;
+    public boolean traveled;
 
     public LocBean() {
     }
@@ -95,8 +95,10 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         dest.writeInt(this.imageCnt);
         dest.writeByte(isFavorite ? (byte) 1 : (byte) 0);
         dest.writeString(this.playGuide);
-        dest.writeString(this.country);
-        dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
+        dest.writeString(this.destCountry);
+       dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.like ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.traveled ? (byte) 1 : (byte) 0);
     }
 
     private LocBean(Parcel in) {
@@ -115,8 +117,10 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         this.imageCnt = in.readInt();
         this.isFavorite = in.readByte() != 0;
         this.playGuide = in.readString();
-        this.country = in.readString();
+        this.destCountry = in.readString();
         this.isChecked = (in.readByte() != 0);
+        this.like = (in.readByte() != 0);
+        this.traveled = (in.readByte() != 0);
     }
 
     public static final Creator<LocBean> CREATOR = new Creator<LocBean>() {

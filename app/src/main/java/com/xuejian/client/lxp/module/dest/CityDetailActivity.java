@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -34,8 +35,10 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
@@ -70,6 +73,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     ImageView[] imageViews;
     ListView travelLv;
     PopupWindow mPop;
+    private CheckedTextView tv_traveled;
+    private CheckedTextView tv_like;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +110,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 .getSystemService(Context.WINDOW_SERVICE);
 
         int width = wm.getDefaultDisplay().getWidth();
-        int ivWidth = (width-LocalDisplay.dp2px(84))/3;
+        int ivWidth = (width - LocalDisplay.dp2px(84)) / 3;
 
         travelLv = (ListView) findViewById(R.id.lv_city_detail);
         // mTravelLv = travelLv;
@@ -116,19 +121,19 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         mCityIv5 = (ImageView) findViewById(R.id.iv_city_5);
         mCityIv6 = (ImageView) findViewById(R.id.iv_city_6);
 
-        mCityIv1.getLayoutParams().width=ivWidth;
-        mCityIv2.getLayoutParams().width=ivWidth;
-        mCityIv3.getLayoutParams().width=ivWidth;
-        mCityIv4.getLayoutParams().width=ivWidth;
-        mCityIv5.getLayoutParams().width=ivWidth;
-        mCityIv6.getLayoutParams().width=ivWidth;
+        mCityIv1.getLayoutParams().width = ivWidth;
+        mCityIv2.getLayoutParams().width = ivWidth;
+        mCityIv3.getLayoutParams().width = ivWidth;
+        mCityIv4.getLayoutParams().width = ivWidth;
+        mCityIv5.getLayoutParams().width = ivWidth;
+        mCityIv6.getLayoutParams().width = ivWidth;
 
-        mCityIv1.getLayoutParams().height=ivWidth;
-        mCityIv2.getLayoutParams().height=ivWidth;
-        mCityIv3.getLayoutParams().height=ivWidth;
-        mCityIv4.getLayoutParams().height=ivWidth;
-        mCityIv5.getLayoutParams().height=ivWidth;
-        mCityIv6.getLayoutParams().height=ivWidth;
+        mCityIv1.getLayoutParams().height = ivWidth;
+        mCityIv2.getLayoutParams().height = ivWidth;
+        mCityIv3.getLayoutParams().height = ivWidth;
+        mCityIv4.getLayoutParams().height = ivWidth;
+        mCityIv5.getLayoutParams().height = ivWidth;
+        mCityIv6.getLayoutParams().height = ivWidth;
 
 
         iv_create = (ImageView) findViewById(R.id.iv_create_plan);
@@ -145,7 +150,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(CityDetailActivity.this,"navigation_item_lxp_city_share");
+                MobclickAgent.onEvent(CityDetailActivity.this, "navigation_item_lxp_city_share");
                 IMUtils.onClickImShare(CityDetailActivity.this);
             }
         });
@@ -169,7 +174,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 return false;
             }
         });
-
+        tv_like = (CheckedTextView) findViewById(R.id.tv_like);
+        tv_traveled = (CheckedTextView) findViewById(R.id.tv_hasGone);
         findViewById(R.id.tv_all_note).setVisibility(View.GONE);
 
         findViewById(R.id.iv_nav_back).setOnClickListener(new View.OnClickListener() {
@@ -200,7 +206,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
                 if (detailResult.code == 0) {
                     bindView(detailResult.result);
-                  //  getTravelNotes(id);
+                    //  getTravelNotes(id);
                     getTravelNotesbyKeyword(detailResult.result.zhName);
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
@@ -222,6 +228,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
     }
+
     private void getTravelNotesbyKeyword(final String keyword) {
         OtherApi.getTravelNoteByKeyword(keyword, 0, 3, new HttpCallBack<String>() {
             @Override
@@ -238,7 +245,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
-                                intent.putExtra("keyword",keyword);
+                                intent.putExtra("keyword", keyword);
                                 intent.putExtra("id", locId);
                                 startActivity(intent);
                             }
@@ -262,6 +269,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             }
         });
     }
+
     private void getTravelNotes(final String locId) {
         OtherApi.getTravelNoteByLocId(locId, 0, 3, new HttpCallBack<String>() {
             @Override
@@ -271,17 +279,17 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 if (detailResult.code == 0) {
                     travelAdapter.getDataList().clear();
                     travelAdapter.getDataList().addAll(detailResult.result);
-                    if(detailResult.result.size()>0){
-                            //全部游记
+                    if (detailResult.result.size() > 0) {
+                        //全部游记
                         findViewById(R.id.tv_all_note).setVisibility(View.VISIBLE);
-                            findViewById(R.id.tv_all_note).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
-                                    intent.putExtra("id", locId);
-                                    startActivity(intent);
-                                }
-                            });
+                        findViewById(R.id.tv_all_note).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                                intent.putExtra("id", locId);
+                                startActivity(intent);
+                            }
+                        });
                     }
                     setListViewHeightBasedOnChildren(travelLv);
                 } else {
@@ -303,12 +311,64 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void bindView(final LocBean detailBean) {
+        final String[] ids = new String[1];
+        ids[0] = detailBean.id;
+        String action = "";
+        if (detailBean.like) {
+            action = "unlike";
+        } else {
+            action = "like";
+        }
+        tv_like.setChecked(detailBean.like);
+        final String ac = action;
+        tv_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserApi.like(ac, "locality", detailBean.id, new HttpCallBack() {
+                    @Override
+                    public void doSuccess(Object result, String method) {
+                        tv_like.setChecked(!detailBean.like);
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+            }
+        });
+        tv_traveled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserApi.updateUserFootPrint(AccountManager.getCurrentUserId(), "add", ids, new HttpCallBack() {
+                    @Override
+                    public void doSuccess(Object result, String method) {
+                        ToastUtil.getInstance(CityDetailActivity.this).showToast("已添加");
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+            }
+        });
         iv_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(CityDetailActivity.this,"navigation_item_lxp_city_create_plan");
-                Intent intent = new Intent( );
-                intent.setClass(CityDetailActivity.this,SelectDestActivity.class);
+                MobclickAgent.onEvent(CityDetailActivity.this, "navigation_item_lxp_city_create_plan");
+                Intent intent = new Intent();
+                intent.setClass(CityDetailActivity.this, SelectDestActivity.class);
                 ArrayList<LocBean> locList = new ArrayList<LocBean>();
                 locList.add(locDetailBean);
                 intent.putExtra("locList", locList);
@@ -346,7 +406,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         findViewById(R.id.ly1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(CityDetailActivity.this,"card_item_city_pictures");
+                MobclickAgent.onEvent(CityDetailActivity.this, "card_item_city_pictures");
                 Intent intent = new Intent(mContext, CityPictureActivity.class);
                 intent.putExtra("id", locDetailBean.id);
                 intent.putExtra("title", locDetailBean.zhName);
@@ -388,7 +448,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                         public void onClick(View view) {
                             Intent intent = new Intent();
                             intent.putExtra("content", detailBean.travelMonth);
-                            intent.putExtra("title","最佳季节");
+                            intent.putExtra("title", "最佳季节");
                             intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
                             startActivityWithNoAnim(intent);
                         }
@@ -454,7 +514,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra("content", desc);
-                intent.putExtra("title","城市简介");
+                intent.putExtra("title", "城市简介");
                 intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
                 startActivityWithNoAnim(intent);
             }
@@ -531,21 +591,21 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_travel:
-                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_travel_tips");
+                MobclickAgent.onEvent(CityDetailActivity.this, "button_item_city_travel_tips");
                 intentToTravel(v);
                 break;
             case R.id.tv_spots:
-                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_spots");
+                MobclickAgent.onEvent(CityDetailActivity.this, "button_item_city_spots");
                 intentToSpots(v);
                 break;
 
             case R.id.tv_restaurant:
-                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_delicious");
+                MobclickAgent.onEvent(CityDetailActivity.this, "button_item_city_delicious");
                 intentToFood(v);
                 break;
 
             case R.id.tv_shopping:
-                MobclickAgent.onEvent(CityDetailActivity.this,"button_item_city_shoppings");
+                MobclickAgent.onEvent(CityDetailActivity.this, "button_item_city_shoppings");
                 intentToShopping(v);
                 break;
         }

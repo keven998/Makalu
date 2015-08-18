@@ -258,7 +258,7 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         title_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFootPrint(allAddCityList);
+       //         updateFootPrint(allAddCityList);
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("footprint", allAddCityList);
                 setResult(RESULT_OK, intent);
@@ -318,33 +318,36 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         String inCountry = PreferenceUtils.getCacheData(MyFootPrinterActivity.this, "destination_indest_group");
         CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(outcountry, CountryBean.class);
         CommonJson4List<CountryBean> groupListResult = CommonJson4List.fromJson(inCountry, CountryBean.class);
-        for (LocBean locBean : allAddCityList) {
-            for (CountryBean countryBean : countryListResult.result) {
-                for (LocBean kLocBean : countryBean.destinations) {
-                    if (locBean.equals(kLocBean)) {
-                        if (track.containsKey(countryBean.zhName)) {
-                            track.get(countryBean.zhName).add(locBean);
-                        } else {
-                            track.put(countryBean.zhName, new ArrayList<LocBean>());
-                            track.get(countryBean.zhName).add(locBean);
+        if (countryListResult!=null&&groupListResult!=null){
+            for (LocBean locBean : allAddCityList) {
+                for (CountryBean countryBean : countryListResult.result) {
+                    for (LocBean kLocBean : countryBean.destinations) {
+                        if (locBean.equals(kLocBean)) {
+                            if (track.containsKey(countryBean.zhName)) {
+                                track.get(countryBean.zhName).add(locBean);
+                            } else {
+                                track.put(countryBean.zhName, new ArrayList<LocBean>());
+                                track.get(countryBean.zhName).add(locBean);
+                            }
                         }
                     }
                 }
-            }
 
-            for (CountryBean incountryBean : groupListResult.result) {
-                for (LocBean kLocBean : incountryBean.destinations) {
-                    if (locBean.equals(kLocBean)) {
-                        if (track.containsKey("中国")) {
-                            track.get("中国").add(locBean);
-                        } else {
-                            track.put("中国", new ArrayList<LocBean>());
-                            track.get("中国").add(locBean);
+                for (CountryBean incountryBean : groupListResult.result) {
+                    for (LocBean kLocBean : incountryBean.destinations) {
+                        if (locBean.equals(kLocBean)) {
+                            if (track.containsKey("中国")) {
+                                track.get("中国").add(locBean);
+                            } else {
+                                track.put("中国", new ArrayList<LocBean>());
+                                track.get("中国").add(locBean);
+                            }
                         }
                     }
                 }
             }
         }
+
     }
 
     private class InOutFragmentAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {

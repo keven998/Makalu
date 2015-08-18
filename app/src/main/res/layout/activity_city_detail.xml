@@ -303,7 +303,7 @@
             android:layout_weight="1"
             android:background="@drawable/selector_ic_city_button">
 
-            <TextView
+            <CheckedTextView
                 android:id="@+id/tv_hasGone"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -323,7 +323,7 @@
             android:layout_weight="1"
             android:background="@drawable/selector_ic_city_button">
 
-            <TextView
+            <CheckedTextView
                 android:id="@+id/tv_like"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
