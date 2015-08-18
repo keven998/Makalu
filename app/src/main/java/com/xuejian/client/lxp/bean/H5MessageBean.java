@@ -6,6 +6,10 @@ public class H5MessageBean {
     public String desc;
     public String image;
     public String url;
+
+    public H5MessageBean(String desc) {
+        this.desc = desc;
+    }
 }
 
 

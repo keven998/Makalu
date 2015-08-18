@@ -104,6 +104,11 @@ public class AddPhoneContactActivity extends ChatBaseActivity {
             contactListInMobile = PhoneContactUtils.getPhoneContact(mContext);
         }
         final ArrayList<AddressBookbean> keyWordResult= PhoneContactUtils.getPhoneContactByKeyWord(mContext,contactListInMobile,keyword);
+        if (keyWordResult.size()==0){
+            DialogManager.getInstance().dissMissLoadingDialog();
+            ToastUtil.getInstance(AddPhoneContactActivity.this).showToast("没有找到匹配的联系人");
+            return;
+        }
         UserApi.searchByAddressBook(keyWordResult, new HttpCallBack<String>(){
             @Override
             public void doSuccess(String result, String method) {

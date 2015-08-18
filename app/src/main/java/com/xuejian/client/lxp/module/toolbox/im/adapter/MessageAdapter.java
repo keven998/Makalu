@@ -29,6 +29,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +57,7 @@ import com.xuejian.client.lxp.bean.H5MessageBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.task.DownloadImage;
 import com.xuejian.client.lxp.common.task.DownloadVoice;
@@ -63,6 +66,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SmileUtils;
+import com.xuejian.client.lxp.common.widget.ItemListView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
@@ -84,6 +88,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -107,6 +112,8 @@ public class MessageAdapter extends BaseAdapter {
     private static final int MESSAGE_TYPE_SENT_EXT = 14;
     private static final int MESSAGE_TYPE_RECV_EXT = 15;
     private static final int MESSAGE_TYPE_TIPS = 16;
+    private static final int MESSAGE_TYPE_SENT_QA = 17;
+    private static final int MESSAGE_TYPE_RECV_QA = 18;
 //    private static final int MESSAGE_TYPE_SENT_UNKOWN = 17;
 //    private static final int MESSAGE_TYPE_RECV_UNKOWN = 18;
 
@@ -219,6 +226,8 @@ public class MessageAdapter extends BaseAdapter {
             case HOTEL_MSG:
             case H5_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
+            case QA_MSG:
+                return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_QA : MESSAGE_TYPE_SENT_QA;
             default:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
@@ -267,6 +276,9 @@ public class MessageAdapter extends BaseAdapter {
             case H5_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
                         R.layout.row_sent_ext, null);
+            case QA_MSG:
+                return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_qa, null) : inflater.inflate(
+                        R.layout.row_sent_qa, null);
             default:
                 break;
         }
@@ -344,6 +356,14 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     break;
+                case QA_MSG:
+                    holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.itemListView = (ItemListView) convertView.findViewById(R.id.item_list);
+                    holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
+                    holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
+                    holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
+                    break;
                 default:
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                     holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
@@ -400,6 +420,11 @@ public class MessageAdapter extends BaseAdapter {
                 handleExtMessage(message, holder, position);
                 handleCommonMessage(position, convertView, message, holder);
                 break;
+            case QA_MSG:
+                handleGroupMessage(position, convertView, message, holder);
+                handleQaMessage(message, holder, position);
+                handleCommonMessage(position, convertView, message, holder);
+                break;
             default:
                 handleGroupMessage(position, convertView, message, holder);
                 handleExtMessage(message, holder, position);
@@ -420,6 +445,23 @@ public class MessageAdapter extends BaseAdapter {
             }
         }
         return convertView;
+    }
+
+    private void handleQaMessage(MessageBean message, ViewHolder holder, int position) {
+        ArrayList<H5MessageBean> list =new ArrayList<>();
+        try {
+            CommonJson4List<H5MessageBean> result = CommonJson4List.fromJson(message.getMessage(),H5MessageBean.class);
+            list.addAll( result.result);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+//        ArrayList<H5MessageBean> list =new ArrayList<>();
+//        for (int i = 0;i<7;i++){
+//                list.add(new H5MessageBean(i+"rdadaddfsfsfsfsdfad"));
+//        }
+        ItemListAdapter adapter =new ItemListAdapter(activity,1,list);
+        holder.itemListView.setAdapter(adapter);
+
     }
 
     private void handleTipsMessage(MessageBean message, ViewHolder holder, final int position) {
@@ -516,6 +558,7 @@ public class MessageAdapter extends BaseAdapter {
                         case FOOD_MSG:
                         case SHOP_MSG:
                         case HOTEL_MSG:
+                        case QA_MSG:
                             ((ChatActivity) activity).resendMessage(position);
                             break;
                     }
@@ -1894,7 +1937,8 @@ public class MessageAdapter extends BaseAdapter {
         // 显示送达回执状态
         TextView tv_delivered;
         TextView tv_map_desc;
-
+        ItemListView itemListView;
+        TextView tv_content;
         TextView tv_file_name;
         TextView tv_file_size;
         TextView tv_file_download_state;
@@ -1945,4 +1989,41 @@ public class MessageAdapter extends BaseAdapter {
         if (sec >= 60) return 280;
         return 210 / 60 * sec + (70);
     }
+    class ItemListAdapter extends ArrayAdapter<H5MessageBean>{
+
+        public ArrayList<H5MessageBean> list;
+        public ItemListAdapter(Context context, int resource, List<H5MessageBean> objects) {
+            super(context, resource, objects);
+            list = (ArrayList<H5MessageBean>) objects;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.row_item_list, parent, false);
+            }
+            ItemHolder holder = (ItemHolder) convertView.getTag();
+            if (holder == null) {
+                holder = new ItemHolder();
+                holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
+            }
+            final H5MessageBean bean = list.get(position);
+            holder.tv_content.setText(bean.desc);
+            holder.tv_content.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, PeachWebViewActivity.class);
+                    intent.putExtra("url", bean.url);
+        //            intent.putExtra("title", h5MessageBean.title);
+                    activity.startActivity(intent);
+                }
+            });
+            return convertView;
+        }
+        class ItemHolder{
+            TextView tv_content;
+        }
+    }
+
 }

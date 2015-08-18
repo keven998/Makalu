@@ -101,7 +101,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                         return;
                     }
                     if (!RegexUtils.checkNickName(nickEt.getText().toString().trim())) {
-                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("请输入1-12位中英文昵称");
+                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("请输入1-16位中英文昵称");
                         return;
                     } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())) {
                         ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("昵称不能为纯数字");

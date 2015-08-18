@@ -73,7 +73,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     return;
                 }
                 if (!RegexUtils.isPwdOk(pwdEt.getText().toString().trim())) {
-                    ToastUtil.getInstance(this).showToast("请正确输入6-12位密码");
+                    ToastUtil.getInstance(this).showToast("请正确输入6-12位数字或英文的密码");
                     return;
                 }
                 if (!CommonUtils.isNetWorkConnected(mContext)) {

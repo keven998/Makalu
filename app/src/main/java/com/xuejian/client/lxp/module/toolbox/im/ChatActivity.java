@@ -1125,6 +1125,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingContainer.setVisibility(View.VISIBLE);
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
+//                        AppOpsManager manager = (AppOpsManager) getSystemService(APP_OPS_SERVICE);
+//                        manager.
                         int code = MediaRecordFunc.getInstance().startRecordAndFile(handler);
                         if (code == 1010) {
                             ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
