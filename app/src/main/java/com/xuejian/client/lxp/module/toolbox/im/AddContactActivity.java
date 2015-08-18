@@ -17,11 +17,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -32,6 +34,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
@@ -207,9 +210,14 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_contact:
-                MobclickAgent.onEvent(AddContactActivity.this, "cell_item_add_lxp_friends_from_contacts");
-                Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
-                startActivity(phoneIntent);
+                if(CommonUtils.checkOp(AddContactActivity.this,4)==1){
+                    Toast.makeText(AddContactActivity.this,"通讯录权限被禁止，请打开权限!",Toast.LENGTH_SHORT).show();
+                }else{
+                    MobclickAgent.onEvent(AddContactActivity.this, "cell_item_add_lxp_friends_from_contacts");
+                    Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
+                    startActivity(phoneIntent);
+                }
+
                 break;
 
             case R.id.tv_weixin_contacts:
