@@ -2,9 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingBottom="8dp"
+    android:padding="8dp"
     android:orientation="vertical" >
 
     <Button
@@ -14,7 +12,7 @@
         android:textColor="@color/app_theme_color"
         android:background="@drawable/btn_white_selector"
         android:textSize="17sp"
-        android:text="新建旅程" />
+        />
 
     <Button
         android:id="@+id/btn_cancle"

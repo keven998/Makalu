@@ -119,8 +119,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     }
                 });
             } else {
-
-                handleView.setVisibility(View.INVISIBLE);
+               // handleView.setVisibility(View.INVISIBLE);
                 handleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -312,32 +311,32 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 }
             });
         } else {
-//            btn.setText("屏蔽");
-//            btn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    MobclickAgent.onEvent(mContext, "event_delete_it");
-//                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
-//                    deleteDialog.setTitle("提示");
-//                    deleteDialog.setMessage("确认屏蔽");
-//                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            // deleteContact(imUser);
-//                            deleteDialog.dismiss();
-//                        }
-//                    });
-//                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            deleteDialog.dismiss();
-//                        }
-//                    });
-//                    deleteDialog.show();
-//
-//                    dialog.dismiss();
-//                }
-//            });
+            btn.setText("屏蔽");
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MobclickAgent.onEvent(mContext, "event_delete_it");
+                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
+                    deleteDialog.setTitle("提示");
+                    deleteDialog.setMessage("确认屏蔽");
+                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            blockUser(String.valueOf(userId),true);
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.show();
+
+                    dialog.dismiss();
+                }
+            });
         }
         contentView.findViewById(R.id.btn_cancle).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -355,6 +354,25 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    private void blockUser(String userId,boolean block) {
+        UserApi.block(userId, block, new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     private void deleteContact(final long userId) {
@@ -546,7 +564,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
         tvNotes.setVisibility(View.INVISIBLE);
         if (!SharePrefUtil.getBoolean(this, "expert_guide1", false)&&isFromExperts) {
-            GuideViewUtils.getInstance().initGuide(this, "plan_guide1", "有问题可以向达人请教噢", CommonUtils.getScreenHeight(this)-300,CommonUtils.getScreenWidth(this)/2-20,R.drawable.guide_view_bg_down);
+            GuideViewUtils.getInstance().initGuide(this, "expert_guide1", "有问题可以向达人请教噢", CommonUtils.getScreenHeight(this)-300,CommonUtils.getScreenWidth(this)/2-20,R.drawable.guide_view_bg_down);
         }
     }
 

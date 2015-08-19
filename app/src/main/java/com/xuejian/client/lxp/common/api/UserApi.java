@@ -91,6 +91,8 @@ public class UserApi extends BaseApi {
     public final static String TRACKS = "/users/%s/footprints";
     //用户喜欢
     public final static String LIKE = "/users/%s/likes";
+
+    public final static String BLOCK = "/users/%s/contacts/%s/block";
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
@@ -801,5 +803,27 @@ public class UserApi extends BaseApi {
 
         return HttpManager.request(request, callback);
     }
+    //屏蔽用户
+    public static PTRequestHandler block(String userId,boolean block, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK,AccountManager.getCurrentUserId(),userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("block", block);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
 
+        return HttpManager.request(request, callback);
+    }
 }
