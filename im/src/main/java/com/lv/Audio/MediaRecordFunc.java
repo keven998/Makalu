@@ -75,6 +75,32 @@ public class MediaRecordFunc {
         }
     }
 
+    public void startRecordNotFile() {
+        // 判断是否有外部存储设备sdcard/
+        if (AudioFileFunc.isSdcardExit()) {
+
+                if (mMediaRecorder == null)
+                    if (!createMediaRecord());
+                try {
+                    try {
+                        mMediaRecorder.prepare();
+                    }catch (Throwable e){
+
+                    }
+
+                    mMediaRecorder.start();
+                    try{
+                        Thread.sleep(15);
+                    }catch(Exception ex){
+
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+
+                }
+
+        }
+    }
     private boolean createMediaRecord() {
         mMediaRecorder = new MediaRecorder();
 
