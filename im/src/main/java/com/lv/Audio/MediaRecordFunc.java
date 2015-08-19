@@ -7,7 +7,6 @@ import android.os.Message;
 import android.os.SystemClock;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MediaRecordFunc {
 
@@ -90,7 +89,7 @@ public class MediaRecordFunc {
 
                     mMediaRecorder.start();
                     try{
-                        Thread.sleep(15);
+                        Thread.sleep(10);
                     }catch(Exception ex){
 
                     }

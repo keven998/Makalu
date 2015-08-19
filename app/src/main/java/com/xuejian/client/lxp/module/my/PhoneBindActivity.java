@@ -131,7 +131,11 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                         if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(PhoneBindActivity.this).showToast("发送短信过于频繁！");
-                        } else if (!isFinishing())
+                        } else if (code==HttpManager.PWD_ERROR){
+                            if (!isFinishing())
+                                ToastUtil.getInstance(PhoneBindActivity.this).showToast("验证码错误！");
+                        }
+                        else if (!isFinishing())
                             ToastUtil.getInstance(PhoneBindActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                     }
                 });

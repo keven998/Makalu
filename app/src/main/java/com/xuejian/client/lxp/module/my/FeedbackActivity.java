@@ -75,7 +75,8 @@ public class FeedbackActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> feedbackResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (feedbackResult.code == 0) {
-                    ToastUtil.getInstance(mContext).showToast("谢谢反馈，我们在努力做到更好");
+                    ToastUtil.getInstance(getApplicationContext()).showToast("谢谢反馈，我们在努力做到更好");
+                    finish();
                 } else {
                     ToastUtil.getInstance(mContext).showToast("提交失败");
                 }

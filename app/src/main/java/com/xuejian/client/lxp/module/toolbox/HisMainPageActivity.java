@@ -322,7 +322,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            blockUser(String.valueOf(userId),true);
+                            blockUser(String.valueOf(userId),false);
                             deleteDialog.dismiss();
                         }
                     });
@@ -356,23 +356,42 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void blockUser(String userId,boolean block) {
-        UserApi.block(userId, block, new HttpCallBack() {
-            @Override
-            public void doSuccess(Object result, String method) {
+    private void blockUser(String userId,boolean isBlock) {
+        if (isBlock){
+            UserApi.removeFromBlackList(userId, new HttpCallBack() {
+                @Override
+                public void doSuccess(Object result, String method) {
 
-            }
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
 
-            }
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
 
-            }
-        });
+                }
+            });
+        }else {
+            UserApi.addToBlackList(userId, new HttpCallBack() {
+                @Override
+                public void doSuccess(Object result, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
     }
 
     private void deleteContact(final long userId) {

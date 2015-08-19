@@ -44,7 +44,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -1138,13 +1137,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         MediaRecordFunc.getInstance().startRecordNotFile();
                         final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
                         long time = com.lv.utils.CommonUtils.getAmrDuration(new File(path));
-                        if (time <0){
+                        if (time <=0){
                                 ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
                                 MediaRecordFunc.getInstance().cancleRecord();
                                 return false;
-
                         }
-
                         v.setPressed(true);
                         wakeLock.acquire();
                         if (VoicePlayClickListener.isPlaying)

@@ -146,7 +146,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         initView();
-        refreshUserInfo();
+      //  refreshUserInfo();
     }
 
     private void initView() {
@@ -278,6 +278,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         super.onResume();
         user = AccountManager.getInstance().getLoginAccount(this);
         // initData();
+        refreshUserInfo();
         MobclickAgent.onPageStart("page_edit_my_profile");
         MobclickAgent.onResume(this);
     }

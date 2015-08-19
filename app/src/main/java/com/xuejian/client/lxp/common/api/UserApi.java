@@ -46,7 +46,7 @@ public class UserApi extends BaseApi {
 
     //第三方登录
     //public final static String AUTH_SIGNUP = "/users/auth-signup";
-   // public final static String AUTH_SIGNUP = "/users/auth-signup";
+    // public final static String AUTH_SIGNUP = "/users/auth-signup";
 
     //  注册
     // public final static String SIGNUP = "/users/signup";
@@ -82,7 +82,7 @@ public class UserApi extends BaseApi {
     //根据足迹获取达人
     public final static String EXPERT_BY_TRACK = "/geo/countries/%s/expert";
     public final static String LOGOUT = "/users/logout";
-//    //根据足迹获取达人
+    //    //根据足迹获取达人
 //    public final static String EXPERT_BY_TRACK = "/users/expert/tracks/users";
 //    /app/users/:id/memo
     //消息免打扰
@@ -92,7 +92,8 @@ public class UserApi extends BaseApi {
     //用户喜欢
     public final static String LIKE = "/users/%s/likes";
 
-    public final static String BLOCK = "/users/%s/contacts/%s/block";
+    public final static String BLOCK = "/users/%s/blacklist";
+
     public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
@@ -305,7 +306,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler updateUserFootPrint(String userId, String type, String[] id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS,AccountManager.getCurrentUserId()));
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -343,7 +344,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler getUserFootPrint(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS,userId));
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, userId));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         return HttpManager.request(request, callback);
@@ -399,10 +400,9 @@ public class UserApi extends BaseApi {
                 jsonObject.put("signature", signature);
             }
             if (!TextUtils.isEmpty(gender)) {
-                if (gender.equals("U")){
+                if (gender.equals("U")) {
                     jsonObject.put("gender", null);
-                }
-                else jsonObject.put("gender", gender);
+                } else jsonObject.put("gender", gender);
             }
             if (!TextUtils.isEmpty(residence)) {
                 jsonObject.put("residence", residence);
@@ -648,7 +648,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler delUserAlbumPic(String userId, String picId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/"+picId);
+        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/" + picId);
         setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
@@ -662,7 +662,7 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler getExpertById(String[] locId,int page , int pageSize, HttpCallBack callback) {
+    public static PTRequestHandler getExpertById(String[] locId, int page, int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_BY_TRACK, locId[0]));
@@ -701,7 +701,7 @@ public class UserApi extends BaseApi {
     public static PTRequestHandler searchByAddressBook(List<AddressBookbean> bookList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + String.format(SEARCH_BY_ADDRESSBOOK,AccountManager.getCurrentUserId()));
+        request.setUrl(SystemConfig.DEV_URL + String.format(SEARCH_BY_ADDRESSBOOK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         request.setHeader("Content-Encoding", "gzip");
         setDefaultParams(request);
@@ -718,7 +718,7 @@ public class UserApi extends BaseApi {
                 jsonArray.put(jsonObject);
             }
             rootObject.put("contacts", jsonArray);
-            rootObject.put("action","addressbook");
+            rootObject.put("action", "addressbook");
             try {
                 StringEntity entity = new StringEntity(rootObject.toString(), "utf-8");
 //                request.setBodyEntity( entity);
@@ -737,7 +737,7 @@ public class UserApi extends BaseApi {
             (String userId, String memo, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contacts/"+userId+"/memo");
+        request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contacts/" + userId + "/memo");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -755,11 +755,12 @@ public class UserApi extends BaseApi {
         LogUtil.d(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
+
     public static PTRequestHandler muteConversation
-            (String userId, String conversation,boolean value,HttpCallBack callback) {
+            (String userId, String conversation, boolean value, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.TRACE);
-        request.setUrl(SystemConfig.DEV_URL + String.format(MUTE_CONVERSATION,userId)+conversation);
+        request.setUrl(SystemConfig.DEV_URL + String.format(MUTE_CONVERSATION, userId) + conversation);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -777,11 +778,12 @@ public class UserApi extends BaseApi {
         LogUtil.d(jsonObject.toString());
         return HttpManager.request(request, callback);
     }
-//用户喜欢的地点
-    public static PTRequestHandler like(String action,String itemType,String id , HttpCallBack callback) {
+
+    //用户喜欢的地点
+    public static PTRequestHandler like(String action, String itemType, String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + String.format(LIKE,AccountManager.getCurrentUserId()));
+        request.setUrl(SystemConfig.DEV_URL + String.format(LIKE, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
@@ -803,16 +805,17 @@ public class UserApi extends BaseApi {
 
         return HttpManager.request(request, callback);
     }
+
     //屏蔽用户
-    public static PTRequestHandler block(String userId,boolean block, HttpCallBack callback) {
+    public static PTRequestHandler addToBlackList(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.PUT);
-        request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK,AccountManager.getCurrentUserId(),userId));
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("block", block);
+            jsonObject.put("userId", Long.parseLong(userId));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -824,6 +827,15 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
 
+        return HttpManager.request(request, callback);
+    }
+
+    public static PTRequestHandler removeFromBlackList(String userId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.DELETE);
+        request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()) + "/" + userId);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
         return HttpManager.request(request, callback);
     }
 }
