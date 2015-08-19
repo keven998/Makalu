@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.aizou.core.dialog.ToastUtil;
 
@@ -112,15 +113,18 @@ public class SelectPicUtils {
         tempImage = new File(PathUtils.getInstance().getLocalImageCachePath(), System.currentTimeMillis() + ".jpg");
         tempImage.getParentFile().mkdirs();
         Intent intent;
+
         if (Build.VERSION.SDK_INT < 19) {
             intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
 
         } else {
-            intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
         }
-        intent.setType("image/*");
-        intent.putExtra("crop", "true");
+        //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
+        intent.putExtra("crop","true");
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         // outputX outputY 是裁剪图片宽高
