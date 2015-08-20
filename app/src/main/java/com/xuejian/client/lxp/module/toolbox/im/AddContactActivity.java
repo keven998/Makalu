@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -120,13 +121,13 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
      * 查找contact
      */
     public void searchContact() {
-        final String name = editText.getText().toString();
+        final String name = editText.getText().toString().trim();
 //        String saveText = searchBtn.getText().toString();
 //        if (getString(R.string.button_search).equals(saveText)) {
         toAddUsername = name;
-        if (TextUtils.isEmpty(name)) {
+        if (TextUtils.isEmpty(name) || name.length()==0) {
 //                startActivity(new Intent(this, IMAlertDialog.class).putExtra("msg", "请输入用户名"));
-            ToastUtil.getInstance(mContext).showToast("你想找谁呢～");
+            ToastUtil.getInstance(mContext).showToast("查无此用户");
             return;
         }
         // TODO 从服务器获取此contact,如果不存在提示不存在此用户
@@ -143,6 +144,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<User> seachResult = CommonJson4List.fromJson(result, User.class);
+
                 if (seachResult.code == 0) {
                     if (seachResult.result.size() > 0) {
                         User user = seachResult.result.get(0);
