@@ -119,9 +119,11 @@ public class MessageDB {
             mdb.execSQL("CREATE table IF NOT EXISTS "
                     + request_msg_table_name
                     + REQUEST_SCHEMA);
+        }else {
+            mdb.execSQL("CREATE table IF NOT EXISTS "
+                    + request_msg_table_name
+                    + REQUEST_SCHEMA);
         }
-
-
     }
 
     public synchronized long saveMsg(final String Friend_Id, final MessageBean entity, String chatType) {

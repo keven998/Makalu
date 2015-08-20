@@ -125,10 +125,12 @@ public class HttpUtils {
                     String s = response.body().string();
                     JSONObject object = new JSONObject(s);
                     JSONArray resultArray = object.getJSONArray("result");
-                    IMClient.lastSusseccFetch = object.getLong("timestamp");
                     List<Message> list = new ArrayList<>();
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "ack Result : " + s);
+                    }
+                    if (resultArray.length()>0){
+                        IMClient.lastSusseccFetch = object.getLong("timestamp");
                     }
                     for (int j = 0; j < resultArray.length(); j++) {
                         Message msg = JSON.parseObject(resultArray.getJSONObject(j).toString(), Message.class);

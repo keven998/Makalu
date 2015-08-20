@@ -29,7 +29,7 @@ public class User implements Serializable {
     private String zodiac;
     private String birthday;
     private int guideCnt;
-
+    public boolean isBlocked;
     public int getTrackCnt() {
         return trackCnt;
     }

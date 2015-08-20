@@ -85,12 +85,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     User user;
     View handleView;
     private boolean isFromExperts;
+    private boolean block;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
         userId = getIntent().getLongExtra("userId", 0);
-        isFromExperts = getIntent().getBooleanExtra("isFromExperts",false);
+        isFromExperts = getIntent().getBooleanExtra("isFromExperts", false);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
         try {
             if (me != null) {
@@ -106,30 +107,32 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 finish();
             }
         });
+
         if (me != null) {
             isMyFriend = UserDBManager.getInstance().isMyFriend(userId);
         }
         handleView = findViewById(R.id.tv_handle_action);
-        if (me != null) {
-            if (userId != 10000 && isMyFriend) {
-                handleView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showActionDialog(1);
-                    }
-                });
-            } else {
-               // handleView.setVisibility(View.INVISIBLE);
-                handleView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showActionDialog(2);
-                    }
-                });
-            }
-        } else {
-            handleView.setVisibility(View.GONE);
-        }
+        handleView.setClickable(false);
+//        if (me != null) {
+//            if (userId != 10000 && isMyFriend) {
+//                handleView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showActionDialog(1);
+//                    }
+//                });
+//            } else {
+//               // handleView.setVisibility(View.INVISIBLE);
+//                handleView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showActionDialog(2);
+//                    }
+//                });
+//            }
+//        } else {
+//            handleView.setVisibility(View.GONE);
+//        }
 
         findViewById(R.id.fl_send_message).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,7 +262,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                         startActivity(intent);
                     }
                 });
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
                 Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
@@ -310,7 +313,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
-        } else {
+        } else if (style == 2) {
             btn.setText("屏蔽");
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -322,7 +325,36 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            blockUser(String.valueOf(userId),false);
+                            block = true;
+                            blockUser(String.valueOf(userId), false);
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialog.show();
+
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            btn.setText("取消屏蔽");
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MobclickAgent.onEvent(mContext, "event_delete_it");
+                    final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
+                    deleteDialog.setTitle("提示");
+                    deleteDialog.setMessage("确认取消屏蔽");
+                    deleteDialog.setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            block = false;
+                            blockUser(String.valueOf(userId), true);
                             deleteDialog.dismiss();
                         }
                     });
@@ -356,8 +388,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
-    private void blockUser(String userId,boolean isBlock) {
-        if (isBlock){
+    private void blockUser(String userId, boolean isBlock) {
+        if (isBlock) {
             UserApi.removeFromBlackList(userId, new HttpCallBack() {
                 @Override
                 public void doSuccess(Object result, String method) {
@@ -374,7 +406,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
                 }
             });
-        }else {
+        } else {
             UserApi.addToBlackList(userId, new HttpCallBack() {
                 @Override
                 public void doSuccess(Object result, String method) {
@@ -397,7 +429,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private void deleteContact(final long userId) {
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "正在删除...");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         UserApi.deleteContact(String.valueOf(userId), new HttpCallBack() {
@@ -430,6 +462,47 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void updateView(final User bean) {
+        handleView.setClickable(true);
+        block = bean.isBlocked;
+        if (me != null) {
+            handleView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (userId != 10000 && isMyFriend) {
+                        showActionDialog(1);
+                    } else if (block) {
+                        showActionDialog(3);
+                    } else {
+                        showActionDialog(2);
+                    }
+                }
+            });
+
+//            if (userId != 10000 && isMyFriend) {
+//                handleView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showActionDialog(1);
+//                    }
+//                });
+//            } else {
+//                // handleView.setVisibility(View.INVISIBLE);
+//                handleView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (bean.isBlocked) {
+//                            showActionDialog(3);
+//                        } else {
+//                            showActionDialog(2);
+//                        }
+//
+//                    }
+//                });
+//            }
+        } else {
+            handleView.setVisibility(View.GONE);
+        }
+
         user = bean;
         nameTv = (TextView) findViewById(R.id.tv_title);
         try {
@@ -470,16 +543,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
         ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
-        if (!TextUtils.isEmpty(bean.getAvatar())){
+        if (!TextUtils.isEmpty(bean.getAvatar())) {
             avatarImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ArrayList<String> pics =new ArrayList<>();
+                    ArrayList<String> pics = new ArrayList<>();
                     pics.add(bean.getAvatar());
                     showSelectedPics(pics);
                 }
             });
-        }else {
+        } else {
             avatarImage.setClickable(false);
         }
 
@@ -494,11 +567,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 .build());
         TextView tvLevel = (TextView) findViewById(R.id.tv_level);
         if (bean.getGender().equalsIgnoreCase("M")) {
-            fl_avatar.setForeground( readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_boy));
+            fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_boy));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
             tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else if (bean.getGender().equalsIgnoreCase("F")) {
-            fl_avatar.setForeground( readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_girl));
+            fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_girl));
             tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
             tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else {
@@ -582,17 +655,18 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
         tvNotes.setVisibility(View.INVISIBLE);
-        if (!SharePrefUtil.getBoolean(this, "expert_guide1", false)&&isFromExperts) {
-            GuideViewUtils.getInstance().initGuide(this, "expert_guide1", "有问题可以向达人请教噢", CommonUtils.getScreenHeight(this)-300,CommonUtils.getScreenWidth(this)/2-20,R.drawable.guide_view_bg_down);
+        if (!SharePrefUtil.getBoolean(this, "expert_guide1", false) && isFromExperts) {
+            GuideViewUtils.getInstance().initGuide(this, "expert_guide1", "有问题可以向达人请教噢", CommonUtils.getScreenHeight(this) - 300, CommonUtils.getScreenWidth(this) / 2 - 20, R.drawable.guide_view_bg_down);
         }
     }
 
     private void showSelectedPics(ArrayList<String> pics) {
-        if (pics.size()==0){
+        if (pics.size() == 0) {
             return;
         }
         IntentUtils.intentToPicGallery2(HisMainPageActivity.this, pics, 0);
     }
+
     public int getAge(String birth) {
         if (TextUtils.isEmpty(birth)) return 0;
         int age = 0;
@@ -607,7 +681,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public void getUserInfo(long userid) {
         try {
             DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissModelessLoadingDialog();
         }
         UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
@@ -776,17 +850,17 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public static Drawable readBitMap(Context context, int resId) {
         try {
             Bitmap bitmap = ImageCache.getInstance().get(String.valueOf(resId));
-            if (bitmap==null){
+            if (bitmap == null) {
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
                 opt.inPurgeable = true;
                 opt.inInputShareable = true;
                 InputStream is = context.getResources().openRawResource(resId);
                 bitmap = BitmapFactory.decodeStream(is, null, opt);
-                ImageCache.getInstance().put(String.valueOf(resId),bitmap);
+                ImageCache.getInstance().put(String.valueOf(resId), bitmap);
             }
             return new BitmapDrawable(bitmap);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
