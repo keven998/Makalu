@@ -816,31 +816,6 @@ public class UserApi extends BaseApi {
         return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler like(String action, String itemType, String id, HttpCallBack callback) {
-        PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + String.format(LIKE, AccountManager.getCurrentUserId()));
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("action", action);
-            jsonObject.put("itemType", itemType);
-            jsonObject.put("itemId", id);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
-    }
 
     //屏蔽用户
     public static PTRequestHandler addToBlackList(String userId, HttpCallBack callback) {

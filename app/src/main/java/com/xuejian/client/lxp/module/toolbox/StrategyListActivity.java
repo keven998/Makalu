@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -78,6 +80,8 @@ public class StrategyListActivity extends PeachBaseActivity {
     private boolean newCopy; //复制补丁
     private String conversation;
     private String copyId;
+    private boolean newCreate;
+    private String newId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -116,9 +120,12 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        newCreate = SharePrefUtil.getBoolean(mContext,"newPlan",false);
+        newId = SharePrefUtil.getString(mContext,"newPlanId","");
         getStrategyListData(0, mContentType);
         MobclickAgent.onPageStart("page_lxp_plan_lists");
         MobclickAgent.onResume(this);
+
     }
 
     @Override
@@ -126,6 +133,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         super.onPause();
        MobclickAgent.onPageEnd("page_lxp_plan_lists");
         newCopy = false;
+       SharePrefUtil.saveBoolean(mContext,"newPlan",false);
         MobclickAgent.onPause(this);
     }
 
@@ -302,6 +310,9 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (sb != null) {
                     PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
+//                newCreate = getIntent().getBooleanExtra("newCreate", false);
+//                newId = getIntent().getStringExtra("newId");
+//                Log.e("===list", " " + newCreate + " " + newId);
                 mMyStrategyLv.doPullRefreshing(true, 0);
             }
         }
@@ -421,11 +432,18 @@ public class StrategyListActivity extends PeachBaseActivity {
         public void showData(final int position, final StrategyBean itemData) {
             tv_tian.setText(String.format("%s天", String.valueOf(itemData.dayCnt)));
             mCitysTv.setText(itemData.summary);
+            Log.e("==",itemData.summary+" "+ newCreate+ " "+ newId+ (newCreate&&itemData.id.equals(newId)));
             if (newCopy&&itemData.id.equals(copyId)) {
                 SpannableString planStr = new SpannableString(String.format("(新复制)%s", itemData.title));
                 planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mNameTv.setText(planStr);
-            } else {
+            }else if (newCreate&&itemData.id.equals(newId)) {
+
+                SpannableString planStr = new SpannableString(String.format("(新建)%s", itemData.title));
+                planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mNameTv.setText(planStr);
+            }
+            else {
                 mNameTv.setText(itemData.title);
             }
 

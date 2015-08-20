@@ -85,6 +85,8 @@ public class StrategyActivity extends PeachBaseActivity {
     private String userId;
     private boolean isOwner;
     private int count;
+    private boolean newCreate;
+    private String newId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -278,6 +280,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
+
                     bindView(strategyResult.result);
                 } else {
                     ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
@@ -314,6 +317,10 @@ public class StrategyActivity extends PeachBaseActivity {
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
                     bindView(strategyResult.result);
+                    newCreate = true;
+                    newId = strategyResult.result.id;
+                    SharePrefUtil.saveBoolean(mContext,"newPlan",true);
+                    SharePrefUtil.saveString(mContext,"newPlanId",newId);
                     if (recommend) {
                         final ComfirmDialog cdialog = new ComfirmDialog(StrategyActivity.this);
                         cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);

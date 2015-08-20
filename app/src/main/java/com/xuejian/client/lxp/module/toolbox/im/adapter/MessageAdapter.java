@@ -1572,6 +1572,14 @@ public class MessageAdapter extends BaseAdapter {
             public void onFailed(int code) {
                 message.setStatus(2);
                 updateSendedView(message, holder);
+                if (code ==403){
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
+                        }
+                    });
+                }
             }
 
             @Override

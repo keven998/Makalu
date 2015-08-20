@@ -274,6 +274,7 @@
             android:layout_alignParentRight="true"
             android:paddingLeft="8dp"
             android:paddingRight="14dp"
+            android:paddingBottom="3dp"
             android:scaleType="center"
             android:src="@drawable/selector_ic_create_plan" />
 
