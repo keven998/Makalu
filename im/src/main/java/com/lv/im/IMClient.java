@@ -141,7 +141,7 @@ public class IMClient {
         if (Config.isDebug) {
             Log.i(Config.TAG, "ACK  频率" + frequency);
         }
-        if (frequency == 0) frequency = 20 * 1000;
+        if (frequency == 0) frequency = 60 * 1000;
         isRunning = true;
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -507,7 +507,7 @@ public class IMClient {
                 LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
             }
             LazyQueue.getInstance().TempDequeue();
-            ack(20*1000);
+            ack(60*1000);
         });
     }
 

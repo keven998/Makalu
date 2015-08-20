@@ -91,6 +91,8 @@ public class UserApi extends BaseApi {
     public final static String TRACKS = "/users/%s/footprints";
     //用户喜欢
     public final static String LIKE = "/users/%s/likes";
+    public final static String VOTE = "/geo/localities/%s/votes";
+
 
     public final static String BLOCK = "/users/%s/blacklist";
 
@@ -780,6 +782,40 @@ public class UserApi extends BaseApi {
     }
 
     //用户喜欢的地点
+
+    public static PTRequestHandler vote( String id, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", Long.parseLong(AccountManager.getCurrentUserId()));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+
+        return HttpManager.request(request, callback);
+    }
+
+    public static PTRequestHandler unVote(String id, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.DELETE);
+        request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id)+"/"+AccountManager.getCurrentUserId());
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        return HttpManager.request(request, callback);
+    }
+
     public static PTRequestHandler like(String action, String itemType, String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);

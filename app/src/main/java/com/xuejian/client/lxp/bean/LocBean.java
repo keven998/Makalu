@@ -34,7 +34,7 @@ public class LocBean implements Parcelable, ICreateShareDialog {
     public String shoppingTitles;
     public String destCountry;
     public boolean isChecked;
-    public boolean like;
+    public boolean isVote;
     public boolean traveled;
 
     public LocBean() {
@@ -97,7 +97,7 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         dest.writeString(this.playGuide);
         dest.writeString(this.destCountry);
        dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.like ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isVote ? (byte) 1 : (byte) 0);
         dest.writeByte(this.traveled ? (byte) 1 : (byte) 0);
     }
 
@@ -119,7 +119,7 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         this.playGuide = in.readString();
         this.destCountry = in.readString();
         this.isChecked = (in.readByte() != 0);
-        this.like = (in.readByte() != 0);
+        this.isVote = (in.readByte() != 0);
         this.traveled = (in.readByte() != 0);
     }
 

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -211,9 +210,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 handler.post(runnableUi);
             }
         }.start();
-        User info = AccountManager.getInstance().getLoginAccountInfo();
-        int guideCount = info.getGuideCnt();
-        tvPlansCount.setText(guideCount + "条");
     }
 
     @Override
