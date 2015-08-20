@@ -4,15 +4,18 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -1061,7 +1064,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode != RESULT_OK) {
             return;
         }
@@ -1071,8 +1074,38 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_LOCAL_ZOOM) {
-            if (tempImage != null) {
-                uploadAvatar(tempImage);
+            Uri uri=null;
+            String path;
+            boolean flag=false;
+            if(data!=null){
+                if(data.getData()!=null){
+                    uri=data.getData();
+                    flag=true;
+                }else{
+                    if(data.getAction()!=null){
+                        uri=Uri.parse(data.getAction());
+                        flag=true;
+                    }else{
+                        flag=false;
+                    }
+                }
+            }
+
+            if(uri!=null && flag==true){
+                Cursor cursor = getContentResolver().query(uri,new String[]{MediaStore.Images.Media.DATA},null,null,null);
+                if(cursor!=null){
+                    cursor.moveToFirst();
+                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    cursor.close();
+                    File pathFile = new File(path);
+                    pathFile.getParentFile().mkdirs();
+                    uploadAvatar(new File(path));
+                }
+            }else{
+                if (tempImage != null) {
+                    uploadAvatar(tempImage);
+
+                }
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_ZOOM) {
             if (tempImage != null) {
@@ -1109,6 +1142,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else if (requestCode == RESET_FOOTPRINT){
             //updateFootPrint from
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void editStatusToInterface(final String sstatus) {

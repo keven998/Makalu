@@ -114,7 +114,7 @@ public class SelectPicUtils {
         tempImage.getParentFile().mkdirs();
         Intent intent;
 
-        if (Build.VERSION.SDK_INT < 19) {
+       if (Build.VERSION.SDK_INT < 19) {
             intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
 
@@ -124,7 +124,7 @@ public class SelectPicUtils {
         }
         //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
-        intent.putExtra("crop","true");
+        intent.putExtra("crop",true);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         // outputX outputY 是裁剪图片宽高
