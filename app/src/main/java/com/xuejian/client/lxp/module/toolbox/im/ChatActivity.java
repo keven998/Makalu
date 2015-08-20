@@ -425,10 +425,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         findViewById(R.id.iv_na_back).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+             /*   Intent intent = new Intent(ChatActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityWithNoAnim(intent);
-                overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+                overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);*/
+                beforeBack();
             }
         });
 
@@ -1369,7 +1370,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     @Override
     public void onBackPressed() {
+        beforeBack();
+    }
 
+    public void beforeBack(){
         if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
             drawerLayout.closeDrawer(GravityCompat.END);
         } else if (mExtraPanel.getVisibility() == View.VISIBLE) {
@@ -1396,7 +1400,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             finish();
         }
     }
-
     @Override
     protected void onStop() {
         super.onStop();
