@@ -412,6 +412,8 @@ public class StrategyActivity extends PeachBaseActivity {
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
                                         if (modifyResult.code == 0) {
+                                            User info = AccountManager.getInstance().getLoginAccountInfo();
+                                            info.setGuideCnt(info.getGuideCnt()+1);
                                             Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
                                             User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
                                             intent.putExtra("userId", String.valueOf(user.getUserId()));
