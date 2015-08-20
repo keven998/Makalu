@@ -59,7 +59,7 @@ public class DayAgendaActivity extends FragmentActivity {
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                beforeBack();
             }
         });
         mTitleView = (TextView) findViewById(R.id.tv_title);
@@ -111,7 +111,10 @@ public class DayAgendaActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
+        beforeBack();
+    }
 
+    public void beforeBack(){
         ObjectAnimator animator = ObjectAnimator.ofFloat(mAnimated, ANIMATED_DOOR_LAYOUT_FLOAT_PROPERTY,0).setDuration(600);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -121,7 +124,6 @@ public class DayAgendaActivity extends FragmentActivity {
         });
         animator.start();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
