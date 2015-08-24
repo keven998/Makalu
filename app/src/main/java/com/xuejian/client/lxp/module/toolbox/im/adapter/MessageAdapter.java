@@ -1276,7 +1276,7 @@ public class MessageAdapter extends BaseAdapter {
                     }
 
                     @Override
-                    public void onError(int errorCode, String msg) {
+                    public void onError(final int errorCode, String msg) {
                         message.setStatus(2);
                         activity.runOnUiThread(new Runnable() {
 
@@ -1284,6 +1284,14 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.INVISIBLE);
                                 updateStatus(message, 2);
+                                if (errorCode ==403){
+                                    if (("single").equals(chatType)){
+                                        ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
+                                    }
+                                    else if (("group").equals(chatType)){
+                                        ToastUtil.getInstance(activity).showToast("你还不是群成员");
+                                    }
+                                }
                             }
                         });
                     }
@@ -1572,11 +1580,16 @@ public class MessageAdapter extends BaseAdapter {
             public void onFailed(int code) {
                 message.setStatus(2);
                 updateSendedView(message, holder);
-                if (code ==403){
+                if (code == 403) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
+                            if (("single").equals(chatType)){
+                                ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
+                            }
+                           else if (("group").equals(chatType)){
+                                ToastUtil.getInstance(activity).showToast("你还不是群成员");
+                            }
                         }
                     });
                 }
@@ -1736,7 +1749,7 @@ public class MessageAdapter extends BaseAdapter {
                 }
 
                 @Override
-                public void onError(int errorCode, String msg) {
+                public void onError(final int errorCode, String msg) {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
                             message.setStatus(2);
@@ -1744,9 +1757,17 @@ public class MessageAdapter extends BaseAdapter {
                             holder.pb.setVisibility(View.GONE);
                             holder.tv.setVisibility(View.GONE);
                             holder.staus_iv.setVisibility(View.VISIBLE);
+                            if (errorCode == 403){
+                                if (("single").equals(chatType)){
+                                    ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
+                                }
+                                else if (("group").equals(chatType)){
+                                    ToastUtil.getInstance(activity).showToast("你还不是群成员");
+                                }
+                            }
 //                            Toast.makeText(activity,
 //                                    activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
-                            ToastUtil.getInstance(activity).showToast(activity.getResources().getString(R.string.request_network_failed));
+                            else ToastUtil.getInstance(activity).showToast(activity.getResources().getString(R.string.request_network_failed));
                         }
                     });
                 }

@@ -130,8 +130,6 @@ public class HttpManager {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-//							DialogManager.getInstance()
-//									.dissMissProgressDialog();
                     }
 
                 }
