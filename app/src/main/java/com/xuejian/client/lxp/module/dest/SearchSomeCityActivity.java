@@ -89,7 +89,7 @@ public class SearchSomeCityActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                finish();
+                beforeBack();
             }
         });
         searchCityText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -275,6 +275,11 @@ public class SearchSomeCityActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        beforeBack();
+        super.onBackPressed();
+    }
+
+    public void beforeBack(){
         ArrayList<LocBean> tempCity = new ArrayList<LocBean>();
         boolean flag = false;
         for(int i=0;i<cityListAdapter.getDataList().size();i++){
@@ -287,7 +292,6 @@ public class SearchSomeCityActivity extends Activity {
         intent.putParcelableArrayListExtra("choosedCities",tempCity);
         setResult(RESULT_OK, intent);
         finish();
-        super.onBackPressed();
     }
 
     @Override
