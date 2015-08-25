@@ -53,6 +53,8 @@ public class SearchSomeCityActivity extends Activity {
     HorizontalScrollView hsView;
     @InjectView(R.id.poiadd_ll)
     LinearLayout hsViewLL;
+    @InjectView(R.id.search_city_cancel)
+    ImageView search_back;
     private String keyWords;
     private ArrayList<LocBean> searchCities=new ArrayList<LocBean>();
     private ArrayList<CountryBean>  countris = new ArrayList<CountryBean>();
@@ -73,22 +75,23 @@ public class SearchSomeCityActivity extends Activity {
         searchCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (searchCityButton.getText().toString().trim().equals("取消")) {
-                    finish();
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                if (TextUtils.isEmpty(searchCityText.getText())) {
+                    return;
                 } else {
-                    if (TextUtils.isEmpty(searchCityText.getText())) {
-                        return;
-                    } else {
-                        searchCities(searchCityText.getText().toString().trim());
-                    }
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    searchCityButton.setText("取消");
+                    searchCities(searchCityText.getText().toString().trim());
                 }
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
 
+        search_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                finish();
+            }
+        });
         searchCityText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -101,26 +104,6 @@ public class SearchSomeCityActivity extends Activity {
                     }
                 }
                 return false;
-            }
-        });
-        searchCityText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchCityButton.setText("取消");
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0) {
-                    searchCityButton.setText("搜索");
-                } else {
-                    searchCityButton.setText("取消");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
             }
         });
 

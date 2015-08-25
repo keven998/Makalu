@@ -16,11 +16,22 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+
+        <ImageView
+            android:id="@+id/search_city_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dp"
+            android:layout_marginRight="10dp"
+
+            android:scaleType="center"
+            android:src="@drawable/selector_ic_nav_back"
+            android:layout_gravity="center_vertical"
+            />
         <EditText
             android:id="@+id/search_city_text"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:background="@drawable/all_whitesolid_background"
             android:drawableLeft="@drawable/ic_search"
@@ -39,9 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="20dp"
-            android:text="取消"
+            android:paddingLeft="12dp"
+            android:paddingRight="15dp"
+            android:text="搜索"
             android:textColor="@color/selector_white_text_color"
             android:textSize="@dimen/text_size_14" />
     </LinearLayout>
