@@ -124,7 +124,7 @@ public class HttpManager {
                             if (!callBack.httpCallBackPreFilter(result,
                                     url)) {// 拦截过滤
                                 callBack.doSuccess(result, url);
-                                callBack.doSuccess(result, url, responseInfo.getAllHeaders());
+                          //      callBack.doSuccess(result, url, responseInfo.getAllHeaders());
 
                             }
                         }

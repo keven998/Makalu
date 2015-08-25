@@ -1,10 +1,9 @@
 package com.xuejian.client.lxp.common.api;
 
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.http.HttpManager;
+import com.aizou.core.http.OkHttpClientManager;
 import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
-import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.xuejian.client.lxp.config.SystemConfig;
@@ -49,7 +48,7 @@ public class OtherApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getCoverStory(HttpCallBack callback) {
+    public static void getCoverStory(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + COVER_STORY);
@@ -57,15 +56,17 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("height", LocalDisplay.SCREEN_HEIGHT_PIXELS + "");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+   //     return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler getOperate(HttpCallBack callback) {
+    public static void getOperate(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + OPERATE);
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -75,7 +76,7 @@ public class OtherApi extends BaseApi {
      * @param scenario
      * @return
      */
-    public static PTRequestHandler getUploadToken(String scenario, HttpCallBack callback) {
+    public static void getUploadToken(String scenario, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + UPLOAD_TOKEN + scenario);
@@ -98,7 +99,8 @@ public class OtherApi extends BaseApi {
 //        LogUtil.d(jsonObject.toString());
 
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -107,13 +109,13 @@ public class OtherApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getAvatarUploadToken(HttpCallBack callback) {
-        return getUploadToken(Scenario.PORTRAIT, callback);
+    public static void getAvatarUploadToken(HttpCallBack callback) {
+         getUploadToken(Scenario.PORTRAIT, callback);
     }
 
 
-    public static PTRequestHandler getAvatarAlbumUploadToken(HttpCallBack callback) {
-        return getUploadToken(Scenario.ALBUM, callback);
+    public static void getAvatarAlbumUploadToken(HttpCallBack callback) {
+         getUploadToken(Scenario.ALBUM, callback);
     }
 
     /**
@@ -122,7 +124,7 @@ public class OtherApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getTravelNoteByLocId(String locId, int page, int pageSize, HttpCallBack callback) {
+    public static void getTravelNoteByLocId(String locId, int page, int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + TRAVEL_NOTES);
@@ -131,7 +133,8 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("pageSize", String.valueOf(pageSize));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -140,7 +143,7 @@ public class OtherApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getTravelNoteByKeyword(String keyword, int page, int pageSize, HttpCallBack callback) {
+    public static void getTravelNoteByKeyword(String keyword, int page, int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + TRAVEL_NOTES_Key);
@@ -152,7 +155,8 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -162,7 +166,7 @@ public class OtherApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getFavist(String type, int page, HttpCallBack callback) {
+    public static void getFavist(String type, int page, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + FAV);
@@ -171,7 +175,8 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+       // return HttpManager.request(request, callback);
     }
 
     /**
@@ -181,12 +186,13 @@ public class OtherApi extends BaseApi {
      * @param callBack
      * @return
      */
-    public static PTRequestHandler deleteFav(String id, HttpCallBack callBack) {
+    public static void deleteFav(String id, HttpCallBack callBack) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.BASE_URL + FAV + "/" + id);
         setDefaultParams(request);
-        return HttpManager.request(request, callBack);
+        OkHttpClientManager.getInstance().request(request, "", callBack);
+      //  return HttpManager.request(request, callBack);
     }
 
     /**
@@ -196,7 +202,7 @@ public class OtherApi extends BaseApi {
      * @param callBack
      * @return
      */
-    public static PTRequestHandler addFav(String id, String type, HttpCallBack callBack) {
+    public static void addFav(String id, String type, HttpCallBack callBack) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + FAV);
@@ -217,7 +223,8 @@ public class OtherApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-        return HttpManager.request(request, callBack);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callBack);
+      //  return HttpManager.request(request, callBack);
     }
 
     /**
@@ -227,7 +234,7 @@ public class OtherApi extends BaseApi {
      * @param callBack
      * @return
      */
-    public static PTRequestHandler feedback(String content, HttpCallBack callBack) {
+    public static void feedback(String content, HttpCallBack callBack) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + FEEDBACK);
@@ -247,7 +254,8 @@ public class OtherApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-        return HttpManager.request(request, callBack);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callBack);
+     //   return HttpManager.request(request, callBack);
     }
 
     /**
@@ -256,12 +264,13 @@ public class OtherApi extends BaseApi {
      * @param callBack
      * @return
      */
-    public static PTRequestHandler checkUpdate(HttpCallBack callBack) {
+    public static void checkUpdate(HttpCallBack callBack) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + UPDATE);
         setDefaultParams(request);
-        return HttpManager.request(request, callBack);
+        OkHttpClientManager.getInstance().request(request, "", callBack);
+      //  return HttpManager.request(request, callBack);
     }
 
 

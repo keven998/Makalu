@@ -1,7 +1,8 @@
 package com.aizou.core.http;
 
 
-import org.apache.http.Header;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 描述：通信回调类
@@ -22,9 +23,10 @@ public abstract class HttpCallBack<T> {
      * 描述：通信成功的回调
      * @param result 回调数据
      * @param method 请求标示
+     * @param headers
      * @return
      */
-    public void doSuccess(T result, String method, Header[] headers){};
+    public void doSuccess(T result, String method, Map<String, List<String>> headers){};
 	
 	/**
 	 * 描述：通信异常的回调

@@ -25,7 +25,6 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 
-import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lxp_dqm07 on 2015/5/18.
@@ -112,7 +112,7 @@ public class ExpertFragment extends PeachBaseFragment {
             }
 
             @Override
-            public void doSuccess(String result, String method, Header[] headers) {
+            public void doSuccess(String result, String method, Map<String, List<String>> headers) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 JSONObject jsonObject = null;
                 try {

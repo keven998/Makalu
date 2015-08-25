@@ -55,13 +55,13 @@ import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
-import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -110,7 +110,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(connectionReceiver, intentFilter);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
 
         if (AccountManager.getInstance().getLoginAccount(this) != null) {
             if (IMClient.getInstance().isDbEmpty()) {
@@ -206,10 +205,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
+
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
         // getInLocList();
@@ -646,7 +647,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
 
             @Override
-            public void doSuccess(String result, String method, Header[] headers) {
+            public void doSuccess(String result, String method, Map<String, List<String>> headers) {
                 CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(result, GroupLocBean.class);
                 if (locListResult.code == 0) {
                     PreferenceUtils.cacheData(MainActivity.this, "destination_indest_group", result);
@@ -677,7 +678,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
 
             @Override
-            public void doSuccess(String result, String method, Header[] headers) {
+            public void doSuccess(String result, String method, Map<String, List<String>> headers) {
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
                 if (countryListResult.code == 0) {
                     PreferenceUtils.cacheData(MainActivity.this, "destination_outcountry", result);
