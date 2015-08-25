@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -310,9 +309,6 @@ public class StrategyListActivity extends PeachBaseActivity {
                 if (sb != null) {
                     PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
-//                newCreate = getIntent().getBooleanExtra("newCreate", false);
-//                newId = getIntent().getStringExtra("newId");
-//                Log.e("===list", " " + newCreate + " " + newId);
                 mMyStrategyLv.doPullRefreshing(true, 0);
             }
         }
@@ -432,7 +428,6 @@ public class StrategyListActivity extends PeachBaseActivity {
         public void showData(final int position, final StrategyBean itemData) {
             tv_tian.setText(String.format("%s天", String.valueOf(itemData.dayCnt)));
             mCitysTv.setText(itemData.summary);
-            Log.e("==",itemData.summary+" "+ newCreate+ " "+ newId+ (newCreate&&itemData.id.equals(newId)));
             if (newCopy&&itemData.id.equals(copyId)) {
                 SpannableString planStr = new SpannableString(String.format("(新复制)%s", itemData.title));
                 planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

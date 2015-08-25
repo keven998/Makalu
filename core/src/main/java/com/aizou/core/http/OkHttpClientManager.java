@@ -2,8 +2,10 @@ package com.aizou.core.http;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.aizou.core.http.entity.PTRequest;
 import com.google.gson.Gson;
 import com.google.gson.internal.$Gson$Types;
 import com.squareup.okhttp.Call;
@@ -17,6 +19,8 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.apache.http.NameValuePair;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,6 +31,7 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class OkHttpClientManager {
     private static OkHttpClientManager mInstance;
@@ -34,12 +39,14 @@ public class OkHttpClientManager {
     private Handler mDelivery;
     private Gson mGson;
 
-    private static final String TAG = "OkHttpClientManager";
-
+    private static final String TAG = "LXPHttp";
+    public static final MediaType json
+            = MediaType.parse("application/json; charset=utf-8");
     private OkHttpClientManager() {
         mOkHttpClient = new OkHttpClient();
         mDelivery = new Handler(Looper.getMainLooper());
         mGson = new Gson();
+        mOkHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
     }
 
     public static OkHttpClientManager getInstance() {
@@ -53,6 +60,59 @@ public class OkHttpClientManager {
         return mInstance;
     }
 
+    public void request(PTRequest request ,String postBody, final HttpCallBack callBack){
+
+        StringBuilder url = new StringBuilder();
+        url.append(request.getRequest().readUrl());
+        int i=0;
+        for(NameValuePair nv:request.getUrlParams()){
+            if(i==0){
+                url.append("?" + nv.getName() + "=" + nv.getValue());
+            }else{
+                url.append("&" + nv.getName() + "=" + nv.getValue());
+            }
+            i++;
+        }
+        Log.d(TAG,"请求接口： "+url);
+        switch (request.getHttpMethod()){
+            case "GET":
+                _getAsyn(url.toString(), new ResultCallback<String>() {
+                    @Override
+                    public void onError(Request request, Exception e, int code) {
+                        callBack.doFailure(e,request.toString(),request.method());
+                        callBack.doFailure(e,request.toString(),request.method(),code);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int code) {
+                        callBack.doSuccess(response,"");
+                        callBack.doSuccess(response,"",null);
+                    }
+                });
+                break;
+            case "POST":
+                    _postAsyn(url.toString(), postBody, new ResultCallback() {
+                        @Override
+                        public void onError(Request request, Exception e, int code) {
+                            callBack.doFailure(e,request.toString(),request.method());
+                            callBack.doFailure(e,request.toString(),request.method(),code);
+                        }
+
+                        @Override
+                        public void onResponse(Object response, int code) {
+                            callBack.doSuccess(response,"");
+                            callBack.doSuccess(response,"",null);
+                        }
+                    });
+                break;
+            case "DELETE":
+                break;
+            case "PUT":
+                break;
+            case "PATCH":
+                break;
+        }
+    }
     /**
      * 同步的Get请求
      *
@@ -131,6 +191,11 @@ public class OkHttpClientManager {
         Request request = buildPostRequest(url, params);
         deliveryResult(callback, request);
     }
+    private void _postAsyn(String url,String postBody ,final ResultCallback callback) {
+        Request request = buildPostRequest(url, postBody);
+        deliveryResult(callback, request);
+    }
+
 
     /**
      * 异步的post请求
@@ -227,7 +292,7 @@ public class OkHttpClientManager {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Request request, final IOException e) {
-                sendFailedStringCallback(request, e, callback);
+              //  sendFailedStringCallback(request, e, callback);
             }
 
             @Override
@@ -245,9 +310,9 @@ public class OkHttpClientManager {
                     }
                     fos.flush();
                     //如果下载文件成功，第一个参数为文件的绝对路径
-                    sendSuccessResultCallback(file.getAbsolutePath(), callback);
+                 //   sendSuccessResultCallback(file.getAbsolutePath(), callback);
                 } catch (IOException e) {
-                    sendFailedStringCallback(response.request(), e, callback);
+                  //  sendFailedStringCallback(response.request(), e, callback);
                 } finally {
                     try {
                         if (is != null) is.close();
@@ -489,48 +554,53 @@ public class OkHttpClientManager {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(final Request request, final IOException e) {
-                sendFailedStringCallback(request, e, callback);
+                sendFailedStringCallback(request, e, -1,callback);
             }
 
             @Override
             public void onResponse(final Response response) {
                 try {
                     final String string = response.body().string();
-                    if (callback.mType == String.class) {
-                        sendSuccessResultCallback(string, callback);
-                    } else {
-                        Object o = mGson.fromJson(string, callback.mType);
-                        sendSuccessResultCallback(o, callback);
+                    Log.d(TAG,"返回结果： "+string);
+                    if (response.isSuccessful()){
+
+                        if (callback.mType == String.class) {
+                            sendSuccessResultCallback(string,response.code(), callback);
+                        } else {
+                            Object o = mGson.fromJson(string, callback.mType);
+                            sendSuccessResultCallback(o,response.code(), callback);
+                        }
+                    }else {
+                        sendFailedStringCallback(response.request(), null,response.code(), callback);
                     }
 
-
                 } catch (IOException e) {
-                    sendFailedStringCallback(response.request(), e, callback);
+                    sendFailedStringCallback(response.request(), e, -2,callback);
                 } catch (com.google.gson.JsonParseException e)//Json解析的错误
                 {
-                    sendFailedStringCallback(response.request(), e, callback);
+                    sendFailedStringCallback(response.request(), e,-3, callback);
                 }
 
             }
         });
     }
 
-    private void sendFailedStringCallback(final Request request, final Exception e, final ResultCallback callback) {
+    private void sendFailedStringCallback(final Request request, final Exception e,final int code, final ResultCallback callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null)
-                    callback.onError(request, e);
+                    callback.onError(request, e, code);
             }
         });
     }
 
-    private void sendSuccessResultCallback(final Object object, final ResultCallback callback) {
+    private void sendSuccessResultCallback(final Object object,final int code ,final ResultCallback callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null) {
-                    callback.onResponse(object);
+                    callback.onResponse(object,code);
                 }
             }
         });
@@ -550,8 +620,34 @@ public class OkHttpClientManager {
                 .post(requestBody)
                 .build();
     }
-
-
+    private Request buildPostRequest(String url, String content) {
+        RequestBody body = RequestBody.create(json, content);
+        return new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+    }
+    private Request buildPutRequest(String url, String content) {
+        RequestBody body = RequestBody.create(json, content);
+        return new Request.Builder()
+                .url(url)
+                .put(body)
+                .build();
+    }
+    private Request buildPatchRequest(String url, String content) {
+        RequestBody body = RequestBody.create(json, content);
+        return new Request.Builder()
+                .url(url)
+                .patch(body)
+                .build();
+    }
+    private Request buildDeleteRequest(String url, String content) {
+        RequestBody body = RequestBody.create(json, content);
+        return new Request.Builder()
+                .url(url)
+                .delete()
+                .build();
+    }
     public static abstract class ResultCallback<T> {
         Type mType;
 
@@ -568,9 +664,9 @@ public class OkHttpClientManager {
             return $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
         }
 
-        public abstract void onError(Request request, Exception e);
+        public abstract void onError(Request request, Exception e,int code);
 
-        public abstract void onResponse(T response);
+        public abstract void onResponse(T response,int code);
     }
 
     public static class Param {

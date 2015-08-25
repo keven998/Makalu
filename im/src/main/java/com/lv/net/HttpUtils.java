@@ -324,6 +324,7 @@ public class HttpUtils {
 
     public static void getConversationAttrs(String userId, List<String> chatIds, final HttpCallback callback) {
         exec.execute(() -> {
+            if (chatIds.size()==0)return;
             String cids = "";
             for (int i = 0; i < chatIds.size(); i++) {
                 if (i != 0) cids += ",";

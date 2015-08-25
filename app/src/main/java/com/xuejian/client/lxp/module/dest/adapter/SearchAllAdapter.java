@@ -180,6 +180,7 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         }
         if (mIsShowMore) {
             if (typeBean.type.equals("loc")) {
+                if (typeBean.resultList.size()<3)searchMore.setVisibility(View.INVISIBLE);
                 searchMore.setText("查看全部 城市>");
             } else if (typeBean.type.equals("vs")) {
                 searchMore.setText("查看全部 景点>");

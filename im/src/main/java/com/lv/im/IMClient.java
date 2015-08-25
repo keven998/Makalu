@@ -603,7 +603,13 @@ public class IMClient {
     }
 
     public List<String> getConversationIds() {
-        return db.getConversationIds();
+        try {
+            return db.getConversationIds();
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ArrayList<String>();
+        }
+
     }
 
     public void getConversationAttr(String userId, String friendId, HttpCallback callback) {
