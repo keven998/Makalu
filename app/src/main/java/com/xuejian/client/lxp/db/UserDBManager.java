@@ -279,12 +279,18 @@ public class UserDBManager {
     }
 
     public synchronized boolean isGroupMember(String groupId){
-        mdb = getDB();
-        Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
-        int type = cursor.getInt(0);
-        cursor.close();
-        closeDB();
-        return (type&QUIT_GROUP)==0;
+        try {
+            mdb = getDB();
+            Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
+            cursor.moveToLast();
+            int type = cursor.getInt(0);
+            cursor.close();
+            closeDB();
+            return (type&QUIT_GROUP)==0;
+        }catch (Exception e){
+            e.printStackTrace();
+            return true;
+        }
     }
 
     public synchronized void saveContact(User user) {

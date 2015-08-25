@@ -19,6 +19,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 
 import java.io.File;
@@ -29,6 +30,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.FileNameMap;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -42,6 +45,7 @@ public class OkHttpClientManager {
     private static final String TAG = "LXPHttp";
     public static final MediaType json
             = MediaType.parse("application/json; charset=utf-8");
+
     private OkHttpClientManager() {
         mOkHttpClient = new OkHttpClient();
         mDelivery = new Handler(Looper.getMainLooper());
@@ -60,59 +64,125 @@ public class OkHttpClientManager {
         return mInstance;
     }
 
-    public void request(PTRequest request ,String postBody, final HttpCallBack callBack){
+    public void request(PTRequest request, String postBody, final HttpCallBack callBack) {
 
         StringBuilder url = new StringBuilder();
         url.append(request.getRequest().readUrl());
-        int i=0;
-        for(NameValuePair nv:request.getUrlParams()){
-            if(i==0){
+        int i = 0;
+        for (NameValuePair nv : request.getUrlParams()) {
+            if (i == 0) {
                 url.append("?" + nv.getName() + "=" + nv.getValue());
-            }else{
+            } else {
                 url.append("&" + nv.getName() + "=" + nv.getValue());
             }
             i++;
         }
-        Log.d(TAG,"请求接口： "+url);
-        switch (request.getHttpMethod()){
+        Log.d(TAG, "请求接口： " + url);
+        List<Header> headerList = request.getPTHeader().overwirdeHeaders;
+        Map<String,String>headerMap =new HashMap<>();
+        for (Header header : headerList) {
+            headerMap.put(header.getName(),header.getValue());
+        }
+        Headers headers = Headers.of(headerMap);
+        switch (request.getHttpMethod()) {
             case "GET":
-                _getAsyn(url.toString(), new ResultCallback<String>() {
+                _getAsyn(url.toString(),headers, new ResultCallback<String>() {
                     @Override
                     public void onError(Request request, Exception e, int code) {
-                        callBack.doFailure(e,request.toString(),request.method());
-                        callBack.doFailure(e,request.toString(),request.method(),code);
+                        if (callBack != null) {
+                            callBack.doFailure(e, request.toString(), request.method());
+                            callBack.doFailure(e, request.toString(), request.method(), code);
+                        }
                     }
 
                     @Override
                     public void onResponse(String response, int code) {
-                        callBack.doSuccess(response,"");
-                        callBack.doSuccess(response,"",null);
+                        if (callBack != null) {
+                            callBack.doSuccess(response, "");
+                            callBack.doSuccess(response, "", null);
+                        }
                     }
                 });
                 break;
             case "POST":
-                    _postAsyn(url.toString(), postBody, new ResultCallback() {
-                        @Override
-                        public void onError(Request request, Exception e, int code) {
-                            callBack.doFailure(e,request.toString(),request.method());
-                            callBack.doFailure(e,request.toString(),request.method(),code);
+                _postAsyn(url.toString(), postBody,headers, new ResultCallback<String>() {
+                    @Override
+                    public void onError(Request request, Exception e, int code) {
+                        if (callBack != null) {
+                            callBack.doFailure(e, request.toString(), request.method());
+                            callBack.doFailure(e, request.toString(), request.method(), code);
                         }
+                    }
 
-                        @Override
-                        public void onResponse(Object response, int code) {
-                            callBack.doSuccess(response,"");
-                            callBack.doSuccess(response,"",null);
+                    @Override
+                    public void onResponse(String response, int code) {
+                        if (callBack != null) {
+                            callBack.doSuccess(response, "");
+                            callBack.doSuccess(response, "", null);
                         }
-                    });
+                    }
+                });
                 break;
             case "DELETE":
+                _deleteAsyn(url.toString(), postBody, headers, new ResultCallback<String>() {
+                    @Override
+                    public void onError(Request request, Exception e, int code) {
+                        if (callBack != null) {
+                            callBack.doFailure(e, request.toString(), request.method());
+                            callBack.doFailure(e, request.toString(), request.method(), code);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(String response, int code) {
+                        if (callBack != null) {
+                            callBack.doSuccess(response, "");
+                            callBack.doSuccess(response, "", null);
+                        }
+                    }
+                });
                 break;
             case "PUT":
+                _putAsyn(url.toString(), postBody, headers, new ResultCallback<String>() {
+                    @Override
+                    public void onError(Request request, Exception e, int code) {
+                        if (callBack != null) {
+                            callBack.doFailure(e, request.toString(), request.method());
+                            callBack.doFailure(e, request.toString(), request.method(), code);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(String response, int code) {
+                        if (callBack != null) {
+                            callBack.doSuccess(response, "");
+                            callBack.doSuccess(response, "", null);
+                        }
+                    }
+                });
                 break;
             case "PATCH":
+                _patchAsyn(url.toString(), postBody, headers, new ResultCallback<String>() {
+                    @Override
+                    public void onError(Request request, Exception e, int code) {
+                        if (callBack != null) {
+                            callBack.doFailure(e, request.toString(), request.method());
+                            callBack.doFailure(e, request.toString(), request.method(), code);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(String response, int code) {
+                        if (callBack != null) {
+                            callBack.doSuccess(response, "");
+                            callBack.doSuccess(response, "", null);
+                        }
+                    }
+                });
                 break;
         }
     }
+
     /**
      * 同步的Get请求
      *
@@ -146,9 +216,10 @@ public class OkHttpClientManager {
      * @param url
      * @param callback
      */
-    private void _getAsyn(String url, final ResultCallback callback) {
+    private void _getAsyn(String url,Headers headers, final ResultCallback callback) {
         final Request request = new Request.Builder()
                 .url(url)
+                .headers(headers)
                 .build();
         deliveryResult(callback, request);
     }
@@ -191,12 +262,23 @@ public class OkHttpClientManager {
         Request request = buildPostRequest(url, params);
         deliveryResult(callback, request);
     }
-    private void _postAsyn(String url,String postBody ,final ResultCallback callback) {
-        Request request = buildPostRequest(url, postBody);
+
+    private void _postAsyn(String url, String postBody,Headers headers ,final ResultCallback callback) {
+        Request request = buildPostRequest(url,headers ,postBody);
         deliveryResult(callback, request);
     }
-
-
+    private void _patchAsyn(String url, String postBody,Headers headers ,final ResultCallback callback) {
+        Request request = buildPatchRequest(url, headers, postBody);
+        deliveryResult(callback, request);
+    }
+    private void _putAsyn(String url, String postBody,Headers headers ,final ResultCallback callback) {
+        Request request = buildPutRequest(url, headers, postBody);
+        deliveryResult(callback, request);
+    }
+    private void _deleteAsyn(String url, String postBody,Headers headers ,final ResultCallback callback) {
+        Request request = buildDeleteRequest(url, headers, postBody);
+        deliveryResult(callback, request);
+    }
     /**
      * 异步的post请求
      *
@@ -213,6 +295,7 @@ public class OkHttpClientManager {
 //    private void _parchAsyn(String url, final ResultCallback callback, Map<String, String> params){
 //
 //    }
+
     /**
      * 同步基于post的文件上传
      *
@@ -292,7 +375,7 @@ public class OkHttpClientManager {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Request request, final IOException e) {
-              //  sendFailedStringCallback(request, e, callback);
+                //  sendFailedStringCallback(request, e, callback);
             }
 
             @Override
@@ -310,9 +393,9 @@ public class OkHttpClientManager {
                     }
                     fos.flush();
                     //如果下载文件成功，第一个参数为文件的绝对路径
-                 //   sendSuccessResultCallback(file.getAbsolutePath(), callback);
+                    //   sendSuccessResultCallback(file.getAbsolutePath(), callback);
                 } catch (IOException e) {
-                  //  sendFailedStringCallback(response.request(), e, callback);
+                    //  sendFailedStringCallback(response.request(), e, callback);
                 } finally {
                     try {
                         if (is != null) is.close();
@@ -426,7 +509,7 @@ public class OkHttpClientManager {
     }
 
     public static void getAsyn(String url, ResultCallback callback) {
-        getInstance()._getAsyn(url, callback);
+    //    getInstance()._getAsyn(url, callback);
     }
 
     public static Response post(String url, Param... params) throws IOException {
@@ -554,38 +637,38 @@ public class OkHttpClientManager {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(final Request request, final IOException e) {
-                sendFailedStringCallback(request, e, -1,callback);
+                sendFailedStringCallback(request, e, -1, callback);
             }
 
             @Override
             public void onResponse(final Response response) {
                 try {
                     final String string = response.body().string();
-                    Log.d(TAG,"返回结果： "+string);
-                    if (response.isSuccessful()){
+                    Log.d(TAG, "返回结果： " + string);
+                    if (response.isSuccessful()) {
 
                         if (callback.mType == String.class) {
-                            sendSuccessResultCallback(string,response.code(), callback);
+                            sendSuccessResultCallback(string, response.code(), callback);
                         } else {
                             Object o = mGson.fromJson(string, callback.mType);
-                            sendSuccessResultCallback(o,response.code(), callback);
+                            sendSuccessResultCallback(o, response.code(), callback);
                         }
-                    }else {
-                        sendFailedStringCallback(response.request(), null,response.code(), callback);
+                    } else {
+                        sendFailedStringCallback(response.request(), null, response.code(), callback);
                     }
 
                 } catch (IOException e) {
-                    sendFailedStringCallback(response.request(), e, -2,callback);
+                    sendFailedStringCallback(response.request(), e, -2, callback);
                 } catch (com.google.gson.JsonParseException e)//Json解析的错误
                 {
-                    sendFailedStringCallback(response.request(), e,-3, callback);
+                    sendFailedStringCallback(response.request(), e, -3, callback);
                 }
 
             }
         });
     }
 
-    private void sendFailedStringCallback(final Request request, final Exception e,final int code, final ResultCallback callback) {
+    private void sendFailedStringCallback(final Request request, final Exception e, final int code, final ResultCallback callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
@@ -595,12 +678,12 @@ public class OkHttpClientManager {
         });
     }
 
-    private void sendSuccessResultCallback(final Object object,final int code ,final ResultCallback callback) {
+    private void sendSuccessResultCallback(final Object object, final int code, final ResultCallback callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null) {
-                    callback.onResponse(object,code);
+                    callback.onResponse(object, code);
                 }
             }
         });
@@ -620,34 +703,43 @@ public class OkHttpClientManager {
                 .post(requestBody)
                 .build();
     }
-    private Request buildPostRequest(String url, String content) {
+
+    private Request buildPostRequest(String url,Headers headers, String content) {
         RequestBody body = RequestBody.create(json, content);
         return new Request.Builder()
                 .url(url)
                 .post(body)
+                .headers(headers)
                 .build();
     }
-    private Request buildPutRequest(String url, String content) {
+
+    private Request buildPutRequest(String url,Headers headers, String content) {
         RequestBody body = RequestBody.create(json, content);
         return new Request.Builder()
                 .url(url)
                 .put(body)
+                .headers(headers)
                 .build();
     }
-    private Request buildPatchRequest(String url, String content) {
+
+    private Request buildPatchRequest(String url,Headers headers, String content) {
         RequestBody body = RequestBody.create(json, content);
         return new Request.Builder()
                 .url(url)
                 .patch(body)
+                .headers(headers)
                 .build();
     }
-    private Request buildDeleteRequest(String url, String content) {
-        RequestBody body = RequestBody.create(json, content);
+
+    private Request buildDeleteRequest(String url,Headers headers, String content) {
+       // RequestBody body = RequestBody.create(json, content);
         return new Request.Builder()
                 .url(url)
                 .delete()
+                .headers(headers)
                 .build();
     }
+
     public static abstract class ResultCallback<T> {
         Type mType;
 
@@ -664,9 +756,9 @@ public class OkHttpClientManager {
             return $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
         }
 
-        public abstract void onError(Request request, Exception e,int code);
+        public abstract void onError(Request request, Exception e, int code);
 
-        public abstract void onResponse(T response,int code);
+        public abstract void onResponse(T response, int code);
     }
 
     public static class Param {
