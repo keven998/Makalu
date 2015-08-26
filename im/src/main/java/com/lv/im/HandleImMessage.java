@@ -394,4 +394,12 @@ public class HandleImMessage {
         }
         return false;
     }
+    public static boolean showNotice(Context c){
+        try {
+            return !isBackground(c)&&ehList.size()==1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

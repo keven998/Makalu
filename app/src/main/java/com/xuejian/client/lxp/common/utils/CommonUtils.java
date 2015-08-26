@@ -55,6 +55,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CommonUtils {
 
@@ -169,7 +170,11 @@ public class CommonUtils {
 
     }
 
-
+    public static String getLastModifyForHeader(Map<String, List<String>> headers) {
+        if (headers==null)return "";
+        if (!headers.containsKey("Last-Modify"))return "";
+        return headers.get("Last-Modify").get(0);
+    }
 //    public static boolean isBackground(Context context) {
 //        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 //        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();

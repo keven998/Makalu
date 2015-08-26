@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -461,7 +462,10 @@ public class GroupDetailFragment extends PeachBaseFragment {
 
         @Override
         public void showData(int position, final User itemData) {
-            nicknameTv.setText(itemData.getNickName());
+            if (!TextUtils.isEmpty(itemData.getMemo())){
+                nicknameTv.setText(String.format("%s(%s)",itemData.getMemo() ,itemData.getNickName()));
+            }
+            else nicknameTv.setText(itemData.getNickName());
             ImageLoader.getInstance().displayImage(itemData.getAvatar(), avatarIv, picOptions);
 
             contentView.setOnClickListener(new View.OnClickListener() {

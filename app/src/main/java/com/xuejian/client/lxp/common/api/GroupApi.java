@@ -1,10 +1,9 @@
 package com.xuejian.client.lxp.common.api;
 
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.http.HttpManager;
+import com.aizou.core.http.OkHttpClientManager;
 import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
-import com.aizou.core.http.entity.PTRequestHandler;
 import com.xuejian.client.lxp.config.SystemConfig;
 
 import org.apache.http.entity.StringEntity;
@@ -28,7 +27,7 @@ public class GroupApi extends BaseApi{
     public final static int ADD_MEMBER = 1;
     public final static int DELETE_MEMBER = 2;
 
-    public static PTRequestHandler createGroup(String requestBody, HttpCallBack callback) {
+    public static void createGroup(String requestBody, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CreateGroup);
@@ -41,7 +40,8 @@ public class GroupApi extends BaseApi{
             e.printStackTrace();
         }
         request.setBodyEntity(entity);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, requestBody, callback);
+      //  return HttpManager.request(request, callback);
     }
 
     public static void editGroupDesc(String desc, String GroupId, HttpCallBack callBack) {
@@ -74,9 +74,9 @@ public class GroupApi extends BaseApi{
         editGroup(object.toString(), GroupId, callBack);
     }
 
-    public static PTRequestHandler editGroup(String requestBody, String GroupId, HttpCallBack callback) {
+    public static void editGroup(String requestBody, String GroupId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.TRACE);
+        request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + GroupId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
@@ -87,28 +87,31 @@ public class GroupApi extends BaseApi{
             e.printStackTrace();
         }
         request.setBodyEntity(entity);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, requestBody, callback);
+    //    return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler getGroupInfo(String groupId, HttpCallBack callback) {
+    public static void getGroupInfo(String groupId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+      //  return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler getGroupMemberInfo(String groupId, HttpCallBack callback) {
+    public static void getGroupMemberInfo(String groupId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+      //  return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler addGroupMember(String groupId, long userId, HttpCallBack callback) {
+    public static void addGroupMember(String groupId, long userId, HttpCallBack callback) {
         JSONObject object = new JSONObject();
         try {
             object.put("member", userId);
@@ -127,19 +130,21 @@ public class GroupApi extends BaseApi{
             e.printStackTrace();
         }
         request.setBodyEntity(entity);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, object.toString(), callback);
+     //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler deleteGroupMember(String groupId, long userId, HttpCallBack callback) {
+    public static void deleteGroupMember(String groupId, long userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members/" + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+       // return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler editGroupMembers(String groupId, JSONArray members, int action, HttpCallBack callback) {
+    public static void editGroupMembers(String groupId, JSONArray members, int action, HttpCallBack callback) {
         JSONObject object = new JSONObject();
         try {
             object.put("members", members);
@@ -149,7 +154,7 @@ public class GroupApi extends BaseApi{
         }
         PTRequest request = new PTRequest();
         if (action == ADD_MEMBER) {
-            request.setHttpMethod(PTRequest.TRACE);
+            request.setHttpMethod(PTRequest.PATCH);
         } else {
             request.setHttpMethod(PTRequest.DELETE);
         }
@@ -163,6 +168,7 @@ public class GroupApi extends BaseApi{
             e.printStackTrace();
         }
         request.setBodyEntity(entity);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, object.toString(), callback);
+   //     return HttpManager.request(request, callback);
     }
 }

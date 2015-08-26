@@ -39,7 +39,7 @@ public class ShareUtils {
 
     }
 
-    public static final String downloadUrl = "http://www.lvxingpai.com/download/lvxingpai.apk";
+    public static final String downloadUrl = "http://www.lvxingpai.com/app/download/";
 
     public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();

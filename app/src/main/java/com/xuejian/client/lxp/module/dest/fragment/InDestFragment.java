@@ -2,15 +2,9 @@ package com.xuejian.client.lxp.module.dest.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
@@ -32,10 +26,8 @@ import com.aizou.core.widget.SideBar;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -44,8 +36,6 @@ import com.xuejian.client.lxp.bean.InDestBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.imageloader.SyncImageLoader;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.HanziToPinyin;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
@@ -55,10 +45,9 @@ import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
 
-import org.apache.http.Header;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -153,7 +142,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
             }
 
             @Override
-            public void doSuccess(String result, String method, Header[] headers) {
+            public void doSuccess(String result, String method, Map<String, List<String>> headers) {
                 CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(result, GroupLocBean.class);
                 box.hideAll();
                 if (locListResult.code == 0) {

@@ -17,6 +17,15 @@ public class MessageBean {
     private int SendType;//0：发送，   1：接收
     private String Metadata;   //如果消息不是文本消息，是语音等其他富媒体信息，储存修饰富媒体信息的 json 体。
     private long SenderId;//如果是群聊显示发送者的 id，单聊不显示
+
+    public String getAbbrev() {
+        return abbrev;
+    }
+
+    public void setAbbrev(String abbrev) {
+        this.abbrev = abbrev;
+    }
+
     private String abbrev;
 
     public long getReceiverId() {

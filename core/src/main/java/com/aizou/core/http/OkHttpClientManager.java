@@ -96,10 +96,10 @@ public class OkHttpClientManager {
                     }
 
                     @Override
-                    public void onResponse(String response, int code) {
+                    public void onResponse(String response, int code, Map<String, List<String>> headers) {
                         if (callBack != null) {
                             callBack.doSuccess(response, "");
-                            callBack.doSuccess(response, "", null);
+                            callBack.doSuccess(response, "", headers);
                         }
                     }
                 });
@@ -115,10 +115,10 @@ public class OkHttpClientManager {
                     }
 
                     @Override
-                    public void onResponse(String response, int code) {
+                    public void onResponse(String response, int code, Map<String, List<String>> headers) {
                         if (callBack != null) {
                             callBack.doSuccess(response, "");
-                            callBack.doSuccess(response, "", null);
+                            callBack.doSuccess(response, "", headers);
                         }
                     }
                 });
@@ -134,10 +134,10 @@ public class OkHttpClientManager {
                     }
 
                     @Override
-                    public void onResponse(String response, int code) {
+                    public void onResponse(String response, int code, Map<String, List<String>> headers) {
                         if (callBack != null) {
                             callBack.doSuccess(response, "");
-                            callBack.doSuccess(response, "", null);
+                            callBack.doSuccess(response, "", headers);
                         }
                     }
                 });
@@ -153,10 +153,10 @@ public class OkHttpClientManager {
                     }
 
                     @Override
-                    public void onResponse(String response, int code) {
+                    public void onResponse(String response, int code, Map<String, List<String>> headers) {
                         if (callBack != null) {
                             callBack.doSuccess(response, "");
-                            callBack.doSuccess(response, "", null);
+                            callBack.doSuccess(response, "", headers);
                         }
                     }
                 });
@@ -172,10 +172,10 @@ public class OkHttpClientManager {
                     }
 
                     @Override
-                    public void onResponse(String response, int code) {
+                    public void onResponse(String response, int code , Map<String, List<String>> headers) {
                         if (callBack != null) {
                             callBack.doSuccess(response, "");
-                            callBack.doSuccess(response, "", null);
+                            callBack.doSuccess(response, "", headers);
                         }
                     }
                 });
@@ -648,10 +648,10 @@ public class OkHttpClientManager {
                     if (response.isSuccessful()) {
 
                         if (callback.mType == String.class) {
-                            sendSuccessResultCallback(string, response.code(), callback);
+                            sendSuccessResultCallback(string, response.code(),response.headers().toMultimap() ,callback);
                         } else {
                             Object o = mGson.fromJson(string, callback.mType);
-                            sendSuccessResultCallback(o, response.code(), callback);
+                            sendSuccessResultCallback(o, response.code(), response.headers().toMultimap() ,callback);
                         }
                     } else {
                         sendFailedStringCallback(response.request(), null, response.code(), callback);
@@ -678,12 +678,12 @@ public class OkHttpClientManager {
         });
     }
 
-    private void sendSuccessResultCallback(final Object object, final int code, final ResultCallback callback) {
+    private void sendSuccessResultCallback(final Object object, final int code, final Map<String, List<String>> headers,final ResultCallback callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null) {
-                    callback.onResponse(object, code);
+                    callback.onResponse(object, code,headers);
                 }
             }
         });
@@ -758,7 +758,7 @@ public class OkHttpClientManager {
 
         public abstract void onError(Request request, Exception e, int code);
 
-        public abstract void onResponse(T response, int code);
+        public abstract void onResponse(T response, int code,Map<String, List<String>> headers);
     }
 
     public static class Param {

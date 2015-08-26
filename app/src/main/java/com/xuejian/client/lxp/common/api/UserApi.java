@@ -4,10 +4,9 @@ import android.text.TextUtils;
 
 import com.aizou.core.http.GzipCompressingEntity;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.http.HttpManager;
+import com.aizou.core.http.OkHttpClientManager;
 import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
-import com.aizou.core.http.entity.PTRequestHandler;
 import com.aizou.core.log.LogUtil;
 import com.xuejian.client.lxp.bean.AddressBookbean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -96,7 +95,7 @@ public class UserApi extends BaseApi {
 
     public final static String BLOCK = "/users/%s/blacklist";
 
-    public static PTRequestHandler authSignUp(String code, HttpCallBack callback) {
+    public static void authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNIN);
@@ -116,11 +115,11 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+     //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler sendValidation
+    public static void sendValidation
             (String phone, String actionCode, String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
@@ -146,11 +145,11 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+     //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler checkValidation
+    public static void checkValidation
             (String phone, String captcha, String actionCode, long uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
@@ -176,11 +175,11 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+     //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler signUp(String phone, String pwd, String captcha, HttpCallBack callback) {
+    public static void signUp(String phone, String pwd, String captcha, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNUP);
@@ -201,11 +200,11 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    //    return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler bindPhone(String phone, String uid, String pwd, String token, HttpCallBack callback) {
+    public static void bindPhone(String phone, String uid, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
@@ -228,11 +227,11 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+     //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler resetPwd(String tel, String pwd, String token, HttpCallBack callback) {
+    public static void resetPwd(String tel, String pwd, String token, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, "_"));
@@ -253,11 +252,11 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+      //  return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler modifyPwd(String oldPwd, String newPwd, String uid, HttpCallBack callback) {
+    public static void modifyPwd(String oldPwd, String newPwd, String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
@@ -277,11 +276,11 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+       // return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler signIn(String loginName, String pwd, HttpCallBack callback) {
+    public static void signIn(String loginName, String pwd, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNIN);
@@ -300,12 +299,13 @@ public class UserApi extends BaseApi {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+       // return null;
+        //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler updateUserFootPrint(String userId, String type, String[] id, HttpCallBack callback) {
+    public static void updateUserFootPrint(String userId, String type, String[] id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, AccountManager.getCurrentUserId()));
@@ -329,63 +329,65 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+      //  return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler getUserInfo(String userId, HttpCallBack callback) {
+    public static void getUserInfo(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + USERINFO + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        // return HttpManager.request(request, callback);
     }
 
 
-    public static PTRequestHandler getUserFootPrint(String userId, HttpCallBack callback) {
+    public static void getUserFootPrint(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, userId));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+      //  return HttpManager.request(request, callback);
     }
 
 
-    public static PTRequestHandler editUserAvatar(User user, String avatar, HttpCallBack callBack) {
-        return editUserInfo(user, avatar, null, null, null, null, null, null, callBack);
+    public static void editUserAvatar(User user, String avatar, HttpCallBack callBack) {
+         editUserInfo(user, avatar, null, null, null, null, null, null, callBack);
     }
 
-    public static PTRequestHandler editUserNickName(User user, String nickname, HttpCallBack callBack) {
-        return editUserInfo(user, null, nickname, null, null, null, null, null, callBack);
+    public static void editUserNickName(User user, String nickname, HttpCallBack callBack) {
+         editUserInfo(user, null, nickname, null, null, null, null, null, callBack);
     }
 
-    public static PTRequestHandler editUserSignature(User user, String signature, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, signature, null, null, null, null, callBack);
+    public static void editUserSignature(User user, String signature, HttpCallBack callBack) {
+         editUserInfo(user, null, null, signature, null, null, null, null, callBack);
     }
 
-    public static PTRequestHandler editUserGender(User user, String gender, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, gender, null, null, null, callBack);
+    public static void editUserGender(User user, String gender, HttpCallBack callBack) {
+         editUserInfo(user, null, null, null, gender, null, null, null, callBack);
     }
 
-    public static PTRequestHandler editUserResidence(User user, String residence, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, null, residence, null, null, callBack);
+    public static void editUserResidence(User user, String residence, HttpCallBack callBack) {
+         editUserInfo(user, null, null, null, null, residence, null, null, callBack);
     }
 
-    public static PTRequestHandler editUserBirthday(User user, String birthday, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, null, null, birthday, null, callBack);
+    public static void editUserBirthday(User user, String birthday, HttpCallBack callBack) {
+         editUserInfo(user, null, null, null, null, null, birthday, null, callBack);
     }
 
-    public static PTRequestHandler editUserStatus(User user, String status, HttpCallBack callBack) {
-        return editUserInfo(user, null, null, null, null, null, null, status, callBack);
+    public static void editUserStatus(User user, String status, HttpCallBack callBack) {
+         editUserInfo(user, null, null, null, null, null, null, status, callBack);
     }
 
 
-    public static PTRequestHandler editUserInfo(User user, String avatar, String nickName, String signature, String gender, String residence,
+    public static void editUserInfo(User user, String avatar, String nickName, String signature, String gender, String residence,
                                                 String birthday, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.TRACE);
+        request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + USERINFO + user.getUserId());
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
 //        request.setHeader(PTHeader.HEADER_CHARSET, "utf-8");
@@ -426,8 +428,8 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    //    return HttpManager.request(request, callback);
     }
 
     /**
@@ -436,13 +438,14 @@ public class UserApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler getContact(HttpCallBack callback) {
+    public static void getContact(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+      //  return HttpManager.request(request, callback);
     }
     /**
      * 同步获取好友列表
@@ -466,7 +469,7 @@ public class UserApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler requestAddContact(String uid, String message, HttpCallBack callback) {
+    public static void requestAddContact(String uid, String message, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         // request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
@@ -487,8 +490,8 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
+      //  return HttpManager.request(request, callback);
     }
 
     /**
@@ -498,9 +501,9 @@ public class UserApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler addContact(String requestId, String message, HttpCallBack callback) {
+    public static void addContact(String requestId, String message, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.TRACE);
+        request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contact-requests/" + requestId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
@@ -518,8 +521,8 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+       // return HttpManager.request(request, callback);
     }
 
     /**
@@ -529,13 +532,14 @@ public class UserApi extends BaseApi {
      * @param callback
      * @return
      */
-    public static PTRequestHandler deleteContact(String uid, HttpCallBack callback) {
+    public static void deleteContact(String uid, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()) + "/" + uid);
 //        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -546,7 +550,7 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler seachContact(String key, HttpCallBack callback) {
+    public static void seachContact(String key, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         //     if ( RegexUtils.isMobileNO(key)) {
@@ -557,10 +561,11 @@ public class UserApi extends BaseApi {
         //    request.setUrl(SystemConfig.DEV_URL + CONTACTS);
         //    request.putUrlParams("Keyword", key);
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler logout(long userId, HttpCallBack callback) {
+    public static void logout(long userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + LOGOUT);
@@ -578,7 +583,8 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+     //   return HttpManager.request(request, callback);
     }
 
 
@@ -590,7 +596,7 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler searchExpertContact(String key, String field, int page, int pageSize, HttpCallBack callback) {
+    public static void searchExpertContact(String key, String field, int page, int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEACH_CONTACT);
@@ -599,7 +605,8 @@ public class UserApi extends BaseApi {
         request.putUrlParams("page", page + "");
         request.putUrlParams("pageSize", pageSize + "");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+      //  return HttpManager.request(request, callback);
     }
 
 
@@ -611,13 +618,14 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler searchExpertFootPrint(boolean abroad, HttpCallBack callback) {
+    public static void searchExpertFootPrint(boolean abroad, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEARCH_EXPERT_FOOTPRINT);
         request.putUrlParams("abroad", String.valueOf(abroad));
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
 
@@ -629,12 +637,13 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler getUserPicAlbumn(String userId, HttpCallBack callback) {
+    public static void getUserPicAlbumn(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId));
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+     //   return HttpManager.request(request, callback);
     }
 
 
@@ -647,12 +656,13 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler delUserAlbumPic(String userId, String picId, HttpCallBack callback) {
+    public static void delUserAlbumPic(String userId, String picId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/" + picId);
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //return HttpManager.request(request, callback);
     }
 
 
@@ -664,7 +674,7 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler getExpertById(String[] locId, int page, int pageSize, HttpCallBack callback) {
+    public static void getExpertById(String[] locId, int page, int pageSize, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_BY_TRACK, locId[0]));
@@ -689,7 +699,8 @@ public class UserApi extends BaseApi {
 //            e.printStackTrace();
 //        }
 //        LogUtil.d(jsonObject.toString());
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+     //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -700,15 +711,16 @@ public class UserApi extends BaseApi {
      * @return
      */
 
-    public static PTRequestHandler searchByAddressBook(List<AddressBookbean> bookList, HttpCallBack callback) {
+    public static void searchByAddressBook(List<AddressBookbean> bookList, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(SEARCH_BY_ADDRESSBOOK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         request.setHeader("Content-Encoding", "gzip");
         setDefaultParams(request);
+        JSONObject rootObject = new JSONObject();
         try {
-            JSONObject rootObject = new JSONObject();
+
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject;
             for (AddressBookbean addressBookbean : bookList) {
@@ -732,10 +744,11 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request,rootObject.toString(), callback);
+     //   return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler editMemo
+    public static void editMemo
             (String userId, String memo, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PUT);
@@ -755,13 +768,14 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+      //  return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler muteConversation
+    public static void muteConversation
             (String userId, String conversation, boolean value, HttpCallBack callback) {
         PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.TRACE);
+        request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + String.format(MUTE_CONVERSATION, userId) + conversation);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
@@ -778,12 +792,13 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+      //  return HttpManager.request(request, callback);
     }
 
     //用户喜欢的地点
 
-    public static PTRequestHandler vote( String id, HttpCallBack callback) {
+    public static void vote(String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id));
@@ -803,22 +818,23 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+      //  return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler unVote(String id, HttpCallBack callback) {
+    public static void unVote(String id, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
-        request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id)+"/"+AccountManager.getCurrentUserId());
+        request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id) + "/" + AccountManager.getCurrentUserId());
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+       // return HttpManager.request(request, callback);
     }
 
 
     //屏蔽用户
-    public static PTRequestHandler addToBlackList(String userId, HttpCallBack callback) {
+    public static void addToBlackList(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()));
@@ -837,16 +853,25 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-        return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+      //  return HttpManager.request(request, callback);
     }
 
-    public static PTRequestHandler removeFromBlackList(String userId, HttpCallBack callback) {
+    public static void removeFromBlackList(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()) + "/" + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        return HttpManager.request(request, callback);
+    //    return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
+    public static void test(HttpCallBack callBack) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + USERINFO + "100004");
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callBack);
     }
 }
