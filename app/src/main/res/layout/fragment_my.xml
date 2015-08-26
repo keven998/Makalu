@@ -188,107 +188,6 @@
 
                 </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_share_appwith_friend"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/option_cell_selector"
-                    android:drawableLeft="@drawable/ic_home_shareapp2friend"
-                    android:drawablePadding="10dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="好友推荐"
-                    android:textColor="@color/color_text_ii"
-                    android:textSize="@dimen/text_size_14" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/color_line" />
-
-                <TextView
-                    android:id="@+id/tv_feedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/option_cell_selector"
-                    android:drawableLeft="@drawable/ic_home_feedback"
-                    android:drawablePadding="10dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="意见反馈"
-                    android:textColor="@color/color_text_ii"
-                    android:textSize="@dimen/text_size_14"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/color_line" />
-
-                <TextView
-                    android:id="@+id/tv_aboutus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/option_cell_selector"
-                    android:drawableLeft="@drawable/ic_home_aboutus"
-                    android:drawablePadding="10dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="关于我们"
-                    android:textColor="@color/color_text_ii"
-                    android:textSize="@dimen/text_size_14" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/color_line" />
-
-
-                <TextView
-                    android:id="@+id/tv_app_setting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/option_cell_selector"
-                    android:drawableLeft="@drawable/ic_home_app_setting"
-                    android:drawablePadding="10dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="应用设置"
-                    android:textColor="@color/color_text_ii"
-                    android:textSize="@dimen/text_size_14" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/color_line" />
-
-            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
@@ -328,6 +227,17 @@
             android:textColor="@color/color_text_titlebar"
             android:textSize="10sp" />
 
+
+        <ImageView
+            android:id="@+id/setting_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"
+            android:layout_marginLeft="32dp"
+            android:src="@drawable/cancer"
+            />
         <TextView
             android:id="@+id/tv_edit_profile"
             android:layout_width="wrap_content"
@@ -339,7 +249,9 @@
             android:singleLine="true"
             android:text="编辑"
             android:textColor="@color/selector_white_text_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="gone"
+            />
         <TextView
             android:id="@+id/unread_msg_notify"
             android:layout_width="wrap_content"

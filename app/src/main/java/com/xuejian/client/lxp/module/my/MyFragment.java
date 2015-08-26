@@ -86,6 +86,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private TextView tvPlansCount;
     @ViewInject(R.id.tv_tracks_count)
     private TextView tvTracksCount;
+
+    @ViewInject(R.id.setting_btn)
+    private ImageView settingBtn;
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     private View rootView;
     private int picsNum = 0;
@@ -95,16 +98,21 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
         ViewUtils.inject(this, rootView);
-        rootView.findViewById(R.id.tv_share_appwith_friend).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_aboutus).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_app_setting).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_feedback).setOnClickListener(this);
+
         rootView.findViewById(R.id.tv_edit_profile).setOnClickListener(this);
         rootView.findViewById(R.id.iv_more_header_frame_gender1).setOnClickListener(this);
         rootView.findViewById(R.id.rl_picture_entry).setOnClickListener(this);
         rootView.findViewById(R.id.fl_plans_entry).setOnClickListener(this);
         rootView.findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
         notice = (TextView) rootView.findViewById(R.id.unread_msg_notify);
+
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(settingIntent);
+            }
+        });
         if (SharePrefUtil.getBoolean(getActivity(),"firstReg",false))notice.setVisibility(View.VISIBLE);
         return rootView;
     }
@@ -235,26 +243,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 }
                 break;
 
-            case R.id.tv_aboutus:
-                Intent aboutIntent = new Intent(getActivity(), PeachWebViewActivity.class);
-                aboutIntent.putExtra("url", String.format("%s?version=%s", H5Url.ABOUT, getResources().getString(R.string.app_version)));
-                aboutIntent.putExtra("title", "关于旅行派");
-                startActivity(aboutIntent);
-                break;
-
-            case R.id.tv_app_setting:
-                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
-                startActivity(settingIntent);
-                break;
-
-            case R.id.tv_feedback:
-                Intent feedback = new Intent(getActivity(), FeedbackActivity.class);
-                startActivity(feedback);
-                break;
-
-            case R.id.tv_share_appwith_friend:
-                ShareUtils.shareAppToWx(getActivity(), null);
-                break;
 
             case R.id.tv_edit_profile:
                 MobclickAgent.onEvent(getActivity(),"navigation_item_edit_profile");
