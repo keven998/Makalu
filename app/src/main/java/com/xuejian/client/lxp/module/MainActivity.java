@@ -50,7 +50,9 @@ import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.dest.TripFragment;
+import com.xuejian.client.lxp.module.dest.fragment.SearchAllFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
@@ -76,16 +78,16 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class};
+    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class,SearchAllFragment.class,MyFragment.class};
 
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_user};
+    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_home_user, R.drawable.checker_tab_home_user};
 //    private String[] tabTitle = {"Talk", "旅游", "我"};
 
     private TextView unreadMsg;
     private TextView regNotice;
     //Tab选项Tag
-    private String mTagArray[] = {"Talk", "Travel", "My"};
+    private String mTagArray[] = {"Talk", "Travel","Soso", "My"};
     private boolean FromBounce;
     private Vibrator vibrator;
     PopupWindow mPop;
