@@ -7,8 +7,6 @@ import android.widget.RadioGroup;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -20,24 +18,27 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class ModifyGenderActivity extends PeachBaseActivity {
-    @ViewInject(R.id.rg_gender)
-    private RadioGroup genderRg;
+    @InjectView(R.id.rg_gender)
+    RadioGroup genderRg;
     private User user;
     private String gender;
 
-    @ViewInject(R.id.title_bar)
-    private TitleHeaderBar titleHeaderBar;
+    @InjectView(R.id.title_bar)
+    TitleHeaderBar titleHeaderBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_gender);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         genderRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

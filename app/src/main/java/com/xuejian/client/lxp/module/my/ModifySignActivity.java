@@ -10,8 +10,6 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -23,14 +21,17 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class ModifySignActivity extends PeachBaseActivity {
-    @ViewInject(R.id.et_sign)
-    private EditText signEt;
-    @ViewInject(R.id.title_bar)
-    private TitleHeaderBar titleHeaderBar;
+    @InjectView(R.id.et_sign)
+    EditText signEt;
+    @InjectView(R.id.title_bar)
+    TitleHeaderBar titleHeaderBar;
     private User user;
 
     @Override
@@ -38,7 +39,7 @@ public class ModifySignActivity extends PeachBaseActivity {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_sign);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         titleHeaderBar.getTitleTextView().setText("个性签名");
         titleHeaderBar.enableBackKey(true);
         titleHeaderBar.getRightTextView().setText("保存");

@@ -18,8 +18,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
 import com.lv.utils.SharePrefUtil;
 import com.xuejian.client.lxp.R;
@@ -36,17 +34,20 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.SplashActivity;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
-    @ViewInject(R.id.et_account)
-    private AutoCompleteTextView loginNameEt;
-    @ViewInject(R.id.et_password)
-    private EditText pwdEt;
+    @InjectView(R.id.et_account)
+    AutoCompleteTextView loginNameEt;
+    @InjectView(R.id.et_password)
+    EditText pwdEt;
 
-    @ViewInject(R.id.btn_login)
-    private Button loginBtn;
+    @InjectView(R.id.btn_login)
+    Button loginBtn;
     private int request_code;
     private boolean autoLogin = false;
     private boolean isBackWeixinLoginPage = true;
@@ -111,7 +112,7 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_login);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         String phoneNum = SharePrefUtil.getPhoneNum(this,"lastPhone");
         if (phoneNum!=null){
             String [] arr={""};

@@ -20,8 +20,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.utils.SharePrefUtil;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -56,6 +54,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/9.
  */
@@ -64,28 +65,28 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public final static int CODE_FOOTPRINT = 103;
     public final static int CODE_PICS = 104;
 
-    @ViewInject(R.id.iv_avatar)
-    private ImageView avatarIv;
-    @ViewInject(R.id.fl_gender_bg)
-    private FrameLayout fl_gender_bg;
-    @ViewInject(R.id.iv_constellation)
-    private ImageView constellationIv;
-    @ViewInject(R.id.iv_more_header_frame_gender1)
-    private ImageView genderFrame;
-    @ViewInject(R.id.tv_level)
-    private TextView tvLevel;
+    @InjectView(R.id.iv_avatar)
+    ImageView avatarIv;
+    @InjectView(R.id.fl_gender_bg)
+    FrameLayout fl_gender_bg;
+    @InjectView(R.id.iv_constellation)
+    ImageView constellationIv;
+    @InjectView(R.id.iv_more_header_frame_gender1)
+    ImageView genderFrame;
+    @InjectView(R.id.tv_level)
+    TextView tvLevel;
 
-    @ViewInject(R.id.tv_title)
-    private TextView nickNameTv;
-    @ViewInject(R.id.tv_subtitle)
-    private TextView idTv;
+    @InjectView(R.id.tv_title)
+    TextView nickNameTv;
+    @InjectView(R.id.tv_subtitle)
+    TextView idTv;
 
-    @ViewInject(R.id.tv_pictures_count)
-    private TextView tvPictureCount;
-    @ViewInject(R.id.tv_plans_count)
-    private TextView tvPlansCount;
-    @ViewInject(R.id.tv_tracks_count)
-    private TextView tvTracksCount;
+    @InjectView(R.id.tv_pictures_count)
+    TextView tvPictureCount;
+    @InjectView(R.id.tv_plans_count)
+    TextView tvPlansCount;
+    @InjectView(R.id.tv_tracks_count)
+    TextView tvTracksCount;
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     private View rootView;
     private int picsNum = 0;
@@ -94,7 +95,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
-        ViewUtils.inject(this, rootView);
+        ButterKnife.inject(this, rootView);
         rootView.findViewById(R.id.tv_share_appwith_friend).setOnClickListener(this);
         rootView.findViewById(R.id.tv_aboutus).setOnClickListener(this);
         rootView.findViewById(R.id.tv_app_setting).setOnClickListener(this);

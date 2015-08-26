@@ -383,13 +383,14 @@ public class HandleImMessage {
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(context.getPackageName())) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
-                    Log.i("后台", appProcess.processName);
-                    return true;
-                } else {
-                    Log.i("前台", appProcess.processName);
-                    return false;
-                }
+                return appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND;
+//                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
+//                   // Log.i("后台", appProcess.processName);
+//                    return true;
+//                } else {
+//                   // Log.i("前台", appProcess.processName);
+//                    return false;
+//                }
             }
         }
         return false;

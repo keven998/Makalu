@@ -9,7 +9,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
-import com.lidroid.xutils.ViewUtils;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ValidationBean;
@@ -33,7 +32,6 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg);
-        ViewUtils.inject(this);
         findViewById(R.id.btn_reg).setOnClickListener(this);
         findViewById(R.id.user_agreement).setOnClickListener(this);
         findViewById(R.id.iv_nav_back).setOnClickListener(new View.OnClickListener() {

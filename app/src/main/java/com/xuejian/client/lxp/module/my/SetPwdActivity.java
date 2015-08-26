@@ -12,8 +12,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -24,14 +22,17 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/13.
  */
 public class SetPwdActivity extends PeachBaseActivity implements View.OnClickListener {
-    @ViewInject(R.id.et_pwd)
-    private EditText pwdEt;
-    @ViewInject(R.id.btn_ok)
-    private Button okBtn;
+    @InjectView(R.id.et_pwd)
+    EditText pwdEt;
+    @InjectView(R.id.btn_ok)
+    Button okBtn;
     String mToken;
     String mPhone;
     User user;
@@ -41,7 +42,7 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_pwd);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         okBtn.setOnClickListener(this);
         mToken = getIntent().getStringExtra("token");
         mPhone = getIntent().getStringExtra("phone");
