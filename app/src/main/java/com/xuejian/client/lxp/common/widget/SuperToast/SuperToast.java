@@ -11,6 +11,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.xuejian.client.lxp.R;
+
 
 /**
  * Created by yibiao.qin on 2015/8/26.
@@ -44,12 +46,12 @@ public class SuperToast {
             throw new IllegalArgumentException("SuperToast - You cannot use a null context.");
         } else {
             this.mContext = context;
-            this.mYOffset = context.getResources().getDimensionPixelSize(com.github.johnpersano.supertoasts.R.dimen.toast_hover);
+            this.mYOffset = context.getResources().getDimensionPixelSize(R.dimen.toast_hover);
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            this.mToastView = layoutInflater.inflate(com.github.johnpersano.supertoasts.R.layout.supertoast, (ViewGroup)null);
+            this.mToastView = layoutInflater.inflate(R.layout.supertoast, (ViewGroup)null);
             this.mWindowManager = (WindowManager)this.mToastView.getContext().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            this.mRootLayout = (LinearLayout)this.mToastView.findViewById(com.github.johnpersano.supertoasts.R.id.root_layout);
-            this.mMessageTextView = (TextView)this.mToastView.findViewById(com.github.johnpersano.supertoasts.R.id.message_textview);
+            this.mRootLayout = (LinearLayout)this.mToastView.findViewById(R.id.root_layout);
+            this.mMessageTextView = (TextView)this.mToastView.findViewById(R.id.message_textview);
         }
     }
 
@@ -63,12 +65,12 @@ public class SuperToast {
             throw new IllegalArgumentException("SuperToast - You cannot use a null context.");
         } else {
             this.mContext = context;
-            this.mYOffset = context.getResources().getDimensionPixelSize(com.github.johnpersano.supertoasts.R.dimen.toast_hover);
+            this.mYOffset = context.getResources().getDimensionPixelSize(R.dimen.toast_hover);
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            this.mToastView = layoutInflater.inflate(com.github.johnpersano.supertoasts.R.layout.supertoast, (ViewGroup)null);
+            this.mToastView = layoutInflater.inflate(R.layout.supertoast, (ViewGroup)null);
             this.mWindowManager = (WindowManager)this.mToastView.getContext().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            this.mRootLayout = (LinearLayout)this.mToastView.findViewById(com.github.johnpersano.supertoasts.R.id.root_layout);
-            this.mMessageTextView = (TextView)this.mToastView.findViewById(com.github.johnpersano.supertoasts.R.id.message_textview);
+            this.mRootLayout = (LinearLayout)this.mToastView.findViewById(R.id.root_layout);
+            this.mMessageTextView = (TextView)this.mToastView.findViewById(R.id.message_textview);
             this.setStyle(style);
         }
     }

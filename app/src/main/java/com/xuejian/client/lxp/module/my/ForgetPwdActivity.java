@@ -12,8 +12,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CheckValidationBean;
@@ -24,19 +22,22 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/13.
  */
 public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClickListener {
     public final static int REQUEST_CODE_RESET_PWD = 300;
-    @ViewInject(R.id.et_phone)
-    private EditText phoneEt;
-    @ViewInject(R.id.et_sms)
-    private EditText smsEt;
-    @ViewInject(R.id.btn_next)
-    private Button nextBtn;
-    @ViewInject(R.id.btn_time_down)
-    private Button downTimeBtn;
+    @InjectView(R.id.et_phone)
+    EditText phoneEt;
+    @InjectView(R.id.et_sms)
+    EditText smsEt;
+    @InjectView(R.id.btn_next)
+    Button nextBtn;
+    @InjectView(R.id.btn_time_down)
+    Button downTimeBtn;
     private TitleHeaderBar titleBar;
     private CountDownTimer countDownTimer;
     private int countDown;
@@ -48,10 +49,10 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
+        ButterKnife.inject(this);
         titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("账户验证");
         titleBar.enableBackKey(true);
-        ViewUtils.inject(this);
         nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
     }

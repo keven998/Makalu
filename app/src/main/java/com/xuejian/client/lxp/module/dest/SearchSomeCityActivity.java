@@ -61,7 +61,7 @@ public class SearchSomeCityActivity extends Activity {
     private ArrayList<GroupLocBean> groupLocBeans = new ArrayList<GroupLocBean>();
     private ListViewDataAdapter<LocBean> cityListAdapter;
     private List<Tag> cityTags = new ArrayList<Tag>();
-
+    ArrayList<LocBean> choosedCities = new ArrayList<LocBean>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +136,7 @@ public class SearchSomeCityActivity extends Activity {
 
                 if(!locBean.isChecked){
                     locBean.isChecked=true;
-
+                    choosedCities.add(locBean);
                     final View layoutview = View.inflate(SearchSomeCityActivity.this, R.layout.poi_bottom_cell_with_del, null);
                     FrameLayout del_fl = (FrameLayout) layoutview.findViewById(R.id.poi_del_fl);
                     TextView location = (TextView) layoutview.findViewById(R.id.names);
@@ -146,6 +146,7 @@ public class SearchSomeCityActivity extends Activity {
                         public void onClick(View view) {
                             hsViewLL.removeView(layoutview);
                             locBean.isChecked = false;
+                            choosedCities.remove(locBean);
                             if(cityListAdapter.getDataList()==null || cityListAdapter.getDataList().size()==0){
                                 hsView.setVisibility(View.GONE);
                             }else{
@@ -280,16 +281,8 @@ public class SearchSomeCityActivity extends Activity {
     }
 
     public void beforeBack(){
-        ArrayList<LocBean> tempCity = new ArrayList<LocBean>();
-        boolean flag = false;
-        for(int i=0;i<cityListAdapter.getDataList().size();i++){
-            if(cityListAdapter.getDataList().get(i).isChecked){
-                flag=true;
-                tempCity.add(cityListAdapter.getDataList().get(i));
-            }
-        }
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra("choosedCities",tempCity);
+        intent.putParcelableArrayListExtra("choosedCities",choosedCities);
         setResult(RESULT_OK, intent);
         finish();
     }

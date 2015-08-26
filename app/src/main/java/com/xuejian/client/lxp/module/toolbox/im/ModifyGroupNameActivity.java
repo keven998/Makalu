@@ -10,8 +10,6 @@ import android.widget.EditText;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.api.GroupApi;
@@ -20,11 +18,14 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class ModifyGroupNameActivity extends PeachBaseActivity implements View.OnClickListener {
-    @ViewInject(R.id.et_groupname)
-    private EditText groupNameEt;
-    @ViewInject(R.id.title_bar)
-    private TitleHeaderBar titleHeaderBar;
+    @InjectView(R.id.et_groupname)
+    EditText groupNameEt;
+    @InjectView(R.id.title_bar)
+    TitleHeaderBar titleHeaderBar;
 
     private User group;
     private String groupId;
@@ -33,7 +34,7 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_groupname);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         titleHeaderBar.getTitleTextView().setText("设置群名称");
         titleHeaderBar.enableBackKey(true);
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {

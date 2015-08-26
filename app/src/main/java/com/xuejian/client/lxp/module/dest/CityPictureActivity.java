@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -28,8 +27,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.HackyViewPager;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qiniu.android.http.ResponseInfo;
@@ -64,18 +61,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/11/19.
  */
 public class CityPictureActivity extends PeachBaseActivity {
-    @ViewInject(R.id.gv_city_pic)
-    private GridView mCityPicGv;
-    @ViewInject(R.id.zoom_container)
-    private RelativeLayout zoomContainer;
-    @ViewInject(R.id.vp_zoom_pic)
-    private HackyViewPager zoomPicVp;
-    @ViewInject(R.id.tv_title_bar_edit)
-    private CheckedTextView editPics;
+    @InjectView(R.id.gv_city_pic)
+    GridView mCityPicGv;
+    @InjectView(R.id.zoom_container)
+    RelativeLayout zoomContainer;
+    @InjectView(R.id.vp_zoom_pic)
+    HackyViewPager zoomPicVp;
+    @InjectView(R.id.tv_title_bar_edit)
+    CheckedTextView editPics;
     private PicAdapter picAdapter;
     private ImageZoomAnimator2 zoomAnimator;
     private String id;
@@ -110,7 +110,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_city_picture);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         isUserPics = getIntent().getBooleanExtra("isUserPics", false);
         isTalentAlbum = getIntent().getBooleanExtra("isTalentAlbum", false);
 

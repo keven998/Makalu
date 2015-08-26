@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +13,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.SharePrefUtil;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lv.im.IMClient;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -30,14 +27,17 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/13.
  */
 public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnClickListener {
-    @ViewInject(R.id.et_sms)
-    private EditText smsEt;
-    @ViewInject(R.id.btn_time_down)
-    private Button downTimeBtn;
+    @InjectView(R.id.et_sms)
+    EditText smsEt;
+    @InjectView(R.id.btn_time_down)
+    Button downTimeBtn;
     private CountDownTimer countDownTimer;
     private String tel, pwd, actionCode;
     private int countDown;
@@ -47,7 +47,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         findViewById(R.id.btn_next).setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
         initData();

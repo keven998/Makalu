@@ -12,8 +12,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
 import com.aizou.core.utils.RegexUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CheckValidationBean;
@@ -26,22 +24,25 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class PhoneBindActivity extends PeachBaseActivity implements View.OnClickListener {
-    @ViewInject(R.id.et_phone)
-    private EditText phoneEt;
-    @ViewInject(R.id.et_sms)
-    private EditText smsEt;
-    @ViewInject(R.id.tv_confirm)
-    private TextView tv_confirm;
-    @ViewInject(R.id.tv_cancel)
-    private TextView tv_cancel;
-    @ViewInject(R.id.tv_title_bar_title)
-    private TextView tv_title_bar_title;
-    @ViewInject(R.id.btn_time_down)
-    private TextView downTimeBtn;
+    @InjectView(R.id.et_phone)
+    EditText phoneEt;
+    @InjectView(R.id.et_sms)
+    EditText smsEt;
+    @InjectView(R.id.tv_confirm)
+    TextView tv_confirm;
+    @InjectView(R.id.tv_cancel)
+    TextView tv_cancel;
+    @InjectView(R.id.tv_title_bar_title)
+    TextView tv_title_bar_title;
+    @InjectView(R.id.btn_time_down)
+    TextView downTimeBtn;
     private CountDownTimer countDownTimer;
     private int countDown;
     private User user;
@@ -52,7 +53,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_phone);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         downTimeBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
         tv_confirm.setOnClickListener(this);

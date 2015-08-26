@@ -25,6 +25,5 @@
 
     <dimen name="spot_detail_picture_height">148dp</dimen>
 
-    <dimen name="tools_search_bar_height">140dp</dimen>
-    <dimen name="tools_tool_card_height">200dp</dimen>
+
 </resources>

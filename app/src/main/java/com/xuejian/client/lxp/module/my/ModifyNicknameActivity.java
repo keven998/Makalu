@@ -12,8 +12,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -26,18 +24,21 @@ import com.xuejian.client.lxp.common.utils.InputCheckUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class ModifyNicknameActivity extends PeachBaseActivity {
-    @ViewInject(R.id.et_modify_content)
-    private EditText nickEt;
-    @ViewInject(R.id.tv_confirm)
-    private TextView tv_confirm;
-    @ViewInject(R.id.tv_cancel)
-    private TextView tv_cancel;
-    @ViewInject(R.id.tv_title_bar_title)
-    private TextView tv_title_bar_title;
+    @InjectView(R.id.et_modify_content)
+    EditText nickEt;
+    @InjectView(R.id.tv_confirm)
+    TextView tv_confirm;
+    @InjectView(R.id.tv_cancel)
+    TextView tv_cancel;
+    @InjectView(R.id.tv_title_bar_title)
+    TextView tv_title_bar_title;
     private boolean isEditMemo;
     private User user;
     private String nickname;
@@ -48,7 +49,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_content_editor);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         isEditMemo = getIntent().getBooleanExtra("isEditMemo", false);
         if (isEditMemo) {
             userId = getIntent().getStringExtra("userId");

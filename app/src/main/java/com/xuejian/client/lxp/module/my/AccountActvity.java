@@ -15,7 +15,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -34,8 +33,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -82,37 +79,40 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class AccountActvity extends PeachBaseActivity implements View.OnClickListener {
 
 
-    @ViewInject(R.id.iv_more_header_frame_gender)
-    private ImageView iv_header_frame_gender;
-    @ViewInject(R.id.iv_avatar)
-    private ImageView avatarIv;
+    @InjectView(R.id.iv_more_header_frame_gender)
+    ImageView iv_header_frame_gender;
+    @InjectView(R.id.iv_avatar)
+    ImageView avatarIv;
 
-    @ViewInject(R.id.tv_nickname)
-    private TextView tv_nickname;
-    @ViewInject(R.id.tv_gender)
-    private TextView tv_gender;
-    @ViewInject(R.id.tv_zodiac)
-    private TextView tv_zodiac;
-    @ViewInject(R.id.tv_resident)
-    private TextView tv_resident;
-    @ViewInject(R.id.tv_plan)
-    private TextView tv_plan;
-    @ViewInject(R.id.tv_foot_print)
-    private TextView tv_foot_print;
-    @ViewInject(R.id.tv_photo)
-    private TextView tv_photo;
-    @ViewInject(R.id.tv_bind_phone)
-    private TextView tv_bind_phone;
-    @ViewInject(R.id.tv_modify_pwd)
-    private TextView tv_modify_pwd;
-    @ViewInject(R.id.btn_logout)
-    private Button btn_logout;
+    @InjectView(R.id.tv_nickname)
+    TextView tv_nickname;
+    @InjectView(R.id.tv_gender)
+    TextView tv_gender;
+    @InjectView(R.id.tv_zodiac)
+    TextView tv_zodiac;
+    @InjectView(R.id.tv_resident)
+    TextView tv_resident;
+    @InjectView(R.id.tv_plan)
+    TextView tv_plan;
+    @InjectView(R.id.tv_foot_print)
+    TextView tv_foot_print;
+    @InjectView(R.id.tv_photo)
+    TextView tv_photo;
+    @InjectView(R.id.tv_bind_phone)
+    TextView tv_bind_phone;
+    @InjectView(R.id.tv_modify_pwd)
+    TextView tv_modify_pwd;
+    @InjectView(R.id.btn_logout)
+    Button btn_logout;
 
     public String getBirthDay() {
         return birthDay;
@@ -154,7 +154,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     private void initView() {
         setContentView(R.layout.activity_account);
-        ViewUtils.inject(this);
+        ButterKnife.inject(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
         findViewById(R.id.ll_gender).setOnClickListener(this);
         findViewById(R.id.ll_resident).setOnClickListener(this);

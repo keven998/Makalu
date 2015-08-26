@@ -1,7 +1,5 @@
 package com.xuejian.client.lxp.common.widget.SuperToast;
 
-import android.os.Build;
-
 import com.xuejian.client.lxp.R;
 
 /**
@@ -140,7 +138,7 @@ public class Style {
     }
 
     public static int getBackground(int style) {
-        if(Build.VERSION.SDK_INT >= 19) {
+  //      if(Build.VERSION.SDK_INT >= 19) {
             switch(style) {
                 case 0:
                     return R.drawable.background_kitkat_black;
@@ -161,28 +159,28 @@ public class Style {
                 default:
                     return  R.drawable.background_kitkat_gray;
             }
-        } else {
-            switch(style) {
-                case 0:
-                    return  R.drawable.background_standard_black;
-                case 1:
-                    return  R.drawable.background_standard_blue;
-                case 2:
-                    return  R.drawable.background_standard_gray;
-                case 3:
-                    return  R.drawable.background_standard_green;
-                case 4:
-                    return  R.drawable.background_standard_orange;
-                case 5:
-                    return  R.drawable.background_standard_purple;
-                case 6:
-                    return  R.drawable.background_standard_red;
-                case 7:
-                    return  R.drawable.background_standard_white;
-                default:
-                    return  R.drawable.background_standard_gray;
-            }
-        }
+//        } else {
+//            switch(style) {
+//                case 0:
+//                    return  R.drawable.background_standard_black;
+//                case 1:
+//                    return  R.drawable.background_standard_blue;
+//                case 2:
+//                    return  R.drawable.background_standard_gray;
+//                case 3:
+//                    return  R.drawable.background_standard_green;
+//                case 4:
+//                    return  R.drawable.background_standard_orange;
+//                case 5:
+//                    return  R.drawable.background_standard_purple;
+//                case 6:
+//                    return  R.drawable.background_standard_red;
+//                case 7:
+//                    return  R.drawable.background_standard_white;
+//                default:
+//                    return  R.drawable.background_standard_gray;
+//            }
+//        }
     }
 }
 
