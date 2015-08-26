@@ -47,6 +47,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
+import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
@@ -74,7 +75,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private FragmentTabHost mTabHost;
     //定义一个布局
     private LayoutInflater layoutInflater;
-
     //定义数组来存放Fragment界面
     private Class fragmentArray[] = {TalkFragment.class, TripFragment.class, MyFragment.class};
 
@@ -89,7 +89,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private boolean FromBounce;
     private Vibrator vibrator;
     PopupWindow mPop;
-
+    SuperToast superToast;
+    private boolean isPause;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -99,6 +100,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             finish();
             return;
         }
+        showNotice(this);
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();
@@ -126,7 +128,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
         int version = SharePrefUtil.getInt(this, "dbversion", 0);
-        IMClient.getInstance().initDB(String.valueOf(user.getUserId()),1,version);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()), 1, version);
         SharePrefUtil.saveInt(this, "dbversion", 1);
         //3、存入内存
         AccountManager.getInstance().setLogin(true);
@@ -135,6 +137,16 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         // 进入主页面
     }
 
+    public void showNotice(Context context){
+        superToast = new SuperToast(context);
+        superToast.setDuration(SuperToast.Duration.LONG);
+        superToast.setBackground(SuperToast.Background.GREEN);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 50);
+       //superToast.setAnimations(R.anim.push_top_in);
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setIcon(R.drawable.icon_notice, SuperToast.IconPosition.LEFT);
+    }
     public void initClient() {
 //        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
 //        if (talkFragment != null) {
@@ -361,6 +373,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        isPause = false;
         if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             HandleImMessage.getInstance().registerMessageListener(this);
 
@@ -434,13 +447,20 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         /**
          * 震动
          */
-//        if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
-//            if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
-//               vibrator.vibrate(500);
-//            } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
-//                vibrator.vibrate(500);
-//            }
-//        }
+        if (!TextUtils.isEmpty(m.getAbbrev())){
+            superToast.setText("  "+m.getAbbrev());
+        }else {
+            superToast.setText("  你有一条新消息");
+        }
+        if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
+            if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
+            //   vibrator.vibrate(500);
+               if (HandleImMessage.showNotice(mContext)&&isPause)superToast.show();
+            } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
+            //    vibrator.vibrate(500);
+                if (HandleImMessage.showNotice(mContext)&&isPause)superToast.show();
+            }
+        }
 
 
         //  notifyNewMessage(m);
@@ -619,6 +639,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onPause() {
         super.onPause();
+        isPause = true;
         MobclickAgent.onPause(this);
     }
 
