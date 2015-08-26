@@ -184,7 +184,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
             if (user != null) {
                 if (user.getNickName() != null) holder.name.setText(user.getNickName());
                 else holder.name.setText(user.getUserId() + "");
-            } else holder.name.setText(conversation.getFriendId() + "");
+            } else{
+                holder.name.setText(conversation.getFriendId() + "");
+                holder.avatar.setImageResource(R.drawable.default_group_avatar);
+            }
         } else {
 
             if (user != null) {
@@ -208,6 +211,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 }
             } else {
                 holder.name.setText("");
+                holder.avatar.setImageResource(R.drawable.ic_home_talklist_default_avatar);
             }
 
         }
