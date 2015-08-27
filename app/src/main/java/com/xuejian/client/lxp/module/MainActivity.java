@@ -4,22 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -54,9 +50,8 @@ import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
-import com.xuejian.client.lxp.module.dest.SearchAllActivity;
-import com.xuejian.client.lxp.module.dest.TripFragment;
 import com.xuejian.client.lxp.module.dest.fragment.SearchAllFragment;
+import com.xuejian.client.lxp.module.dest.fragment.TalentLocFragement;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
@@ -81,7 +76,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, TripFragment.class,SearchAllFragment.class,MyFragment.class};
+    private Class fragmentArray[] = {TalkFragment.class, TalentLocFragement.class,SearchAllFragment.class,MyFragment.class};
 
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_home_user, R.drawable.checker_tab_home_user};

@@ -466,11 +466,6 @@
             android:theme="@style/horizontal_slide"/>
 
         <activity
-            android:name=".module.dest.TalentLocActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"/>
-
-        <activity
             android:name=".module.dest.PoiSaveActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>

@@ -1,9 +1,11 @@
-package com.xuejian.client.lxp.module.dest;
+package com.xuejian.client.lxp.module.dest.fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,7 +25,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -40,7 +42,7 @@ import java.util.List;
 /**
  * Created by lxp_dqm07 on 2015/7/8.
  */
-public class TalentLocActivity extends PeachBaseActivity implements AbsListView.OnScrollListener {
+public class TalentLocFragement extends PeachBaseFragment implements AbsListView.OnScrollListener {
 
     private ListView listView;
     private CheckedTextView titleTextView;
@@ -54,18 +56,22 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     ArrayList<ArrayList<CountryWithExpertsBean>> data;
     XDialog xDialog;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.talentloc);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.talentloc,container,false);
         lists = Arrays.asList(delta);
-        initView();
+        initView(view);
         initData();
+        return view;
     }
+
+
 
     private void initData() {
         try {
-            DialogManager.getInstance().showLoadingDialog(this);
+            DialogManager.getInstance().showLoadingDialog(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,7 +113,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
             }
         }
         data.removeAll(del);
-        adapter = new TalentLocAdapter(this);
+        adapter = new TalentLocAdapter(getActivity());
         listView.setAdapter(adapter);
         getHeaderPos();
         for (ArrayList<CountryWithExpertsBean> beans : data) {
@@ -116,7 +122,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xDialog = new XDialog(mContext, R.layout.loc_select, R.style.LocSelectDialog);
+                xDialog = new XDialog(getActivity(), R.layout.loc_select, R.style.LocSelectDialog);
                 WindowManager.LayoutParams wlmp = xDialog.getWindow().getAttributes();
                 wlmp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
                 ListView lv = xDialog.getListView();
@@ -135,17 +141,17 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         });
     }
 
-    private void initView() {
-        findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+    private void initView(View view) {
+        view.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
             }
         });
-        titleTextView = (CheckedTextView) findViewById(R.id.tv_title_bar_title);
+        titleTextView = (CheckedTextView) view.findViewById(R.id.tv_title_bar_title);
         titleTextView.setText(delta[0]);
 
-        listView = (ListView) findViewById(R.id.talent_loc_list);
+        listView = (ListView) view.findViewById(R.id.talent_loc_list);
 
         listView.setOnScrollListener(this);
 
@@ -161,22 +167,17 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("page_lxp_guide_distribute");
-        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(getActivity());
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("page_lxp_guide_distribute");
-        MobclickAgent.onPause(this);
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
+        MobclickAgent.onPause(getActivity());
     }
 
     @Override
@@ -193,9 +194,9 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
                     if (!titleTextView.getText().equals(delta[j])) {
                         titleTextView.setText(delta[j]);
                         if (pos > lastPos) {
-                            titleTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom));
+                            titleTextView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom));
                         } else {
-                            titleTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_top));
+                            titleTextView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_top));
                         }
                         lastPos = pos;
                     }
@@ -204,7 +205,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
                 if (pos > headerPos.get(j)) {
                     if (!titleTextView.getText().equals(delta[j])) {
                         titleTextView.setText(delta[j]);
-                        titleTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom));
+                        titleTextView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom));
                         lastPos = pos;
                     }
                 }
@@ -297,7 +298,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
             holder.rl_country.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent expertIntent = new Intent(TalentLocActivity.this, GuilderListActivity.class);
+                    Intent expertIntent = new Intent(getActivity(), GuilderListActivity.class);
                     expertIntent.putExtra("countryId", item.id);
                     expertIntent.putExtra("countryName", item.zhName);
                     startActivity(expertIntent);
@@ -396,7 +397,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         public View getView(int position, View convertView, ViewGroup parent) {
 
             if (convertView == null) {
-                convertView = View.inflate(mContext, R.layout.loc_cell, null);
+                convertView = View.inflate(getActivity(), R.layout.loc_cell, null);
 
             }
             TextView days_title = (TextView) convertView.findViewById(R.id.days_title);
