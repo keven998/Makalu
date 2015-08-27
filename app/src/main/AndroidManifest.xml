@@ -44,11 +44,9 @@
 
     <uses-permission android:name="getui.permission.GetuiService.com.aizou.peachtravel" />
 
-    <uses-permission android:name="getui.permission.GetuiService.com.xuejian.lvxingpai" />
-
     <!--自定义权限-->
     <permission
-        android:name="getui.permission.GetuiService.com.xuejian.lvxingpai"
+        android:name="getui.permission.GetuiService.com.aizou.peachtravel"
         android:protectionLevel="normal"/>
 
     <uses-feature android:name="android.hardware.camera" />

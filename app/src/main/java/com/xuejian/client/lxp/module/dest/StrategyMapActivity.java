@@ -124,7 +124,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                     public void onClick(View v) {
                         LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 //自定义布局
-                        final XDialog xDialog = new XDialog(StrategyMapActivity.this);
+                        final XDialog xDialog = new XDialog(StrategyMapActivity.this,R.layout.map_day_select);
                         WindowManager.LayoutParams wlmp = xDialog.getWindow().getAttributes();
                         wlmp.gravity = Gravity.TOP | Gravity.RIGHT;
                         ListView lv = xDialog.getListView();

@@ -15,7 +15,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar">
+        android:background="@color/base_color_white">
 
         <ImageView
             android:id="@+id/tv_cancel"
@@ -26,7 +26,7 @@
             android:scaleType="center"
             android:src="@drawable/selector_ic_nav_back" />
 
-        <TextView
+        <CheckedTextView
             android:id="@+id/tv_title_bar_title"
             android:layout_width="128dp"
             android:layout_height="match_parent"
@@ -34,7 +34,8 @@
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="@color/color_text_titlebar"
+            android:drawableRight="@drawable/checked_spinner"
+            android:textColor="@color/color_text_ii"
             android:textSize="18sp" />
 
     </RelativeLayout>

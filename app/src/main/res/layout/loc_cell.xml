@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:minHeight="45dp"
+    android:background="@color/transparent_color"
+    android:gravity="center_vertical|left">
+
+    <TextView
+        android:id="@+id/days_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|left"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/base_color_white"
+        />
+
+    <ImageView
+        android:id="@+id/map_days_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_gray_complete"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

@@ -3,10 +3,15 @@ package com.xuejian.client.lxp.module.dest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,6 +27,7 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.dialog.XDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
@@ -37,19 +43,22 @@ import java.util.List;
 public class TalentLocActivity extends PeachBaseActivity implements AbsListView.OnScrollListener {
 
     private ListView listView;
-    private TextView titleTextView;
+    private CheckedTextView titleTextView;
 
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
     private int lastPos = 0;
-    private String[] delta = {"亚洲", "欧洲","北美洲" ,"美洲", "非洲", "大洋洲"};
+    private String[] delta = {"亚洲", "欧洲", "北美洲", "美洲", "非洲", "大洋洲"};
     List<String> lists;
+    List<String> continentNames = new ArrayList<>();
     ArrayList<ArrayList<CountryWithExpertsBean>> data;
+    XDialog xDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talentloc);
-        lists= Arrays.asList(delta);
+        lists = Arrays.asList(delta);
         initView();
         initData();
     }
@@ -82,18 +91,18 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     }
 
     private void resizeData(List<CountryWithExpertsBean> list) {
-       data=new ArrayList<ArrayList<CountryWithExpertsBean>>();
-        for (int i=0;i<6; i++){
+        data = new ArrayList<ArrayList<CountryWithExpertsBean>>();
+        for (int i = 0; i < 6; i++) {
             data.add(new ArrayList<CountryWithExpertsBean>());
         }
         for (CountryWithExpertsBean bean : list) {
             data.get(lists.indexOf(bean.continents.zhName)).add(bean);
         }
-        ArrayList<ArrayList<CountryWithExpertsBean>> del=new ArrayList<>();
+        ArrayList<ArrayList<CountryWithExpertsBean>> del = new ArrayList<>();
         for (ArrayList<CountryWithExpertsBean> beans : data) {
-            if (beans.size()==0){
+            if (beans.size() == 0) {
                 del.add(beans);
-            }else {
+            } else {
                 sortCountries(beans);
             }
         }
@@ -101,6 +110,29 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         adapter = new TalentLocAdapter(this);
         listView.setAdapter(adapter);
         getHeaderPos();
+        for (ArrayList<CountryWithExpertsBean> beans : data) {
+            continentNames.add(beans.get(0).continents.zhName);
+        }
+        titleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xDialog = new XDialog(mContext, R.layout.loc_select, R.style.LocSelectDialog);
+                WindowManager.LayoutParams wlmp = xDialog.getWindow().getAttributes();
+                wlmp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                ListView lv = xDialog.getListView();
+                MapsDayAdapter adapter = new MapsDayAdapter();
+                lv.setAdapter(adapter);
+                xDialog.show();
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        listView.setSelection(headerPos.get(position));
+                        titleTextView.setText(continentNames.get(position));
+                        if (xDialog != null) xDialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     private void initView() {
@@ -110,7 +142,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
                 finish();
             }
         });
-        titleTextView = (TextView) findViewById(R.id.tv_title_bar_title);
+        titleTextView = (CheckedTextView) findViewById(R.id.tv_title_bar_title);
         titleTextView.setText(delta[0]);
 
         listView = (ListView) findViewById(R.id.talent_loc_list);
@@ -191,14 +223,15 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
 
     private class TalentLocAdapter extends BaseSectionAdapter {
         private TextView header;
-        private DisplayImageOptions poptions; ;
+        private DisplayImageOptions poptions;
+        ;
         private Context mCxt;
         private ImageLoader mImgLoader;
 
         public TalentLocAdapter(Context context) {
             mCxt = context;
             mImgLoader = ImageLoader.getInstance();
-            poptions= new DisplayImageOptions.Builder()
+            poptions = new DisplayImageOptions.Builder()
                     .showImageOnFail(R.drawable.messages_bg_useravatar)
                     .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                     .showImageOnLoading(R.drawable.messages_bg_useravatar)
@@ -243,7 +276,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
                 convertView = View.inflate(mCxt, R.layout.talent_loc_cell_content, null);
             }
 
-            final CountryWithExpertsBean item=getItem(section,position);
+            final CountryWithExpertsBean item = getItem(section, position);
             ViewHolder holder = (ViewHolder) convertView.getTag();
             if (holder == null) {
                 holder = new ViewHolder();
@@ -254,13 +287,13 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
                 convertView.setTag(holder);
             }
             if (item.images.size() > 0) {
-                mImgLoader.displayImage(item.images.get(0).url,  holder.bgImage, poptions);
-            }else {
-                mImgLoader.displayImage("",  holder.bgImage, poptions);
+                mImgLoader.displayImage(item.images.get(0).url, holder.bgImage, poptions);
+            } else {
+                mImgLoader.displayImage("", holder.bgImage, poptions);
             }
 
-            holder.numSum.setText(String.format("%d位", item.expertCnt));
-            holder.loc.setText(String.format("~派派 · %s · 达人~", item.zhName));
+            holder.numSum.setText(item.zhName);
+            holder.loc.setText(String.format("~派派 · %d位 · 达人~", item.expertCnt));
             holder.rl_country.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -307,6 +340,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         public boolean shouldListHeaderFloat(int headerIndex) {
             return false;
         }
+
         private class ViewHolder {
             private FrameLayout rl_country;
             private ImageView bgImage;
@@ -314,6 +348,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
             private TextView loc;
         }
     }
+
     private void sortCountries(List<CountryWithExpertsBean> conversationList) {
         Collections.sort(conversationList, new Comparator<CountryWithExpertsBean>() {
             @Override
@@ -335,4 +370,43 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
         });
     }
 
+    public class MapsDayAdapter extends BaseAdapter {
+
+        public MapsDayAdapter() {
+            super();
+        }
+
+
+        @Override
+        public int getCount() {
+            return continentNames.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return continentNames.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+                convertView = View.inflate(mContext, R.layout.loc_cell, null);
+
+            }
+            TextView days_title = (TextView) convertView.findViewById(R.id.days_title);
+            if (titleTextView.getText().toString().equals(getItem(position).toString()))
+                days_title.setTextColor(getResources().getColor(R.color.app_theme_color));
+            else days_title.setTextColor(getResources().getColor(R.color.base_color_white));
+            days_title.setText(getItem(position).toString());
+            //selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
+            //if(position==(whichDay-1)){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}
+            return convertView;
+        }
+    }
 }
