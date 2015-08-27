@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,14 +13,17 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.UpdateBean;
+import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.config.SettingConfig;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
@@ -34,8 +38,11 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         setContentView(R.layout.activity_setting);
         initTitlebar();
         findViewById(R.id.ll_version_update).setOnClickListener(this);
+        findViewById(R.id.geek_apply).setOnClickListener(this);
         findViewById(R.id.ll_clear_cache).setOnClickListener(this);
-
+        findViewById(R.id.ll_about_us).setOnClickListener(this);
+        findViewById(R.id.recommend_app).setOnClickListener(this);
+        findViewById(R.id.ll_tv_feedback).setOnClickListener(this);
         CheckedTextView ctv = (CheckedTextView) findViewById(R.id.ll_xt);
         ctv.setOnClickListener(new OnClickListener() {
             @Override
@@ -79,12 +86,27 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.recommend_app:
+                ShareUtils.shareAppToWx(SettingActivity.this, null);
+                break;
+            case R.id.geek_apply:
+
+                break;
+            case R.id.ll_about_us:
+                Intent aboutIntent = new Intent(SettingActivity.this, PeachWebViewActivity.class);
+                aboutIntent.putExtra("url", String.format("%s?version=%s", H5Url.ABOUT, getResources().getString(R.string.app_version)));
+                aboutIntent.putExtra("title", "关于旅行派");
+                startActivity(aboutIntent);
+                break;
             case R.id.ll_version_update:
                 update();
                 break;
-
             case R.id.ll_clear_cache:
                 clearCache();
+                break;
+            case R.id.ll_tv_feedback:
+                Intent feedback = new Intent(SettingActivity.this, FeedbackActivity.class);
+                startActivity(feedback);
                 break;
             default:
                 break;

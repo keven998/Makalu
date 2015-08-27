@@ -61,52 +61,22 @@ import butterknife.InjectView;
  * Created by Rjm on 2014/10/9.
  */
 public class MyFragment extends PeachBaseFragment implements View.OnClickListener {
-    public final static int CODE_PLANS = 102;
-    public final static int CODE_FOOTPRINT = 103;
-    public final static int CODE_PICS = 104;
-
-    @InjectView(R.id.iv_avatar)
-    ImageView avatarIv;
-    @InjectView(R.id.fl_gender_bg)
-    FrameLayout fl_gender_bg;
-    @InjectView(R.id.iv_constellation)
-    ImageView constellationIv;
-    @InjectView(R.id.iv_more_header_frame_gender1)
-    ImageView genderFrame;
-    @InjectView(R.id.tv_level)
-    TextView tvLevel;
-
-    @InjectView(R.id.tv_title)
-    TextView nickNameTv;
-    @InjectView(R.id.tv_subtitle)
-    TextView idTv;
-
-    @InjectView(R.id.tv_pictures_count)
-    TextView tvPictureCount;
-    @InjectView(R.id.tv_plans_count)
-    TextView tvPlansCount;
-    @InjectView(R.id.tv_tracks_count)
-    TextView tvTracksCount;
-    ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     private View rootView;
-    private int picsNum = 0;
-    private TextView notice;
-    private String Sex;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
         ButterKnife.inject(this, rootView);
-        rootView.findViewById(R.id.tv_share_appwith_friend).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_aboutus).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_app_setting).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_feedback).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_edit_profile).setOnClickListener(this);
-        rootView.findViewById(R.id.iv_more_header_frame_gender1).setOnClickListener(this);
-        rootView.findViewById(R.id.rl_picture_entry).setOnClickListener(this);
-        rootView.findViewById(R.id.fl_plans_entry).setOnClickListener(this);
-        rootView.findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
-        notice = (TextView) rootView.findViewById(R.id.unread_msg_notify);
-        if (SharePrefUtil.getBoolean(getActivity(),"firstReg",false))notice.setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.my_profile).setOnClickListener(this);
+
+        ImageView settingBtn = (ImageView)rootView.findViewById(R.id.setting_btn);
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(settingIntent);
+            }
+        });
+
         return rootView;
     }
 
@@ -115,339 +85,40 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void refreshLoginStatus() {
-        User user = AccountManager.getInstance().getLoginAccount(getActivity());
-        all_foot_print_list.clear();
-        if (user == null) {
-            avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
-            nickNameTv.setText("旅行派");
-            idTv.setText("未登录");
-            tvPictureCount.setText("0图");
-            tvPlansCount.setText("0条");
-            tvTracksCount.setText("0国0城市");
-            tvLevel.setText("Lv0");
-            tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
-            genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-            fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
-            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
-        } else {
-           if (!user.getGender().equals(Sex)){
-               Sex=user.getGender();
-               if (user.getGender().equalsIgnoreCase("M")) {
-                   /**
-                    * OOM Exception
-                    */
-                   genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_boy));
-                   //               genderFrame.setImageResource(R.drawable.ic_home_header_boy);
-                   fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
-                   tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
-               } else if (user.getGender().equalsIgnoreCase("F")) {
-                   genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_girl));
-                   //            genderFrame.setImageResource(R.drawable.ic_home_header_girl);
-                   fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
-                   tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
-               } else {
-                   genderFrame.setImageBitmap(readBitMap(getActivity(), R.drawable.ic_home_header_unlogin));
-                   //               genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-                   fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
-                   tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
-               }
-            }
-            int countryCount = 0;
-            int cityCount = 0;
-            String level = "0";
-            int guideCount = 0;
-            int picNum=0;
-            User info=null;
-            if (AccountManager.getInstance().getLoginAccountInfo() != null) {
-                info = AccountManager.getInstance().getLoginAccountInfo();
-                guideCount = info.getGuideCnt();
-                level = info.getLevel();
-                countryCount=info.getCountryCnt();
-                cityCount=info.getTrackCnt();
-                picNum=info.getAlbumCnt();
-            }
-            tvPictureCount.setText(picNum + "张");
-            tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
-            tvPlansCount.setText(guideCount + "条");
-            nickNameTv.setText(user.getNickName());
-            idTv.setText("ID：" + user.getUserId());
-            tvLevel.setText("LV" + level);
-            int res= ConstellationUtil.calculateConstellation(user.getBirthday());
-            if (res==0){
-                constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
-            }else constellationIv.setImageResource(res);
-            DisplayImageOptions options = new DisplayImageOptions.Builder()
-                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
-                    .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
-                    .resetViewBeforeLoading(true)
-                    .cacheOnDisk(true)
-                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
-                    .build();
-            if (info!=null){
-                ImageLoader.getInstance().displayImage(info.getAvatar(), avatarIv, options);
-            }else ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, options);
-
-          //  getUserPicsNum(user.getUserId());
-        }
-    }
-
-    Handler handler = new Handler();
-    Runnable runnableUi = new Runnable() {
-        @Override
-        public void run() {
-            //更新界面
-            refreshLoginStatus();
-        }
-    };
 
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_home_mine");
-        new Thread() {
-            public void run() {
-                handler.post(runnableUi);
-            }
-        }.start();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_home_mine");
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_more_header_frame_gender1:
-                User user1 = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user1 == null) {
-                    Intent logIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(logIntent);
-                } else {
-                    if(!TextUtils.isEmpty(user1.getAvatar())) {
-                        ArrayList<String> pic = new ArrayList<>();
-                        pic.add(user1.getAvatar());
-                        showSelectedPics(pic);
-                    }
-                }
+
+
+            case R.id.my_profile:
+                Intent intent = new Intent(getActivity(),MyProfileActivity.class);
+                startActivity(intent);
                 break;
 
-            case R.id.tv_aboutus:
-                Intent aboutIntent = new Intent(getActivity(), PeachWebViewActivity.class);
-                aboutIntent.putExtra("url", String.format("%s?version=%s", H5Url.ABOUT, getResources().getString(R.string.app_version)));
-                aboutIntent.putExtra("title", "关于旅行派");
-                startActivity(aboutIntent);
-                break;
-
-            case R.id.tv_app_setting:
-                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
-                startActivity(settingIntent);
-                break;
-
-            case R.id.tv_feedback:
-                Intent feedback = new Intent(getActivity(), FeedbackActivity.class);
-                startActivity(feedback);
-                break;
-
-            case R.id.tv_share_appwith_friend:
-                ShareUtils.shareAppToWx(getActivity(), null);
-                break;
-
-            case R.id.tv_edit_profile:
-                MobclickAgent.onEvent(getActivity(),"navigation_item_edit_profile");
-                User user = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user == null) {
-                    Intent logIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(logIntent);
-                } else {
-                    if (SharePrefUtil.getBoolean(getActivity(),"firstReg",false)){
-                        notice.setVisibility(View.GONE);
-                        MainActivity activity = (MainActivity) getActivity();
-                        if (activity!=null){
-                            activity.setNoticeInvisiable();
-                        }
-                        SharePrefUtil.saveBoolean(getActivity(),"firstReg",false);
-                    }
-                    Intent accountIntent = new Intent(getActivity(), AccountActvity.class);
-                    startActivity(accountIntent);
-                }
-                break;
-
-            case R.id.rl_picture_entry:
-                final User userPics = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (userPics != null) {
-                    Intent intent2 = new Intent(getActivity(), CityPictureActivity.class);
-                    intent2.putExtra("id", String.valueOf(userPics.getUserId()));
-                    intent2.putExtra("user_name", userPics.getNickName());
-                    intent2.putExtra("isUserPics", true);
-                    startActivity(intent2);
-                } else {
-                    Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(LoginIntent, CODE_PICS);
-                    getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
-                }
-
-                break;
-
-            case R.id.fl_plans_entry:
-                final User user2 = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user2 != null) {
-                    Intent intent2 = new Intent(getActivity(), StrategyListActivity.class);
-                    intent2.putExtra("userId", String.valueOf(user2.getUserId()));
-                    intent2.putExtra("user_name", user2.getNickName());
-                    startActivity(intent2);
-                } else {
-                    Intent LoginIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(LoginIntent, CODE_PLANS);
-                    getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
-                }
-                break;
-
-            case R.id.fl_tracks_entry:
-                User user3 = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user3 == null) {
-                    Intent logIntent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(logIntent);
-                } else {
-                    Intent tracks_intent = new Intent(getActivity(), StrategyMapActivity.class);
-                    tracks_intent.putExtra("isMyFootPrint", true);
-                    tracks_intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
-                    tracks_intent.putExtra("title", tvTracksCount.getText().toString());
-                    startActivityForResult(tracks_intent, CODE_FOOTPRINT);
-                }
-                break;
 
             default:
                 break;
         }
     }
 
-    private void showSelectedPics(ArrayList<String> pics) {
-        if (pics.size()==0){
-            return;
-        }
-        IntentUtils.intentToPicGallery2(getActivity(), pics, 0);
-    }
-
-    private void imLogin(final User user) {
-
-        AccountManager.getInstance().saveLoginAccount(getActivity(), user);
-
-        final ConcurrentHashMap<Long, User> userlist = new ConcurrentHashMap<Long, User>();
-
-        UserApi.getContact(new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson<ContactListBean> contactResult = CommonJson.fromJson(result, ContactListBean.class);
-                if (contactResult.code == 0) {
-                    for (User myUser : contactResult.result.contacts) {
-                        userlist.put(myUser.getUserId(), user);
-                    }
-                    // 存入内存
-                    AccountManager.getInstance().setContactList(userlist);
-                    // 存入db
-                    List<User> users = new ArrayList<User>(userlist.values());
-                    UserDBManager.getInstance().saveContactList(users);
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                if (!getActivity().isFinishing())
-                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-        // 进入主页面
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                refreshLoginStatus();
-            }
-        });
-
-    }
-
-    public void getUserPicsNum(Long userId) {
-        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    if (jsonObject.getInt("code") == 0) {
-                        JSONArray object = jsonObject.getJSONArray("result");
-                        picsNum = object.length();
-                        tvPictureCount.setText(picsNum + "张");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                tvPictureCount.setText(picsNum + "张");
-                ToastUtil.getInstance(getActivity()).showToast("好像没有网络额~");
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-
-    }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == LoginActivity.REQUEST_CODE_REG) {
-                User user = (User) data.getSerializableExtra("user");
-                try {
-                    DialogManager.getInstance().showLoadingDialog(getActivity(), "正在登录");
-                }catch (Exception e){
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                }
-                imLogin(user);
-            } else if (requestCode == CODE_PLANS) {
-                final User user2 = AccountManager.getInstance().getLoginAccount(getActivity());
-                if (user2 != null) {
-                    Intent intent2 = new Intent(getActivity(), StrategyListActivity.class);
-                    intent2.putExtra("userId", String.valueOf(user2.getUserId()));
-                    intent2.putExtra("user_name", user2.getNickName());
-                    startActivity(intent2);
-                }
-            }
-        }
-    }
-    public static Bitmap readBitMap(Context context, int resId) {
-        try {
-            Bitmap bitmap = ImageCache.getInstance().get(String.valueOf(resId));
-            if (bitmap==null){
-                BitmapFactory.Options opt = new BitmapFactory.Options();
-                opt.inPreferredConfig = Bitmap.Config.RGB_565;
-                opt.inPurgeable = true;
-                opt.inInputShareable = true;
-                InputStream is = context.getResources().openRawResource(resId);
-                bitmap = BitmapFactory.decodeStream(is, null, opt);
-                ImageCache.getInstance().put(String.valueOf(resId),bitmap);
-            }
-            return bitmap;
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
+
+
+
 }
