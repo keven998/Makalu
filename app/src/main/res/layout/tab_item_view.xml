@@ -2,29 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@color/base_color_white">
+    android:background="@color/color_white_trans"
+
+    android:id="@+id/tab_view_pannel"
+    >
 
     <CheckedTextView
         android:id="@+id/imageview"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:focusable="false"
-        android:gravity="center"
-        android:textColor="@color/checker_home_tab_text_color"
-        android:textSize="8sp" />
-
+        android:textColor="@color/textcolor_selector_2"
+        android:textSize="12sp"
+        />
+    <View
+        android:id="@+id/line_inter"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/color_line"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        />
     <TextView
         android:id="@+id/unread_msg_notify"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/imageview"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/line_inter"
+        android:layout_alignTop="@+id/imageview"
+        android:layout_marginRight="8dp"
         android:background="@drawable/bg_unread_msg"
         android:gravity="center"
-        android:minWidth="20dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:textColor="@color/base_color_white"
-        android:textSize="12sp"
+        android:textSize="11sp"
         android:visibility="gone"
         />
 

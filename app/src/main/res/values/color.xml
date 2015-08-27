@@ -43,6 +43,7 @@
 
     <color name="base_color_white">#ffffff</color>
     <color name="base_color_white_trans">#eef2f2f2</color>
+    <color name="color_white_trans">#88f2f2f2</color>
     <color name="base_color_black">#000000</color>
     <color name="base_color_red">#ff0000</color>
     <color name="base_color_purple">#7D26CD</color>

@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -82,12 +85,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_home_user, R.drawable.checker_tab_home_user};
-//    private String[] tabTitle = {"Talk", "旅游", "我"};
-
+    private String[] tabTitle = {"消息", "达人", "搜索","我的"};
+    private int[] colors=new int[]{R.color.white,R.color.black_overlay,R.color.white,R.color.black_overlay};
     private TextView unreadMsg;
     private TextView regNotice;
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel","Soso", "My"};
+
     private boolean FromBounce;
     private Vibrator vibrator;
     PopupWindow mPop;
@@ -210,10 +214,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
-                    MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+                   /* MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
                     if (myFragment != null) {
                         myFragment.refreshLoginStatus();
-                    }
+                    }*/
                 }
             }
 
@@ -318,11 +322,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         int count = fragmentArray.length;
         for (int i = 0; i < count; i++) {
             //为每一个Tab按钮设置图标、文字和内容
-            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTagArray[i]).setIndicator(getTabItemView(i));
+            View view=getTabItemView(i);
+            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTagArray[i]).setIndicator(view);
             //将Tab按钮添加进Tab选项卡中
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
         }
+
+
 
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
@@ -350,6 +357,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      */
     private View getTabItemView(int index) {
         View view = layoutInflater.inflate(R.layout.tab_item_view, null);
+      //  view.setBackgroundResource(colors[index]);
         if (index == 0) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
@@ -358,10 +366,16 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             regNotice.setTextColor(Color.RED);
             regNotice.setVisibility(View.VISIBLE);
         }
+
+       // Drawable myImage = (Drawable)getResources().getDrawable(mImageViewArray[index], );
+       // myImage.setBounds(1, 1, 100, 100);
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
-        imageView.setCompoundDrawablesWithIntrinsicBounds(mImageViewArray[index], 0, 0, 0);
+        imageView.setCompoundDrawablesWithIntrinsicBounds(0, mImageViewArray[index], 0, 0);
+        imageView.setCompoundDrawablePadding(2);
+
         imageView.setChecked(true);
-        //imageView.setText(tabTitle[index]);
+        imageView.setText(tabTitle[index]);
+
         return view;
     }
     public void setNoticeInvisiable(){
@@ -430,7 +444,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             conflictDialog.show();
             isConflict = true;
         } catch (Exception e) {
-            Log.e("###", "---------color conflictBuilder error" + e.getMessage());
+
         }
 
 
@@ -629,12 +643,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         moveTaskToBack(true);
     }
 
-    public void onDrivingLogout() {
-        MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
-        if (myFragment != null) {
-            myFragment.refreshLoginStatus();
-        }
-    }
+
 
     @Override
     protected void onPause() {
