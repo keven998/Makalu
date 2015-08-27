@@ -12,22 +12,27 @@ import com.xuejian.client.lxp.R;
 public class XDialog extends Dialog {
     private ListView listView;
     int resId;
-    public XDialog(Context context,int resId){
+
+    public XDialog(Context context, int resId) {
         super(context, R.style.ComfirmDialog);
         this.resId = resId;
         initView();
         setCanceledOnTouchOutside(true);
     }
-    public XDialog(Context context,int resId,int style){
+
+    public XDialog(Context context, int resId, int style) {
         super(context, style);
         this.resId = resId;
         initView();
         setCanceledOnTouchOutside(true);
     }
-    public void initView(){
+
+    public void initView() {
         setContentView(resId);
-        listView=(ListView)findViewById(R.id.map_days_list);
+        listView = (ListView) findViewById(R.id.loc_select_list);
     }
 
-    public ListView getListView(){return listView;}
+    public ListView getListView() {
+        return listView;
+    }
 }

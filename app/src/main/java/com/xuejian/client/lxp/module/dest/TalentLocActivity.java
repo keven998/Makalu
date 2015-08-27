@@ -48,7 +48,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
     private int lastPos = 0;
-    private String[] delta = {"亚洲", "欧洲", "北美洲", "美洲", "非洲", "大洋洲"};
+    private String[] delta = {"亚洲", "欧洲", "北美洲", "美洲", "非洲", "大洋洲","南极洲"};
     List<String> lists;
     List<String> continentNames = new ArrayList<>();
     ArrayList<ArrayList<CountryWithExpertsBean>> data;
@@ -92,7 +92,7 @@ public class TalentLocActivity extends PeachBaseActivity implements AbsListView.
 
     private void resizeData(List<CountryWithExpertsBean> list) {
         data = new ArrayList<ArrayList<CountryWithExpertsBean>>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             data.add(new ArrayList<CountryWithExpertsBean>());
         }
         for (CountryWithExpertsBean bean : list) {

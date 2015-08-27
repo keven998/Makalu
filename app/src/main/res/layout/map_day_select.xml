@@ -35,7 +35,7 @@
     </RelativeLayout>-->
 
     <ListView
-        android:id="@+id/map_days_list"
+        android:id="@+id/loc_select_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="1dp"
