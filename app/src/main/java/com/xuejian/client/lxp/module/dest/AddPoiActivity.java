@@ -77,8 +77,6 @@ public class AddPoiActivity extends PeachBaseActivity {
     private LocBean curLoc;
     private PoiAdapter mPoiAdapter;
     private StringSpinnerAdapter mLocSpinnerAdapter, mTypeSpinnerAdapter;
-    private String mKeyWord = "";
-
     private CityAdapter cityAdapter;
     private PopupWindow mPop;
     private ImageView selected;

@@ -225,8 +225,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             }
         });
-        // getInLocList();
-        // getOutCountryList();
     }
 
     @Override

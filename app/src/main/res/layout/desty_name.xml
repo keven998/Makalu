@@ -18,6 +18,6 @@
         android:maxWidth="90dp"
         android:singleLine="true"
         android:ellipsize="end"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="left|center_vertical"
         />
 </LinearLayout>
