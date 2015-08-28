@@ -42,8 +42,10 @@ import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,17 +64,8 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
     TextView myProfileEdit;
     @InjectView(R.id.iv_avatar)
     ImageView avatarIv;
-    @InjectView(R.id.iv_more_header_frame_gender1)
-    ImageView genderFrame;
-    @InjectView(R.id.fl_gender_bg)
-    FrameLayout fl_gender_bg;
     @InjectView(R.id.iv_constellation)
-    ImageView constellationIv;
-    @InjectView(R.id.tv_level)
-    TextView tvLevel;
-
-
-
+    TextView constellationIv;
 
     @InjectView(R.id.tv_pictures_count)
     TextView tvPictureCount;
@@ -82,6 +75,21 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
     TextView tvPlansCount;
     @InjectView(R.id.tv_tracks_count)
     TextView tvTracksCount;
+
+    @InjectView(R.id.iv_user_name)
+    TextView ivUserName;//姓名
+
+    @InjectView(R.id.iv_age)
+    TextView ivAge;//年龄
+
+    @InjectView(R.id.iv_gender)
+    ImageView ivGender;//性别
+
+    @InjectView(R.id.iv_city)
+    TextView ivCity;
+
+    @InjectView(R.id.iv_about_me)
+    TextView ivAboutMe;
     private TextView notice;
     private int picsNum = 0;
     private String Sex;
@@ -91,22 +99,22 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_profile_activity);
         ButterKnife.inject(this);
-        ((TextView)findViewById(R.id.my_profile_subtitle)).setText("");
         myProfileEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 turnToEditProfile();
             }
         });
-        genderFrame.setOnClickListener(this);
+        //genderFrame.setOnClickListener(this);
        // findViewById(R.id.tv_edit_profile).setOnClickListener(this);
 
-        findViewById(R.id.rl_picture_entry).setOnClickListener(this);
+
         findViewById(R.id.fl_plans_entry).setOnClickListener(this);
         findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
         notice = (TextView) findViewById(R.id.unread_msg_notify);
         if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false))notice.setVisibility(View.VISIBLE);
-
+        refreshLoginStatus();
+        refreshUserInfo();
     }
 
 
@@ -128,7 +136,7 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.iv_more_header_frame_gender1:
+           /* case R.id.iv_more_header_frame_gender1:
                 User user1 = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
                 if (user1 == null) {
                     Intent logIntent = new Intent(MyProfileActivity.this, LoginActivity.class);
@@ -140,9 +148,10 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
                         showSelectedPics(pic);
                     }
                 }
-                break;
+                //已删除！！！
+                break;*/
 
-            case R.id.rl_picture_entry:
+           /* case R.id.rl_picture_entry:
                 final User userPics = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
                 if (userPics != null) {
                     Intent intent2 = new Intent(MyProfileActivity.this, CityPictureActivity.class);
@@ -155,8 +164,8 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
                     startActivityForResult(LoginIntent, CODE_PICS);
                     MyProfileActivity.this.overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 }
-
-                break;
+                //个人相册
+                break;*/
 
             case R.id.tv_edit_profile:
                 MobclickAgent.onEvent(MyProfileActivity.this,"navigation_item_edit_profile");
@@ -207,14 +216,6 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
         }
     }
 
-    Handler handler = new Handler();
-    Runnable runnableUi = new Runnable() {
-        @Override
-        public void run() {
-            //更新界面
-            refreshLoginStatus();
-        }
-    };
 
     public static Bitmap readBitMap(Context context, int resId) {
         try {
@@ -234,42 +235,72 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
             return null;
         }
     }
+
+    private void refreshUserInfo() {
+        final User user = AccountManager.getInstance().getLoginAccount(this);
+        if (user != null) {
+            if (user.getGender().equalsIgnoreCase("M")) {
+                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+            } else if (user.getGender().equalsIgnoreCase("F")) {
+                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+            } else {
+                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+            }
+
+            UserApi.getUserInfo(String.valueOf(user.getUserId()), new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
+                    if (userResult.code == 0) {
+                        AccountManager.getInstance().saveLoginAccount(MyProfileActivity.this, userResult.result);
+                        refreshUserInfo();
+
+                    }
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
+    }
+    public int getAge(String birth) {
+        if (TextUtils.isEmpty(birth)) return 0;
+        int age = 0;
+        String birthType = birth.substring(0, 4);
+        int birthYear = Integer.parseInt(birthType);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String date = sdf.format(new java.util.Date());
+        age = Integer.parseInt(date) - birthYear;
+        return age;
+    }
+
     public void refreshLoginStatus() {
         User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
         all_foot_print_list.clear();
         if (user == null) {
             avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
-            //nickNameTv.setText("旅行派");
-            //idTv.setText("未登录");
-            tvPictureCount.setText("0图");
+            tvPictureCount.setText("0");
             tvPlansCount.setText("0条");
             tvTracksCount.setText("0国0城市");
-            tvLevel.setText("Lv0");
-            tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
-            genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-            fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
-            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
+            constellationIv.setText("星座");
         } else {
             if (!user.getGender().equals(Sex)){
+                ivGender.setVisibility(View.VISIBLE);
                 Sex=user.getGender();
                 if (user.getGender().equalsIgnoreCase("M")) {
-                    /**
-                     * OOM Exception
-                     */
-                    genderFrame.setImageBitmap(readBitMap(MyProfileActivity.this, R.drawable.ic_home_header_boy));
-                    //               genderFrame.setImageResource(R.drawable.ic_home_header_boy);
-                    fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_boy));
-                    tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
+                    ivGender.setImageResource(R.drawable.icon_boy);
                 } else if (user.getGender().equalsIgnoreCase("F")) {
-                    genderFrame.setImageBitmap(readBitMap(MyProfileActivity.this, R.drawable.ic_home_header_girl));
-                    //            genderFrame.setImageResource(R.drawable.ic_home_header_girl);
-                    fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_girl));
-                    tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
+                    ivGender.setImageResource(R.drawable.icon_girl);
                 } else {
-                    genderFrame.setImageBitmap(readBitMap(MyProfileActivity.this, R.drawable.ic_home_header_unlogin));
-                    //               genderFrame.setImageResource(R.drawable.ic_home_header_unlogin);
-                    fl_gender_bg.setForeground(getResources().getDrawable(R.drawable.ic_home_avatar_border_unknown));
-                    tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
+                    ivGender.setVisibility(View.GONE);
                 }
             }
             int countryCount = 0;
@@ -278,6 +309,10 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
             int guideCount = 0;
             int picNum=0;
             User info=null;
+            String username="姓名";
+            int age =0;
+            String city="";
+            String aboutMe=null;
             if (AccountManager.getInstance().getLoginAccountInfo() != null) {
                 info = AccountManager.getInstance().getLoginAccountInfo();
                 guideCount = info.getGuideCnt();
@@ -285,30 +320,32 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
                 countryCount=info.getCountryCnt();
                 cityCount=info.getTrackCnt();
                 picNum=info.getAlbumCnt();
+                username=info.getNickName();
+                age=getAge(info.getBirthday());
+                city=info.getResidence();
+                aboutMe=info.getSignature();
             }
-            tvPictureCount.setText(picNum + "张");
+            if(aboutMe!=null && aboutMe.trim().length()>0){
+                ivAboutMe.setText(aboutMe);
+            }
+
+            ivUserName.setText(username);
+            ivAge.setText(age+"");
+            ivCity.setText(city+"");
+            tvPictureCount.setText(picNum + "");
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
-            //nickNameTv.setText(user.getNickName());
-            //idTv.setText("ID：" + user.getUserId());
-            tvLevel.setText("LV" + level);
-            int res= ConstellationUtil.calculateConstellation(user.getBirthday());
-            if (res==0){
-                constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
-            }else constellationIv.setImageResource(res);
+            constellationIv.setText("星座");
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
                     .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
                     .resetViewBeforeLoading(true)
                     .cacheOnDisk(true)
-                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .build();
             if (info!=null){
                 ImageLoader.getInstance().displayImage(info.getAvatar(), avatarIv, options);
             }else ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, options);
-
-            //  getUserPicsNum(user.getUserId());
         }
     }
     private void showSelectedPics(ArrayList<String> pics) {
@@ -328,11 +365,6 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
     protected void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("page_home_mine");
-        new Thread() {
-            public void run() {
-                handler.post(runnableUi);
-            }
-        }.start();
     }
 
     @Override
