@@ -376,7 +376,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/text_size_14"
                         android:textColor="@color/color_text_ii"
-                        android:text="Ta还没有添加任何描述哦!"
+                        android:text="我还没有添加任何描述哦!"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="15dp"
                         android:background="@color/white"
