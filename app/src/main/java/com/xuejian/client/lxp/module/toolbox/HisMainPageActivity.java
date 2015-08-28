@@ -47,6 +47,7 @@ import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -102,6 +103,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     HorizontalScrollView all_pics_sv;
     @InjectView(R.id.tv_expert_sign)
     TextView tv_expert_sign;
+    @InjectView(R.id.tv_plan_count)
+    TextView tv_plan_count;
+    @InjectView(R.id.tv_track_count)
+    TextView tv_track_count;
+    @InjectView(R.id.tv_comment)
+    TextView tv_comment;
+    @InjectView(R.id.about)
+    TextView about;
+    @InjectView(R.id.comment)
+    TextView comment;
     private final List<Tag> mTags = new ArrayList<Tag>();
 
     @Override
@@ -603,17 +614,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
         if (bean.getGender().equalsIgnoreCase("M")) {
             iv_expert_sex.setImageResource(R.drawable.icon_boy);
-            //        fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_boy));
-            //        tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
-            //       tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else if (bean.getGender().equalsIgnoreCase("F")) {
             iv_expert_sex.setImageResource(R.drawable.icon_girl);
-            //          fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_girl));
-            //          tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
-            //          tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else {
-            //        fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_unknown));
-            //        tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
             iv_expert_sex.setVisibility(View.INVISIBLE);
         }
         if (TextUtils.isEmpty(bean.getBirthday())) {
@@ -637,17 +640,37 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 //        }
 //        TextView tvLocation = (TextView) findViewById(R.id.tv_location);
         if (TextUtils.isEmpty(bean.getResidence())) {
-            tv_expert_location.setText("未设置");
+            tv_expert_location.setVisibility(View.INVISIBLE);
         } else {
             tv_expert_location.setText(bean.getResidence());
         }
-        //       TextView tvAge = (TextView) findViewById(R.id.tv_age);
         if (TextUtils.isEmpty(bean.getBirthday())) {
-            tv_expert_age.setText("未设置");
+            tv_expert_age.setVisibility(View.INVISIBLE);
         } else {
             tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday())));
         }
-
+        tv_plan_count.setText(String.format("%d篇", bean.getGuideCnt()));
+        tv_track_count.setText(String.format("%d国%d城", bean.getCountryCnt(), bean.getTrackCnt()));
+        tv_track_count.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
+                intent.putExtra("isExpertFootPrint", true);
+                intent.putExtra("title", tv_track_count.getText().toString());
+                intent.putExtra("id", String.valueOf(userId));
+                startActivity(intent);
+            }
+        });
+        tv_plan_count.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
+                intent.putExtra("userId", String.valueOf(userId));
+                startActivity(intent);
+            }
+        });
   /*      TextView tvPlan = (TextView) findViewById(R.id.tv_profile_plan);
         SpannableString planStr = new SpannableString("计划");
         planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -814,8 +837,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
                             all_pics.add(imgArray.getJSONObject(0).getString("url"));
                         }
-                        initScrollView(all_pics,ids);
-                      //  refreshUserPics(all_pics);
+                        initScrollView(all_pics, ids);
+                        //  refreshUserPics(all_pics);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -913,20 +936,32 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 //                });
 //            } else {
 //                final String uri = picList.get(i);
-  //              final String id = ids.get(i);
-  //              final int index = i;
-                ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, UILUtils.getDefaultOption());
-                my_pics_cell.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                 //       showChangePicDialog(picList, id, index);
-                    }
-                });
+            //              final String id = ids.get(i);
+            //              final int index = i;
+            final int pos = i;
+            ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, UILUtils.getDefaultOption());
+            my_pics_cell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    IntentUtils.intentToPicGallery2(HisMainPageActivity.this, picList, pos);
+                }
+            });
 
-  //          }
+            //          }
             llPics.addView(view);
         }
         all_pics_sv.addView(llPics);
+//        llPics.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_album");
+//                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
+//                intent2.putExtra("id", String.valueOf(userId));
+//                intent2.putExtra("title", user.getNickName());
+//                intent2.putExtra("isTalentAlbum", true);
+//                startActivity(intent2);
+//            }
+//        });
     }
 
     public static Drawable readBitMap(Context context, int resId) {

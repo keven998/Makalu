@@ -67,7 +67,7 @@
     <color name="base_divider_color">#eeeeee</color>
     <color name="base_highlight_color">#f4f4f4</color>
     <color name="back_blue_color">#0000FF</color>
-
+    <color name="tag_grey">#f0f0f0</color>
     <color name="light_gray_text_color">#B3B3B3</color>
     <color name="search_edit_text_hint_color">#cdcdcd</color>
     <color name="status_bg_01">@color/app_theme_color</color>

@@ -74,7 +74,7 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
 
     private void inflateTagView(final Tag t, boolean b) {
         TagView localTagView;
-        if (mTagViewResId <= 0) {
+        if (mTagViewResId == 0) {
              localTagView = (TagView) View.inflate(getContext(),
                     R.layout.tag, null);
             localTagView.setText(t.getTitle());
@@ -86,14 +86,13 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
             localTagView.setTag(t);
         }
 
-        if (mTagViewTextColorResId <= 0) {
-            int c = getResources().getColor(R.color.app_theme_color);
-            localTagView.setTextColor(c);
+        if (mTagViewTextColorResId == 0) {
+            localTagView.setTextColor(getResources().getColor(R.color.app_theme_color));
         } else {
-            localTagView.setTextColor(mTagViewTextColorResId);
+            localTagView.setTextColor(getResources().getColor(mTagViewTextColorResId));
         }
 
-        if (mTagViewBackgroundResId <= 0) {
+        if (mTagViewBackgroundResId == 0) {
             mTagViewBackgroundResId = R.drawable.all_whitesolid_greenline;
             localTagView.setBackgroundResource(mTagViewBackgroundResId);
         } else {
@@ -109,9 +108,9 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
                     localTagView.getPaddingBottom());
             //localTagView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.forum_tag_close, 0);删除按钮
         }
-        if (t.getBackgroundResId() > 0) {
-            localTagView.setBackgroundResource(t.getBackgroundResId());
-        }
+//        if (t.getBackgroundResId() > 0) {
+//            localTagView.setBackgroundResource(t.getBackgroundResId());
+//        }
         if ((t.getLeftDrawableResId() > 0) || (t.getRightDrawableResId() > 0)) {
             localTagView.setCompoundDrawablesWithIntrinsicBounds(
                     t.getLeftDrawableResId(), 0, t.getRightDrawableResId(), 0);
