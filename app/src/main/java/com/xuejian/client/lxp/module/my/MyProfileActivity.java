@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -56,7 +57,7 @@ import butterknife.InjectView;
 /**
  * Created by xuyongchen on 15/8/27.
  */
-public class MyProfileActivity  extends Activity implements  View.OnClickListener{
+public class MyProfileActivity  extends PeachBaseActivity implements  View.OnClickListener{
     public final static int CODE_PLANS = 102;
     public final static int CODE_FOOTPRINT = 103;
     public final static int CODE_PICS = 104;

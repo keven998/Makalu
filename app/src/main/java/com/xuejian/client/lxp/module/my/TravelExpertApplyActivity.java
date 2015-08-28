@@ -18,6 +18,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 
@@ -31,7 +32,7 @@ import butterknife.InjectView;
 /**
  * Created by xuyongchen on 15/8/28.
  */
-public class TravelExpertApplyActivity extends Activity{
+public class TravelExpertApplyActivity extends PeachBaseActivity {
     @InjectView(R.id.number_input)
     EditText numberInput;
     PopupWindow popupWindow;
