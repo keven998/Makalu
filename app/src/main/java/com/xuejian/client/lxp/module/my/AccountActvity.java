@@ -305,16 +305,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
                 .build());
         if (user.getGender().equalsIgnoreCase("M")) {
-            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+            //iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
             tv_gender.setText("帅锅");
         } else if (user.getGender().equalsIgnoreCase("F")) {
-            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+            //iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
             tv_gender.setText("美女");
         }else if (user.getGender().equalsIgnoreCase("S")){
-            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+         //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
             tv_gender.setText("保密");
         }else {
-            iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+          //  iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
             tv_gender.setText("一言难尽");
         }
 
@@ -563,11 +563,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
        final User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
             if (user.getGender().equalsIgnoreCase("M")) {
-                iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+               // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
             } else if (user.getGender().equalsIgnoreCase("F")) {
-                iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+               // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
             } else {
-                iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+               // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
             }
 
             UserApi.getUserInfo(String.valueOf(user.getUserId()), new HttpCallBack<String>() {
@@ -810,16 +810,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     if (gender.equalsIgnoreCase("M")) {
-                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+                     //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
                         tv_gender.setText("帅锅");
                     } else if (gender.equalsIgnoreCase("F")) {
-                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+                     //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
                         tv_gender.setText("美女");
                     } else if (user.getGender().equalsIgnoreCase("S")) {
-                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                    //    iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                         tv_gender.setText("保密");
                     } else {
-                        iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                     //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                         tv_gender.setText("一言难尽");
                     }
 
