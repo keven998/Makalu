@@ -1,6 +1,5 @@
 package com.xuejian.client.lxp.common.widget.TagView;
 
-import com.xuejian.client.lxp.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ToggleButton;
@@ -29,7 +28,7 @@ public class TagView extends ToggleButton {
         setTextOn(null);
         setTextOff(null);
         setText("");
-        setBackgroundResource(R.drawable.all_whitesolid_greenline);
+    //    setBackgroundResource(R.drawable.all_whitesolid_greenline);
     }
 
     public void setCheckEnable(boolean paramBoolean) {

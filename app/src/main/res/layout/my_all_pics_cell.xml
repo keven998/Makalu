@@ -8,9 +8,10 @@
     android:paddingBottom="10dp">
 
     <ImageView
-        android:layout_width="126dp"
+        android:layout_width="83dp"
         android:layout_height="83dp"
         android:id="@+id/my_pics_cell"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_add_selected"
         android:background="@color/gray_pressed"
         />

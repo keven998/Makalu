@@ -9,35 +9,28 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
-import com.aizou.core.utils.SharePrefUtil;
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
@@ -45,16 +38,15 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
-import com.xuejian.client.lxp.common.utils.GuideViewUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
+import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
-import com.xuejian.client.lxp.module.dest.CityPictureActivity;
-import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -68,6 +60,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by lxp_dqm07 on 2015/5/18.
  */
@@ -80,16 +75,40 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private TextView tv_send_action;
     private boolean isMyFriend;
     private int EDIT_MEMO = 101;
-    private TextView nameTv;
     private String newMemo;
     User user;
     View handleView;
     private boolean isFromExperts;
     private boolean block;
+    @InjectView(R.id.iv_avatar)
+    ImageView iv_avatar;
+    @InjectView(R.id.tv_level)
+    TextView tv_level;
+    @InjectView(R.id.tv_expert_name)
+    TextView tv_expert_name;
+    @InjectView(R.id.expert_tag)
+    TagListView expert_tag;
+    @InjectView(R.id.tv_expert_age)
+    TextView tv_expert_age;
+    @InjectView(R.id.iv_expert_sex)
+    ImageView iv_expert_sex;
+    @InjectView(R.id.tv_expert_con)
+    TextView tv_expert_con;
+    @InjectView(R.id.tv_expert_location)
+    TextView tv_expert_location;
+    @InjectView(R.id.tv_photo_num)
+    TextView tv_photo_num;
+    @InjectView(R.id.all_pics_sv)
+    HorizontalScrollView all_pics_sv;
+    @InjectView(R.id.tv_expert_sign)
+    TextView tv_expert_sign;
+    private final List<Tag> mTags = new ArrayList<Tag>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
+        ButterKnife.inject(this);
         userId = getIntent().getLongExtra("userId", 0);
         isFromExperts = getIntent().getBooleanExtra("isFromExperts", false);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
@@ -278,7 +297,14 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void initData(long id) {
+        for (int i = 0; i < 9; i++) {
+            Tag tag = new Tag();
+            tag.setTitle("属性" + i);
+            tag.setId(i);
+            mTags.add(tag);
+        }
         getUserInfo(id);
+        initScrollView(id);
     }
 
     private void showActionDialog(int style) {
@@ -477,7 +503,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     }
                 }
             });
-
+            expert_tag.setTagViewBackgroundRes(R.drawable.shape_grey);
+            expert_tag.setTagViewTextColorRes(R.color.color_text_iii);
+            expert_tag.setmTagViewResId(R.layout.expert_tag);
+            expert_tag.setTags(mTags);
 //            if (userId != 10000 && isMyFriend) {
 //                handleView.setOnClickListener(new View.OnClickListener() {
 //                    @Override
@@ -504,20 +533,19 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
 
         user = bean;
-        nameTv = (TextView) findViewById(R.id.tv_title);
         try {
             if (isMyFriend && imUser != null) {
                 if (TextUtils.isEmpty(imUser.getMemo())) {
-                    nameTv.setText(bean.getNickName());
+                    tv_expert_name.setText(bean.getNickName());
                 } else {
-                    nameTv.setText(imUser.getMemo() + "(" + bean.getNickName() + ")");
+                    tv_expert_name.setText(imUser.getMemo() + "(" + bean.getNickName() + ")");
                 }
             } else {
-                nameTv.setText(bean.getNickName());
+                tv_expert_name.setText(bean.getNickName());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            nameTv.setText(bean.getNickName());
+            tv_expert_name.setText(bean.getNickName());
         }
 
 
@@ -525,7 +553,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 if (isMyFriend) {
-                    if (!TextUtils.isEmpty(nameTv.getText().toString())) {
+                    if (!TextUtils.isEmpty(tv_expert_name.getText().toString())) {
                         Intent intent = new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
                         intent.putExtra("isEditMemo", true);
                         intent.putExtra("nickname", bean.getNickName());
@@ -539,12 +567,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
 
-
+        tv_expert_sign.setText(bean.getSignature());
+        tv_photo_num.setText(String.valueOf(bean.getAlbumCnt()));
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
-        ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
+        //   ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
         if (!TextUtils.isEmpty(bean.getAvatar())) {
-            avatarImage.setOnClickListener(new View.OnClickListener() {
+            iv_avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ArrayList<String> pics = new ArrayList<>();
@@ -553,59 +582,73 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 }
             });
         } else {
-            avatarImage.setClickable(false);
+            iv_avatar.setClickable(false);
         }
 
-        FrameLayout fl_avatar = (FrameLayout) findViewById(R.id.fl_gender_bg);
-        ImageLoader.getInstance().displayImage(bean.getAvatar(), avatarImage, new DisplayImageOptions.Builder()
+        //       FrameLayout fl_avatar = (FrameLayout) findViewById(R.id.fl_gender_bg);
+        ImageLoader.getInstance().displayImage(bean.getAvatar(), iv_avatar, new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
                 .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                        getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                        // .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
+                        //         getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
                 .build());
-        TextView tvLevel = (TextView) findViewById(R.id.tv_level);
+        //      TextView tvLevel = (TextView) findViewById(R.id.tv_level);
+        if (TextUtils.isEmpty(bean.getLevel()) || bean.getLevel().equals("0")) {
+            tv_level.setText("旅行派达人咨询师 LEVEL-0");
+        } else {
+            tv_level.setText(String.format("旅行派达人咨询师 LEVEL-%s", bean.getLevel()));
+        }
+
         if (bean.getGender().equalsIgnoreCase("M")) {
-            fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_boy));
-            tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
-            tvLevel.setText(String.format("LV%s", bean.getLevel()));
+            iv_expert_sex.setImageResource(R.drawable.icon_boy);
+            //        fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_boy));
+            //        tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_boy);
+            //       tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else if (bean.getGender().equalsIgnoreCase("F")) {
-            fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_girl));
-            tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
-            tvLevel.setText(String.format("LV%s", bean.getLevel()));
+            iv_expert_sex.setImageResource(R.drawable.icon_girl);
+            //          fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_girl));
+            //          tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_girl);
+            //          tvLevel.setText(String.format("LV%s", bean.getLevel()));
         } else {
-            fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_unknown));
-            tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
+            //        fl_avatar.setForeground(readBitMap(HisMainPageActivity.this, R.drawable.ic_home_avatar_border_unknown));
+            //        tvLevel.setBackgroundResource(R.drawable.ic_home_level_bg_unknown);
+            iv_expert_sex.setVisibility(View.INVISIBLE);
         }
-
-        ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
-        int res = ConstellationUtil.calculateConstellation(bean.getBirthday());
-        if (res == 0) {
-            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
-        } else constellationIv.setImageResource(res);
-
-
-        TextView tvMemo = (TextView) findViewById(R.id.tv_memo);
-        if (!TextUtils.isEmpty(bean.getSignature())) {
-            tvMemo.setText(bean.getMemo());
-        } else {
-            tvMemo.setText("~什么都没写~");
-        }
-        TextView tvLocation = (TextView) findViewById(R.id.tv_location);
-        if (TextUtils.isEmpty(bean.getResidence())) {
-            tvLocation.setText("未设置");
-        } else {
-            tvLocation.setText(bean.getResidence());
-        }
-        TextView tvAge = (TextView) findViewById(R.id.tv_age);
         if (TextUtils.isEmpty(bean.getBirthday())) {
-            tvAge.setText("未设置");
+            tv_expert_con.setVisibility(View.INVISIBLE);
         } else {
-            tvAge.setText(String.valueOf(getAge(bean.getBirthday())));
+            tv_expert_con.setText(ConstellationUtil.calculateConstellationZHname(bean.getBirthday()));
         }
 
-        TextView tvPlan = (TextView) findViewById(R.id.tv_profile_plan);
+//        ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
+//        int res = ConstellationUtil.calculateConstellation(bean.getBirthday());
+//        if (res == 0) {
+//            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
+//        } else constellationIv.setImageResource(res);
+
+
+//        TextView tvMemo = (TextView) findViewById(R.id.tv_memo);
+//        if (!TextUtils.isEmpty(bean.getSignature())) {
+//            tvMemo.setText(bean.getMemo());
+//        } else {
+//            tvMemo.setText("~什么都没写~");
+//        }
+//        TextView tvLocation = (TextView) findViewById(R.id.tv_location);
+        if (TextUtils.isEmpty(bean.getResidence())) {
+            tv_expert_location.setText("未设置");
+        } else {
+            tv_expert_location.setText(bean.getResidence());
+        }
+        //       TextView tvAge = (TextView) findViewById(R.id.tv_age);
+        if (TextUtils.isEmpty(bean.getBirthday())) {
+            tv_expert_age.setText("未设置");
+        } else {
+            tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday())));
+        }
+
+  /*      TextView tvPlan = (TextView) findViewById(R.id.tv_profile_plan);
         SpannableString planStr = new SpannableString("计划");
         planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         planStr.setSpan(new AbsoluteSizeSpan(14, true), 0, planStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -657,7 +700,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         tvNotes.setVisibility(View.INVISIBLE);
         if (!SharePrefUtil.getBoolean(this, "expert_guide1", false) && isFromExperts) {
             GuideViewUtils.getInstance().initGuide(this, "expert_guide1", "有问题可以向达人请教噢", CommonUtils.getScreenHeight(this) - 300, CommonUtils.getScreenWidth(this) / 2 - 20, R.drawable.guide_view_bg_down);
-        }
+        }*/
     }
 
     private void showSelectedPics(ArrayList<String> pics) {
@@ -735,40 +778,44 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     private void updatePics(int num) {
-        TextView tvAlbum = (TextView) findViewById(R.id.tv_profile_album);
-        SpannableString albumStr = new SpannableString("相册");
-        albumStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, albumStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        albumStr.setSpan(new AbsoluteSizeSpan(14, true), 0, albumStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder asb = new SpannableStringBuilder();
-        asb.append(String.format("%d张\n", num)).append(albumStr);
-        tvAlbum.setText(asb);
-        tvAlbum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_album");
-                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
-                intent2.putExtra("id", String.valueOf(userId));
-                intent2.putExtra("title", user.getNickName());
-                intent2.putExtra("isTalentAlbum", true);
-                startActivity(intent2);
-            }
-        });
+//        TextView tvAlbum ;
+//  //              = (TextView) findViewById(R.id.tv_profile_album);
+//        SpannableString albumStr = new SpannableString("相册");
+//        albumStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, albumStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        albumStr.setSpan(new AbsoluteSizeSpan(14, true), 0, albumStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//        SpannableStringBuilder asb = new SpannableStringBuilder();
+//        asb.append(String.format("%d张\n", num)).append(albumStr);
+//        tvAlbum.setText(asb);
+//        tvAlbum.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_album");
+//                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
+//                intent2.putExtra("id", String.valueOf(userId));
+//                intent2.putExtra("title", user.getNickName());
+//                intent2.putExtra("isTalentAlbum", true);
+//                startActivity(intent2);
+//            }
+//        });
     }
 
-    public void initScrollView(int userId) {
+    public void initScrollView(long userId) {
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 JSONObject jsonObject = null;
                 try {
+                    ArrayList<String> ids = new ArrayList<String>();
                     jsonObject = new JSONObject(result);
                     if (jsonObject.getInt("code") == 0) {
                         JSONArray object = jsonObject.getJSONArray("result");
                         for (int i = 0; i < object.length(); i++) {
+                            ids.add(object.getJSONObject(i).getString("id"));
                             JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
                             all_pics.add(imgArray.getJSONObject(0).getString("url"));
                         }
-                        refreshUserPics(all_pics);
+                        initScrollView(all_pics,ids);
+                      //  refreshUserPics(all_pics);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -789,6 +836,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void refreshUserPics(final ArrayList<String> pics) {
+
 //        his_pics_sv.removeAllViews();
 //        LinearLayout llPics = new LinearLayout(this);
 //        llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -841,10 +889,44 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             if (requestCode == EDIT_MEMO) {
                 newMemo = data.getStringExtra("memo");
                 if (!TextUtils.isEmpty(newMemo)) {
-                    nameTv.setText(newMemo + "(" + user.getNickName() + ")");
+                    tv_expert_name.setText(newMemo + "(" + user.getNickName() + ")");
                 }
             }
         }
+    }
+
+    public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
+        all_pics_sv.removeAllViews();
+        LinearLayout llPics = new LinearLayout(this);
+        llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        llPics.removeAllViews();
+        for (int i = 0; i < picList.size(); i++) {
+            View view = View.inflate(mContext, R.layout.my_all_pics_cell, null);
+            ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
+//            if (i == picList.size()) {
+//                //  my_pics_cell.setImageResource(R.drawable.smiley_add_btn);
+//                my_pics_cell.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showSelectPicDialog();
+//                    }
+//                });
+//            } else {
+//                final String uri = picList.get(i);
+  //              final String id = ids.get(i);
+  //              final int index = i;
+                ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, UILUtils.getDefaultOption());
+                my_pics_cell.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                 //       showChangePicDialog(picList, id, index);
+                    }
+                });
+
+  //          }
+            llPics.addView(view);
+        }
+        all_pics_sv.addView(llPics);
     }
 
     public static Drawable readBitMap(Context context, int resId) {

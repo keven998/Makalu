@@ -209,6 +209,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
+                    /**
+                     *
+                     *
+                     *
+                     */
                    /* MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
                     if (myFragment != null) {
                         myFragment.refreshLoginStatus();
@@ -317,8 +322,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         int count = fragmentArray.length;
         for (int i = 0; i < count; i++) {
             //为每一个Tab按钮设置图标、文字和内容
-            View view=getTabItemView(i);
-            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTagArray[i]).setIndicator(view);
+            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTagArray[i]).setIndicator(getTabItemView(i));
             //将Tab按钮添加进Tab选项卡中
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
