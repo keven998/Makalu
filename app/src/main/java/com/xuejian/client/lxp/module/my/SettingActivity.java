@@ -13,8 +13,10 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.UpdateBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.OtherApi;
+import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -23,6 +25,7 @@ import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.config.SettingConfig;
+import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 
@@ -36,13 +39,19 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 
     private void initView() {
         setContentView(R.layout.activity_setting);
-        initTitlebar();
         findViewById(R.id.ll_version_update).setOnClickListener(this);
         findViewById(R.id.geek_apply).setOnClickListener(this);
         findViewById(R.id.ll_clear_cache).setOnClickListener(this);
         findViewById(R.id.ll_about_us).setOnClickListener(this);
         findViewById(R.id.recommend_app).setOnClickListener(this);
         findViewById(R.id.ll_tv_feedback).setOnClickListener(this);
+        findViewById(R.id.logout_app).setOnClickListener(this);
+        findViewById(R.id.setting_head_back).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         CheckedTextView ctv = (CheckedTextView) findViewById(R.id.ll_xt);
         ctv.setOnClickListener(new OnClickListener() {
             @Override
@@ -72,11 +81,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         MobclickAgent.onPause(this);
     }
 
-    private void initTitlebar() {
-        TitleHeaderBar thb = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
-        thb.getTitleTextView().setText("设置");
-        thb.enableBackKey(true);
-    }
 
     @Override
     public void finish() {
@@ -109,11 +113,61 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 Intent feedback = new Intent(SettingActivity.this, FeedbackActivity.class);
                 startActivity(feedback);
                 break;
+            case R.id.logout_app:
+                warnLogout();
+                break;
             default:
                 break;
         }
     }
 
+
+    private void warnLogout() {
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setMessage("确定退出登录");
+        dialog.setPositiveButton("确定", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                try {
+                    DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
+                }catch (Exception e){
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
+                UserApi.logout(AccountManager.getInstance().getLoginAccount(SettingActivity.this).getUserId(), new HttpCallBack() {
+                    @Override
+                    public void doSuccess(Object result, String method) {
+                        AccountManager.getInstance().logout(mContext);
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+
+
+            }
+        });
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
     private void notice(boolean value) {
         SettingConfig.getInstance().setLxqPushSetting(SettingActivity.this,value);
 

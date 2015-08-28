@@ -111,8 +111,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     TextView tv_bind_phone;
     @InjectView(R.id.tv_modify_pwd)
     TextView tv_modify_pwd;
-    @InjectView(R.id.btn_logout)
-    Button btn_logout;
+
 
     public String getBirthDay() {
         return birthDay;
@@ -164,7 +163,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_foot_print).setOnClickListener(this);
         findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
-        findViewById(R.id.btn_logout).setOnClickListener(this);
         findViewById(R.id.iv_avatar).setOnClickListener(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
@@ -552,9 +550,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 startActivity(intent2);
                 break;
 
-            case R.id.btn_logout:
-                warnLogout();
-                break;
         }
     }
 
@@ -594,52 +589,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
     }
 
-    private void warnLogout() {
-        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-        dialog.setTitle("提示");
-        dialog.setMessage("确定退出登录");
-        dialog.setPositiveButton("确定", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                try {
-                    DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
-                }catch (Exception e){
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                }
-                UserApi.logout(AccountManager.getInstance().getLoginAccount(AccountActvity.this).getUserId(), new HttpCallBack() {
-                    @Override
-                    public void doSuccess(Object result, String method) {
-                        AccountManager.getInstance().logout(mContext);
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
 
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-
-                    }
-
-                    @Override
-                    public void doFailure(Exception error, String msg, String method, int code) {
-
-                    }
-                });
-
-
-            }
-        });
-        dialog.setNegativeButton("取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-
-    }
 
     private void showChangePicDialog(final ArrayList<String> urls, final String id, final int index) {
         final AlertDialog dialog = new AlertDialog.Builder(this).create();
