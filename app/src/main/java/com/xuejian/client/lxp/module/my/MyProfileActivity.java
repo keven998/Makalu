@@ -93,6 +93,9 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
     private TextView notice;
     private int picsNum = 0;
     private String Sex;
+    private int[] pictures= new int[]{
+
+    };
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,7 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
 
         findViewById(R.id.fl_plans_entry).setOnClickListener(this);
         findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
+        findViewById(R.id.iv_head_back).setOnClickListener(this);
         notice = (TextView) findViewById(R.id.unread_msg_notify);
         if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false))notice.setVisibility(View.VISIBLE);
         refreshLoginStatus();
@@ -212,6 +216,9 @@ public class MyProfileActivity  extends Activity implements  View.OnClickListene
                     tracks_intent.putExtra("title", tvTracksCount.getText().toString());
                     startActivityForResult(tracks_intent, CODE_FOOTPRINT);
                 }
+                break;
+            case R.id.iv_head_back:
+                finish();
                 break;
         }
     }

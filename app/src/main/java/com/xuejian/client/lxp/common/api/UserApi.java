@@ -92,7 +92,7 @@ public class UserApi extends BaseApi {
     public final static String LIKE = "/users/%s/likes";
     public final static String VOTE = "/geo/localities/%s/votes";
 
-
+    public final static String EXPERT_REQUEST="/users/%s/expert-requests";
     public final static String BLOCK = "/users/%s/blacklist";
 
     public static void authSignUp(String code, HttpCallBack callback) {
@@ -586,6 +586,30 @@ public class UserApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
      //   return HttpManager.request(request, callback);
     }
+
+
+    public static void experRequest(String phoneNumber, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_REQUEST, AccountManager.getCurrentUserId()));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("tel", phoneNumber);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
+            request.setBodyEntity(entity);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+        //   return HttpManager.request(request, callback);
+    }
+
 
 
     /**

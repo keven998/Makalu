@@ -90,7 +90,8 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 ShareUtils.shareAppToWx(SettingActivity.this, null);
                 break;
             case R.id.geek_apply:
-
+                Intent applyIntent = new Intent(SettingActivity.this,TravelExpertApplyActivity.class);
+                startActivity(applyIntent);
                 break;
             case R.id.ll_about_us:
                 Intent aboutIntent = new Intent(SettingActivity.this, PeachWebViewActivity.class);
