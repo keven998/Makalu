@@ -142,6 +142,12 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     }
 
     private void initView(View view) {
+        view.findViewById(R.id.expert_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         view.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

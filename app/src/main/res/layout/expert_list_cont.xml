@@ -1,152 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:padding="5dp"
+    android:background="@color/base_color_white"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/rl_basic_info_panel"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
-        android:background="@drawable/expert_bg_green"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/expert_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/expert_address"
-                android:drawablePadding="3dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/expert_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/expert_zod"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/expert_star"
-                android:drawablePadding="3dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/expert_age"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/base_color_white"
-                android:textSize="10sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/rl_basic_info_panel"
-        android:layout_marginBottom="-4dp"
-        android:background="@drawable/expert_bg_white"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/expert_pic"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitCenter" />
-
-        <ImageView
-            android:id="@+id/iv_status"
+        <TextView
+            android:id="@+id/tv_expert_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="-7dp"
-            android:background="@drawable/expert_free_online"
-            android:visibility="gone" />
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:textColor="@color/base_color_white"
+            android:background="@drawable/shape_round"
+            android:text="V9"
+            android:textSize="20sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="7dp"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_expert_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_expert_level"
+            android:text="娜美"
+            android:padding="5dp"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/tv_track_summary"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:lineSpacingExtra="2dp"
-                android:lines="2"
-                android:textColor="@color/color_text_i"
-                android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tv_expert_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_expert_name"
+            android:layout_toRightOf="@+id/tv_expert_level"
+            android:text="北京市"
+            android:padding="5dp"
+            android:textColor="@color/color_text_iii"
+            android:textSize="14sp" />
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1">
+        <TextView
+            android:id="@+id/tv_expert_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_expert_name"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/tv_expert_loc"
+            android:text="29"
+            android:padding="5dp"
+            android:textColor="@color/color_text_iii"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:scaleType="center"
-                    android:src="@drawable/poi_save_level_bg" />
+    <TextView
+        android:id="@+id/tv_expert_track"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:textSize="17sp"
+        android:text="服务城市： 北京——上海——天津" />
 
-                <TextView
-                    android:id="@+id/expert_level"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingBottom="3dp"
-                    android:textColor="@color/app_theme_color"
-                    android:textSize="8sp" />
-            </FrameLayout>
-
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon" />
+    <TextView
+        android:id="@+id/tv_pi_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="派派点评"
+        />
+</LinearLayout>

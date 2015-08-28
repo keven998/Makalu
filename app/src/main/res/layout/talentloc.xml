@@ -31,13 +31,20 @@
             android:layout_width="128dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
+            android:drawableRight="@drawable/checked_spinner"
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:drawableRight="@drawable/checked_spinner"
             android:textColor="@color/color_text_ii"
             android:textSize="18sp" />
 
+        <ImageView
+            android:id="@+id/expert_search"
+            android:layout_width="@dimen/title_bar_height"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_alignParentRight="true"
+            android:padding="15dp"
+            android:src="@drawable/expert_loc_search" />
     </RelativeLayout>
 
 </FrameLayout>

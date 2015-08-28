@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud">
 
-    <com.aizou.core.widget.prv.PullToRefreshGridView
+    <com.aizou.core.widget.prv.PullToRefreshListView
         android:id="@+id/expert_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,9 +13,11 @@
         android:cacheColorHint="@android:color/transparent"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:scrollbarStyle="outsideOverlay"
+        android:dividerPadding="5dp"
         android:fadingEdge="none"
-        android:numColumns="2"
         android:overScrollMode="never" />
 
     <RelativeLayout
