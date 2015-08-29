@@ -141,8 +141,11 @@ public class HttpUtils {
                             Log.i(Config.TAG, "msg list : " + list.toString());
                         }
                         listener.OnMsgArrive(list);
+                    }else {
+                        listener.OnMsgArrive(new ArrayList<Message>());
                     }
                 } else {
+                    listener.OnMsgArrive(new ArrayList<Message>());
                     IMClient.getInstance().setBLOCK(false);
                     LazyQueue.getInstance().TempDequeue();
                 }

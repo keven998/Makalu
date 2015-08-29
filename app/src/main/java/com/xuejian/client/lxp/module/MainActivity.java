@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -531,6 +530,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     }
                 }
                 if (tipsType == 2001) {
+                    setUpGroupMemeber(GroupId);
                     //   addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
                 } else if (tipsType == 2002) {
                     if (beenKicked) {

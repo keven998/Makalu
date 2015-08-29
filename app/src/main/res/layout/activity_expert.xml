@@ -16,8 +16,6 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:scrollbarStyle="outsideOverlay"
-        android:dividerPadding="5dp"
-        android:fadingEdge="none"
         android:overScrollMode="never" />
 
     <RelativeLayout

@@ -51,7 +51,7 @@ public class IMClient {
     private static List<String> invokeStatus = new ArrayList<>();
     private static ConcurrentHashMap<String, Integer> prograssMap = new ConcurrentHashMap<>();
     private Timer timer;
-    private boolean isRunning;
+    private volatile boolean isRunning;
     public int p;
     public static long lastSusseccFetch;
 
@@ -91,10 +91,10 @@ public class IMClient {
         return client;
     }
 
-    public void initDB(String userId,int version,int currentVersion) {
+    public void initDB(String userId, int version, int currentVersion) {
         MessageDB.initDB(userId);
         db = MessageDB.getInstance();
-        MessageDB.getInstance().init(version,currentVersion);
+        MessageDB.getInstance().init(version, currentVersion);
         isLogin = true;
     }
 
@@ -124,8 +124,6 @@ public class IMClient {
 //        }
 
 
-
-
 //        if (acklist.length() > 10) {
 //            HttpUtils.FetchNewMsg(User.getUser().getCurrentUser(), (list) -> {
 //                for (Message msg : list) {
@@ -142,6 +140,7 @@ public class IMClient {
             Log.i(Config.TAG, "ACK  频率" + frequency);
         }
         if (frequency == 0) frequency = 60 * 1000;
+        if (isRunning) return;
         isRunning = true;
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -159,12 +158,10 @@ public class IMClient {
                             LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
                         }
                         LazyQueue.getInstance().TempDequeue();
-                        isRunning = false;
                     }
                 });
             }
-        },frequency,frequency);
-
+        }, frequency, frequency);
 
 
 //        timer.schedule(new TimerTask() {
@@ -507,7 +504,7 @@ public class IMClient {
                 LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
             }
             LazyQueue.getInstance().TempDequeue();
-            ack(60*1000);
+            ack(60 * 1000);
         });
     }
 
@@ -587,9 +584,11 @@ public class IMClient {
     public void updateInventMsgStatus(long userId, int status) {
         db.updateInventMessageStatus(userId, status);
     }
+
     public void updateInventMsgReadStatus(int isRead) {
         db.updateInventMsgReadStatus(isRead);
     }
+
     public void muteConversation(String conversation, boolean value, HttpCallback callback) {
         HttpUtils.muteConversation(conversation, value, callback);
     }
@@ -605,7 +604,7 @@ public class IMClient {
     public List<String> getConversationIds() {
         try {
             return db.getConversationIds();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<String>();
         }
@@ -619,7 +618,8 @@ public class IMClient {
     public boolean isDbEmpty() {
         return db == null;
     }
-    public ArrayList<String> getPics(String chatId){
+
+    public ArrayList<String> getPics(String chatId) {
         return db.getAllPics(chatId);
     }
 
