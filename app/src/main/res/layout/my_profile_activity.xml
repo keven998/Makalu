@@ -185,12 +185,20 @@
                     android:paddingRight="15dp"
                     />
 
+
+
+                    <HorizontalScrollView
+                        android:id="@+id/my_all_pics_sv"
+                        android:layout_width="match_parent"
+                        android:layout_height="65dp"
+                      />
                     <ImageView
                         android:id="@+id/profile_image0"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:src="@drawable/ic_person_normal"
                         android:layout_gravity="center_vertical"
+                        android:visibility="gone"
                         />
                     <ImageView
                         android:id="@+id/profile_image1"
@@ -198,12 +206,14 @@
                         android:layout_height="65dp"
                         android:src="@drawable/ic_person_normal"
                         android:layout_gravity="center_vertical"
+                        android:visibility="gone"
                         />
                     <ImageView
                         android:id="@+id/profile_image2"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:src="@drawable/ic_person_normal"
+                        android:visibility="gone"
                         />
                     <ImageView
                         android:id="@+id/profile_image3"
@@ -211,6 +221,7 @@
                         android:layout_height="65dp"
                         android:src="@drawable/ic_person_normal"
                         android:layout_gravity="center_vertical"
+                        android:visibility="gone"
                         />
             </LinearLayout>
             <View

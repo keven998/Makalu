@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -30,6 +33,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
@@ -61,6 +65,9 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     public final static int CODE_PLANS = 102;
     public final static int CODE_FOOTPRINT = 103;
     public final static int CODE_PICS = 104;
+    private ArrayList<String> all_pics = new ArrayList<String>();
+    @InjectView(R.id.my_all_pics_sv)
+    HorizontalScrollView all_pics_sv;
     @InjectView(R.id.my_profile_edit)
     TextView myProfileEdit;
     @InjectView(R.id.iv_avatar)
@@ -120,6 +127,11 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false))notice.setVisibility(View.VISIBLE);
         refreshLoginStatus();
         refreshUserInfo();
+        User user= AccountManager.getInstance().getLoginAccount(this);
+        if(user!=null){
+            initScrollView(user.getUserId());
+        }
+
     }
 
 
@@ -428,6 +440,66 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
         });
 
+    }
+
+
+
+    public void initScrollView(long userId) {
+        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                JSONObject jsonObject = null;
+                try {
+                    ArrayList<String> ids = new ArrayList<String>();
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject.getInt("code") == 0) {
+                        JSONArray object = jsonObject.getJSONArray("result");
+                        for (int i = 0; i < object.length(); i++) {
+                            ids.add(object.getJSONObject(i).getString("id"));
+                            JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
+                            all_pics.add(imgArray.getJSONObject(0).getString("url"));
+                        }
+                        initScrollView(all_pics, ids);
+                        //  refreshUserPics(all_pics);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                ToastUtil.getInstance(MyProfileActivity.this).showToast("好像没有网络额~");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+    public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
+        all_pics_sv.removeAllViews();
+        LinearLayout llPics = new LinearLayout(this);
+        llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        llPics.removeAllViews();
+        for (int i = 0; i < picList.size(); i++) {
+            View view = View.inflate(MyProfileActivity.this, R.layout.my_all_pics_cell, null);
+            ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
+            final int pos = i;
+            ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, UILUtils.getDefaultOption());
+            my_pics_cell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    IntentUtils.intentToPicGallery2(MyProfileActivity.this, picList, pos);
+                }
+            });
+
+            //          }
+            llPics.addView(view);
+        }
+        all_pics_sv.addView(llPics);
     }
 
 

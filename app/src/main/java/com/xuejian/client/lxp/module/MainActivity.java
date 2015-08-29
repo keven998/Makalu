@@ -367,6 +367,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             regNotice.setVisibility(View.VISIBLE);
         }
 
+        if(index==3){
+            view.findViewById(R.id.line_inter).setVisibility(View.GONE);
+        }
        // Drawable myImage = (Drawable)getResources().getDrawable(mImageViewArray[index], );
        // myImage.setBounds(1, 1, 100, 100);
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);

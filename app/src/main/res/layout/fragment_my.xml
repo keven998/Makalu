@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/my_profile"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical"
-        >
-
-    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
@@ -88,4 +80,14 @@
             android:visibility="gone"
             />
     </RelativeLayout>
-</FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/my_profile"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        >
+
+    </LinearLayout>
+</LinearLayout>
