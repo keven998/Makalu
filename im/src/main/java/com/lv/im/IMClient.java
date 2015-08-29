@@ -53,8 +53,8 @@ public class IMClient {
     private Timer timer;
     private volatile boolean isRunning;
     public int p;
-    public static long lastSusseccFetch;
-
+    public static long lastSuccessFetch;
+    private Context mContext;
     public boolean isLogin() {
         return isLogin;
     }
@@ -492,14 +492,14 @@ public class IMClient {
     }
 
     public void ackAndFetch(FetchListener listener) {
-        HttpUtils.postAck(lastSusseccFetch, listener);
+        HttpUtils.postAck(lastSuccessFetch, listener);
     }
 
     /**
      * 初始化Fetch
      */
     public void initAckAndFetch() {
-        HttpUtils.postAck(lastSusseccFetch, (list) -> {
+        HttpUtils.postAck(lastSuccessFetch, (list) -> {
             for (Message msg : list) {
                 LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
             }
@@ -514,7 +514,7 @@ public class IMClient {
         if (result == 0) {
             setLastMsg(message.getConversation(), message.getMsgId());
         }
-        //       IMClient.lastSusseccFetch = message.getTimestamp();
+        //       IMClient.lastSuccessFetch = message.getTimestamp();
         add2ackList(message.getId());
         return result;
     }

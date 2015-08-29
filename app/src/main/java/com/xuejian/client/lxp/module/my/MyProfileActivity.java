@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,11 +16,9 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.utils.SharePrefUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -34,20 +29,16 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
-import com.xuejian.client.lxp.module.MainActivity;
-import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -135,7 +126,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     }
 
 
-    private void   turnToEditProfile(){
+    private void  turnToEditProfile(){
         MobclickAgent.onEvent(MyProfileActivity.this, "navigation_item_edit_profile");
         User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
         if (user == null) {
@@ -273,7 +264,8 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(MyProfileActivity.this, userResult.result);
-                        refreshUserInfo();
+                        refreshLoginStatus();
+                       // refreshUserInfo();
 
                     }
 

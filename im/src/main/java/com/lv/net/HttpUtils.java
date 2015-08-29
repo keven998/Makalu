@@ -48,6 +48,10 @@ public class HttpUtils {
                 .url(url)
                 .post(body)
                 .build();
+        if (Config.isDebug){
+            Log.d(Config.TAG,"请求内容： "+postBody);
+            Log.d(Config.TAG,"请求接口： "+url);
+        }
         return client.newCall(request).execute();
 
     }
@@ -71,6 +75,9 @@ public class HttpUtils {
                 .url(url)
                 .get()
                 .build();
+        if (Config.isDebug){
+            Log.d(Config.TAG,"请求接口： "+url);
+        }
         return client.newCall(request).execute();
     }
 
@@ -82,6 +89,10 @@ public class HttpUtils {
                 .url(url)
                 .patch(body)
                 .build();
+        if (Config.isDebug){
+            Log.d(Config.TAG,"请求内容： "+patchBody);
+            Log.d(Config.TAG,"请求接口： "+url);
+        }
         return client.newCall(request).execute();
     }
 
@@ -130,7 +141,7 @@ public class HttpUtils {
                         Log.i(Config.TAG, "ack Result : " + s);
                     }
                     if (resultArray.length()>0){
-                        IMClient.lastSusseccFetch = object.getLong("timestamp");
+                        IMClient.lastSuccessFetch = object.getLong("timestamp");
                     }
                     for (int j = 0; j < resultArray.length(); j++) {
                         Message msg = JSON.parseObject(resultArray.getJSONObject(j).toString(), Message.class);

@@ -890,12 +890,4 @@ public class UserApi extends BaseApi {
     //    return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request,"", callback);
     }
-
-    public static void test(HttpCallBack callBack) {
-        PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + USERINFO + "100004");
-        setDefaultParams(request);
-        OkHttpClientManager.getInstance().request(request,"", callBack);
-    }
 }

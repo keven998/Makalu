@@ -773,31 +773,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
             }
         });
-        UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    if (jsonObject.getInt("code") == 0) {
-                        JSONArray object = jsonObject.getJSONArray("result");
-                        updatePics(object.length());
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
     }
 
     private void updatePics(int num) {
