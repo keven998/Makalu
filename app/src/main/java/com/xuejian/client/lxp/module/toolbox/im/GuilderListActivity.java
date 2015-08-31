@@ -273,6 +273,7 @@ public class GuilderListActivity extends PeachBaseActivity {
                 vh = (ViewHolder) convertView.getTag();
             }
             //获取接口数据进行加载
+
             ExpertBean eb = (ExpertBean) getItem(position);
 //            if (eb.gender.equalsIgnoreCase("M")) {
 //                vh.avatarView.setBackgroundResource(R.drawable.expert_boy);
@@ -281,6 +282,7 @@ public class GuilderListActivity extends PeachBaseActivity {
 //            } else {
 //                vh.avatarView.setBackgroundResource(R.drawable.expert_unknow);
 //            }
+            ViewCompat.setElevation(convertView, CommonUtils.dip2px(mContext,5));
             imgLoader.displayImage(eb.avatar, vh.avatarView, UILUtils.getDefaultOption());
             vh.nickView.setText(eb.nickName);
             if (!TextUtils.isEmpty(eb.residence)) {

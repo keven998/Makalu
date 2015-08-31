@@ -149,15 +149,11 @@ public class IMClient {
                 ackAndFetch(new FetchListener() {
                     @Override
                     public void OnMsgArrive(List<Message> list) {
-                        /**
-                         *
-                         * 风险
-                         *
-                         */
+
                         for (Message msg : list) {
                             LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
                         }
-                        LazyQueue.getInstance().TempDequeue();
+                        if (list.size()>0)LazyQueue.getInstance().TempDequeue();
                     }
                 });
             }

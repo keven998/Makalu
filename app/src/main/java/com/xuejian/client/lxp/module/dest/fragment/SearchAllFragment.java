@@ -3,7 +3,6 @@ package com.xuejian.client.lxp.module.dest.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,7 +50,7 @@ import java.util.List;
  */
 public class SearchAllFragment extends PeachBaseFragment {
 
-
+    ImageView iv_clean;
     EditText mEtSearch;
     TextView mBtnSearch;
     ListView mSearchAllLv;
@@ -82,6 +82,13 @@ public class SearchAllFragment extends PeachBaseFragment {
         cleanHistory = (TextView) rootView.findViewById(R.id.cleanHistory);
         history_pannel = (FrameLayout) rootView.findViewById(R.id.history_pannel);
         recomend_tag = (TagListView) rootView.findViewById(R.id.recomend_tag);
+        iv_clean = (ImageView) rootView.findViewById(R.id.iv_clean);
+        iv_clean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEtSearch.setText("");
+            }
+        });
         cleanHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,10 +107,9 @@ public class SearchAllFragment extends PeachBaseFragment {
                 }
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                mBtnSearch.setText("取消");
             }
         });
-
+        mEtSearch.setHint("城市/景点/美食/购物");
         mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -122,17 +128,16 @@ public class SearchAllFragment extends PeachBaseFragment {
         mEtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mBtnSearch.setText("取消");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
                     mSearchAllLv.setAdapter(null);
-                    mBtnSearch.setText("取消");
+                    iv_clean.setVisibility(View.INVISIBLE);
                 }
                 if (s.length() > 0) {
-                    mBtnSearch.setText("搜索");
+                    iv_clean.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -159,14 +164,14 @@ public class SearchAllFragment extends PeachBaseFragment {
 
             }
         });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mEtSearch.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mEtSearch, InputMethodManager.SHOW_IMPLICIT);
-            }
-        }, 600);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mEtSearch.requestFocus();
+//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.showSoftInput(mEtSearch, InputMethodManager.SHOW_IMPLICIT);
+//            }
+//        }, 600);
         history_tag = (TagListView) rootView.findViewById(R.id.history_tag);
         setUpData();
         history_tag.setTags(mTags);

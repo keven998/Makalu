@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/search_bar"
+android:layout_width="fill_parent"
+android:layout_height="@dimen/title_bar_height"
+android:background="@drawable/bg_navigation_bar"
+android:focusable="true"
+android:focusableInTouchMode="true"
+android:gravity="center_vertical"
+android:orientation="horizontal">
+<RelativeLayout
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/all_whitesolid_background"
+        android:drawableLeft="@drawable/ic_search"
+        android:paddingRight="5dp"
+        android:drawablePadding="10dp"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:paddingLeft="8dp"
+        android:singleLine="true"
+        android:textColor="@color/base_text_color_title"
+        android:textColorHint="@color/base_text_color_text_hint"
+        android:textSize="@dimen/text_size_14" />
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/iv_clean"
+        android:scaleType="centerCrop"
+        android:padding="2dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"
+        android:paddingRight="5dp"
+        android:src="@drawable/icon_clean"/>
+</RelativeLayout>
+
+<!--   android:background="@drawable/button_normal_shape"-->
+<TextView
+    android:id="@+id/btn_search"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="20dp"
+    android:text="搜索"
+    android:textColor="@color/selector_white_text_color"
+    android:textSize="@dimen/text_size_14" />
+</LinearLayout>

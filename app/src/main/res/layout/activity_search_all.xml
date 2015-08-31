@@ -25,42 +25,41 @@
             android:id="@+id/empty_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-                <FrameLayout
-                    android:id="@+id/history_pannel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="搜搜历史"
-                        android:layout_gravity="center_vertical|left"
-                        android:textSize="@dimen/text_size_15"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="15dp"
-                        android:textColor="@color/color_text_ii"
-                        />
+            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/cleanHistory"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="清除"
-                        android:layout_gravity="center_vertical|right"
-                        android:textSize="@dimen/text_size_13"
-                        android:layout_marginRight="15dp"
-                        android:textColor="@color/color_text_ii"
-                        />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/color_line"
-                        android:layout_gravity="bottom"
-                        android:layout_marginLeft="15dp"
-                        />
-                </FrameLayout>
+            <FrameLayout
+                android:id="@+id/history_pannel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginLeft="15dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="搜搜历史"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="@dimen/text_size_15" />
+
+                <TextView
+                    android:id="@+id/cleanHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="15dp"
+                    android:text="清除"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="@dimen/text_size_13" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="15dp"
+                    android:background="@color/color_line" />
+            </FrameLayout>
 
             <com.xuejian.client.lxp.common.widget.TagView.TagListView
                 android:id="@+id/history_tag"
@@ -77,20 +76,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="热门搜搜"
                 android:layout_gravity="center_vertical|left"
-                android:textSize="@dimen/text_size_15"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
                 android:layout_marginLeft="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="热门搜搜"
                 android:textColor="@color/color_text_ii"
-                />
+                android:textSize="@dimen/text_size_15" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/color_line"
                 android:layout_marginRight="15dp"
-                />
+                android:background="@color/color_line" />
+
             <com.xuejian.client.lxp.common.widget.TagView.TagListView
                 android:id="@+id/recomend_tag"
                 android:layout_width="match_parent"
@@ -105,44 +104,6 @@
         </LinearLayout>
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/search_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/et_search"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/all_whitesolid_background"
-            android:drawableLeft="@drawable/ic_search"
-            android:drawablePadding="10dp"
-            android:hint="城市/景点/美食/购物"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:paddingLeft="8dp"
-            android:singleLine="true"
-            android:textColor="@color/base_text_color_title"
-            android:textColorHint="@color/base_text_color_text_hint"
-            android:textSize="@dimen/text_size_14" />
-<!--   android:background="@drawable/button_normal_shape"-->
-        <TextView
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="20dp"
-            android:text="取消"
-            android:textColor="@color/selector_white_text_color"
-            android:textSize="@dimen/text_size_14" />
-    </LinearLayout>
+    <include layout="@layout/search_bar_with_clean" />
 
 </RelativeLayout>
