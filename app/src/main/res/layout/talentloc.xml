@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/talent_loc_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/content_top_margin"
-        android:divider="@null"
-        android:dividerHeight="0dp" />
+
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -24,7 +18,9 @@
             android:paddingLeft="12dp"
             android:paddingRight="32dp"
             android:scaleType="center"
-            android:src="@drawable/selector_ic_nav_back" />
+            android:src="@drawable/selector_ic_nav_back"
+            android:visibility="gone"
+            />
 
         <CheckedTextView
             android:id="@+id/tv_title_bar_title"
@@ -46,5 +42,14 @@
             android:padding="15dp"
             android:src="@drawable/expert_loc_search" />
     </RelativeLayout>
-
-</FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"/>
+    <ListView
+        android:id="@+id/talent_loc_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
+</LinearLayout>
