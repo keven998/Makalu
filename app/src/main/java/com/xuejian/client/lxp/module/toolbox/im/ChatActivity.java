@@ -87,7 +87,6 @@ import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
-import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
@@ -182,7 +181,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public static List<MessageBean> messageList = new LinkedList<>();
     private User user;
     TextView titleView;
-    private String changedTitle=null;
+    private String changedTitle = null;
+
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -239,7 +239,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public void getUserInfo(int userId) {
         try {
             DialogManager.getInstance().showModelessLoadingDialog(mContext);
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissModelessLoadingDialog();
         }
         UserApi.getUserInfo(String.valueOf(userId), new HttpCallBack<String>() {
@@ -625,14 +625,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
     }
 
-    public void setTitleText(String titleText){
+    public void setTitleText(String titleText) {
         if ("single".equals(chatType)) {
 
-        }else{
-            changedTitle=titleText;
+        } else {
+            changedTitle = titleText;
             titleView.setText(titleText);
         }
     }
+
     /**
      * 消息图标点击事件
      */
@@ -727,7 +728,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             btnContainer.setVisibility(View.GONE);
             expressionContainer.setVisibility(View.GONE);
             mExtraPanel.setVisibility(View.GONE);
-            showKeyboadrd(mEditTextContent);
+            showKeyboard(mEditTextContent);
         }
     }
 
@@ -762,7 +763,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             mCamera.release();
             mCamera = null;
         }
-
         return canUse;
     }
 
@@ -853,7 +853,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             adapter.refresh();
             listView.setSelection(listView.getCount() - 1);
             setResult(RESULT_OK);
-        }else {
+        } else {
             ToastUtil.getInstance(ChatActivity.this).showToast("图片解析失败");
         }
     }
@@ -1025,7 +1025,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             btnMore.setVisibility(View.GONE);
             buttonSend.setVisibility(View.VISIBLE);
         }
-        showKeyboadrd(mEditTextContent);
+        showKeyboard(mEditTextContent);
     }
 
     /**
@@ -1138,10 +1138,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         MediaRecordFunc.getInstance().startRecordNotFile();
                         final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
                         long time = com.lv.utils.CommonUtils.getAmrDuration(new File(path));
-                        if (time <=0){
-                                ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
-                                MediaRecordFunc.getInstance().cancleRecord();
-                                return false;
+                        if (time <= 0) {
+                            ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
+                            MediaRecordFunc.getInstance().cancleRecord();
+                            return false;
                         }
                         v.setPressed(true);
                         wakeLock.acquire();
@@ -1150,7 +1150,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         recordingContainer.setVisibility(View.VISIBLE);
                         recordingHint.setText(getString(R.string.move_up_to_cancel));
                         recordingHint.setBackgroundColor(Color.TRANSPARENT);
-                        int code= MediaRecordFunc.getInstance().startRecordAndFile(handler);
+                        int code = MediaRecordFunc.getInstance().startRecordAndFile(handler);
                         if (code == 1010) {
                             ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
                             isRecord = false;
@@ -1338,28 +1338,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
     }
 
-    private void showKeyboadrd(View view) {
+    private void showKeyboard(View view) {
         manager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    /**
-     * 加入到黑名单
-     *
-     * @param username username
-     */
-    private void addUserToBlacklist(String username) {
-        try {
-            //   EMContactManager.getInstance().addUserToBlackList(username, true);
-//			Toast.makeText(getApplicationContext(), "移入黑名单成功", Toast.LENGTH_SHORT).show();
-            if (!isFinishing())
-                ToastUtil.getInstance(this).showToast("成功删除她");
-        } catch (Exception e) {
-            e.printStackTrace();
-//			Toast.makeText(getApplicationContext(), "移入黑名单失败", Toast.LENGTH_SHORT).show();
-            if (!isFinishing())
-                ToastUtil.getInstance(this).showToast("呃～好像找不到网络");
-        }
-    }
 
     public void back(View view) {
         finish();
@@ -1373,7 +1355,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         beforeBack();
     }
 
-    public void beforeBack(){
+    public void beforeBack() {
         if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
             drawerLayout.closeDrawer(GravityCompat.END);
         } else if (mExtraPanel.getVisibility() == View.VISIBLE) {
@@ -1386,13 +1368,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
             if ("single".equals(chatType)) {
 
-            }else {
-                if(changedTitle!=null && changedTitle.trim().length()>0){
+            } else {
+                if (changedTitle != null && changedTitle.trim().length() > 0) {
                     user.setNickName(changedTitle);
                     UserDBManager.getInstance().saveContact(user);
                     Intent intent = new Intent();
-                    intent.putExtra("changedTitle",changedTitle);
-                    setResult(RESULT_OK,intent);
+                    intent.putExtra("changedTitle", changedTitle);
+                    setResult(RESULT_OK, intent);
                 }
 
             }
@@ -1400,6 +1382,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             finish();
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -1423,7 +1406,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             loadmorePB.setVisibility(View.GONE);
                             return;
                         }
-              //          System.out.println("messageList "+messageList.size());
+                        //          System.out.println("messageList "+messageList.size());
                         if (messageList.size() != 0) {
                             // 刷新ui
                             adapter.notifyDataSetChanged();
@@ -1480,19 +1463,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         return false;
     }
 
-    public int checkOp(){
-        if (Build.VERSION.SDK_INT>19){
-            int uid =0;
+    public int checkOp() {
+        if (Build.VERSION.SDK_INT > 19) {
+            int uid = 0;
             try {
                 PackageManager pm = getPackageManager();
                 ApplicationInfo ai = pm.getApplicationInfo("com.xuejian.client.lxp", PackageManager.GET_ACTIVITIES);
-                uid =ai.uid;
+                uid = ai.uid;
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
             AppOpsManager manager = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
             int result = manager.checkOp("27", uid, "com.xuejian.client.lxp");
-            System.out.println(uid+" "+result);
+            System.out.println(uid + " " + result);
         }
         return 0;
     }

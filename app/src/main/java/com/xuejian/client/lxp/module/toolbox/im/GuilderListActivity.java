@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -298,6 +299,7 @@ public class GuilderListActivity extends PeachBaseActivity {
             } else {
                 vh.ageView.setText("");
             }
+            ViewCompat.setElevation(vh.expert_level,10);
             vh.expert_level.setText(String.format("V%d", eb.level));
             //足迹
             String st1 = "服务城市：";

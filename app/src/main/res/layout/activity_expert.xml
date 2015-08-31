@@ -13,8 +13,8 @@
         android:cacheColorHint="@android:color/transparent"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
+        android:divider="@color/app_backgroud"
+        android:dividerHeight="15dp"
         android:scrollbarStyle="outsideOverlay"
         android:overScrollMode="never" />
 
