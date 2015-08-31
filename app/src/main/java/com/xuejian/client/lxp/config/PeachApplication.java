@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.xuejian.client.lxp.common.utils.CrashHandler;
 
 import java.io.File;
 
@@ -35,6 +36,7 @@ public class PeachApplication extends BaseApplication {
         initPeachConfig();
         initChannelId();
         initImageLoader();
+        CrashHandler.getInstance().init(this);
     }
 
     private void initImageLoader() {

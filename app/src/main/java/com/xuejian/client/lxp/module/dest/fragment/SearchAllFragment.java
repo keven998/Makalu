@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.KeywordBean;
@@ -46,13 +45,10 @@ import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 /**
  * Created by xuyongchen on 15/8/26.
  */
-public class SearchAllFragment  extends PeachBaseFragment {
+public class SearchAllFragment extends PeachBaseFragment {
 
 
     EditText mEtSearch;
@@ -70,7 +66,8 @@ public class SearchAllFragment  extends PeachBaseFragment {
     private final List<Tag> mTags = new ArrayList<Tag>();
     private final List<Tag> mKeyTags = new ArrayList<Tag>();
     private TagListView history_tag;
-    private String [] keys;
+    private String[] keys;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,14 +75,13 @@ public class SearchAllFragment  extends PeachBaseFragment {
         //toId = getIntent().getStringExtra("toId");
         //chatType = getIntent().getStringExtra("chatType");
         //conversation = getIntent().getStringExtra("conversation");
-        View  rootView = inflater.inflate(R.layout.activity_search_all,container,false);
-
-        mEtSearch = (EditText)rootView.findViewById(R.id.et_search);
-        mBtnSearch = (TextView)rootView.findViewById(R.id.btn_search);
-        mSearchAllLv = (ListView)rootView.findViewById(R.id.search_all_lv);
-        cleanHistory = (TextView)rootView.findViewById(R.id.cleanHistory);
-        history_pannel = (FrameLayout)rootView.findViewById(R.id.history_pannel);
-        recomend_tag = (TagListView)rootView.findViewById(R.id.recomend_tag);
+        View rootView = inflater.inflate(R.layout.activity_search_all, container, false);
+        mEtSearch = (EditText) rootView.findViewById(R.id.et_search);
+        mBtnSearch = (TextView) rootView.findViewById(R.id.btn_search);
+        mSearchAllLv = (ListView) rootView.findViewById(R.id.search_all_lv);
+        cleanHistory = (TextView) rootView.findViewById(R.id.cleanHistory);
+        history_pannel = (FrameLayout) rootView.findViewById(R.id.history_pannel);
+        recomend_tag = (TagListView) rootView.findViewById(R.id.recomend_tag);
         cleanHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,14 +93,14 @@ public class SearchAllFragment  extends PeachBaseFragment {
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if (TextUtils.isEmpty(mEtSearch.getText())) {
-                        return;
-                    } else {
-                        searchAll(mEtSearch.getText().toString().trim());
-                    }
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    mBtnSearch.setText("取消");
+                if (TextUtils.isEmpty(mEtSearch.getText())) {
+                    return;
+                } else {
+                    searchAll(mEtSearch.getText().toString().trim());
+                }
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                mBtnSearch.setText("取消");
             }
         });
 
@@ -177,7 +173,7 @@ public class SearchAllFragment  extends PeachBaseFragment {
         history_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
-                if (keys!=null&&keys.length>0){
+                if (keys != null && keys.length > 0) {
                     mEtSearch.setText(keys[tag.getId()]);
                 }
             }
@@ -185,22 +181,23 @@ public class SearchAllFragment  extends PeachBaseFragment {
 
         return rootView;
     }
-    private String[] getSearchHistory(){
+
+    private String[] getSearchHistory() {
         String save_Str = SharePrefUtil.getHistory(getActivity());
         return save_Str.split(",");
     }
 
     private void setUpData() {
-        keys= getSearchHistory();
-        if (keys.length>0&&!TextUtils.isEmpty(keys[0])){
-            for (int i = keys.length-1; i >=0; i--) {
+        keys = getSearchHistory();
+        if (keys.length > 0 && !TextUtils.isEmpty(keys[0])) {
+            for (int i = keys.length - 1; i >= 0; i--) {
                 Tag tag = new Tag();
                 tag.setId(i);
                 tag.setChecked(true);
                 tag.setTitle(keys[i]);
                 mTags.add(tag);
             }
-        }else {
+        } else {
             history_pannel.setVisibility(View.GONE);
         }
         TravelApi.getRecommendKeywords(new HttpCallBack() {
@@ -242,8 +239,7 @@ public class SearchAllFragment  extends PeachBaseFragment {
         String save_Str = SharePrefUtil.getHistory(getActivity());
         String[] hisArrays = save_Str.split(",");
         for (String s : hisArrays) {
-            if(s.equals(keyword))
-            {
+            if (s.equals(keyword)) {
                 return;
             }
         }
@@ -253,7 +249,7 @@ public class SearchAllFragment  extends PeachBaseFragment {
     }
 
     private void searchAll(final String keyword) {
-        if(TextUtils.isEmpty(keyword)){
+        if (TextUtils.isEmpty(keyword)) {
             ToastUtil.getInstance(getActivity()).showToast("请输入关键词");
             return;
         }

@@ -81,7 +81,6 @@ public class GuilderListActivity extends PeachBaseActivity {
 
         initList();
     }
-
     private void initList() {
         gridView = (PullToRefreshListView) findViewById(R.id.expert_grid);
         gridView.setPullLoadEnabled(false);
@@ -299,7 +298,8 @@ public class GuilderListActivity extends PeachBaseActivity {
             } else {
                 vh.ageView.setText("");
             }
-            ViewCompat.setElevation(vh.expert_level,10);
+
+            ViewCompat.setElevation(vh.expert_level, CommonUtils.dip2px(mContext,5));
             vh.expert_level.setText(String.format("V%d", eb.level));
             //足迹
             String st1 = "服务城市：";
