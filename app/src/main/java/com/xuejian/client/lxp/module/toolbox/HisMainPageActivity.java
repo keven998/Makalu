@@ -113,6 +113,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     TextView about;
     @InjectView(R.id.comment)
     TextView comment;
+
+    @InjectView(R.id.fl_tracks_entry)
+    LinearLayout flTracksEntry;
+
+    @InjectView(R.id.fl_plans_entry)
+    LinearLayout flPlansEntry;
     private final List<Tag> mTags = new ArrayList<Tag>();
 
     @Override
@@ -649,9 +655,10 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         } else {
             tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday())));
         }
+
         tv_plan_count.setText(String.format("%d篇", bean.getGuideCnt()));
         tv_track_count.setText(String.format("%d国%d城", bean.getCountryCnt(), bean.getTrackCnt()));
-        tv_track_count.setOnClickListener(new View.OnClickListener() {
+        flPlansEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
@@ -662,7 +669,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 startActivity(intent);
             }
         });
-        tv_plan_count.setOnClickListener(new View.OnClickListener() {
+
+        flTracksEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
