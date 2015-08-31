@@ -78,7 +78,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent"
-            android:windowSoftInputMode="stateUnchanged">
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.notify" />
                 <category android:name="android.intent.category.DEFAULT" />
