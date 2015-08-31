@@ -89,7 +89,7 @@
                     android:paddingLeft="15dp"
                     android:paddingTop="15dp"
                     android:background="@color/white"
-                    android:textSize="@dimen/text_size_16"
+                    android:textSize="24sp"
                     android:textColor="@color/color_text_i"
                     android:text="姓名"
                     />
@@ -178,7 +178,7 @@
                     android:layout_height="65dp"
                     android:text="0"
                     android:textColor="@color/color_text_iii"
-                    android:textSize="18sp"
+                    android:textSize="30sp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:paddingLeft="15dp"
@@ -189,8 +189,10 @@
 
                     <HorizontalScrollView
                         android:id="@+id/my_all_pics_sv"
-                        android:layout_width="match_parent"
-                        android:layout_height="65dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="10dp"
                       />
                     <ImageView
                         android:id="@+id/profile_image0"
@@ -247,8 +249,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:background="@color/white"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
                         >
                         <LinearLayout
                             android:id="@+id/fl_tracks_entry"
