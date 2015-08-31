@@ -93,14 +93,13 @@ public class SearchAllFragment extends PeachBaseFragment {
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(mEtSearch.getText())) {
-                    return;
-                } else {
-                    searchAll(mEtSearch.getText().toString().trim());
-                }
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                mBtnSearch.setText("取消");
+                    if (TextUtils.isEmpty(mEtSearch.getText())) {
+                        return;
+                    } else {
+                        searchAll(mEtSearch.getText().toString().trim());
+                    }
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
 
@@ -119,28 +118,7 @@ public class SearchAllFragment extends PeachBaseFragment {
             }
         });
 
-        mEtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mBtnSearch.setText("取消");
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    mSearchAllLv.setAdapter(null);
-                    mBtnSearch.setText("取消");
-                }
-                if (s.length() > 0) {
-                    mBtnSearch.setText("搜索");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         View emptyView = rootView.findViewById(R.id.empty_text);
 
 

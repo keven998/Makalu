@@ -113,7 +113,6 @@ public class StrategyListActivity extends PeachBaseActivity {
             isOwner = (AccountManager.getInstance().getLoginAccount(this) != null) && userId.equals(AccountManager.getCurrentUserId());
             user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
         }
-
     }
 
     @Override
@@ -124,15 +123,14 @@ public class StrategyListActivity extends PeachBaseActivity {
         getStrategyListData(0, mContentType);
         MobclickAgent.onPageStart("page_lxp_plan_lists");
         MobclickAgent.onResume(this);
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-       MobclickAgent.onPageEnd("page_lxp_plan_lists");
+        MobclickAgent.onPageEnd("page_lxp_plan_lists");
         newCopy = false;
-       SharePrefUtil.saveBoolean(mContext,"newPlan",false);
+        SharePrefUtil.saveBoolean(mContext,"newPlan",false);
         MobclickAgent.onPause(this);
     }
 
