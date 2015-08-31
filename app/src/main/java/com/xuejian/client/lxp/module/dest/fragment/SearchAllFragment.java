@@ -143,7 +143,7 @@ public class SearchAllFragment extends PeachBaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                
             }
         });
         View emptyView = rootView.findViewById(R.id.empty_text);

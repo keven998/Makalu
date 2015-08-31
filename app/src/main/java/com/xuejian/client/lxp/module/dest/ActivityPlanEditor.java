@@ -18,6 +18,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.GuideViewUtils;
+import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.module.dest.fragment.EditPlanFragment;
@@ -83,6 +85,12 @@ public class ActivityPlanEditor extends FragmentActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setEnabled(true);
         mDragListView = (DragSortListView) findViewById(R.id.listview_plan_editor);
+        View view = new View(this);
+        AbsListView.LayoutParams params =new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,AbsListView.LayoutParams.WRAP_CONTENT);
+        params.height=400;
+        view.setLayoutParams(params);
+
+        mDragListView.addFooterView(view);
         editorAdapter = new EditorAdapter(this);
         mDragListView.setDropListener(editorAdapter);
         SectionController c = new SectionController(mDragListView, editorAdapter);
@@ -90,7 +98,6 @@ public class ActivityPlanEditor extends FragmentActivity {
         mDragListView.setFloatViewManager(c);
         mDragListView.setOnTouchListener(c);
         mDragListView.setAdapter(editorAdapter);
-
         findViewById(R.id.btn_edit_day).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
