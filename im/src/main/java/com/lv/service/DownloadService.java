@@ -134,12 +134,13 @@ public class DownloadService extends Service {
                     input = conn.getInputStream();
                     if (msgType==1){
                         output = new FileOutputStream(newfile);
-                        byte buffer[] = new byte[512];
-                        while(input.read(buffer) != -1){
-                            output.write(buffer);
+
+                        byte[] voice_bytes = new byte[1024];
+                        int len1 = -1;
+                        while ((len1 = input.read(voice_bytes)) != -1) {
+                            output.write(voice_bytes, 0, len1);
                         }
                         output.flush();
-
                     }
                     if (msgType==2) {
                         Bitmap bm = BitmapFactory.decodeStream(input);

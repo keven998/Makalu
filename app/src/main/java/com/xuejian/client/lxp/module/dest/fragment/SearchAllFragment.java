@@ -143,7 +143,7 @@ public class SearchAllFragment extends PeachBaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                
+
             }
         });
         View emptyView = rootView.findViewById(R.id.empty_text);
@@ -195,12 +195,15 @@ public class SearchAllFragment extends PeachBaseFragment {
     private void setUpData() {
         keys = getSearchHistory();
         if (keys.length > 0 && !TextUtils.isEmpty(keys[0])) {
+            int count = 0;
             for (int i = keys.length - 1; i >= 0; i--) {
                 Tag tag = new Tag();
                 tag.setId(i);
                 tag.setChecked(true);
                 tag.setTitle(keys[i]);
                 mTags.add(tag);
+                count++;
+                if (count==9)break;
             }
         } else {
             history_pannel.setVisibility(View.GONE);

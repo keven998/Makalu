@@ -178,9 +178,9 @@ public class VoicePlayClickListener implements View.OnClickListener {
                 }
 
             } else if (message.getStatus() == 1) {
-                Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
             } else if (message.getStatus() == 2) {
-                Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(activity, "正在下载语音，稍后点击", Toast.LENGTH_SHORT).show();
                 new AsyncTask<Void, Void, Void>() {
 
                     @Override

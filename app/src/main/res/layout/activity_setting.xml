@@ -265,7 +265,7 @@
                 android:layout_gravity="center_vertical"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="退出应用"
+                android:text="退出登录"
                 android:textColor="@color/red_add"
                 android:textSize="15sp"
                 android:layout_column="1"

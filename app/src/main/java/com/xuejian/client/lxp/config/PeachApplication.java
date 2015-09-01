@@ -36,7 +36,10 @@ public class PeachApplication extends BaseApplication {
         initPeachConfig();
         initChannelId();
         initImageLoader();
-        CrashHandler.getInstance().init(this);
+        if (!com.xuejian.client.lxp.BuildConfig.DEBUG){
+            CrashHandler.getInstance().init(this);
+        }
+
     }
 
     private void initImageLoader() {

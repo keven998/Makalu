@@ -181,6 +181,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public static List<MessageBean> messageList = new LinkedList<>();
     private User user;
     TextView titleView;
+    private int currentSize;
     private String changedTitle = null;
 
     @Override
@@ -265,6 +266,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private void initData() {
         messageList.clear();
         messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));
+        currentSize=messageList.size();
         adapter.refresh();
         int count = listView.getCount();
         if (count > 0) {
@@ -1400,19 +1402,22 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
                         loadmorePB.setVisibility(View.VISIBLE);
                         try {
+                            currentSize = messageList.size();
                             messageList.clear();
                             messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, ++PAGE));
                         } catch (Exception e1) {
                             loadmorePB.setVisibility(View.GONE);
                             return;
                         }
-                        //          System.out.println("messageList "+messageList.size());
                         if (messageList.size() != 0) {
                             // 刷新ui
                             adapter.notifyDataSetChanged();
-                            listView.setSelection(messageList.size() - 1);
-                            if (messageList.size() != pagesize)
+                            if (messageList.size()>currentSize){
+                                listView.setSelection(messageList.size()-currentSize-1);
+                            }
+                            if (messageList.size() == currentSize) {
                                 haveMoreData = false;
+                            }
                         } else {
                             haveMoreData = false;
                         }
@@ -1426,7 +1431,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
         }
 
     }
