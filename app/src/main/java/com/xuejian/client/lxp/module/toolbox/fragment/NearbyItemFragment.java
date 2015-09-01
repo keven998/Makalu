@@ -231,6 +231,7 @@ public class NearbyItemFragment extends PeachBaseFragment implements NearbyActiv
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.reset(this);
     }
 
     @Override

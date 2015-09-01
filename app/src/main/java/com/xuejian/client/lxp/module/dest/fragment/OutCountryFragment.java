@@ -313,6 +313,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.reset(this);
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
     }

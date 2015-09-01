@@ -118,7 +118,6 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             case R.id.web_view_share:
                 ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, strategy);
                 break;
-
             default:
                 break;
         }

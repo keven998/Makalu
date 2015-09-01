@@ -76,6 +76,12 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         try {
             mOnEditModeChangeListener = (OnStrategyModeChangeListener) activity;

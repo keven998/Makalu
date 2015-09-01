@@ -117,6 +117,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
         return rootView;
     }
 
+
     private void initData() {
 
         //这里还需要判断读取不同的接口数据
@@ -531,6 +532,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.reset(this);
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
     }

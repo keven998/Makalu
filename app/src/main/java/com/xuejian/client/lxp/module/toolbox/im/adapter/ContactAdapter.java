@@ -21,8 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -36,8 +34,6 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +165,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.avatarView.setImageResource(R.drawable.my_group);
             vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         } else {
+            vh.unreadMsgView.setVisibility(View.INVISIBLE);
             if (TextUtils.isEmpty(user.getMemo())){
                 vh.nickView.setText(user.getNickName());
             }else {

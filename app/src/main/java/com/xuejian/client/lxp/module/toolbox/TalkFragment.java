@@ -27,8 +27,6 @@ import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -105,10 +103,7 @@ public class TalkFragment extends PeachBaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 curconversation = adapter.getItem(position);
-//                String username = conversation.getFriendId() + "";
                 if (String.valueOf(curconversation.getFriendId()).equals(AccountManager.getCurrentUserId()))
-                    //  if (username.equals(AccountManager.getInstance().getLoginAccount(getActivity()).easemobUser))
-//                    Toast.makeText(getActivity(), "不能和自己聊天", Toast.LENGTH_SHORT).show();
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
                 else {
                     if (curconversation.getFriendId()==10000){

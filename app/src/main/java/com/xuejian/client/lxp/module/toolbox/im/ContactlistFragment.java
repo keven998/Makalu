@@ -13,7 +13,6 @@
  */
 package com.xuejian.client.lxp.module.toolbox.im;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,7 +26,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.widget.SideBar;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -169,39 +167,6 @@ public class ContactlistFragment extends Fragment {
     }
 
 
-    /**
-     * 把user移入到黑名单
-     */
-    private void moveToBlacklist(final String username) {
-        final ProgressDialog pd = new ProgressDialog(getActivity());
-        pd.setMessage("正在移入黑名单...");
-        pd.setCanceledOnTouchOutside(false);
-        pd.show();
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    //加入到黑名单
-                    if (isAdded())
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                pd.dismiss();
-                                ToastUtil.getInstance(getActivity()).showToast("成功移除她");
-                            }
-                        });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    if (isAdded())
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                pd.dismiss();
-                                ToastUtil.getInstance(getActivity()).showToast("呃~好像找不到网络");
-                            }
-                        });
-                }
-            }
-        }).start();
-
-    }
 
     // 刷新ui
     public void refresh() {

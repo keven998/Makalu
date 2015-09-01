@@ -32,7 +32,6 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.GroupAdapter;
 
 public class GroupsActivity extends ChatBaseActivity {
     private ListView groupListView;
-    //protected List<EMGroup> grouplist;
     private GroupAdapter groupAdapter;
     private InputMethodManager inputMethodManager;
     public static GroupsActivity instance;
@@ -44,9 +43,7 @@ public class GroupsActivity extends ChatBaseActivity {
 
         instance = this;
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //grouplist =	EMGroupManager.getInstance().getAllGroups();
         groupListView = (ListView) findViewById(R.id.list);
-        //groupAdapter = new GroupAdapter(this, 1, grouplist);
         groupListView.setAdapter(groupAdapter);
         groupListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -97,8 +94,6 @@ public class GroupsActivity extends ChatBaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-        //grouplist = EMGroupManager.getInstance().getAllGroups();
-        //groupAdapter = new GroupAdapter(this, 1, grouplist);
         groupListView.setAdapter(groupAdapter);
         groupAdapter.notifyDataSetChanged();
     }
