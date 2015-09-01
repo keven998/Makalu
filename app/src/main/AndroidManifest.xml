@@ -343,9 +343,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
         <!-- 收藏夹 -->
-        <activity
-            android:name=".module.toolbox.FavListActivity"
-            android:screenOrientation="portrait"/>
         <!-- 群组列表 -->
         <activity
             android:name=".module.toolbox.im.GroupsActivity"

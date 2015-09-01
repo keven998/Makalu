@@ -95,7 +95,7 @@ public class EditPlanFragment extends Fragment {
             setBackgroundColor(Color.TRANSPARENT);
             setRemoveEnabled(false);
             setRemoveMode(DragSortController.CLICK_REMOVE);
-            setClickRemoveId(R.id.delete);
+            setClickRemoveId(R.id.iv_delete_day);
             mDSlv = dslv;
             mAdapter = adapter;
         }
