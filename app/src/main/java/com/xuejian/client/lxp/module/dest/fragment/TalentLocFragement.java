@@ -31,6 +31,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.XDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.module.dest.SearchExpertActivity;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
 import java.util.ArrayList;
@@ -145,7 +146,9 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
         view.findViewById(R.id.expert_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), SearchExpertActivity.class);
+                startActivity(intent);
             }
         });
         view.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {

@@ -106,7 +106,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                     }
                 }
             }
-
         };
 
         final String storyImageUrl = SharePrefUtil.getString(this, "story_image", "");

@@ -2,9 +2,11 @@ package com.xuejian.client.lxp.module.my;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -23,22 +25,46 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
-import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.config.SettingConfig;
+import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
-
+TextView cacheSize;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                File file =new File(Environment.getExternalStorageDirectory().getPath()+File.separator+ SystemConfig.NET_IMAGE_CACHE_DIR);
+                System.out.println(file.getAbsolutePath());
+                if (file.exists()){
+                    long  size = getFolderSize(file);
+                    size = size / 1024 / 1024;
+                    final long s =size;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            cacheSize.setText(s+"MB");
+                        }
+                    });
+                }
+            }
+        }).start();
+
     }
 
     private void initView() {
         setContentView(R.layout.activity_setting);
+        cacheSize = (TextView) findViewById(R.id.tv_cache_size);
         findViewById(R.id.ll_version_update).setOnClickListener(this);
         findViewById(R.id.geek_apply).setOnClickListener(this);
         findViewById(R.id.ll_clear_cache).setOnClickListener(this);
@@ -132,7 +158,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 dialog.dismiss();
                 try {
                     DialogManager.getInstance().showLoadingDialog(mContext, "正在登出");
-                }catch (Exception e){
+                } catch (Exception e) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                 }
                 UserApi.logout(AccountManager.getInstance().getLoginAccount(SettingActivity.this).getUserId(), new HttpCallBack() {
@@ -169,7 +195,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 
     }
     private void notice(boolean value) {
-        SettingConfig.getInstance().setLxqPushSetting(SettingActivity.this,value);
+        SettingConfig.getInstance().setLxqPushSetting(SettingActivity.this, value);
 
     }
 
@@ -195,6 +221,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                             public void run() {
                                 DialogManager.getInstance().dissMissLoadingDialog();
                                 ToastUtil.getInstance(mContext).showToast("清除成功");
+                                cacheSize.setText("0MB");
                             }
                         });
                     }
@@ -247,6 +274,60 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 
             }
         });
+    }
+    public static long getFolderSize(java.io.File file){
+
+        long size = 0;
+        try {
+            java.io.File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++)
+            {
+                if (fileList[i].isDirectory())
+                {
+                    size = size + getFolderSize(fileList[i]);
+
+                }else{
+                    size = size + fileList[i].length();
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+
+
+    public long getFileSizes(File f) throws Exception {
+
+        long s = 0;
+        if (f.exists()) {
+            FileInputStream fis = null;
+            fis = new FileInputStream(f);
+            s = fis.available();
+            fis.close();
+        } else {
+            f.createNewFile();
+            System.out.println("文件夹不存在");
+        }
+
+        return s;
+    }
+
+    /**
+     * 递归
+     * */
+    public long getFileSize(File f) {
+        long size = 0;
+        File flist[] = f.listFiles();
+        for (int i = 0; i < flist.length; i++) {
+            if (flist[i].isDirectory()) {
+                size = size + getFileSize(flist[i]);
+            } else {
+                size = size + flist[i].length();
+            }
+        }
+        return size;
     }
 
 }

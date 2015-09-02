@@ -95,6 +95,10 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".module.dest.SearchExpertActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.dest.SelectDestActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
