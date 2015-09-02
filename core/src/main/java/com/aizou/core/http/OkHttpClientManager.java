@@ -644,7 +644,7 @@ public class OkHttpClientManager {
             public void onResponse(final Response response) {
                 try {
                     final String string = response.body().string();
-                    Log.d(TAG, "返回结果： " + string);
+                    Log.d(TAG, "返回结果： code "+response.code()+"  "+ string);
                     if (response.isSuccessful()) {
 
                         if (callback.mType == String.class) {

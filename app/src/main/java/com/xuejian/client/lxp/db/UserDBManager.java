@@ -133,7 +133,7 @@ public class UserDBManager {
                 JSONArray userlist = new JSONArray((new JSONObject(data).get("GroupMember")).toString());
                 for (int i = 0; i < userlist.length(); i++) {
                     User user = getContactByUserId(userlist.getLong(i));
-                    if (user == null) return null;
+                    if (user == null) return list;
                     list.add(user);
                 }
                 cursor.close();
@@ -143,12 +143,12 @@ public class UserDBManager {
                 e.printStackTrace();
                 cursor.close();
                 closeDB();
-                return null;
+                return list;
             }
         }
         cursor.close();
         closeDB();
-        return null;
+        return list;
     }
 
     public synchronized void deleteContact(long userId) {

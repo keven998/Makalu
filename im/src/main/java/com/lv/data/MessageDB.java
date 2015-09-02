@@ -79,6 +79,9 @@ public class MessageDB {
         db = SQLiteDatabase.openOrCreateDatabase(databaseFilename, null);
     }
 
+    public String getFilename(){
+        return databaseFilename;
+    }
     public static MessageDB getInstance() {
         if (instance == null) {
             instance = new MessageDB(userId);

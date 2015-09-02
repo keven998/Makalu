@@ -92,7 +92,7 @@ public class UserApi extends BaseApi {
     public final static String LIKE = "/users/%s/likes";
     public final static String VOTE = "/geo/localities/%s/votes";
 
-    public final static String EXPERT_REQUEST="/users/%s/expert-requests";
+    public final static String EXPERT_REQUEST = "/users/%s/expert-requests";
     public final static String BLOCK = "/users/%s/blacklist";
 
     public static void authSignUp(String code, HttpCallBack callback) {
@@ -116,7 +116,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     public static void sendValidation
@@ -146,7 +146,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     public static void checkValidation
@@ -176,7 +176,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     public static void signUp(String phone, String pwd, String captcha, HttpCallBack callback) {
@@ -201,7 +201,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-    //    return HttpManager.request(request, callback);
+        //    return HttpManager.request(request, callback);
     }
 
     public static void bindPhone(String phone, String uid, String pwd, String token, HttpCallBack callback) {
@@ -228,7 +228,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     public static void resetPwd(String tel, String pwd, String token, HttpCallBack callback) {
@@ -253,7 +253,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     public static void modifyPwd(String oldPwd, String newPwd, String uid, HttpCallBack callback) {
@@ -277,7 +277,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-       // return HttpManager.request(request, callback);
+        // return HttpManager.request(request, callback);
     }
 
     public static void signIn(String loginName, String pwd, HttpCallBack callback) {
@@ -301,7 +301,7 @@ public class UserApi extends BaseApi {
         }
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         LogUtil.d(jsonObject.toString());
-       // return null;
+        // return null;
         //   return HttpManager.request(request, callback);
     }
 
@@ -330,7 +330,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     public static void getUserInfo(String userId, HttpCallBack callback) {
@@ -351,41 +351,41 @@ public class UserApi extends BaseApi {
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
 
     public static void editUserAvatar(User user, String avatar, HttpCallBack callBack) {
-         editUserInfo(user, avatar, null, null, null, null, null, null, callBack);
+        editUserInfo(user, avatar, null, null, null, null, null, null, callBack);
     }
 
     public static void editUserNickName(User user, String nickname, HttpCallBack callBack) {
-         editUserInfo(user, null, nickname, null, null, null, null, null, callBack);
+        editUserInfo(user, null, nickname, null, null, null, null, null, callBack);
     }
 
     public static void editUserSignature(User user, String signature, HttpCallBack callBack) {
-         editUserInfo(user, null, null, signature, null, null, null, null, callBack);
+        editUserInfo(user, null, null, signature, null, null, null, null, callBack);
     }
 
     public static void editUserGender(User user, String gender, HttpCallBack callBack) {
-         editUserInfo(user, null, null, null, gender, null, null, null, callBack);
+        editUserInfo(user, null, null, null, gender, null, null, null, callBack);
     }
 
     public static void editUserResidence(User user, String residence, HttpCallBack callBack) {
-         editUserInfo(user, null, null, null, null, residence, null, null, callBack);
+        editUserInfo(user, null, null, null, null, residence, null, null, callBack);
     }
 
     public static void editUserBirthday(User user, String birthday, HttpCallBack callBack) {
-         editUserInfo(user, null, null, null, null, null, birthday, null, callBack);
+        editUserInfo(user, null, null, null, null, null, birthday, null, callBack);
     }
 
     public static void editUserStatus(User user, String status, HttpCallBack callBack) {
-         editUserInfo(user, null, null, null, null, null, null, status, callBack);
+        editUserInfo(user, null, null, null, null, null, null, status, callBack);
     }
 
 
     public static void editUserInfo(User user, String avatar, String nickName, String signature, String gender, String residence,
-                                                String birthday, String status, HttpCallBack callback) {
+                                    String birthday, String status, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + USERINFO + user.getUserId());
@@ -429,7 +429,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-    //    return HttpManager.request(request, callback);
+        //    return HttpManager.request(request, callback);
     }
 
     /**
@@ -445,7 +445,7 @@ public class UserApi extends BaseApi {
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
     /**
      * 同步获取好友列表
@@ -490,8 +490,8 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-        OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+        //  return HttpManager.request(request, callback);
     }
 
     /**
@@ -522,7 +522,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-       // return HttpManager.request(request, callback);
+        // return HttpManager.request(request, callback);
     }
 
     /**
@@ -539,7 +539,7 @@ public class UserApi extends BaseApi {
 //        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -562,7 +562,7 @@ public class UserApi extends BaseApi {
         //    request.putUrlParams("Keyword", key);
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     public static void logout(long userId, HttpCallBack callback) {
@@ -584,11 +584,11 @@ public class UserApi extends BaseApi {
         }
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
 
-    public static void experRequest(String phoneNumber, HttpCallBack callback) {
+    public static void experRequest(String phoneNumber, long userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_REQUEST, AccountManager.getCurrentUserId()));
@@ -596,6 +596,9 @@ public class UserApi extends BaseApi {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phoneNumber);
+            if (userId != -1) {
+                jsonObject.put("userId", userId);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -609,7 +612,6 @@ public class UserApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
-
 
 
     /**
@@ -630,7 +632,7 @@ public class UserApi extends BaseApi {
         request.putUrlParams("pageSize", pageSize + "");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
 
@@ -649,7 +651,7 @@ public class UserApi extends BaseApi {
         request.putUrlParams("abroad", String.valueOf(abroad));
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
 
@@ -667,7 +669,7 @@ public class UserApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId));
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
 
@@ -723,8 +725,8 @@ public class UserApi extends BaseApi {
 //            e.printStackTrace();
 //        }
 //        LogUtil.d(jsonObject.toString());
-        OkHttpClientManager.getInstance().request(request,"", callback);
-     //   return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -768,8 +770,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        OkHttpClientManager.getInstance().request(request,rootObject.toString(), callback);
-     //   return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, rootObject.toString(), callback);
+        //   return HttpManager.request(request, callback);
     }
 
     public static void editMemo
@@ -793,7 +795,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     public static void muteConversation
@@ -817,7 +819,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     //用户喜欢的地点
@@ -843,7 +845,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     public static void unVote(String id, HttpCallBack callback) {
@@ -853,7 +855,7 @@ public class UserApi extends BaseApi {
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-       // return HttpManager.request(request, callback);
+        // return HttpManager.request(request, callback);
     }
 
 
@@ -878,7 +880,7 @@ public class UserApi extends BaseApi {
         }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     public static void removeFromBlackList(String userId, HttpCallBack callback) {
@@ -887,7 +889,7 @@ public class UserApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()) + "/" + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-    //    return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        //    return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 }

@@ -4,9 +4,24 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 
+import com.lv.im.IMClient;
 import com.xuejian.client.lxp.module.SplashActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by yibiao.qin on 2015/8/31.
@@ -16,7 +31,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static CrashHandler INSTANCE = new CrashHandler();
     private Context mContext;
     private Thread.UncaughtExceptionHandler mDefaultHandler;
+    private Map<String, String> infos = new HashMap<String, String>();
 
+    // 用于格式化日期,作为日志文件名的一部分
+    private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
     private CrashHandler() {
     }
 
@@ -32,9 +50,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        Log.e("LXP","crash !\n "+ex.getMessage());
-
+        Log.e("LXP", "crash !\n " + ex.getMessage());
+       // saveCrashInfo2File(ex);
         restartApplication();
+
+
         // if (!handleException(ex) && mDefaultHandler != null) {
         // mDefaultHandler.uncaughtException(thread, ex);
         // } else {
@@ -102,5 +122,87 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 700, mPendingIntent);
         System.exit(0);
     }
+    private String saveCrashInfo2File(Throwable ex) {
+        StringBuffer sb = new StringBuffer();
+        for (Map.Entry<String, String> entry : infos.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            sb.append(key + "=" + value + "\n");
+        }
 
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        ex.printStackTrace(printWriter);
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            cause = cause.getCause();
+        }
+        printWriter.close();
+
+        String result = writer.toString();
+        sb.append(result);
+        try {
+            long timestamp = System.currentTimeMillis();
+            String time = formatter.format(new Date());
+            String fileName = "crash-" + time + "-" + timestamp + ".log";
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                String path = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/crash/";
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                FileOutputStream fos = new FileOutputStream(path + fileName);
+                fos.write(sb.toString().getBytes());
+                fos.close();
+            }
+            copyDBToSDcrad(time,timestamp);
+            return fileName;
+        } catch (Exception e) {
+            Log.e(TAG, "an error occured while writing file...", e);
+        }
+
+        return null;
+    }
+    private void copyDBToSDcrad(String time,long timestamp)
+    {
+        String path = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/crash/";
+        String fileName = "db-" + time + "-" + timestamp + ".db";
+        String oldPath = IMClient.getInstance().getDBFilename();
+        copyFile(oldPath, path + fileName);
+    }
+
+    public static void copyFile(String oldPath, String newPath)
+    {
+        try
+        {
+            int bytesum = 0;
+            int byteread = 0;
+            File oldfile = new File(oldPath);
+            File newfile = new File(newPath);
+            if (!newfile.exists())
+            {
+                newfile.createNewFile();
+            }
+            if (oldfile.exists())
+            { // 文件存在时
+                InputStream inStream = new FileInputStream(oldPath); // 读入原文件
+                FileOutputStream fs = new FileOutputStream(newPath);
+                byte[] buffer = new byte[1444];
+                while ((byteread = inStream.read(buffer)) != -1)
+                {
+                    bytesum += byteread; // 字节数 文件大小
+                    fs.write(buffer, 0, byteread);
+                }
+                inStream.close();
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("复制单个文件操作出错");
+            e.printStackTrace();
+
+        }
+
+    }
 }

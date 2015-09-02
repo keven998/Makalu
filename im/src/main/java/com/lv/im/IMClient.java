@@ -317,7 +317,9 @@ public class IMClient {
         return list;
     }
 
-
+    public String getDBFilename(){
+        return db.getFilename();
+    }
     public void sendTextMessage(MessageBean message, String friendId, String conversation, HttpCallback listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
         SendMessageBean imessage = new SendMessageBean((int) message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());

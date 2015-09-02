@@ -1,13 +1,9 @@
 package com.xuejian.client.lxp.module.my;
 
-import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +15,11 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.RegexUtils;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
+import com.xuejian.client.lxp.db.User;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +33,7 @@ public class TravelExpertApplyActivity extends PeachBaseActivity {
     @InjectView(R.id.number_input)
     EditText numberInput;
     PopupWindow popupWindow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,21 +53,26 @@ public class TravelExpertApplyActivity extends PeachBaseActivity {
         });
     }
 
-    public void checkPhoneNumber(){
-        final String myphoneNumber=numberInput.getText().toString();
-        if(myphoneNumber==null || TextUtils.isEmpty(myphoneNumber) || myphoneNumber.trim().length()==0){
-            Toast.makeText(TravelExpertApplyActivity.this,"手机号不能为空哦!",Toast.LENGTH_SHORT).show();
+    public void checkPhoneNumber() {
+        final String myphoneNumber = numberInput.getText().toString();
+        if (myphoneNumber == null || TextUtils.isEmpty(myphoneNumber) || myphoneNumber.trim().length() == 0) {
+            Toast.makeText(TravelExpertApplyActivity.this, "手机号不能为空哦!", Toast.LENGTH_SHORT).show();
             return;
-        }else  if(!RegexUtils.isMobileNO(myphoneNumber.trim())){
-            Toast.makeText(TravelExpertApplyActivity.this,"请输入正确地手机号格式~",Toast.LENGTH_SHORT).show();
+        } else if (!RegexUtils.isMobileNO(myphoneNumber.trim())) {
+            Toast.makeText(TravelExpertApplyActivity.this, "请输入正确地手机号格式~", Toast.LENGTH_SHORT).show();
             return;
-        }else{
+        } else {
             submitToServer(myphoneNumber.trim());
         }
     }
 
-    private void submitToServer(String phoneNumber){
-        UserApi.experRequest(phoneNumber,new HttpCallBack<String>() {
+    private void submitToServer(String phoneNumber) {
+        User user = AccountManager.getInstance().getLoginAccount(mContext);
+        long id = -1;
+        if (user != null) {
+            id = user.getUserId();
+        }
+        UserApi.experRequest(phoneNumber, id, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 JSONObject jsonObject = null;
@@ -98,17 +101,16 @@ public class TravelExpertApplyActivity extends PeachBaseActivity {
     }
 
 
-
-    private void showPopUpWindow(){
-        if(popupWindow == null){
+    private void showPopUpWindow() {
+        if (popupWindow == null) {
             popupWindow = new PopupWindow(TravelExpertApplyActivity.this);
-            View  view = getLayoutInflater().inflate(R.layout.expert_apply_info,null,false);
-            Button button =(Button)view.findViewById(R.id.i_understand);
+            View view = getLayoutInflater().inflate(R.layout.expert_apply_info, null, false);
+            Button button = (Button) view.findViewById(R.id.i_understand);
             popupWindow.setContentView(view);
             popupWindow.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
             popupWindow.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
             //popupWindow.setAnimationStyle(R.style.PopAnimation);
-            ColorDrawable  drawable = new ColorDrawable(getResources().getColor(R.color.transparent_color));
+            ColorDrawable drawable = new ColorDrawable(getResources().getColor(R.color.transparent_color));
             popupWindow.setBackgroundDrawable(drawable);
 
             button.setOnClickListener(new View.OnClickListener() {
