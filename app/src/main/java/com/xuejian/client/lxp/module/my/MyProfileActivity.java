@@ -175,7 +175,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 //个人相册
                 break;*/
 
-            case R.id.tv_edit_profile:
+            case R.id.my_profile_edit:
                 MobclickAgent.onEvent(MyProfileActivity.this,"navigation_item_edit_profile");
                 User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
                 if (user == null) {
