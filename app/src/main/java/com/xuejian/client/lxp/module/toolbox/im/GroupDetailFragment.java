@@ -328,7 +328,7 @@ public class GroupDetailFragment extends PeachBaseFragment {
         final List<User> members = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
         final List<String> unkownMembers = new ArrayList<String>();
         memberAdapter.getDataList().clear();
-        if (members == null || "update".equals(type)) {
+        if (members == null || "update".equals(type)||members.size()==0) {
             //fetch info
             GroupApi.getGroupMemberInfo(groupId, new HttpCallBack() {
                 @Override
@@ -397,6 +397,8 @@ public class GroupDetailFragment extends PeachBaseFragment {
                     user.setExt(o.toString());
                     user.setType(8);
                     UserDBManager.getInstance().updateGroupInfo(user, groupId);
+                    ChatActivity activity = (ChatActivity) getActivity();
+                    activity.setTitleName(user.getNickName());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

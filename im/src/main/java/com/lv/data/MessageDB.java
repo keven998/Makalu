@@ -202,6 +202,10 @@ public class MessageDB {
          * 屏蔽欢迎回来
          */
         if (entity.getSenderId() == 0) {
+            if (IMClient.getInstance().isBLOCK()) {
+                IMClient.getInstance().setBLOCK(false);
+                LazyQueue.getInstance().TempDequeue();
+            }
             closeDB();
             return 1;
         }

@@ -31,11 +31,11 @@ import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
-TextView cacheSize;
+    TextView cacheSize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,17 +43,17 @@ TextView cacheSize;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                File file =new File(Environment.getExternalStorageDirectory().getPath()+File.separator+ SystemConfig.NET_IMAGE_CACHE_DIR);
+                File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + SystemConfig.NET_IMAGE_CACHE_DIR);
                 System.out.println(file.getAbsolutePath());
-                if (file.exists()){
-                    long  size = getFolderSize(file);
+                if (file.exists()) {
+                    long size = getFolderSize(file);
                     size = size / 1024 / 1024;
-                    final long s =size;
+                    final long s = size;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            cacheSize.setText(s+"MB");
+                            cacheSize.setText(s + "MB");
                         }
                     });
                 }
@@ -120,7 +120,7 @@ TextView cacheSize;
                 ShareUtils.shareAppToWx(SettingActivity.this, null);
                 break;
             case R.id.geek_apply:
-                Intent applyIntent = new Intent(SettingActivity.this,TravelExpertApplyActivity.class);
+                Intent applyIntent = new Intent(SettingActivity.this, TravelExpertApplyActivity.class);
                 startActivity(applyIntent);
                 break;
             case R.id.ll_about_us:
@@ -194,6 +194,7 @@ TextView cacheSize;
         dialog.show();
 
     }
+
     private void notice(boolean value) {
         SettingConfig.getInstance().setLxqPushSetting(SettingActivity.this, value);
 
@@ -209,7 +210,7 @@ TextView cacheSize;
                 dialog.dismiss();
                 try {
                     DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-                }catch (Exception e){
+                } catch (Exception e) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                 }
                 new Thread(new Runnable() {
@@ -240,13 +241,13 @@ TextView cacheSize;
     }
 
     private void update() {
-        if (!CommonUtils.isNetWorkConnected(SettingActivity.this)){
+        if (!CommonUtils.isNetWorkConnected(SettingActivity.this)) {
             ToastUtil.getInstance(SettingActivity.this).showToast("请检查网络连接");
             return;
         }
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "正在检查更新");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         OtherApi.checkUpdate(new HttpCallBack<String>() {
@@ -275,57 +276,23 @@ TextView cacheSize;
             }
         });
     }
-    public static long getFolderSize(java.io.File file){
+
+    public static long getFolderSize(java.io.File file) {
 
         long size = 0;
         try {
             java.io.File[] fileList = file.listFiles();
-            for (int i = 0; i < fileList.length; i++)
-            {
-                if (fileList[i].isDirectory())
-                {
+            for (int i = 0; i < fileList.length; i++) {
+                if (fileList[i].isDirectory()) {
                     size = size + getFolderSize(fileList[i]);
 
-                }else{
+                } else {
                     size = size + fileList[i].length();
 
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        return size;
-    }
-
-
-    public long getFileSizes(File f) throws Exception {
-
-        long s = 0;
-        if (f.exists()) {
-            FileInputStream fis = null;
-            fis = new FileInputStream(f);
-            s = fis.available();
-            fis.close();
-        } else {
-            f.createNewFile();
-            System.out.println("文件夹不存在");
-        }
-
-        return s;
-    }
-
-    /**
-     * 递归
-     * */
-    public long getFileSize(File f) {
-        long size = 0;
-        File flist[] = f.listFiles();
-        for (int i = 0; i < flist.length; i++) {
-            if (flist[i].isDirectory()) {
-                size = size + getFileSize(flist[i]);
-            } else {
-                size = size + flist[i].length();
-            }
         }
         return size;
     }

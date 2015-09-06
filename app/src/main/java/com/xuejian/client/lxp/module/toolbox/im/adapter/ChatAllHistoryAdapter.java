@@ -119,7 +119,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
         holder.avatar.setTag(conversation.getFriendId());
         User user = null;
         if (AccountManager.getInstance().getLoginAccount(mContext) != null) {
-            user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(conversation.getFriendId() + ""));
+            user = UserDBManager.getInstance().getContactByUserId(conversation.getFriendId());
         }
         // 获取用户username或者群组groupid
         String username = String.valueOf(conversation.getFriendId());
@@ -182,7 +182,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 holder.avatar.setImageResource(R.drawable.default_group_avatar);
             }
             if (user != null) {
-                if (user.getNickName() != null) holder.name.setText(user.getNickName());
+
+                if (user.getNickName() != null){
+                    holder.name.setText(user.getNickName());
+                }
                 else holder.name.setText(user.getUserId() + "");
             } else{
                 holder.name.setText(conversation.getFriendId() + "");

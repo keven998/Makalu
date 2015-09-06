@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -19,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -37,8 +33,6 @@ import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
-import com.xuejian.client.lxp.common.api.UserApi;
-import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
@@ -51,10 +45,7 @@ import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;
-import com.xuejian.client.lxp.module.toolbox.im.NewFriendsMsgActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,15 +56,13 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 
-public class MyFragment extends PeachBaseFragment implements View.OnClickListener{
+public class MyFragment extends PeachBaseFragment implements View.OnClickListener {
     private View rootView;
-    private ListView  my_fragment_list;
+    private ListView my_fragment_list;
     //private ScrollView myScrollView;
     private MyPlaneAdapter myPlaneAdapter;
     private ContactAdapter myContactAdapter;
     private List<User> contactList;
-
-
 
 
     private LinearLayout plane_panel;
@@ -91,37 +80,38 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     private View travel_pline;
     private View contact_pline;
-    private int currentIndex=0;
+    private int currentIndex = 0;
     int mCurrentPage = 0;
     private User user;
     private ArrayList<StrategyBean> planeList;
-    float  startY=0.0f;
-    private static final int RESULT_PLAN_DETAIL=0x222;
+    float startY = 0.0f;
+    private static final int RESULT_PLAN_DETAIL = 0x222;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
         ButterKnife.inject(this, rootView);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         planeList = new ArrayList<StrategyBean>();
-      //  myScrollView = (ScrollView) rootView.findViewById(R.id.myScrollView);
+        //  myScrollView = (ScrollView) rootView.findViewById(R.id.myScrollView);
 
         //myScrollView.setOnTouchListener(View.OnTouchListener);
-       // myScrollView.
-        my_fragment_list = (ListView)rootView.findViewById(R.id.my_fragment_list);
-        fragment_parent = (FrameLayout)rootView.findViewById(R.id.fragment_parent);
-        fragment_view =(CustomFrameLayout) rootView.findViewById(R.id.fragment_view);
-        user_info_pannel = (LinearLayout)rootView.findViewById(R.id.user_info_pannel);
-        background_image = (ImageView)rootView.findViewById(R.id.background_image);
-        user_parent = (FrameLayout)rootView.findViewById(R.id.user_parent);
-       // fragment_parent.seton
-        user_avatar = (ImageView)rootView.findViewById(R.id.user_avatar);
-        nameAndId = (TextView)rootView.findViewById(R.id.nameAndId);
-        other_infos = (TextView)rootView.findViewById(R.id.other_infos);
+        // myScrollView.
+        my_fragment_list = (ListView) rootView.findViewById(R.id.my_fragment_list);
+        fragment_parent = (FrameLayout) rootView.findViewById(R.id.fragment_parent);
+        fragment_view = (CustomFrameLayout) rootView.findViewById(R.id.fragment_view);
+        user_info_pannel = (LinearLayout) rootView.findViewById(R.id.user_info_pannel);
+        background_image = (ImageView) rootView.findViewById(R.id.background_image);
+        user_parent = (FrameLayout) rootView.findViewById(R.id.user_parent);
+        // fragment_parent.seton
+        user_avatar = (ImageView) rootView.findViewById(R.id.user_avatar);
+        nameAndId = (TextView) rootView.findViewById(R.id.nameAndId);
+        other_infos = (TextView) rootView.findViewById(R.id.other_infos);
         //rootView.findViewById(R.id.my_profile).setOnClickListener(this);
-      //  headTitleView = inflater.inflate(R.layout.travel_people_info,null);
+        //  headTitleView = inflater.inflate(R.layout.travel_people_info,null);
         initHeadTitleView(user);
         initTabView();
-       TextView settingBtn = (TextView) rootView.findViewById(R.id.setting_btn);
+        TextView settingBtn = (TextView) rootView.findViewById(R.id.setting_btn);
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,28 +122,28 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         contactList = new ArrayList<User>();
         getContactList();
 
-        View  view = new View(getActivity());
+        View view = new View(getActivity());
         AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-        abp.height=200;
+        abp.height = 200;
         view.setLayoutParams(abp);
         my_fragment_list.addFooterView(view);
         myContactAdapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
 
-        myPlaneAdapter = new MyPlaneAdapter(getActivity(),planeList);
+        myPlaneAdapter = new MyPlaneAdapter(getActivity(), planeList);
         my_fragment_list.setAdapter(myPlaneAdapter);
 
         user_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getActivity(),MyProfileActivity.class);
+                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
                 startActivity(intent);
             }
         });
         fragment_view.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
             @Override
             public void onInterEvent(int upordown) {
-                
+
                 if (upordown == 1) {
                     if (user_info_pannel.getVisibility() == View.VISIBLE) {
                         user_info_pannel.setVisibility(View.GONE);
@@ -178,16 +168,16 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         my_fragment_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try{
-                    if(currentIndex==0){
-                        if(user!=null){
+                try {
+                    if (currentIndex == 0) {
+                        if (user != null) {
                             StrategyBean bean = (StrategyBean) planeList.get(position);
                             Intent intent = new Intent(getActivity(), StrategyActivity.class);
                             intent.putExtra("id", bean.id);
-                            intent.putExtra("userId", user.getUserId()+"");
+                            intent.putExtra("userId", user.getUserId() + "");
                             startActivityForResult(intent, RESULT_PLAN_DETAIL);
                         }
-                    }else{
+                    } else {
                         String username = contactList.get(position).getNickName();
                         if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
                             MobclickAgent.onEvent(getActivity(), "cell_item_new_friends_request");
@@ -203,7 +193,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                             getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                         }
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
 
                 }
 
@@ -216,9 +206,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
 
-
-    private void changeTabView(int index){
-        switch(index){
+    private void changeTabView(int index) {
+        switch (index) {
             case 0:
                 travel_plane.setTextColor(getResources().getColor(R.color.app_theme_color));
                 contact_people.setTextColor(getResources().getColor(R.color.color_text_ii));
@@ -234,9 +223,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         }
     }
 
-    private void initHeadTitleView(User user){
-        if(user!=null){
-            if(user.getAvatar()!=null){
+    private void initHeadTitleView(User user) {
+        if (user != null) {
+            if (user.getAvatar() != null) {
                 ImageLoader.getInstance().displayImage(user.getAvatar(), user_avatar, new DisplayImageOptions.Builder()
                         .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                         .showImageOnFail(R.drawable.messages_bg_useravatar)
@@ -247,32 +236,32 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                         .build());
             }
             StringBuffer nameSb = new StringBuffer();
-            if(user.getNickName()!=null){
+            if (user.getNickName() != null) {
                 nameSb.append(user.getNickName());
             }
-            if(user.getUserId()!=null){
-                nameSb.append("      "+user.getUserId());
+            if (user.getUserId() != null) {
+                nameSb.append("      " + user.getUserId());
             }
             nameAndId.setText(nameSb.toString());
 
             StringBuffer otherSb = new StringBuffer();
-            if(user.getGender()!=null){
+            if (user.getGender() != null) {
                 if (user.getGender().equalsIgnoreCase("M")) {
                     otherSb.append("帅锅");
                 } else if (user.getGender().equalsIgnoreCase("F")) {
                     otherSb.append("美女");
-                }else if (user.getGender().equalsIgnoreCase("S")){
+                } else if (user.getGender().equalsIgnoreCase("S")) {
                     otherSb.append("保密");
-                }else {
+                } else {
                     otherSb.append("一言难尽");
                 }
             }
 
-            if(user.getBirthday()!=null){
-                otherSb.append("      "+ConstellationUtil.calculateConstellationZHname(user.getBirthday()));
+            if (user.getBirthday() != null) {
+                otherSb.append("      " + ConstellationUtil.calculateConstellationZHname(user.getBirthday()));
             }
-            if(user.getLevel()!=null) {
-                otherSb.append("      "+"LV"+user.getLevel());
+            if (user.getLevel() != null) {
+                otherSb.append("      " + "LV" + user.getLevel());
             }
 
             other_infos.setText(otherSb.toString());
@@ -283,34 +272,16 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private void requestUserInfo() {
         final User user = AccountManager.getInstance().getLoginAccount(getActivity());
         if (user != null) {
-            UserApi.getUserInfo(String.valueOf(user.getUserId()), new HttpCallBack<String>() {
-                @Override
-                public void doSuccess(String result, String method) {
-                    CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
-                    if (userResult.code == 0) {
-                        AccountManager.getInstance().saveLoginAccount(getActivity(), userResult.result);
-                        initHeadTitleView(userResult.result);
-                    }
-                }
-                @Override
-                public void doFailure(Exception error, String msg, String method) {
-
-                }
-                @Override
-                public void doFailure(Exception error, String msg, String method, int code) {
-
-                }
-            });
+            initHeadTitleView(AccountManager.getInstance().getLoginAccountInfo());
         }
     }
 
 
-
-    private void initTabView(){
-        plane_panel = (LinearLayout)rootView.findViewById(R.id.plane_panel);
-        contact_panel = (LinearLayout)rootView.findViewById(R.id.contact_panel);
+    private void initTabView() {
+        plane_panel = (LinearLayout) rootView.findViewById(R.id.plane_panel);
+        contact_panel = (LinearLayout) rootView.findViewById(R.id.contact_panel);
         travel_plane = (TextView) rootView.findViewById(R.id.travel_plane);
-        contact_people = (TextView)rootView.findViewById(R.id.contact_people);
+        contact_people = (TextView) rootView.findViewById(R.id.contact_people);
         travel_pline = rootView.findViewById(R.id.travel_pline);
         contact_pline = rootView.findViewById(R.id.contact_pline);
         changeTabView(0);
@@ -318,8 +289,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         plane_panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentIndex!=0){
-                    currentIndex=0;
+                if (currentIndex != 0) {
+                    currentIndex = 0;
                     changeTabView(0);
                     my_fragment_list.setAdapter(myPlaneAdapter);
                 }
@@ -328,8 +299,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         contact_panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentIndex!=1){
-                    currentIndex=1;
+                if (currentIndex != 1) {
+                    currentIndex = 1;
                     changeTabView(1);
                     my_fragment_list.setAdapter(myContactAdapter);
                 }
@@ -337,6 +308,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         });
 
     }
+
     private void getContactList() {
         Map<Long, User> users = AccountManager.getInstance().getContactList(getActivity());
         if (users == null) {
@@ -346,7 +318,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
         List<User> del = new ArrayList<>();
         for (User user : contactList) {
-            if (user.getUserId()==10000||user.getUserId()==10001)del.add(user);
+            if (user.getUserId() == 10000 || user.getUserId() == 10001) del.add(user);
         }
         contactList.removeAll(del);
         // 排序
@@ -368,16 +340,16 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
     private void getStrategyListData() {
-        if(user!=null){
-            TravelApi.getStrategyPlannedList(user.getUserId()+"", mCurrentPage,null, new HttpCallBack<String>() {
+        if (user != null) {
+            TravelApi.getStrategyPlannedList(user.getUserId() + "", mCurrentPage, null, new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
                     CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
                     if (strategyListResult.code == 0) {
-                        if(mCurrentPage==0){
+                        if (mCurrentPage == 0) {
                             planeList.clear();
                             planeList.addAll(strategyListResult.result);
-                        }else{
+                        } else {
                             mCurrentPage++;
                             planeList.addAll(strategyListResult.result);
                         }
@@ -405,18 +377,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
 
-
     private void cachePage() {
         if (user == null) {
-                return;
+            return;
         }
         int size = myPlaneAdapter.getCount();
         if (size > OtherApi.PAGE_SIZE) {
-                size = OtherApi.PAGE_SIZE;
+            size = OtherApi.PAGE_SIZE;
         }
         List<StrategyBean> cd = planeList.subList(0, size);
         PreferenceUtils.cacheData(getActivity(), String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -430,7 +402,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == getActivity().RESULT_OK){
+        if (resultCode == getActivity().RESULT_OK) {
             if (requestCode == RESULT_PLAN_DETAIL) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
             }
@@ -466,14 +438,15 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
 
-    class MyPlaneAdapter extends BaseAdapter{
+    class MyPlaneAdapter extends BaseAdapter {
         private ArrayList<StrategyBean> data;
         private Context context;
         private LayoutInflater inflater;
         private DisplayImageOptions picOptions;
-        public MyPlaneAdapter(Context context,ArrayList<StrategyBean> data){
+
+        public MyPlaneAdapter(Context context, ArrayList<StrategyBean> data) {
             this.context = context;
-            this.data=data;
+            this.data = data;
             inflater = LayoutInflater.from(context);
             picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
@@ -484,6 +457,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
+
         @Override
         public int getCount() {
             return data.size();
@@ -503,30 +477,30 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         public View getView(int position, View view, ViewGroup viewGroup) {
             final StrategyBean strategyBean = data.get(position);
             ViewHolder viewHolder;
-            if(view==null){
-                view = inflater.inflate(R.layout.travel_plane_item,viewGroup,false);
+            if (view == null) {
+                view = inflater.inflate(R.layout.travel_plane_item, viewGroup, false);
                 viewHolder = new ViewHolder();
-                viewHolder.plane_pic = (ImageView)view.findViewById(R.id.plane_pic);
-                viewHolder.plane_spans = (TextView)view.findViewById(R.id.plane_spans);
-                viewHolder.plane_title =(TextView)view.findViewById(R.id.plane_title);
-                viewHolder.city_hasGone = (TextView)view.findViewById(R.id.city_hasGone);
-                viewHolder.create_time = (TextView)view.findViewById(R.id.create_time);
+                viewHolder.plane_pic = (ImageView) view.findViewById(R.id.plane_pic);
+                viewHolder.plane_spans = (TextView) view.findViewById(R.id.plane_spans);
+                viewHolder.plane_title = (TextView) view.findViewById(R.id.plane_title);
+                viewHolder.city_hasGone = (TextView) view.findViewById(R.id.city_hasGone);
+                viewHolder.create_time = (TextView) view.findViewById(R.id.create_time);
                 view.setTag(viewHolder);
-            }else {
-                viewHolder=(ViewHolder)view.getTag();
+            } else {
+                viewHolder = (ViewHolder) view.getTag();
             }
 
-            Log.e("strategyBean.detailUrl",strategyBean.detailUrl+"---------------------");
+            Log.e("strategyBean.detailUrl", strategyBean.detailUrl + "---------------------");
             ImageLoader.getInstance().displayImage(strategyBean.detailUrl, viewHolder.plane_pic);
             viewHolder.plane_spans.setText(strategyBean.dayCnt + "天");
             viewHolder.plane_title.setText(strategyBean.title);
             viewHolder.city_hasGone.setText(strategyBean.summary);
-            viewHolder.create_time.setText("创建时间: "+CommonUtils.getTimestampString(new Date(strategyBean.updateTime)));
+            viewHolder.create_time.setText("创建时间: " + CommonUtils.getTimestampString(new Date(strategyBean.updateTime)));
             return view;
         }
 
 
-        class ViewHolder{
+        class ViewHolder {
             public ImageView plane_pic;
             public TextView plane_spans;
             public TextView plane_title;

@@ -422,7 +422,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
         mExtraPanel.setLayoutTransition(lt);
     }
-
+    public void setTitleName(String name){
+        titleView.setText(name);
+    }
     private void setUpView() {
         findViewById(R.id.iv_na_back).setOnClickListener(new OnClickListener() {
             @Override
@@ -1367,20 +1369,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             iv_emoticons_normal.setVisibility(View.VISIBLE);
             iv_emoticons_checked.setVisibility(View.GONE);
         } else {
-
-            if ("single".equals(chatType)) {
-
-            } else {
-                if (changedTitle != null && changedTitle.trim().length() > 0) {
-                    user.setNickName(changedTitle);
-                    UserDBManager.getInstance().saveContact(user);
-                    Intent intent = new Intent();
-                    intent.putExtra("changedTitle", changedTitle);
-                    setResult(RESULT_OK, intent);
-                }
-
-            }
-
             finish();
         }
     }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
+import com.lv.utils.Config;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -76,22 +78,23 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, TalentLocFragement.class,SearchAllFragment.class,MyFragment.class};
+    private Class fragmentArray[] = {TalkFragment.class, TalentLocFragement.class, SearchAllFragment.class, MyFragment.class};
 
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_home_user, R.drawable.checker_tab_home_user};
-    private String[] tabTitle = {"消息", "达人", "搜索","我的"};
-    private int[] colors=new int[]{R.color.white,R.color.black_overlay,R.color.white,R.color.black_overlay};
+    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
+    private String[] tabTitle = {"消息", "达人", "搜索", "我的"};
+    private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
     private TextView unreadMsg;
     private TextView regNotice;
     //Tab选项Tag
-    private String mTagArray[] = {"Talk", "Travel","Soso", "My"};
+    private String mTagArray[] = {"Talk", "Travel", "Soso", "My"};
 
     private boolean FromBounce;
     private Vibrator vibrator;
     PopupWindow mPop;
     SuperToast superToast;
     private boolean isPause;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -138,16 +141,17 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         // 进入主页面
     }
 
-    public void showNotice(Context context){
+    public void showNotice(Context context) {
         superToast = new SuperToast(context);
         superToast.setDuration(SuperToast.Duration.LONG);
         superToast.setBackground(SuperToast.Background.GREEN);
         superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-        superToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 50);
-       //superToast.setAnimations(R.anim.push_top_in);
+        superToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 2);
+        //superToast.setAnimations(R.anim.push_top_in);
         superToast.setAnimations(SuperToast.Animations.FLYIN);
         superToast.setIcon(R.drawable.icon_notice, SuperToast.IconPosition.LEFT);
     }
+
     public void initClient() {
 //        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
 //        if (talkFragment != null) {
@@ -166,12 +170,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void onFailed(int code) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtil.getInstance(MainActivity.this).showToast("push服务登录失败");
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ToastUtil.getInstance(MainActivity.this).showToast("push服务登录失败");
+//                    }
+//                });
             }
         });
 
@@ -329,7 +333,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
 
 
-
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
@@ -356,21 +359,21 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      */
     private View getTabItemView(int index) {
         View view = layoutInflater.inflate(R.layout.tab_item_view, null);
-      //  view.setBackgroundResource(colors[index]);
+        //  view.setBackgroundResource(colors[index]);
         if (index == 0) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
-        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false)&& index == 2) {
+        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false) && index == 3) {
             regNotice = (TextView) view.findViewById(R.id.unread_msg_notify);
             regNotice.setTextColor(Color.RED);
             regNotice.setVisibility(View.VISIBLE);
         }
 
-        if(index==3){
+        if (index == 3) {
             view.findViewById(R.id.line_inter).setVisibility(View.GONE);
         }
-       // Drawable myImage = (Drawable)getResources().getDrawable(mImageViewArray[index], );
-       // myImage.setBounds(1, 1, 100, 100);
+        // Drawable myImage = (Drawable)getResources().getDrawable(mImageViewArray[index], );
+        // myImage.setBounds(1, 1, 100, 100);
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
         imageView.setCompoundDrawablesWithIntrinsicBounds(0, mImageViewArray[index], 0, 0);
         imageView.setCompoundDrawablePadding(2);
@@ -380,11 +383,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
         return view;
     }
-    public void setNoticeInvisiable(){
-        if (regNotice!=null){
+
+    public void setNoticeInvisiable() {
+        if (regNotice != null) {
             regNotice.setVisibility(View.GONE);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -454,30 +459,74 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
     @Override
-    public void onMsgArrive(MessageBean m, String groupId) {
+    public void onMsgArrive(MessageBean m, final String groupId) {
         TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
         if (talkFragment != null) {
             talkFragment.loadConversation();
         }
         updateUnreadMsgCount();
+        try {
+            if (!TextUtils.isEmpty(groupId) && UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId)) == null) {
+                GroupApi.getGroupInfo(groupId, new HttpCallBack() {
+                    @Override
+                    public void doSuccess(Object result, String method) {
+                        JSONObject object = null;
+                        try {
+                            if (Config.isDebug) {
+                                Log.i(Config.TAG, "group info : " + result);
+                            }
+                            object = new JSONObject(result.toString());
+                            JSONObject o = object.getJSONObject("result");
+                            User user = new User();
+                            user.setNickName(o.get("name").toString() == null ? " " : o.get("name").toString());
+                            o.remove("name");
+                            user.setAvatar(o.get("avatar").toString());
+                            o.remove("avatar");
+                            user.setExt(o.toString());
+                            user.setType(8);
+                            user.setUserId(Long.parseLong(groupId));
+                            UserDBManager.getInstance().saveContact(user);
+                            TalkFragment fragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                            if (fragment != null && !isPause) {
+                                fragment.loadConversation();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         /**
          * 震动
          */
-        if (!TextUtils.isEmpty(m.getAbbrev())){
-            superToast.setText("  "+m.getAbbrev());
-        }else {
+        if (!TextUtils.isEmpty(m.getAbbrev())) {
+            superToast.setText("  " + m.getAbbrev());
+        } else {
             superToast.setText("  你有一条新消息");
         }
         if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
             if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
-            //   vibrator.vibrate(500);
-               if (HandleImMessage.showNotice(mContext)&&isPause)superToast.show();
+                //   vibrator.vibrate(500);
+                if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
             } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
-            //    vibrator.vibrate(500);
-                if (HandleImMessage.showNotice(mContext)&&isPause)superToast.show();
+                //    vibrator.vibrate(500);
+                if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
             }
         }
-
 
         //  notifyNewMessage(m);
     }
@@ -548,7 +597,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             e.printStackTrace();
         }
         TalkFragment fragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-        if (fragment!=null){
+        if (fragment != null) {
             fragment.refresh();
         }
     }
@@ -645,7 +694,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     public void onBackPressed() {
         moveTaskToBack(true);
     }
-
 
 
     @Override
