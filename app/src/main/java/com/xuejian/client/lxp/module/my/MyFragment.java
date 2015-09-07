@@ -147,7 +147,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                         ValueAnimator  valueAnimator = ValueAnimator.ofInt(0,startmagrinTop);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                         valueAnimator.setTarget(fragment_parent);
-                        valueAnimator.setDuration(300).start();
+                        valueAnimator.setDuration(350).start();
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -173,7 +173,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                         ValueAnimator  valueAnimator = ValueAnimator.ofInt(startmagrinTop,0);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                         valueAnimator.setTarget(fragment_parent);
-                        valueAnimator.setDuration(300).start();
+                        valueAnimator.setDuration(350).start();
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {

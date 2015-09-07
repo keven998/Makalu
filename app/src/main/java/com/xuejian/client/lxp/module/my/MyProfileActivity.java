@@ -112,6 +112,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
 
     };
 
+    private ImageView[] myImageView;
     private int maxHeight;
 
     private int startMarginTop=0;
@@ -144,7 +145,11 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         if(user!=null){
             initScrollView(user.getUserId());
         }
-
+        myImageView = new ImageView[]{
+                (ImageView)findViewById(R.id.profile_image0),
+                (ImageView)findViewById(R.id.profile_image1),
+                (ImageView)findViewById(R.id.profile_image2)
+        };
         profileFragmentView.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
             @Override
             public void onInterEvent(int upordown) {
@@ -543,6 +548,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             @Override
             public void doSuccess(String result, String method) {
                 JSONObject jsonObject = null;
+                Log.e("success","请求完毕-----------------------"+result);
                 try {
                     ArrayList<String> ids = new ArrayList<String>();
                     jsonObject = new JSONObject(result);
@@ -553,8 +559,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                             JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
                             all_pics.add(imgArray.getJSONObject(0).getString("url"));
                         }
-                      //  initScrollView(all_pics, ids);
-                        //  refreshUserPics(all_pics);
+                        refreshPicture(all_pics);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -573,28 +578,27 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
         });
     }
-   /* public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
-        all_pics_sv.removeAllViews();
-        LinearLayout llPics = new LinearLayout(this);
-        llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        llPics.removeAllViews();
-        for (int i = 0; i < picList.size(); i++) {
-            View view = View.inflate(MyProfileActivity.this, R.layout.my_all_pics_cell, null);
-            ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
-            final int pos = i;
-            ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, UILUtils.getDefaultOption());
-            my_pics_cell.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    IntentUtils.intentToPicGallery2(MyProfileActivity.this, picList, pos);
-                }
-            });
+   public void refreshPicture(final ArrayList<String> picList) {
+       int i = 0;
+       for (; i < picList.size()&& i<3; i++) {
+           final int pos=i;
+           ImageLoader.getInstance().displayImage(picList.get(i), myImageView[i], UILUtils.getDefaultOption());
+           myImageView[i].setVisibility(View.VISIBLE);
+           myImageView[i].setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   IntentUtils.intentToPicGallery2(MyProfileActivity.this, picList, pos);
+               }
+           });
+       }
 
-            //          }
-            llPics.addView(view);
-        }
-        all_pics_sv.addView(llPics);
-    }*/
+       if(i<3){
+           for(int j=i;j<3;j++){
+               myImageView[i].setVisibility(View.INVISIBLE);
+           }
+
+       }
+    }
 
 
     private void imLogin(final User user) {
