@@ -127,6 +127,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     private void imLogin(final User user) {
+
         //初始化数据库，方便后面操作
         IMClient.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
         UserDBManager.getInstance().initDB(user.getUserId() + "");
@@ -143,11 +144,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     public void showNotice(Context context) {
         superToast = new SuperToast(context);
-        superToast.setDuration(SuperToast.Duration.LONG);
-        superToast.setBackground(SuperToast.Background.GREEN);
-        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setDuration(SuperToast.Duration.MEDIUM);
+        superToast.setBackground(SuperToast.Background.GRAY);
+        superToast.setTextSize(SuperToast.TextSize.SMALL);
         superToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 2);
-        //superToast.setAnimations(R.anim.push_top_in);
+        superToast.setAnimations(R.style.msg_in);
         superToast.setAnimations(SuperToast.Animations.FLYIN);
         superToast.setIcon(R.drawable.icon_notice, SuperToast.IconPosition.LEFT);
     }
@@ -521,10 +522,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
             if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
                 //   vibrator.vibrate(500);
-                if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
+               if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
             } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
                 //    vibrator.vibrate(500);
-                if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
+                 if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
             }
         }
 
