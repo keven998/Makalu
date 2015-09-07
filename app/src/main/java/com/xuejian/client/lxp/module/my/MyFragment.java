@@ -43,6 +43,7 @@ import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
@@ -81,17 +82,25 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     private View travel_pline;
     private View contact_pline;
-    private int currentIndex=0;
-    private int startmagrinTop=0;
+    private int currentIndex = 0;
+    private int startmagrinTop = 0;
     int mCurrentPage = 0;
     private User user;
     private ArrayList<StrategyBean> planeList;
-    private static final int RESULT_PLAN_DETAIL=0x222;
-
+    private static final int RESULT_PLAN_DETAIL = 0x222;
+    DisplayImageOptions options;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
         ButterKnife.inject(this, rootView);
+        options=new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                .showImageOnFail(R.drawable.messages_bg_useravatar)
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
+                        getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                .build();
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         planeList = new ArrayList<StrategyBean>();
         my_fragment_list = (ListView) rootView.findViewById(R.id.my_fragment_list);
@@ -114,8 +123,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
         });
         contactList = new ArrayList<User>();
-        getContactList();
-
         View view = new View(getActivity());
         AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         abp.height = 200;
@@ -140,11 +147,11 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 if (upordown == 1) {
                     if (user_info_pannel.getVisibility() == View.VISIBLE) {
 
-                        if(startmagrinTop==0){
-                            startmagrinTop =-CommonUtils.dip2px(getActivity(), 248);
+                        if (startmagrinTop == 0) {
+                            startmagrinTop = -CommonUtils.dip2px(getActivity(), 248);
                         }
 
-                        ValueAnimator  valueAnimator = ValueAnimator.ofInt(0,startmagrinTop);
+                        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, startmagrinTop);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                         valueAnimator.setTarget(fragment_parent);
                         valueAnimator.setDuration(350).start();
@@ -156,7 +163,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                                 LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) fragment_parent.getLayoutParams();
                                 fp.setMargins(0, marginTop, 0, 0);
                                 fragment_parent.setLayoutParams(fp);
-                                if(startmagrinTop==marginTop){
+                                if (startmagrinTop == marginTop) {
                                     user_info_pannel.setVisibility(View.GONE);
                                     fragment_view.setIsDrawawing(false);
 
@@ -170,7 +177,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 } else if (upordown == 2) {
                     if (user_info_pannel.getVisibility() == View.GONE) {
                         user_info_pannel.setVisibility(View.VISIBLE);
-                        ValueAnimator  valueAnimator = ValueAnimator.ofInt(startmagrinTop,0);
+                        ValueAnimator valueAnimator = ValueAnimator.ofInt(startmagrinTop, 0);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                         valueAnimator.setTarget(fragment_parent);
                         valueAnimator.setDuration(350).start();
@@ -228,8 +235,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             }
         });
-        requestUserInfo();
-        getStrategyListData();
+
         return rootView;
 
     }
@@ -254,16 +260,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     private void initHeadTitleView(User user) {
         if (user != null) {
-            if (user.getAvatar() != null) {
-                ImageLoader.getInstance().displayImage(user.getAvatar(), user_avatar, new DisplayImageOptions.Builder()
-                        .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                        .showImageOnFail(R.drawable.messages_bg_useravatar)
-                        .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                        .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                        .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                                getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
-                        .build());
-            }
+            ImageLoader.getInstance().displayImage(user.getAvatar(), user_avatar,options);
             StringBuffer nameSb = new StringBuffer();
             if (user.getNickName() != null) {
                 nameSb.append(user.getNickName());
@@ -298,11 +295,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
 
-    private void requestUserInfo() {
-        final User user = AccountManager.getInstance().getLoginAccount(getActivity());
-        if (user != null) {
-            initHeadTitleView(AccountManager.getInstance().getLoginAccountInfo());
-        }
+    private void requestUserInfo(User user) {
+        initHeadTitleView(user);
+        getContactList();
+        getStrategyListData(user);
     }
 
 
@@ -368,7 +364,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         contactList.add(0, newFriends);
     }
 
-    private void getStrategyListData() {
+    private void getStrategyListData(User user) {
         if (user != null) {
             TravelApi.getStrategyPlannedList(user.getUserId() + "", mCurrentPage, null, new HttpCallBack<String>() {
                 @Override
@@ -443,7 +439,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-
+        final User user = AccountManager.getInstance().getLoginAccount(getActivity());
+        if (user != null) {
+            requestUserInfo(user);
+        }else {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.setTabForLogout();
+        }
     }
 
     @Override

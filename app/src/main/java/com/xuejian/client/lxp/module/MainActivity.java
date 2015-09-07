@@ -344,7 +344,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         startActivityWithNoAnim(logIntent);
                         overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                     }
-                } else if (s.equals(mTagArray[1])) {
+                } else if (s.equals(mTagArray[3])) {
+                    if (AccountManager.getInstance().getLoginAccount(MainActivity.this) == null) {
+                        mTabHost.setCurrentTab(1);
+                        Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivityWithNoAnim(logIntent);
+                        overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+                    }
                 }
             }
         });
@@ -355,6 +361,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
     }
 
+    public void setTabForLogout(){
+        mTabHost.setCurrentTab(1);
+    }
     /**
      * 给Tab按钮设置图标和文字
      */
