@@ -26,7 +26,7 @@ public class ExpertBean {
     public String[] roles;
     public Map<String, ArrayList<LocBean>> tracks;
     public int guideCnt;
-
+    public ArrayList<String> zone;
 
     public String getRolesDescription() {
         if (roles == null || roles.length == 0) return "";

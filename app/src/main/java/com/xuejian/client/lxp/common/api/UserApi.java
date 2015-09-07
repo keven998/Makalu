@@ -95,6 +95,8 @@ public class UserApi extends BaseApi {
     public final static String EXPERT_REQUEST = "/users/%s/expert-requests";
     public final static String BLOCK = "/users/%s/blacklist";
 
+    public final static String EXPERT_SEARCH = "/users/experts?zone=%s";
+
     public static void authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
@@ -887,6 +889,16 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()) + "/" + userId);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        //    return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void searchExpert(String keyword, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_SEARCH, keyword));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         //    return HttpManager.request(request, callback);

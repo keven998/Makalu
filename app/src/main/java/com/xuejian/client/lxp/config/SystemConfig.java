@@ -13,5 +13,5 @@ public class SystemConfig {
     public static String BASE_URL = "http://api.lvxingpai.com/app";
     //http://api2.taozilvxing.cn/taozi";*/
     // public static final String DEV_URL = "http://api-dev.lvxingpai.com/app";
-    public static final String DEV_URL = "http://api.lvxingpai.com/app";
+     public static final String DEV_URL = "http://api.lvxingpai.com/app";
 }
