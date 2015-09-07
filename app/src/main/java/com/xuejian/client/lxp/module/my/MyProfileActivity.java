@@ -7,18 +7,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.utils.SharePrefUtil;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -29,8 +37,10 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
+import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
@@ -57,18 +67,21 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     public final static int CODE_FOOTPRINT = 103;
     public final static int CODE_PICS = 104;
     private ArrayList<String> all_pics = new ArrayList<String>();
-    @InjectView(R.id.my_all_pics_sv)
-    HorizontalScrollView all_pics_sv;
+
+    @InjectView(R.id.profile_fragment_view)
+    CustomFrameLayout profileFragmentView;
     @InjectView(R.id.my_profile_edit)
     TextView myProfileEdit;
     @InjectView(R.id.iv_avatar)
     ImageView avatarIv;
-    @InjectView(R.id.iv_constellation)
-    TextView constellationIv;
+    //@InjectView(R.id.iv_constellation)
+    //TextView constellationIv;
 
     @InjectView(R.id.tv_pictures_count)
     TextView tvPictureCount;
 
+    @InjectView(R.id.user_info_p)
+    LinearLayout userInfoP;
 
     @InjectView(R.id.tv_plans_count)
     TextView tvPlansCount;
@@ -81,20 +94,29 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     @InjectView(R.id.iv_age)
     TextView ivAge;//年龄
 
-    @InjectView(R.id.iv_gender)
-    ImageView ivGender;//性别
+  //  @InjectView(R.id.iv_gender)
+  //  ImageView ivGender;//性别
 
     @InjectView(R.id.iv_city)
     TextView ivCity;
 
     @InjectView(R.id.iv_about_me)
     TextView ivAboutMe;
+
+    @InjectView(R.id.title_bar_profile)
+    RelativeLayout title_bar;
     private TextView notice;
     private int picsNum = 0;
     private String Sex;
     private int[] pictures= new int[]{
 
     };
+
+    private int maxHeight;
+
+    private int startMarginTop=0;
+    private Boolean isViewVisible=true;
+
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +144,76 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         if(user!=null){
             initScrollView(user.getUserId());
         }
+
+        profileFragmentView.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
+            @Override
+            public void onInterEvent(int upordown) {
+                if(upordown==1){
+                    if(isViewVisible==true){
+                        //profileFragmentView.setCanInterTitleDown(true);
+                        //userInfoP.setVisibility(View.GONE);
+
+                        if(startMarginTop==0){
+                            startMarginTop=CommonUtils.dip2px(MyProfileActivity.this,52)-userInfoP.getHeight();
+                        }
+
+                        ValueAnimator animator = ValueAnimator.ofInt(0,startMarginTop);
+                        animator.setTarget(userInfoP);
+                        animator.setDuration(300).start();
+                        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    int maginTop = (int) valueAnimator.getAnimatedValue();
+                                    LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
+                                    vl.setMargins(0,maginTop,0,0);
+                                    userInfoP.setLayoutParams(vl);
+                                    if (maginTop==startMarginTop) {
+                                       // profileFragmentView.setCanInterTitleUp(false);
+                                        //userInfoP.setVisibility(View.GONE);
+                                        title_bar.setBackgroundResource(R.color.color_text_iii);
+                                        isViewVisible=false;
+                                        profileFragmentView.setIsDrawawing(false);
+
+                                    }
+                                }
+
+                            });
+                        //userInfoP.startAnimation(AnimationUtils.loadAnimation(MyProfileActivity.this,R.anim.scale_title_animation));
+                    }
+                }else if(upordown==2){
+                    if(!isViewVisible){
+                       // userInfoP.setVisibility(View.VISIBLE);
+                            // profileFragmentView.setCanInterTitleUp(true);
+                            title_bar.setBackgroundResource(R.color.transparent_color);
+                            ValueAnimator animator = ValueAnimator.ofInt(startMarginTop,0);
+                            animator.setTarget(userInfoP);
+                            animator.setDuration(300).start();
+                            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    int marginTop = (int) valueAnimator.getAnimatedValue();
+                                    LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
+                                    vl.setMargins(0,marginTop,0,0);
+
+                                    userInfoP.setLayoutParams(vl);
+
+                                    if (marginTop == 0) {
+                                        //profileFragmentView.setCanInterTitleDown(false);
+                                        Log.e("下拉动结束","----------------------------");
+                                        isViewVisible=true;
+                                        profileFragmentView.setIsDrawawing(false);
+                                    }
+                                }
+
+                            });
+                    }
+
+
+                }
+            }
+        });
 
     }
 
@@ -298,13 +390,19 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
         all_foot_print_list.clear();
         if (user == null) {
-            avatarIv.setImageResource(R.drawable.ic_home_userentry_unlogin);
-            tvPictureCount.setText("0");
+            ImageLoader.getInstance().displayImage("", avatarIv, new DisplayImageOptions.Builder()
+                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageOnFail(R.drawable.messages_bg_useravatar)
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
+                    .build());
+            tvPictureCount.setText("0图");
             tvPlansCount.setText("0条");
             tvTracksCount.setText("0国0城市");
-            constellationIv.setText("星座");
+          //  constellationIv.setText("星座");
         } else {
-            if (!user.getGender().equals(Sex)){
+          /*  if (!user.getGender().equals(Sex)){
                 ivGender.setVisibility(View.VISIBLE);
                 Sex=user.getGender();
                 if (user.getGender().equalsIgnoreCase("M")) {
@@ -314,7 +412,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 } else {
                     ivGender.setVisibility(View.GONE);
                 }
-            }
+            }*/
             int countryCount = 0;
             int cityCount = 0;
             String level = "0";
@@ -344,10 +442,10 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             ivUserName.setText(username);
             ivAge.setText(age+"");
             ivCity.setText(city+"");
-            tvPictureCount.setText(picNum + "");
+            tvPictureCount.setText(picNum + "图");
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
             tvPlansCount.setText(guideCount + "条");
-            constellationIv.setText("星座");
+           // constellationIv.setText("星座");
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
@@ -355,9 +453,13 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     .resetViewBeforeLoading(true)
                     .cacheOnDisk(true)
                     .build();
-            if (info!=null){
-                ImageLoader.getInstance().displayImage(info.getAvatar(), avatarIv, options);
-            }else ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, options);
+            ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
+                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageOnFail(R.drawable.messages_bg_useravatar)
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
+                    .build());
         }
     }
     private void showSelectedPics(ArrayList<String> pics) {
@@ -412,7 +514,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     if (jsonObject.getInt("code") == 0) {
                         JSONArray object = jsonObject.getJSONArray("result");
                         picsNum = object.length();
-                        tvPictureCount.setText(picsNum + "张");
+                        tvPictureCount.setText(picsNum + "图");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -422,7 +524,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                tvPictureCount.setText(picsNum + "张");
+                tvPictureCount.setText(picsNum + "图");
                 ToastUtil.getInstance(MyProfileActivity.this).showToast("好像没有网络额~");
             }
 
@@ -451,7 +553,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                             JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
                             all_pics.add(imgArray.getJSONObject(0).getString("url"));
                         }
-                        initScrollView(all_pics, ids);
+                      //  initScrollView(all_pics, ids);
                         //  refreshUserPics(all_pics);
                     }
                 } catch (JSONException e) {
@@ -471,7 +573,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
         });
     }
-    public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
+   /* public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
         all_pics_sv.removeAllViews();
         LinearLayout llPics = new LinearLayout(this);
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -492,7 +594,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             llPics.addView(view);
         }
         all_pics_sv.addView(llPics);
-    }
+    }*/
 
 
     private void imLogin(final User user) {

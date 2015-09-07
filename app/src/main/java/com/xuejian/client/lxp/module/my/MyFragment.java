@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -22,6 +23,7 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -64,7 +66,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private ContactAdapter myContactAdapter;
     private List<User> contactList;
 
-
     private LinearLayout plane_panel;
     private LinearLayout contact_panel;
     private TextView travel_plane;
@@ -80,12 +81,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     private View travel_pline;
     private View contact_pline;
-    private int currentIndex = 0;
+    private int currentIndex=0;
+    private int startmagrinTop=0;
     int mCurrentPage = 0;
     private User user;
     private ArrayList<StrategyBean> planeList;
-    float startY = 0.0f;
-    private static final int RESULT_PLAN_DETAIL = 0x222;
+    private static final int RESULT_PLAN_DETAIL=0x222;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,22 +94,15 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         ButterKnife.inject(this, rootView);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         planeList = new ArrayList<StrategyBean>();
-        //  myScrollView = (ScrollView) rootView.findViewById(R.id.myScrollView);
-
-        //myScrollView.setOnTouchListener(View.OnTouchListener);
-        // myScrollView.
         my_fragment_list = (ListView) rootView.findViewById(R.id.my_fragment_list);
         fragment_parent = (FrameLayout) rootView.findViewById(R.id.fragment_parent);
         fragment_view = (CustomFrameLayout) rootView.findViewById(R.id.fragment_view);
         user_info_pannel = (LinearLayout) rootView.findViewById(R.id.user_info_pannel);
         background_image = (ImageView) rootView.findViewById(R.id.background_image);
         user_parent = (FrameLayout) rootView.findViewById(R.id.user_parent);
-        // fragment_parent.seton
         user_avatar = (ImageView) rootView.findViewById(R.id.user_avatar);
         nameAndId = (TextView) rootView.findViewById(R.id.nameAndId);
         other_infos = (TextView) rootView.findViewById(R.id.other_infos);
-        //rootView.findViewById(R.id.my_profile).setOnClickListener(this);
-        //  headTitleView = inflater.inflate(R.layout.travel_people_info,null);
         initHeadTitleView(user);
         initTabView();
         TextView settingBtn = (TextView) rootView.findViewById(R.id.setting_btn);
@@ -135,7 +129,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         user_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getActivity(), MyProfileActivity.class);
                 startActivity(intent);
             }
@@ -146,20 +139,56 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
                 if (upordown == 1) {
                     if (user_info_pannel.getVisibility() == View.VISIBLE) {
-                        user_info_pannel.setVisibility(View.GONE);
-                        FrameLayout.LayoutParams fp = (FrameLayout.LayoutParams) background_image.getLayoutParams();
-                        fp.setMargins(0, -CommonUtils.dip2px(getActivity(), 248), 0, 0);
-                        //fragment_view.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.transparent_to_small));
-                        background_image.setLayoutParams(fp);
+
+                        if(startmagrinTop==0){
+                            startmagrinTop =-CommonUtils.dip2px(getActivity(), 248);
+                        }
+
+                        ValueAnimator  valueAnimator = ValueAnimator.ofInt(0,startmagrinTop);
+                        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                        valueAnimator.setTarget(fragment_parent);
+                        valueAnimator.setDuration(300).start();
+                        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                                int marginTop = (int) valueAnimator.getAnimatedValue();
+                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) fragment_parent.getLayoutParams();
+                                fp.setMargins(0, marginTop, 0, 0);
+                                fragment_parent.setLayoutParams(fp);
+                                if(startmagrinTop==marginTop){
+                                    user_info_pannel.setVisibility(View.GONE);
+                                    fragment_view.setIsDrawawing(false);
+
+                                }
+                                //fragment_view.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.transparent_to_small));
+
+                            }
+                        });
 
                     }
                 } else if (upordown == 2) {
                     if (user_info_pannel.getVisibility() == View.GONE) {
                         user_info_pannel.setVisibility(View.VISIBLE);
-                        FrameLayout.LayoutParams fp = (FrameLayout.LayoutParams) background_image.getLayoutParams();
-                        fp.setMargins(0, 0, 0, 0);
-                        background_image.setLayoutParams(fp);
+                        ValueAnimator  valueAnimator = ValueAnimator.ofInt(startmagrinTop,0);
+                        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                        valueAnimator.setTarget(fragment_parent);
+                        valueAnimator.setDuration(300).start();
+                        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
+                                int marginTop = (int) valueAnimator.getAnimatedValue();
+                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) fragment_parent.getLayoutParams();
+                                fp.setMargins(0, 0, 0, 0);
+                                fragment_parent.setLayoutParams(fp);
+                                if (startmagrinTop == marginTop) {
+                                    fragment_view.setIsDrawawing(false);
+                                }
+                                //fragment_view.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.transparent_to_small));
+
+                            }
+                        });
                     }
                 }
             }
@@ -510,53 +539,5 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     }
 
-
-
-    /*class ScalingRunnable implements Runnable {
-        protected long mDuration;
-        protected boolean mIsFinished = true;
-        protected float magrinTop;
-        protected long mStartTime;
-
-        ScalingRunnable() {
-        }
-
-        public void abortAnimation() {
-            mIsFinished = true;
-        }
-
-        public boolean isFinished() {
-            return mIsFinished;
-        }
-
-        public void run() {
-            if (mZoomView != null) {
-                float f2;
-                ViewGroup.LayoutParams localLayoutParams;
-                if ((!mIsFinished) && (mScale > 1.0D)) {
-                    float f1 = ((float) SystemClock.currentThreadTimeMillis() - (float) mStartTime) / (float) mDuration;
-                    f2 = mScale - (mScale - 1.0F) * CustomFrameLayout.sInterpolator.getInterpolation(f1);
-                    localLayoutParams = mHeaderContainer.getLayoutParams();
-                    if (f2 > 1.0F) {
-                        localLayoutParams.height = ((int) (f2 * mHeaderHeight));
-                        mHeaderContainer.setLayoutParams(localLayoutParams);
-                        post(this);
-                        return;
-                    }
-                    mIsFinished = true;
-                }
-            }
-        }
-
-        public void startAnimation(long paramLong) {
-            if (mZoomView != null) {
-                mStartTime = SystemClock.currentThreadTimeMillis();
-                mDuration = paramLong;
-                mScale = ((float) (mHeaderContainer.getBottom()) / mHeaderHeight);
-                mIsFinished = false;
-                post(this);
-            }
-        }
-    }*/
 
 }

@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.common.widget;
 import android.content.Context;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -14,6 +15,7 @@ import android.widget.FrameLayout;
 public class CustomFrameLayout extends FrameLayout{
     private Boolean canInterTitleUp=true;
     private Boolean canInterTitleDown=false;
+    private Boolean isDrawawing=false;
     private Float startY=0.0f;
     private OnInterDispatchListener onInterDispatchListener;
     private static final Interpolator sInterpolator = new Interpolator() {
@@ -29,12 +31,12 @@ public class CustomFrameLayout extends FrameLayout{
         super(context,attrs);
     }
     public CustomFrameLayout(Context context,AttributeSet attrs,int defStyle){
-        super(context,attrs,defStyle);
+        super(context, attrs, defStyle);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
+        return true;
     }
 
     @Override
@@ -51,27 +53,36 @@ public class CustomFrameLayout extends FrameLayout{
             case MotionEvent.ACTION_UP:
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(canInterTitleUp || canInterTitleDown){
-                    if((startY-ev.getY())>0){
-                        if(canInterTitleUp){
-                            if(onInterDispatchListener!=null){
-                                onInterDispatchListener.onInterEvent(1);
+                    if(isDrawawing){
+                        return true;
+                    }
+                    if(canInterTitleUp || canInterTitleDown){
+                        if((startY-ev.getY())>0){
+                            if(canInterTitleUp){
+                                if(onInterDispatchListener!=null){
+                                    isDrawawing=true;
+                                    onInterDispatchListener.onInterEvent(1);
+
+                                }
+                                canInterTitleUp=false;
+                                canInterTitleDown=true;
+                                return true;
                             }
-                            canInterTitleUp=false;
-                            canInterTitleDown=true;
-                            return false;
-                        }
-                    }else{
-                        if(canInterTitleDown){
-                            if(onInterDispatchListener!=null){
-                                onInterDispatchListener.onInterEvent(2);
+
+                        }else{
+                            if(canInterTitleDown){
+                                if(onInterDispatchListener!=null){
+                                    isDrawawing=true;
+                                    onInterDispatchListener.onInterEvent(2);
+
+                                }
+                                canInterTitleDown=false;
+                                canInterTitleUp=true;
+                                return true;
                             }
-                            canInterTitleDown=false;
-                            canInterTitleUp=true;
-                            return false;
                         }
                     }
-                }
+
 
                 break;
         }
@@ -94,6 +105,11 @@ public class CustomFrameLayout extends FrameLayout{
         this.onInterDispatchListener = onInterDispatchListener;
     }
 
+    public void setIsDrawawing(Boolean isDrawawing) {
+        this.isDrawawing = isDrawawing;
+    }
 
-
+    public Boolean getIsDrawawing() {
+        return isDrawawing;
+    }
 }
