@@ -9,25 +9,36 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -39,9 +50,11 @@ import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
+import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.config.SettingConfig;
@@ -60,6 +73,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -83,8 +97,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private boolean block;
     @InjectView(R.id.iv_avatar)
     ImageView iv_avatar;
-    @InjectView(R.id.tv_level)
-    TextView tv_level;
+    @InjectView(R.id.expert_info)
+    LinearLayout userInfoP;
+
     @InjectView(R.id.tv_expert_name)
     TextView tv_expert_name;
     @InjectView(R.id.expert_tag)
@@ -94,38 +109,48 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     @InjectView(R.id.iv_expert_sex)
     ImageView iv_expert_sex;
     @InjectView(R.id.tv_expert_con)
-    TextView tv_expert_con;
+    ImageView tv_expert_con;
     @InjectView(R.id.tv_expert_location)
     TextView tv_expert_location;
     @InjectView(R.id.tv_photo_num)
     TextView tv_photo_num;
-    @InjectView(R.id.all_pics_sv)
-    HorizontalScrollView all_pics_sv;
     @InjectView(R.id.tv_expert_sign)
     TextView tv_expert_sign;
     @InjectView(R.id.tv_plan_count)
     TextView tv_plan_count;
     @InjectView(R.id.tv_track_count)
     TextView tv_track_count;
-    @InjectView(R.id.tv_comment)
-    TextView tv_comment;
-    @InjectView(R.id.about)
-    TextView about;
-    @InjectView(R.id.comment)
-    TextView comment;
+
 
     @InjectView(R.id.fl_tracks_entry)
     LinearLayout flTracksEntry;
 
     @InjectView(R.id.fl_plans_entry)
     LinearLayout flPlansEntry;
-    private final List<Tag> mTags = new ArrayList<Tag>();
 
+    @InjectView(R.id.expert_fragment_view)
+    CustomFrameLayout  expert_fragment;
+    @InjectView(R.id.expert_title_bar)
+    RelativeLayout title_bar;
+    @InjectView(R.id.expert_scroll)
+    ScrollView expertScroll;
+    private final List<Tag> mTags = new ArrayList<Tag>();
+    private ImageView[] pictures;
+    private boolean isViewVisible = true;
+    private int startMarginTop=0;
+    private int[] lebelColors =new int[]{
+        R.drawable.all_light_green_label,R.drawable.all_light_red_label,R.drawable.all_light_perple_label,R.drawable.all_light_blue_label,R.drawable.all_light_yellow_label
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
         ButterKnife.inject(this);
+        pictures = new ImageView[]{
+                (ImageView)findViewById(R.id.expter_image0),
+                (ImageView)findViewById(R.id.expter_image1),
+                (ImageView)findViewById(R.id.expter_image2)
+        };
         userId = getIntent().getLongExtra("userId", 0);
         isFromExperts = getIntent().getBooleanExtra("isFromExperts", false);
         me = AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this);
@@ -170,32 +195,88 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 //            handleView.setVisibility(View.GONE);
 //        }
 
-        findViewById(R.id.fl_send_message).setOnClickListener(new View.OnClickListener() {
+       findViewById(R.id.fl_send_message).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startTalk();
             }
         });
 
-        tv_send_action = (TextView) findViewById(R.id.tv_send_action);
+       tv_send_action = (TextView) findViewById(R.id.tv_send_action);
 
-        if (isMyFriend) {
+       if (isMyFriend) {
             tv_send_action.setText("备注");
         }
 
         initData(userId);
-//        UserApi.editMemo(100000+"", "hihi", new HttpCallBack() {
-//            @Override
-//            public void doSuccess(Object result, String method) {
-//                System.out.println(result.toString());
-//            }
-//
-//            @Override
-//            public void doFailure(Exception error, String msg, String method) {
-//                System.out.println(msg);
-//                error.printStackTrace();
-//            }
-//        });
+        expert_fragment.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
+            @Override
+            public void onInterEvent(int upordown) {
+                if(upordown==1){
+                    if(isViewVisible==true){
+
+                        if(startMarginTop==0){
+                            startMarginTop= CommonUtils.dip2px(HisMainPageActivity.this, 52)-userInfoP.getHeight();
+                        }
+
+                        ValueAnimator animator = ValueAnimator.ofInt(0,startMarginTop);
+                        animator.setTarget(userInfoP);
+                        animator.setDuration(300).start();
+                        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                int maginTop = (int) valueAnimator.getAnimatedValue();
+                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
+                                vl.setMargins(0,maginTop,0,0);
+                                userInfoP.setLayoutParams(vl);
+                                if (maginTop==startMarginTop) {
+                                    // profileFragmentView.setCanInterTitleUp(false);
+                                    //userInfoP.setVisibility(View.GONE);
+                                    title_bar.setBackgroundResource(R.color.color_text_iii);
+                                    isViewVisible=false;
+                                    expert_fragment.setIsDrawawing(false);
+
+                                }
+                            }
+
+                        });
+                        //userInfoP.startAnimation(AnimationUtils.loadAnimation(MyProfileActivity.this,R.anim.scale_title_animation));
+                    }
+                }else if(upordown==2){
+                    if(!isViewVisible){
+                        // userInfoP.setVisibility(View.VISIBLE);
+                        // profileFragmentView.setCanInterTitleUp(true);
+                        expertScroll.scrollTo(0,0);
+                        title_bar.setBackgroundResource(R.color.transparent_color);
+                        ValueAnimator animator = ValueAnimator.ofInt(startMarginTop,0);
+                        animator.setTarget(userInfoP);
+                        animator.setDuration(300).start();
+                        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                int marginTop = (int) valueAnimator.getAnimatedValue();
+                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
+                                vl.setMargins(0,marginTop,0,0);
+
+                                userInfoP.setLayoutParams(vl);
+
+                                if (marginTop == 0) {
+                                    //profileFragmentView.setCanInterTitleDown(false);
+                                    Log.e("下拉动结束", "----------------------------");
+                                    isViewVisible=true;
+                                    expert_fragment.setIsDrawawing(false);
+                                }
+                            }
+
+                        });
+                    }
+
+
+                }
+            }
+        });
     }
 
     private void editMemo(String memo) {
@@ -314,16 +395,28 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void initData(long id) {
+        Random random = new Random();
+        int lastColor = random.nextInt(4);
         for (int i = 0; i < 9; i++) {
             Tag tag = new Tag();
             tag.setTitle("属性" + i);
             tag.setId(i);
+            tag.setBackgroundResId(lebelColors[lastColor]);
             mTags.add(tag);
+            lastColor=getNextColor(lastColor);
         }
         getUserInfo(id);
         initScrollView(id);
     }
 
+    public int getNextColor(int currentcolor){
+        Random random = new Random();
+        int nextValue = random.nextInt(4);
+        if(nextValue==0){
+            nextValue++;
+        }
+        return (nextValue+currentcolor)%5;
+    }
     private void showActionDialog(int style) {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
@@ -520,8 +613,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     }
                 }
             });
-            expert_tag.setTagViewBackgroundRes(R.drawable.shape_grey);
-            expert_tag.setTagViewTextColorRes(R.color.color_text_iii);
+          //  expert_tag.setTagViewBackgroundRes(R.drawable.shape_grey);
+            expert_tag.setTagViewTextColorRes(R.color.white);
             expert_tag.setmTagViewResId(R.layout.expert_tag);
             expert_tag.setTags(mTags);
 //            if (userId != 10000 && isMyFriend) {
@@ -566,7 +659,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
 
 
-        findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
+       findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isMyFriend) {
@@ -585,7 +678,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
 
         tv_expert_sign.setText(bean.getSignature());
-        tv_photo_num.setText(String.valueOf(bean.getAlbumCnt()));
+        tv_photo_num.setText(String.valueOf(bean.getAlbumCnt())+"图");
         TextView idTv = (TextView) findViewById(R.id.tv_subtitle);
         idTv.setText(String.format("ID：%d", bean.getUserId()));
         //   ImageView avatarImage = (ImageView) findViewById(R.id.iv_avatar);
@@ -602,21 +695,20 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             iv_avatar.setClickable(false);
         }
 
-        //       FrameLayout fl_avatar = (FrameLayout) findViewById(R.id.fl_gender_bg);
         ImageLoader.getInstance().displayImage(bean.getAvatar(), iv_avatar, new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
-                .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
+                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                        // .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                        //         getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
                 .build());
+        //       FrameLayout fl_avatar = (FrameLayout) findViewById(R.id.fl_gender_bg);
         //      TextView tvLevel = (TextView) findViewById(R.id.tv_level);
-        if (TextUtils.isEmpty(bean.getLevel()) || bean.getLevel().equals("0")) {
+       /* if (TextUtils.isEmpty(bean.getLevel()) || bean.getLevel().equals("0")) {
             tv_level.setText("旅行派达人咨询师 LEVEL-0");
         } else {
             tv_level.setText(String.format("旅行派达人咨询师 LEVEL-%s", bean.getLevel()));
-        }
+        }*/
 
         if (bean.getGender().equalsIgnoreCase("M")) {
             iv_expert_sex.setImageResource(R.drawable.icon_boy);
@@ -625,11 +717,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         } else {
             iv_expert_sex.setVisibility(View.INVISIBLE);
         }
-        if (TextUtils.isEmpty(bean.getBirthday())) {
+        /*if (TextUtils.isEmpty(bean.getBirthday())) {
             tv_expert_con.setVisibility(View.INVISIBLE);
         } else {
             tv_expert_con.setText(ConstellationUtil.calculateConstellationZHname(bean.getBirthday()));
-        }
+        }*/
 
 //        ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
 //        int res = ConstellationUtil.calculateConstellation(bean.getBirthday());
@@ -656,8 +748,19 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday())));
         }
 
-        tv_plan_count.setText(String.format("%d篇", bean.getGuideCnt()));
-        tv_track_count.setText(String.format("%d国%d城", bean.getCountryCnt(), bean.getTrackCnt()));
+        String tvPlaneCount = String.format("共%d份旅行计划", bean.getGuideCnt());
+        int planeLength=(bean.getGuideCnt()+"").length();
+        SpannableString spannableString = new SpannableString(tvPlaneCount);
+        spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),1,1+planeLength,0);
+        tv_plan_count.setText(spannableString);
+
+        String countryCount = String.format("旅行%d个国家,共%d个城市", bean.getCountryCnt(), bean.getTrackCnt());
+        int countryLength = (bean.getCountryCnt()+"").length();
+        int cityLength =(bean.getTrackCnt()+"").length();
+        SpannableString countrySpannable = new SpannableString(countryCount);
+        countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),2,2+countryLength,0);
+        countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),8,8+cityLength,0);
+        tv_track_count.setText(countrySpannable);
         flPlansEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -820,8 +923,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             JSONArray imgArray = object.getJSONObject(i).getJSONArray("image");
                             all_pics.add(imgArray.getJSONObject(0).getString("url"));
                         }
-                        initScrollView(all_pics, ids);
-                        //  refreshUserPics(all_pics);
+                        refreshImageView(all_pics);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -841,28 +943,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
     }
 
-    public void refreshUserPics(final ArrayList<String> pics) {
-
-//        his_pics_sv.removeAllViews();
-//        LinearLayout llPics = new LinearLayout(this);
-//        llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        llPics.removeAllViews();
-//        for (int i = 0; i < pics.size(); i++) {
-//            View view = View.inflate(HisMainPageActivity.this, R.layout.my_all_pics_cell, null);
-//            my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
-//            ImageLoader.getInstance().displayImage(pics.get(i), my_pics_cell, options);
-//            my_pics_cell.setOnClickListener(new View.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(View v) {
-//                                                    IntentUtils.intentToPicGallery2(HisMainPageActivity.this, pics, 0);
-//                                                }
-//                                            }
-//            );
-//
-//            llPics.addView(view);
-//        }
-//        his_pics_sv.addView(llPics);
-    }
 
     @Override
     protected void onResume() {
@@ -901,39 +981,27 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         }
     }
 
-    public void initScrollView(final ArrayList<String> picList, final ArrayList<String> ids) {
-        all_pics_sv.removeAllViews();
-        LinearLayout llPics = new LinearLayout(this);
-        llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        llPics.removeAllViews();
-        for (int i = 0; i < picList.size(); i++) {
+   public void refreshImageView(final ArrayList<String> picList) {
+        int i = 0;
+        for (; i < picList.size() && i<3; i++) {
             View view = View.inflate(mContext, R.layout.my_all_pics_cell, null);
-            ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
-//            if (i == picList.size()) {
-//                //  my_pics_cell.setImageResource(R.drawable.smiley_add_btn);
-//                my_pics_cell.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        showSelectPicDialog();
-//                    }
-//                });
-//            } else {
-//                final String uri = picList.get(i);
-            //              final String id = ids.get(i);
-            //              final int index = i;
             final int pos = i;
-            ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, UILUtils.getDefaultOption());
-            my_pics_cell.setOnClickListener(new View.OnClickListener() {
+            ImageLoader.getInstance().displayImage(picList.get(i), pictures[i], UILUtils.getDefaultOption());
+            pictures[i].setVisibility(View.VISIBLE);
+            pictures[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     IntentUtils.intentToPicGallery2(HisMainPageActivity.this, picList, pos);
                 }
             });
 
-            //          }
-            llPics.addView(view);
         }
-        all_pics_sv.addView(llPics);
+
+        if(i<3){
+            for (int j=i;j<3;j++){
+                pictures[j].setVisibility(View.GONE);
+            }
+        }
 //        llPics.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
