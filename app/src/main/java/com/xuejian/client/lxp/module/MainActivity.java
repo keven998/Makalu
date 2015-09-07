@@ -361,9 +361,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
     }
 
-    public void setTabForLogout(){
+    public void setTabForLogout() {
         mTabHost.setCurrentTab(1);
     }
+
     /**
      * 给Tab按钮设置图标和文字
      */
@@ -523,18 +524,24 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         /**
          * 震动
          */
-        if (!TextUtils.isEmpty(m.getAbbrev())) {
-            superToast.setText("  " + m.getAbbrev());
-        } else {
-            superToast.setText("  你有一条新消息");
+        try {
+            if (!TextUtils.isEmpty(m.getAbbrev())) {
+                superToast.setText("  " + m.getAbbrev());
+            } else {
+                superToast.setText("  你有一条新消息");
+            }
+        } catch (Exception e) {
         }
+
         if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
             if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
                 //   vibrator.vibrate(500);
-               if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
+                if (HandleImMessage.showNotice(mContext) && isPause && isLongEnough())
+                    superToast.show();
             } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
                 //    vibrator.vibrate(500);
-                 if (HandleImMessage.showNotice(mContext) && isPause) superToast.show();
+                if (HandleImMessage.showNotice(mContext) && isPause && isLongEnough())
+                    superToast.show();
             }
         }
 
@@ -813,5 +820,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         });
 
+    }
+
+    private static long mSendTime;
+
+    public static boolean isLongEnough() {
+        long currentTime = System.currentTimeMillis();
+        long time = currentTime - mSendTime;
+        mSendTime = currentTime;
+        return !(0 < time && time < 1000);
     }
 }

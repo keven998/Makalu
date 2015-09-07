@@ -53,14 +53,12 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.CustomLoadingDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
-import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
@@ -88,11 +86,8 @@ import butterknife.InjectView;
 public class AccountActvity extends PeachBaseActivity implements View.OnClickListener {
 
 
-    @InjectView(R.id.iv_more_header_frame_gender)
-    ImageView iv_header_frame_gender;
     @InjectView(R.id.iv_avatar)
     ImageView avatarIv;
-
     @InjectView(R.id.tv_nickname)
     TextView tv_nickname;
     @InjectView(R.id.tv_gender)
@@ -299,8 +294,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                        getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10))) // 设置成圆角图片
                 .build());
         if (user.getGender().equalsIgnoreCase("M")) {
             //iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);

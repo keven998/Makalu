@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -521,7 +520,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 viewHolder = (ViewHolder) view.getTag();
             }
 
-            Log.e("strategyBean.detailUrl", strategyBean.detailUrl + "---------------------");
             ImageLoader.getInstance().displayImage(strategyBean.detailUrl, viewHolder.plane_pic);
             viewHolder.plane_spans.setText(strategyBean.dayCnt + "天");
             viewHolder.plane_title.setText(strategyBean.title);

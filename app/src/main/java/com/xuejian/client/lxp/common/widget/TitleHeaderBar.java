@@ -50,7 +50,6 @@ public class TitleHeaderBar extends HeaderBarBase {
         containerRl = (RelativeLayout) findViewById(R.id.container);
 //		mMoreAction = findViewById(R.id.ly_title_bar_more_action);
     }
-
     @Override
     protected int getLayoutId() {
         return R.layout.base_header_bar_title;
