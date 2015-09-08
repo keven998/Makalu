@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="52dp"
-            android:background="@color/color_text_iii"
+            android:background="@drawable/profile_background"
             >
             <FrameLayout
                 android:id="@+id/avatar_pannel"
@@ -283,6 +283,7 @@
                     />
 
                 <FrameLayout
+                    android:id="@+id/goToAlbum"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -545,7 +546,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/color_text_iii"
         android:layout_gravity="top"
         >
     <RelativeLayout
@@ -636,8 +636,8 @@
               android:drawableLeft="@drawable/add_friend"
               android:drawablePadding="5dp"
               android:text="好友"
-              android:paddingTop="12dp"
-              android:paddingBottom="12dp"
+              android:paddingTop="15dp"
+              android:paddingBottom="15dp"
               android:textColor="@color/color_text_ii"
               android:textSize="15sp" />
       </FrameLayout>
@@ -661,8 +661,8 @@
               android:layout_gravity="center"
               android:drawableLeft="@drawable/massage"
               android:drawablePadding="5dp"
-              android:paddingTop="12dp"
-              android:paddingBottom="12dp"
+              android:paddingTop="15dp"
+              android:paddingBottom="15dp"
               android:text="聊天"
               android:textColor="@color/color_text_ii"
               android:textSize="15sp" />

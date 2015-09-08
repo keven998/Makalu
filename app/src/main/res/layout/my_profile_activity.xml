@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="52dp"
-            android:background="@color/color_text_iii"
+            android:background="@drawable/profile_background"
             >
             <FrameLayout
                 android:id="@+id/avatar_pannel"
@@ -199,6 +199,7 @@
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
                     android:background="@color/white"
+                    android:minHeight="120dp"
                     >
                     <ImageView
                         android:id="@+id/profile_image0"
@@ -207,7 +208,7 @@
                         android:src="@drawable/ic_person_normal"
                         android:layout_gravity="center_vertical"
                         android:scaleType="centerCrop"
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         />
                     <ImageView
                         android:id="@+id/profile_image1"
@@ -217,7 +218,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         />
                     <ImageView
                         android:id="@+id/profile_image2"
@@ -227,10 +228,11 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         />
 
                     <FrameLayout
+                        android:id="@+id/goToMyAlbums"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -301,7 +303,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="旅行1个国家,共1个城市"
-                                android:textColor="@color/app_theme_color"
+                                android:textColor="@color/color_text_ii"
                                 android:textSize="14sp"
                                 android:layout_marginTop="6dp"
                                 android:layout_gravity="center_horizontal"
@@ -341,7 +343,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="共0份旅行计划"
-                                android:textColor="@color/app_theme_color"
+                                android:textColor="@color/color_text_ii"
                                 android:textSize="14sp"
                                 android:layout_marginTop="6dp"
                                 android:layout_gravity="center_horizontal"
