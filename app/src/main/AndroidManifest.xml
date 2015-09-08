@@ -77,7 +77,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Transparent"
+
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.notify" />
@@ -296,9 +296,6 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".module.toolbox.im.GuilderListActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".module.toolbox.im.LXPGuiderDistributeListAcitivity"
             android:screenOrientation="portrait"/>
 
         <!-- ###################IM Acitivity###################### -->

@@ -88,11 +88,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private ArrayList<StrategyBean> planeList;
     private static final int RESULT_PLAN_DETAIL = 0x222;
     DisplayImageOptions options;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
         ButterKnife.inject(this, rootView);
-        options=new DisplayImageOptions.Builder()
+        options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
@@ -259,7 +260,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
     private void initHeadTitleView(User user) {
         if (user != null) {
-            ImageLoader.getInstance().displayImage(user.getAvatar(), user_avatar,options);
+            ImageLoader.getInstance().displayImage(user.getAvatar(), user_avatar, options);
             StringBuffer nameSb = new StringBuffer();
             if (user.getNickName() != null) {
                 nameSb.append(user.getNickName());
@@ -294,7 +295,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
 
-    private void requestUserInfo(User user) {
+    public void requestUserInfo(User user) {
         initHeadTitleView(user);
         getContactList();
         getStrategyListData(user);
@@ -441,7 +442,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         final User user = AccountManager.getInstance().getLoginAccount(getActivity());
         if (user != null) {
             requestUserInfo(user);
-        }else {
+        } else {
             MainActivity activity = (MainActivity) getActivity();
             activity.setTabForLogout();
         }
@@ -519,8 +520,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-
-            ImageLoader.getInstance().displayImage(strategyBean.detailUrl, viewHolder.plane_pic);
+            if (strategyBean.images.size() > 0) {
+                ImageLoader.getInstance().displayImage(strategyBean.images.get(0).url, viewHolder.plane_pic, picOptions);
+            }
             viewHolder.plane_spans.setText(strategyBean.dayCnt + "天");
             viewHolder.plane_title.setText(strategyBean.title);
             viewHolder.city_hasGone.setText(strategyBean.summary);

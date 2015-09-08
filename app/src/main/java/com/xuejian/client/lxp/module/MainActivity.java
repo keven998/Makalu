@@ -215,15 +215,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
-                    /**
-                     *
-                     *
-                     *
-                     */
-                   /* MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
-                    if (myFragment != null) {
-                        myFragment.refreshLoginStatus();
-                    }*/
+                    MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+                    if (myFragment != null && Info.result != null) {
+                        myFragment.requestUserInfo(Info.result);
+                    }
                 }
             }
 

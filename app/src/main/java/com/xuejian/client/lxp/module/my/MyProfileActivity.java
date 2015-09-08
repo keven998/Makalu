@@ -11,12 +11,8 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -160,7 +156,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             @Override
             public void onInterEvent(int upordown) {
                 if(upordown==1){
-                    if(isViewVisible==true){
+                    if(isViewVisible){
                         //profileFragmentView.setCanInterTitleDown(true);
                         //userInfoP.setVisibility(View.GONE);
 

@@ -156,7 +156,7 @@
                     android:layout_weight="1"
                     android:textSize="@dimen/text_size_16"
                     android:textColor="@color/color_text_ii"
-                    android:text="旅行派.达人.咨询师"
+                    android:text="旅行派·达人·咨询师"
                     android:layout_gravity="center_horizontal"
                     android:drawableLeft="@drawable/checker_tab_home_user"
                     android:drawablePadding="10dp"
