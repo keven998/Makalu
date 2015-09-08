@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
-        android:background="@drawable/bg_navigation_bar"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
         <include layout="@layout/commom_back_btn" />
@@ -30,7 +30,7 @@
             android:clickable="true"
             android:onClick="onPublicGroups"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_add_normal" />
+            android:src="@drawable/ic_navigationbar_menu_add" />
     </RelativeLayout>
     <View
         android:layout_width="match_parent"

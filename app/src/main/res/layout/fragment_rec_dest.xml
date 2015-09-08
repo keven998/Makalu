@@ -23,7 +23,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar">
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/des_back"
@@ -33,7 +33,7 @@
             android:drawableLeft="@drawable/selector_ic_nav_back"
             android:gravity="center_vertical"
             android:textSize="18sp"
-            android:textColor="@color/back_blue_color"
+            android:textColor="@color/color_text_ii"
             android:paddingLeft="10dp"
             android:paddingRight="30dp"
             android:drawablePadding="3dp"
@@ -48,7 +48,7 @@
             android:singleLine="true"
             android:textSize="18sp"
             android:text="热门城市"
-            android:textColor="@color/base_font_color"/>
+            android:textColor="@color/color_text_ii"/>
 
         <ImageView
             android:id="@+id/tv_title_bar_right"
@@ -57,7 +57,7 @@
             android:layout_gravity="right"
             android:paddingRight="10dp"
             android:paddingLeft="22dp"
-            android:src="@drawable/ic_search"/>
+            android:src="@drawable/expert_search"/>
 
         <View
             android:layout_width="match_parent"

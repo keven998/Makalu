@@ -21,10 +21,15 @@
         android:paddingBottom="10dp"
         android:scrollbars="none" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar">
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/poi_det_back"
@@ -39,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="景点详情"
-            android:textColor="@color/color_text_titlebar"
+            android:textColor="@color/color_text_ii"
             android:textSize="18sp" />
 
         <ImageView
@@ -53,6 +58,11 @@
             android:src="@drawable/selector_ic_talk_share" />
 
     </RelativeLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line"
+            />
+    </LinearLayout>
 
 </FrameLayout>
