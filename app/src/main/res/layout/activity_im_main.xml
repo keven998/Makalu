@@ -9,7 +9,7 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar">
+        android:background="@color/white">
 
         <RelativeLayout
             android:id="@+id/ly_title_bar_left"
@@ -32,7 +32,7 @@
                 android:duplicateParentState="true"
                 android:drawableLeft="@drawable/selector_ic_nav_back"
                 android:gravity="center"
-                android:textColor="@color/base_text_color_text_hint"
+                android:textColor="@color/color_text_ii"
                 android:drawablePadding="3dp"
                 android:textSize="15sp" />
 
@@ -72,7 +72,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="8dp"
                 android:singleLine="true"
-                android:textColor="@color/app_theme_color"
+                android:textColor="@color/color_text_ii"
                 android:textSize="15sp" />
 
         </RelativeLayout>

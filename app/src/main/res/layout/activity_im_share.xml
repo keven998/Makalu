@@ -9,7 +9,10 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
-
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1px"
+         android:background="@color/color_line"/>
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">

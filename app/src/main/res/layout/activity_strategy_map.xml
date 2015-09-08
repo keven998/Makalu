@@ -66,11 +66,17 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
     <RelativeLayout
         android:id="@+id/map_title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/map_title_back"
@@ -92,7 +98,7 @@
             android:layout_marginBottom="0dp"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="@color/color_text_titlebar"
+            android:textColor="@color/color_text_ii"
             android:textSize="15sp" />
 
         <TextView
@@ -106,7 +112,7 @@
             android:layout_marginTop="-2dp"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="@color/color_text_titlebar"
+            android:textColor="@color/color_text_ii"
             android:textSize="10sp" />
 
 
@@ -159,7 +165,11 @@
 
 
     </RelativeLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line"/>
+    </LinearLayout>
     <!--<com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/map_title_bar"
         android:layout_width="match_parent"
