@@ -55,6 +55,7 @@ public class IMClient {
     public int p;
     public static long lastSuccessFetch;
     private Context mContext;
+
     public boolean isLogin() {
         return isLogin;
     }
@@ -153,7 +154,7 @@ public class IMClient {
                         for (Message msg : list) {
                             LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
                         }
-                        if (list.size()>0)LazyQueue.getInstance().TempDequeue();
+                        if (list.size() > 0) LazyQueue.getInstance().TempDequeue();
                     }
                 });
             }
@@ -317,9 +318,10 @@ public class IMClient {
         return list;
     }
 
-    public String getDBFilename(){
+    public String getDBFilename() {
         return db.getFilename();
     }
+
     public void sendTextMessage(MessageBean message, String friendId, String conversation, HttpCallback listen, String chatType) {
         if ("0".equals(conversation)) conversation = null;
         SendMessageBean imessage = new SendMessageBean((int) message.getSenderId(), friendId, Config.TEXT_MSG, message.getMessage());
@@ -509,7 +511,7 @@ public class IMClient {
     public int saveReceiveMsg(Message message) {
         countFrequency.addMessage();
         int result = db.saveReceiveMsg(message.getSenderId() + "", Msg2Bean(message), message.getConversation(), message.getGroupId(), message.getChatType());
-        if (result == 0) {
+        if (result == 0 ) {
             setLastMsg(message.getConversation(), message.getMsgId());
         }
         //       IMClient.lastSuccessFetch = message.getTimestamp();

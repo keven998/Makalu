@@ -32,6 +32,7 @@ import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 import com.lv.utils.Config;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -272,6 +273,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     wenwen.setNickName("旅行问问");
                     wenwen.setUserId(10001l);
                     wenwen.setType(1);
+                    String drawableUrl = ImageDownloader.Scheme.DRAWABLE.wrap("R.drawable.lvxingwenwen");
+                    wenwen.setAvatarSmall("drawable://R.drawable.lvxingwenwen");
                     UserDBManager.getInstance().saveContact(wenwen);
                     User paipai = new User();
                     paipai.setNickName("派派");

@@ -165,10 +165,11 @@ public class MessageDB {
         if (entity.getType() == 100) {
             closeDB();
             return handleCMD(entity);
-        } else if (entity.getType() == 200) {
-            closeDB();
-            return handleTips(entity);
         }
+//        else if (entity.getType() == 200) {
+//            closeDB();
+//            return handleTips(entity);
+//        }
         /**
          * 单聊
          */
@@ -266,6 +267,11 @@ public class MessageDB {
             closeDB();
             return 1;
         }
+        if (entity.getType() == 200) {
+            cursor.close();
+            closeDB();
+            return handleTips(entity);
+        }
         cursor.close();
         ContentValues values = new ContentValues();
         values.put("ServerId", entity.getServerId());
@@ -301,12 +307,12 @@ public class MessageDB {
                 }
             }
             if (tipsType == 2001) {
-                addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group");
+                addTips(groupId, operator.getString("nickName") + "邀请" + tag.toString() + "加入讨论组", "group",entity.getServerId(),entity.getSenderId());
             } else if (tipsType == 2002) {
                 if (TextUtils.isEmpty(tag.toString())) {
-                    addTips(groupId, operator.getString("nickName") + "退出了讨论组", "group");
+                    addTips(groupId, operator.getString("nickName") + "退出了讨论组", "group",entity.getServerId(),entity.getSenderId());
                 } else {
-                    addTips(groupId, operator.getString("nickName") + "将" + tag.toString() + "移出了讨论组", "group");
+                    addTips(groupId, operator.getString("nickName") + "将" + tag.toString() + "移出了讨论组", "group",entity.getServerId(),entity.getSenderId());
                 }
 
             } else return 1;
@@ -740,7 +746,15 @@ public class MessageDB {
         m.setType(TIPS_TYPE);
         saveMsg(String.valueOf(chatId), m, chatType);
     }
-
+    public synchronized void addTips(String chatId, String tips, String chatType,long serverId, long senderId) {
+        MessageBean m = new MessageBean();
+        m.setMessage(tips);
+        m.setCreateTime(TimeUtils.getTimestamp());
+        m.setSenderId(serverId);
+        m.setSenderId(senderId);
+        m.setType(TIPS_TYPE);
+        saveMsg(String.valueOf(chatId), m, chatType);
+    }
     public ArrayList<String> getAllPics(String chatId) {
         ArrayList<String> pics = new ArrayList<>();
         if (TextUtils.isEmpty(chatId)) return pics;
