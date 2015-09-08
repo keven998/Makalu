@@ -9,7 +9,11 @@
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"/>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"
+        />
 
     <!--<RelativeLayout-->
         <!--android:id="@+id/title"-->

@@ -405,7 +405,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/title_bar_height"
-                android:background="@drawable/bg_navigation_bar">
+                android:background="@color/white">
 
                 <ImageView
                     android:id="@+id/iv_na_back"
@@ -424,7 +424,7 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:textColor="@color/color_text_titlebar"
+                    android:textColor="@color/color_text_ii"
                     android:textSize="18sp" />
 
                 <ImageView
@@ -436,6 +436,10 @@
                     android:paddingRight="12dp"
                     android:scaleType="center"
                     android:src="@drawable/selector_ic_common_navigation_menu" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_line"/>
             </FrameLayout>
 
         </RelativeLayout>

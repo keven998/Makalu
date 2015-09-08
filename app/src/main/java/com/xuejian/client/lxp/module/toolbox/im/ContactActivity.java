@@ -31,7 +31,7 @@ public class ContactActivity extends PeachBaseActivity {
         titleBar.getTitleTextView().setText("联系人");
         titleBar.enableBackKey(true);
 
-        titleBar.setRightViewImageRes(R.drawable.ic_contact_list_add);
+        titleBar.setRightViewImageRes(R.drawable.navigation_addfriend);
         titleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
