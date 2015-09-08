@@ -69,7 +69,7 @@ public class CustomFrameLayout extends FrameLayout{
                                 return true;
                             }
 
-                        }else{
+                        }else if((startY-ev.getY())<0){
                             if(canInterTitleDown){
                                 if(onInterDispatchListener!=null){
                                     isDrawawing=true;

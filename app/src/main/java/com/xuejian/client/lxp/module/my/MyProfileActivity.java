@@ -6,13 +6,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,6 +46,7 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
@@ -105,6 +109,8 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
 
     @InjectView(R.id.title_bar_profile)
     RelativeLayout title_bar;
+    @InjectView(R.id.goToMyAlbums)
+    FrameLayout goToMyAlbums;
     private TextView notice;
     private int picsNum = 0;
     private String Sex;
@@ -220,6 +226,23 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
         });
 
+        goToMyAlbums.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final User userPics = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
+                if (userPics != null) {
+                    Intent intent2 = new Intent(MyProfileActivity.this, CityPictureActivity.class);
+                    intent2.putExtra("id", String.valueOf(userPics.getUserId()));
+                    intent2.putExtra("user_name", userPics.getNickName());
+                    intent2.putExtra("isUserPics", true);
+                    startActivity(intent2);
+                } else {
+                    Intent LoginIntent = new Intent(MyProfileActivity.this, LoginActivity.class);
+                    startActivityForResult(LoginIntent, CODE_PICS);
+                    MyProfileActivity.this.overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+                }
+            }
+        });
     }
 
 
@@ -449,7 +472,20 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             ivCity.setText(city+"");
             tvPictureCount.setText(picNum + "图");
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
-            tvPlansCount.setText(guideCount + "条");
+
+            String countryCountStr = String.format("旅行%d个国家,共%d个城市",countryCount,cityCount);
+            int countryLength = (countryCount+"").length();
+            int cityLength =(cityCount+"").length();
+            SpannableString countrySpannable = new SpannableString(countryCountStr);
+            countrySpannable.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 2, 2 + countryLength, 0);
+            countrySpannable.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 7 + countryLength, 7 + countryLength + cityLength, 0);
+            tvTracksCount.setText(countrySpannable);
+
+            String tvPlaneCount = String.format("共%d份旅行计划", guideCount);
+            int planeLength=(guideCount+"").length();
+            SpannableString spannableString = new SpannableString(tvPlaneCount);
+            spannableString.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
+            tvPlansCount.setText(spannableString);
            // constellationIv.setText("星座");
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
@@ -594,7 +630,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
 
        if(i<3){
            for(int j=i;j<3;j++){
-               myImageView[i].setVisibility(View.INVISIBLE);
+               myImageView[i].setVisibility(View.GONE);
            }
 
        }

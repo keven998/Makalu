@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,6 +61,7 @@ import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
@@ -134,6 +136,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     RelativeLayout title_bar;
     @InjectView(R.id.expert_scroll)
     ScrollView expertScroll;
+
+    @InjectView(R.id.goToAlbum)
+    FrameLayout goToAlbum;
     private final List<Tag> mTags = new ArrayList<Tag>();
     private ImageView[] pictures;
     private boolean isViewVisible = true;
@@ -212,14 +217,14 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         expert_fragment.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
             @Override
             public void onInterEvent(int upordown) {
-                if(upordown==1){
-                    if(isViewVisible==true){
+                if (upordown == 1) {
+                    if (isViewVisible == true) {
 
-                        if(startMarginTop==0){
-                            startMarginTop= CommonUtils.dip2px(HisMainPageActivity.this, 52)-userInfoP.getHeight();
+                        if (startMarginTop == 0) {
+                            startMarginTop = CommonUtils.dip2px(HisMainPageActivity.this, 52) - userInfoP.getHeight();
                         }
 
-                        ValueAnimator animator = ValueAnimator.ofInt(0,startMarginTop);
+                        ValueAnimator animator = ValueAnimator.ofInt(0, startMarginTop);
                         animator.setTarget(userInfoP);
                         animator.setDuration(300).start();
                         animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -227,14 +232,14 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                                 int maginTop = (int) valueAnimator.getAnimatedValue();
-                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
-                                vl.setMargins(0,maginTop,0,0);
+                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams) userInfoP.getLayoutParams();
+                                vl.setMargins(0, maginTop, 0, 0);
                                 userInfoP.setLayoutParams(vl);
-                                if (maginTop==startMarginTop) {
+                                if (maginTop == startMarginTop) {
                                     // profileFragmentView.setCanInterTitleUp(false);
                                     //userInfoP.setVisibility(View.GONE);
                                     title_bar.setBackgroundResource(R.color.color_text_iii);
-                                    isViewVisible=false;
+                                    isViewVisible = false;
                                     expert_fragment.setIsDrawawing(false);
 
                                 }
@@ -243,13 +248,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                         });
                         //userInfoP.startAnimation(AnimationUtils.loadAnimation(MyProfileActivity.this,R.anim.scale_title_animation));
                     }
-                }else if(upordown==2){
-                    if(!isViewVisible){
+                } else if (upordown == 2) {
+                    if (!isViewVisible) {
                         // userInfoP.setVisibility(View.VISIBLE);
                         // profileFragmentView.setCanInterTitleUp(true);
-                        expertScroll.scrollTo(0,0);
+                        expertScroll.scrollTo(0, 0);
                         title_bar.setBackgroundResource(R.color.transparent_color);
-                        ValueAnimator animator = ValueAnimator.ofInt(startMarginTop,0);
+                        ValueAnimator animator = ValueAnimator.ofInt(startMarginTop, 0);
                         animator.setTarget(userInfoP);
                         animator.setDuration(300).start();
                         animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -257,15 +262,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                                 int marginTop = (int) valueAnimator.getAnimatedValue();
-                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
+                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams) userInfoP.getLayoutParams();
                                 vl.setMargins(0,marginTop,0,0);
-
                                 userInfoP.setLayoutParams(vl);
 
                                 if (marginTop == 0) {
                                     //profileFragmentView.setCanInterTitleDown(false);
-                                    Log.e("下拉动结束", "----------------------------");
-                                    isViewVisible=true;
+                                    isViewVisible = true;
                                     expert_fragment.setIsDrawawing(false);
                                 }
                             }
@@ -275,6 +278,21 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
 
                 }
+            }
+        });
+
+        goToAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
+                intent2.putExtra("id", String.valueOf(userId));
+                String userName="";
+                if(user!=null &&user.getNickName()!=null){
+                    userName=user.getNickName();
+                }
+                intent2.putExtra("title",user.getNickName());
+                intent2.putExtra("isTalentAlbum", true);
+                startActivity(intent2);
             }
         });
     }
@@ -759,7 +777,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         int cityLength =(bean.getTrackCnt()+"").length();
         SpannableString countrySpannable = new SpannableString(countryCount);
         countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),2,2+countryLength,0);
-        countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),8,8+cityLength,0);
+        countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),7+countryLength,7+countryLength+cityLength,0);
         tv_track_count.setText(countrySpannable);
         flPlansEntry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -886,27 +904,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         });
     }
 
-    private void updatePics(int num) {
-//        TextView tvAlbum ;
-//  //              = (TextView) findViewById(R.id.tv_profile_album);
-//        SpannableString albumStr = new SpannableString("相册");
-//        albumStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_text_iii)), 0, albumStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        albumStr.setSpan(new AbsoluteSizeSpan(14, true), 0, albumStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-//        SpannableStringBuilder asb = new SpannableStringBuilder();
-//        asb.append(String.format("%d张\n", num)).append(albumStr);
-//        tvAlbum.setText(asb);
-//        tvAlbum.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_album");
-//                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
-//                intent2.putExtra("id", String.valueOf(userId));
-//                intent2.putExtra("title", user.getNickName());
-//                intent2.putExtra("isTalentAlbum", true);
-//                startActivity(intent2);
-//            }
-//        });
-    }
+
 
     public void initScrollView(long userId) {
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
@@ -1002,17 +1000,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 pictures[j].setVisibility(View.GONE);
             }
         }
-//        llPics.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_album");
-//                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
-//                intent2.putExtra("id", String.valueOf(userId));
-//                intent2.putExtra("title", user.getNickName());
-//                intent2.putExtra("isTalentAlbum", true);
-//                startActivity(intent2);
-//            }
-//        });
     }
 
     public static Drawable readBitMap(Context context, int resId) {
