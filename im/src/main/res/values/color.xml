@@ -23,4 +23,10 @@
      <color name="seekbar_secondaryprogress_color">#3F4DB5A4</color>
      <color name="item_common_select">#e8e8e5</color>
      <color name="red_n">#ff7676</color>
+    
+    <color name="light_green_label">#B9DC96</color>
+    <color name="light_red_label">#FF96A0</color>
+    <color name="light_perple_label">#8cc8ff</color>
+    <color name="light_yellow_label">#ffbe64</color>
+    <color name="light_blue_label">#82f0fa</color>
 </resources>

@@ -21,7 +21,6 @@
                 android:id="@+id/fragment_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 >
 
                 <ImageView
@@ -39,12 +38,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     >
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/color_line"
-                        />
 
                     <View
                         android:layout_width="1px"

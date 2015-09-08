@@ -92,11 +92,11 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
             localTagView.setTextColor(getResources().getColor(mTagViewTextColorResId));
         }
 
-        if (mTagViewBackgroundResId == 0) {
+        if (t.getBackgroundResId()== 0) {
             mTagViewBackgroundResId = R.drawable.all_whitesolid_greenline;
             localTagView.setBackgroundResource(mTagViewBackgroundResId);
         } else {
-            localTagView.setBackgroundResource(mTagViewBackgroundResId);
+            localTagView.setBackgroundResource(t.getBackgroundResId());
         }
         localTagView.setChecked(t.isChecked());
         localTagView.setCheckEnable(b);
