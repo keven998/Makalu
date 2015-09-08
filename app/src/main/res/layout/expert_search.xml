@@ -9,11 +9,12 @@
         android:id="@+id/search_city_bar"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/bg_navigation_bar"
+        android:background="@color/white"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
 
         <ImageView
@@ -36,7 +37,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/all_whitesolid_background"
+                android:background="@drawable/all_whitesolid_geyline"
                 android:drawableLeft="@drawable/ic_search"
                 android:paddingRight="5dp"
                 android:drawablePadding="10dp"
@@ -45,7 +46,7 @@
                 android:inputType="text"
                 android:paddingLeft="8dp"
                 android:singleLine="true"
-                android:textColor="@color/base_text_color_title"
+                android:textColor="@color/color_text_ii"
                 android:textColorHint="@color/base_text_color_text_hint"
                 android:textSize="@dimen/text_size_14" />
             <ImageView
@@ -85,10 +86,14 @@
             android:paddingLeft="12dp"
             android:paddingRight="15dp"
             android:text="搜索"
-            android:textColor="@color/selector_white_text_color"
+            android:textColor="@color/color_text_ii"
             android:textSize="@dimen/text_size_14" />
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"
+        />
     <com.aizou.core.widget.prv.PullToRefreshListView
         android:id="@+id/expert_list"
         android:layout_width="match_parent"
