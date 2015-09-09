@@ -31,7 +31,7 @@ import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
-import com.lv.utils.Config;
+
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -481,9 +481,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     public void doSuccess(Object result, String method) {
                         JSONObject object = null;
                         try {
-                            if (Config.isDebug) {
-                                Log.i(Config.TAG, "group info : " + result);
-                            }
+
                             object = new JSONObject(result.toString());
                             JSONObject o = object.getJSONObject("result");
                             User user = new User();

@@ -14,22 +14,6 @@
             android:orientation="vertical"
             >
 
-            <!--<FrameLayout
-                android:id="@+id/fragment_parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/profile_background"
-                >
-            </FrameLayout>-->
-               <!-- <ImageView
-                    android:id="@+id/background_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:scaleType="centerCrop"
-                    android:adjustViewBounds="true"
-                    android:background="@color/red_add"
-                    />-->
-
                     <LinearLayout
                         android:id="@+id/user_info_pannel"
                         android:layout_width="match_parent"
@@ -137,7 +121,7 @@
                 <TextView
                     android:id="@+id/contact_people"
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
+                    android:layout_height="48dp"
                     android:textSize="@dimen/text_size_15"
                     android:text="联系人"
                     android:paddingTop="12dp"
@@ -211,7 +195,7 @@
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="我的·旅行派"
+                android:text="我的.旅行派"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
