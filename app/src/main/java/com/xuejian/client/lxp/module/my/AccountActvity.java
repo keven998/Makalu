@@ -136,14 +136,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     private int RESET_FOOTPRINT = 8;
     private boolean birthTimeFlag;
     private boolean fromReg;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         initView();
-      //  refreshUserInfo();
+        //  refreshUserInfo();
     }
 
     private void initView() {
@@ -158,7 +158,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_foot_print).setOnClickListener(this);
         findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
-        findViewById(R.id.iv_avatar).setOnClickListener(this);
+        findViewById(R.id.ll_ava).setOnClickListener(this);
 
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("编辑资料");
@@ -283,15 +283,15 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     @Override
     protected void onPause() {
         super.onPause();
-       MobclickAgent.onPageEnd("page_edit_my_profile");
+        MobclickAgent.onPageEnd("page_edit_my_profile");
         MobclickAgent.onPause(this);
     }
 
-    private void bindView(final User user,final long userId) {
+    private void bindView(final User user, final long userId) {
         tv_nickname.setText(user.getNickName());
         ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                .showImageOnFail(R.drawable.messages_bg_useravatar)
+                .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_corner)
+                .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_corner)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10))) // 设置成圆角图片
@@ -302,11 +302,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } else if (user.getGender().equalsIgnoreCase("F")) {
             //iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
             tv_gender.setText("美女");
-        }else if (user.getGender().equalsIgnoreCase("S")){
-         //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+        } else if (user.getGender().equalsIgnoreCase("S")) {
+            //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
             tv_gender.setText("保密");
-        }else {
-          //  iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+        } else {
+            //  iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
             tv_gender.setText("一言难尽");
         }
 
@@ -352,7 +352,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 intent.putExtra("isMyFootPrint", true);
                 intent.putParcelableArrayListExtra("myfootprint", trackCitys);
                 intent.putExtra("title", tv_foot_print.getText().toString());
-                startActivityForResult(intent,RESET_FOOTPRINT);
+                startActivityForResult(intent, RESET_FOOTPRINT);
             }
         });
 
@@ -360,7 +360,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             tv_bind_phone.setText("已绑定");
         }
         tv_photo.setText(user.getAlbumCnt() + "张");
-      //  getUserPics(user.getUserId());
+        //  getUserPics(user.getUserId());
 
     }
 
@@ -390,28 +390,28 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                startActivityForResult(statusIntent, STATUS);
 //                break;
 
-            case R.id.iv_avatar:
+            case R.id.ll_ava:
                 showSelectPicDialog();
                 break;
 
-            case R.id.ll_foot_print:
-                Intent intent = new Intent(AccountActvity.this, MyFootPrinterActivity.class);
-                intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
-                startActivityForResult(intent, FOOTPRINT);
-                break;
+//            case R.id.ll_foot_print:
+//                Intent intent = new Intent(AccountActvity.this, MyFootPrinterActivity.class);
+//                intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
+//                startActivityForResult(intent, FOOTPRINT);
+//                break;
 
             case R.id.ll_zodiac:
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Calendar calendar = Calendar.getInstance();
-                try{
+                try {
                     Date date = format.parse(user.getBirthday());
                     calendar.setTime(date);
 
-                }catch(Exception ex){
+                } catch (Exception ex) {
 
                 }
 
- //               if(Build.BRAND.equals("Meizu")){
+                //               if(Build.BRAND.equals("Meizu")){
                 DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -435,8 +435,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 //                            birthTimeFlag = false;
 //                        }
                     }
-                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
-               final DatePicker datePicker =dialog.getDatePicker();
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+                final DatePicker datePicker = dialog.getDatePicker();
 //                }else {
 //                    dialog = makeDatePicker(new DatePickerDialog.OnDateSetListener() {
 //                        @Override
@@ -492,12 +492,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        String dateString =  datePicker.getYear() + "-" +  (datePicker.getMonth()+1)+ "-" +  datePicker.getDayOfMonth();
+                        String dateString = datePicker.getYear() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getDayOfMonth();
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        String  submitStr = dateString;
+                        String submitStr = dateString;
                         try {
                             Date date = format.parse(dateString);
-                            submitStr=format.format(date);
+                            submitStr = format.format(date);
                             if (date.after(new Date())) {
                                 ToastUtil.getInstance(AccountActvity.this).showToast("无效的生日设置");
                             } else {
@@ -549,14 +549,14 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
 
     private void refreshUserInfo() {
-       final User user = AccountManager.getInstance().getLoginAccount(this);
+        final User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
             if (user.getGender().equalsIgnoreCase("M")) {
-               // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
             } else if (user.getGender().equalsIgnoreCase("F")) {
-               // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
             } else {
-               // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
             }
 
             UserApi.getUserInfo(String.valueOf(user.getUserId()), new HttpCallBack<String>() {
@@ -565,7 +565,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
-                        bindView(userResult.result,user.getUserId());
+                        bindView(userResult.result, user.getUserId());
                     }
 
                 }
@@ -582,7 +582,6 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             });
         }
     }
-
 
 
     private void showChangePicDialog(final ArrayList<String> urls, final String id, final int index) {
@@ -651,7 +650,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         UserApi.delUserAlbumPic(String.valueOf(user.getUserId()), picId, new HttpCallBack<String>() {
@@ -740,7 +739,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         UserApi.editUserGender(user, gender, new HttpCallBack<String>() {
@@ -754,16 +753,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     if (gender.equalsIgnoreCase("M")) {
-                     //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
+                        //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
                         tv_gender.setText("帅锅");
                     } else if (gender.equalsIgnoreCase("F")) {
-                     //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
+                        //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
                         tv_gender.setText("美女");
                     } else if (user.getGender().equalsIgnoreCase("S")) {
-                    //    iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                        //    iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                         tv_gender.setText("保密");
                     } else {
-                     //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
+                        //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
                         tv_gender.setText("一言难尽");
                     }
 
@@ -905,7 +904,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         UserApi.editUserAvatar(user, url, new HttpCallBack<String>() {
@@ -924,12 +923,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                         e.printStackTrace();
                     }
                     ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
-                            .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                            .showImageOnFail(R.drawable.messages_bg_useravatar)
+                            .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_corner)
+                            .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_corner)
                             .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                             .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                            .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                                    getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                            .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10))) // 设置成圆角图片
                             .build());
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");
                 }
@@ -1018,26 +1016,26 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
             }
         } else if (requestCode == SelectPicUtils.REQUEST_CODE_LOCAL_ZOOM) {
-            Uri uri=null;
+            Uri uri = null;
             String path;
-            boolean flag=false;
-            if(data!=null){
-                if(data.getData()!=null){
-                    uri=data.getData();
-                    flag=true;
-                }else{
-                    if(data.getAction()!=null){
-                        uri=Uri.parse(data.getAction());
-                        flag=true;
-                    }else{
-                        flag=false;
+            boolean flag = false;
+            if (data != null) {
+                if (data.getData() != null) {
+                    uri = data.getData();
+                    flag = true;
+                } else {
+                    if (data.getAction() != null) {
+                        uri = Uri.parse(data.getAction());
+                        flag = true;
+                    } else {
+                        flag = false;
                     }
                 }
             }
 
-            if(uri!=null && flag==true){
-                Cursor cursor = getContentResolver().query(uri,new String[]{MediaStore.Images.Media.DATA},null,null,null);
-                if(cursor!=null){
+            if (uri != null && flag == true) {
+                Cursor cursor = getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+                if (cursor != null) {
                     cursor.moveToFirst();
                     path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     cursor.close();
@@ -1045,7 +1043,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                     pathFile.getParentFile().mkdirs();
                     uploadAvatar(new File(path));
                 }
-            }else{
+            } else {
                 if (tempImage != null) {
                     uploadAvatar(tempImage);
 
@@ -1083,7 +1081,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             tv_nickname.setText(data.getExtras().getString("nickname"));
         } else if (requestCode == BINDPHONE) {
             //  bindPhoneTv.setText(data.getExtras().getString("bindphone"));
-        } else if (requestCode == RESET_FOOTPRINT){
+        } else if (requestCode == RESET_FOOTPRINT) {
             //updateFootPrint from
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -1096,7 +1094,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         UserApi.editUserStatus(user, sstatus, new HttpCallBack<String>() {
@@ -1139,7 +1137,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         UserApi.editUserResidence(user, residence, new HttpCallBack<String>() {
@@ -1183,7 +1181,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
         UserApi.editUserBirthday(user, birth, new HttpCallBack<String>() {

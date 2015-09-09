@@ -483,9 +483,9 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
-                    .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageOnFail(R.drawable.ic_default_picture)
+                    .showImageOnLoading(R.drawable.ic_default_picture)
+                    .showImageForEmptyUri(R.drawable.ic_default_picture)
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
@@ -522,7 +522,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
             if (strategyBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(strategyBean.images.get(0).url, viewHolder.plane_pic, picOptions);
-            }
+            } else ImageLoader.getInstance().displayImage("", viewHolder.plane_pic, picOptions);
             viewHolder.plane_spans.setText(strategyBean.dayCnt + "天");
             viewHolder.plane_title.setText(strategyBean.title);
             viewHolder.city_hasGone.setText(strategyBean.summary);
@@ -538,7 +538,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             public TextView city_hasGone;
             public TextView create_time;
         }
-
     }
 
 

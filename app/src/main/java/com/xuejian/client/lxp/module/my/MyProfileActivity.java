@@ -415,8 +415,8 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         all_foot_print_list.clear();
         if (user == null) {
             ImageLoader.getInstance().displayImage("", avatarIv, new DisplayImageOptions.Builder()
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
@@ -483,16 +483,9 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             spannableString.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
             tvPlansCount.setText(spannableString);
            // constellationIv.setText("星座");
-            DisplayImageOptions options = new DisplayImageOptions.Builder()
-                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
-                    .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
-                    .resetViewBeforeLoading(true)
-                    .cacheOnDisk(true)
-                    .build();
             ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片

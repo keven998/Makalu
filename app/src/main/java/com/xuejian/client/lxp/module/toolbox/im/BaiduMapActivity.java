@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.amap.api.location.core.GeoPoint;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -84,8 +83,8 @@ public class BaiduMapActivity extends ChatBaseActivity {
             location();
         } else {
             double longtitude = intent.getDoubleExtra("longitude", 0);
-            LatLng ll = commonToBd(latitude, longtitude);
-            showMap(ll.latitude, ll.longitude, null);
+            point ll = gcjToBaidu(latitude, longtitude);
+            showMap(ll.lng, ll.lat, null);
         }
     }
 
@@ -148,8 +147,8 @@ public class BaiduMapActivity extends ChatBaseActivity {
         mLocClient.registerLocationListener(myListener);
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true);// 打开gps
-      //  option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setCoorType("gcj02");
+        option.setCoorType("bd09ll"); // 设置坐标类型
+      //  option.setCoorType("gcj02");
         option.setScanSpan(1000);
         option.setAddrType("all");
         mLocClient.setLocOption(option);
@@ -186,9 +185,11 @@ public class BaiduMapActivity extends ChatBaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                     //   LatLng newLL = bdToCommon(lastLocation.getLatitude(),lastLocation.getLongitude());
+                        point newLL = baiduToGcj(lastLocation.getLatitude(),lastLocation.getLongitude());
                         Intent intent = new Intent();
-                        intent.putExtra("latitude", lastLocation.getLatitude());
-                        intent.putExtra("longitude", lastLocation.getLongitude());
+                        intent.putExtra("latitude", newLL.lat);
+                        intent.putExtra("longitude", newLL.lng);
                         intent.putExtra("address", lastLocation.getAddrStr());
                         intent.putExtra("path", mapPath);
                         progressDialog.dismiss();
@@ -306,21 +307,32 @@ public class BaiduMapActivity extends ChatBaseActivity {
 
     static final double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
 
-    public static GeoPoint gcjToBaidu(double lat, double lng) {
+    public  point gcjToBaidu(double lat, double lng) {
         double x = lng, y = lat;
         double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
         double theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
         double bdLng = z * Math.cos(theta) + 0.0065;
         double bdLat = z * Math.sin(theta) + 0.006;
-        return new GeoPoint((int) (bdLat * 1e6), (int) (bdLng * 1e6));
+   //     return new GeoPoint((int) (bdLat * 1e6), (int) (bdLng * 1e6));
+        return new point(bdLng,bdLat);
     }
 
-    public static GeoPoint baiduToGcj(double lat, double lng) {
+    public  point baiduToGcj(double lat, double lng) {
         double x = lng - 0.0065, y = lat - 0.006;
         double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
         double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
         double gcjLng = z * Math.cos(theta);
         double gcjLat = z * Math.sin(theta);
-        return new GeoPoint((int) (gcjLat * 1e6), (int) (gcjLng * 1e6));
+     //   return new GeoPoint((int) (gcjLat * 1e6), (int) (gcjLng * 1e6));
+        return new point(gcjLat,gcjLng);
+    }
+    class point{
+        double lat;
+        double lng;
+
+        public point(double lat, double lng) {
+            this.lat = lat;
+            this.lng = lng;
+        }
     }
 }

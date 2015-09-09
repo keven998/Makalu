@@ -397,8 +397,13 @@ public class GroupDetailFragment extends PeachBaseFragment {
                     user.setExt(o.toString());
                     user.setType(8);
                     UserDBManager.getInstance().updateGroupInfo(user, groupId);
-                    ChatActivity activity = (ChatActivity) getActivity();
-                    activity.setTitleName(user.getNickName());
+                    try {
+                        ChatActivity activity = (ChatActivity) getActivity();
+                        activity.setTitleName(user.getNickName());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
