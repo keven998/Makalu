@@ -47,6 +47,7 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
@@ -715,7 +716,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-               // .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
+                        // .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
                 .build());
 
         TextView level_num_info = (TextView)findViewById(R.id.level_num_info);

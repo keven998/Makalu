@@ -13,11 +13,8 @@
         android:paddingRight="30dp"
         android:text="取消"
         android:layout_gravity="left"
-<<<<<<< Updated upstream
-        android:textColor="@color/color_text_iii" />
-=======
         android:textColor="@color/color_text_ii" />
->>>>>>> Stashed changes
+
 
     <TextView
         android:id="@+id/tv_title_bar_title"
@@ -39,11 +36,8 @@
         android:paddingLeft="32dp"
         android:paddingRight="12dp"
         android:text="保存"
-<<<<<<< Updated upstream
         android:textColor="@color/color_text_iii" />
-=======
-        android:textColor="@color/color_text_ii" />
->>>>>>> Stashed changes
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"

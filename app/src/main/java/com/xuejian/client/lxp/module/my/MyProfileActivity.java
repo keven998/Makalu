@@ -507,10 +507,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             spannableString.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
             tvPlansCount.setText(spannableString);
            // constellationIv.setText("星座");
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
             ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
                     .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                     .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
