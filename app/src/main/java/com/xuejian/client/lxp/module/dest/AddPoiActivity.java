@@ -82,6 +82,7 @@ public class AddPoiActivity extends PeachBaseActivity {
     private ImageView selected;
     private int globalFlag = 0;
     private static final int SEARCH_CODE = 105;
+    private List<PoiDetailBean> curPoiList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +127,7 @@ public class AddPoiActivity extends PeachBaseActivity {
                     @Override
                     public void onClick(View view) {
                         onPoiRemoved(poi);
-                        poi.hasAdded=false;
+                        poi.hasAdded = false;
                         mPoiAdapter.notifyDataSetChanged();
                     }
                 });
@@ -423,19 +424,22 @@ public class AddPoiActivity extends PeachBaseActivity {
         for (int i = 0; i < hasAddList.size(); i++) {
             final int pos = i;
             View view = View.inflate(AddPoiActivity.this, R.layout.poi_bottom_cell_with_del, null);
-            final FrameLayout del_fl = (FrameLayout)view.findViewById(R.id.poi_del_fl);
-            TextView location = (TextView) view.findViewById(R.id.names);
+            final FrameLayout del_fl = (FrameLayout) view.findViewById(R.id.poi_del_fl);
+            final TextView location = (TextView) view.findViewById(R.id.names);
             location.setText(hasAddList.get(i).zhName);
             del_fl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    hsViewLL.removeView(del_fl);
-                    hasAddList.get(pos).hasAdded=false;
-                    hasAddList.remove(hasAddList.get(pos));
+
+                    int pos = getPos(location.getText().toString());
+                    int listPos = getPosOfList(location.getText().toString());
+                    if (listPos>=0)mPoiAdapter.cancleAdd(listPos);
+                    hasAddList.remove(pos);
                     if (hasAddList.size() == 0) {
                         bottomFrame.setVisibility(View.GONE);
                     }
-
+                    // getPos(location.getText().toString());
+                    hsViewLL.removeView(del_fl);
                     mPoiAdapter.notifyDataSetChanged();
                     autoScrollPanel();
                 }
@@ -523,6 +527,24 @@ public class AddPoiActivity extends PeachBaseActivity {
 //        mTilteView.setText(String.format("第%d天(%d安排)", dayIndex+1, hasAddList.size()));
     }
 
+    private int getPosOfList(String zhName) {
+        for (int i = 0; i < curPoiList.size(); i++) {
+            if (curPoiList.get(i).zhName.equals(zhName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getPos(String name) {
+        for (int i = 0; i < hasAddList.size(); i++) {
+            if (hasAddList.get(i).zhName.equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public String resizeTypeName(String type) {
         if ("hotel".equals(type)) {
             return "酒店";
@@ -606,6 +628,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         for (PoiDetailBean detailBean : result) {
             detailBean.hasAdded = hasAddList.contains(detailBean);
         }
+        curPoiList = result;
         mPoiAdapter.getDataList().addAll(result);
         mPoiAdapter.notifyDataSetChanged();
     }
@@ -644,10 +667,6 @@ public class AddPoiActivity extends PeachBaseActivity {
                         FrameLayout del_fl = (FrameLayout) view.findViewById(R.id.poi_del_fl);
                         TextView location = (TextView) view.findViewById(R.id.names);
                         location.setText(bean.zhName);
-
-
-
-
 
 
 //                        View cityView = View.inflate(mContext, R.layout.poi_select_name, null);

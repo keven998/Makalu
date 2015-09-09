@@ -86,6 +86,11 @@ public class PoiAdapter extends BaseAdapter {
         return mPoiList.get(position);
     }
 
+    public void cancleAdd(int pos){
+        mPoiList.get(pos).hasAdded=false;
+        notifyDataSetChanged();
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
