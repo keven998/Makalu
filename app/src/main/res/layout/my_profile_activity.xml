@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
     android:orientation="vertical"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
     >
 
     <LinearLayout
@@ -20,34 +21,24 @@
             android:paddingTop="52dp"
             android:background="@drawable/profile_background"
             >
-            <FrameLayout
-                android:id="@+id/avatar_pannel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center_horizontal"
-                >
-                <ImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:scaleType="centerCrop"
-                    />
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/self_picture_round_boader"
-                    />
-            </FrameLayout>
+            <com.xuejian.client.lxp.common.widget.RoundImageBoarderView
+                android:id="@+id/iv_avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+                imagecontrol:border_outside_color="#FFFFFFFE"
+                imagecontrol:border_thickness="2dp"
+                android:layout_marginTop="15dp"
+                />
 
             <TextView
                 android:id="@+id/iv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textColor="@color/white"
                 android:text="姓名"
                 android:layout_gravity="center_horizontal"
@@ -66,10 +57,10 @@
                     android:id="@+id/iv_age"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_14"
+                    android:textSize="13sp"
                     android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
-                    android:text="年龄"
+                    android:text="年龄 未知"
                     />
 
 
@@ -77,7 +68,7 @@
                     android:id="@+id/iv_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_14"
+                    android:textSize="13sp"
                     android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
@@ -113,24 +104,39 @@
                 android:layout_marginBottom="15dp"
 
                 >
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/level_label"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
                     android:scaleType="fitXY"
-                    android:background="@color/red"
+                    android:src="@drawable/level_round_bg"
                     />
+                    <TextView
+                        android:id="@+id/level_num_infos"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:text="v0"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+                </FrameLayout>
+
                 <ImageView
                     android:id="@+id/gender_label"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
                     android:scaleType="fitXY"
                     android:layout_marginLeft="15dp"
                     />
                 <ImageView
                     android:id="@+id/constellation_label"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
                     android:scaleType="fitXY"
                     android:layout_marginLeft="15dp"
                     />
@@ -165,7 +171,7 @@
                         android:textColor="@color/color_text_ii"
                         android:text="我的相册"
                         android:layout_gravity="center_horizontal"
-                        android:drawableLeft="@drawable/checker_tab_home_user"
+                        android:drawableLeft="@drawable/ico_albums"
                         android:drawablePadding="10dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
@@ -196,7 +202,6 @@
                     android:orientation="horizontal"
                     android:paddingLeft="10dp"
                     android:paddingBottom="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="10dp"
                     android:background="@color/white"
                     android:minHeight="120dp"
@@ -205,7 +210,7 @@
                         android:id="@+id/profile_image0"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/ic_person_normal"
+                        android:src="@drawable/pic_loadfail"
                         android:layout_gravity="center_vertical"
                         android:scaleType="centerCrop"
                         android:visibility="gone"
@@ -214,7 +219,7 @@
                         android:id="@+id/profile_image1"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/ic_person_normal"
+                        android:src="@drawable/pic_loadfail"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
@@ -224,7 +229,7 @@
                         android:id="@+id/profile_image2"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/ic_person_normal"
+                        android:src="@drawable/pic_loadfail"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
@@ -242,6 +247,7 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_arrow_right"
                             android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="10dp"
                             />
 
                     </FrameLayout>
@@ -256,7 +262,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_16"
                 android:textColor="@color/color_text_ii"
-                android:drawableLeft="@drawable/ic_person_normal"
+                android:drawableLeft="@drawable/ico_traveled"
                 android:drawablePadding="10dp"
                 android:text="我的旅行"
                 android:layout_gravity="center_horizontal"
@@ -288,15 +294,11 @@
                             android:background="@drawable/option_cell_selector"
                             >
 
-                            <TextView
+                            <ImageView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/text_size_14"
-                                android:textColor="@color/color_text_iii"
-                                android:text="足迹"
-                                android:drawableLeft="@drawable/iv_travel_foot"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ico_mid_travel"
                                 android:layout_gravity="center_horizontal"
-                                android:drawablePadding="6dp"
                                 />
                             <TextView
                                 android:id="@+id/tv_tracks_count"
@@ -304,7 +306,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="旅行1个国家,共1个城市"
                                 android:textColor="@color/color_text_ii"
-                                android:textSize="14sp"
+                                android:textSize="11sp"
                                 android:layout_marginTop="6dp"
                                 android:layout_gravity="center_horizontal"
                                 />
@@ -327,16 +329,11 @@
                             android:paddingBottom="15dp"
                             >
 
-                            <TextView
+                            <ImageView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/text_size_14"
-                                android:textColor="@color/color_text_iii"
-                                android:text="计划"
-                                android:drawableLeft="@drawable/iv_travel_plan"
-                                android:drawablePadding="6dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ico_mid_plan"
                                 android:layout_gravity="center_horizontal"
-
                                 />
                             <TextView
                                 android:id="@+id/tv_plans_count"
@@ -344,7 +341,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="共0份旅行计划"
                                 android:textColor="@color/color_text_ii"
-                                android:textSize="14sp"
+                                android:textSize="11sp"
                                 android:layout_marginTop="6dp"
                                 android:layout_gravity="center_horizontal"
                                 />
@@ -402,7 +399,7 @@
                         android:textColor="@color/color_text_ii"
                         android:text="关于自己"
                         android:layout_gravity="center_horizontal"
-                        android:drawableLeft="@drawable/ic_person_normal"
+                        android:drawableLeft="@drawable/ico_aboutself"
                         android:drawablePadding="10dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
@@ -511,4 +508,5 @@
         android:background="@color/color_line"
         />
     </LinearLayout>
+
 </com.xuejian.client.lxp.common.widget.CustomFrameLayout>

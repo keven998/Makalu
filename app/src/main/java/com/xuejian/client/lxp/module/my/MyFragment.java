@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +19,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -39,10 +44,13 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
+import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
+import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
@@ -70,24 +78,26 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private LinearLayout contact_panel;
     private TextView travel_plane;
     private TextView contact_people;
-    private ImageView background_image;
-    private ImageView user_avatar;
-    private FrameLayout user_parent;
+    private RoundImageBoarderView user_avatar;
     private TextView nameAndId;
     private TextView other_infos;
-    private FrameLayout fragment_parent;
     private CustomFrameLayout fragment_view;
     private LinearLayout user_info_pannel;
+    private RelativeLayout my_panpan_frame;
 
     private View travel_pline;
     private View contact_pline;
+    private ImageView add_plane_icon;
     private int currentIndex = 0;
     private int startmagrinTop = 0;
     int mCurrentPage = 0;
     private User user;
     private ArrayList<StrategyBean> planeList;
     private static final int RESULT_PLAN_DETAIL = 0x222;
+    public static final int REQUEST_CODE_NEW_PLAN = 0x22;
     DisplayImageOptions options;
+    private boolean isPanelVisible=true;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,21 +107,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                        getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中// 设置成圆角图片
                 .build();
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         planeList = new ArrayList<StrategyBean>();
         my_fragment_list = (ListView) rootView.findViewById(R.id.my_fragment_list);
-        fragment_parent = (FrameLayout) rootView.findViewById(R.id.fragment_parent);
         fragment_view = (CustomFrameLayout) rootView.findViewById(R.id.fragment_view);
         user_info_pannel = (LinearLayout) rootView.findViewById(R.id.user_info_pannel);
-        background_image = (ImageView) rootView.findViewById(R.id.background_image);
-        user_parent = (FrameLayout) rootView.findViewById(R.id.user_parent);
-        user_avatar = (ImageView) rootView.findViewById(R.id.user_avatar);
+        user_avatar = (RoundImageBoarderView) rootView.findViewById(R.id.user_avatar);
         nameAndId = (TextView) rootView.findViewById(R.id.nameAndId);
         other_infos = (TextView) rootView.findViewById(R.id.other_infos);
+        my_panpan_frame = (RelativeLayout)rootView.findViewById(R.id.my_panpan_frame);
+        add_plane_icon = (ImageView)rootView.findViewById(R.id.add_plane_icon);
         initHeadTitleView(user);
         initTabView();
         TextView settingBtn = (TextView) rootView.findViewById(R.id.setting_btn);
@@ -133,38 +140,32 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         myPlaneAdapter = new MyPlaneAdapter(getActivity(), planeList);
         my_fragment_list.setAdapter(myPlaneAdapter);
 
-        user_parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
-                startActivity(intent);
-            }
-        });
         fragment_view.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
             @Override
             public void onInterEvent(int upordown) {
 
                 if (upordown == 1) {
-                    if (user_info_pannel.getVisibility() == View.VISIBLE) {
+                    if (isPanelVisible == true) {
 
                         if (startmagrinTop == 0) {
-                            startmagrinTop = -CommonUtils.dip2px(getActivity(), 248);
+                            startmagrinTop = CommonUtils.dip2px(getActivity(), 52) - user_info_pannel.getHeight();
                         }
 
                         ValueAnimator valueAnimator = ValueAnimator.ofInt(0, startmagrinTop);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                        valueAnimator.setTarget(fragment_parent);
-                        valueAnimator.setDuration(350).start();
+                        valueAnimator.setTarget(user_info_pannel);
+                        valueAnimator.setDuration(300).start();
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
                                 int marginTop = (int) valueAnimator.getAnimatedValue();
-                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) fragment_parent.getLayoutParams();
+                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) user_info_pannel.getLayoutParams();
                                 fp.setMargins(0, marginTop, 0, 0);
-                                fragment_parent.setLayoutParams(fp);
+                                user_info_pannel.setLayoutParams(fp);
                                 if (startmagrinTop == marginTop) {
-                                    user_info_pannel.setVisibility(View.GONE);
+                                    isPanelVisible = false;
+                                    my_panpan_frame.setBackgroundResource(R.color.color_text_iii);
                                     fragment_view.setIsDrawawing(false);
 
                                 }
@@ -175,21 +176,23 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
                     }
                 } else if (upordown == 2) {
-                    if (user_info_pannel.getVisibility() == View.GONE) {
-                        user_info_pannel.setVisibility(View.VISIBLE);
+                    if (!isPanelVisible) {
+                        my_fragment_list.setSelection(0);
                         ValueAnimator valueAnimator = ValueAnimator.ofInt(startmagrinTop, 0);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                        valueAnimator.setTarget(fragment_parent);
-                        valueAnimator.setDuration(350).start();
+                        valueAnimator.setTarget(user_info_pannel);
+                        valueAnimator.setDuration(300).start();
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
                                 int marginTop = (int) valueAnimator.getAnimatedValue();
-                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) fragment_parent.getLayoutParams();
+                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) user_info_pannel.getLayoutParams();
                                 fp.setMargins(0, 0, 0, 0);
-                                fragment_parent.setLayoutParams(fp);
+                                user_info_pannel.setLayoutParams(fp);
                                 if (startmagrinTop == marginTop) {
+                                    my_panpan_frame.setBackgroundResource(R.color.transparent_color);
+                                    isPanelVisible = true;
                                     fragment_view.setIsDrawawing(false);
                                 }
                                 //fragment_view.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.transparent_to_small));
@@ -201,6 +204,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
         });
 
+        user_info_pannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         my_fragment_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -236,6 +246,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
         });
 
+        add_plane_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SelectDestActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
+            }
+        });
         return rootView;
 
     }
@@ -245,15 +262,22 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         switch (index) {
             case 0:
                 travel_plane.setTextColor(getResources().getColor(R.color.app_theme_color));
+                travel_plane.setCompoundDrawablesWithIntrinsicBounds(R.drawable.my_plan_selected,0,0,0);
+                contact_people.setCompoundDrawablesWithIntrinsicBounds(R.drawable.note_normal,0,0,0);
                 contact_people.setTextColor(getResources().getColor(R.color.color_text_ii));
                 travel_pline.setBackgroundResource(R.color.app_theme_color);
                 contact_pline.setBackgroundResource(R.color.color_text_ii);
+                add_plane_icon.setVisibility(View.VISIBLE);
                 break;
             case 1:
+                travel_plane.setCompoundDrawablesWithIntrinsicBounds(R.drawable.my_plan_normal,0,0,0);
+                contact_people.setCompoundDrawablesWithIntrinsicBounds(R.drawable.note_selected,0,0,0);
                 travel_plane.setTextColor(getResources().getColor(R.color.color_text_ii));
+
                 contact_people.setTextColor(getResources().getColor(R.color.app_theme_color));
                 travel_pline.setBackgroundResource(R.color.color_text_ii);
                 contact_pline.setBackgroundResource(R.color.app_theme_color);
+                add_plane_icon.setVisibility(View.GONE);
                 break;
         }
     }
@@ -262,20 +286,32 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         if (user != null) {
             ImageLoader.getInstance().displayImage(user.getAvatar(), user_avatar, options);
             StringBuffer nameSb = new StringBuffer();
+            int nameLenth = 0;
             if (user.getNickName() != null) {
                 nameSb.append(user.getNickName());
+                nameLenth = user.getNickName().length();
             }
+            int idLenght=0;
             if (user.getUserId() != null) {
-                nameSb.append("      " + user.getUserId());
+                nameSb.append("  " + user.getUserId());
+                idLenght=(user.getUserId()+"").length();
             }
-            nameAndId.setText(nameSb.toString());
+            SpannableString spannableString = new SpannableString(nameSb.toString());
+            if(idLenght>0){
+                spannableString.setSpan(new AbsoluteSizeSpan(13,true),nameLenth+2,nameLenth+2+idLenght,0);
+                nameAndId.setText(spannableString);
+            }else{
+                nameAndId.setText(nameSb.toString());
+            }
+
+
 
             StringBuffer otherSb = new StringBuffer();
             if (user.getGender() != null) {
                 if (user.getGender().equalsIgnoreCase("M")) {
-                    otherSb.append("帅锅");
+                    otherSb.append("男");
                 } else if (user.getGender().equalsIgnoreCase("F")) {
-                    otherSb.append("美女");
+                    otherSb.append("女");
                 } else if (user.getGender().equalsIgnoreCase("S")) {
                     otherSb.append("保密");
                 } else {
@@ -284,10 +320,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
 
             if (user.getBirthday() != null) {
-                otherSb.append("      " + ConstellationUtil.calculateConstellationZHname(user.getBirthday()));
+                otherSb.append("  " + ConstellationUtil.calculateConstellationZHname(user.getBirthday()));
             }
             if (user.getLevel() != null) {
-                otherSb.append("      " + "LV" + user.getLevel());
+                otherSb.append("  " + "LV" + user.getLevel());
             }
 
             other_infos.setText(otherSb.toString());
@@ -430,6 +466,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         if (resultCode == getActivity().RESULT_OK) {
             if (requestCode == RESULT_PLAN_DETAIL) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
+            }else if(requestCode == REQUEST_CODE_NEW_PLAN){
+                StrategyBean sb = data.getParcelableExtra("strategy");
+                if (sb != null) {
+                    PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
+                }
+                mCurrentPage=0;
+                getStrategyListData(user);
+
             }
         }
 
@@ -488,6 +532,30 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .showImageForEmptyUri(R.drawable.ic_default_picture)
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
+
+      /*  @Override
+        public void fillValues(int position, View convertView) {
+            final StrategyBean strategyBean = data.get(position);
+            ViewHolder viewHolder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.travel_plane_item,null, false);
+                viewHolder = new ViewHolder();
+                viewHolder.plane_pic = (ImageView) convertView.findViewById(R.id.plane_pic);
+                viewHolder.plane_spans = (TextView) convertView.findViewById(R.id.plane_spans);
+                viewHolder.plane_title = (TextView) convertView.findViewById(R.id.plane_title);
+                viewHolder.city_hasGone = (TextView) convertView.findViewById(R.id.city_hasGone);
+                viewHolder.create_time = (TextView) convertView.findViewById(R.id.create_time);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            ImageLoader.getInstance().displayImage(strategyBean.detailUrl, viewHolder.plane_pic);
+            viewHolder.plane_spans.setText(strategyBean.dayCnt + "天");
+            viewHolder.plane_title.setText(strategyBean.title);
+            viewHolder.city_hasGone.setText(strategyBean.summary);
+            viewHolder.create_time.setText("创建时间: " + CommonUtils.getTimestampString(new Date(strategyBean.updateTime)));
+        }*/
 
         @Override
         public int getCount() {

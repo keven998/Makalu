@@ -37,9 +37,11 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
+import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
@@ -73,7 +75,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     @InjectView(R.id.my_profile_edit)
     TextView myProfileEdit;
     @InjectView(R.id.iv_avatar)
-    ImageView avatarIv;
+    RoundImageBoarderView avatarIv;
     //@InjectView(R.id.iv_constellation)
     //TextView constellationIv;
 
@@ -107,6 +109,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     RelativeLayout title_bar;
     @InjectView(R.id.goToMyAlbums)
     FrameLayout goToMyAlbums;
+
     private TextView notice;
     private int picsNum = 0;
     private String Sex;
@@ -132,8 +135,6 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 turnToEditProfile();
             }
         });
-        //genderFrame.setOnClickListener(this);
-       // findViewById(R.id.tv_edit_profile).setOnClickListener(this);
 
 
         findViewById(R.id.fl_plans_entry).setOnClickListener(this);
@@ -208,7 +209,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
 
                                     if (marginTop == 0) {
                                         //profileFragmentView.setCanInterTitleDown(false);
-                                        Log.e("下拉动结束","----------------------------");
+
                                         isViewVisible=true;
                                         profileFragmentView.setIsDrawawing(false);
                                     }
@@ -419,24 +420,49 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
                     .build());
             tvPictureCount.setText("0图");
             tvPlansCount.setText("0条");
             tvTracksCount.setText("0国0城市");
           //  constellationIv.setText("星座");
         } else {
-          /*  if (!user.getGender().equals(Sex)){
-                ivGender.setVisibility(View.VISIBLE);
+
+            ImageView gender_label = (ImageView)findViewById(R.id.gender_label);
+            if (!user.getGender().equals(Sex)){
+                gender_label.setVisibility(View.VISIBLE);
                 Sex=user.getGender();
                 if (user.getGender().equalsIgnoreCase("M")) {
-                    ivGender.setImageResource(R.drawable.icon_boy);
+                    gender_label.setImageResource(R.drawable.icon_boy);
                 } else if (user.getGender().equalsIgnoreCase("F")) {
-                    ivGender.setImageResource(R.drawable.icon_girl);
+                    gender_label.setImageResource(R.drawable.icon_girl);
                 } else {
-                    ivGender.setVisibility(View.GONE);
+                    gender_label.setVisibility(View.GONE);
                 }
-            }*/
+            }
+
+            int res = ConstellationUtil.calculateConstellation(user.getBirthday());
+            ImageView constellation_label = (ImageView)findViewById(R.id.constellation_label);
+            if (res == 0) {
+                constellation_label.setImageResource(R.drawable.ic_home_constellation_unknown);
+            } else constellation_label.setImageResource(res);
+
+            TextView level_num_infos = (TextView)findViewById(R.id.level_num_infos);
+            if (TextUtils.isEmpty(user.getLevel()) || user.getLevel().equals("0")) {
+                level_num_infos.setText("v"+user.getLevel());
+            } else {
+                level_num_infos.setText("v"+user.getLevel());
+            }
+
+            if (TextUtils.isEmpty(user.getResidence())) {
+                ivCity.setText("现居住城市 未知");
+            } else {
+                ivCity.setText("现居住在 "+user.getResidence());
+            }
+            if (TextUtils.isEmpty(user.getBirthday())) {
+                ivAge.setText("年龄 未知");
+            } else {
+                ivAge.setText(String.valueOf(getAge(user.getBirthday()))+"岁");
+            }
             int countryCount = 0;
             int cityCount = 0;
             String level = "0";
@@ -464,8 +490,6 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
 
             ivUserName.setText(username);
-            ivAge.setText(age+"");
-            ivCity.setText(city+"");
             tvPictureCount.setText(picNum + "图");
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
 
@@ -483,12 +507,16 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             spannableString.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
             tvPlansCount.setText(spannableString);
            // constellationIv.setText("星座");
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
                     .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                     .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
+
                     .build());
         }
     }
@@ -607,7 +635,12 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
        int i = 0;
        for (; i < picList.size()&& i<3; i++) {
            final int pos=i;
-           ImageLoader.getInstance().displayImage(picList.get(i), myImageView[i], UILUtils.getDefaultOption());
+           ImageLoader.getInstance().displayImage(picList.get(i), myImageView[i], new DisplayImageOptions.Builder()
+                   .showImageForEmptyUri(R.drawable.pic_loadfail)
+                   .showImageOnFail(R.drawable.pic_loadfail)
+                   .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                   .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                   .build());
            myImageView[i].setVisibility(View.VISIBLE);
            myImageView[i].setOnClickListener(new View.OnClickListener() {
                @Override

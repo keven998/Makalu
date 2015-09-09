@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/app_backgroud"
+    >
+
+    <com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp">
+<LinearLayout
+    android:id="@+id/swipe_bg_ll"
+    android:layout_width="wrap_content"
+    android:layout_height="130dp"
+    >
+
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/swipeContent"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -79,3 +101,5 @@
         android:layout_marginRight="10dp"
         />
 </LinearLayout>
+    </com.aizou.peachtravel.common.widget.swipelistview.SwipeLayout>
+</FrameLayout>
