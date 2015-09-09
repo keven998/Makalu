@@ -40,7 +40,7 @@ public class ModifySignActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_sign);
         ButterKnife.inject(this);
-        titleHeaderBar.getTitleTextView().setText("个性签名");
+        titleHeaderBar.getTitleTextView().setText("设置签名");
         titleHeaderBar.enableBackKey(true);
         titleHeaderBar.getRightTextView().setText("保存");
         titleHeaderBar.findViewById(R.id.ly_title_bar_right).setOnClickListener(new View.OnClickListener() {

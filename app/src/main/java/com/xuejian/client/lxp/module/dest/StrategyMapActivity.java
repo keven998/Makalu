@@ -45,7 +45,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
-import com.xuejian.client.lxp.module.my.MyFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -116,6 +115,9 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         //titleHeaderBar.getTitleTextView().setText("地图");
         if (!isExpertFootPrint && !isMyFootPrint && !isAllPoiLoc) {
             if (allBeans.size() > 0) {
+                if (allBeans.get(0).itinerary.size()<=0){
+                    return;
+                }
                 final int day_sums = allBeans.get(0).itinerary.get(allBeans.get(0).itinerary.size() - 1).dayIndex + 1;
                 tv_title.setText("第1天");
                 tv_select_day.setText("01");

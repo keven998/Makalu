@@ -109,6 +109,10 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void resetMemberValue(Intent intent) {
         userId = intent.getStringExtra("userId");
+        if (TextUtils.isEmpty(userId)){
+            finish();
+            return;
+        }
         if (AccountManager.getInstance().getLoginAccount(StrategyListActivity.this)!=null){
             isOwner = (AccountManager.getInstance().getLoginAccount(this) != null) && userId.equals(AccountManager.getCurrentUserId());
             user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));

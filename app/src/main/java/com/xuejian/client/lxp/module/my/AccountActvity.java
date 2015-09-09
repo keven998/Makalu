@@ -106,7 +106,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     TextView tv_bind_phone;
     @InjectView(R.id.tv_modify_pwd)
     TextView tv_modify_pwd;
-
+    @InjectView(R.id.tv_sign)
+    TextView tv_sign;
 
     public String getBirthDay() {
         return birthDay;
@@ -159,7 +160,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         findViewById(R.id.ll_modify_pwd).setOnClickListener(this);
         findViewById(R.id.ll_bind_phone).setOnClickListener(this);
         findViewById(R.id.ll_ava).setOnClickListener(this);
-
+        findViewById(R.id.ll_sign).setOnClickListener(this);
         TitleHeaderBar titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("编辑资料");
         titleBar.enableBackKey(true);
@@ -316,6 +317,11 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             tv_resident.setText("未设置");
         } else {
             tv_resident.setText(user.getResidence());
+        }
+        if (TextUtils.isEmpty(user.getSignature())) {
+            tv_sign.setText("未设置");
+        } else {
+            tv_sign.setText(user.getSignature());
         }
         if (TextUtils.isEmpty(user.getBirthday())) {
             tv_zodiac.setText("未设置");
@@ -543,7 +549,10 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 intent2.putExtra("isUserPics", true);
                 startActivity(intent2);
                 break;
-
+            case R.id.ll_sign:
+                Intent signIntent = new Intent(mContext, ModifySignActivity.class);
+                startActivityForResult(signIntent, SIGNATURE);
+                break;
         }
     }
 
@@ -1076,7 +1085,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
             all_foot_print_list = data.getParcelableArrayListExtra("footprint");
             initFootPrint(all_foot_print_list);
         } else if (requestCode == SIGNATURE) {
-            //signTv.setText(data.getExtras().getString("signature"));
+           tv_sign.setText(data.getExtras().getString("signature"));
         } else if (requestCode == NICKNAME) {
             tv_nickname.setText(data.getExtras().getString("nickname"));
         } else if (requestCode == BINDPHONE) {

@@ -138,7 +138,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                         editPics.setText("编辑");
                         ltv.setVisibility(View.VISIBLE);
                     }
-                    picAdapter.notifyDataSetChanged();
+                    if (picAdapter!=null)picAdapter.notifyDataSetChanged();
                 }
             });
         } else {

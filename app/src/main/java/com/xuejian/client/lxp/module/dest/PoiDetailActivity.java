@@ -264,7 +264,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     if (CommonUtils.checkIntent(mContext, mIntent)) {
                         startActivity(mIntent);
                     } else {
-                        ToastUtil.getInstance(mContext).showToast("没有地图应用");
+                        ToastUtil.getInstance(mContext).showToast("没有安装地图应用");
                     }
                 }
             }

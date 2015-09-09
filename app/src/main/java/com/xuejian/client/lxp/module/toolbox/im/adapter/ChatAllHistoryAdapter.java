@@ -159,13 +159,22 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Bitmap avatar = JoinBitmaps.createBitmap(LocalDisplay.dp2px(56),
-                                            LocalDisplay.dp2px(56), membersAvatars);
-                                    ImageCache.getInstance().put(String.valueOf(conversation.getFriendId()), avatar);
-                                    if (finalHolder1.avatar.getTag() != null && (int) finalHolder1.avatar.getTag() == conversation.getFriendId()) {
-                                        finalHolder1.avatar.setImageBitmap(avatar);
-                                    }
 
+                                    Bitmap avatar = null;
+                                    try {
+                                        avatar = JoinBitmaps.createBitmap(LocalDisplay.dp2px(56),
+                                                LocalDisplay.dp2px(56), membersAvatars);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (avatar != null) {
+                                        ImageCache.getInstance().put(String.valueOf(conversation.getFriendId()), avatar);
+                                        if (finalHolder1.avatar.getTag() != null && (int) finalHolder1.avatar.getTag() == conversation.getFriendId()) {
+                                            finalHolder1.avatar.setImageBitmap(avatar);
+                                        }
+                                    } else {
+                                        finalHolder1.avatar.setImageResource(R.drawable.default_group_avatar);
+                                    }
                                 }
                             });
 

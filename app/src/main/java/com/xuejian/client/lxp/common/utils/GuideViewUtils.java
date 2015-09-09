@@ -42,6 +42,7 @@ public class GuideViewUtils {
         }
         return instance;
     }
+
     private Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
@@ -85,13 +86,16 @@ public class GuideViewUtils {
         if (res != -1) textView.setBackgroundResource(res);
         textView.setText(content);
         handler.sendEmptyMessageDelayed(1, 300);
-
+        SharePrefUtil.saveBoolean(context, guideName, true);
         view.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-                windowManager.removeView(view);
-                SharePrefUtil.saveBoolean(context, guideName, true);
+                try {
+                    windowManager.removeView(view);
+                } catch (Exception e) {
+                }
+
             }
         });
     }
