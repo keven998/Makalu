@@ -416,6 +416,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
+                    android:id="@+id/ll_note_entry"
                     android:background="@drawable/option_cell_selector"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"

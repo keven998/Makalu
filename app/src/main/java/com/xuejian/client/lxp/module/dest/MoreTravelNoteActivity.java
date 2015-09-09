@@ -38,15 +38,24 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
     int mPage = 0;
     String locId;
     String keyword;
+    boolean isExpert;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_travelnote);
         ButterKnife.inject(this);
-        locId = getIntent().getStringExtra("id");
-        keyword = getIntent().getStringExtra("keyword");
-        mTitleBar.getTitleTextView().setText("全部游记");
+        isExpert = getIntent().getBooleanExtra("isExpert", false);
+        if (isExpert) {
+            locId = getIntent().getStringExtra("id");
+            mTitleBar.getTitleTextView().setText(getIntent().getStringExtra("title"));
+        } else {
+            locId = getIntent().getStringExtra("id");
+            keyword = getIntent().getStringExtra("keyword");
+            mTitleBar.getTitleTextView().setText("全部游记");
+        }
+
         mTitleBar.enableBackKey(true);
 
         mMoreTravelNoteLv.setPullLoadEnabled(false);
@@ -64,16 +73,21 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         mMoreTravelNoteLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-              //  getTravelNoteList(0);
-                getTravelNoteListByKeyword(0);
+                //  getTravelNoteList(0);
+                if (isExpert) {
+
+                } else getTravelNoteListByKeyword(0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-               // getTravelNoteList(mPage + 1);
-                getTravelNoteListByKeyword(mPage + 1);
+                // getTravelNoteList(mPage + 1);
+                if (isExpert) {
+
+                } else getTravelNoteListByKeyword(mPage + 1);
             }
         });
+
         mMoreTravelNoteLv.doPullRefreshing(true, 100);
 
     }
@@ -91,6 +105,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         MobclickAgent.onPageEnd("page_travel_notes_lists");
         MobclickAgent.onPause(this);
     }
+
     private void getTravelNoteListByKeyword(final int page) {
         OtherApi.getTravelNoteByKeyword(keyword, page, BaseApi.PAGE_SIZE, new HttpCallBack<String>() {
             @Override
@@ -124,6 +139,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         });
 
     }
+
     private void getTravelNoteList(final int page) {
         OtherApi.getTravelNoteByLocId(locId, page, BaseApi.PAGE_SIZE, new HttpCallBack<String>() {
             @Override

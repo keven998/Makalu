@@ -56,6 +56,7 @@ import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
+import com.xuejian.client.lxp.module.dest.MoreTravelNoteActivity;
 import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
@@ -124,6 +125,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     @InjectView(R.id.fl_plans_entry)
     LinearLayout flPlansEntry;
 
+    @InjectView(R.id.ll_note_entry)
+    LinearLayout ll_note_entry;
     @InjectView(R.id.expert_fragment_view)
     CustomFrameLayout  expert_fragment;
     @InjectView(R.id.expert_title_bar)
@@ -670,7 +673,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             tv_expert_name.setText(bean.getNickName());
         }
 
-
        findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -763,8 +765,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         String tvPlaneCount = String.format("共%d份旅行计划", bean.getGuideCnt());
         int planeLength=(bean.getGuideCnt()+"").length();
         SpannableString spannableString = new SpannableString(tvPlaneCount);
-        spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),1,1+planeLength,0);
+        spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
         tv_plan_count.setText(spannableString);
+
 
         String countryCount = String.format("旅行%d个国家,共%d个城市", bean.getCountryCnt(), bean.getTrackCnt());
         int countryLength = (bean.getCountryCnt()+"").length();
@@ -791,6 +794,17 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
                 intent.putExtra("userId", String.valueOf(userId));
+                startActivity(intent);
+            }
+        });
+
+        ll_note_entry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HisMainPageActivity.this, MoreTravelNoteActivity.class);
+                intent.putExtra("isExpert", true);
+                intent.putExtra("title", bean.getNickName() + "的游记");
+                intent.putExtra("id", String.valueOf(userId));
                 startActivity(intent);
             }
         });
