@@ -1,6 +1,8 @@
 package com.xuejian.client.lxp.module.toolbox;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,10 +12,12 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,6 +32,9 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -45,6 +52,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
@@ -52,6 +60,7 @@ import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,9 +74,9 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     PullToRefreshListView mMyStrategyLv;
     ImageButton mEditBtn;
-    RelativeLayout create_plan;
+    ImageView create_plan;
     StrategyBean temp;
-    ListViewDataAdapter mStrategyListAdapter;
+    StrategyAdapter mStrategyListAdapter;
     boolean isShare;
     int mCurrentPage = 0;
     String chatType;
@@ -81,6 +90,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private String copyId;
     private boolean newCreate;
     private String newId;
+    private ArrayList<StrategyBean> strategyBeans;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -137,19 +147,15 @@ public class StrategyListActivity extends PeachBaseActivity {
     private void initView() {
         setContentView(R.layout.activity_strategy_list);
         mMyStrategyLv = (PullToRefreshListView) findViewById(R.id.my_strategy_lv);
-        create_plan = (RelativeLayout) findViewById(R.id.create_plan);
+        create_plan = (ImageView) findViewById(R.id.create_plan);
         PullToRefreshListView listView = mMyStrategyLv;
         listView.setPullLoadEnabled(false);
         listView.setPullRefreshEnabled(true);
         listView.setScrollLoadEnabled(false);
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
-        mStrategyListAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
-            @Override
-            public ViewHolderBase createViewHolder() {
-                return new StrategyAdapter(isOwner);
-            }
-        });
+        strategyBeans = new ArrayList<StrategyBean>();
+        mStrategyListAdapter = new StrategyAdapter(this,strategyBeans,isOwner);
         if (!isOwner) {
             create_plan.setVisibility(View.GONE);
         }
@@ -385,68 +391,110 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
 
-    private class StrategyAdapter extends ViewHolderBase<StrategyBean> {
-        TextView tv_tian;
+    private class StrategyAdapter extends BaseSwipeAdapter{
+        TextView plane_spans;
         TextView tv_day;
-        TextView mCitysTv;
-        TextView mNameTv;
-        TextView mTimeTv;
-        ImageView mDelete;
-        ImageView mCheck;
-        RelativeLayout rl_plan;
-        ImageView mCheckStatus;
+        TextView city_hasGone;
+        TextView plane_title;
+        TextView create_time;
+        TextView mDelete;
+        TextView mCheck;
+
+        ImageView travel_hasGone;
         RelativeLayout rl_send;
-        RelativeLayout rl_action;
-        CheckedTextView ctv;
         boolean isOwner;
-
-        public StrategyAdapter(boolean isOwner) {
+        private ArrayList<StrategyBean> data;
+        private Context context;
+        private LinearLayout swipe_ll;
+        ImageView plane_pic;
+        private DisplayImageOptions picOptions;
+        public StrategyAdapter(Context context,ArrayList<StrategyBean>data, boolean isOwner) {
+            this.context = context;
+            this.data=data;
             this.isOwner = isOwner;
+            picOptions = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                    .resetViewBeforeLoading(true)
+                    .showImageOnFail(R.drawable.pic_loadfail)
+                    .showImageOnLoading(R.drawable.pic_loadfail)
+                    .showImageForEmptyUri(R.drawable.pic_loadfail)
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
         @Override
-        public View createView(LayoutInflater layoutInflater) {
-            View convertView = layoutInflater.inflate(R.layout.row_my_strategy, null);
-            tv_tian = (TextView) convertView.findViewById(R.id.tian);
-         //   tv_day = (TextView) convertView.findViewById(R.id.day_tv);
-            mCitysTv = (TextView) convertView.findViewById(R.id.citys_tv);
-            mNameTv = (TextView) convertView.findViewById(R.id.name_tv);
-            mTimeTv = (TextView) convertView.findViewById(R.id.time_tv);
-            mCheck = (ImageView) convertView.findViewById(R.id.iv_check);
-            mDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
-            mCheckStatus = (ImageView) convertView.findViewById(R.id.iv_check_status);
-            rl_plan = (RelativeLayout) convertView.findViewById(R.id.rl_plan);
+        public long getItemId(int position) {
+            return 0;
+        }
+        public ArrayList<StrategyBean> getDataList(){
+            return data;
+        }
+        @Override
+        public Object getItem(int position) {
+            return data.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return data.size();
+        }
+
+        @Override
+        public int getSwipeLayoutResourceId(int position) {
+            return R.id.myswipe;
+        }
+
+        @Override
+        public View generateView(int position, ViewGroup parent) {
+            View v = LayoutInflater.from(context).inflate(R.layout.travel_plane_item, null);
+            swipe_ll = (LinearLayout)v.findViewById(R.id.swipe_bg_ll);
+            return v;
+        }
+
+        @Override
+        public void fillValues(int position, View convertView) {
+            plane_spans = (TextView) convertView.findViewById(R.id.plane_spans);
+            city_hasGone = (TextView) convertView.findViewById(R.id.city_hasGone);
+            plane_title = (TextView) convertView.findViewById(R.id.plane_title);
+            create_time = (TextView) convertView.findViewById(R.id.create_time);
+            mCheck = (TextView) convertView.findViewById(R.id.sign_up);
+            mDelete = (TextView) convertView.findViewById(R.id.delete);
+            plane_pic = (ImageView) convertView.findViewById(R.id.plane_pic);
+            travel_hasGone = (ImageView) convertView.findViewById(R.id.travel_hasGone);
             rl_send = (RelativeLayout) convertView.findViewById(R.id.rl_send);
-            rl_action = (RelativeLayout) convertView.findViewById(R.id.rl_action);
-            ctv = (CheckedTextView) convertView.findViewById(R.id.btn_send);
-            return convertView;
+            showData(data.get(position));
         }
 
-        @Override
-        public void showData(final int position, final StrategyBean itemData) {
-            tv_tian.setText(String.format("%s天", String.valueOf(itemData.dayCnt)));
-            mCitysTv.setText(itemData.summary);
+
+        public void showData(final StrategyBean itemData) {
+            plane_spans.setText(String.format("%s天", String.valueOf(itemData.dayCnt)));
+            city_hasGone.setText(itemData.summary);
             if (newCopy&&itemData.id.equals(copyId)) {
                 SpannableString planStr = new SpannableString(String.format("(新复制)%s", itemData.title));
                 planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mNameTv.setText(planStr);
+                plane_title.setText(planStr);
             }else if (newCreate&&itemData.id.equals(newId)) {
-
                 SpannableString planStr = new SpannableString(String.format("(新建)%s", itemData.title));
                 planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mNameTv.setText(planStr);
+                plane_title.setText(planStr);
             }
             else {
-                mNameTv.setText(itemData.title);
+                plane_title.setText(itemData.title);
             }
+            if(itemData.images!=null && itemData.images.size()>0 && itemData.images.get(0)!=null && itemData.images.get(0).url!=null){
+                plane_pic.setTag(itemData.images.get(0).url);
+                if(plane_pic.getTag()!=null && plane_pic.getTag().equals(itemData.images.get(0).url)){
+                    ImageLoader.getInstance().displayImage(itemData.images.get(0).url, plane_pic,picOptions);
+                }
 
-            mTimeTv.setText("创建：" + new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
+            }else{
+                plane_pic.setImageResource(R.drawable.pic_loadfail);
+            }
+            create_time.setText("创建：" + new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
             if (itemData.status.equals("traveled")) {
-                rl_plan.setBackgroundResource(R.drawable.plan_status_travelled);
-                mCheckStatus.setVisibility(View.VISIBLE);
+                travel_hasGone.setVisibility(View.VISIBLE);
             } else {
-                rl_plan.setBackgroundResource(R.drawable.plan_status_planned);
-                mCheckStatus.setVisibility(View.GONE);
+                travel_hasGone.setVisibility(View.GONE);
             }
 
             if (!isOwner) {
@@ -454,13 +502,11 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mCheck.setVisibility(View.INVISIBLE);
             }
             if (isShare) {
-                rl_action.setVisibility(View.GONE);
+
+                mDelete.setVisibility(View.GONE);
+                mCheck.setVisibility(View.GONE);
+
                 rl_send.setVisibility(View.VISIBLE);
-//                if (!itemData.status.equals("traveled")) {
-//                    ctv.setBackgroundResource(R.color.app_theme_color);
-//                } else {
-//                    ctv.setBackgroundResource(R.color.light_grey);
-//                }
             }
             rl_send.setOnClickListener(new View.OnClickListener() {
                 @Override

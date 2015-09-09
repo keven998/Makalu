@@ -1,85 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:id="@+id/title_bar"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/white">
-
-        <TextView
-            android:id="@+id/tv_title_bar_left"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back_theme"
-            android:minWidth="60dp"
-            android:paddingLeft="12dp" />
-
-        <TextView
-            android:id="@+id/tv_title_bar_title"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/color_text_i"
-            android:textSize="17sp" />
-
-        <ImageButton
-            android:id="@+id/ivb_content_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:background="@null"
-            android:paddingLeft="8dp"
-            android:paddingRight="14dp"
-            android:scaleType="center"
-            android:src="@drawable/selector_ic_shift_plan" />
-
-        <ImageButton
-            android:id="@+id/edit_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_toLeftOf="@id/ivb_content_filter"
-            android:background="@null"
-            android:visibility="invisible"
-            android:paddingLeft="32dp"
-            android:paddingRight="7dp"
-            android:scaleType="center"
-            android:src="@drawable/selector_ic_add_plan" />
-    </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/color_line"
-        />
-    <RelativeLayout
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="@drawable/plan_create_bg"
-        android:layout_below="@+id/title_bar"
-        android:id="@+id/create_plan"
-        android:layout_margin="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/app_theme_color"
-            android:paddingTop="30dp"
-            android:paddingBottom="10dp"
-            android:layout_centerInParent="true"
-            android:drawableLeft="@drawable/plan_add"
-            android:textSize="16sp"
-            android:drawablePadding="6dp"
-            android:text="创建旅行计划"/>
-    </RelativeLayout>
     <com.aizou.core.widget.prv.PullToRefreshListView
         android:id="@+id/my_strategy_lv"
         android:layout_below="@+id/create_plan"
@@ -91,5 +16,81 @@
         android:dividerHeight="0dp"
         android:fadingEdge="none"
         android:listSelector="@android:color/transparent"
-        android:overScrollMode="never" />
-</LinearLayout>
+        android:overScrollMode="never"
+        android:layout_marginTop="52dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="top"
+        >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:id="@+id/title_bar"
+            android:layout_height="@dimen/title_bar_height"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_title_bar_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/selector_ic_nav_back_theme"
+                android:minWidth="60dp"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:id="@+id/tv_title_bar_title"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/color_text_i"
+                android:textSize="17sp" />
+
+            <ImageButton
+                android:id="@+id/ivb_content_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:paddingLeft="8dp"
+                android:paddingRight="14dp"
+                android:scaleType="center"
+                android:src="@drawable/selector_ic_shift_plan" />
+
+            <ImageButton
+                android:id="@+id/edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_toLeftOf="@id/ivb_content_filter"
+                android:background="@null"
+                android:visibility="invisible"
+                android:paddingLeft="32dp"
+                android:paddingRight="7dp"
+                android:scaleType="center"
+                android:src="@drawable/selector_ic_add_plan" />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/create_plan"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/add_my_plane"
+        android:layout_marginBottom="70dp"
+        android:layout_gravity="bottom|center_horizontal"
+        />
+</FrameLayout>

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:padding="5dp"
-        android:background="@drawable/plan_status_planned">
+        >
 
         <TextView
             android:id="@+id/name_tv"
