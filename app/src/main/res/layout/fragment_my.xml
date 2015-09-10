@@ -5,72 +5,37 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
     android:orientation="vertical"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
     >
-    <!---<com.xuejian.client.lxp.common.widget.CustomScrollView
-        android:id="@+id/myScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.xuejian.client.lxp.common.widget.CustomScrollView>-->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
 
-            <FrameLayout
-                android:id="@+id/fragment_parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <ImageView
-                    android:id="@+id/background_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:scaleType="centerCrop"
-                    android:adjustViewBounds="true"
-                    android:background="@color/red_add"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/user_info_pannel"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
-
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="1px"
-                        android:layout_weight="1"
-                        />
                     <LinearLayout
+                        android:id="@+id/user_info_pannel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
-                        android:layout_marginBottom="10dp"
+                        android:paddingTop="67dp"
+                        android:paddingBottom="15dp"
+                        android:background="@drawable/profile_background"
                         >
-                        <FrameLayout
-                            android:id="@+id/user_parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            >
-                        <ImageView
+
+
+                        <com.xuejian.client.lxp.common.widget.RoundImageBoarderView
                             android:id="@+id/user_avatar"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
+                            android:layout_gravity="center_horizontal"
                             android:scaleType="centerCrop"
+                            imagecontrol:border_outside_color="#FFFFFFFE"
+                            imagecontrol:border_thickness="2dp"
                             />
-                            <ImageView
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/self_picture_round_boader"
-                                android:scaleType="fitXY"
-                                />
-                        </FrameLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -82,7 +47,7 @@
                                 android:id="@+id/nameAndId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="16sp"
+                                android:textSize="18sp"
                                 android:textColor="@color/white"
                                 android:text="姓名"
                                 />
@@ -91,15 +56,14 @@
                                 android:id="@+id/other_infos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:textSize="@dimen/text_size_14"
+                                android:layout_marginTop="10dp"
+                                android:textSize="13sp"
                                 android:textColor="@color/white"
                                 android:text="星座"
                                 />
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-            </FrameLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -116,13 +80,13 @@
                 <TextView
                     android:id="@+id/travel_plane"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_horizontal"
                     android:textSize="@dimen/text_size_15"
                     android:text="旅行计划"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:drawablePadding="15dp"
                     android:drawableLeft="@drawable/plane_selector"
                     android:textColor="@color/textcolor_selector_2"
@@ -157,7 +121,7 @@
                 <TextView
                     android:id="@+id/contact_people"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:textSize="@dimen/text_size_15"
                     android:text="联系人"
                     android:paddingTop="12dp"
@@ -165,7 +129,7 @@
 
                     android:drawableLeft="@drawable/plane_selector"
                     android:drawablePadding="15dp"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/textcolor_selector_2"
                     />
@@ -204,6 +168,7 @@
         android:layout_gravity="top"
         >
         <RelativeLayout
+            android:id="@+id/my_panpan_frame"
             android:layout_width="match_parent"
             android:layout_height="@dimen/title_bar_height"
             >
@@ -230,7 +195,7 @@
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="我的·旅行派"
+                android:text="我的.旅行派"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -257,5 +222,13 @@
     </LinearLayout>
 
 
-
+    <ImageView
+        android:id="@+id/add_plane_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/add_my_plane"
+        android:layout_marginBottom="70dp"
+        android:layout_gravity="bottom|center_horizontal"
+        />
 </com.xuejian.client.lxp.common.widget.CustomFrameLayout>

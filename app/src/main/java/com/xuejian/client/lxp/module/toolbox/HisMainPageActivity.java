@@ -28,13 +28,11 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -45,11 +43,12 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.ImageCache;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
+import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.config.SettingConfig;
@@ -93,7 +92,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     private boolean isFromExperts;
     private boolean block;
     @InjectView(R.id.iv_avatar)
-    ImageView iv_avatar;
+    RoundImageBoarderView iv_avatar;
     @InjectView(R.id.expert_info)
     LinearLayout userInfoP;
 
@@ -125,8 +124,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     @InjectView(R.id.fl_plans_entry)
     LinearLayout flPlansEntry;
 
-    @InjectView(R.id.ll_note_entry)
-    LinearLayout ll_note_entry;
+    @InjectView(R.id.travel_notice)
+    LinearLayout travel_notice;
     @InjectView(R.id.expert_fragment_view)
     CustomFrameLayout  expert_fragment;
     @InjectView(R.id.expert_title_bar)
@@ -714,16 +713,15 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
+                        // .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(100))) // 设置成圆角图片
                 .build());
-        //       FrameLayout fl_avatar = (FrameLayout) findViewById(R.id.fl_gender_bg);
-        //      TextView tvLevel = (TextView) findViewById(R.id.tv_level);
-       /* if (TextUtils.isEmpty(bean.getLevel()) || bean.getLevel().equals("0")) {
-            tv_level.setText("旅行派达人咨询师 LEVEL-0");
-        } else {
-            tv_level.setText(String.format("旅行派达人咨询师 LEVEL-%s", bean.getLevel()));
-        }*/
 
+        TextView level_num_info = (TextView)findViewById(R.id.level_num_info);
+        if (TextUtils.isEmpty(bean.getLevel()) || bean.getLevel().equals("0")) {
+            level_num_info.setText("v"+bean.getLevel());
+        } else {
+            level_num_info.setText("v"+bean.getLevel());
+        }
         if (bean.getGender().equalsIgnoreCase("M")) {
             iv_expert_sex.setImageResource(R.drawable.icon_boy);
         } else if (bean.getGender().equalsIgnoreCase("F")) {
@@ -731,17 +729,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         } else {
             iv_expert_sex.setVisibility(View.INVISIBLE);
         }
-        /*if (TextUtils.isEmpty(bean.getBirthday())) {
-            tv_expert_con.setVisibility(View.INVISIBLE);
-        } else {
-            tv_expert_con.setText(ConstellationUtil.calculateConstellationZHname(bean.getBirthday()));
-        }*/
 
-//        ImageView constellationIv = (ImageView) findViewById(R.id.iv_constellation);
-//        int res = ConstellationUtil.calculateConstellation(bean.getBirthday());
-//        if (res == 0) {
-//            constellationIv.setImageResource(R.drawable.ic_home_constellation_unknown);
-//        } else constellationIv.setImageResource(res);
+        int res = ConstellationUtil.calculateConstellation(bean.getBirthday());
+        if (res == 0) {
+            tv_expert_con.setImageResource(R.drawable.ic_home_constellation_unknown);
+        } else tv_expert_con.setImageResource(res);
 
 
 //        TextView tvMemo = (TextView) findViewById(R.id.tv_memo);
@@ -752,14 +744,14 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 //        }
 //        TextView tvLocation = (TextView) findViewById(R.id.tv_location);
         if (TextUtils.isEmpty(bean.getResidence())) {
-            tv_expert_location.setVisibility(View.INVISIBLE);
+            tv_expert_location.setText("现居住城市 未知");
         } else {
-            tv_expert_location.setText(bean.getResidence());
+            tv_expert_location.setText("现居住在 "+bean.getResidence());
         }
         if (TextUtils.isEmpty(bean.getBirthday())) {
-            tv_expert_age.setVisibility(View.INVISIBLE);
+            tv_expert_age.setText("年龄 未知");
         } else {
-            tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday())));
+            tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday()))+"岁");
         }
 
         String tvPlaneCount = String.format("共%d份旅行计划", bean.getGuideCnt());
@@ -798,7 +790,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
 
-        ll_note_entry.setOnClickListener(new View.OnClickListener() {
+        travel_notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HisMainPageActivity.this, MoreTravelNoteActivity.class);
@@ -992,7 +984,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         for (; i < picList.size() && i<3; i++) {
             View view = View.inflate(mContext, R.layout.my_all_pics_cell, null);
             final int pos = i;
-            ImageLoader.getInstance().displayImage(picList.get(i), pictures[i], UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(picList.get(i), pictures[i], new DisplayImageOptions.Builder()
+                    .showImageForEmptyUri(R.drawable.pic_loadfail)
+                    .showImageOnFail(R.drawable.pic_loadfail)
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                    .build());
             pictures[i].setVisibility(View.VISIBLE);
             pictures[i].setOnClickListener(new View.OnClickListener() {
                 @Override

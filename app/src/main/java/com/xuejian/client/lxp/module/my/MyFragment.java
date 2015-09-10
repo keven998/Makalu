@@ -4,45 +4,54 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.utils.LocalDisplay;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
+import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
+import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.config.Constant;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
@@ -70,24 +79,26 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private LinearLayout contact_panel;
     private TextView travel_plane;
     private TextView contact_people;
-    private ImageView background_image;
-    private ImageView user_avatar;
-    private FrameLayout user_parent;
+    private RoundImageBoarderView user_avatar;
     private TextView nameAndId;
     private TextView other_infos;
-    private FrameLayout fragment_parent;
     private CustomFrameLayout fragment_view;
     private LinearLayout user_info_pannel;
+    private RelativeLayout my_panpan_frame;
 
     private View travel_pline;
     private View contact_pline;
+    private ImageView add_plane_icon;
     private int currentIndex = 0;
     private int startmagrinTop = 0;
     int mCurrentPage = 0;
     private User user;
     private ArrayList<StrategyBean> planeList;
     private static final int RESULT_PLAN_DETAIL = 0x222;
+    public static final int REQUEST_CODE_NEW_PLAN = 0x22;
     DisplayImageOptions options;
+    private boolean isPanelVisible=true;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,21 +108,18 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(
-                        getResources().getDimensionPixelSize(R.dimen.user_profile_entry_height)))) // 设置成圆角图片
+                .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中// 设置成圆角图片
                 .build();
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         planeList = new ArrayList<StrategyBean>();
         my_fragment_list = (ListView) rootView.findViewById(R.id.my_fragment_list);
-        fragment_parent = (FrameLayout) rootView.findViewById(R.id.fragment_parent);
         fragment_view = (CustomFrameLayout) rootView.findViewById(R.id.fragment_view);
         user_info_pannel = (LinearLayout) rootView.findViewById(R.id.user_info_pannel);
-        background_image = (ImageView) rootView.findViewById(R.id.background_image);
-        user_parent = (FrameLayout) rootView.findViewById(R.id.user_parent);
-        user_avatar = (ImageView) rootView.findViewById(R.id.user_avatar);
+        user_avatar = (RoundImageBoarderView) rootView.findViewById(R.id.user_avatar);
         nameAndId = (TextView) rootView.findViewById(R.id.nameAndId);
         other_infos = (TextView) rootView.findViewById(R.id.other_infos);
+        my_panpan_frame = (RelativeLayout)rootView.findViewById(R.id.my_panpan_frame);
+        add_plane_icon = (ImageView)rootView.findViewById(R.id.add_plane_icon);
         initHeadTitleView(user);
         initTabView();
         TextView settingBtn = (TextView) rootView.findViewById(R.id.setting_btn);
@@ -133,38 +141,32 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         myPlaneAdapter = new MyPlaneAdapter(getActivity(), planeList);
         my_fragment_list.setAdapter(myPlaneAdapter);
 
-        user_parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
-                startActivity(intent);
-            }
-        });
         fragment_view.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
             @Override
             public void onInterEvent(int upordown) {
 
                 if (upordown == 1) {
-                    if (user_info_pannel.getVisibility() == View.VISIBLE) {
+                    if (isPanelVisible == true) {
 
                         if (startmagrinTop == 0) {
-                            startmagrinTop = -CommonUtils.dip2px(getActivity(), 248);
+                            startmagrinTop = CommonUtils.dip2px(getActivity(), 52) - user_info_pannel.getHeight();
                         }
 
                         ValueAnimator valueAnimator = ValueAnimator.ofInt(0, startmagrinTop);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                        valueAnimator.setTarget(fragment_parent);
-                        valueAnimator.setDuration(350).start();
+                        valueAnimator.setTarget(user_info_pannel);
+                        valueAnimator.setDuration(300).start();
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
                                 int marginTop = (int) valueAnimator.getAnimatedValue();
-                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) fragment_parent.getLayoutParams();
+                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) user_info_pannel.getLayoutParams();
                                 fp.setMargins(0, marginTop, 0, 0);
-                                fragment_parent.setLayoutParams(fp);
+                                user_info_pannel.setLayoutParams(fp);
                                 if (startmagrinTop == marginTop) {
-                                    user_info_pannel.setVisibility(View.GONE);
+                                    isPanelVisible = false;
+                                    my_panpan_frame.setBackgroundResource(R.color.color_text_iii);
                                     fragment_view.setIsDrawawing(false);
 
                                 }
@@ -175,21 +177,23 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
                     }
                 } else if (upordown == 2) {
-                    if (user_info_pannel.getVisibility() == View.GONE) {
-                        user_info_pannel.setVisibility(View.VISIBLE);
+                    if (!isPanelVisible) {
+                        my_fragment_list.setSelection(0);
                         ValueAnimator valueAnimator = ValueAnimator.ofInt(startmagrinTop, 0);
                         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                        valueAnimator.setTarget(fragment_parent);
-                        valueAnimator.setDuration(350).start();
+                        valueAnimator.setTarget(user_info_pannel);
+                        valueAnimator.setDuration(300).start();
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
                                 int marginTop = (int) valueAnimator.getAnimatedValue();
-                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) fragment_parent.getLayoutParams();
+                                LinearLayout.LayoutParams fp = (LinearLayout.LayoutParams) user_info_pannel.getLayoutParams();
                                 fp.setMargins(0, 0, 0, 0);
-                                fragment_parent.setLayoutParams(fp);
+                                user_info_pannel.setLayoutParams(fp);
                                 if (startmagrinTop == marginTop) {
+                                    my_panpan_frame.setBackgroundResource(R.color.transparent_color);
+                                    isPanelVisible = true;
                                     fragment_view.setIsDrawawing(false);
                                 }
                                 //fragment_view.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.transparent_to_small));
@@ -201,6 +205,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
         });
 
+        user_info_pannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         my_fragment_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -236,6 +247,13 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
         });
 
+        add_plane_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SelectDestActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
+            }
+        });
         return rootView;
 
     }
@@ -245,15 +263,22 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         switch (index) {
             case 0:
                 travel_plane.setTextColor(getResources().getColor(R.color.app_theme_color));
+                travel_plane.setCompoundDrawablesWithIntrinsicBounds(R.drawable.my_plan_selected,0,0,0);
+                contact_people.setCompoundDrawablesWithIntrinsicBounds(R.drawable.note_normal,0,0,0);
                 contact_people.setTextColor(getResources().getColor(R.color.color_text_ii));
                 travel_pline.setBackgroundResource(R.color.app_theme_color);
                 contact_pline.setBackgroundResource(R.color.color_text_ii);
+                add_plane_icon.setVisibility(View.VISIBLE);
                 break;
             case 1:
+                travel_plane.setCompoundDrawablesWithIntrinsicBounds(R.drawable.my_plan_normal,0,0,0);
+                contact_people.setCompoundDrawablesWithIntrinsicBounds(R.drawable.note_selected,0,0,0);
                 travel_plane.setTextColor(getResources().getColor(R.color.color_text_ii));
+
                 contact_people.setTextColor(getResources().getColor(R.color.app_theme_color));
                 travel_pline.setBackgroundResource(R.color.color_text_ii);
                 contact_pline.setBackgroundResource(R.color.app_theme_color);
+                add_plane_icon.setVisibility(View.GONE);
                 break;
         }
     }
@@ -262,20 +287,32 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         if (user != null) {
             ImageLoader.getInstance().displayImage(user.getAvatar(), user_avatar, options);
             StringBuffer nameSb = new StringBuffer();
+            int nameLenth = 0;
             if (user.getNickName() != null) {
                 nameSb.append(user.getNickName());
+                nameLenth = user.getNickName().length();
             }
+            int idLenght=0;
             if (user.getUserId() != null) {
-                nameSb.append("      " + user.getUserId());
+                nameSb.append("  " + user.getUserId());
+                idLenght=(user.getUserId()+"").length();
             }
-            nameAndId.setText(nameSb.toString());
+            SpannableString spannableString = new SpannableString(nameSb.toString());
+            if(idLenght>0){
+                spannableString.setSpan(new AbsoluteSizeSpan(13,true),nameLenth+2,nameLenth+2+idLenght,0);
+                nameAndId.setText(spannableString);
+            }else{
+                nameAndId.setText(nameSb.toString());
+            }
+
+
 
             StringBuffer otherSb = new StringBuffer();
             if (user.getGender() != null) {
                 if (user.getGender().equalsIgnoreCase("M")) {
-                    otherSb.append("帅锅");
+                    otherSb.append("男");
                 } else if (user.getGender().equalsIgnoreCase("F")) {
-                    otherSb.append("美女");
+                    otherSb.append("女");
                 } else if (user.getGender().equalsIgnoreCase("S")) {
                     otherSb.append("保密");
                 } else {
@@ -284,10 +321,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
 
             if (user.getBirthday() != null) {
-                otherSb.append("      " + ConstellationUtil.calculateConstellationZHname(user.getBirthday()));
+                otherSb.append("  " + ConstellationUtil.calculateConstellationZHname(user.getBirthday()));
             }
             if (user.getLevel() != null) {
-                otherSb.append("      " + "LV" + user.getLevel());
+                otherSb.append("  " + "LV" + user.getLevel());
             }
 
             other_infos.setText(otherSb.toString());
@@ -430,6 +467,14 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         if (resultCode == getActivity().RESULT_OK) {
             if (requestCode == RESULT_PLAN_DETAIL) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
+            }else if(requestCode == REQUEST_CODE_NEW_PLAN){
+                StrategyBean sb = data.getParcelableExtra("strategy");
+                if (sb != null) {
+                    PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
+                }
+                mCurrentPage=0;
+                getStrategyListData(user);
+
             }
         }
 
@@ -469,11 +514,12 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
 
-    class MyPlaneAdapter extends BaseAdapter {
+    class MyPlaneAdapter extends BaseSwipeAdapter {
         private ArrayList<StrategyBean> data;
         private Context context;
         private LayoutInflater inflater;
         private DisplayImageOptions picOptions;
+        private LinearLayout swipe_ll;
 
         public MyPlaneAdapter(Context context, ArrayList<StrategyBean> data) {
             this.context = context;
@@ -483,10 +529,105 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.ic_default_picture)
-                    .showImageOnLoading(R.drawable.ic_default_picture)
-                    .showImageForEmptyUri(R.drawable.ic_default_picture)
+                    .showImageOnFail(R.drawable.pic_loadfail)
+                    .showImageOnLoading(R.drawable.pic_loadfail)
+                    .showImageForEmptyUri(R.drawable.pic_loadfail)
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+        }
+
+        @Override
+        public void fillValues(int position, View convertView) {
+            final StrategyBean strategyBean = data.get(position);
+
+            ImageView plane_pic = (ImageView) convertView.findViewById(R.id.plane_pic);
+            TextView plane_spans = (TextView) convertView.findViewById(R.id.plane_spans);
+            TextView plane_title = (TextView) convertView.findViewById(R.id.plane_title);
+            TextView city_hasGone = (TextView) convertView.findViewById(R.id.city_hasGone);
+            TextView create_time = (TextView) convertView.findViewById(R.id.create_time);
+            ImageView travel_hasGone = (ImageView)convertView.findViewById(R.id.travel_hasGone);
+
+
+            TextView mCheck = (TextView)convertView.findViewById(R.id.sign_up);
+            TextView mDelete = (TextView)convertView.findViewById(R.id.delete);
+            plane_spans.setText(strategyBean.dayCnt + "天");
+            plane_title.setText(strategyBean.title);
+            city_hasGone.setText(strategyBean.summary);
+            //plane_pic.setImageResource(R.drawable.pic_loadfail);
+            create_time.setText("创建时间: " + CommonUtils.getTimestampString(new Date(strategyBean.updateTime)));
+
+            if(strategyBean.images!=null && strategyBean.images.size()>0 && strategyBean.images.get(0)!=null && strategyBean.images.get(0).url!=null){
+                plane_pic.setTag(strategyBean.images.get(0).url);
+                if(plane_pic.getTag()!=null && plane_pic.getTag().equals(strategyBean.images.get(0).url)){
+                    ImageLoader.getInstance().displayImage(strategyBean.images.get(0).url, plane_pic,picOptions);
+                }
+
+            }else{
+                plane_pic.setImageResource(R.drawable.pic_loadfail);
+            }
+            if(strategyBean!=null){
+                if (strategyBean.status.equals("traveled")) {
+                    travel_hasGone.setVisibility(View.VISIBLE);
+                } else {
+                    travel_hasGone.setVisibility(View.GONE);
+                }
+            }else{
+                travel_hasGone.setVisibility(View.GONE);
+            }
+            mDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteItem(strategyBean);
+                }
+            });
+            mCheck.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MobclickAgent.onEvent(getActivity(), "ell_item_plans_change_status");
+                    if (strategyBean.status.equals("planned")) {
+                        haveBeenVisited(strategyBean);
+                        notifyDataSetChanged();
+                        final ComfirmDialog cdialog = new ComfirmDialog(context);
+                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
+                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
+                        cdialog.setTitle("提示");
+                        cdialog.setMessage("已去过，旅历＋1");
+                        cdialog.setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cdialog.dismiss();
+                                //mMyStrategyLv.doPullRefreshing(true, 0);(下拉刷新)
+                            }
+                        });
+                        final Handler handler = new Handler() {
+                            public void handleMessage(Message msg) {
+                                switch (msg.what) {
+                                    case 1:
+                                        cdialog.show();
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        Message message = handler.obtainMessage(1);
+                        handler.sendMessageDelayed(message, 300);
+                    } else {
+                        cancleVisited(strategyBean);
+                        notifyDataSetChanged();
+                         //mMyStrategyLv.doPullRefreshing(true, 300);(下拉刷新)
+                    }
+                }
+            });
+        }
+
+        @Override
+        public View generateView(int position, ViewGroup parent) {
+            View v = LayoutInflater.from(context).inflate(R.layout.travel_plane_item, null);
+            swipe_ll = (LinearLayout)v.findViewById(R.id.swipe_bg_ll);
+            return v;
+        }
+
+        @Override
+        public int getSwipeLayoutResourceId(int position) {
+            return R.id.myswipe;
         }
 
         @Override
@@ -504,7 +645,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             return 0;
         }
 
-        @Override
+        public ArrayList<StrategyBean> getDataList() {
+            return data;
+        }
+       /* @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             final StrategyBean strategyBean = data.get(position);
             ViewHolder viewHolder;
@@ -528,7 +672,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             viewHolder.city_hasGone.setText(strategyBean.summary);
             viewHolder.create_time.setText("创建时间: " + CommonUtils.getTimestampString(new Date(strategyBean.updateTime)));
             return view;
-        }
+        }*/
 
 
         class ViewHolder {
@@ -540,5 +684,139 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         }
     }
 
+
+
+    private void haveBeenVisited(final StrategyBean beenBean) {
+        try {
+            DialogManager.getInstance().showLoadingDialog(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String visited = "traveled";
+        TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
+                if (visitedResult.code == 0) {
+                    deleteThisItem(beenBean);
+                } else {
+                    if (!getActivity().isFinishing())
+                        ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!getActivity().isFinishing())
+                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void deleteItem(final StrategyBean itemData) {
+        MobclickAgent.onEvent(getActivity(),"cell_item_plans_delete");
+        final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+        dialog.setTitle("提示");
+        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+        dialog.setMessage(String.format("删除\"%s\"", itemData.title));
+        dialog.setPositiveButton("确认", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                try {
+                    DialogManager.getInstance().showLoadingDialog(getActivity());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
+                    @Override
+                    public void doSuccess(String result, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                        if (deleteResult.code == 0) {
+                            deleteThisItem(itemData);
+                            int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+                            AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt - 1);
+                        } else {
+                            if (!getActivity().isFinishing())
+                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                        }
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        if (!getActivity().isFinishing())
+                            ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+            }
+        });
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
+
+    private void deleteThisItem(StrategyBean data) {
+        int index = myPlaneAdapter.getDataList().indexOf(data);
+        myPlaneAdapter.getDataList().remove(index);
+        myPlaneAdapter.notifyDataSetChanged();
+        if (myPlaneAdapter.getCount() == 0) {
+           // myPlaneAdapter.doPullRefreshing(true, 0);(刷新)
+        } else if (index <= OtherApi.PAGE_SIZE) {
+            cachePage();
+        }
+    }
+
+    private void cancleVisited(final StrategyBean beenBean) {
+        try {
+            DialogManager.getInstance().showLoadingDialog(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String planned = "planned";
+        TravelApi.modifyGuideVisited(beenBean.id, planned, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
+                if (visitedResult.code == 0) {
+                    deleteThisItem(beenBean);
+                } else {
+                    if (!getActivity().isFinishing())
+                        ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                if (!getActivity().isFinishing())
+                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
 
 }
