@@ -113,12 +113,9 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     private TextView notice;
     private int picsNum = 0;
     private String Sex;
-    private int[] pictures= new int[]{
-
-    };
 
     private ImageView[] myImageView;
-    private int maxHeight;
+
 
     private int startMarginTop=0;
     private Boolean isViewVisible=true;
