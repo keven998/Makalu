@@ -12,9 +12,9 @@ import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
-import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -44,7 +43,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.widget.CustomFrameLayout;
 import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.config.Constant;
@@ -82,7 +80,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     private RoundImageBoarderView user_avatar;
     private TextView nameAndId;
     private TextView other_infos;
-    private CustomFrameLayout fragment_view;
+    private FrameLayout fragment_view;
     private LinearLayout user_info_pannel;
     private RelativeLayout my_panpan_frame;
 
@@ -98,7 +96,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     public static final int REQUEST_CODE_NEW_PLAN = 0x22;
     DisplayImageOptions options;
     private boolean isPanelVisible=true;
-
+    View footView;
+    private boolean isLoading=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -113,7 +112,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         planeList = new ArrayList<StrategyBean>();
         my_fragment_list = (ListView) rootView.findViewById(R.id.my_fragment_list);
-        fragment_view = (CustomFrameLayout) rootView.findViewById(R.id.fragment_view);
+        fragment_view = (FrameLayout) rootView.findViewById(R.id.fragment_view);
         user_info_pannel = (LinearLayout) rootView.findViewById(R.id.user_info_pannel);
         user_avatar = (RoundImageBoarderView) rootView.findViewById(R.id.user_avatar);
         nameAndId = (TextView) rootView.findViewById(R.id.nameAndId);
@@ -131,17 +130,17 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }
         });
         contactList = new ArrayList<User>();
-        View view = new View(getActivity());
+        footView  = new View(getActivity());
         AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         abp.height = 200;
-        view.setLayoutParams(abp);
-        my_fragment_list.addFooterView(view);
+        footView.setLayoutParams(abp);
+        my_fragment_list.addFooterView(footView);
         myContactAdapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
 
         myPlaneAdapter = new MyPlaneAdapter(getActivity(), planeList);
         my_fragment_list.setAdapter(myPlaneAdapter);
 
-        fragment_view.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
+       /* fragment_view.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
             @Override
             public void onInterEvent(int upordown) {
 
@@ -203,7 +202,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                     }
                 }
             }
-        });
+        });*/
 
         user_info_pannel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,6 +245,36 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             }
         });
+
+        my_fragment_list.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Boolean scrollToEnd = false;
+                try {
+                    if (view.getPositionForView(footView) == view
+                            .getLastVisiblePosition()) {
+                        scrollToEnd = true;
+                    }
+                } catch (Exception ex) {
+
+                }
+                if (!scrollToEnd) {
+                    return;
+                }
+                if (scrollToEnd && currentIndex == 0) {
+                    if (!isLoading && user!=null) {
+                        getStrategyListData(user);
+                    }
+                }
+
+            }
+        });
+
 
         add_plane_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -402,36 +431,47 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     }
 
     private void getStrategyListData(User user) {
+        isLoading=true;
         if (user != null) {
             TravelApi.getStrategyPlannedList(user.getUserId() + "", mCurrentPage, null, new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
+                    isLoading=false;
                     CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
                     if (strategyListResult.code == 0) {
-                        if (mCurrentPage == 0) {
-                            planeList.clear();
-                            planeList.addAll(strategyListResult.result);
-                        } else {
+                        List<StrategyBean> tempStragy =strategyListResult.result;
+                        if(tempStragy!=null){
+                            if (mCurrentPage == 0) {
+                                planeList.clear();
+                                planeList.addAll(tempStragy);
+                            } else {
+                                planeList.addAll(tempStragy);
+                            }
                             mCurrentPage++;
-                            planeList.addAll(strategyListResult.result);
+                            if(strategyListResult.result.size()<15){
+                                isLoading=true;
+                            }
+                            if (mCurrentPage == 0 || myPlaneAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
+                                cachePage();
+                            }
+                        }else {
+                            isLoading=true;
                         }
 
-                        if (mCurrentPage == 0 || myPlaneAdapter.getCount() < OtherApi.PAGE_SIZE * 2) {
-                            cachePage();
-                        }
                     }
                     myPlaneAdapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
+                    isLoading=false;
                     if (!getActivity().isFinishing())
                         ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method, int code) {
-
+                    isLoading=false;
                 }
             });
         }
