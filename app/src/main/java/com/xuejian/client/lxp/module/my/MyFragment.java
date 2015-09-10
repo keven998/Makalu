@@ -555,24 +555,20 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             //plane_pic.setImageResource(R.drawable.pic_loadfail);
             create_time.setText("创建时间: " + CommonUtils.getTimestampString(new Date(strategyBean.updateTime)));
 
-            if(strategyBean.images!=null && strategyBean.images.size()>0 && strategyBean.images.get(0)!=null && strategyBean.images.get(0).url!=null){
+            if(strategyBean.images!=null && strategyBean.images.size()>0 ){
                 plane_pic.setTag(strategyBean.images.get(0).url);
                 if(plane_pic.getTag()!=null && plane_pic.getTag().equals(strategyBean.images.get(0).url)){
                     ImageLoader.getInstance().displayImage(strategyBean.images.get(0).url, plane_pic,picOptions);
                 }
 
             }else{
-                plane_pic.setImageResource(R.drawable.pic_loadfail);
+                ImageLoader.getInstance().displayImage("", plane_pic, picOptions);
             }
-            if(strategyBean!=null){
                 if (strategyBean.status.equals("traveled")) {
                     travel_hasGone.setVisibility(View.VISIBLE);
                 } else {
                     travel_hasGone.setVisibility(View.GONE);
                 }
-            }else{
-                travel_hasGone.setVisibility(View.GONE);
-            }
             mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

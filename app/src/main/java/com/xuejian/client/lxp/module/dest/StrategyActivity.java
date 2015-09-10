@@ -560,7 +560,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
 
     private class StrategyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"行程", "想去"};
+        private String[] tabNames = {"行程", "收集"};
         private LayoutInflater inflater;
         private StrategyBean strategyBean;
 

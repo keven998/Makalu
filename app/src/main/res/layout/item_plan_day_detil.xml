@@ -50,7 +50,7 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/cell_selecter_btn"
         android:gravity="center"
-        android:text="想去"
+        android:text="收集"
         android:clickable="true"
         android:textColor="@color/theme_color"
         android:textSize="13sp"

@@ -142,11 +142,11 @@ public class CollectionFragment extends Fragment {
             if (i == 0) {
                 viewHolder.saveTypeTitle.setText("美食");
                 viewHolder.saveType.setImageResource(R.drawable.collect_food);
-                viewHolder.saveNumber.setText(strategy.restaurant.size() + "个想去的美食");
+                viewHolder.saveNumber.setText(strategy.restaurant.size() + "个收集的美食");
             } else if (i == 1) {
                 viewHolder.saveTypeTitle.setText("购物");
                 viewHolder.saveType.setImageResource(R.drawable.collect_shopping);
-                viewHolder.saveNumber.setText(strategy.shopping.size() + "个想去的购物");
+                viewHolder.saveNumber.setText(strategy.shopping.size() + "个收集的购物");
             }
 
             return view;

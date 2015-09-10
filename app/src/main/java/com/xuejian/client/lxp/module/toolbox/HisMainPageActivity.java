@@ -768,7 +768,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),2,2+countryLength,0);
         countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),7+countryLength,7+countryLength+cityLength,0);
         tv_track_count.setText(countrySpannable);
-        flPlansEntry.setOnClickListener(new View.OnClickListener() {
+        flTracksEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
@@ -780,7 +780,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
 
-        flTracksEntry.setOnClickListener(new View.OnClickListener() {
+        flPlansEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");

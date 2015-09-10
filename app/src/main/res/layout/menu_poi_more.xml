@@ -15,7 +15,7 @@
         android:drawablePadding="10dp"
         android:gravity="center"
         android:textStyle="bold"
-        android:text="想去"
+        android:text="收集"
         android:padding="30dp"/>
 
     <TextView android:id="@+id/im_share"

@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,9 +25,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.SharePrefUtil;
-import com.aizou.core.widget.listHelper.ListViewDataAdapter;
-import com.aizou.core.widget.listHelper.ViewHolderBase;
-import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.google.gson.reflect.TypeToken;
@@ -485,14 +481,14 @@ public class StrategyListActivity extends PeachBaseActivity {
             else {
                 plane_title.setText(itemData.title);
             }
-            if(itemData.images!=null && itemData.images.size()>0 && itemData.images.get(0)!=null && itemData.images.get(0).url!=null){
+            if(itemData.images!=null && itemData.images.size()>0 ){
                 plane_pic.setTag(itemData.images.get(0).url);
                 if(plane_pic.getTag()!=null && plane_pic.getTag().equals(itemData.images.get(0).url)){
                     ImageLoader.getInstance().displayImage(itemData.images.get(0).url, plane_pic,picOptions);
                 }
 
             }else{
-                plane_pic.setImageResource(R.drawable.pic_loadfail);
+                ImageLoader.getInstance().displayImage("", plane_pic, picOptions);
             }
             create_time.setText("创建：" + new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
             if (itemData.status.equals("traveled")) {
@@ -506,10 +502,8 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mCheck.setVisibility(View.INVISIBLE);
             }
             if (isShare) {
-
                 mDelete.setVisibility(View.GONE);
                 mCheck.setVisibility(View.GONE);
-
                 rl_send.setVisibility(View.VISIBLE);
             }
             rl_send.setOnClickListener(new View.OnClickListener() {
