@@ -771,11 +771,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         flTracksEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
-                Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
-                intent.putExtra("isExpertFootPrint", true);
-                intent.putExtra("title", tv_track_count.getText().toString());
-                intent.putExtra("id", String.valueOf(userId));
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
+                intent.putExtra("userId", String.valueOf(userId));
                 startActivity(intent);
             }
         });
@@ -783,9 +781,12 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         flPlansEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
-                Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
-                intent.putExtra("userId", String.valueOf(userId));
+
+                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
+                intent.putExtra("isExpertFootPrint", true);
+                intent.putExtra("title", tv_track_count.getText().toString());
+                intent.putExtra("id", String.valueOf(userId));
                 startActivity(intent);
             }
         });
