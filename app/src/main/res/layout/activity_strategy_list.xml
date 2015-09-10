@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:drawableLeft="@drawable/selector_ic_nav_back_theme"
+                android:drawableLeft="@drawable/selector_ic_nav_back"
                 android:minWidth="60dp"
                 android:paddingLeft="12dp" />
 

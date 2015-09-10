@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:drawableLeft="@drawable/selector_ic_nav_back"
+                android:drawableLeft="@drawable/white_headback"
                 android:paddingLeft="10dp"
                 android:paddingRight="32dp" />
 

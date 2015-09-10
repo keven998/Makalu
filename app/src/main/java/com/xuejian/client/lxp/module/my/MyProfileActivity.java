@@ -595,7 +595,6 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             @Override
             public void doSuccess(String result, String method) {
                 JSONObject jsonObject = null;
-                Log.e("success","请求完毕-----------------------"+result);
                 try {
                     ArrayList<String> ids = new ArrayList<String>();
                     jsonObject = new JSONObject(result);

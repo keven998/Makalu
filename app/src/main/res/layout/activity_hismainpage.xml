@@ -555,7 +555,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:drawableLeft="@drawable/white_headback"
             android:gravity="center_vertical|left"
             android:minWidth="60dp"
             android:paddingLeft="12dp" />

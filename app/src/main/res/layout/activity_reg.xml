@@ -13,7 +13,7 @@
         android:paddingRight="32dp"
         android:paddingTop="20dp"
         android:scaleType="center"
-        android:src="@drawable/selector_ic_nav_back_theme" />
+        android:src="@drawable/selector_ic_nav_back" />
 
     <ImageView
         android:id="@+id/icon"

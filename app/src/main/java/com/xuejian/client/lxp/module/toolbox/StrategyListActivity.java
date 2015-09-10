@@ -502,11 +502,10 @@ public class StrategyListActivity extends PeachBaseActivity {
             }
 
             if (!isOwner) {
-                mDelete.setVisibility(View.INVISIBLE);
-                mCheck.setVisibility(View.INVISIBLE);
+                mDelete.setVisibility(View.GONE);
+                mCheck.setVisibility(View.GONE);
             }
             if (isShare) {
-
                 mDelete.setVisibility(View.GONE);
                 mCheck.setVisibility(View.GONE);
 
