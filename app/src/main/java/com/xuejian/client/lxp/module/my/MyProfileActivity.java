@@ -243,9 +243,9 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             Intent logIntent = new Intent(MyProfileActivity.this, LoginActivity.class);
             startActivity(logIntent);
         } else {
-            if (SharePrefUtil.getBoolean(MyProfileActivity.this, "firstReg", false)){
-                SharePrefUtil.saveBoolean(MyProfileActivity.this,"firstReg",false);
-            }
+//            if (SharePrefUtil.getBoolean(MyProfileActivity.this, "firstReg", false)){
+//                SharePrefUtil.saveBoolean(MyProfileActivity.this,"firstReg",false);
+//            }
             Intent accountIntent = new Intent(MyProfileActivity.this, AccountActvity.class);
             startActivity(accountIntent);
         }
@@ -294,7 +294,6 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 } else {
                     if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false)){
                         notice.setVisibility(View.GONE);
-
                         SharePrefUtil.saveBoolean(MyProfileActivity.this,"firstReg",false);
                     }
                     Intent accountIntent = new Intent(MyProfileActivity.this, AccountActvity.class);

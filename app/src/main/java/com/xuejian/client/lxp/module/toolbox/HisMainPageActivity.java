@@ -214,8 +214,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onInterEvent(int upordown) {
                 if (upordown == 1) {
-                    if (isViewVisible == true) {
-
+                    if (isViewVisible) {
                         if (startMarginTop == 0) {
                             startMarginTop = CommonUtils.dip2px(HisMainPageActivity.this, 52) - userInfoP.getHeight();
                         }
@@ -259,7 +258,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                                 int marginTop = (int) valueAnimator.getAnimatedValue();
                                 LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams) userInfoP.getLayoutParams();
-                                vl.setMargins(0,marginTop,0,0);
+                                vl.setMargins(0, marginTop, 0, 0);
                                 userInfoP.setLayoutParams(vl);
 
                                 if (marginTop == 0) {
@@ -274,21 +273,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
 
                 }
-            }
-        });
-
-        goToAlbum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
-                intent2.putExtra("id", String.valueOf(userId));
-                String userName="";
-                if(user!=null &&user.getNickName()!=null){
-                    userName=user.getNickName();
-                }
-                intent2.putExtra("title",user.getNickName());
-                intent2.putExtra("isTalentAlbum", true);
-                startActivity(intent2);
             }
         });
     }
@@ -671,7 +655,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             e.printStackTrace();
             tv_expert_name.setText(bean.getNickName());
         }
-
+        goToAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(HisMainPageActivity.this, CityPictureActivity.class);
+                intent2.putExtra("id", String.valueOf(user.getUserId()));
+                intent2.putExtra("title",user.getNickName());
+                intent2.putExtra("isTalentAlbum", true);
+                startActivity(intent2);
+            }
+        });
        findViewById(R.id.fl_send_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -680,10 +673,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                         Intent intent = new Intent(HisMainPageActivity.this, ModifyNicknameActivity.class);
                         intent.putExtra("isEditMemo", true);
                         intent.putExtra("nickname", bean.getNickName());
-                        intent.putExtra("userId", String.valueOf(userId));
+                        intent.putExtra("userId", String.valueOf(bean.getUserId()));
                         startActivityForResult(intent, EDIT_MEMO);
                     }
-                    //editMemo("123");
                 } else {
                     addToFriend();
                 }

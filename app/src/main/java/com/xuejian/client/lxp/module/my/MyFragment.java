@@ -537,7 +537,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
         @Override
         public void fillValues(int position, View convertView) {
-            final StrategyBean strategyBean = data.get(position);
+
 
             ImageView plane_pic = (ImageView) convertView.findViewById(R.id.plane_pic);
             TextView plane_spans = (TextView) convertView.findViewById(R.id.plane_spans);
@@ -549,6 +549,10 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
 
             TextView mCheck = (TextView)convertView.findViewById(R.id.sign_up);
             TextView mDelete = (TextView)convertView.findViewById(R.id.delete);
+
+            final StrategyBean strategyBean = data.get(position);
+
+
             plane_spans.setText(strategyBean.dayCnt + "天");
             plane_title.setText(strategyBean.title);
             city_hasGone.setText(strategyBean.summary);
@@ -669,150 +673,153 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             viewHolder.create_time.setText("创建时间: " + CommonUtils.getTimestampString(new Date(strategyBean.updateTime)));
             return view;
         }*/
+       private void haveBeenVisited(final StrategyBean beenBean) {
+           try {
+               DialogManager.getInstance().showLoadingDialog(getActivity());
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+           String visited = "traveled";
+           TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
+               @Override
+               public void doSuccess(String result, String method) {
+                   DialogManager.getInstance().dissMissLoadingDialog();
+                   CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
+                   if (visitedResult.code == 0) {
+                       deleteThisItem(beenBean);
+                   } else {
+                       if (!getActivity().isFinishing())
+                           ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                   }
+               }
 
+               @Override
+               public void doFailure(Exception error, String msg, String method) {
+                   DialogManager.getInstance().dissMissLoadingDialog();
+                   if (!getActivity().isFinishing())
+                       ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+               }
+
+               @Override
+               public void doFailure(Exception error, String msg, String method, int code) {
+
+               }
+           });
+       }
+
+        private void deleteItem(final StrategyBean itemData) {
+            MobclickAgent.onEvent(getActivity(),"cell_item_plans_delete");
+            final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
+            dialog.setTitle("提示");
+            dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+            dialog.setMessage(String.format("删除\"%s\"", itemData.title));
+            dialog.setPositiveButton("确认", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(getActivity());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
+                        @Override
+                        public void doSuccess(String result, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (deleteResult.code == 0) {
+                                deleteThisItem(itemData);
+                                int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+                                AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt - 1);
+                            } else {
+                                if (!getActivity().isFinishing())
+                                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                            }
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            if (!getActivity().isFinishing())
+                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                        }
+                    });
+                }
+            });
+            dialog.setNegativeButton("取消", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
+        }
+
+        private void deleteThisItem(StrategyBean data) {
+            int index = myPlaneAdapter.getDataList().indexOf(data);
+            myPlaneAdapter.getDataList().remove(index);
+            myPlaneAdapter.notifyDataSetChanged();
+            if (myPlaneAdapter.getCount() == 0) {
+                // myPlaneAdapter.doPullRefreshing(true, 0);(刷新)
+            } else if (index <= OtherApi.PAGE_SIZE) {
+                cachePage();
+            }
+        }
+
+        private void cancleVisited(final StrategyBean beenBean) {
+            try {
+                DialogManager.getInstance().showLoadingDialog(getActivity());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String planned = "planned";
+            TravelApi.modifyGuideVisited(beenBean.id, planned, new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
+                    if (visitedResult.code == 0) {
+                        deleteThisItem(beenBean);
+                    } else {
+                        if (!getActivity().isFinishing())
+                            ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    if (!getActivity().isFinishing())
+                        ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
 
         class ViewHolder {
-            public ImageView plane_pic;
-            public TextView plane_spans;
-            public TextView plane_title;
-            public TextView city_hasGone;
-            public TextView create_time;
+            ImageView plane_pic ;
+            TextView plane_spans ;
+            TextView plane_title ;
+            TextView city_hasGone ;
+            TextView create_time ;
+            ImageView travel_hasGone;
+            TextView mCheck;
+            TextView mDelete;
         }
     }
 
 
 
-    private void haveBeenVisited(final StrategyBean beenBean) {
-        try {
-            DialogManager.getInstance().showLoadingDialog(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String visited = "traveled";
-        TravelApi.modifyGuideVisited(beenBean.id, visited, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
-                if (visitedResult.code == 0) {
-                    deleteThisItem(beenBean);
-                } else {
-                    if (!getActivity().isFinishing())
-                        ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
-                }
-            }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                if (!getActivity().isFinishing())
-                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
-
-    private void deleteItem(final StrategyBean itemData) {
-        MobclickAgent.onEvent(getActivity(),"cell_item_plans_delete");
-        final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
-        dialog.setTitle("提示");
-        dialog.setTitleIcon(R.drawable.ic_dialog_tip);
-        dialog.setMessage(String.format("删除\"%s\"", itemData.title));
-        dialog.setPositiveButton("确认", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                try {
-                    DialogManager.getInstance().showLoadingDialog(getActivity());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
-                    @Override
-                    public void doSuccess(String result, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
-                        if (deleteResult.code == 0) {
-                            deleteThisItem(itemData);
-                            int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
-                            AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt - 1);
-                        } else {
-                            if (!getActivity().isFinishing())
-                                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
-                        }
-                    }
-
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-                        DialogManager.getInstance().dissMissLoadingDialog();
-                        if (!getActivity().isFinishing())
-                            ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-                    }
-
-                    @Override
-                    public void doFailure(Exception error, String msg, String method, int code) {
-
-                    }
-                });
-            }
-        });
-        dialog.setNegativeButton("取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-
-    }
-
-    private void deleteThisItem(StrategyBean data) {
-        int index = myPlaneAdapter.getDataList().indexOf(data);
-        myPlaneAdapter.getDataList().remove(index);
-        myPlaneAdapter.notifyDataSetChanged();
-        if (myPlaneAdapter.getCount() == 0) {
-           // myPlaneAdapter.doPullRefreshing(true, 0);(刷新)
-        } else if (index <= OtherApi.PAGE_SIZE) {
-            cachePage();
-        }
-    }
-
-    private void cancleVisited(final StrategyBean beenBean) {
-        try {
-            DialogManager.getInstance().showLoadingDialog(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String planned = "planned";
-        TravelApi.modifyGuideVisited(beenBean.id, planned, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
-                if (visitedResult.code == 0) {
-                    deleteThisItem(beenBean);
-                } else {
-                    if (!getActivity().isFinishing())
-                        ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                if (!getActivity().isFinishing())
-                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
 
 }
