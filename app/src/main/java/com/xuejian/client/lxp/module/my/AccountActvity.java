@@ -838,7 +838,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
     }
 
     private void uploadAvatar(final File file) {
-        final CustomLoadingDialog progressDialog = DialogManager.getInstance().showLoadingDialog(mContext, "0%");
+        CustomLoadingDialog dialog = null;
+        try {
+            dialog = DialogManager.getInstance().showLoadingDialog(mContext, "0%");
+        }catch (Exception e){
+        }
+        final CustomLoadingDialog progressDialog = dialog;
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -882,8 +887,12 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                             }, new UploadOptions(null, null, false,
                                     new UpProgressHandler() {
                                         public void progress(String key, double percent) {
-                                            progressDialog.setContent((int) (percent * 100) + "%");
-                                            LogUtil.d("progress", percent + "");
+                                            try {
+                                                progressDialog.setContent((int) (percent * 100) + "%");
+                                            }catch (Exception e){
+
+                                            }
+
                                         }
                                     }, null));
                 } else {

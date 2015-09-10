@@ -718,9 +718,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
         TextView level_num_info = (TextView)findViewById(R.id.level_num_info);
         if (TextUtils.isEmpty(bean.getLevel()) || bean.getLevel().equals("0")) {
-            level_num_info.setText("v"+bean.getLevel());
+            level_num_info.setText("V0");
         } else {
-            level_num_info.setText("v"+bean.getLevel());
+            level_num_info.setText("V"+bean.getLevel());
         }
         if (bean.getGender().equalsIgnoreCase("M")) {
             iv_expert_sex.setImageResource(R.drawable.icon_boy);
@@ -768,7 +768,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),2,2+countryLength,0);
         countrySpannable.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)),7+countryLength,7+countryLength+cityLength,0);
         tv_track_count.setText(countrySpannable);
-        flTracksEntry.setOnClickListener(new View.OnClickListener() {
+        flPlansEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
@@ -778,7 +778,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             }
         });
 
-        flPlansEntry.setOnClickListener(new View.OnClickListener() {
+        flTracksEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

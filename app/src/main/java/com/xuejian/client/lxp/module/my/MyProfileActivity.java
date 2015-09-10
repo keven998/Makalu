@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -20,12 +19,10 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.utils.SharePrefUtil;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -35,7 +32,6 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.utils.ImageCache;
@@ -423,7 +419,6 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             tvTracksCount.setText("0国0城市");
           //  constellationIv.setText("星座");
         } else {
-
             ImageView gender_label = (ImageView)findViewById(R.id.gender_label);
             if (!user.getGender().equals(Sex)){
                 gender_label.setVisibility(View.VISIBLE);
@@ -445,9 +440,9 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
 
             TextView level_num_infos = (TextView)findViewById(R.id.level_num_infos);
             if (TextUtils.isEmpty(user.getLevel()) || user.getLevel().equals("0")) {
-                level_num_infos.setText("v"+user.getLevel());
+                level_num_infos.setText("V0");
             } else {
-                level_num_infos.setText("v"+user.getLevel());
+                level_num_infos.setText("V"+user.getLevel());
             }
 
             if (TextUtils.isEmpty(user.getResidence())) {

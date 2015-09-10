@@ -11,11 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.PopupWindow;
 import android.widget.TabHost;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.FragmentTabHost;
 import com.alibaba.fastjson.JSON;
@@ -31,24 +28,16 @@ import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
-
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
-import com.xuejian.client.lxp.bean.CountryBean;
-import com.xuejian.client.lxp.bean.GroupLocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
-import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
@@ -65,7 +54,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -123,7 +111,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 imLogin(AccountManager.getInstance().getLoginAccount(this));
             }
             initClient();
-            //   DialogManager.getInstance().showLoadingDialog(this);
         }
     }
 
@@ -172,12 +159,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             @Override
             public void onFailed(int code) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        ToastUtil.getInstance(MainActivity.this).showToast("push服务登录失败");
-//                    }
-//                });
             }
         });
 
@@ -634,7 +615,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 UserDBManager.getInstance().updateGroupMemberInfo(list, groupId);
             }
 
@@ -666,31 +646,32 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-            NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            String acton = intent.getAction();
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(acton)) {
+                ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-            if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
-                TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-                if (talkFragment != null) {
-                    talkFragment.netStateChange("(未连接)");
+                if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
+                    TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                    if (talkFragment != null) {
+                        talkFragment.netStateChange("(未连接)");
+                    }
+                } else {
+                    TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                    if (talkFragment != null) {
+                        talkFragment.netStateChange("");
+                    }
+                    //IMClient.initIM(getApplicationContext());
+                    IMClient.getInstance().initAckAndFetch();
                 }
-            } else {
-                TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-                if (talkFragment != null) {
-                    talkFragment.netStateChange("");
-                }
-                //IMClient.initIM(getApplicationContext());
-                IMClient.getInstance().initAckAndFetch();
             }
         }
     };
 
 
     public void updateUnreadMsgCount() {
-        int unreadMsgCountTotal = 0;
-        // unreadMsgCountTotal = IMClient.getInstance().getUnReadCount()+
-        unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
+        int unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
         if (unreadMsgCountTotal > 0) {
             unreadMsg.setVisibility(View.VISIBLE);
             if (unreadMsgCountTotal < 100) {
@@ -729,93 +710,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             connectionReceiver = null;
         }
         HandleImMessage.getInstance().unregisterMessageListener(this);
-    }
-
-    private void getInLocList() {
-        //这个地方也需要判断一下做出接口读取的选择
-        String lastModify = PreferenceUtils.getCacheData(MainActivity.this, "indest_group_last_modify");
-        TravelApi.getInDestListByGroup(lastModify, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-
-            }
-
-            @Override
-            public void doSuccess(String result, String method, Map<String, List<String>> headers) {
-                CommonJson4List<GroupLocBean> locListResult = CommonJson4List.fromJson(result, GroupLocBean.class);
-                if (locListResult.code == 0) {
-                    PreferenceUtils.cacheData(MainActivity.this, "destination_indest_group", result);
-                    PreferenceUtils.cacheData(MainActivity.this, "indest_group_last_modify", CommonUtils.getLastModifyForHeader(headers));
-                    LogUtil.d("last_modify", CommonUtils.getLastModifyForHeader(headers));
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-//                if (isAdded()) {
-//                    ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-//                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
-
-    private void getOutCountryList() {
-        String lastModify = PreferenceUtils.getCacheData(MainActivity.this, "outcountry_last_modify");
-        TravelApi.getOutDestList(lastModify, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-            }
-
-            @Override
-            public void doSuccess(String result, String method, Map<String, List<String>> headers) {
-                CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
-                if (countryListResult.code == 0) {
-                    PreferenceUtils.cacheData(MainActivity.this, "destination_outcountry", result);
-                    PreferenceUtils.cacheData(MainActivity.this, "outcountry_last_modify", CommonUtils.getLastModifyForHeader(headers));
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-//                if (isAdded())
-//                ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
-
-    public void showAD() {
-        LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//自定义布局
-        ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-                R.layout.text_diaplay, null, true);
-        TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
-
-        TextView tv = (TextView) menuView.findViewById(R.id.msg);
-        tv.setText("AD");
-        mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-                FlowLayout.LayoutParams.MATCH_PARENT, true);
-        mPop.setContentView(menuView);//设置包含视图
-        mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-        mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-        mPop.setAnimationStyle(R.style.PopAnimation);
-        mPop.showAtLocation(findViewById(R.id.realtabcontent), Gravity.BOTTOM, 0, 0);
-        pop_dismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPop.dismiss();
-            }
-        });
-
     }
 
     private static long mSendTime;

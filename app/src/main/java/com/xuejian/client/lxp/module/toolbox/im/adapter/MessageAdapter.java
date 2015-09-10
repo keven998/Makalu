@@ -161,9 +161,9 @@ public class MessageAdapter extends BaseAdapter {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
+                .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                 .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
+                .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                 .displayer(new RoundedBitmapDisplayer(context.getResources().getDimensionPixelSize(R.dimen.size_avatar)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }

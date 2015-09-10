@@ -64,9 +64,8 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.messages_bg_useravatar)
-                .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(20)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }

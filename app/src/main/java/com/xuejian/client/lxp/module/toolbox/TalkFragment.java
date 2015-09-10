@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -61,6 +62,7 @@ public class TalkFragment extends PeachBaseFragment {
     private List<ConversationBean> conversations = new ArrayList<>();
     private List<ConversationBean> tempConversations = new ArrayList<>();
     private ConversationBean curconversation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_talk, null);
@@ -81,7 +83,11 @@ public class TalkFragment extends PeachBaseFragment {
         super.onActivityCreated(savedInstanceState);
         listView = (ListView) getView().findViewById(R.id.list);
         adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversations);
-        // 设置adapter
+        View view = new View(getActivity());
+        AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
+        abp.height = 200;
+        view.setLayoutParams(abp);
+        listView.addFooterView(view);
         listView.setAdapter(adapter);
         tvTitleAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +98,7 @@ public class TalkFragment extends PeachBaseFragment {
         btnContainerAddressList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(getActivity(),"navigation_item_my_friends");
+                MobclickAgent.onEvent(getActivity(), "navigation_item_my_friends");
                 Intent intent = new Intent(getActivity(), ContactActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
@@ -106,10 +112,10 @@ public class TalkFragment extends PeachBaseFragment {
                 if (String.valueOf(curconversation.getFriendId()).equals(AccountManager.getCurrentUserId()))
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
                 else {
-                    if (curconversation.getFriendId()==10000){
-                        MobclickAgent.onEvent(getActivity(),"cell_item_paipai");
-                    }else if (curconversation.getFriendId()==10001){
-                        MobclickAgent.onEvent(getActivity(),"cell_item_wenwen");
+                    if (curconversation.getFriendId() == 10000) {
+                        MobclickAgent.onEvent(getActivity(), "cell_item_paipai");
+                    } else if (curconversation.getFriendId() == 10001) {
+                        MobclickAgent.onEvent(getActivity(), "cell_item_wenwen");
                     }
 
                     // 进入聊天页面
@@ -122,7 +128,7 @@ public class TalkFragment extends PeachBaseFragment {
                     if (curconversation.getHASH() != null) {
                         intent.putExtra("name", curconversation.getHASH());
                     }
-                    startActivityForResult(intent,Edit_CHAT_REQUEST_CODE);
+                    startActivityForResult(intent, Edit_CHAT_REQUEST_CODE);
                 }
             }
         });
@@ -146,14 +152,14 @@ public class TalkFragment extends PeachBaseFragment {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
-        if (AccountManager.getInstance().getLoginAccount(getActivity())==null) {
+        if (AccountManager.getInstance().getLoginAccount(getActivity()) == null) {
             return;
         }
         loadConversation();
     }
 
     private void showActionDialog() {
-        MobclickAgent.onEvent(getActivity(),"navigation_item_talks_menu");
+        MobclickAgent.onEvent(getActivity(), "navigation_item_talks_menu");
         String[] names = {"新建聊天", "添加朋友", "取消"};
         final MoreDialog dialog = new MoreDialog(getActivity());
         dialog.setMoreStyle(false, 3, names);
@@ -219,7 +225,7 @@ public class TalkFragment extends PeachBaseFragment {
      * 刷新页面
      */
     public void refresh() {
-        if (AccountManager.getInstance().getLoginAccount(getActivity())==null) return;
+        if (AccountManager.getInstance().getLoginAccount(getActivity()) == null) return;
         // loadConversationsWithRecentChat();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
@@ -234,8 +240,8 @@ public class TalkFragment extends PeachBaseFragment {
         tempConversations.clear();
         try {
             tempConversations.addAll(IMClient.getInstance().getConversationList());
-        }catch (Exception e){
-           e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         conversations.add(0, new ConversationBean(10, 0, "single"));
         conversations.add(1, new ConversationBean(11, 0, "single"));
@@ -326,7 +332,7 @@ public class TalkFragment extends PeachBaseFragment {
         if (!hidden) {
             refresh();
         }
-        if (AccountManager.getInstance().getLoginAccount(getActivity())!=null) {
+        if (AccountManager.getInstance().getLoginAccount(getActivity()) != null) {
             loadConversation();
             if (!hidden) {
                 refresh();
@@ -362,10 +368,10 @@ public class TalkFragment extends PeachBaseFragment {
                     }
                     break;
                 case Edit_CHAT_REQUEST_CODE:
-                    if(data!=null && curconversation!=null){
+                    if (data != null && curconversation != null) {
                         String groupName = data.getStringExtra("changedTitle");
-                        if(groupName!=null){
-                                refresh();
+                        if (groupName != null) {
+                            refresh();
                         }
                     }
                     break;
