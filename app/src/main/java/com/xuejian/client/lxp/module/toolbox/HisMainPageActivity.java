@@ -157,6 +157,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     @InjectView(R.id.tv_comment)
     TextView tv_comment;
+
+    @InjectView(R.id.tv_note_count)
+    TextView tv_note_count;
     private final List<Tag> mTags = new ArrayList<Tag>();
     private ImageView[] pictures;
     private boolean isViewVisible = true;
@@ -689,6 +692,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             tv_comment.setVisibility(View.GONE);
             travel_notice.setVisibility(View.GONE);
         }
+
+
         user = bean;
 
 
@@ -797,11 +802,20 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday()))+"岁");
         }
 
+
+
+
+        String noteCount = String.format("完成%d篇游记", bean.getTravelNoteCnt());
+        int noteLength=(bean.getTravelNoteCnt()+"").length();
+        SpannableString spannableString = new SpannableString(noteCount);
+        spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 2, 2 + noteLength, 0);
+        tv_note_count.setText(spannableString);
+
         String tvPlaneCount = String.format("共%d份旅行计划", bean.getGuideCnt());
         int planeLength=(bean.getGuideCnt()+"").length();
-        SpannableString spannableString = new SpannableString(tvPlaneCount);
-        spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
-        tv_plan_count.setText(spannableString);
+        SpannableString spanString = new SpannableString(tvPlaneCount);
+        spanString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
+        tv_plan_count.setText(spanString);
 
 
         String countryCount = String.format("旅行%d个国家,共%d个城市", bean.getCountryCnt(), bean.getTrackCnt());

@@ -401,7 +401,7 @@
                             android:src="@drawable/ico_mid_notice" />
 
                         <TextView
-
+                            android:id="@+id/tv_note_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
