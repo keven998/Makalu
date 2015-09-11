@@ -110,7 +110,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                 startActivityForResult(intent, RESULT_PLAN_DETAIL);
             }
         });
-        getStrategyListData(userId);
+      //  getStrategyListData(userId);
         return rootView;
     }
 
@@ -184,7 +184,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
     @Override
     public void onResume() {
         super.onResume();
-
+        getStrategyListData(userId);
     }
 
     @Override

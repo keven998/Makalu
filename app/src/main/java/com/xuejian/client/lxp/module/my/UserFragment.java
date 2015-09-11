@@ -63,7 +63,7 @@ public class UserFragment extends PeachBaseFragment {
     private String[] mTitles = new String[]{"旅行计划", "联系人"};
     private FragmentPagerAdapter mAdapter;
     private Fragment[] mFragments = new Fragment[2];
-    String userId;
+    User user;
     DisplayImageOptions options;
     private static final int RESULT_PLAN_DETAIL = 0x222;
     public static final int REQUEST_CODE_NEW_PLAN = 0x22;
@@ -78,10 +78,8 @@ public class UserFragment extends PeachBaseFragment {
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中// 设置成圆角图片
                 .build();
-        User user = AccountManager.getInstance().getLoginAccount(getActivity());
-        if (user==null)return null;
+        user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
-      //  mIndicator.setIndicatorColor(getResources().getColor(R.color.app_theme_color));
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
