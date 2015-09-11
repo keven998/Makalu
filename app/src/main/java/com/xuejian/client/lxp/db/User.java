@@ -5,6 +5,7 @@ package com.xuejian.client.lxp.db;
 import com.xuejian.client.lxp.bean.ExpertInfo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Entity mapped to table USER.
@@ -33,6 +34,7 @@ public class User implements Serializable {
     private int guideCnt;
     public boolean isBlocked;
     public ExpertInfo expertInfo;
+    private ArrayList<String> tags;
     public int getTrackCnt() {
         return trackCnt;
     }
@@ -266,6 +268,15 @@ public class User implements Serializable {
 
     public void setExt(String Ext) {
         this.Ext = Ext;
+    }
+
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
 
     public String getGenderDesc() {

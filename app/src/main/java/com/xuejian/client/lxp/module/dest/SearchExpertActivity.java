@@ -137,7 +137,7 @@ public class SearchExpertActivity extends PeachBaseActivity {
                 CommonJson4List<ExpertBean> list = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (list.code == 0) {
                     try{
-
+                        Log.e("searchResult",result+"---------------------------");
                         if (list.result.size() == 0) {
                             ToastUtil.getInstance(mContext).showToast(String.format("暂时还没有达人去过“%s”", keyword));
                         } else {
@@ -293,13 +293,22 @@ public class SearchExpertActivity extends PeachBaseActivity {
 
             ViewCompat.setElevation(vh.expert_level, CommonUtils.dip2px(mContext, 5));
             vh.expert_level.setText(String.format("V%d", eb.level));
+           if(eb.tags!=null && eb.tags.size()>0){
+               List<Tag> mTags = new ArrayList<Tag>();
+               initData(mTags,eb.tags);
+               vh.expert_tag.removeAllViews();
+               vh.expert_tag.setTagViewTextColorRes(R.color.white);
+               vh.expert_tag.setmTagViewResId(R.layout.expert_tag);
+               vh.expert_tag.setTags(mTags);
+           }else{
+               vh.expert_tag.removeAllViews();
+           }
 
-            List<Tag> mTags = new ArrayList<Tag>();
-            initData(mTags);
-            vh.expert_tag.removeAllViews();
-            vh.expert_tag.setTagViewTextColorRes(R.color.white);
-            vh.expert_tag.setmTagViewResId(R.layout.expert_tag);
-            vh.expert_tag.setTags(mTags);
+            if(eb.signature!=null && eb.signature.trim().length()>0){
+                vh.tv_comment.setText(eb.signature);
+            }else{
+                vh.tv_comment.setText("Ta还没添加任何描述！");
+            }
            /* String str1 = "派派点评：";
             SpannableString attrStr1 = new SpannableString(str1);
             attrStr1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, str1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -315,12 +324,12 @@ public class SearchExpertActivity extends PeachBaseActivity {
             }
             return (nextValue+currentcolor)%5;
         }
-        public void initData(List<Tag> mTags) {
+        public void initData(List<Tag> mTags,ArrayList<String> tagStr) {
             Random random = new Random();
             int lastColor = random.nextInt(4);
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i <tagStr.size(); i++) {
                 Tag tag = new Tag();
-                tag.setTitle("属性" + i);
+                tag.setTitle(tagStr.get(i));
                 tag.setId(i);
                 tag.setBackgroundResId(lebelColors[lastColor]);
                 mTags.add(tag);

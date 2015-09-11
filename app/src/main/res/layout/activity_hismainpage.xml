@@ -167,22 +167,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />
-
-
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:background="@color/white"
+                    >
                 <com.xuejian.client.lxp.common.widget.TagView.TagListView
                     android:id="@+id/expert_tag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="50dp"
-                    android:background="@color/white"
                     android:paddingBottom="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
+                    android:layout_gravity="center_vertical"
                     f:horizontalSpace="8dp"
                     f:orientation="horizontal"
-                    f:verticalSpace="6dp" />
-
+                    f:verticalSpace="6dp"
+                    />
+                </FrameLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
@@ -623,7 +627,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/massage"
+                android:drawableLeft="@drawable/message"
                 android:drawablePadding="5dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
