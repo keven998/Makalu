@@ -133,6 +133,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/expert_label_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -164,10 +165,12 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/expert_lebel_line"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />
                 <FrameLayout
+                    android:id="@+id/expert_lebel_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="40dp"
@@ -188,14 +191,17 @@
                     />
                 </FrameLayout>
                 <View
+                    android:id="@+id/expert_lebel_bodyLine"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_line"
+                    android:layout_marginBottom="10dp"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+
                     android:background="@color/white"
                     android:orientation="horizontal">
 
@@ -452,12 +458,9 @@
                     android:layout_height="1px"
                     android:background="@color/color_line" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/color_line" />
 
                 <TextView
+                    android:id="@+id/panpan_lebel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -473,6 +476,7 @@
                     android:textSize="@dimen/text_size_16" />
 
                 <View
+                    android:id="@+id/panpan_lebel_line"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />
