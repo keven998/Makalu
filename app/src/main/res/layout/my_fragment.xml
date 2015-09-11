@@ -12,7 +12,7 @@
 <View
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_bar_height"
-    android:background="#000000"/>
+    android:background="#ffffff"/>
 
     <RelativeLayout
         android:id="@id/id_stickynavlayout_topview"
@@ -27,9 +27,9 @@
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingTop="60dp"
-            android:paddingBottom="15dp"
-            android:background="@drawable/profile_background"
+            android:paddingTop="30dp"
+            android:paddingBottom="25dp"
+            android:background="#ffffff"
             >
 
 
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/color_text_ii"
                     android:text="姓名"
                     />
 
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textSize="13sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/color_text_ii"
                     android:text="星座"
                     />
             </LinearLayout>
@@ -91,6 +91,7 @@
         android:id="@+id/my_panpan_frame"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
+        android:background="@color/base_color_white"
         >
 
         <ImageView
@@ -116,7 +117,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="我的·旅行派"
-            android:textColor="@color/white"
+            android:textColor="@color/color_text_ii"
             android:textSize="18sp" />
 
         <TextView
@@ -130,9 +131,14 @@
             android:paddingRight="14dp"
             android:singleLine="true"
             android:text="设置"
-            android:textColor="@color/selector_white_text_color"
+            android:textColor="@color/color_text_ii"
             android:textSize="16sp"
             />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_line"/>
     </RelativeLayout>
 
     <ImageView

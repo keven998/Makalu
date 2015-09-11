@@ -13,11 +13,10 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentLeft="true"
-        android:padding="3dp"
         android:layout_centerVertical="true"
         android:background="@drawable/messages_bg_useravatar"
-        android:scaleType="centerCrop"
-        />
+        android:padding="3dp"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/top"
@@ -36,29 +35,28 @@
             android:maxWidth="160dp"
             android:singleLine="true"
             android:textColor="@color/color_text_i"
-            android:textSize="@dimen/text_size_16"/>
+            android:textSize="@dimen/text_size_16" />
 
         <TextView
             android:id="@+id/unread_msg_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/bg_history_unread_msg"
             android:gravity="center"
-            android:textColor="@color/base_color_white"
-            android:textSize="12sp"
-            android:layout_gravity="center_vertical"
-            android:visibility="visible"
+            android:paddingBottom="1dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="1dp"
-            android:paddingBottom="1dp"
-            android:layout_marginLeft="10dp"
-            />
+            android:textColor="@color/base_color_white"
+            android:textSize="12sp"
+            android:visibility="visible" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/time"
@@ -79,12 +77,17 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/avatar"
         android:drawablePadding="5dp"
-        android:paddingBottom="12dp"
         android:ellipsize="end"
         android:gravity="bottom"
+        android:paddingBottom="12dp"
         android:paddingRight="10dp"
         android:singleLine="true"
         android:textColor="@color/color_text_iii"
         android:textSize="14sp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_line" />
 </RelativeLayout>

@@ -110,7 +110,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                 startActivityForResult(intent, RESULT_PLAN_DETAIL);
             }
         });
-      //  getStrategyListData(userId);
+        //  getStrategyListData(userId);
         return rootView;
     }
 
@@ -177,13 +177,14 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
         if (size > OtherApi.PAGE_SIZE) {
             size = OtherApi.PAGE_SIZE;
         }
-           List<StrategyBean> cd = planList.subList(0, size);
-           PreferenceUtils.cacheData(getActivity(), String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
+        List<StrategyBean> cd = planList.subList(0, size);
+        PreferenceUtils.cacheData(getActivity(), String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mCurrentPage = 0;
         getStrategyListData(userId);
     }
 
@@ -191,7 +192,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (is_divPage
                 && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            if (!isLoading)getStrategyListData(userId);
+            if (!isLoading) getStrategyListData(userId);
         } else if (!is_divPage
                 && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
         }
@@ -266,7 +267,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
             mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteItem(strategyBean,position);
+                    deleteItem(strategyBean, position);
                 }
             });
             mCheck.setOnClickListener(new View.OnClickListener() {
@@ -286,7 +287,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                             public void onClick(View v) {
                                 closeItem(position);
                                 cdialog.dismiss();
-                                mCurrentPage=0;
+                                mCurrentPage = 0;
                                 getStrategyListData(userId);
                                 //mMyStrategyLv.doPullRefreshing(true, 0);(下拉刷新)
                             }
@@ -303,7 +304,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                         Message message = handler.obtainMessage(1);
                         handler.sendMessageDelayed(message, 300);
                     } else {
-                        cancleVisited(strategyBean,position);
+                        cancleVisited(strategyBean, position);
                         notifyDataSetChanged();
                         //mMyStrategyLv.doPullRefreshing(true, 300);(下拉刷新)
                     }
@@ -380,7 +381,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (visitedResult.code == 0) {
-                    //    deleteThisItem(beenBean);
+                        //    deleteThisItem(beenBean);
                     } else {
                         if (!getActivity().isFinishing())
                             ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
@@ -401,7 +402,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
             });
         }
 
-        private void deleteItem(final StrategyBean itemData,final int pos) {
+        private void deleteItem(final StrategyBean itemData, final int pos) {
             MobclickAgent.onEvent(getActivity(), "cell_item_plans_delete");
             final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
             dialog.setTitle("提示");
@@ -467,7 +468,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
             }
         }
 
-        private void cancleVisited(final StrategyBean beenBean,final int pos) {
+        private void cancleVisited(final StrategyBean beenBean, final int pos) {
             try {
                 DialogManager.getInstance().showLoadingDialog(getActivity());
             } catch (Exception e) {
@@ -481,8 +482,8 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                     CommonJson<ModifyResult> visitedResult = CommonJson.fromJson(result, ModifyResult.class);
                     if (visitedResult.code == 0) {
                         closeItem(pos);
-                       // deleteThisItem(beenBean);
-                        mCurrentPage=0;
+                        // deleteThisItem(beenBean);
+                        mCurrentPage = 0;
                         getStrategyListData(userId);
                     } else {
 //                        if (!getActivity().isFinishing())

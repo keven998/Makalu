@@ -117,6 +117,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     private Boolean isViewVisible=true;
 
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
+    DisplayImageOptions options;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,19 +129,22 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 turnToEditProfile();
             }
         });
-
-
+        options =new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                .build();
         findViewById(R.id.fl_plans_entry).setOnClickListener(this);
         findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
         findViewById(R.id.iv_head_back).setOnClickListener(this);
         notice = (TextView) findViewById(R.id.unread_msg_notify);
         if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false))notice.setVisibility(View.VISIBLE);
-        refreshLoginStatus();
-        refreshUserInfo();
         User user= AccountManager.getInstance().getLoginAccount(this);
         if(user!=null){
             initScrollView(user.getUserId());
         }
+        refreshLoginStatus();
         myImageView = new ImageView[]{
                 (ImageView)findViewById(R.id.profile_image0),
                 (ImageView)findViewById(R.id.profile_image1),
@@ -373,6 +377,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(MyProfileActivity.this, userResult.result);
+                        AccountManager.getInstance().setLoginAccountInfo(userResult.result);
                         refreshLoginStatus();
                        // refreshUserInfo();
 
@@ -407,12 +412,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         final User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
         all_foot_print_list.clear();
         if (user == null) {
-            ImageLoader.getInstance().displayImage("", avatarIv, new DisplayImageOptions.Builder()
-                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
-                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
-                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                    .build());
+            ImageLoader.getInstance().displayImage("", avatarIv, options);
             tvPictureCount.setText("0图");
             tvPlansCount.setText("0条");
             tvTracksCount.setText("0国0城市");
@@ -537,6 +537,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     protected void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("page_home_mine");
+        refreshUserInfo();
     }
 
     @Override

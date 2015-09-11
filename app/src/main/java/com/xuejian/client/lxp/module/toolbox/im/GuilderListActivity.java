@@ -6,12 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +34,6 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -293,7 +287,7 @@ public class GuilderListActivity extends PeachBaseActivity {
             }
             vh.residenceView.setText(sb.toString());
 
-            ViewCompat.setElevation(vh.expert_level, CommonUtils.dip2px(mContext,5));
+            ViewCompat.setElevation(vh.expert_level, CommonUtils.dip2px(mContext, 5));
             vh.expert_level.setText(String.format("V%d", eb.level));
             List<Tag> mTags = new ArrayList<Tag>();
             initData(mTags);
