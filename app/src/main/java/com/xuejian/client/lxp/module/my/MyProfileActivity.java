@@ -404,7 +404,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     }
 
     public void refreshLoginStatus() {
-        User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
+        final User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
         all_foot_print_list.clear();
         if (user == null) {
             ImageLoader.getInstance().displayImage("", avatarIv, new DisplayImageOptions.Builder()
@@ -504,8 +504,20 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-
                     .build());
+
+            if (!TextUtils.isEmpty(user.getAvatar())) {
+                avatarIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ArrayList<String> pics = new ArrayList<>();
+                        pics.add(user.getAvatar());
+                        showSelectedPics(pics);
+                    }
+                });
+            } else {
+                avatarIv.setClickable(false);
+            }
         }
     }
     private void showSelectedPics(ArrayList<String> pics) {
@@ -660,6 +672,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     for (User myUser : contactResult.result.contacts) {
                         userlist.put(myUser.getUserId(), user);
                     }
+
                     // 存入内存
                     AccountManager.getInstance().setContactList(userlist);
                     // 存入db

@@ -393,16 +393,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void initData(long id) {
-        Random random = new Random();
-        int lastColor = random.nextInt(4);
-        for (int i = 0; i < 9; i++) {
-            Tag tag = new Tag();
-            tag.setTitle("属性" + i);
-            tag.setId(i);
-            tag.setBackgroundResId(lebelColors[lastColor]);
-            mTags.add(tag);
-            lastColor=getNextColor(lastColor);
-        }
+
         getUserInfo(id);
         initScrollView(id);
     }
@@ -612,6 +603,18 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 }
             });
           //  expert_tag.setTagViewBackgroundRes(R.drawable.shape_grey);
+
+            Random random = new Random();
+            int lastColor = random.nextInt(4);
+            for (int i = 0; i < 9; i++) {
+                Tag tag = new Tag();
+                tag.setTitle("属性" + i);
+                tag.setId(i);
+                tag.setBackgroundResId(lebelColors[lastColor]);
+                mTags.add(tag);
+                lastColor=getNextColor(lastColor);
+            }
+            expert_tag.removeAllViews();
             expert_tag.setTagViewTextColorRes(R.color.white);
             expert_tag.setmTagViewResId(R.layout.expert_tag);
             expert_tag.setTags(mTags);

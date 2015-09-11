@@ -463,7 +463,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     public void doSuccess(Object result, String method) {
                         JSONObject object = null;
                         try {
-
                             object = new JSONObject(result.toString());
                             JSONObject o = object.getJSONObject("result");
                             User user = new User();
