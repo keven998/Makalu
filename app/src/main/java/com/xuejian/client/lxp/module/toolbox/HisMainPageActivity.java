@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -603,21 +604,26 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 }
             });
           //  expert_tag.setTagViewBackgroundRes(R.drawable.shape_grey);
-
-            Random random = new Random();
-            int lastColor = random.nextInt(4);
-            for (int i = 0; i < 9; i++) {
-                Tag tag = new Tag();
-                tag.setTitle("属性" + i);
-                tag.setId(i);
-                tag.setBackgroundResId(lebelColors[lastColor]);
-                mTags.add(tag);
-                lastColor=getNextColor(lastColor);
+            if(bean.getTags()!=null && bean.getTags().size()>0){
+                Random random = new Random();
+                int lastColor = random.nextInt(4);
+                ArrayList<String> tagStr =bean.getTags();
+                for (int i = 0; i < tagStr.size(); i++) {
+                    Tag tag = new Tag();
+                    tag.setTitle(tagStr.get(i));
+                    tag.setId(i);
+                    tag.setBackgroundResId(lebelColors[lastColor]);
+                    mTags.add(tag);
+                    lastColor=getNextColor(lastColor);
+                }
+                expert_tag.removeAllViews();
+                expert_tag.setTagViewTextColorRes(R.color.white);
+                expert_tag.setmTagViewResId(R.layout.expert_tag);
+                expert_tag.setTags(mTags);
+            }else{
+                expert_tag.removeAllViews();
             }
-            expert_tag.removeAllViews();
-            expert_tag.setTagViewTextColorRes(R.color.white);
-            expert_tag.setmTagViewResId(R.layout.expert_tag);
-            expert_tag.setTags(mTags);
+
 //            if (userId != 10000 && isMyFriend) {
 //                handleView.setOnClickListener(new View.OnClickListener() {
 //                    @Override
@@ -878,6 +884,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
+                Log.e("hisresult",result+"------------------------");
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<User> expertInfo = CommonJson.fromJson(result, User.class);
                 if (expertInfo.code == 0) {

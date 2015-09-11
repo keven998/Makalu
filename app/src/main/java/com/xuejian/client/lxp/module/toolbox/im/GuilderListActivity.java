@@ -133,7 +133,6 @@ public class GuilderListActivity extends PeachBaseActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             try{
-
                 ExpertBean xEb = (ExpertBean) adapter.getItem(position);
                 Intent intent = new Intent();
                 intent.setClass(GuilderListActivity.this, HisMainPageActivity.class);
@@ -157,6 +156,7 @@ public class GuilderListActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
+                Log.e("search result",result+"------------------------------");
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (expertresult.code == 0) {
                     mCurrentPage = page;
@@ -293,14 +293,25 @@ public class GuilderListActivity extends PeachBaseActivity {
             }
             vh.residenceView.setText(sb.toString());
 
-            ViewCompat.setElevation(vh.expert_level, CommonUtils.dip2px(mContext,5));
+            ViewCompat.setElevation(vh.expert_level, CommonUtils.dip2px(mContext, 5));
             vh.expert_level.setText(String.format("V%d", eb.level));
-            List<Tag> mTags = new ArrayList<Tag>();
-            initData(mTags);
-            vh.expert_tag.removeAllViews();
-            vh.expert_tag.setTagViewTextColorRes(R.color.white);
-            vh.expert_tag.setmTagViewResId(R.layout.expert_tag);
-            vh.expert_tag.setTags(mTags);
+
+            if(eb.tags!=null && eb.tags.size()>0){
+                List<Tag> mTags = new ArrayList<Tag>();
+                initData(mTags,eb.tags);
+                vh.expert_tag.removeAllViews();
+                vh.expert_tag.setTagViewTextColorRes(R.color.white);
+                vh.expert_tag.setmTagViewResId(R.layout.expert_tag);
+                vh.expert_tag.setTags(mTags);
+            }else{
+                vh.expert_tag.removeAllViews();
+            }
+
+            if(eb.signature!=null && eb.signature.trim().length()>0){
+                vh.tv_comment.setText(eb.signature);
+            }else{
+                vh.tv_comment.setText("Ta还没添加任何描述！");
+            }
             //足迹
             /*String st1 = "服务城市：";
             String st2 = countryName;
@@ -326,12 +337,12 @@ public class GuilderListActivity extends PeachBaseActivity {
         }
         return (nextValue+currentcolor)%5;
     }
-    public void initData(List<Tag> mTags) {
+    public void initData(List<Tag> mTags,ArrayList<String> tagStr) {
         Random random = new Random();
         int lastColor = random.nextInt(4);
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i <tagStr.size(); i++) {
             Tag tag = new Tag();
-            tag.setTitle("属性" + i);
+            tag.setTitle(tagStr.get(i));
             tag.setId(i);
             tag.setBackgroundResId(lebelColors[lastColor]);
             mTags.add(tag);
