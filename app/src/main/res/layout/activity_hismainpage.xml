@@ -321,7 +321,7 @@
                         android:id="@+id/fl_tracks_entry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
                         android:background="@drawable/option_cell_selector"
                         android:orientation="vertical"
                         android:paddingBottom="15dp"
@@ -346,18 +346,13 @@
                             android:textSize="11sp" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/color_line" />
+
 
                     <LinearLayout
                         android:id="@+id/fl_plans_entry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:background="@drawable/option_cell_selector"
                         android:orientation="vertical"
                         android:paddingBottom="15dp"
@@ -381,18 +376,13 @@
                             android:textSize="11sp" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/color_line" />
+
 
                     <LinearLayout
                         android:id="@+id/travel_notice"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
                         android:background="@drawable/option_cell_selector"
                         android:orientation="vertical"
                         android:paddingBottom="15dp"
