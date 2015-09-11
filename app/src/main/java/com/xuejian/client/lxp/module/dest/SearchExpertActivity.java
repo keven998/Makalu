@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,12 +136,17 @@ public class SearchExpertActivity extends PeachBaseActivity {
             public void doSuccess(String result, String method) {
                 CommonJson4List<ExpertBean> list = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (list.code == 0) {
-                    if (list.result.size() == 0) {
-                        ToastUtil.getInstance(mContext).showToast(String.format("暂时还没有达人去过“%s”", keyword));
-                    } else {
-                        System.out.println(list.result.get(0).zone.size());
-                        bindView(list.result);
+                    try{
+
+                        if (list.result.size() == 0) {
+                            ToastUtil.getInstance(mContext).showToast(String.format("暂时还没有达人去过“%s”", keyword));
+                        } else {
+                            bindView(list.result);
+                        }
+                    }catch (Exception ex){
+
                     }
+
                 }
             }
 
