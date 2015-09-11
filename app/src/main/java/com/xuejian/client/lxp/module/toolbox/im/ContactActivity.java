@@ -35,11 +35,14 @@ public class ContactActivity extends PeachBaseActivity {
         titleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(ContactActivity.this,"navigation_item_add_lxp_friend");
+                MobclickAgent.onEvent(ContactActivity.this, "navigation_item_add_lxp_friend");
                 startActivity(new Intent(ContactActivity.this, AddContactActivity.class));
             }
         });
         contactListFragment = new ContactlistFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isAddFriend", false);
+        contactListFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, contactListFragment).commit();

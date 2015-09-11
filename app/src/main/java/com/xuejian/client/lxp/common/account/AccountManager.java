@@ -139,6 +139,9 @@ public class AccountManager {
     }
 
     public User getLoginAccountInfo() {
+        if (userInfo==null){
+            userInfo=user;
+        }
         return userInfo;
     }
 

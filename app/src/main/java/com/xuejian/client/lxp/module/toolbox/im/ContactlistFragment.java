@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -54,6 +55,13 @@ public class ContactlistFragment extends Fragment {
     private SideBar indexBar;
     private TextView indexDialogTv;
     private boolean hidden;
+    private boolean isAddFriend;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        isAddFriend = getArguments().getBoolean("isAddFriend");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +76,12 @@ public class ContactlistFragment extends Fragment {
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
             return;
         }
-        listView = (ListView) getView().findViewById(R.id.list);
+        listView = (ListView) getView().findViewById(R.id.id_stickynavlayout_innerscrollview);
+        View footView  = new View(getActivity());
+        AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
+        abp.height = 400;
+        footView.setLayoutParams(abp);
+        listView.addFooterView(footView);
         indexBar = (SideBar) getView().findViewById(R.id.sb_index);
         indexDialogTv = (TextView) getView().findViewById(R.id.dialog);
         indexBar.setTextView(indexDialogTv);
@@ -95,10 +108,15 @@ public class ContactlistFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String username = adapter.getItem(position).getNickName();
                 if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
-                    MobclickAgent.onEvent(getActivity(),"cell_item_new_friends_request");
-                    // 进入申请与通知页面
-                    startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
-                    getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                    if (isAddFriend){
+                        startActivity(new Intent(getActivity(), AddContactActivity.class));
+                        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                    }else {
+                        MobclickAgent.onEvent(getActivity(),"cell_item_new_friends_request");
+                        startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
+                        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                    }
+
                 } else if (Constant.GROUP_USERNAME.equals(username)) {
                     // 进入群聊列表页面
                     startActivity(new Intent(getActivity(), GroupsActivity.class));

@@ -536,7 +536,7 @@ public class StrategyActivity extends PeachBaseActivity {
             }
         }
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
-        indicatorViewPager.setCurrentItem(curIndex, false);
+        StrategyAdapter a= new StrategyAdapter(getSupportFragmentManager(), result);
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {

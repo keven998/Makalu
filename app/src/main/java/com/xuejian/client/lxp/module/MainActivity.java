@@ -44,6 +44,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.fragment.SearchAllFragment;
 import com.xuejian.client.lxp.module.dest.fragment.TalentLocFragement;
+import com.xuejian.client.lxp.module.my.UserFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
@@ -67,7 +68,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, TalentLocFragement.class, SearchAllFragment.class, MyFragment.class};
+    private Class fragmentArray[] = {TalkFragment.class, TalentLocFragement.class, SearchAllFragment.class, UserFragment.class};
 
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
@@ -196,9 +197,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
-                    MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
+                    UserFragment myFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag("My");
                     if (myFragment != null && Info.result != null) {
-                        myFragment.requestUserInfo(Info.result);
+                        myFragment.initHeadTitleView(Info.result);
                     }
                 }
             }

@@ -7,7 +7,6 @@
 
     <com.aizou.core.widget.prv.PullToRefreshListView
         android:id="@+id/my_strategy_lv"
-        android:layout_below="@+id/create_plan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/app_backgroud"
