@@ -42,11 +42,14 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ConstellationUtil;
+import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -69,7 +72,9 @@ public class SearchExpertActivity extends PeachBaseActivity {
     @InjectView(R.id.iv_clean)
     ImageView iv_clean;
     ExpertAdapter adapter;
-
+    private int[] lebelColors =new int[]{
+            R.drawable.all_light_green_label,R.drawable.all_light_red_label,R.drawable.all_light_perple_label,R.drawable.all_light_blue_label,R.drawable.all_light_yellow_label
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -242,27 +247,13 @@ public class SearchExpertActivity extends PeachBaseActivity {
             if (convertView == null) {
                 inflater = LayoutInflater.from(this.context);
                 convertView = inflater.inflate(R.layout.expert_list_cont, null);
-//                int padding = LocalDisplay.dp2px(6);
-//                AbsListView.LayoutParams lparms = new AbsListView.LayoutParams(width / 2, width * 39 / 54);
-//                convertView.setLayoutParams(lparms);
-//                convertView.setPadding(padding, padding, padding, padding);
-//
                 vh = new ViewHolder();
                 vh.avatarView = (ImageView) convertView.findViewById(R.id.iv_avatar);
-//                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams((int) (0.41 * width / 2.0), (int) (0.41 * 41 * width / 74));
-//                llp.gravity = Gravity.CENTER_HORIZONTAL;
-//                llp.topMargin = 5 * padding / 2;
-//                vh.avatarView.setLayoutParams(llp);
-//                int dp = llp.width * 4 / 74;
-//                vh.avatarView.setPadding(dp, dp * 34 / 12, dp, dp);
-
-                vh.titleView = (TextView) convertView.findViewById(R.id.tv_expert_track);
                 vh.residenceView = (TextView) convertView.findViewById(R.id.tv_expert_loc);
                 vh.nickView = (TextView) convertView.findViewById(R.id.tv_expert_name);
-                //   vh.loc = (TextView) convertView.findViewById(R.id.expert_zod);
-                vh.ageView = (TextView) convertView.findViewById(R.id.tv_expert_age);
                 vh.expert_level = (TextView) convertView.findViewById(R.id.tv_expert_level);
                 vh.tv_comment = (TextView) convertView.findViewById(R.id.tv_pi_comment);
+                vh.expert_tag = (TagListView)convertView.findViewById(R.id.expert_tag);
                 convertView.setTag(vh);
             } else {
                 vh = (ViewHolder) convertView.getTag();
@@ -270,57 +261,67 @@ public class SearchExpertActivity extends PeachBaseActivity {
             //获取接口数据进行加载
 
             ExpertBean eb = (ExpertBean) getItem(position);
-//            if (eb.gender.equalsIgnoreCase("M")) {
-//                vh.avatarView.setBackgroundResource(R.drawable.expert_boy);
-//            } else if (eb.gender.equalsIgnoreCase("F")) {
-//                vh.avatarView.setBackgroundResource(R.drawable.expert_girl);
-//            } else {
-//                vh.avatarView.setBackgroundResource(R.drawable.expert_unknow);
-//            }
+            vh.nickView.setText(eb.nickName);
+            boolean  flag = false;
+            StringBuffer sb = new StringBuffer();
+            if (!TextUtils.isEmpty(eb.residence)) {
+                sb.append(eb.residence);
+                flag = true;
+
+            }
+            if(!TextUtils.isEmpty(eb.birthday)){
+                if(flag){
+                    sb.append("  "+getAge(eb.birthday)+"岁");
+                }else{
+                    sb.append(""+getAge(eb.birthday)+"岁");
+                }
+            }
+            vh.residenceView.setText(sb.toString());
             ViewCompat.setElevation(convertView, CommonUtils.dip2px(mContext, 5));
             imgLoader.displayImage(eb.avatar, vh.avatarView, UILUtils.getDefaultOption());
-            vh.nickView.setText(eb.nickName);
             if (!TextUtils.isEmpty(eb.residence)) {
                 vh.residenceView.setText(eb.residence);
             } else {
                 vh.residenceView.setText("");
             }
-            if (!TextUtils.isEmpty(eb.birthday)) {
-                vh.ageView.setText(String.valueOf(getAge(eb.birthday)));
-            } else {
-                vh.ageView.setText("");
-            }
-            if (!TextUtils.isEmpty(eb.birthday)) {
-                vh.ageView.setText(ConstellationUtil.calculateConstellationZHname(eb.birthday));
-            } else {
-                vh.ageView.setText("");
-            }
 
             ViewCompat.setElevation(vh.expert_level, CommonUtils.dip2px(mContext, 5));
             vh.expert_level.setText(String.format("V%d", eb.level));
-            //足迹
-            String st1 = "服务城市：";
-            StringBuilder st2 = new StringBuilder();
-            if (eb.zone != null && eb.zone.size() > 0) {
-                int size = eb.zone.size();
-                for (int i = 0; i < size; i++) {
-                    st2.append(eb.zone.get(i));
-                    if (i != size - 1) st2.append("·");
-                }
-            }
-            SpannableString attrStr2 = new SpannableString(st1);
-            attrStr2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, st1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            //   attrStr2.setSpan(new AbsoluteSizeSpan(13, true), 0, attrStr2.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            SpannableStringBuilder spb = new SpannableStringBuilder();
-            spb.append(attrStr2).append(st2);
-            vh.titleView.setText(spb);
 
-            String str1 = "派派点评：";
+            List<Tag> mTags = new ArrayList<Tag>();
+            initData(mTags);
+            vh.expert_tag.removeAllViews();
+            vh.expert_tag.setTagViewTextColorRes(R.color.white);
+            vh.expert_tag.setmTagViewResId(R.layout.expert_tag);
+            vh.expert_tag.setTags(mTags);
+           /* String str1 = "派派点评：";
             SpannableString attrStr1 = new SpannableString(str1);
             attrStr1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, str1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            vh.tv_comment.setText(attrStr1);
+            vh.tv_comment.setText(attrStr1);*/
             return convertView;
         }
+
+        public int getNextColor(int currentcolor){
+            Random random = new Random();
+            int nextValue = random.nextInt(4);
+            if(nextValue==0){
+                nextValue++;
+            }
+            return (nextValue+currentcolor)%5;
+        }
+        public void initData(List<Tag> mTags) {
+            Random random = new Random();
+            int lastColor = random.nextInt(4);
+            for (int i = 0; i < 9; i++) {
+                Tag tag = new Tag();
+                tag.setTitle("属性" + i);
+                tag.setId(i);
+                tag.setBackgroundResId(lebelColors[lastColor]);
+                mTags.add(tag);
+                lastColor=getNextColor(lastColor);
+            }
+        }
+
     }
 
     public class DarenClick implements AdapterView.OnItemClickListener {
@@ -344,14 +345,14 @@ public class SearchExpertActivity extends PeachBaseActivity {
         return Integer.parseInt(date) - birthYear;
     }
 
+
     private class ViewHolder {
         ImageView avatarView;
-        TextView titleView;
         TextView expert_level;
         TextView residenceView;
         TextView loc;
         TextView nickView;
-        TextView ageView;
         TextView tv_comment;
+        TagListView expert_tag;
     }
 }

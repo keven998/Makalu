@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:gravity="center"
+            android:gravity="center_vertical"
+            android:background="@color/color_white_trans"
             android:layout_alignParentBottom="true"
             />
 
