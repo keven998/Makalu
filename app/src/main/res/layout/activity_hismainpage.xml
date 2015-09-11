@@ -627,7 +627,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/massage"
+                android:drawableLeft="@drawable/message"
                 android:drawablePadding="5dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
