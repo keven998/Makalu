@@ -96,6 +96,8 @@ public class UserApi extends BaseApi {
     public final static String BLOCK = "/users/%s/blacklist";
 
     public final static String EXPERT_SEARCH = "/users/experts?zone=%s";
+    public final static String EXPERT_TRAVEL_NOTE = "/users/%s/travelnotes";
+
 
     public static void authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -345,7 +347,15 @@ public class UserApi extends BaseApi {
         // return HttpManager.request(request, callback);
     }
 
-
+    public static void getUserTravelNote(String userId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_TRAVEL_NOTE,userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        // return HttpManager.request(request, callback);
+    }
     public static void getUserFootPrint(String userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

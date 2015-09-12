@@ -187,12 +187,15 @@ public class SearchAllActivity extends PeachBaseActivity {
     private void setUpData() {
         keys= getSearchHistory();
         if (keys.length>0&&!TextUtils.isEmpty(keys[0])){
+            int count=0;
             for (int i = keys.length-1; i >=0; i--) {
                 Tag tag = new Tag();
                 tag.setId(i);
                 tag.setChecked(true);
                 tag.setTitle(keys[i]);
                 mTags.add(tag);
+                count++;
+                if (count==9)break;
             }
         }else {
             history_pannel.setVisibility(View.GONE);
@@ -215,7 +218,6 @@ public class SearchAllActivity extends PeachBaseActivity {
                         if (mKeyTags!=null&&mKeyTags.size()>0){
                             mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
                         }
-
                     }
                 });
             }

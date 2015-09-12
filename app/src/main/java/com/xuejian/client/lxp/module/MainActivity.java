@@ -44,9 +44,9 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.fragment.SearchAllFragment;
 import com.xuejian.client.lxp.module.dest.fragment.TalentLocFragement;
-import com.xuejian.client.lxp.module.my.UserFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
+import com.xuejian.client.lxp.module.my.UserFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
 import org.json.JSONArray;

@@ -32,7 +32,6 @@ import com.xuejian.client.lxp.bean.ExpertBean;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
@@ -150,7 +149,6 @@ public class GuilderListActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                Log.e("search result",result+"------------------------------");
                 CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (expertresult.code == 0) {
                     mCurrentPage = page;
@@ -213,8 +211,8 @@ public class GuilderListActivity extends PeachBaseActivity {
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown)
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
@@ -269,14 +267,13 @@ public class GuilderListActivity extends PeachBaseActivity {
 
             ExpertBean eb = (ExpertBean) getItem(position);
             ViewCompat.setElevation(convertView, CommonUtils.dip2px(mContext, 5));
-            imgLoader.displayImage(eb.avatar, vh.avatarView, UILUtils.getDefaultOption());
+            imgLoader.displayImage(eb.avatar, vh.avatarView, options);
             vh.nickView.setText(eb.nickName);
             boolean  flag = false;
             StringBuffer sb = new StringBuffer();
             if (!TextUtils.isEmpty(eb.residence)) {
                 sb.append(eb.residence);
                 flag = true;
-
             }
             if(!TextUtils.isEmpty(eb.birthday)){
                 if(flag){

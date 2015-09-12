@@ -60,7 +60,7 @@ import butterknife.InjectView;
 /**
  * Created by xuyongchen on 15/8/27.
  */
-public class MyProfileActivity  extends PeachBaseActivity implements  View.OnClickListener{
+public class MyProfileActivity extends PeachBaseActivity implements View.OnClickListener {
     public final static int CODE_PLANS = 102;
     public final static int CODE_FOOTPRINT = 103;
     public final static int CODE_PICS = 104;
@@ -92,8 +92,8 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     @InjectView(R.id.iv_age)
     TextView ivAge;//年龄
 
-  //  @InjectView(R.id.iv_gender)
-  //  ImageView ivGender;//性别
+    //  @InjectView(R.id.iv_gender)
+    //  ImageView ivGender;//性别
 
     @InjectView(R.id.iv_city)
     TextView ivCity;
@@ -113,11 +113,12 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     private ImageView[] myImageView;
 
 
-    private int startMarginTop=0;
-    private Boolean isViewVisible=true;
+    private int startMarginTop = 0;
+    private Boolean isViewVisible = true;
 
     ArrayList<LocBean> all_foot_print_list = new ArrayList<LocBean>();
     DisplayImageOptions options;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +130,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 turnToEditProfile();
             }
         });
-        options =new DisplayImageOptions.Builder()
+        options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
@@ -139,80 +140,80 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         findViewById(R.id.fl_tracks_entry).setOnClickListener(this);
         findViewById(R.id.iv_head_back).setOnClickListener(this);
         notice = (TextView) findViewById(R.id.unread_msg_notify);
-        if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false))notice.setVisibility(View.VISIBLE);
-        User user= AccountManager.getInstance().getLoginAccount(this);
-        if(user!=null){
+        //    if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false))notice.setVisibility(View.VISIBLE);
+        User user = AccountManager.getInstance().getLoginAccount(this);
+        if (user != null) {
             initScrollView(user.getUserId());
         }
         refreshLoginStatus();
         myImageView = new ImageView[]{
-                (ImageView)findViewById(R.id.profile_image0),
-                (ImageView)findViewById(R.id.profile_image1),
-                (ImageView)findViewById(R.id.profile_image2)
+                (ImageView) findViewById(R.id.profile_image0),
+                (ImageView) findViewById(R.id.profile_image1),
+                (ImageView) findViewById(R.id.profile_image2)
         };
         profileFragmentView.setOnInterDispatchListener(new CustomFrameLayout.OnInterDispatchListener() {
             @Override
             public void onInterEvent(int upordown) {
-                if(upordown==1){
-                    if(isViewVisible){
+                if (upordown == 1) {
+                    if (isViewVisible) {
                         //profileFragmentView.setCanInterTitleDown(true);
                         //userInfoP.setVisibility(View.GONE);
 
-                        if(startMarginTop==0){
-                            startMarginTop=CommonUtils.dip2px(MyProfileActivity.this,52)-userInfoP.getHeight();
+                        if (startMarginTop == 0) {
+                            startMarginTop = CommonUtils.dip2px(MyProfileActivity.this, 52) - userInfoP.getHeight();
                         }
 
-                        ValueAnimator animator = ValueAnimator.ofInt(0,startMarginTop);
+                        ValueAnimator animator = ValueAnimator.ofInt(0, startMarginTop);
                         animator.setTarget(userInfoP);
                         animator.setDuration(300).start();
                         animator.setInterpolator(new AccelerateDecelerateInterpolator());
                         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                @Override
-                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    int maginTop = (int) valueAnimator.getAnimatedValue();
-                                    LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
-                                    vl.setMargins(0,maginTop,0,0);
-                                    userInfoP.setLayoutParams(vl);
-                                    if (maginTop==startMarginTop) {
-                                       // profileFragmentView.setCanInterTitleUp(false);
-                                        //userInfoP.setVisibility(View.GONE);
-                                        title_bar.setBackgroundResource(R.color.color_text_iii);
-                                        isViewVisible=false;
-                                        profileFragmentView.setIsDrawawing(false);
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                int maginTop = (int) valueAnimator.getAnimatedValue();
+                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams) userInfoP.getLayoutParams();
+                                vl.setMargins(0, maginTop, 0, 0);
+                                userInfoP.setLayoutParams(vl);
+                                if (maginTop == startMarginTop) {
+                                    // profileFragmentView.setCanInterTitleUp(false);
+                                    //userInfoP.setVisibility(View.GONE);
+                                    title_bar.setBackgroundResource(R.color.color_text_iii);
+                                    isViewVisible = false;
+                                    profileFragmentView.setIsDrawawing(false);
 
-                                    }
                                 }
+                            }
 
-                            });
+                        });
                         //userInfoP.startAnimation(AnimationUtils.loadAnimation(MyProfileActivity.this,R.anim.scale_title_animation));
                     }
-                }else if(upordown==2){
-                    if(!isViewVisible){
-                       // userInfoP.setVisibility(View.VISIBLE);
-                            // profileFragmentView.setCanInterTitleUp(true);
-                            title_bar.setBackgroundResource(R.color.transparent_color);
-                            ValueAnimator animator = ValueAnimator.ofInt(startMarginTop,0);
-                            animator.setTarget(userInfoP);
-                            animator.setDuration(300).start();
-                            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                @Override
-                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    int marginTop = (int) valueAnimator.getAnimatedValue();
-                                    LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams)userInfoP.getLayoutParams();
-                                    vl.setMargins(0,marginTop,0,0);
+                } else if (upordown == 2) {
+                    if (!isViewVisible) {
+                        // userInfoP.setVisibility(View.VISIBLE);
+                        // profileFragmentView.setCanInterTitleUp(true);
+                        title_bar.setBackgroundResource(R.color.transparent_color);
+                        ValueAnimator animator = ValueAnimator.ofInt(startMarginTop, 0);
+                        animator.setTarget(userInfoP);
+                        animator.setDuration(300).start();
+                        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                int marginTop = (int) valueAnimator.getAnimatedValue();
+                                LinearLayout.LayoutParams vl = (LinearLayout.LayoutParams) userInfoP.getLayoutParams();
+                                vl.setMargins(0, marginTop, 0, 0);
 
-                                    userInfoP.setLayoutParams(vl);
+                                userInfoP.setLayoutParams(vl);
 
-                                    if (marginTop == 0) {
-                                        //profileFragmentView.setCanInterTitleDown(false);
+                                if (marginTop == 0) {
+                                    //profileFragmentView.setCanInterTitleDown(false);
 
-                                        isViewVisible=true;
-                                        profileFragmentView.setIsDrawawing(false);
-                                    }
+                                    isViewVisible = true;
+                                    profileFragmentView.setIsDrawawing(false);
                                 }
+                            }
 
-                            });
+                        });
                     }
 
 
@@ -240,7 +241,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     }
 
 
-    private void  turnToEditProfile(){
+    private void turnToEditProfile() {
         MobclickAgent.onEvent(MyProfileActivity.this, "navigation_item_edit_profile");
         User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
         if (user == null) {
@@ -257,7 +258,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
            /* case R.id.iv_more_header_frame_gender1:
                 User user1 = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
                 if (user1 == null) {
@@ -290,21 +291,20 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 break;*/
 
             case R.id.my_profile_edit:
-                MobclickAgent.onEvent(MyProfileActivity.this,"navigation_item_edit_profile");
+                MobclickAgent.onEvent(MyProfileActivity.this, "navigation_item_edit_profile");
                 User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
                 if (user == null) {
                     Intent logIntent = new Intent(MyProfileActivity.this, LoginActivity.class);
                     startActivity(logIntent);
                 } else {
-                    if (SharePrefUtil.getBoolean(MyProfileActivity.this,"firstReg",false)){
+                    if (SharePrefUtil.getBoolean(MyProfileActivity.this, "firstReg", false)) {
                         notice.setVisibility(View.GONE);
-                        SharePrefUtil.saveBoolean(MyProfileActivity.this,"firstReg",false);
+                        SharePrefUtil.saveBoolean(MyProfileActivity.this, "firstReg", false);
                     }
                     Intent accountIntent = new Intent(MyProfileActivity.this, AccountActvity.class);
                     startActivity(accountIntent);
                 }
                 break;
-
 
 
             case R.id.fl_plans_entry:
@@ -344,17 +344,17 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     public static Bitmap readBitMap(Context context, int resId) {
         try {
             Bitmap bitmap = ImageCache.getInstance().get(String.valueOf(resId));
-            if (bitmap==null){
+            if (bitmap == null) {
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
                 opt.inPurgeable = true;
                 opt.inInputShareable = true;
                 InputStream is = context.getResources().openRawResource(resId);
                 bitmap = BitmapFactory.decodeStream(is, null, opt);
-                ImageCache.getInstance().put(String.valueOf(resId),bitmap);
+                ImageCache.getInstance().put(String.valueOf(resId), bitmap);
             }
             return bitmap;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -363,14 +363,6 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
     private void refreshUserInfo() {
         final User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
-            if (user.getGender().equalsIgnoreCase("M")) {
-                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
-            } else if (user.getGender().equalsIgnoreCase("F")) {
-                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_girl);
-            } else {
-                // iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_unlogin);
-            }
-
             UserApi.getUserInfo(String.valueOf(user.getUserId()), new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
@@ -378,25 +370,21 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(MyProfileActivity.this, userResult.result);
                         AccountManager.getInstance().setLoginAccountInfo(userResult.result);
-                        refreshLoginStatus();
-                       // refreshUserInfo();
-
+                        if (userResult.result != null) bindView(userResult.result);
                     }
-
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method, int code) {
-
                 }
             });
         }
     }
+
     public int getAge(String birth) {
         if (TextUtils.isEmpty(birth)) return 0;
         int age = 0;
@@ -408,20 +396,19 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         return age;
     }
 
-    public void refreshLoginStatus() {
-        final User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
+    public void bindView(final User user) {
         all_foot_print_list.clear();
         if (user == null) {
             ImageLoader.getInstance().displayImage("", avatarIv, options);
             tvPictureCount.setText("0图");
             tvPlansCount.setText("0条");
             tvTracksCount.setText("0国0城市");
-          //  constellationIv.setText("星座");
+            //  constellationIv.setText("星座");
         } else {
-            ImageView gender_label = (ImageView)findViewById(R.id.gender_label);
-            if (!user.getGender().equals(Sex)){
+            ImageView gender_label = (ImageView) findViewById(R.id.gender_label);
+            if (!user.getGender().equals(Sex)) {
                 gender_label.setVisibility(View.VISIBLE);
-                Sex=user.getGender();
+                Sex = user.getGender();
                 if (user.getGender().equalsIgnoreCase("M")) {
                     gender_label.setImageResource(R.drawable.icon_boy);
                 } else if (user.getGender().equalsIgnoreCase("F")) {
@@ -432,7 +419,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
 
             int res = ConstellationUtil.calculateConstellation(user.getBirthday());
-            ImageView constellation_label = (ImageView)findViewById(R.id.constellation_label);
+            ImageView constellation_label = (ImageView) findViewById(R.id.constellation_label);
             if (res == 0) {
                 constellation_label.setImageResource(R.drawable.ic_home_constellation_unknown);
             } else constellation_label.setImageResource(res);
@@ -447,57 +434,40 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             if (TextUtils.isEmpty(user.getResidence())) {
                 ivCity.setText("现居住城市 未知");
             } else {
-                ivCity.setText("现居住在 "+user.getResidence());
+                ivCity.setText("现居住在 " + user.getResidence());
             }
             if (TextUtils.isEmpty(user.getBirthday())) {
                 ivAge.setText("年龄 未知");
             } else {
-                ivAge.setText(String.valueOf(getAge(user.getBirthday()))+"岁");
+                ivAge.setText(String.valueOf(getAge(user.getBirthday())) + "岁");
             }
             int countryCount = 0;
             int cityCount = 0;
-            String level = "0";
             int guideCount = 0;
-            int picNum=0;
-            User info=null;
-            String username="姓名";
-            int age =0;
-            String city="";
-            String aboutMe=null;
-            if (AccountManager.getInstance().getLoginAccountInfo() != null) {
-                info = AccountManager.getInstance().getLoginAccountInfo();
-                guideCount = info.getGuideCnt();
-                level = info.getLevel();
-                countryCount=info.getCountryCnt();
-                cityCount=info.getTrackCnt();
-                picNum=info.getAlbumCnt();
-                username=info.getNickName();
-                age=getAge(info.getBirthday());
-                city=info.getResidence();
-                aboutMe=info.getSignature();
-            }
-            if(aboutMe!=null && aboutMe.trim().length()>0){
-                ivAboutMe.setText(aboutMe);
-            }
-
-            ivUserName.setText(username);
+            int picNum = 0;
+            guideCount = user.getGuideCnt();
+            countryCount = user.getCountryCnt();
+            cityCount = user.getTrackCnt();
+            picNum = user.getAlbumCnt();
+            ivAboutMe.setText(user.getSignature());
+            ivUserName.setText(user.getNickName());
             tvPictureCount.setText(picNum + "图");
             tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
 
-            String countryCountStr = String.format("旅行%d个国家,共%d个城市",countryCount,cityCount);
-            int countryLength = (countryCount+"").length();
-            int cityLength =(cityCount+"").length();
+            String countryCountStr = String.format("旅行%d个国家,共%d个城市", countryCount, cityCount);
+            int countryLength = (countryCount + "").length();
+            int cityLength = (cityCount + "").length();
             SpannableString countrySpannable = new SpannableString(countryCountStr);
             countrySpannable.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 2, 2 + countryLength, 0);
             countrySpannable.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 7 + countryLength, 7 + countryLength + cityLength, 0);
             tvTracksCount.setText(countrySpannable);
 
             String tvPlaneCount = String.format("共%d份旅行计划", guideCount);
-            int planeLength=(guideCount+"").length();
+            int planeLength = (guideCount + "").length();
             SpannableString spannableString = new SpannableString(tvPlaneCount);
             spannableString.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
             tvPlansCount.setText(spannableString);
-           // constellationIv.setText("星座");
+            // constellationIv.setText("星座");
 
             ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
                     .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
@@ -520,8 +490,112 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
         }
     }
+
+    public void refreshLoginStatus() {
+        final User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
+        all_foot_print_list.clear();
+        if (user == null) {
+            ImageLoader.getInstance().displayImage("", avatarIv, options);
+            tvPictureCount.setText("0图");
+            tvPlansCount.setText("0条");
+            tvTracksCount.setText("0国0城市");
+            //  constellationIv.setText("星座");
+        } else {
+            ImageView gender_label = (ImageView) findViewById(R.id.gender_label);
+            if (!user.getGender().equals(Sex)) {
+                gender_label.setVisibility(View.VISIBLE);
+                Sex = user.getGender();
+                if (user.getGender().equalsIgnoreCase("M")) {
+                    gender_label.setImageResource(R.drawable.icon_boy);
+                } else if (user.getGender().equalsIgnoreCase("F")) {
+                    gender_label.setImageResource(R.drawable.icon_girl);
+                } else {
+                    gender_label.setVisibility(View.GONE);
+                }
+            }
+
+            int res = ConstellationUtil.calculateConstellation(user.getBirthday());
+            ImageView constellation_label = (ImageView) findViewById(R.id.constellation_label);
+            if (res == 0) {
+                constellation_label.setImageResource(R.drawable.ic_home_constellation_unknown);
+            } else constellation_label.setImageResource(res);
+
+            TextView level_num_infos = (TextView) findViewById(R.id.level_num_infos);
+            level_num_infos.setText("V" + user.getLevel());
+
+            if (TextUtils.isEmpty(user.getResidence())) {
+                ivCity.setText("现居住城市 未知");
+            } else {
+                ivCity.setText("现居住在 " + user.getResidence());
+            }
+            if (TextUtils.isEmpty(user.getBirthday())) {
+                ivAge.setText("年龄 未知");
+            } else {
+                ivAge.setText(String.valueOf(getAge(user.getBirthday())) + "岁");
+            }
+            int countryCount = 0;
+            int cityCount = 0;
+            int guideCount = 0;
+            int picNum = 0;
+            User info = null;
+            String username = "姓名";
+            String aboutMe = null;
+            if (AccountManager.getInstance().getLoginAccountInfo() != null) {
+                info = AccountManager.getInstance().getLoginAccountInfo();
+                guideCount = info.getGuideCnt();
+                countryCount = info.getCountryCnt();
+                cityCount = info.getTrackCnt();
+                picNum = info.getAlbumCnt();
+                username = info.getNickName();
+                aboutMe = info.getSignature();
+            }
+            if (aboutMe != null && aboutMe.trim().length() > 0) {
+                ivAboutMe.setText(aboutMe);
+            }
+
+            ivUserName.setText(username);
+            tvPictureCount.setText(picNum + "图");
+            tvTracksCount.setText(countryCount + "国" + cityCount + "城市");
+
+            String countryCountStr = String.format("旅行%d个国家,共%d个城市", countryCount, cityCount);
+            int countryLength = (countryCount + "").length();
+            int cityLength = (cityCount + "").length();
+            SpannableString countrySpannable = new SpannableString(countryCountStr);
+            countrySpannable.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 2, 2 + countryLength, 0);
+            countrySpannable.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 7 + countryLength, 7 + countryLength + cityLength, 0);
+            tvTracksCount.setText(countrySpannable);
+
+            String tvPlaneCount = String.format("共%d份旅行计划", guideCount);
+            int planeLength = (guideCount + "").length();
+            SpannableString spannableString = new SpannableString(tvPlaneCount);
+            spannableString.setSpan(new ForegroundColorSpan(MyProfileActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
+            tvPlansCount.setText(spannableString);
+            // constellationIv.setText("星座");
+
+            ImageLoader.getInstance().displayImage(user.getAvatar(), avatarIv, new DisplayImageOptions.Builder()
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                    .build());
+
+            if (!TextUtils.isEmpty(user.getAvatar())) {
+                avatarIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ArrayList<String> pics = new ArrayList<>();
+                        pics.add(user.getAvatar());
+                        showSelectedPics(pics);
+                    }
+                });
+            } else {
+                avatarIv.setClickable(false);
+            }
+        }
+    }
+
     private void showSelectedPics(ArrayList<String> pics) {
-        if (pics.size()==0){
+        if (pics.size() == 0) {
             return;
         }
         IntentUtils.intentToPicGallery2(MyProfileActivity.this, pics, 0);
@@ -548,7 +622,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
                 User user = (User) data.getSerializableExtra("user");
                 try {
                     DialogManager.getInstance().showLoadingDialog(MyProfileActivity.this, "正在登录");
-                }catch (Exception e){
+                } catch (Exception e) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                 }
                 imLogin(user);
@@ -563,6 +637,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
         }
     }
+
     public void getUserPicsNum(Long userId) {
         UserApi.getUserPicAlbumn(String.valueOf(userId), new HttpCallBack<String>() {
             @Override
@@ -594,7 +669,6 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         });
 
     }
-
 
 
     public void initScrollView(long userId) {
@@ -631,31 +705,32 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
             }
         });
     }
-   public void refreshPicture(final ArrayList<String> picList) {
-       int i = 0;
-       for (; i < picList.size()&& i<3; i++) {
-           final int pos=i;
-           ImageLoader.getInstance().displayImage(picList.get(i), myImageView[i], new DisplayImageOptions.Builder()
-                   .showImageForEmptyUri(R.drawable.pic_loadfail)
-                   .showImageOnFail(R.drawable.pic_loadfail)
-                   .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                   .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
-                   .build());
-           myImageView[i].setVisibility(View.VISIBLE);
-           myImageView[i].setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   IntentUtils.intentToPicGallery2(MyProfileActivity.this, picList, pos);
-               }
-           });
-       }
 
-       if(i<3){
-           for(int j=i;j<3;j++){
-               myImageView[i].setVisibility(View.GONE);
-           }
+    public void refreshPicture(final ArrayList<String> picList) {
+        int i = 0;
+        for (; i < picList.size() && i < 3; i++) {
+            final int pos = i;
+            ImageLoader.getInstance().displayImage(picList.get(i), myImageView[i], new DisplayImageOptions.Builder()
+                    .showImageForEmptyUri(R.drawable.pic_loadfail)
+                    .showImageOnFail(R.drawable.pic_loadfail)
+                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
+                    .build());
+            myImageView[i].setVisibility(View.VISIBLE);
+            myImageView[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    IntentUtils.intentToPicGallery2(MyProfileActivity.this, picList, pos);
+                }
+            });
+        }
 
-       }
+        if (i < 3) {
+            for (int j = i; j < 3; j++) {
+                myImageView[i].setVisibility(View.GONE);
+            }
+
+        }
     }
 
 
@@ -702,6 +777,7 @@ public class MyProfileActivity  extends PeachBaseActivity implements  View.OnCli
         });
 
     }
+
     @Override
     protected void onPause() {
         super.onPause();

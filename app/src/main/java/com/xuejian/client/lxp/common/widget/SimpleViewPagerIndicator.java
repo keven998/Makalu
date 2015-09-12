@@ -8,8 +8,10 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import com.xuejian.client.lxp.R;
 
 public class SimpleViewPagerIndicator extends LinearLayout {
 
@@ -18,6 +20,7 @@ public class SimpleViewPagerIndicator extends LinearLayout {
     //Color.GREEN;
 
     private String[] mTitles;
+    private CheckedTextView []views = new CheckedTextView[2];
     private int mTabCount;
     private int mIndicatorColor = COLOR_INDICATOR_COLOR;
     private float mTranslationX;
@@ -84,18 +87,34 @@ public class SimpleViewPagerIndicator extends LinearLayout {
         setWeightSum(count);
         for (int i = 0; i < count; i++) {
             final int pos = i;
-            TextView tv = new TextView(getContext());
+            final CheckedTextView tv = new CheckedTextView(getContext());
             LayoutParams lp = new LayoutParams(0,
                     LayoutParams.MATCH_PARENT);
             lp.weight = 1;
+            lp.rightMargin=20;
+            lp.leftMargin=20;
+            if (i==0){
+                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.selecter_btn_plan,0,0,0);
+                tv.setCompoundDrawablePadding(10);
+                tv.setChecked(true);
+            }
+            if (i==1){
+                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.selecter_btn_contact,0,0,0);
+                tv.setCompoundDrawablePadding(10);
+            }
+            tv.setPadding(20,0,20,0);
             tv.setGravity(Gravity.CENTER);
             tv.setTextColor(COLOR_TEXT_NORMAL);
             tv.setText(mTitles[i]);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             tv.setLayoutParams(lp);
+            views[i] =tv;
             tv.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
+                    views[pos].setChecked(true);
+                    views[pos^1].setChecked(false);
                     if (listenr != null) {
                         listenr.OnIndicatorChange(pos);
                     }

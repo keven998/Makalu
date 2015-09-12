@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -302,8 +307,17 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
                 mImgLoader.displayImage("", holder.bgImage, poptions);
             }
 
-            holder.numSum.setText(item.zhName);
-            holder.loc.setText(String.format("~派派 · %d位 · 达人~", item.expertCnt));
+            if (!TextUtils.isEmpty(item.zhName)&&!TextUtils.isEmpty(item.enName)){
+                StringBuilder sb = new StringBuilder();
+                sb.append(item.zhName).append("\n").append(item.enName);
+                SpannableString zh =new SpannableString(sb);
+                zh.setSpan(new AbsoluteSizeSpan(24,true),0,item.zhName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                zh.setSpan(new TypefaceSpan("default-bold"),0,item.zhName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                zh.setSpan(new AbsoluteSizeSpan(18,true),item.zhName.length()+1,sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.numSum.setText(zh);
+            }
+
+            holder.loc.setText(String.valueOf(item.expertCnt));
             holder.rl_country.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

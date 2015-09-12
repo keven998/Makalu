@@ -16,6 +16,7 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.api.BaseApi;
 import com.xuejian.client.lxp.common.api.OtherApi;
+import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
@@ -50,6 +51,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         if (isExpert) {
             locId = getIntent().getStringExtra("id");
             mTitleBar.getTitleTextView().setText(getIntent().getStringExtra("title"));
+            mTitleBar.getTitleTextView().setTextColor(getResources().getColor(R.color.color_text_ii));
         } else {
             locId = getIntent().getStringExtra("id");
             keyword = getIntent().getStringExtra("keyword");
@@ -75,7 +77,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 //  getTravelNoteList(0);
                 if (isExpert) {
-
+                    getExpertNote(locId,0);
                 } else getTravelNoteListByKeyword(0);
             }
 
@@ -90,6 +92,39 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
 
         mMoreTravelNoteLv.doPullRefreshing(true, 100);
 
+    }
+
+    private void getExpertNote(String userId,int page) {
+        UserApi.getUserTravelNote(userId, new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                try {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result.toString(), TravelNoteBean.class);
+                if (detailResult.code == 0) {
+              //      mPage = page;
+                    bindView(detailResult.result);
+                } else {
+//                  ToastUtil.getInstance(MoreTravelNoteActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                }
+                mMoreTravelNoteLv.onPullUpRefreshComplete();
+                mMoreTravelNoteLv.onPullDownRefreshComplete();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                mMoreTravelNoteLv.onPullUpRefreshComplete();
+                mMoreTravelNoteLv.onPullDownRefreshComplete();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     @Override
@@ -110,7 +145,11 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
         OtherApi.getTravelNoteByKeyword(keyword, page, BaseApi.PAGE_SIZE, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
+                try {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
                     mPage = page;

@@ -664,7 +664,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         if (extType == PLAN_MSG) {
             holder.tv_attr.setVisibility(View.VISIBLE);
-            holder.tv_name.setText(bean.name);
+            holder.tv_name.setText(String.format("计划 | %s",bean.name));
             holder.tv_desc.setText(bean.desc);
             holder.tv_attr.setText(bean.timeCost);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
@@ -679,7 +679,7 @@ public class MessageAdapter extends BaseAdapter {
                 }
             });
         } else if (extType == CITY_MSG) {
-            holder.tv_name.setText(bean.name);
+            holder.tv_name.setText(String.format("城市 | %s",bean.name));
             holder.tv_attr.setVisibility(View.GONE);
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("城市");
@@ -693,7 +693,7 @@ public class MessageAdapter extends BaseAdapter {
                 }
             });
         } else if (extType == TRAVEL_MSG) {
-            holder.tv_name.setText(bean.name);
+            holder.tv_name.setText(String.format("游记 | %s",bean.name));
             holder.tv_attr.setVisibility(View.GONE);
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("游记");
@@ -714,7 +714,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.tv_attr.setVisibility(View.VISIBLE);
                 holder.tv_attr.setText(bean.timeCost);
             }
-            holder.tv_name.setText(bean.name);
+            holder.tv_name.setText(String.format("景点 | %s",bean.name));
             holder.tv_desc.setText(bean.desc);
 
             holder.tv_type.setText("景点");
@@ -729,19 +729,19 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv_attr.setVisibility(View.VISIBLE);
             switch (extType) {
                 case FOOD_MSG:
-                    holder.tv_name.setText(bean.name);
+                    holder.tv_name.setText(String.format("美食 | %s",bean.name));
                     holder.tv_type.setText("美食");
                     holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
                 case HOTEL_MSG:
-                    holder.tv_name.setText(bean.name);
+                    holder.tv_name.setText(String.format("酒店 | %s",bean.name));
                     holder.tv_type.setText("酒店");
                     holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
                 case SHOP_MSG:
-                    holder.tv_name.setText(bean.name);
+                    holder.tv_name.setText(String.format("购物 | %s",bean.name));
                     holder.tv_type.setText("购物");
                     holder.tv_attr.setText(bean.rating + " ");
                     break;

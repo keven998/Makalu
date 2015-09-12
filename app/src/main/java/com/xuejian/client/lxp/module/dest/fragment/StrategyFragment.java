@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,9 @@ import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.swipelistview.adapters.BaseSwipeAdapter;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -96,6 +100,20 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
         myFragmentList.setAdapter(myPlaneAdapter);
         myFragmentList.setOnScrollListener(this);
         footView = new View(getActivity());
+        String data = PreferenceUtils.getCacheData(getActivity(), String.format("%s_plans", AccountManager.getCurrentUserId()));
+        if (!TextUtils.isEmpty(data)) {
+            try {
+                JSONArray array = new JSONArray(data);
+                JSONObject object = new JSONObject();
+                object.put("result", array);
+                CommonJson4List<StrategyBean> list = CommonJson4List.fromJson(object.toString(), StrategyBean.class);
+                planList.clear();
+                planList.addAll(list.result);
+                myPlaneAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         abp.height = 400;
         footView.setLayoutParams(abp);
@@ -110,7 +128,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                 startActivityForResult(intent, RESULT_PLAN_DETAIL);
             }
         });
-        //  getStrategyListData(userId);
+        getStrategyListData(userId);
         return rootView;
     }
 
@@ -148,7 +166,6 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                         } else {
                             isLoading = true;
                         }
-
                     }
                     myPlaneAdapter.notifyDataSetChanged();
                 }
@@ -166,7 +183,6 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                 }
             });
         }
-
     }
 
     private void cachePage() {

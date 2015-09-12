@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -761,7 +760,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
         tv_plan_count.setText(spannableString);
 
-
         String countryCount = String.format("旅行%d个国家,共%d个城市", bean.getCountryCnt(), bean.getTrackCnt());
         int countryLength = (bean.getCountryCnt()+"").length();
         int cityLength =(bean.getTrackCnt()+"").length();
@@ -884,7 +882,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         UserApi.getUserInfo(String.valueOf(userid), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                Log.e("hisresult",result+"------------------------");
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson<User> expertInfo = CommonJson.fromJson(result, User.class);
                 if (expertInfo.code == 0) {
