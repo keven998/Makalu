@@ -289,12 +289,7 @@
                             android:textSize="11sp" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/color_line" />
+
 
                     <LinearLayout
                         android:id="@+id/fl_plans_entry"
@@ -323,13 +318,7 @@
                             android:textSize="11sp" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/color_line"
-                        android:visibility="gone" />
+
 
                     <LinearLayout
                         android:layout_width="0dp"

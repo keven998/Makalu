@@ -133,6 +133,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/expert_label_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -164,10 +165,12 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/expert_lebel_line"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />
                 <FrameLayout
+                    android:id="@+id/expert_lebel_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="40dp"
@@ -188,14 +191,17 @@
                     />
                 </FrameLayout>
                 <View
+                    android:id="@+id/expert_lebel_bodyLine"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_line"
+                    android:layout_marginBottom="10dp"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+
                     android:background="@color/white"
                     android:orientation="horizontal">
 
@@ -321,7 +327,7 @@
                         android:id="@+id/fl_tracks_entry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
                         android:background="@drawable/option_cell_selector"
                         android:orientation="vertical"
                         android:paddingBottom="15dp"
@@ -346,18 +352,13 @@
                             android:textSize="11sp" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/color_line" />
+
 
                     <LinearLayout
                         android:id="@+id/fl_plans_entry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:background="@drawable/option_cell_selector"
                         android:orientation="vertical"
                         android:paddingBottom="15dp"
@@ -381,18 +382,13 @@
                             android:textSize="11sp" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/color_line" />
+
 
                     <LinearLayout
                         android:id="@+id/travel_notice"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
                         android:background="@drawable/option_cell_selector"
                         android:orientation="vertical"
                         android:paddingBottom="15dp"
@@ -405,7 +401,7 @@
                             android:src="@drawable/ico_mid_notice" />
 
                         <TextView
-
+                            android:id="@+id/tv_note_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -462,12 +458,9 @@
                     android:layout_height="1px"
                     android:background="@color/color_line" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/color_line" />
 
                 <TextView
+                    android:id="@+id/panpan_lebel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -483,6 +476,7 @@
                     android:textSize="@dimen/text_size_16" />
 
                 <View
+                    android:id="@+id/panpan_lebel_line"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />

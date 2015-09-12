@@ -135,6 +135,30 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     @InjectView(R.id.goToAlbum)
     FrameLayout goToAlbum;
+
+    @InjectView(R.id.expert_lebel_body)
+    FrameLayout expert_lebel_body;
+
+    @InjectView(R.id.expert_lebel_bodyLine)
+    View expert_lebel_bodyLine;
+
+    @InjectView(R.id.expert_lebel_line)
+    View expert_lebel_line;
+
+    @InjectView(R.id.expert_label_info)
+    LinearLayout expert_label_info;
+
+    @InjectView(R.id.panpan_lebel_line)
+    View panpan_lebel_line;
+
+    @InjectView(R.id.panpan_lebel)
+    TextView panpan_lebel;
+
+    @InjectView(R.id.tv_comment)
+    TextView tv_comment;
+
+    @InjectView(R.id.tv_note_count)
+    TextView tv_note_count;
     private final List<Tag> mTags = new ArrayList<Tag>();
     private ImageView[] pictures;
     private boolean isViewVisible = true;
@@ -648,7 +672,30 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             handleView.setVisibility(View.GONE);
         }
 
+        if(bean!=null && bean.expertInfo!=null && bean.expertInfo.getProfile()!=null && bean.expertInfo.getProfile().equals("旅行派达人")){
+            expert_lebel_body.setVisibility(View.VISIBLE);
+            expert_lebel_bodyLine.setVisibility(View.VISIBLE);
+            expert_lebel_line.setVisibility(View.VISIBLE);
+            expert_label_info.setVisibility(View.VISIBLE);
+            panpan_lebel_line.setVisibility(View.VISIBLE);
+            panpan_lebel.setVisibility(View.VISIBLE);
+            tv_comment.setVisibility(View.VISIBLE);
+            travel_notice.setVisibility(View.VISIBLE);
+        }else{
+            expert_lebel_body.setVisibility(View.GONE);
+            expert_lebel_bodyLine.setVisibility(View.GONE);
+            expert_lebel_line.setVisibility(View.GONE);
+            expert_label_info.setVisibility(View.GONE);
+            panpan_lebel_line.setVisibility(View.GONE);
+            panpan_lebel.setVisibility(View.GONE);
+            tv_comment.setVisibility(View.GONE);
+            travel_notice.setVisibility(View.GONE);
+        }
+
+
         user = bean;
+
+
         try {
             if (isMyFriend && imUser != null) {
                 if (TextUtils.isEmpty(imUser.getMemo())) {
@@ -754,11 +801,20 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             tv_expert_age.setText(String.valueOf(getAge(bean.getBirthday()))+"岁");
         }
 
+
+
+
+        String noteCount = String.format("完成%d篇游记", bean.getTravelNoteCnt());
+        int noteLength=(bean.getTravelNoteCnt()+"").length();
+        SpannableString spannableString = new SpannableString(noteCount);
+        spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 2, 2 + noteLength, 0);
+        tv_note_count.setText(spannableString);
+
         String tvPlaneCount = String.format("共%d份旅行计划", bean.getGuideCnt());
         int planeLength=(bean.getGuideCnt()+"").length();
-        SpannableString spannableString = new SpannableString(tvPlaneCount);
-        spannableString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
-        tv_plan_count.setText(spannableString);
+        SpannableString spanString = new SpannableString(tvPlaneCount);
+        spanString.setSpan(new ForegroundColorSpan(HisMainPageActivity.this.getResources().getColor(R.color.app_theme_color)), 1, 1 + planeLength, 0);
+        tv_plan_count.setText(spanString);
 
         String countryCount = String.format("旅行%d个国家,共%d个城市", bean.getCountryCnt(), bean.getTrackCnt());
         int countryLength = (bean.getCountryCnt()+"").length();
