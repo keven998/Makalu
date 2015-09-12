@@ -24,7 +24,6 @@ import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -213,7 +212,7 @@ public class GuilderListActivity extends PeachBaseActivity {
                     .resetViewBeforeLoading(true)
                     .showImageOnFail(R.drawable.ic_home_more_avatar_unknown)
                     .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown)
-                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                  //  .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
             width = CommonUtils.getScreenWidth((Activity) cxt) - LocalDisplay.dp2px(24);

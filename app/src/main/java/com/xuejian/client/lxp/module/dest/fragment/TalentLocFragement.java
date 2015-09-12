@@ -36,6 +36,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.XDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.module.dest.SearchExpertActivity;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
@@ -59,7 +60,6 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     private String[] delta = {"亚洲", "欧洲", "北美洲", "美洲", "非洲", "大洋洲","南极洲"};
     List<String> lists;
     List<String> continentNames = new ArrayList<>();
-    ArrayList<ArrayList<CountryWithExpertsBean>> data;
     XDialog xDialog;
 
 
@@ -86,8 +86,8 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
             public void doSuccess(Object result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
-                //  CommonJson4List
                 resizeData(expertResult.result);
+                PreferenceUtils.cacheData(getActivity(),"countryList",result.toString());
             }
 
             @Override
@@ -103,26 +103,27 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     }
 
     private void resizeData(List<CountryWithExpertsBean> list) {
-        data = new ArrayList<ArrayList<CountryWithExpertsBean>>();
+        adapter.getList().clear();
         for (int i = 0; i < 7; i++) {
-            data.add(new ArrayList<CountryWithExpertsBean>());
+            adapter.getList().add(new ArrayList<CountryWithExpertsBean>());
         }
         for (CountryWithExpertsBean bean : list) {
-            data.get(lists.indexOf(bean.continents.zhName)).add(bean);
+            adapter.getList().get(lists.indexOf(bean.continents.zhName)).add(bean);
         }
         ArrayList<ArrayList<CountryWithExpertsBean>> del = new ArrayList<>();
-        for (ArrayList<CountryWithExpertsBean> beans : data) {
+        for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
             if (beans.size() == 0) {
                 del.add(beans);
             } else {
                 sortCountries(beans);
             }
         }
-        data.removeAll(del);
-        adapter = new TalentLocAdapter(getActivity());
-        listView.setAdapter(adapter);
+        adapter.getList().removeAll(del);
+//        adapter = new TalentLocAdapter(getActivity());
+//        listView.setAdapter(adapter);
         getHeaderPos();
-        for (ArrayList<CountryWithExpertsBean> beans : data) {
+        adapter.notifyDataSetChanged();
+        for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
             continentNames.add(beans.get(0).continents.zhName);
         }
         titleTextView.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +169,14 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
         listView = (ListView) view.findViewById(R.id.talent_loc_list);
 
         listView.setOnScrollListener(this);
-
+        ArrayList<ArrayList<CountryWithExpertsBean>> data = new ArrayList<>();
+        adapter = new TalentLocAdapter(getActivity(),data);
+        listView.setAdapter(adapter);
+        String datas = PreferenceUtils.getCacheData(getActivity(), "countryList");
+        if (!TextUtils.isEmpty(datas)){
+            CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(datas, CountryWithExpertsBean.class);
+            resizeData(expertResult.result);
+        }
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -228,6 +236,7 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     }
 
     public void getHeaderPos() {
+        headerPos.clear();
         int pos = 0;
         headerPos.add(pos);
         for (int i = 0; i < adapter.getSectionCount() - 1; i++) {
@@ -239,12 +248,13 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     private class TalentLocAdapter extends BaseSectionAdapter {
         private TextView header;
         private DisplayImageOptions poptions;
-        ;
+        private ArrayList<ArrayList<CountryWithExpertsBean>> list;
         private Context mCxt;
         private ImageLoader mImgLoader;
 
-        public TalentLocAdapter(Context context) {
+        public TalentLocAdapter(Context context,ArrayList<ArrayList<CountryWithExpertsBean>> list) {
             mCxt = context;
+            this.list = list;
             mImgLoader = ImageLoader.getInstance();
             poptions = new DisplayImageOptions.Builder()
                     .showImageOnFail(R.drawable.messages_bg_useravatar)
@@ -254,7 +264,9 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
                     .cacheOnDisc(true)
                     .build();
         }
-
+        public ArrayList<ArrayList<CountryWithExpertsBean>> getList(){
+            return list;
+        }
         @Override
         public int getContentItemViewType(int section, int position) {
             return 0;
@@ -277,7 +289,7 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
 
         @Override
         public CountryWithExpertsBean getItem(int section, int position) {
-            return data.get(section).get(position);
+            return list.get(section).get(position);
         }
 
         @Override
@@ -342,17 +354,17 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
 
         @Override
         public int getSectionCount() {
-            return data.size();
+            return list.size();
         }
 
         @Override
         public int getCountInSection(int section) {
-            return data.get(section).size();
+            return list.get(section).size();
         }
 
         @Override
         public String getSectionStr(int section) {
-            return data.get(section).get(0).continents.zhName;
+            return list.get(section).get(0).continents.zhName;
         }
 
         @Override

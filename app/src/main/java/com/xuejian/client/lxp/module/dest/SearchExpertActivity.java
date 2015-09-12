@@ -7,13 +7,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,15 +29,12 @@ import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ExpertBean;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.utils.ConstellationUtil;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -137,7 +129,6 @@ public class SearchExpertActivity extends PeachBaseActivity {
                 CommonJson4List<ExpertBean> list = CommonJson4List.fromJson(result, ExpertBean.class);
                 if (list.code == 0) {
                     try{
-                        Log.e("searchResult",result+"---------------------------");
                         if (list.result.size() == 0) {
                             ToastUtil.getInstance(mContext).showToast(String.format("暂时还没有达人去过“%s”", keyword));
                         } else {
@@ -210,11 +201,11 @@ public class SearchExpertActivity extends PeachBaseActivity {
             this.context = cxt;
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
-                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown)
+                //    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
             width = CommonUtils.getScreenWidth((Activity) cxt) - LocalDisplay.dp2px(24);
@@ -284,7 +275,7 @@ public class SearchExpertActivity extends PeachBaseActivity {
             }
             vh.residenceView.setText(sb.toString());
             ViewCompat.setElevation(convertView, CommonUtils.dip2px(mContext, 5));
-            imgLoader.displayImage(eb.avatar, vh.avatarView, UILUtils.getDefaultOption());
+            imgLoader.displayImage(eb.avatar, vh.avatarView, options);
             if (!TextUtils.isEmpty(eb.residence)) {
                 vh.residenceView.setText(eb.residence);
             } else {

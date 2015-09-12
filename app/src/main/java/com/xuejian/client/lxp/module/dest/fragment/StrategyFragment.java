@@ -399,16 +399,16 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                     if (visitedResult.code == 0) {
                         //    deleteThisItem(beenBean);
                     } else {
-                        if (!getActivity().isFinishing())
-                            ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
+//                        if (!getActivity().isFinishing())
+//                            ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_server_failed));
                     }
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
-                    if (!getActivity().isFinishing())
-                        ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
+//                    if (!getActivity().isFinishing())
+//                        ToastUtil.getInstance(getActivity()).showToast(getResources().getString(R.string.request_network_failed));
                 }
 
                 @Override
