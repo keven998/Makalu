@@ -77,7 +77,7 @@ public class ContactlistFragment extends Fragment {
             return;
         }
         listView = (ListView) getView().findViewById(R.id.id_stickynavlayout_innerscrollview);
-        View footView  = new View(getActivity());
+        View footView = new View(getActivity());
         AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         abp.height = 400;
         footView.setLayoutParams(abp);
@@ -106,17 +106,17 @@ public class ContactlistFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (adapter.getCount()<=position){
+                if (adapter.getCount() <= position) {
                     return;
                 }
                 try {
                     String username = adapter.getItem(position).getNickName();
                     if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
-                        if (isAddFriend){
+                        if (isAddFriend) {
                             startActivity(new Intent(getActivity(), AddContactActivity.class));
                             getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
-                        }else {
-                            MobclickAgent.onEvent(getActivity(),"cell_item_new_friends_request");
+                        } else {
+                            MobclickAgent.onEvent(getActivity(), "cell_item_new_friends_request");
                             startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
                             getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                         }
@@ -128,8 +128,7 @@ public class ContactlistFragment extends Fragment {
                         startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId()));
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     }
-                }catch (Exception e){
-
+                } catch (Exception e) {
                 }
 
             }
@@ -192,7 +191,6 @@ public class ContactlistFragment extends Fragment {
     }
 
 
-
     // 刷新ui
     public void refresh() {
         try {
@@ -218,7 +216,7 @@ public class ContactlistFragment extends Fragment {
         contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
         List<User> del = new ArrayList<>();
         for (User user : contactList) {
-            if (user.getUserId()==10000||user.getUserId()==10001)del.add(user);
+            if (user.getUserId() == 10000 || user.getUserId() == 10001) del.add(user);
         }
         contactList.removeAll(del);
         // 排序
