@@ -36,6 +36,7 @@ import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.api.UserApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
@@ -486,6 +487,30 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
 
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+            } else if (TextUtils.isEmpty(groupId) && UserDBManager.getInstance().getContactByUserId(m.getSenderId()) == null) {
+                UserApi.getUserInfo(String.valueOf(m.getSenderId()), new HttpCallBack<String>() {
+                    @Override
+                    public void doSuccess(String result, String method) {
+                        DialogManager.getInstance().dissMissModelessLoadingDialog();
+                        CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
+                        if (userInfo.code == 0) {
+                            UserDBManager.getInstance().saveContact(userInfo.result);
+                            TalkFragment fragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                            if (fragment != null && !isPause) {
+                                fragment.loadConversation();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
                     }
 
                     @Override

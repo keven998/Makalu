@@ -6,7 +6,7 @@ import com.aizou.core.constant.LibConfig;
 
 public class LogUtil {
 
-	private static String sApplicationTag = "PeachTravel";// LOG默认TAG
+	private static String sApplicationTag = "LXP";// LOG默认TAG
 
 	private static final String TAG_CONTENT_PRINT = "%s:%s.%s:%d";
 

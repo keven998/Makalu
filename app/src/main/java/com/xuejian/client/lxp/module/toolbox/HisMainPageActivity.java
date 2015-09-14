@@ -1050,7 +1050,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             pictures[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    IntentUtils.intentToPicGallery2(HisMainPageActivity.this, picList, pos);
+                    if (picList.size()>0)IntentUtils.intentToPicGallery2(HisMainPageActivity.this, picList, pos);
                 }
             });
 

@@ -284,7 +284,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="6dp"
-                            android:text="旅行1个国家,共1个城市"
+                            android:text="旅行0个国家,共0个城市"
                             android:textColor="@color/color_text_ii"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -386,7 +386,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
-                    android:text="我还没有添加任何描述哦!"
+                    android:text="你还没有添加任何描述哦!"
                     android:textColor="@color/color_text_ii"
                     android:textSize="@dimen/text_size_14" />
 

@@ -129,6 +129,7 @@ public class ContactlistFragment extends Fragment {
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -175,8 +176,6 @@ public class ContactlistFragment extends Fragment {
         if (!hidden) {
             refresh();
         }
-
-
     }
 
     @Override

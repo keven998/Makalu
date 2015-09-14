@@ -121,6 +121,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
         myFragmentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (myPlaneAdapter.getCount() <= position) return;
                 StrategyBean bean = (StrategyBean) myPlaneAdapter.getDataList().get(position);
                 Intent intent = new Intent(getActivity(), StrategyActivity.class);
                 intent.putExtra("id", bean.id);

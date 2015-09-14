@@ -1,11 +1,8 @@
 package com.xuejian.client.lxp.common.widget;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 

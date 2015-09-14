@@ -87,6 +87,7 @@ public class TalkFragment extends PeachBaseFragment {
         AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         abp.height = 200;
         view.setLayoutParams(abp);
+        view.setClickable(false);
         listView.addFooterView(view);
         listView.setAdapter(adapter);
         tvTitleAdd.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +109,7 @@ public class TalkFragment extends PeachBaseFragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (adapter.getCount() <= position) return;
                 curconversation = adapter.getItem(position);
                 if (String.valueOf(curconversation.getFriendId()).equals(AccountManager.getCurrentUserId()))
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
@@ -159,8 +161,8 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     private void showActionDialog() {
-        MobclickAgent.onEvent(getActivity(),"navigation_item_talks_menu");
-        String[] names = {"新建聊天(或群聊)", "添加朋友", "取消"};
+        MobclickAgent.onEvent(getActivity(), "navigation_item_talks_menu");
+        String[] names = {"新建聊天/群聊", "添加朋友", "取消"};
         final MoreDialog dialog = new MoreDialog(getActivity());
         dialog.setMoreStyle(false, 3, names);
         dialog.getTv1().setOnClickListener(new View.OnClickListener() {
