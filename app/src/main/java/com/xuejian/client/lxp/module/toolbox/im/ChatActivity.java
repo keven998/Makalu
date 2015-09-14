@@ -44,11 +44,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -301,7 +304,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         iv_emoticons_checked.setVisibility(View.GONE);
         mExtraPanel = (FrameLayout) findViewById(R.id.fl_extra_panel);
 
-        setPanelAnimation();
+        //setPanelAnimation();
 
         // 动画资源文件,用于录制语音时
         micImages = new Drawable[]{getResources().getDrawable(R.drawable.record_animate_00), getResources().getDrawable(R.drawable.record_animate_01),
@@ -416,10 +419,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         LayoutTransition lt = new LayoutTransition();
         lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
         lt.setStagger(LayoutTransition.APPEARING, 20);
+        lt.setStagger(LayoutTransition.DISAPPEARING, 20);
         lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
         lt.setDuration(LayoutTransition.DISAPPEARING, 0);
         lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+        lt.setStartDelay(LayoutTransition.DISAPPEARING,20);
         mExtraPanel.setLayoutTransition(lt);
     }
     public void setTitleName(String name){
@@ -508,13 +512,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 hideKeyboard();
-                mExtraPanel.setVisibility(View.GONE);
-                iv_emoticons_normal.setVisibility(View.VISIBLE);
-                iv_emoticons_checked.setVisibility(View.GONE);
-                expressionContainer.setVisibility(View.GONE);
-                btnContainer.setVisibility(View.GONE);
-                buttonPressToSpeak.setVisibility(View.GONE);
-                mEditTextContent.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mExtraPanel.setVisibility(View.GONE);
+                        iv_emoticons_normal.setVisibility(View.VISIBLE);
+                        iv_emoticons_checked.setVisibility(View.GONE);
+                        expressionContainer.setVisibility(View.GONE);
+                        //btnContainer.setVisibility(View.GONE);
+                        buttonPressToSpeak.setVisibility(View.GONE);
+                        mEditTextContent.setVisibility(View.VISIBLE);
+                    }
+                }, 300);
+
                 return false;
             }
         });
@@ -1054,7 +1064,26 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mExtraPanel.setVisibility(View.VISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.slidein_from_bottom);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+
+                            mExtraPanel.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    mExtraPanel.startAnimation(animation);
+                   // mExtraPanel.setVisibility(View.VISIBLE);
                     btnContainer.setVisibility(View.VISIBLE);
                     expressionContainer.setVisibility(View.GONE);
 
@@ -1072,13 +1101,24 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }, 100);
         } else {
             if (expressionContainer.getVisibility() == View.VISIBLE) {
-                expressionContainer.setVisibility(View.GONE);
-                btnContainer.setVisibility(View.VISIBLE);
-                iv_emoticons_normal.setVisibility(View.VISIBLE);
-                iv_emoticons_checked.setVisibility(View.GONE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        expressionContainer.setVisibility(View.GONE);
+                        btnContainer.setVisibility(View.VISIBLE);
+                        iv_emoticons_normal.setVisibility(View.VISIBLE);
+                        iv_emoticons_checked.setVisibility(View.GONE);
+                    }
+                }, 100);
+
             } else {
-                mExtraPanel.setVisibility(View.GONE);
-                btnContainer.setVisibility(View.GONE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mExtraPanel.setVisibility(View.GONE);
+                    }
+                },300);
+               // btnContainer.setVisibility(View.GONE);
             }
 
         }
