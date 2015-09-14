@@ -70,6 +70,10 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
+    @Override
+    public int getCount() {
+        return super.getCount();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

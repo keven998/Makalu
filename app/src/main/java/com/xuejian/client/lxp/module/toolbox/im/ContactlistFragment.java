@@ -106,25 +106,32 @@ public class ContactlistFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String username = adapter.getItem(position).getNickName();
-                if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
-                    if (isAddFriend){
-                        startActivity(new Intent(getActivity(), AddContactActivity.class));
+                if (adapter.getCount()<=position){
+                    return;
+                }
+                try {
+                    String username = adapter.getItem(position).getNickName();
+                    if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
+                        if (isAddFriend){
+                            startActivity(new Intent(getActivity(), AddContactActivity.class));
+                            getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                        }else {
+                            MobclickAgent.onEvent(getActivity(),"cell_item_new_friends_request");
+                            startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
+                            getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                        }
+                    } else if (Constant.GROUP_USERNAME.equals(username)) {
+                        // 进入群聊列表页面
+                        startActivity(new Intent(getActivity(), GroupsActivity.class));
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
-                    }else {
-                        MobclickAgent.onEvent(getActivity(),"cell_item_new_friends_request");
-                        startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
+                    } else {
+                        startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId()));
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     }
+                }catch (Exception e){
 
-                } else if (Constant.GROUP_USERNAME.equals(username)) {
-                    // 进入群聊列表页面
-                    startActivity(new Intent(getActivity(), GroupsActivity.class));
-                    getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
-                } else {
-                    startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId()));
-                    getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                 }
+
             }
         });
         registerForContextMenu(listView);

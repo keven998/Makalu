@@ -754,7 +754,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(SEARCH_BY_ADDRESSBOOK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        request.setHeader("Content-Encoding", "gzip");
+      //  request.setHeader("Content-Encoding", "gzip");
         setDefaultParams(request);
         JSONObject rootObject = new JSONObject();
         try {
