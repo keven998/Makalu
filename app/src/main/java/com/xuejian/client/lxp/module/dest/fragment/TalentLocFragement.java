@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +87,7 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
             public void doSuccess(Object result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
+
                 resizeData(expertResult.result);
                 PreferenceUtils.cacheData(getActivity(),"countryList",result.toString());
             }
@@ -122,10 +124,11 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
 //        adapter = new TalentLocAdapter(getActivity());
 //        listView.setAdapter(adapter);
         getHeaderPos();
-        adapter.notifyDataSetChanged();
+        continentNames.clear();
         for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
             continentNames.add(beans.get(0).continents.zhName);
         }
+        adapter.notifyDataSetChanged();
         titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +176,7 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
         adapter = new TalentLocAdapter(getActivity(),data);
         listView.setAdapter(adapter);
         String datas = PreferenceUtils.getCacheData(getActivity(), "countryList");
+
         if (!TextUtils.isEmpty(datas)){
             CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(datas, CountryWithExpertsBean.class);
             resizeData(expertResult.result);
