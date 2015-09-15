@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/app_theme_color</item>
         <item name="colorPrimaryDark">@android:color/black</item>
         <item name="colorAccent">@color/app_theme_color</item>
+
         <!-- Customize your theme here. -->
     </style>
 
@@ -14,7 +15,11 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-
+    <style name="WhiteTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
     <style name="Theme.Start" parent="android:Theme">
         <item name="android:windowBackground">@android:drawable/screen_background_dark_transparent
         </item>

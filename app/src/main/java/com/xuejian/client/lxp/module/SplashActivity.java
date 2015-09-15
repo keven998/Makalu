@@ -75,7 +75,9 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                 .showImageOnFail(R.drawable.bg_splash)
                 .showImageForEmptyUri(R.drawable.bg_splash)
                 .showImageOnLoading(R.drawable.bg_splash)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+                .build();
+               // .imageScaleType(ImageScaleType.)
+               //
         // 延长2秒后进入主界面
 
         handler = new Handler();

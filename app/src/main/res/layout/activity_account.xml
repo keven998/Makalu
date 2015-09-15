@@ -265,10 +265,11 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="12dp"
                     android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center_vertical|right"
+
                     android:paddingBottom="17dp"
                     android:paddingRight="12dp"
                     android:paddingTop="17dp"
+                    android:paddingLeft="10dp"
                     android:text="未设置"
                     android:textColor="@color/color_text_i"
                     android:textSize="15sp" />

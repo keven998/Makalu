@@ -3,6 +3,8 @@ package com.xuejian.client.lxp.module;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -42,8 +44,28 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
     private int guide2IvIndex;
     //引导页第三页小图动画index
     private int guide3IvIndex;
+    private static final int START_LOGIN=0x232;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case START_LOGIN:
+                    if (TextUtils.isEmpty(type)) {
+                        SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
+                        Intent mainActivity = new Intent(GuideActivity.this, LoginActivity.class);
+                        startActivity(mainActivity);
+                        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
+                    } else if (type.equals("setting")) {
 
+                    }
+                    finish();
+                    GuideActivity.this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +115,8 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
         // 绑定回调
         vp.setOnPageChangeListener(this);
         if (Build.VERSION.SDK_INT >= 11) {
-            vp.setPageTransformer(true, new ZoomOutPageTransformer());
+           //vp.setPageTransformer(true, new ZoomOutPageTransformer());
+            vp.setPageTransformer(true,new DepthPageTransformer());
         }
         // 初始化底部小点
 //		initDots();
@@ -124,15 +147,9 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
     public void onPageScrolled(int arg0, float arg1, int arg2) {
         if (arg0 == this.views.size() - 1 && arg1 == 0
                 && arg2 == 0 && isScrolling) {
-            if (TextUtils.isEmpty(type)) {
-                SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
-                Intent mainActivity = new Intent(GuideActivity.this, LoginActivity.class);
-                startActivityWithNoAnim(mainActivity);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            } else if (type.equals("setting")) {
 
-            }
-            finish();
+            handler.sendEmptyMessage(START_LOGIN);
+
         }
 
     }
@@ -352,6 +369,29 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
 
 }
 
+class DepthPageTransformer implements ViewPager.PageTransformer{
+    private static float MIN_SCALE=0.75f;
+    @Override
+    public void transformPage(View view, float position) {
+        int pageWidth = view.getWidth();
+        if(position<-1){
+            view.setAlpha(0);
+        }else if(position<=0){
+            view.setAlpha(1);
+            view.setTranslationX(0);
+            view.setScaleX(1);
+            view.setScaleY(1);
+        }else if(position <=1){
+            view.setAlpha(1-position);
+            view.setTranslationX(pageWidth*(-position));
+            float scaleFactor = MIN_SCALE +(1-MIN_SCALE)*(1-Math.abs(position));
+            view.setScaleX(scaleFactor);
+            view.setScaleY(scaleFactor);
+        }else {
+            view.setAlpha(0);
+        }
+    }
+}
 class ZoomOutPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.85f;
     private static final float MIN_ALPHA = 0.85f;
@@ -367,7 +407,7 @@ class ZoomOutPageTransformer implements ViewPager.PageTransformer {
         } else if (position <= 1) { // [-1,1]
             // Modify the default slide transition to shrink the page as well
             float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
-            float vertMargin = pageHeight * (1 - scaleFactor) / 2;
+            /*float vertMargin = pageHeight * (1 - scaleFactor) / 2;
             float horzMargin = pageWidth * (1 - scaleFactor) / 2;
             if (position < 0) {
                 view.setTranslationX(horzMargin - vertMargin / 2);
@@ -377,7 +417,7 @@ class ZoomOutPageTransformer implements ViewPager.PageTransformer {
 
             // Scale the page down (between MIN_SCALE and 1)
             view.setScaleX(scaleFactor);
-            view.setScaleY(scaleFactor);
+            view.setScaleY(scaleFactor);*/
 
             // Fade the page relative to its size.
             view.setAlpha(MIN_ALPHA +
