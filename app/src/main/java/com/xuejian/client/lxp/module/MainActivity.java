@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.api.UserApi;
-import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
@@ -355,11 +353,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (index == 0) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
-        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false) && index == 3) {
-            regNotice = (TextView) view.findViewById(R.id.unread_msg_notify);
-            regNotice.setTextColor(Color.RED);
-            regNotice.setVisibility(View.VISIBLE);
-        }
+//        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false) && index == 3) {
+//            regNotice = (TextView) view.findViewById(R.id.unread_msg_notify);
+//            regNotice.setTextColor(Color.RED);
+//            regNotice.setVisibility(View.VISIBLE);
+//        }
 
         if (index == 3) {
             view.findViewById(R.id.line_inter).setVisibility(View.GONE);
@@ -498,7 +496,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 UserApi.getUserInfo(String.valueOf(m.getSenderId()), new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
-                        DialogManager.getInstance().dissMissModelessLoadingDialog();
                         CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
                         if (userInfo.code == 0) {
                             UserDBManager.getInstance().saveContact(userInfo.result);

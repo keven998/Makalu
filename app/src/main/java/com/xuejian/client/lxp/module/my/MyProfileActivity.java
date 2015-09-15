@@ -215,8 +215,6 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
 
                         });
                     }
-
-
                 }
             }
         });

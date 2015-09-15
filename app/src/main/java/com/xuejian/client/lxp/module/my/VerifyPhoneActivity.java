@@ -138,7 +138,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 if (userResult.code == 0) {
                                     imLogin(userResult.result);
                                     Intent accountIntent = new Intent(VerifyPhoneActivity.this, MainActivity.class);
-                                    SharePrefUtil.saveBoolean(getApplicationContext(), "firstReg", true);
+                                   // SharePrefUtil.saveBoolean(getApplicationContext(), "firstReg", true);
                                     startActivityWithNoAnim(accountIntent);
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("注册成功");
                                     Intent intent = getIntent();

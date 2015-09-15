@@ -320,8 +320,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }
         if (TextUtils.isEmpty(user.getSignature())) {
             tv_sign.setText("未设置");
-        } else {
-            tv_sign.setText(user.getSignature());
+        }else {
+            tv_sign.setText("");
         }
         if (TextUtils.isEmpty(user.getBirthday())) {
             tv_zodiac.setText("未设置");

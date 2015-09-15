@@ -54,7 +54,7 @@ public class CustomFrameLayout extends FrameLayout{
                         return true;
                     }
                     if(canInterTitleUp || canInterTitleDown){
-                        if((startY-ev.getY())>0){
+                        if((startY-ev.getY())>10){
                             if(canInterTitleUp){
                                 if(onInterDispatchListener!=null){
                                     isDrawawing=true;
@@ -66,7 +66,7 @@ public class CustomFrameLayout extends FrameLayout{
                                 return true;
                             }
 
-                        }else if((startY-ev.getY())<0){
+                        }else if((startY-ev.getY())<-10){
                             if(canInterTitleDown){
                                 if(onInterDispatchListener!=null){
                                     isDrawawing=true;

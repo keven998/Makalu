@@ -9,7 +9,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,6 +105,7 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
 
     private void resizeData(List<CountryWithExpertsBean> list) {
         adapter.getList().clear();
+        continentNames.clear();
         for (int i = 0; i < 7; i++) {
             adapter.getList().add(new ArrayList<CountryWithExpertsBean>());
         }
@@ -124,7 +124,6 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
 //        adapter = new TalentLocAdapter(getActivity());
 //        listView.setAdapter(adapter);
         getHeaderPos();
-        continentNames.clear();
         for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
             continentNames.add(beans.get(0).continents.zhName);
         }

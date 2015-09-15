@@ -159,6 +159,9 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
     @InjectView(R.id.tv_note_count)
     TextView tv_note_count;
+
+    @InjectView(R.id.tv_title)
+    TextView tv_title;
     private final List<Tag> mTags = new ArrayList<Tag>();
     private ImageView[] pictures;
     private boolean isViewVisible = true;
@@ -672,7 +675,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             handleView.setVisibility(View.GONE);
         }
 
-        if(bean!=null && bean.expertInfo!=null && bean.expertInfo.getProfile()!=null && bean.expertInfo.getProfile().equals("旅行派达人")){
+        if(bean.expertInfo!=null && bean.expertInfo.getProfile()!=null && bean.expertInfo.getProfile().equals("旅行派达人")){
             expert_lebel_body.setVisibility(View.VISIBLE);
             expert_lebel_bodyLine.setVisibility(View.VISIBLE);
             expert_lebel_line.setVisibility(View.VISIBLE);
@@ -682,6 +685,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             tv_comment.setVisibility(View.VISIBLE);
             travel_notice.setVisibility(View.VISIBLE);
         }else{
+            if (tv_title!=null)tv_title.setText("旅行派");
             expert_lebel_body.setVisibility(View.GONE);
             expert_lebel_bodyLine.setVisibility(View.GONE);
             expert_lebel_line.setVisibility(View.GONE);
