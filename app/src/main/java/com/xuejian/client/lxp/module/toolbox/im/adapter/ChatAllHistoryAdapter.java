@@ -71,6 +71,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
     private static final int FOOD_MSG = 14;
     private static final int SHOP_MSG = 15;
     private static final int HOTEL_MSG = 16;
+    private static final int H5_MSG = 18;
     private static final int TIPS_MSG = 200;
     boolean isGroup;
 
@@ -355,6 +356,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                break;
+            case H5_MSG:
+                digest = "[链接]";
                 break;
             case TIPS_MSG:
                 digest = "[系统消息]";

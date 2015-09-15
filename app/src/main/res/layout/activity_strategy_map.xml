@@ -135,7 +135,7 @@
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:text="01"
-                android:textColor="@color/selector_white_text_color"
+                android:textColor="@color/color_text_ii"
                 android:textSize="16sp" />
 
 
@@ -145,7 +145,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="2dp"
                 android:textSize="10sp"
-                android:textColor="@color/selector_white_text_color"
+                android:textColor="@color/color_text_ii"
                 android:text=".Day"
                 />
 
