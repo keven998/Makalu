@@ -295,11 +295,12 @@ public class SearchExpertActivity extends PeachBaseActivity {
                vh.expert_tag.removeAllViews();
            }
 
-            if(eb.signature!=null && eb.signature.trim().length()>0){
-                vh.tv_comment.setText(eb.signature);
-            }else{
-                vh.tv_comment.setText("Ta还没添加任何描述！");
+            if(eb.expertInfo!=null){
+                vh.tv_comment.setText(eb.expertInfo.getProfile());
             }
+//            else{
+//                vh.tv_comment.setText("Ta还没添加任何描述！");
+//            }
            /* String str1 = "派派点评：";
             SpannableString attrStr1 = new SpannableString(str1);
             attrStr1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, str1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

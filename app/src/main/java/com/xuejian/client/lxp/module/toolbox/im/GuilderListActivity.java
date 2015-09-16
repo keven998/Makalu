@@ -297,11 +297,12 @@ public class GuilderListActivity extends PeachBaseActivity {
                 vh.expert_tag.removeAllViews();
             }
 
-            if(eb.signature!=null && eb.signature.trim().length()>0){
-                vh.tv_comment.setText(eb.signature);
-            }else{
-                vh.tv_comment.setText("Ta还没添加任何描述！");
+            if(eb.expertInfo!=null){
+                vh.tv_comment.setText(eb.expertInfo.getProfile());
             }
+//            else{
+//                vh.tv_comment.setText("Ta还没添加任何描述！");
+//            }
             //足迹
             /*String st1 = "服务城市：";
             String st2 = countryName;

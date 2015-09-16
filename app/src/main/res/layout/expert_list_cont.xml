@@ -85,7 +85,6 @@
             android:lines="3"
             android:paddingRight="10dp"
             android:layout_marginTop="4dp"
-            android:text="他的计划很青春很大胆，他的计划很青春很大胆，他的计划很青春很大胆，他的计划很青春很大胆，他的计划很青春很大胆，他的计划很青春很大胆"
             />
 
     </LinearLayout>

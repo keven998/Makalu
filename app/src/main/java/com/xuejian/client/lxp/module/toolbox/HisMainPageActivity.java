@@ -675,16 +675,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             handleView.setVisibility(View.GONE);
         }
 
-        if(bean.expertInfo!=null && bean.expertInfo.getProfile()!=null && bean.expertInfo.getProfile().equals("旅行派达人")){
-            expert_lebel_body.setVisibility(View.VISIBLE);
-            expert_lebel_bodyLine.setVisibility(View.VISIBLE);
-            expert_lebel_line.setVisibility(View.VISIBLE);
-            expert_label_info.setVisibility(View.VISIBLE);
-            panpan_lebel_line.setVisibility(View.VISIBLE);
-            panpan_lebel.setVisibility(View.VISIBLE);
-            tv_comment.setVisibility(View.VISIBLE);
-            travel_notice.setVisibility(View.VISIBLE);
-        }else{
+        if(bean.expertInfo==null||(bean.expertInfo.profile==null&&bean.expertInfo.zone==null) ){
             if (tv_title!=null)tv_title.setText("旅行派");
             expert_lebel_body.setVisibility(View.GONE);
             expert_lebel_bodyLine.setVisibility(View.GONE);
@@ -694,6 +685,16 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             panpan_lebel.setVisibility(View.GONE);
             tv_comment.setVisibility(View.GONE);
             travel_notice.setVisibility(View.GONE);
+        }else{
+            expert_lebel_body.setVisibility(View.VISIBLE);
+            expert_lebel_bodyLine.setVisibility(View.VISIBLE);
+            expert_lebel_line.setVisibility(View.VISIBLE);
+            expert_label_info.setVisibility(View.VISIBLE);
+            panpan_lebel_line.setVisibility(View.VISIBLE);
+            panpan_lebel.setVisibility(View.VISIBLE);
+            tv_comment.setVisibility(View.VISIBLE);
+            travel_notice.setVisibility(View.VISIBLE);
+            tv_comment.setText(bean.expertInfo.getProfile());
         }
 
 

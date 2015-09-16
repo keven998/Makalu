@@ -57,8 +57,10 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
     private int lastPos = 0;
-    private String[] delta = {"亚洲", "欧洲", "北美洲", "美洲", "非洲", "大洋洲","南极洲"};
+    private String[] delta = {"亚洲", "欧洲", "北美洲", "南美洲", "非洲", "大洋洲"};
+    private String[] deltaEN = {"AS", "EU", "NA", "SA", "AF", "OC"};
     List<String> lists;
+    List<String> listsEN;
     List<String> continentNames = new ArrayList<>();
     XDialog xDialog;
 
@@ -68,6 +70,7 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.talentloc,container,false);
         lists = Arrays.asList(delta);
+        listsEN = Arrays.asList(deltaEN);
         initView(view);
         initData();
         return view;
@@ -106,12 +109,17 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     private void resizeData(List<CountryWithExpertsBean> list) {
         adapter.getList().clear();
         continentNames.clear();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             adapter.getList().add(new ArrayList<CountryWithExpertsBean>());
         }
+//        for (CountryWithExpertsBean bean : list) {
+//            adapter.getList().get(lists.indexOf(bean.continents.zhName)).add(bean);
+//        }
         for (CountryWithExpertsBean bean : list) {
-            adapter.getList().get(lists.indexOf(bean.continents.zhName)).add(bean);
+            int p = listsEN.indexOf(bean.continents.code);
+            if (p>=0)adapter.getList().get(p).add(bean);
         }
+
         ArrayList<ArrayList<CountryWithExpertsBean>> del = new ArrayList<>();
         for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
             if (beans.size() == 0) {
@@ -125,7 +133,9 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
 //        listView.setAdapter(adapter);
         getHeaderPos();
         for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
-            continentNames.add(beans.get(0).continents.zhName);
+            String name = beans.get(0).continents.zhName;
+        //    if ("美洲".equals(name))name = "南美洲";
+            continentNames.add(name);
         }
         adapter.notifyDataSetChanged();
         titleTextView.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +188,11 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
 
         if (!TextUtils.isEmpty(datas)){
             CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(datas, CountryWithExpertsBean.class);
-            resizeData(expertResult.result);
+            try {
+                resizeData(expertResult.result);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override

@@ -28,7 +28,7 @@ public class ExpertBean {
     public int guideCnt;
     public ArrayList<String> zone;
     public ArrayList<String> tags;
-
+    public ExpertInfo expertInfo;
     public String getRolesDescription() {
         if (roles == null || roles.length == 0) return "";
         if (Arrays.asList(roles).contains("expert")) {
