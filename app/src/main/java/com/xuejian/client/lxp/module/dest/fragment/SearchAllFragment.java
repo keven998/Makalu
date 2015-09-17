@@ -180,6 +180,7 @@ public class SearchAllFragment extends PeachBaseFragment {
             public void onTagClick(TagView tagView, Tag tag) {
                 if (keys != null && keys.length > 0) {
                     mEtSearch.setText(keys[tag.getId()]);
+
                 }
             }
         });
@@ -227,6 +228,7 @@ public class SearchAllFragment extends PeachBaseFragment {
                     public void onTagClick(TagView tagView, Tag tag) {
                         if (mKeyTags != null && mKeyTags.size() > 0) {
                             mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
+                            searchAll(mKeyTags.get(tag.getId()).getTitle());
                         }
 
                     }
