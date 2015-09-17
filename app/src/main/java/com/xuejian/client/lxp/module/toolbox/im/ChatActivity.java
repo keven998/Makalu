@@ -713,7 +713,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             selectPicFromLocal(); // 点击图片图标
         } else if (id == R.id.btn_location) { // 位置
             MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
-            startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
+            startActivityForResult(new Intent(this, MapActivity.class), REQUEST_CODE_MAP);
         } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
             hideKeyboard();
 

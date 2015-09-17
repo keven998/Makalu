@@ -77,6 +77,7 @@ import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
 import com.xuejian.client.lxp.module.toolbox.im.GroupDetailFragment;
+import com.xuejian.client.lxp.module.toolbox.im.MapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ShowBigImage;
 import com.xuejian.client.lxp.module.toolbox.im.VoicePlayClickListener;
 
@@ -1992,7 +1993,7 @@ public class MessageAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             Intent intent;
-            intent = new Intent(context, BaiduMapActivity.class);
+            intent = new Intent(context, MapActivity.class);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
             intent.putExtra("address", address);

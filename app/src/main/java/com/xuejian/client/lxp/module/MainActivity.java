@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -23,6 +24,10 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.FragmentTabHost;
 import com.alibaba.fastjson.JSON;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.LocationManagerProxy;
+import com.amap.api.location.LocationProviderProxy;
 import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
@@ -57,7 +62,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler {
+public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler ,AMapLocationListener{
     //    public final static int CODE_IM_LOGIN = 101;
 //    public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
@@ -83,7 +88,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     PopupWindow mPop;
     SuperToast superToast;
     private boolean isPause;
-
+    LocationManagerProxy mLocationManagerProxy;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -112,6 +117,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
             initClient();
         }
+        initLocation();
+    }
+    private void initLocation() {
+        mLocationManagerProxy = LocationManagerProxy.getInstance(this);
+        mLocationManagerProxy.requestLocationData(
+                LocationProviderProxy.AMapNetwork, -1, 100, this);
+        mLocationManagerProxy.setGpsEnable(false);
     }
 
     private void imLogin(final User user) {
@@ -741,5 +753,38 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         long time = currentTime - mSendTime;
         mSendTime = currentTime;
         return !(0 < time && time < 1000);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if(aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0){
+            //获取位置信息
+            Double geoLat = aMapLocation.getLatitude();
+            Double geoLng = aMapLocation.getLongitude();
+            System.out.println("geoLat "+geoLat+" geoLat "+geoLng);
+            System.out.println(aMapLocation.getCountry()+" :"+aMapLocation.getAddress());
+            mLocationManagerProxy.removeUpdates(this);
+            mLocationManagerProxy.destroy();
+        }
     }
 }

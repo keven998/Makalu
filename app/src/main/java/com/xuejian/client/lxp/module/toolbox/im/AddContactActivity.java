@@ -17,7 +17,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -38,6 +37,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 public class AddContactActivity extends ChatBaseActivity implements View.OnClickListener {

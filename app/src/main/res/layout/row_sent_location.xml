@@ -48,7 +48,7 @@
                     android:layout_height="160dp"
                     android:background="@drawable/location_msg"
                     android:gravity="bottom|center_horizontal"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerCrop"
                     android:textColor="@android:color/white" />
 
                 <TextView

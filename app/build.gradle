@@ -110,8 +110,10 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.orhanobut:dialogplus:1.7@aar'
     //compile(name:'play-services-base-6.5.87', ext:'aar')
-    compile files('libs/baidumapapi_v3_4_0.jar')
+    //compile files('libs/baidumapapi_v3_4_0.jar')
     compile 'io.reactivex:rxandroid:0.25.0'
     compile 'io.reactivex:rxjava:1.0.13'
     //compile(name:'supertoasts-1.3.4.1', ext:'aar')
+    compile files('libs/AMap_2DMap_v2.6.0_20150916.jar')
+    compile files('libs/AMap_ Location_v1.4.0.1_20150910.jar')
 }

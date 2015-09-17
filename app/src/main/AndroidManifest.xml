@@ -3,6 +3,7 @@
     package="com.xuejian.client.lxp"
     android:versionCode="8"
     android:versionName="@string/app_version">
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -366,11 +367,14 @@
             android:theme="@style/Transparent"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 地图 -->
+        <!--<activity-->
+            <!--android:name=".module.toolbox.im.BaiduMapActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/horizontal_slide"/>-->
         <activity
-            android:name=".module.toolbox.im.BaiduMapActivity"
+            android:name=".module.toolbox.im.MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
-
         <!-- 新的朋友邀请消息页面 -->
         <activity
             android:name=".module.toolbox.im.NewFriendsMsgActivity"
@@ -449,6 +453,10 @@
             android:name=".module.dest.ReadMoreActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent"/>
+        <activity
+            android:name=".module.dest.StrategyDomesticMapActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent"/>
         <!--去过页面-->
         <!--攻略地图-->
         <activity
@@ -489,9 +497,19 @@
             android:value="@integer/google_play_services_version" />
 
         <!-- 高德地图-->
+        <!--DevKey -->
         <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="5e52974b98ed60f5fd81ce6de1860deb" />
+        android:name="com.amap.api.v2.apikey"
+        android:value="4e22d882f8a2794150757c6be797e7e9" />
+
+
+        <!--DEV-->
+        <!--android:value="4e22d882f8a2794150757c6be797e7e9" />-->
+        <!--正式Key -->
+        <!--android:value="f20e266c3a0f9cf4d232dcfa4eeb72d6" />-->
+
+
+            <!--android:value="5e52974b98ed60f5fd81ce6de1860deb" />-->
         <!--备用签名更新坐标 1ebc37fe421415484068dad4493ffccb-->
 
         <meta-data
