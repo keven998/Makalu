@@ -73,7 +73,6 @@ import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
-import com.xuejian.client.lxp.module.toolbox.im.BaiduMapActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
 import com.xuejian.client.lxp.module.toolbox.im.GroupDetailFragment;
