@@ -42,6 +42,7 @@ import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.LocationUtils;
 import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
@@ -782,7 +783,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             Double geoLat = aMapLocation.getLatitude();
             Double geoLng = aMapLocation.getLongitude();
             System.out.println("geoLat "+geoLat+" geoLat "+geoLng);
-            System.out.println(aMapLocation.getCountry()+" :"+aMapLocation.getAddress());
+            LocationUtils utils = new LocationUtils();
+            boolean isAbroad = utils.pointInPolygon(new LocationUtils.Point(geoLat, geoLng));
+            SharePrefUtil.saveBoolean(mContext, "isAbroad",!isAbroad);
             mLocationManagerProxy.removeUpdates(this);
             mLocationManagerProxy.destroy();
         }

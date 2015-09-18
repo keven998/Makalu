@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.aizou.core.utils.SharePrefUtil;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
@@ -16,6 +17,7 @@ import com.amap.api.location.LocationProviderProxy;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.MapsInitializer;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
@@ -39,10 +41,12 @@ public class MapActivity extends PeachBaseActivity implements AMapLocationListen
     double lat;
     double lng;
     String addr;
+    private static final String OSM_URL = "http://a.tile.openstreetmap.org/%d/%d/%d.png";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        if (SharePrefUtil.getBoolean(mContext,"isAbroad",false))MapsInitializer.replaceURL(OSM_URL, "OSM");
         mapView = (MapView) findViewById(R.id.bmapView);
         sendButton = (Button) findViewById(R.id.btn_location_send);
         sendButton.setEnabled(false);
@@ -193,7 +197,7 @@ public class MapActivity extends PeachBaseActivity implements AMapLocationListen
                 aMap.clear();
                 aMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marka))
                         .position(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())).snippet(aMapLocation.getAddress()));
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()), 19));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()), 18.5f));
                 sendButton.setEnabled(true);
             }
 

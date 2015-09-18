@@ -3,9 +3,11 @@ package com.xuejian.client.lxp.module.dest;
 import android.os.Bundle;
 import android.view.View;
 
+import com.aizou.core.utils.SharePrefUtil;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.MapsInitializer;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.LatLngBounds;
@@ -32,7 +34,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.domestic_map);
-     //   MapsInitializer.replaceURL(OSM_URL, "OSM");
+        if (SharePrefUtil.getBoolean(mContext, "isAbroad", false))MapsInitializer.replaceURL(OSM_URL, "OSM");
         mapView = (MapView) findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         init();

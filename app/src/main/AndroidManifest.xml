@@ -500,7 +500,7 @@
         <!--DevKey -->
         <meta-data
         android:name="com.amap.api.v2.apikey"
-        android:value="4e22d882f8a2794150757c6be797e7e9" />
+        android:value="${AMAP_KEY}"/>
 
 
         <!--DEV-->
