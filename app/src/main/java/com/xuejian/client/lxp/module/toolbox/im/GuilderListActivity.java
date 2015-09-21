@@ -24,6 +24,7 @@ import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -58,11 +59,13 @@ public class GuilderListActivity extends PeachBaseActivity {
     private int[] lebelColors =new int[]{
             R.drawable.all_light_green_label,R.drawable.all_light_red_label,R.drawable.all_light_perple_label,R.drawable.all_light_blue_label,R.drawable.all_light_yellow_label
     };
+    private String zone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         countryId = getIntent().getStringExtra("countryId");
         countryName = getIntent().getStringExtra("countryName");
+        zone = getIntent().getStringExtra("zone");
         setContentView(R.layout.activity_expert);
 
         findViewById(R.id.expert_back).setOnClickListener(new View.OnClickListener() {
@@ -73,7 +76,11 @@ public class GuilderListActivity extends PeachBaseActivity {
         });
 
         TextView titleView = (TextView) findViewById(R.id.tv_title);
-        titleView.setText(String.format("~派派 · %s · 达人~", countryName));
+        if (TextUtils.isEmpty(zone)){
+            titleView.setText(String.format("~派派 · %s · 达人~", countryName));
+        }else {
+            titleView.setText(String.format("~派派 · %s · 达人~", zone));
+        }
         stView = (TextView) findViewById(R.id.tv_subtitle);
         stView.setText("0位");
 
@@ -93,7 +100,11 @@ public class GuilderListActivity extends PeachBaseActivity {
         gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getExpertData(0, PAGE_SIZE);
+                if (TextUtils.isEmpty(zone)) {
+                    getExpertData(0, PAGE_SIZE);
+                } else {
+                    searchExpert(zone);
+                }
             }
 
             @Override
@@ -102,7 +113,11 @@ public class GuilderListActivity extends PeachBaseActivity {
                 gridView.onPullUpRefreshComplete();
             }
         });
-        getExpertData(0, PAGE_SIZE);
+        if (TextUtils.isEmpty(zone)){
+            getExpertData(0, PAGE_SIZE);
+        }else {
+            searchExpert(zone);
+        }
     }
 
     @Override
@@ -136,7 +151,37 @@ public class GuilderListActivity extends PeachBaseActivity {
             }
         }
     }
+    private void searchExpert(final String keyword) {
+        UserApi.searchExpert(keyword, new HttpCallBack<String>() {
 
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<ExpertBean> list = CommonJson4List.fromJson(result, ExpertBean.class);
+                if (list.code == 0) {
+                    try{
+                        if (list.result.size() == 0) {
+                            ToastUtil.getInstance(mContext).showToast(String.format("暂时还没有达人去过“%s”", keyword));
+                        } else {
+                            bindView(list.result);
+                        }
+                    }catch (Exception ex){
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
     public void getExpertData(final int page, final int pageSize) {
         String[] countryIds = {countryId};
         try {
@@ -208,11 +253,11 @@ public class GuilderListActivity extends PeachBaseActivity {
             this.context = cxt;
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
-                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown)
-                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown)
-                  //  .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                    .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
 
             width = CommonUtils.getScreenWidth((Activity) cxt) - LocalDisplay.dp2px(24);

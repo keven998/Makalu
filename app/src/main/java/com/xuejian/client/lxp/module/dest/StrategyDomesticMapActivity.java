@@ -39,6 +39,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
         mapView.onCreate(savedInstanceState);
         init();
     }
+
     private void init() {
         if (aMap == null) {
             aMap = mapView.getMap();

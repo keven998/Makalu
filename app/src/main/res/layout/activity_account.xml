@@ -255,7 +255,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
-                    android:text="签名"
+                    android:text="关于自己"
                     android:textColor="@color/color_text_iii"
                     android:textSize="13sp" />
 
@@ -265,12 +265,12 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="12dp"
                     android:drawableRight="@drawable/icon_arrow_right"
-
                     android:paddingBottom="17dp"
                     android:paddingRight="12dp"
                     android:paddingTop="17dp"
                     android:paddingLeft="10dp"
                     android:text="未设置"
+                    android:gravity="right"
                     android:textColor="@color/color_text_i"
                     android:textSize="15sp" />
 

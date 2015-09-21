@@ -2,10 +2,12 @@ package com.xuejian.client.lxp.module.dest;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,10 +16,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -28,11 +32,13 @@ import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
+import com.xuejian.client.lxp.bean.ExpertBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -44,15 +50,44 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
+import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/13.
  */
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
+    @InjectView(R.id.recommend_plan)
+    TextView recommend_plan;
+    @InjectView(R.id.recommend_note)
+    TextView recommend_note;
+    @InjectView(R.id.tv_all_expert)
+    RelativeLayout rl_all_expert;
+    @InjectView(R.id.tv_expert_level)
+    TextView tvExpertLevel;
+    @InjectView(R.id.iv_avatar)
+    ImageView ivAvatar;
+    @InjectView(R.id.fl_avatar)
+    FrameLayout flAvatar;
+    @InjectView(R.id.tv_expert_name)
+    TextView tvExpertName;
+    @InjectView(R.id.tv_expert_loc)
+    TextView tvExpertLoc;
+    @InjectView(R.id.expert_tag)
+    TagListView expertTag;
+    @InjectView(R.id.tv_pi_comment)
+    TextView tvPiComment;
     private ImageView mCityIv1;
     private ImageView mCityIv2;
     private ImageView mCityIv3;
@@ -77,11 +112,25 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     private CheckedTextView tv_like;
     boolean isVote;
     boolean isTraveled;
+    DisplayImageOptions options;
+    private int[] lebelColors =new int[]{
+            R.drawable.all_light_green_label,R.drawable.all_light_red_label,R.drawable.all_light_perple_label,R.drawable.all_light_blue_label,R.drawable.all_light_yellow_label
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_detail);
+        ButterKnife.inject(this);
         isFromStrategy = getIntent().getBooleanExtra("isFromStrategy", false);
+        options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20))) // 设置成圆角图片
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         initView();
         initData();
     }
@@ -185,24 +234,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 finish();
             }
         });
-        findViewById(R.id.tv_hasGone).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        findViewById(R.id.tv_like).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     private void getCityDetailData(final String id) {
         try {
             DialogManager.getInstance().showModelessLoadingDialog(this);
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissModelessLoadingDialog();
         }
         TravelApi.getCityDetail(id, (int) (LocalDisplay.SCREEN_WIDTH_PIXELS / 1.5), new HttpCallBack<String>() {
@@ -211,8 +248,9 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 CommonJson<LocBean> detailResult = CommonJson.fromJson(result, LocBean.class);
                 if (detailResult.code == 0) {
                     bindView(detailResult.result);
-                    //  getTravelNotes(id);
-                    getTravelNotesbyKeyword(detailResult.result.zhName);
+                    // getTravelNotesbyKeyword(detailResult.result.zhName);
+                    getLocalExpert(detailResult.result.zhName);
+                    DialogManager.getInstance().dissMissModelessLoadingDialog();
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                     DialogManager.getInstance().dissMissModelessLoadingDialog();
@@ -232,6 +270,65 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
             }
         });
+    }
+
+    private void getLocalExpert(String zhName) {
+        UserApi.searchExpert(zhName, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<ExpertBean> expertresult = CommonJson4List.fromJson(result, ExpertBean.class);
+                if (expertresult.code == 0) {
+                    bindExpertView(expertresult.result);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void bindExpertView(List<ExpertBean> result) {
+        if (result==null||result.size()==0) return;
+        ExpertBean bean = result.get(0);
+        ImageLoader.getInstance().displayImage(bean.avatarSmall,ivAvatar,options);
+        tvExpertName.setText(bean.nickName);
+        boolean  flag = false;
+        StringBuffer sb = new StringBuffer();
+        if (!TextUtils.isEmpty(bean.residence)) {
+            sb.append(bean.residence);
+            flag = true;
+        }
+        if(!TextUtils.isEmpty(bean.birthday)){
+            if(flag){
+                sb.append("  "+getAge(bean.birthday)+"岁");
+            }else{
+                sb.append(""+getAge(bean.birthday)+"岁");
+            }
+        }
+        tvExpertLoc.setText(sb.toString());
+        tvExpertLevel.setText(String.format("V%d", bean.level));
+
+        if(bean.tags!=null && bean.tags.size()>0){
+            List<Tag> mTags = new ArrayList<Tag>();
+            initTagData(mTags,bean.tags);
+            expertTag.removeAllViews();
+            expertTag.setTagViewTextColorRes(R.color.white);
+            expertTag.setmTagViewResId(R.layout.expert_tag);
+            expertTag.setTags(mTags);
+        }else{
+            expertTag.removeAllViews();
+        }
+
+        if(bean.expertInfo!=null){
+            tvPiComment.setText(bean.expertInfo.getProfile());
+        }
     }
 
     private void getTravelNotesbyKeyword(final String keyword) {
@@ -329,7 +426,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                         @Override
                         public void doSuccess(Object result, String method) {
                             tv_like.setChecked(!isVote);
-                            isVote =!isVote;
+                            isVote = !isVote;
                         }
 
                         @Override
@@ -347,7 +444,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                         @Override
                         public void doSuccess(Object result, String method) {
                             tv_like.setChecked(!isVote);
-                            isVote =!isVote;
+                            isVote = !isVote;
                         }
 
                         @Override
@@ -378,7 +475,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     @Override
                     public void doSuccess(Object result, String method) {
                         tv_traveled.setChecked(!isTraveled);
-                        isTraveled=!isTraveled;
+                        isTraveled = !isTraveled;
                     }
 
                     @Override
@@ -405,7 +502,33 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 startActivity(intent);
             }
         });
+        recommend_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, StrategyActivity.class);
+                intent.putExtra("locId", detailBean.id);
+                intent.putExtra("recommend", true);
+                startActivity(intent);
+            }
+        });
+        recommend_note.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                intent.putExtra("keyword", detailBean.zhName);
+                intent.putExtra("id", locId);
+                startActivity(intent);
+            }
+        });
 
+        rl_all_expert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, GuilderListActivity.class);
+                intent.putExtra("zone", detailBean.zhName);
+                startActivity(intent);
+            }
+        });
         TextView titleTv = (TextView) findViewById(R.id.tv_title_bar_title);
         titleTv.setText(detailBean.zhName);
 
@@ -449,7 +572,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             detailBean.imageCnt = 100;
         }
 
-        mCityNameTv.setText(getCityName(detailBean.zhName));
+        mCityNameTv.setText(detailBean.zhName);
         mCostTimeTv.setText(String.format("～推荐旅行 · %s～", detailBean.timeCostDesc));
         foodTv.setOnClickListener(this);
         shoppingTv.setOnClickListener(this);
@@ -489,33 +612,6 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
         final String desc = detailBean.desc;
         mCityDesc.setText(desc);
-//        mCityDesc.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-////自定义布局
-//                ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-//                        R.layout.text_diaplay, null, true);
-//                TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
-//
-//                TextView tv = (TextView) menuView.findViewById(R.id.msg);
-//                tv.setText(detailBean.desc);
-//                mPop = new PopupWindow(menuView, FlowLayout.LayoutParams.MATCH_PARENT,
-//                        FlowLayout.LayoutParams.MATCH_PARENT, true);
-//                mPop.setContentView(menuView);//设置包含视图
-//                mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-//                mPop.setHeight(FlowLayout.LayoutParams.MATCH_PARENT);
-//                mPop.setAnimationStyle(R.style.PopAnimation);
-//                mPop.showAtLocation(findViewById(R.id.rl_spot_detail_list), Gravity.BOTTOM, 0, 0);
-//                pop_dismiss.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mPop.dismiss();
-//                    }
-//                });
-//
-//            }
-//        });
         ViewTreeObserver observer = mCityDesc.getViewTreeObserver();
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -708,5 +804,32 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //listView.getDividerHeight()获取子项间分隔符占用的高度
 //params.height最后得到整个ListView完整显示需要的高度
         listView.setLayoutParams(params);
+    }
+    public void initTagData(List<Tag> mTags,ArrayList<String> tagStr) {
+        Random random = new Random();
+        int lastColor = random.nextInt(4);
+        for (int i = 0; i <tagStr.size(); i++) {
+            Tag tag = new Tag();
+            tag.setTitle(tagStr.get(i));
+            tag.setId(i);
+            tag.setBackgroundResId(lebelColors[lastColor]);
+            mTags.add(tag);
+            lastColor=getNextColor(lastColor);
+        }
+    }
+    public int getNextColor(int currentcolor){
+        Random random = new Random();
+        int nextValue = random.nextInt(4);
+        if(nextValue==0){
+            nextValue++;
+        }
+        return (nextValue+currentcolor)%5;
+    }
+    private int getAge(String birth) {
+        String birthType = birth.substring(0, 4);
+        int birthYear = Integer.parseInt(birthType);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String date = sdf.format(new java.util.Date());
+        return Integer.parseInt(date) - birthYear;
     }
 }

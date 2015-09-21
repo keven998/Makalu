@@ -87,7 +87,6 @@ import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
-import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
@@ -225,11 +224,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         chatType = intent.getStringExtra("chatType");
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(10001);
-        user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
+        if (!TextUtils.isEmpty(toChatUsername)) {
+            user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(toChatUsername));
+        }
         initView();
         setUpView();
-
-
         if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }
@@ -266,7 +265,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private void initData() {
         messageList.clear();
         messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));
-        currentSize=messageList.size();
+        currentSize = messageList.size();
         adapter.refresh();
         int count = listView.getCount();
         if (count > 0) {
@@ -419,12 +418,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
         lt.setDuration(LayoutTransition.DISAPPEARING, 0);
         lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-        lt.setStartDelay(LayoutTransition.DISAPPEARING,0);
+        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
         mExtraPanel.setLayoutTransition(lt);
     }
-    public void setTitleName(String name){
+
+    public void setTitleName(String name) {
         titleView.setText(name);
     }
+
     private void setUpView() {
         findViewById(R.id.iv_na_back).setOnClickListener(new OnClickListener() {
             @Override
@@ -665,29 +666,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (id == R.id.btn_dest) {
-            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpsearch");
-            Intent intent = new Intent(mContext, SearchAllActivity.class);
-            intent.putExtra("chatType", chatType);
-            intent.putExtra("toId", toChatUsername);
-            intent.putExtra("conversation", conversation);
-            intent.putExtra("isShare", true);
-            intent.setAction("action.chat");
-            startActivityWithNoAnim(intent);
-            overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
-            // 点击我的目的地图标
-//            JSONObject contentJson = new JSONObject();
-//            try {
-//                contentJson.put("id","1");
-//                contentJson.put("desc","我的景点描述");
-//                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-//                contentJson.put("timeCost","3小时");
-//                contentJson.put("name","景点");
-//                sendText(contentJson.toString(), Constant.ExtType.SPOT);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-        } /*else if (id == R.id.btn_location) {
+        }
+//        else if (id == R.id.btn_dest) {
+//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpsearch");
+//            Intent intent = new Intent(mContext, SearchAllActivity.class);
+//            intent.putExtra("chatType", chatType);
+//            intent.putExtra("toId", toChatUsername);
+//            intent.putExtra("conversation", conversation);
+//            intent.putExtra("isShare", true);
+//            intent.setAction("action.chat");
+//            startActivityWithNoAnim(intent);
+//            overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
+//        }
+         /*else if (id == R.id.btn_location) {
             ToastUtil.getInstance(this).showToast("发送位置");*/
            /* MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
             Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
@@ -1088,11 +1079,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     public void onMsgArrive(MessageBean m, String groupId) {
         if ("single".equals(chatType) && !groupId.equals(String.valueOf(0))) {
-            if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            if (isLongEnough())
+                Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("single".equals(chatType) && !toChatUsername.equals(String.valueOf(m.getSenderId())))) {
-            if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            if (isLongEnough())
+                Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("group".equals(chatType) && !toChatUsername.equals(groupId))) {
-            if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            if (isLongEnough())
+                Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else {
             m.setSendType(1);
             messageList.add(m);
@@ -1401,8 +1395,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         if (messageList.size() != 0) {
                             // 刷新ui
                             adapter.notifyDataSetChanged();
-                            if (messageList.size()>currentSize){
-                                listView.setSelection(messageList.size()-currentSize-1);
+                            if (messageList.size() > currentSize) {
+                                listView.setSelection(messageList.size() - currentSize - 1);
                             }
                             if (messageList.size() == currentSize) {
                                 haveMoreData = false;
@@ -1472,6 +1466,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
         return 0;
     }
+
     private static long mSendTime;
 
     public static boolean isLongEnough() {

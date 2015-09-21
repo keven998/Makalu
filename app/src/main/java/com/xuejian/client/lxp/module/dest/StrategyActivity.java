@@ -87,11 +87,15 @@ public class StrategyActivity extends PeachBaseActivity {
     private int count;
     private boolean newCreate;
     private String newId;
+    private String locId;
+    private boolean recomment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         userId = getIntent().getStringExtra("userId");
+        locId = getIntent().getStringExtra("locId");
+        recomment = getIntent().getBooleanExtra("recommend",false);
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData(savedInstanceState);
@@ -233,7 +237,10 @@ public class StrategyActivity extends PeachBaseActivity {
 
     private void initData(Bundle savedInstanceState) {
         id = getIntent().getStringExtra("id");
-        if (id == null) {
+        if (recomment){
+            getRecommentPlan();
+        }
+        else if (id == null) {
             cityIdList = new ArrayList<String>();
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
@@ -280,7 +287,6 @@ public class StrategyActivity extends PeachBaseActivity {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
                 if (strategyResult.code == 0) {
-
                     bindView(strategyResult.result);
                 } else {
                     ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
@@ -294,6 +300,29 @@ public class StrategyActivity extends PeachBaseActivity {
                 if (!isFinishing())
                     DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    public void getRecommentPlan(){
+        TravelApi.getRecommendPlan(locId, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<StrategyBean> bean = CommonJson.fromJson(result,StrategyBean.class);
+                if (bean.code == 0) {
+                    bindView(bean.result);
+                }
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
             }
 
             @Override
@@ -384,7 +413,6 @@ public class StrategyActivity extends PeachBaseActivity {
         adapter = new DrawAdapter(StrategyActivity.this);
         draw_list.setAdapter(adapter);
         final User user = AccountManager.getInstance().getLoginAccount(this);
-
         topTitle.setText(result.title);
 
         if (user == null) {
@@ -536,7 +564,6 @@ public class StrategyActivity extends PeachBaseActivity {
             }
         }
         indicatorViewPager.setAdapter(new StrategyAdapter(getSupportFragmentManager(), result));
-        StrategyAdapter a= new StrategyAdapter(getSupportFragmentManager(), result);
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {

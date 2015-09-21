@@ -20,12 +20,16 @@ public class LocationUtils {
     private void initData() {
         list.add(new Point(49.207884, 87.570003));
         list.add(new Point(39.433194, 73.463557));
+        list.add(new Point(30.077871, 81.080163));
+        list.add(new Point(28.545185, 97.559655));
+        list.add(new Point(23.291036, 105.250085));
         list.add(new Point(21.939444, 101.764337));
         list.add(new Point(21.612970, 107.960625));
         list.add(new Point(3.465682, 111.739922));
-        list.add(new Point(32.172326, 125.143242));
-        list.add(new Point(40.041465, 124.000664));
-        list.add(new Point(48.514032, 135.294608));
+        list.add(new Point(24.336318, 122.696374));
+        list.add(new Point(39.917516, 124.278405));
+        list.add(new Point(42.625255, 130.606530));
+        list.add(new Point(48.467628, 135.042902));
         list.add(new Point(53.538000, 122.726250));
         list.add(new Point(41.702830, 104.796564));
     }
@@ -33,7 +37,7 @@ public class LocationUtils {
     public boolean containsPoint(Point point) {
         int verticesCount = list.size();
         int nCross = 0;
-        if (point.getLat() < 3) return false;
+        if (point.getLat() < 3||point.getLat()>54) return false;
         if (point.getLng() > 135 || point.getLng() < 73) return false;
         for (int i = 0; i < verticesCount; ++i) {
             Point p1 = list.get(i);
@@ -65,7 +69,7 @@ public class LocationUtils {
 //  float  polyY[]    =  verticalcoordinates of corners
 //  float  x,y       =  point to be tested;
     public boolean pointInPolygon(Point _point) {
-        if (_point.getLat() < 3) return false;
+        if (_point.getLat() < 3||_point.getLat()>54) return false;
         if (_point.getLng() > 135 || _point.getLng() < 73) return false;
         Xlist.clear();
         Ylist.clear();
