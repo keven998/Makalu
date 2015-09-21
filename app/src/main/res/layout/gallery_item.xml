@@ -1,0 +1,31 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gallery_frame"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+
+    <ImageView
+        android:id="@+id/imgQueue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        />
+
+
+    <CheckBox
+        android:id="@+id/imgQueueMultiSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:layout_gravity="right|top"
+        android:background="@drawable/selected_or_unselected"
+        android:button="@null"
+        android:checked="false"
+        android:focusable="false"
+        />
+
+
+</FrameLayout>
+

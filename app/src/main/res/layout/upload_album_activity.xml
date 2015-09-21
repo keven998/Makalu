@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical" >
+    <!-- 标题 -->
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+        android:id="@+id/post_album_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height" />
+    <LinearLayout
+        android:id="@+id/post_edit_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_marginTop="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        >
+
+
+
+        <EditText
+            android:id="@+id/post_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="给照片添加描述..."
+            android:maxLength="150"
+            android:lines="6"
+            android:textColor="@color/color_text_ii"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="14sp"
+            android:background="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/post_text_remain"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:text="0/150"
+            android:textColor="@color/color_text_iii"
+            android:textSize="12sp" />
+
+        <GridView
+            android:id="@+id/image_to_upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:verticalSpacing="4dp"
+            android:horizontalSpacing="4dp"
+            android:numColumns="4"
+            >
+
+        </GridView>
+    </LinearLayout>
+
+
+</LinearLayout>

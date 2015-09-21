@@ -60,8 +60,7 @@ public class StickyNavLayout extends LinearLayout {
 		mNav = findViewById(R.id.id_stickynavlayout_indicator);
 		View view = findViewById(R.id.id_stickynavlayout_viewpager);
 		if (!(view instanceof ViewPager)) {
-			throw new RuntimeException(
-					"id_stickynavlayout_viewpager show used by ViewPager !");
+			throw new RuntimeException("id_stickynavlayout_viewpager show used by ViewPager !");
 		}
 		mViewPager = (ViewPager) view;
 	}
@@ -145,7 +144,6 @@ public class StickyNavLayout extends LinearLayout {
 					if (!isTopHidden
 							|| (mInnerScrollView.getScrollY() == 0
 									&& isTopHidden && dy > 0)) {
-
 						initVelocityTrackerIfNotExists();
 						mVelocityTracker.addMovement(ev);
 						mLastY = y;

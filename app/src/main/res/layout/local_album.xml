@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+        android:id="@+id/gallery_catergory_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height" />
+
+    <ListView
+        android:id="@+id/local_album_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10dp"
+        android:dividerHeight="1px"
+        android:divider="@color/color_line"
+        />
+</LinearLayout>

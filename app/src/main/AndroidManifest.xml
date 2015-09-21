@@ -298,6 +298,29 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".module.my.CustomGalleryActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="lvxingpai.ACTION_PICK" />
+                <action android:name="lvxingpai.ACTION_MULTIPLE_PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".module.my.GalleryCatergoryActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".module.my.GalleryDetailActivity"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+
+        <activity android:name=".module.my.UploadAlbumActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity
             android:name=".module.toolbox.im.GuilderListActivity"
             android:screenOrientation="portrait"/>
 

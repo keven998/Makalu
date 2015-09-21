@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical" >
+
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+        android:id="@+id/gallery_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <GridView
+            android:id="@+id/grid_Gallery"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="4dp"
+            android:numColumns="4"
+            android:padding="4dp"
+            android:verticalSpacing="4dp"
+            android:scrollbars="none"
+            android:listSelector="@color/app_backgroud"
+            tools:listitem="@layout/gallery_item" >
+        </GridView>
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/llBottomContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:gravity="right"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/prey_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/enable_disable_selector"
+            android:text="预览"
+            android:gravity="center"
+            android:enabled="false"
+            android:layout_gravity="left|center_vertical"
+            />
+        <TextView
+            android:id="@+id/btnGalleryOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:textSize="14sp"
+            android:textColor="@color/enable_disable_selector"
+            android:background="@drawable/enable_diasable_line_selector"
+            android:text="确定"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginRight="15dp"
+            android:enabled="false"
+            android:layout_gravity="right|center_vertical"
+            />
+    </FrameLayout>
+
+</LinearLayout>

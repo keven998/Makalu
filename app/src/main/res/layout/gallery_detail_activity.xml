@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/base_color_black"
+    >
+
+    <com.xuejian.client.lxp.module.my.adapter.AlbumViewPager
+        android:id="@+id/albumviewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
+
+    <RelativeLayout
+        android:id="@+id/album_item_header_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="52dp"
+        android:background="@color/white"
+        android:layout_gravity="top"
+        >
+
+        <ImageView
+            android:id="@+id/header_bar_photo_back"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/selector_ic_nav_back" />
+
+        <TextView
+            android:id="@+id/header_bar_photo_count"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/color_text_ii"
+            android:textSize="18sp" />
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/selected_or_unselected"
+            android:button="@null"
+            android:checked="false"
+            android:focusable="false" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/gallery_bottom_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="5dp"
+        android:background="@color/white"
+        >
+    <TextView
+        android:id="@+id/gallery_header_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:gravity="center"
+        android:background="@drawable/enable_diasable_line_selector"
+        android:textColor="@color/app_theme_color"
+        android:layout_marginRight="12dp"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="确定"
+        android:textSize="14sp"
+        android:layout_gravity="right|center_vertical"
+        />
+    </FrameLayout>
+</FrameLayout>

@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.common.api;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.aizou.core.http.GzipCompressingEntity;
 import com.aizou.core.http.HttpCallBack;
@@ -679,6 +680,7 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId));
+        Log.e("getPicrequest", SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "----------------------------");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);

@@ -74,11 +74,18 @@ public class TitleHeaderBar extends HeaderBarBase {
 //		mMoreAction.setVisibility(VISIBLE);
     }
 
+    public void setTitleText(String titleStr){
+        mTitleTextView.setText(titleStr);
+    }
+
     public void setLeftViewImageRes(int res) {
         Drawable drawable = getResources().getDrawable(res);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mReturnImageView.setCompoundDrawables(drawable, null, null, null);
     }
+
+
+
 
     public void setLeftDrawableToNull() {
         mReturnImageView.setCompoundDrawables(null, null, null, null);

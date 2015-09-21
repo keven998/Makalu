@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.xuejian.client.lxp.common.widget.FilterImageView
+        android:id="@+id/post_add_pic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/pic_loadfail"
+        android:scaleType="centerCrop"
+        />
+
+</FrameLayout>
