@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -52,6 +54,7 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ImageZoomAnimator2;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
+import com.xuejian.client.lxp.module.my.UploadAlbumActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,7 +78,7 @@ public class CityPictureActivity extends PeachBaseActivity {
     @InjectView(R.id.vp_zoom_pic)
     HackyViewPager zoomPicVp;
     @InjectView(R.id.tv_title_bar_edit)
-    CheckedTextView editPics;
+    ImageView editPics;
     private PicAdapter picAdapter;
     private ImageZoomAnimator2 zoomAnimator;
     private String id;
@@ -84,7 +87,8 @@ public class CityPictureActivity extends PeachBaseActivity {
     private ArrayList<ImageBean> userPics = new ArrayList<ImageBean>();
     private File tempImage;
     private ArrayList<String> pic_ids = new ArrayList<String>();
-
+    private static final int REQUEST_IMAGE_CHOOSER = 0x322;
+    private static final int REFRESH_IMAGE=0x321;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,27 +128,33 @@ public class CityPictureActivity extends PeachBaseActivity {
 
         TextView titleView = (TextView) findViewById(R.id.tv_title_bar_title);
         if (isUserPics) {
-            titleView.setText(getIntent().getStringExtra("user_name"));
+            //titleView.setText(getIntent().getStringExtra("user_name"));
+            titleView.setText("我的图集");
             editPics.setVisibility(View.VISIBLE);
             editPics.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Boolean isChecked = !editPics.isChecked();
-                    editPics.setChecked(isChecked);
-                    if (isChecked) {
-                        editPics.setText("完成");
-                        ltv.setVisibility(View.GONE);
-                    } else {
-                        editPics.setText("编辑");
-                        ltv.setVisibility(View.VISIBLE);
-                    }
-                    if (picAdapter!=null)picAdapter.notifyDataSetChanged();
+                    //tempImage = SelectPicUtils.getInstance().selectZoomPicFromLocal(CityPictureActivity.this);
+                   /* Intent intent = new Intent(
+                            "lvxingpai.ACTION_MULTIPLE_PICK");
+                    CityPictureActivity.this.startActivityForResult(
+                            intent, REQUEST_IMAGE_CHOOSER);*/
+
+                    Intent intent = new Intent(CityPictureActivity.this, UploadAlbumActivity.class);
+                    startActivityForResult(intent,REFRESH_IMAGE);
+                    //showSelectPicDialog();
+
                 }
             });
         } else {
             titleView.setText(getIntent().getStringExtra("title") + "图集");
         }
-
+        mCityPicGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                zoomAnimator.transformIn(position);
+            }
+        });
 
     }
 
@@ -154,6 +164,7 @@ public class CityPictureActivity extends PeachBaseActivity {
             UserApi.getUserPicAlbumn(String.valueOf(id), new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
+                    Log.e("getPictures",result+"----------------------------");
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(result);
@@ -170,9 +181,9 @@ public class CityPictureActivity extends PeachBaseActivity {
                             picAdapter = new PicAdapter(userPics);
                             mCityPicGv.setAdapter(picAdapter);
                             ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
-                            if (isUserPics) {
+                         /*   if (isUserPics) {
                                 newUserPics.add(new ImageBean());
-                            }
+                            }*/
                             for (int k = 0; k < userPics.size(); k++) {
                                 newUserPics.add(userPics.get(k));
                             }
@@ -264,11 +275,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
         @Override
         public int getCount() {
-            if (isUserPics) {
-                return imageBeanList.size() + 1;
-            } else {
-                return imageBeanList.size();
-            }
+            return imageBeanList.size();
         }
 
         @Override
@@ -284,38 +291,18 @@ public class CityPictureActivity extends PeachBaseActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View view = View.inflate(mContext, R.layout.all_pics_cell, null);
-            AbsListView.LayoutParams lytp = new AbsListView.LayoutParams((LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(4)) / 3,
-                    (LocalDisplay.SCREEN_WIDTH_PIXELS - LocalDisplay.dp2px(4)) / 3);
+            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - (5*LocalDisplay.dp2px(4))) / 4;
+            AbsListView.LayoutParams lytp = new AbsListView.LayoutParams(width,width);
 
             FrameLayout cell_fl = (FrameLayout) view.findViewById(R.id.all_pics_cell_fl);
             ImageView cell_pic = (ImageView) view.findViewById(R.id.all_pics_cell_id);
             ImageView del_cell_pic = (ImageView) view.findViewById(R.id.all_pics_cell_del);
 
             cell_fl.setLayoutParams(lytp);
-            cell_fl.setPadding(1, 1, 1, 1);
             cell_pic.setBackgroundResource(R.drawable.frame_cell_image_frame);
-            cell_pic.setScaleType(ImageView.ScaleType.CENTER_CROP);
             cell_pic.setImageDrawable(null);
-
-            if (isUserPics) {
-                if (position == 0) {
-                    cell_pic.setBackgroundResource(R.drawable.picture_add);
-                    //cell_pic.setImageDrawable(getResources().getDrawable(R.drawable.add_pictuer));
-                    del_cell_pic.setVisibility(View.GONE);
-                } else {
-                    ImageBean itemData = imageBeanList.get(position - 1);
-                    imageLoader.displayImage(itemData.url, cell_pic, picOptions);
-                    if (editPics.isChecked()) {
-                        del_cell_pic.setVisibility(View.VISIBLE);
-                    } else {
-                        del_cell_pic.setVisibility(View.GONE);
-                    }
-                }
-            } else {
-                ImageBean itemData = imageBeanList.get(position);
-                imageLoader.displayImage(itemData.url, cell_pic, picOptions);
-            }
-
+            ImageBean itemData = imageBeanList.get(position);
+            imageLoader.displayImage(itemData.url, cell_pic, picOptions);
             del_cell_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -337,22 +324,6 @@ public class CityPictureActivity extends PeachBaseActivity {
                         }
                     });
                     dialog.show();
-                }
-            });
-
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isUserPics) {
-                        if (position == 0) {
-                            showSelectPicDialog();
-                        } else {
-                            zoomAnimator.transformIn(position);
-                        }
-                    } else {
-                        zoomAnimator.transformIn(position);
-                    }
                 }
             });
             view.setTag(position);
@@ -462,6 +433,7 @@ public class CityPictureActivity extends PeachBaseActivity {
         OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
+                Log.e("uploadresult",result+"-----------------------");
                 CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
                 if (tokenResult.code == 0) {
                     String token = tokenResult.result.uploadToken;
@@ -472,6 +444,7 @@ public class CityPictureActivity extends PeachBaseActivity {
                                 @Override
                                 public void complete(String key, ResponseInfo info, JSONObject response) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
+                                    Log.e("uploadresultInfo",info.isOK()+"----------------------");
                                     if (info.isOK()) {
                                         LogUtil.d(response.toString());
                                         userPics.clear();

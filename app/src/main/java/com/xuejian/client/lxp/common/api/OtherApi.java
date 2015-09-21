@@ -1,5 +1,7 @@
 package com.xuejian.client.lxp.common.api;
 
+import android.util.Log;
+
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.OkHttpClientManager;
 import com.aizou.core.http.entity.PTHeader;
@@ -76,10 +78,17 @@ public class OtherApi extends BaseApi {
      * @param scenario
      * @return
      */
-    public static void getUploadToken(String scenario, HttpCallBack callback) {
+    public static void getUploadToken(String scenario,String info,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + UPLOAD_TOKEN + scenario);
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(SystemConfig.DEV_URL + UPLOAD_TOKEN + scenario);
+        if(info!=null){
+            sb.append("?caption="+info);
+        }
+        Log.e("requestUrl",sb.toString()+"------------------");
+        request.setUrl(sb.toString());
      //   request.setUrl(SystemConfig.DEV_URL + UPLOAD_TOKEN );
 
 //        JSONObject jsonObject = new JSONObject();
@@ -110,14 +119,17 @@ public class OtherApi extends BaseApi {
      * @return
      */
     public static void getAvatarUploadToken(HttpCallBack callback) {
-         getUploadToken(Scenario.PORTRAIT, callback);
+         getUploadToken(Scenario.PORTRAIT, "这是一张图片！！！！", callback);
     }
 
 
     public static void getAvatarAlbumUploadToken(HttpCallBack callback) {
-         getUploadToken(Scenario.ALBUM, callback);
+         getUploadToken(Scenario.ALBUM,"这是一张图片！！！！", callback);
     }
 
+    public static void getAvatarAlbumUploadToken(HttpCallBack callback,String info) {
+        getUploadToken(Scenario.ALBUM,"这是一张图片！！！！",callback);
+    }
     /**
      * 根据城市获取游记
      *
