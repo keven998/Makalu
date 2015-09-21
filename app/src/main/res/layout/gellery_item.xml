@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/imgQueue"
-        android:layout_width="@dimen/photo_width"
-        android:layout_height="@dimen/photo_height"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:layout_margin="1dp"
         android:layout_centerInParent="true"

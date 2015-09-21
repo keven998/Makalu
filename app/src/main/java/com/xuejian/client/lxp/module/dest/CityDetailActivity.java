@@ -317,7 +317,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
         if(bean.tags!=null && bean.tags.size()>0){
             List<Tag> mTags = new ArrayList<Tag>();
-            initTagData(mTags,bean.tags);
+            initTagData(mTags, bean.tags);
             expertTag.removeAllViews();
             expertTag.setTagViewTextColorRes(R.color.white);
             expertTag.setmTagViewResId(R.layout.expert_tag);
