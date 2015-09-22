@@ -60,7 +60,7 @@ import com.xuejian.client.lxp.common.utils.SelectPicUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
-import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
+import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import org.json.JSONArray;
@@ -354,7 +354,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         tv_foot_print.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountActvity.this, StrategyMapActivity.class);
+                Intent intent = new Intent(AccountActvity.this, StrategyDomesticMapActivity.class);
                 intent.putExtra("isMyFootPrint", true);
                 intent.putParcelableArrayListExtra("myfootprint", trackCitys);
                 intent.putExtra("title", tv_foot_print.getText().toString());

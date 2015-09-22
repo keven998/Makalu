@@ -39,6 +39,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.GuideViewUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
@@ -161,9 +162,8 @@ public class StrategyActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(StrategyActivity.this, "navigation_item_lxp_plan_mapview");
-                Intent intent = new Intent(StrategyActivity.this, StrategyMapActivity.class);
-                ArrayList<StrategyBean> list = new ArrayList<StrategyBean>() {
-                };
+                Intent intent = new Intent(StrategyActivity.this, StrategyDomesticMapActivity.class);
+                ArrayList<StrategyBean> list = new ArrayList<StrategyBean>() {};
                 list.add(getSaveStrategy());
                 intent.putParcelableArrayListExtra("strategy", list);
                 startActivity(intent);
@@ -313,9 +313,11 @@ public class StrategyActivity extends PeachBaseActivity {
         TravelApi.getRecommendPlan(locId, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                CommonJson<StrategyBean> bean = CommonJson.fromJson(result,StrategyBean.class);
+                CommonJson4List<StrategyBean> bean = CommonJson4List.fromJson(result,StrategyBean.class);
                 if (bean.code == 0) {
-                    bindView(bean.result);
+                    if (bean.result.size()>0){
+                        bindView(bean.result.get(0));
+                    }
                 }
 
             }

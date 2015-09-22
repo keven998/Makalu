@@ -41,7 +41,7 @@ import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
-import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
+import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 
 import org.json.JSONArray;
@@ -325,7 +325,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
                     Intent logIntent = new Intent(MyProfileActivity.this, LoginActivity.class);
                     startActivity(logIntent);
                 } else {
-                    Intent tracks_intent = new Intent(MyProfileActivity.this, StrategyMapActivity.class);
+                    Intent tracks_intent = new Intent(MyProfileActivity.this, StrategyDomesticMapActivity.class);
                     tracks_intent.putExtra("isMyFootPrint", true);
                     tracks_intent.putParcelableArrayListExtra("myfootprint", all_foot_print_list);
                     tracks_intent.putExtra("title", tvTracksCount.getText().toString());

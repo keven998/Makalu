@@ -785,7 +785,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             System.out.println("geoLat "+geoLat+" geoLat "+geoLng);
             LocationUtils utils = new LocationUtils();
             boolean isAbroad = utils.pointInPolygon(new LocationUtils.Point(geoLat, geoLng));
-            SharePrefUtil.saveBoolean(mContext, "isAbroad",!isAbroad);
+            SharePrefUtil.saveBoolean(mContext, "isAbroad",isAbroad);
             mLocationManagerProxy.removeUpdates(this);
             mLocationManagerProxy.destroy();
         }

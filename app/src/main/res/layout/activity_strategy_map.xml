@@ -1,174 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    android:id="@+id/parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/app_backgroud"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-
-        <com.airbnb.android.airmapview.AirMapView
-            android:id="@+id/strategy_map"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/spinnet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+
+            <com.airbnb.android.airmapview.AirMapView
+                android:id="@+id/strategy_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/spinnet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
+                android:padding="5dp"
+                android:textColor="@color/base_font_color"
+                android:textSize="10sp"
+                android:visibility="gone" />
+
+
+        </FrameLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/strategy_map_locations"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:background="@color/base_color_white"
-            android:textColor="@color/base_font_color"
-            android:textSize="10sp"
-            android:visibility="gone"
-            />
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
+            <HorizontalScrollView
+                android:id="@+id/map_days_name_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true">
+            </HorizontalScrollView>
 
-    </FrameLayout>
-
-
-
-
-    <RelativeLayout
-        android:id="@+id/strategy_map_locations"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@color/base_color_white"
-        >
-
-        <HorizontalScrollView
-            android:id="@+id/map_days_name_list"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true">
-
-
-
-        </HorizontalScrollView>
-
-    </RelativeLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/map_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"
-        android:background="@color/white">
-
-        <ImageView
-            android:id="@+id/map_title_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/selector_ic_nav_back"
-            />
-
-        <TextView
-            android:id="@+id/tv_title"
+        <RelativeLayout
+            android:id="@+id/map_title_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="72dp"
-            android:layout_marginRight="72dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="0dp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/color_text_ii"
-            android:textSize="15sp" />
+            android:layout_height="@dimen/title_bar_height"
+            android:background="@color/white">
 
-        <TextView
-            android:id="@+id/tv_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_title"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="72dp"
-            android:layout_marginRight="72dp"
-            android:layout_marginTop="-2dp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/color_text_ii"
-            android:textSize="10sp" />
-
-
-        <LinearLayout
-            android:id="@+id/day_select"
-            android:layout_width="54dp"
-            android:layout_height="26dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:background="@drawable/day_select_border"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_select_day"
+            <ImageView
+                android:id="@+id/map_title_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:src="@drawable/selector_ic_nav_back" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
                 android:singleLine="true"
-                android:text="01"
                 android:textColor="@color/color_text_ii"
-                android:textSize="16sp" />
-
+                android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"
+                android:layout_marginTop="-2dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/color_text_ii"
+                android:textSize="10sp" />
+
+
+            <LinearLayout
+                android:id="@+id/day_select"
+                android:layout_width="54dp"
+                android:layout_height="26dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/day_select_border"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_select_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="01"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="16sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:text=".Day"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/map_more"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:textSize="10sp"
-                android:textColor="@color/color_text_ii"
-                android:text=".Day"
-                />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/map_more"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/selector_ic_edit_footprint"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:layout_alignParentRight="true"
-            android:visibility="gone"
-            />
+                android:layout_alignParentRight="true"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:src="@drawable/selector_ic_edit_footprint"
+                android:visibility="gone" />
 
 
+        </RelativeLayout>
 
-    </RelativeLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/color_line"/>
+            android:background="@color/color_line" />
     </LinearLayout>
     <!--<com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/map_title_bar"

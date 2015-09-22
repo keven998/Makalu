@@ -55,9 +55,6 @@ import java.util.List;
  */
 public class StrategyMapActivity extends PeachBaseActivity implements OnMapInitializedListener {
     private AirMapView mapView;
-    // private AMap aMap;
-
-    // private TitleHeaderBar titleHeaderBar;
     private HorizontalScrollView all_locations;
     private ArrayList<StrategyBean> allBeans;
     private MarkerOptions markerOption;
@@ -133,26 +130,6 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                         adapter = new MapsDayAdapter(day_sums, DealWithDays(tv_title.getText().toString()));
                         lv.setAdapter(adapter);
                         xDialog.show();
-/*
-                        ViewGroup menuView = (ViewGroup) mLayoutInflater.inflate(
-                                R.layout.map_day_select, null, true);
-                        //TextView pop_dismiss = (TextView) menuView.findViewById(R.id.pop_dismiss);
-
-                        ListView lv = (ListView) menuView.findViewById(R.id.map_days_list);
-                        adapter = new MapsDayAdapter(day_sums, DealWithDays(tv_title.getText().toString()));
-                        lv.setAdapter(adapter);
-                        mPop = new PopupWindow(menuView,FlowLayout.LayoutParams.MATCH_PARENT,
-                                FlowLayout.LayoutParams.WRAP_CONTENT, true);
-                        mPop.setContentView(menuView);//设置包含视图
-                        mPop.setWidth(FlowLayout.LayoutParams.MATCH_PARENT);
-                        mPop.setHeight(FlowLayout.LayoutParams.WRAP_CONTENT);
-                        mPop.setAnimationStyle(android.R.style.Animation_Dialog);
-                        //mPop.showAsDropDown(day_select,-30,20);
-                        mPop.setOutsideTouchable(true);
-                        mPop.showAtLocation(findViewById(R.id.parent), Gravity.CENTER, 0, 0);*/
-                       /* WindowManager.LayoutParams params=StrategyMapActivity.this.getWindow().getAttributes();
-                        params.alpha=0.7f;
-                        StrategyMapActivity.this.getWindow().setAttributes(params);*/
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -249,7 +226,6 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SET_FOOTPRINT) {
-                //ArrayList<LocBean> result=new ArrayList<LocBean>();
                 all_print_print = data.getParcelableArrayListExtra("footprint");
                 updateUserinfo();
                 loadExpertFootPrintMap(all_print_print);
@@ -303,8 +279,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         for (int k = 0; k < footPrint.size(); k++) {
             View view = View.inflate(StrategyMapActivity.this, R.layout.strategy_map_locations_item, null);
             TextView location = (TextView) view.findViewById(R.id.map_places);
-            TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
-            r_arrow.setVisibility(View.GONE);
+         //   TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
+        //    r_arrow.setVisibility(View.GONE);
             location.setText(footPrint.get(k).zhName);
             final int pos = k;
             view.setOnClickListener(new View.OnClickListener() {
@@ -351,8 +327,8 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
         for (int k = 0; k < footPrint.size(); k++) {
             View view = View.inflate(StrategyMapActivity.this, R.layout.strategy_map_locations_item, null);
             TextView location = (TextView) view.findViewById(R.id.map_places);
-            TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
-            r_arrow.setVisibility(View.GONE);
+        //    TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
+        //    r_arrow.setVisibility(View.GONE);
             location.setText(footPrint.get(k).zhName);
             final int pos = k;
             view.setOnClickListener(new View.OnClickListener() {
@@ -408,7 +384,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
             if (allBeans.get(0).itinerary.get(i).dayIndex == pos) {
                 View view = View.inflate(StrategyMapActivity.this, R.layout.strategy_map_locations_item, null);
                 TextView location = (TextView) view.findViewById(R.id.map_places);
-                TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
+          //      TextView r_arrow = (TextView) view.findViewById(R.id.right_arrow);
                 location.setText(flag + " " + allBeans.get(0).itinerary.get(i).poi.zhName);
                 final int position = i;
                 view.setOnClickListener(new View.OnClickListener() {
@@ -423,7 +399,7 @@ public class StrategyMapActivity extends PeachBaseActivity implements OnMapIniti
                 names.add(allBeans.get(0).itinerary.get(i).poi.zhName);
                 if (flag == 1) {
                     allDesString = allBeans.get(0).itinerary.get(0).poi.zhName;
-                    r_arrow.setVisibility(View.GONE);
+           //         r_arrow.setVisibility(View.GONE);
                 } else {
                     allDesString = String.format("%s>%s", allDesString, allBeans.get(0).itinerary.get(i).poi.zhName);
                 }

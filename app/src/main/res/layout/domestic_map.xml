@@ -4,8 +4,153 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.amap.api.maps2d.MapView
-        android:id="@+id/map_view"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/map_title_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_bar_height"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/map_title_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="20dp"
+                    android:src="@drawable/selector_ic_nav_back" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="72dp"
+                    android:layout_marginRight="72dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_title"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="72dp"
+                    android:layout_marginRight="72dp"
+                    android:layout_marginTop="-2dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_plan_index"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:src="@drawable/selector_ic_common_navigation_menu"
+                     />
+
+                <ImageView
+                    android:id="@+id/map_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:src="@drawable/selector_ic_edit_footprint"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_line" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/title_bar_height">
+
+            <com.amap.api.maps2d.MapView
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:id="@+id/strategy_map_locations"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                android:background="@color/transparent_black"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <HorizontalScrollView
+                    android:id="@+id/map_days_name_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true">
+
+                </HorizontalScrollView>
+
+            </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_my_location"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:scaleType="center"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="55dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/btn_my_location"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@color/transparent_black"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_plan_index_title"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:textColor="@color/base_color_white"
+                android:padding="7dp"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:text="我的行程"
+                android:drawableLeft="@drawable/icon_my_trip"/>
+
+            <ListView
+                android:id="@+id/plan_index"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp"/>
+        </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

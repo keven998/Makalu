@@ -515,7 +515,7 @@ public class AddPoiActivity extends PeachBaseActivity {
         iv_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddPoiActivity.this, StrategyMapActivity.class);
+                Intent intent = new Intent(AddPoiActivity.this, StrategyDomesticMapActivity.class);
                 intent.putParcelableArrayListExtra("allLoadLocList", allLoadLocList);
                 intent.putExtra("title", curLoc.zhName + resizeTypeName(mType));
                 intent.putExtra("isAllPoiLoc", true);

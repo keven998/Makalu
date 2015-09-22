@@ -56,7 +56,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.MoreTravelNoteActivity;
-import com.xuejian.client.lxp.module.dest.StrategyMapActivity;
+import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -843,7 +843,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
 
                 MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
-                Intent intent = new Intent(HisMainPageActivity.this, StrategyMapActivity.class);
+                Intent intent = new Intent(HisMainPageActivity.this, StrategyDomesticMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tv_track_count.getText().toString());
                 intent.putExtra("id", String.valueOf(userId));

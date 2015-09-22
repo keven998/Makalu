@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/map_places_ll"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/right_arrow"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="3dp"
+        android:id="@+id/iv_arrow"
+        android:src="@drawable/icon_right_arrow_white"
+        android:visibility="gone"/>
+    <CheckedTextView
+        android:id="@+id/map_places"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text=">"
-        android:textColor="#FA5064"
-        />
-
-
-    <TextView
-    android:id="@+id/map_places"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:layout_gravity="center_vertical"
-    android:paddingRight="5dp"
-    android:paddingLeft="5dp"
-    android:textSize="16sp"
-    android:textColor="@color/color_text_ii"
-    android:text="fdsa"
-        />
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:drawablePadding="3dp"
+        android:drawableLeft="@drawable/icon_location"
+        android:textColor="@color/base_color_white"
+        android:textSize="16sp" />
 
 
 </LinearLayout>

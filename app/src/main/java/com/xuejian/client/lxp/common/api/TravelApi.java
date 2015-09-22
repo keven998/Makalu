@@ -69,7 +69,7 @@ public class TravelApi extends BaseApi {
     //修改攻略目的地
     public final static String MODIFY_GUIDE_LOC = "/guides";
 
-    public final static String RECOMMEND_PLAN = "/guide-templates";
+    public final static String RECOMMEND_PLAN = "/geo/localities/%s/guides";
 
     //收藏
     public final static String FAV = "/misc/favorites";
@@ -212,8 +212,7 @@ public class TravelApi extends BaseApi {
     public static void getRecommendPlan(String locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + RECOMMEND_PLAN);
-        request.putUrlParams("locId",locId);
+        request.setUrl(SystemConfig.DEV_URL + String.format(RECOMMEND_PLAN,locId));
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
