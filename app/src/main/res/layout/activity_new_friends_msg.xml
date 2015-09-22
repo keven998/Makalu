@@ -42,7 +42,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:text="新朋友"
+            android:text="好友请求"
             android:textColor="@color/color_text_ii"
             android:textSize="18sp" />
 
