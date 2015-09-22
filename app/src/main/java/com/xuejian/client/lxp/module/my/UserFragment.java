@@ -170,7 +170,7 @@ public class UserFragment extends PeachBaseFragment {
     public ContactlistFragment createContactlistFragment(){
         ContactlistFragment fragment = new ContactlistFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isAddFriend",true);
+        bundle.putBoolean("isAddFriend",false);
         fragment.setArguments(bundle);
         return fragment;
     }
