@@ -128,7 +128,7 @@ public class OtherApi extends BaseApi {
     }
 
     public static void getAvatarAlbumUploadToken(HttpCallBack callback,String info) {
-        getUploadToken(Scenario.ALBUM,"这是一张图片！！！！",callback);
+        getUploadToken(Scenario.ALBUM,info,callback);
     }
     /**
      * 根据城市获取游记

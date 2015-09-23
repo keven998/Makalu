@@ -319,7 +319,10 @@
             android:screenOrientation="portrait">
 
         </activity>
-
+        <activity android:name=".module.my.UserAlbumInfoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".module.my.EditAlbumDescActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".module.toolbox.im.GuilderListActivity"
             android:screenOrientation="portrait"/>

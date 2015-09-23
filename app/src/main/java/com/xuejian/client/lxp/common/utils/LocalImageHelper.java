@@ -205,7 +205,8 @@ public class LocalImageHelper {
         private String thumbnailUri;//缩略图URI
         private int orientation;//图片旋转角度
         public boolean isSeleted;
-
+        private boolean isupLoading=false;
+        private int currentProgress=0;
         public String getThumbnailUri() {
             return thumbnailUri;
         }
@@ -231,5 +232,20 @@ public class LocalImageHelper {
             orientation =  exifOrientation;
         }
 
+        public int getCurrentProgress() {
+            return currentProgress;
+        }
+
+        public void setCurrentProgress(int currentProgress) {
+            this.currentProgress = currentProgress;
+        }
+
+        public void setIsupLoading(boolean isupLoading) {
+            this.isupLoading = isupLoading;
+        }
+
+        public boolean isupLoading() {
+            return isupLoading;
+        }
     }
 }
