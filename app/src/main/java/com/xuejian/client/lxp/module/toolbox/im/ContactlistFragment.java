@@ -112,14 +112,12 @@ public class ContactlistFragment extends Fragment {
                 try {
                     String username = adapter.getItem(position).getNickName();
                     if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
-                        if (isAddFriend) {
-                            startActivity(new Intent(getActivity(), AddContactActivity.class));
-                            getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
-                        } else {
-                            MobclickAgent.onEvent(getActivity(), "cell_item_new_friends_request");
-                            startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
-                            getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
-                        }
+                        startActivity(new Intent(getActivity(), AddContactActivity.class));
+                        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                    } else if ("item_friends_request".equals(username)) {
+                        MobclickAgent.onEvent(getActivity(), "cell_item_new_friends_request");
+                        startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
+                        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     } else if (Constant.GROUP_USERNAME.equals(username)) {
                         // 进入群聊列表页面
                         startActivity(new Intent(getActivity(), GroupsActivity.class));
@@ -228,11 +226,20 @@ public class ContactlistFragment extends Fragment {
         });
 //		// 加入"申请与通知"和"群聊"
         // 把"申请与通知"添加到首位
-        User newFriends = new User();
-        newFriends.setUserId(2);
-        newFriends.setNickName("item_new_friends");
-        newFriends.setType(1);
-        UserDBManager.getInstance().saveContact(newFriends);
-        contactList.add(0, newFriends);
+        User friendRequest = new User();
+        friendRequest.setUserId(3);
+        friendRequest.setNickName("item_friends_request");
+        friendRequest.setType(1);
+        UserDBManager.getInstance().saveContact(friendRequest);
+        contactList.add(0, friendRequest);
+        if (isAddFriend) {
+            User newFriends = new User();
+            newFriends.setUserId(2);
+            newFriends.setNickName("item_new_friends");
+            newFriends.setType(1);
+            UserDBManager.getInstance().saveContact(newFriends);
+            contactList.add(1, newFriends);
+        }
+
     }
 }

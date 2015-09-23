@@ -382,6 +382,30 @@
                                     android:textSize="11sp" />
 
                             </FrameLayout>
+                            <FrameLayout
+                                android:id="@+id/btn_note"
+                                android:layout_width="0dp"
+                                android:layout_height="94dp"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:onClick="onClick">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="72dp"
+                                    android:src="@drawable/chat_note_select" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="游记"
+                                    android:textColor="@color/color_text_ii"
+                                    android:textSize="11sp" />
+
+                            </FrameLayout>
                         </LinearLayout>
 
                     </LinearLayout>

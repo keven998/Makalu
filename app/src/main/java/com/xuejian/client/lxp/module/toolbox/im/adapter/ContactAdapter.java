@@ -45,7 +45,7 @@ import java.util.List;
 public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer {
 
     private LayoutInflater layoutInflater;
-//    private EditText query;
+    //    private EditText query;
 //    private ImageButton clearSearch;
     private List<String> sections;
     private SparseIntArray positionOfSection;
@@ -145,21 +145,21 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.sectionHeader.setVisibility(View.GONE);
             vh.dividerView.setVisibility(View.GONE);
         }
-        if ("item_new_friends".equals(username)) {
+        if ("item_new_friends".equals(username)||"item_friends_request".equals(username)) {
             vh.sectionHeader.setVisibility(View.GONE);
             vh.dividerView.setVisibility(View.GONE);
         }
         //显示申请与通知item
         if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-            vh.nickView.setText("好友请求");
-//                vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cell_accessory, 0);
-//                vh.avatarView.setImageResource(R.drawable.new_friends_icon);
-            //    vh.talkView.setImageResource(R.drawable.icon_arrow_right);
+            vh.nickView.setText("添加朋友");
             vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
-            if(IMClient.getInstance().getUnAcceptMsg()>0){
+        } else if ("item_friends_request".equals(username)) {
+            vh.nickView.setText("好友请求");
+            vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
+            if (IMClient.getInstance().getUnAcceptMsg() > 0) {
                 vh.unreadMsgView.setVisibility(View.VISIBLE);
-                vh.unreadMsgView.setText(IMClient.getInstance().getUnAcceptMsg()+"");
-            }else{
+                //         vh.unreadMsgView.setText(IMClient.getInstance().getUnAcceptMsg()+"");
+            } else {
                 vh.unreadMsgView.setVisibility(View.GONE);
             }
         } else if (username.equals(Constant.GROUP_USERNAME)) {
@@ -169,10 +169,10 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         } else {
             vh.unreadMsgView.setVisibility(View.INVISIBLE);
-            if (TextUtils.isEmpty(user.getMemo())){
+            if (TextUtils.isEmpty(user.getMemo())) {
                 vh.nickView.setText(user.getNickName());
-            }else {
-                vh.nickView.setText(user.getMemo()+"("+user.getNickName()+")");
+            } else {
+                vh.nickView.setText(user.getMemo() + "(" + user.getNickName() + ")");
             }
             vh.nickView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             ImageLoader.getInstance().displayImage(user.getAvatarSmall(), vh.avatarView, picOptions);
