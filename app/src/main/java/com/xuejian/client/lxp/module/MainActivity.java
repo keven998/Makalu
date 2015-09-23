@@ -47,8 +47,9 @@ import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.fragment.DestinationFragment;
 import com.xuejian.client.lxp.module.dest.fragment.SearchAllFragment;
-import com.xuejian.client.lxp.module.dest.fragment.TalentLocFragement;
+
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.my.UserFragment;
@@ -73,11 +74,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, TalentLocFragement.class, SearchAllFragment.class, UserFragment.class};
-
+    private Class fragmentArray[] = {TalkFragment.class, DestinationFragment.class, SearchAllFragment.class, UserFragment.class};
+    //TalentLocFragement
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
-    private String[] tabTitle = {"消息", "达人", "搜索", "我的"};
+    private String[] tabTitle = {"消息","目的地", "搜索", "我的"};
     private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
     private TextView unreadMsg;
     private TextView regNotice;

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/white"
+
+        >
+        <TextView
+            android:id="@+id/tv_title_bar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:duplicateParentState="true"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp"
+            android:visibility="gone"
+            />
+        <com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView
+            android:id="@+id/densty_indicator"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/in_out_indicator" />
+        <TextView
+            android:id="@+id/tv_title_bar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/expert_loc_search"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="6dp"
+            android:duplicateParentState="true"
+            android:gravity="right|center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="8dp"
+            android:singleLine="true"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line"
+            android:layout_gravity="bottom"
+            />
+    </FrameLayout>
+    <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
+        android:id="@+id/densty_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+
+</LinearLayout>

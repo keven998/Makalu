@@ -49,10 +49,10 @@ import java.util.List;
 /**
  * Created by lxp_dqm07 on 2015/7/8.
  */
-public class TalentLocFragement extends PeachBaseFragment implements AbsListView.OnScrollListener {
+public class OverSeasFragment extends PeachBaseFragment {
 
     private ListView listView;
-    private CheckedTextView titleTextView;
+
 
     private TalentLocAdapter adapter;
     private ArrayList<Integer> headerPos = new ArrayList<Integer>();
@@ -62,7 +62,6 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
     List<String> lists;
     List<String> listsEN;
     List<String> continentNames = new ArrayList<>();
-    XDialog xDialog;
 
 
     @Nullable
@@ -138,49 +137,23 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
             continentNames.add(name);
         }
         adapter.notifyDataSetChanged();
-        titleTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                xDialog = new XDialog(getActivity(), R.layout.loc_select, R.style.LocSelectDialog);
-                WindowManager.LayoutParams wlmp = xDialog.getWindow().getAttributes();
-                wlmp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                ListView lv = xDialog.getListView();
-                MapsDayAdapter adapter = new MapsDayAdapter();
-                lv.setAdapter(adapter);
-                xDialog.show();
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        listView.setSelection(headerPos.get(position));
-                        titleTextView.setText(continentNames.get(position));
-                        if (xDialog != null) xDialog.dismiss();
-                    }
-                });
-            }
-        });
     }
 
     private void initView(View view) {
-        view.findViewById(R.id.expert_search).setOnClickListener(new View.OnClickListener() {
+       /* view.findViewById(R.id.expert_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), SearchExpertActivity.class);
                 startActivity(intent);
             }
-        });
-        view.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        });*/
 
-            }
-        });
-        titleTextView = (CheckedTextView) view.findViewById(R.id.tv_title_bar_title);
-        titleTextView.setText(delta[0]);
+
 
         listView = (ListView) view.findViewById(R.id.talent_loc_list);
 
-        listView.setOnScrollListener(this);
+
         ArrayList<ArrayList<CountryWithExpertsBean>> data = new ArrayList<>();
         adapter = new TalentLocAdapter(getActivity(),data);
         listView.setAdapter(adapter);
@@ -219,38 +192,8 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
         MobclickAgent.onPause(getActivity());
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView absListView, int i) {
 
-    }
 
-    @Override
-    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-        int pos = listView.getFirstVisiblePosition();
-        for (int j = 0; j < headerPos.size(); j++) {
-            if (j < headerPos.size() - 1) {
-                if (pos > headerPos.get(j) && pos < headerPos.get(j + 1)) {
-                    if (!titleTextView.getText().equals(delta[j])) {
-                        titleTextView.setText(delta[j]);
-                        if (pos > lastPos) {
-                            titleTextView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom));
-                        } else {
-                            titleTextView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_top));
-                        }
-                        lastPos = pos;
-                    }
-                }
-            } else {
-                if (pos > headerPos.get(j)) {
-                    if (!titleTextView.getText().equals(delta[j])) {
-                        titleTextView.setText(delta[j]);
-                        titleTextView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.abc_slide_in_bottom));
-                        lastPos = pos;
-                    }
-                }
-            }
-        }
-    }
 
     public void getHeaderPos() {
         headerPos.clear();
@@ -423,43 +366,4 @@ public class TalentLocFragement extends PeachBaseFragment implements AbsListView
         });
     }
 
-    public class MapsDayAdapter extends BaseAdapter {
-
-        public MapsDayAdapter() {
-            super();
-        }
-
-
-        @Override
-        public int getCount() {
-            return continentNames.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return continentNames.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            if (convertView == null) {
-                convertView = View.inflate(getActivity(), R.layout.loc_cell, null);
-
-            }
-            TextView days_title = (TextView) convertView.findViewById(R.id.days_title);
-            if (titleTextView.getText().toString().equals(getItem(position).toString()))
-                days_title.setTextColor(getResources().getColor(R.color.app_theme_color));
-            else days_title.setTextColor(getResources().getColor(R.color.base_color_white));
-            days_title.setText(getItem(position).toString());
-            //selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
-            //if(position==(whichDay-1)){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}
-            return convertView;
-        }
-    }
 }
