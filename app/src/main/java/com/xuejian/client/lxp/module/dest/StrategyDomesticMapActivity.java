@@ -119,6 +119,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
         isAllPoiLoc = getIntent().getBooleanExtra("isAllPoiLoc", false);
         mapView = (MapView) findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mapTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,7 +241,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
                 latLngs.add(latLng);
                 builder.include(latLng);
                 aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                        .position(latLng).title(allBeans.get(0).itinerary.get(i).poi.zhName)
+                        .position(latLng).snippet(allBeans.get(0).itinerary.get(i).poi.zhName)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marker)).draggable(true));
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,7 +261,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
         tvTitle.setText(String.format("第%d天", pos + 1));
         tvSubtitle.setText(allDesString);
         mapDaysNameList.addView(layout);
-        aMap.addPolyline(new PolylineOptions().addAll(latLngs).color(getResources().getColor(R.color.app_theme_color)));
+        aMap.addPolyline(new PolylineOptions().addAll(latLngs).color(getResources().getColor(R.color.app_theme_color)).width(10));
         aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 10));
     }
 
@@ -273,7 +274,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
         for (int k = 0; k < beans.size(); k++) {
             builder.include(new LatLng(beans.get(k).location.coordinates[1], beans.get(k).location.coordinates[0]));
             aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                    .position(new LatLng(beans.get(k).location.coordinates[1], beans.get(k).location.coordinates[0])).title(beans.get(k).zhName)
+                    .position(new LatLng(beans.get(k).location.coordinates[1], beans.get(k).location.coordinates[0])).snippet(beans.get(k).zhName)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marker)).draggable(true));
             View view = View.inflate(mContext, R.layout.strategy_map_locations_item, null);
             CheckedTextView location = (CheckedTextView) view.findViewById(R.id.map_places);
@@ -332,7 +333,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
         for (int k = 0; k < my_footprint.size(); k++) {
             builder.include(new LatLng(my_footprint.get(k).location.coordinates[1], my_footprint.get(k).location.coordinates[0]));
             aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                    .position(new LatLng(my_footprint.get(k).location.coordinates[1], my_footprint.get(k).location.coordinates[0])).title(my_footprint.get(k).zhName)
+                    .position(new LatLng(my_footprint.get(k).location.coordinates[1], my_footprint.get(k).location.coordinates[0])).snippet(my_footprint.get(k).zhName)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marker)).draggable(true));
             View view = View.inflate(mContext, R.layout.strategy_map_locations_item, null);
             CheckedTextView location = (CheckedTextView) view.findViewById(R.id.map_places);
@@ -360,35 +361,6 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
         aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
         aMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
         aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
-    }
-
-    private void drawLine() {
-        List<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(39.983456, 116.3154950));
-        latLngs.add(new LatLng(34.341568, 108.940174));
-        latLngs.add(new LatLng(30.679879, 104.064855));
-        latLngs.add(new LatLng(53.001000, 103.480001));
-        aMap.addPolyline(new PolylineOptions().addAll(latLngs).color(getResources().getColor(R.color.app_theme_color)));
-    }
-
-    private void addMarkersToMap() {
-        aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                .position(new LatLng(39.983456, 116.3154950)).title("北京市")
-                .snippet("北京市:30.679879, 104.064855").draggable(true));
-
-        MarkerOptions options = new MarkerOptions();
-        options.title("成都市").snippet("成都市经纬度");
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_boy));
-        options.position(new LatLng(30.679879, 104.064855));
-        aMap.addMarker(options);
-
-        aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                .position(new LatLng(34.341568, 108.940174)).title("西安市")
-                .snippet("西安市经纬度").draggable(true));
-
-        aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                .position(new LatLng(53.001001, 103.480001)).title("安市")
-                .snippet("经纬度").draggable(true));
     }
 
     @Override
@@ -474,11 +446,15 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
-            if (currentMarker != null) currentMarker.remove();
-            currentMarker = aMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
-                    .position(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())).snippet(aMapLocation.getAddress()));
-            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()), 17.5f));
+        try {
+            if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
+                if (currentMarker != null) currentMarker.remove();
+                currentMarker = aMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
+                        .position(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())).snippet(aMapLocation.getAddress()));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()), 17.5f));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

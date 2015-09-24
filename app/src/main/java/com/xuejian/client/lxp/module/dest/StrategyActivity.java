@@ -73,6 +73,8 @@ public class StrategyActivity extends PeachBaseActivity {
     FixedViewPager mStrategyViewpager;
     @InjectView(R.id.strategy_indicator)
     FixedIndicatorView mStrategyIndicator;
+    @InjectView(R.id.iv_location)
+    ImageView Iv_location;
     private String id;
     private StrategyBean strategy;
     private List<String> cityIdList;
@@ -80,7 +82,6 @@ public class StrategyActivity extends PeachBaseActivity {
     private int curIndex = 0;
     PlanScheduleFragment routeDayFragment;
     CollectionFragment collectionFragment;
-    private ImageView iv_location;
     private ListView draw_list;
     private DrawAdapter adapter;
     private String userId;
@@ -90,13 +91,15 @@ public class StrategyActivity extends PeachBaseActivity {
     private String newId;
     private String locId;
     private boolean recomment;
+    private ArrayList<String> recommendCityList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         userId = getIntent().getStringExtra("userId");
         locId = getIntent().getStringExtra("locId");
-        recomment = getIntent().getBooleanExtra("recommend",false);
+        recomment = getIntent().getBooleanExtra("recommend", false);
         destinations = getIntent().getParcelableArrayListExtra("destinations");
         initView();
         initData(savedInstanceState);
@@ -128,14 +131,13 @@ public class StrategyActivity extends PeachBaseActivity {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             if (!SharePrefUtil.getBoolean(this, "plan_guide1", false)) {
-                GuideViewUtils.getInstance().initGuide(this, "plan_guide1", "点击这里修改计划", (int) getResources().getDimension(R.dimen.title_bar_height), -1,-1);
+                GuideViewUtils.getInstance().initGuide(this, "plan_guide1", "点击这里修改计划", (int) getResources().getDimension(R.dimen.title_bar_height), -1, -1);
             }
         }
     }
 
     private void initView() {
         setContentView(R.layout.activity_strategy);
-        iv_location = (ImageView) findViewById(R.id.iv_location);
         draw_list = (ListView) findViewById(R.id.strategy_user_been_place_list);
 
         findViewById(R.id.tv_add_plan).setOnClickListener(new View.OnClickListener() {
@@ -157,13 +159,14 @@ public class StrategyActivity extends PeachBaseActivity {
         mStrategyViewpager.setPrepareNumber(2);
         mStrategyIndicator.setDividerDrawable(getResources().getDrawable(R.color.color_line));
         indicatorViewPager = new IndicatorViewPager(mStrategyIndicator, mStrategyViewpager);
-
-        findViewById(R.id.iv_location).setOnClickListener(new View.OnClickListener() {
+        Iv_location.setEnabled(false);
+        Iv_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(StrategyActivity.this, "navigation_item_lxp_plan_mapview");
                 Intent intent = new Intent(StrategyActivity.this, StrategyDomesticMapActivity.class);
-                ArrayList<StrategyBean> list = new ArrayList<StrategyBean>() {};
+                ArrayList<StrategyBean> list = new ArrayList<StrategyBean>() {
+                };
                 list.add(getSaveStrategy());
                 intent.putParcelableArrayListExtra("strategy", list);
                 startActivity(intent);
@@ -237,10 +240,9 @@ public class StrategyActivity extends PeachBaseActivity {
 
     private void initData(Bundle savedInstanceState) {
         id = getIntent().getStringExtra("id");
-        if (recomment){
+        if (recomment) {
             getRecommentPlan();
-        }
-        else if (id == null) {
+        } else if (id == null) {
             cityIdList = new ArrayList<String>();
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
@@ -296,7 +298,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                iv_location.setVisibility(View.GONE);
+                Iv_location.setVisibility(View.GONE);
                 if (!isFinishing())
                     DialogManager.getInstance().dissMissLoadingDialog();
                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
@@ -309,13 +311,13 @@ public class StrategyActivity extends PeachBaseActivity {
         });
     }
 
-    public void getRecommentPlan(){
+    public void getRecommentPlan() {
         TravelApi.getRecommendPlan(locId, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                CommonJson4List<StrategyBean> bean = CommonJson4List.fromJson(result,StrategyBean.class);
+                CommonJson4List<StrategyBean> bean = CommonJson4List.fromJson(result, StrategyBean.class);
                 if (bean.code == 0) {
-                    if (bean.result.size()>0){
+                    if (bean.result.size() > 0) {
                         bindView(bean.result.get(0));
                     }
                 }
@@ -337,7 +339,7 @@ public class StrategyActivity extends PeachBaseActivity {
     public void createStrategyByCityIds(List<String> cityIds, final boolean recommend) {
         try {
             DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
 
@@ -350,8 +352,8 @@ public class StrategyActivity extends PeachBaseActivity {
                     bindView(strategyResult.result);
                     newCreate = true;
                     newId = strategyResult.result.id;
-                    SharePrefUtil.saveBoolean(mContext,"newPlan",true);
-                    SharePrefUtil.saveString(mContext,"newPlanId",newId);
+                    SharePrefUtil.saveBoolean(mContext, "newPlan", true);
+                    SharePrefUtil.saveString(mContext, "newPlanId", newId);
                     if (recommend) {
                         final ComfirmDialog cdialog = new ComfirmDialog(StrategyActivity.this);
                         cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
@@ -386,7 +388,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
                     AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt + 1);
                 } else {
-                    iv_location.setVisibility(View.GONE);
+                    Iv_location.setVisibility(View.GONE);
                     if (!isFinishing())
                         ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -395,7 +397,7 @@ public class StrategyActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                iv_location.setVisibility(View.GONE);
+                Iv_location.setVisibility(View.GONE);
                 if (!isFinishing())
                     ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
             }
@@ -408,7 +410,14 @@ public class StrategyActivity extends PeachBaseActivity {
     }
 
     private void bindView(final StrategyBean result) {
+        Iv_location.setEnabled(true);
         destinations = result.localities;
+        if (recomment && destinations != null) {
+            recommendCityList = new ArrayList<>();
+            for (LocBean bean : destinations) {
+                recommendCityList.add(bean.id);
+            }
+        }
         strategy = result;
         TextView dtv = (TextView) findViewById(R.id.jh_title);
 //        dtv.setText(result.title);
@@ -419,13 +428,13 @@ public class StrategyActivity extends PeachBaseActivity {
 
         if (user == null) {
             mIvMore.setVisibility(View.GONE);
-            iv_location.setVisibility(View.VISIBLE);
+            Iv_location.setVisibility(View.VISIBLE);
             mTvCopyGuide.setVisibility(View.GONE);
         } else {
             isOwner = (user.getUserId() == result.userId);
             if (!isOwner) {
                 mIvMore.setVisibility(View.GONE);
-                iv_location.setVisibility(View.GONE);
+                Iv_location.setVisibility(View.GONE);
                 mTvCopyGuide.setVisibility(View.VISIBLE);
                 mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -443,42 +452,66 @@ public class StrategyActivity extends PeachBaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                TravelApi.copyStrategy(result.userId, result.id, new HttpCallBack<String>() {
-                                    @Override
-                                    public void doSuccess(String resultStr, String method) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
-                                        if (modifyResult.code == 0) {
-                                            User info = AccountManager.getInstance().getLoginAccountInfo();
-                                            info.setGuideCnt(info.getGuideCnt()+1);
-                                            Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
-                                            User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
-                                            intent.putExtra("userId", String.valueOf(user.getUserId()));
-                                            intent.putExtra("copyId", modifyResult.result.id);
-                                            intent.putExtra("new_copy", true);
-                                            startActivity(intent);
-                                        } else {
-                                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void doFailure(Exception error, String msg, String method) {
-
-                                    }
-
-                                    @Override
-                                    public void doFailure(Exception error, String msg, String method, int code) {
-                                        DialogManager.getInstance().dissMissLoadingDialog();
-                                        if (code == 404) {
-                                            if (!isFinishing()) {
-                                                ToastUtil.getInstance(StrategyActivity.this).showToast("资源不存在");
+                                if (recomment) {
+                                    TravelApi.createGuide("create", recommendCityList, true, new HttpCallBack<String>() {
+                                        @Override
+                                        public void doSuccess(String result, String method) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
+                                            CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(result, CopyStrategyBean.class);
+                                            if (modifyResult.code == 0) {
+                                                ToastUtil.getInstance(mContext).showToast("已复制到你的旅行计划");
                                             }
-                                        } else if (!isFinishing()) {
-                                            ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                                         }
-                                    }
-                                });
+
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
+                                        }
+
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                                        }
+                                    });
+                                } else {
+                                    TravelApi.copyStrategy(result.userId, result.id, new HttpCallBack<String>() {
+                                        @Override
+                                        public void doSuccess(String resultStr, String method) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
+                                            CommonJson<CopyStrategyBean> modifyResult = CommonJson.fromJson(resultStr, CopyStrategyBean.class);
+                                            if (modifyResult.code == 0) {
+                                                User info = AccountManager.getInstance().getLoginAccountInfo();
+                                                info.setGuideCnt(info.getGuideCnt() + 1);
+                                                Intent intent = new Intent(StrategyActivity.this, StrategyListActivity.class);
+                                                User user = AccountManager.getInstance().getLoginAccount(StrategyActivity.this);
+                                                intent.putExtra("userId", String.valueOf(user.getUserId()));
+                                                intent.putExtra("copyId", modifyResult.result.id);
+                                                intent.putExtra("new_copy", true);
+                                                startActivity(intent);
+                                            } else {
+                                                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                            }
+                                        }
+
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method) {
+
+                                        }
+
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method, int code) {
+                                            DialogManager.getInstance().dissMissLoadingDialog();
+                                            if (code == 404) {
+                                                if (!isFinishing()) {
+                                                    ToastUtil.getInstance(StrategyActivity.this).showToast("资源不存在");
+                                                }
+                                            } else if (!isFinishing()) {
+                                                ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                                            }
+                                        }
+                                    });
+                                }
+
                             }
                         });
 
@@ -493,7 +526,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 });
             } else {
                 mIvMore.setVisibility(View.VISIBLE);
-                iv_location.setVisibility(View.VISIBLE);
+                Iv_location.setVisibility(View.VISIBLE);
                 mTvCopyGuide.setVisibility(View.GONE);
                 dtv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -507,7 +540,7 @@ public class StrategyActivity extends PeachBaseActivity {
                             public void onClick(View v) {
 
                                 final String editTitle = editDialog.getMessage();
-                                if(TextUtils.isEmpty(editTitle) || editTitle.trim().length()==0){
+                                if (TextUtils.isEmpty(editTitle) || editTitle.trim().length() == 0) {
                                     return;
                                 }
                                 editDialog.dismiss();
@@ -525,7 +558,7 @@ public class StrategyActivity extends PeachBaseActivity {
                                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (modifyResult.code == 0) {
 //                                            dtv.setText(editDialog.getMessage());
-                                            strategy.title=editTitle;
+                                            strategy.title = editTitle;
                                         } else {
                                             if (!isFinishing()) {
                                                 ToastUtil.getInstance(StrategyActivity.this).showToast(getResources().getString(R.string.request_network_failed));
@@ -622,14 +655,14 @@ public class StrategyActivity extends PeachBaseActivity {
         @Override
         public Fragment getFragmentForPage(int position) {
             if (position == 0) {
-                MobclickAgent.onEvent(StrategyActivity.this,"tab_item_trip_detail");
+                MobclickAgent.onEvent(StrategyActivity.this, "tab_item_trip_detail");
                 if (routeDayFragment == null) {
                     routeDayFragment = new PlanScheduleFragment();
                 }
 
                 return routeDayFragment;
             } else {
-                MobclickAgent.onEvent(StrategyActivity.this,"tab_item_trip_favorite");
+                MobclickAgent.onEvent(StrategyActivity.this, "tab_item_trip_favorite");
                 if (collectionFragment == null) {
                     collectionFragment = new CollectionFragment();
                     Bundle bundle = new Bundle();

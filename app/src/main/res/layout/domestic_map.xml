@@ -126,7 +126,7 @@
         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="100dp"
+            android:layout_width="140dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:background="@color/transparent_black"
@@ -138,9 +138,10 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:textColor="@color/base_color_white"
-                android:padding="7dp"
+                android:padding="10dp"
                 android:gravity="center"
-                android:textSize="14sp"
+                android:textSize="12sp"
+                android:drawablePadding="5dp"
                 android:text="我的行程"
                 android:drawableLeft="@drawable/icon_my_trip"/>
 

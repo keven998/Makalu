@@ -78,7 +78,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
     private String[] tabTitle = {"消息", "达人", "搜索", "我的"};
-    private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
+   // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
     private TextView unreadMsg;
     private TextView regNotice;
     //Tab选项Tag

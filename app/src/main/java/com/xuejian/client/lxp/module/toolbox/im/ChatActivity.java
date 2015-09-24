@@ -299,7 +299,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         iv_emoticons_normal.setVisibility(View.VISIBLE);
         iv_emoticons_checked.setVisibility(View.GONE);
         mExtraPanel = (FrameLayout) findViewById(R.id.fl_extra_panel);
-
         setPanelAnimation();
 
         // 动画资源文件,用于录制语音时
@@ -312,13 +311,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 getResources().getDrawable(R.drawable.record_animate_12), getResources().getDrawable(R.drawable.record_animate_13),
         };
         // 表情list
-        reslist = getExpressionRes(35);
+        reslist = getExpressionRes(85);
         // 初始化表情viewpager
         List<View> views = new ArrayList<View>();
         View gv1 = getGridChildView(1);
         View gv2 = getGridChildView(2);
+        View gv3 = getGridChildView(3);
+        View gv4 = getGridChildView(4);
+        View gv5 = getGridChildView(5);
         views.add(gv1);
         views.add(gv2);
+        views.add(gv3);
+        views.add(gv4);
+        views.add(gv5);
         final int num = views.size();
         dots.setNum(num);
         expressionViewpager.setAdapter(new ExpressionPagerAdapter(views));
@@ -413,12 +418,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void setPanelAnimation() {
         LayoutTransition lt = new LayoutTransition();
-        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
-        lt.setStagger(LayoutTransition.APPEARING, 20);
-        lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
-        lt.setDuration(LayoutTransition.DISAPPEARING, 0);
-        lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+ //       lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
+         lt.setDuration(LayoutTransition.APPEARING, 10);
+//        lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
+         lt.setDuration(LayoutTransition.DISAPPEARING, 10);
+//        lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+//        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
         mExtraPanel.setLayoutTransition(lt);
     }
 
@@ -1229,7 +1234,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             List<String> list1 = reslist.subList(0, 20);
             list.addAll(list1);
         } else if (i == 2) {
-            list.addAll(reslist.subList(20, reslist.size()));
+            list.addAll(reslist.subList(21, 40));
+        }else if (i==3){
+            list.addAll(reslist.subList(41, 60));
+        }else if (i==4){
+            list.addAll(reslist.subList(61, 80));
+        }else if (i==5){
+            list.addAll(reslist.subList(81, reslist.size()));
         }
         list.add("delete_expression");
         final ExpressionAdapter expressionAdapter = new ExpressionAdapter(this, 1, list);

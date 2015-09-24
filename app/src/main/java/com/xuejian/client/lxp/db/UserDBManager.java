@@ -237,7 +237,7 @@ public class UserDBManager {
             int Type = cursor.getInt(18);
             String ext = cursor.getString(19);
             String header = cursor.getString(20);
-            if (((Type & 1) == 1) && ((Type & 8) != 8) && userId != 2) {
+            if (((Type & 1) == 1) && ((Type & 8) != 8) && userId != 2 && userId != 3) {
                 list.add(new User(userId, nickName, avatar, avatarSmall, gender, signature, tel, secToken, countryCode,
                         email, memo, travelStatus, residence, level, zodiac, birthday, guideCnt, Type, ext, header));
             }
@@ -278,7 +278,7 @@ public class UserDBManager {
         closeDB();
     }
 
-    public synchronized boolean isGroupMember(String groupId){
+    public synchronized boolean isGroupMember(String groupId) {
         try {
             mdb = getDB();
             Cursor cursor = mdb.rawQuery("select Type from " + fri_table_name + " where userId=?", new String[]{String.valueOf(groupId)});
@@ -286,8 +286,8 @@ public class UserDBManager {
             int type = cursor.getInt(0);
             cursor.close();
             closeDB();
-            return (type&QUIT_GROUP)==0;
-        }catch (Exception e){
+            return (type & QUIT_GROUP) == 0;
+        } catch (Exception e) {
             e.printStackTrace();
             return true;
         }
