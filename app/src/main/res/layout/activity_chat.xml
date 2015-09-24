@@ -112,8 +112,8 @@
                         android:layout_width="36dp"
                         android:layout_height="48dp"
                         android:layout_gravity="right"
-                        android:paddingLeft="5dp"
                         android:layout_marginRight="44dp"
+                        android:paddingLeft="5dp"
                         android:scaleType="center"
                         android:src="@drawable/selector_ic_chat_expression" />
 
@@ -122,8 +122,8 @@
                         android:layout_width="36dp"
                         android:layout_height="48dp"
                         android:layout_gravity="right"
-                        android:paddingLeft="5dp"
                         android:layout_marginRight="44dp"
+                        android:paddingLeft="5dp"
                         android:scaleType="center"
                         android:src="@drawable/selector_ic_chat_keyboard"
                         android:visibility="gone" />
@@ -230,6 +230,89 @@
                             </FrameLayout>
 
                             <FrameLayout
+                                android:id="@+id/btn_note"
+                                android:layout_width="0dp"
+                                android:layout_height="94dp"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:onClick="onClick">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="72dp"
+                                    android:src="@drawable/chat_note_select" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="游记"
+                                    android:textColor="@color/color_text_ii"
+                                    android:textSize="11sp" />
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:id="@+id/btn_viewspot"
+                                android:layout_width="0dp"
+                                android:layout_height="94dp"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:onClick="onClick">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="72dp"
+                                    android:src="@drawable/chat_viewspot_select" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="景点"
+                                    android:textColor="@color/color_text_ii"
+                                    android:textSize="11sp" />
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:id="@+id/btn_food"
+                                android:layout_width="0dp"
+                                android:layout_height="94dp"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:onClick="onClick">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="72dp"
+                                    android:src="@drawable/chat_food_select" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="美食"
+                                    android:textColor="@color/color_text_ii"
+                                    android:textSize="11sp" />
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="4">
+
+                            <FrameLayout
                                 android:id="@+id/btn_location"
                                 android:layout_width="0dp"
                                 android:layout_height="94dp"
@@ -278,6 +361,7 @@
                                     android:textSize="11sp" />
 
                             </FrameLayout>
+
                             <FrameLayout
                                 android:id="@+id/btn_take_picture"
                                 android:layout_width="0dp"
@@ -302,38 +386,7 @@
                                     android:textSize="11sp" />
 
                             </FrameLayout>
-                        </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="4">
-
-                            <FrameLayout
-                                android:id="@+id/btn_viewspot"
-                                android:layout_width="0dp"
-                                android:layout_height="94dp"
-                                android:layout_weight="1"
-                                android:clickable="true"
-                                android:onClick="onClick">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_viewspot_select" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="bottom"
-                                    android:gravity="center"
-                                    android:padding="5dp"
-                                    android:text="景点"
-                                    android:textColor="@color/color_text_ii"
-                                    android:textSize="11sp" />
-
-                            </FrameLayout>
                             <FrameLayout
                                 android:id="@+id/btn_shopping"
                                 android:layout_width="0dp"
@@ -358,54 +411,8 @@
                                     android:textSize="11sp" />
 
                             </FrameLayout>
-                            <FrameLayout
-                                android:id="@+id/btn_food"
-                                android:layout_width="0dp"
-                                android:layout_height="94dp"
-                                android:layout_weight="1"
-                                android:clickable="true"
-                                android:onClick="onClick">
 
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_food_select" />
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="bottom"
-                                    android:gravity="center"
-                                    android:padding="5dp"
-                                    android:text="美食"
-                                    android:textColor="@color/color_text_ii"
-                                    android:textSize="11sp" />
-
-                            </FrameLayout>
-                            <FrameLayout
-                                android:id="@+id/btn_note"
-                                android:layout_width="0dp"
-                                android:layout_height="94dp"
-                                android:layout_weight="1"
-                                android:clickable="true"
-                                android:onClick="onClick">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_note_select" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="bottom"
-                                    android:gravity="center"
-                                    android:padding="5dp"
-                                    android:text="游记"
-                                    android:textColor="@color/color_text_ii"
-                                    android:textSize="11sp" />
-
-                            </FrameLayout>
                         </LinearLayout>
 
                     </LinearLayout>
@@ -504,10 +511,11 @@
                     android:paddingRight="12dp"
                     android:scaleType="center"
                     android:src="@drawable/selector_ic_common_navigation_menu" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/color_line"/>
+                    android:background="@color/color_line" />
             </FrameLayout>
 
         </RelativeLayout>

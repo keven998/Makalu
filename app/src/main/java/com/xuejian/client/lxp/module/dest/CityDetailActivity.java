@@ -44,6 +44,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
+import com.xuejian.client.lxp.module.my.TravelExpertApplyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpertAdapter;
@@ -66,6 +67,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     RelativeLayout rl_all_expert;
     @InjectView(R.id.lv_city_detail)
     ListView expertListview;
+    @InjectView(R.id.apply_expert)
+    ImageView apply_expert;
     private ImageView mCityIv1;
     private ImageView mCityIv2;
     private ImageView mCityIv3;
@@ -257,10 +260,18 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     }
 
     private void bindExpertView(List<ExpertBean> result) {
+        apply_expert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, TravelExpertApplyActivity.class));
+            }
+        });
         if (result==null||result.size()==0){
             rl_all_expert.setVisibility(View.GONE);
+            apply_expert.setVisibility(View.VISIBLE);
             return;
         }
+        if (result.size()<2)apply_expert.setVisibility(View.VISIBLE);
 //        AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
 //        abp.height = 400;
 //        View footView = new View(mContext);
