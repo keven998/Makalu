@@ -705,7 +705,37 @@ public class UserApi extends BaseApi {
         //return HttpManager.request(request, callback);
     }
 
+    /**
+     * 更新图片描述
+     * @param userId
+     * @param picId
+     * @param picDesc
+     * @param callback
+     */
+    public static void updateAlbumDesc(String userId, String picId,String picDesc,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/" + picId);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        String picDesStr = null;
+        JSONObject jsonObject = new JSONObject();
+        try{
 
+            jsonObject.put("caption",picDesc);
+            picDesStr=jsonObject.toString();
+        }catch (Exception ex){
+
+        }
+        try{
+            StringEntity stringEntity = new StringEntity(picDesStr,"utf-8");
+            request.setBodyEntity(stringEntity);
+        }catch (Exception ex){
+
+        }
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
+        //return HttpManager.request(request, callback);
+    }
     /**
      * 根据达人目的地id获取达人列表
      *

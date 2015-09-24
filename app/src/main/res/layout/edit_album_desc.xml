@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.xuejian.client.lxp.common.widget.TitleHeaderBar
+        android:id="@+id/edit_album_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height" />
+    <ImageView
+        android:id="@+id/myalbum"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pic_loadfail"
+        />
+    <EditText
+        android:id="@+id/album_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_text_ii"
+        android:textSize="14sp"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:maxLength="150"
+        android:lines="4"
+        android:hint="为图片添加描述..."
+        android:gravity="top|left"
+        />
+
+
+</LinearLayout>

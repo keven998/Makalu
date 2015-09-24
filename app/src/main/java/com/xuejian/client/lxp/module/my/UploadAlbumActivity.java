@@ -7,10 +7,13 @@ package com.xuejian.client.lxp.module.my;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +32,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -75,16 +79,32 @@ public class UploadAlbumActivity extends Activity{
     private TitleHeaderBar post_album_title;
     private GridView image_to_upload;
     private UpLoadImageAdapter adapter;
-    private int currentPosition=-1;
     private static final int REFRESH_CURRENT_IMAGES=0x434;
     private static final int UPLOAD_ONE_IMAGE=0x435;
     private static final int REQUEST_CATEGORY=0x444;
+    private static final int REFRESHADAPTER=0x445;
     private LocalImageHelper.LocalFile addFile;
+    private int currentUpload=0;
+    private String info;
     private Handler myHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case UPLOAD_ONE_IMAGE:
+                    if(currentUpload>=0 && currentUpload<pictures.size()-1){
+                        adapter.notifyDataSetChanged();
+
+                        if(!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())){
+                            uploadAvatar(pictures.get(currentUpload),info);
+                        }
+                    }else{
+                        Toast.makeText(UploadAlbumActivity.this,"上传成功~",Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                    break;
+                case REFRESHADAPTER:
+                    adapter.notifyDataSetChanged();
                     break;
             }
             super.handleMessage(msg);
@@ -123,14 +143,33 @@ public class UploadAlbumActivity extends Activity{
         post_album_title.getLeftTextView().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                beforeBack();
             }
         });
         post_album_title.getRightTextView().setText("上传");
         post_album_title.getRightTextView().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                post_album_title.getRightTextView().setEnabled(false);
+                info = mContent.getText().toString().trim();
+                if(info!=null && info.length()>0){
+                    post_album_title.getRightTextView().setEnabled(false);
+                    for(int i=0;i<pictures.size();i++){
+                        if("addfile".equals(pictures.get(i).getThumbnailUri())){
+                            pictures.get(i).setIsupLoading(false);
+                        }else{
+                            pictures.get(i).setIsupLoading(true);
+                        }
+                    }
+
+                    if(currentUpload>=0 && currentUpload<pictures.size()){
+                        if(!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())){
+                            uploadAvatar(pictures.get(currentUpload),info);
+                        }
+                    }
+                }else{
+                    Toast.makeText(UploadAlbumActivity.this,"图片描述不能为空哦！",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         mContent = (EditText) findViewById(R.id.post_content);
@@ -181,73 +220,110 @@ public class UploadAlbumActivity extends Activity{
         });
     }
 
+    private void uploadAvatar(final LocalImageHelper.LocalFile localFile,final String info) {
+        String filepath=null;
+        if(localFile!=null){
+            try {
+                String[] project = new String[]{MediaStore.Images.Media.DATA};
+                Cursor cursor = UploadAlbumActivity.this.getContentResolver().query(Uri.parse(localFile.getOriginalUri()), project, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                filepath= cursor.getString(columnIndex);
+                cursor.close();
+            }catch (Exception ex){
+
+            }
+
+            if(filepath==null){
+                filepath="";
+            }
+            final File file = new File(filepath);
+            if(file!=null){
+                OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
+                    @Override
+                    public void doSuccess(String result, String method) {
+                        CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
+                        if (tokenResult.code == 0) {
+                            String token = tokenResult.result.uploadToken;
+                            String key = tokenResult.result.key;
+                            UploadManager uploadManager = new UploadManager();
+                            uploadManager.put(file, key, token,
+                                    new UpCompletionHandler() {
+                                        @Override
+                                        public void complete(String key, ResponseInfo info, JSONObject response) {
+                                            localFile.setIsupLoading(false);
+                                            Message message = new Message();
+                                            currentUpload++;
+                                            if (info.isOK()) {
+                                                message.arg1=1;
+                                            }
+                                            message.what=UPLOAD_ONE_IMAGE;
+                                            myHandler.sendMessage(message);
+                                        }
+                                    }, new UploadOptions(null, null, false,
+                                            new UpProgressHandler() {
+                                                public void progress(String key, double percent) {
+                                                    try {
+
+                                                        localFile.setCurrentProgress((int)percent*100);
+                                                        myHandler.sendEmptyMessage(REFRESHADAPTER);
+                                                        //progressDialog.setContent((int) (percent * 100) + "%");
+                                                    } catch (Exception e) {
+                                                    }
+                                                }
+                                            }, null));
+                        } else {
+                            if(currentUpload==pictures.size()-1){
+                                finish();
+                                return;
+                            }
+                            currentUpload++;
+                            localFile.setIsupLoading(false);
+                            myHandler.sendEmptyMessage(UPLOAD_ONE_IMAGE);
+                        }
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        if(currentUpload==pictures.size()-1){
+                            finish();
+                            return;
+                        }
+                        currentUpload++;
+                        localFile.setIsupLoading(false);
+                        myHandler.sendEmptyMessage(UPLOAD_ONE_IMAGE);
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+                        if(currentUpload==pictures.size()-1){
+                            finish();
+                            return;
+                        }
+                        currentUpload++;
+                        localFile.setIsupLoading(false);
+                        adapter.notifyDataSetChanged();
+                        myHandler.sendEmptyMessage(UPLOAD_ONE_IMAGE);
+                    }
+                },info);
+            }
+
+        }
+
+    }
+
     @Override
     public void onBackPressed() {
-
+        super.onBackPressed();
+        beforeBack();
     }
 
-
-    public void uploadImages(){
-
+    public void beforeBack(){
+        if(LocalImageHelper.getInstance()!=null && LocalImageHelper.getInstance().getCheckedItems()!=null){
+            LocalImageHelper.getInstance().getCheckedItems().clear();
+        }
+        finish();
     }
-
-    private void uploadAvatar(final File file) {
-
-        OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                Log.e("uploadresult", result + "-----------------------");
-                CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
-                if (tokenResult.code == 0) {
-                    String token = tokenResult.result.uploadToken;
-                    String key = tokenResult.result.key;
-                    UploadManager uploadManager = new UploadManager();
-                    uploadManager.put(file, key, token,
-                            new UpCompletionHandler() {
-                                @Override
-                                public void complete(String key, ResponseInfo info, JSONObject response) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    Log.e("uploadresultInfo", info.isOK() + "----------------------");
-                                    Message message = new Message();
-                                    if (info.isOK()) {
-                                        message.arg1=1;
-                                    }
-                                    message.what=UPLOAD_ONE_IMAGE;
-                                    myHandler.sendMessage(message);
-                                }
-                            }, new UploadOptions(null, null, false,
-                                    new UpProgressHandler() {
-                                        public void progress(String key, double percent) {
-                                            try {
-                                                //progressDialog.setContent((int) (percent * 100) + "%");
-                                            } catch (Exception e) {
-                                            }
-                                        }
-                                    }, null));
-                } else {
-                    myHandler.sendEmptyMessage(UPLOAD_ONE_IMAGE);
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                if (!isFinishing())
-                    ToastUtil.getInstance(UploadAlbumActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
-
-
-
-
-
-
 
 
 
@@ -310,7 +386,7 @@ public class UploadAlbumActivity extends Activity{
                 }
                 finish();
             }else if(requestCode == REQUEST_CATEGORY && resultCode==20){
-                Log.e("dfssd","sdfsfsafasfasfasflasfaslfjkaskf");
+
                 if (LocalImageHelper.getInstance() != null) {
                     pictures.clear();
                     if (LocalImageHelper.getInstance().getCheckedItems() != null && LocalImageHelper.getInstance().getCheckedItems().size() > 0) {
@@ -319,7 +395,6 @@ public class UploadAlbumActivity extends Activity{
                     if (!pictures.contains(addFile)) {
                         pictures.add(addFile);
                     }
-                    Log.e("picture.size",pictures.size()+"--------------------------");
                     adapter.notifyDataSetChanged();
                     image_to_upload.setAdapter(adapter);
                 }
@@ -355,20 +430,24 @@ public class UploadAlbumActivity extends Activity{
             FrameLayout gallery_frame = (FrameLayout) convertView.findViewById(R.id.gallery_frame);
             ImageView imgQueue = (ImageView) convertView.findViewById(R.id.imgQueue);
             ProgressBar image_progress = (ProgressBar)convertView.findViewById(R.id.image_progress);
+            FrameLayout overLay = (FrameLayout)convertView.findViewById(R.id.overLay);
+            TextView progress_info = (TextView)convertView.findViewById(R.id.progress_info);
             int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - (3*LocalDisplay.dp2px(4)+LocalDisplay.dp2px(20))) / 4;
             AbsListView.LayoutParams lytp = new AbsListView.LayoutParams(width,width);
             gallery_frame.setLayoutParams(lytp);
-            if(currentPosition ==position){
-                image_progress.setVisibility(View.VISIBLE);
-            }else{
-                image_progress.setVisibility(View.GONE);
-            }
             if(uploadImages.get(position).getThumbnailUri()!=null && uploadImages.get(position).getThumbnailUri().equals("addfile")){
                 imgQueue.setImageResource(R.drawable.add_pictures);
             }else{
                 ImageLoader.getInstance().displayImage(uploadImages.get(position).getThumbnailUri(), new ImageViewAware(imgQueue), options,
                         null, null, uploadImages.get(position).getOrientation());
             }
+            if(uploadImages.get(position).isupLoading()){
+                overLay.setVisibility(View.VISIBLE);
+                progress_info.setText(uploadImages.get(position).getCurrentProgress()+"%");
+            }else{
+                overLay.setVisibility(View.GONE);
+            }
+
 
             return convertView;
         }
