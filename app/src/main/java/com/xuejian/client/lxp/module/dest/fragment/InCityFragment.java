@@ -534,7 +534,7 @@ public class InCityFragment extends PeachBaseFragment{
             HolderView holderView=null;
             LocBean groupLocBean= mygroupLocbean.get(position);
             if(convertView==null || convertView.getTag()==null){
-                convertView = inflater.inflate(R.layout.out_desty_city_image, null);
+                convertView = inflater.inflate(R.layout.in_desty_city_image, null);
                 holderView = new HolderView();
                 holderView.cityNameTv = (TextView) convertView.findViewById(R.id.des_title);
                 holderView.desBgImage = (ImageView) convertView.findViewById(R.id.des_bg_pic);

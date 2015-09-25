@@ -41,7 +41,7 @@ public class DestinationFragment extends PeachBaseFragment {
         densty_viewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。
         densty_viewpager.setPrepareNumber(2);
-        densty_indicator.setDividerDrawable(getResources().getDrawable(R.color.color_line));
+        //densty_indicator.setDividerDrawable(getResources().getDrawable(R.color.color_line));
         indicatorViewPager = new IndicatorViewPager(densty_indicator, densty_viewpager);
         indicatorViewPager.setAdapter(new DenstyAdapter(getActivity().getSupportFragmentManager()));
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {

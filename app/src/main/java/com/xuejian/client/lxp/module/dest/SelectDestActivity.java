@@ -328,9 +328,9 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
             TextView textView = (TextView) convertView.findViewById(R.id.desty_title);
             textView.setText(tabNames[position]);
             if (position == 0) {
-                textView.setBackgroundResource(R.drawable.lefttwo_wgrey_seletor);
+                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg);
             } else if (position == 1) {
-                textView.setBackgroundResource(R.drawable.righttwo_wgrey_seletor);
+                textView.setBackgroundResource(R.drawable.in_out_indicator_textbg_01);
             }
             return convertView;
         }
