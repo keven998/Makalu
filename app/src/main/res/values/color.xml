@@ -81,7 +81,7 @@
     <color name="red_text_color">#FF2D2D</color>
     <color name="tips_text_gray_color">#909090</color>
     <color name="fragment_bg">#e4e4e4</color>
-
+    <color name="black_overlay">#60000000</color>
     <!-- Exceptions colors -->
     <color name="exception_button_color">#5fcf80</color>
     <color name="exception_button_color_second">#35c460</color>
