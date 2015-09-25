@@ -157,6 +157,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         strategyBeans = new ArrayList<StrategyBean>();
         mStrategyListAdapter = new StrategyAdapter(this,strategyBeans,isOwner);
         if (!isOwner) {
+            findViewById(R.id.ivb_content_filter).setVisibility(View.INVISIBLE);
             create_plan.setVisibility(View.GONE);
         }
 

@@ -16,7 +16,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +24,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -34,9 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -50,8 +46,6 @@ import com.qiniu.android.storage.UploadOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
 import com.xuejian.client.lxp.common.api.OtherApi;
-import com.xuejian.client.lxp.common.dialog.CustomLoadingDialog;
-import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.LocalImageHelper;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
@@ -59,10 +53,11 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UploadAlbumActivity extends Activity{
+public class UploadAlbumActivity extends Activity {
 
 
     private EditText mContent;//动态内容编辑框
@@ -79,44 +74,84 @@ public class UploadAlbumActivity extends Activity{
     private TitleHeaderBar post_album_title;
     private GridView image_to_upload;
     private UpLoadImageAdapter adapter;
-    private static final int REFRESH_CURRENT_IMAGES=0x434;
-    private static final int UPLOAD_ONE_IMAGE=0x435;
-    private static final int REQUEST_CATEGORY=0x444;
-    private static final int REFRESHADAPTER=0x445;
+    private static final int REFRESH_CURRENT_IMAGES = 0x434;
+    private static final int UPLOAD_ONE_IMAGE = 0x435;
+    private static final int REQUEST_CATEGORY = 0x444;
+    private static final int REFRESHADAPTER = 0x445;
     private LocalImageHelper.LocalFile addFile;
-    private int currentUpload=0;
+    private int currentUpload = 0;
     private String info;
-    private Handler myHandler = new Handler(){
+
+    private static class MyHandler extends Handler {
+
+        private final WeakReference<UploadAlbumActivity> mActivity;
+
+        public MyHandler(UploadAlbumActivity activity) {
+            mActivity = new WeakReference<UploadAlbumActivity>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
-                case UPLOAD_ONE_IMAGE:
-                    if(currentUpload>=0 && currentUpload<pictures.size()-1){
-                        adapter.notifyDataSetChanged();
+            UploadAlbumActivity activity = mActivity.get();
 
-                        if(!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())){
-                            uploadAvatar(pictures.get(currentUpload),info);
+            if (activity != null) {
+                switch (msg.what) {
+                    case UPLOAD_ONE_IMAGE:
+                        if (activity.currentUpload >= 0 && activity.currentUpload < activity.pictures.size() - 1) {
+                            activity.adapter.notifyDataSetChanged();
+
+                            if (!"addfile".equals(activity.pictures.get(activity.currentUpload).getThumbnailUri())) {
+                                activity.uploadAvatar(activity.pictures.get(activity.currentUpload), activity.info);
+                            }
+                        } else {
+                            Toast.makeText(activity, "上传成功~", Toast.LENGTH_SHORT).show();
+                            activity.setResult(RESULT_OK);
+                            activity.finish();
                         }
-                    }else{
-                        Toast.makeText(UploadAlbumActivity.this,"上传成功~",Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                    break;
-                case REFRESHADAPTER:
-                    adapter.notifyDataSetChanged();
-                    break;
+                        break;
+                    case REFRESHADAPTER:
+                        activity.adapter.notifyDataSetChanged();
+                        break;
+                }
+                super.handleMessage(msg);
             }
-            super.handleMessage(msg);
         }
-    };
+    }
+
+    private MyHandler myHandler = new MyHandler(this);
+
+//    private Handler myHandler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what){
+//                case UPLOAD_ONE_IMAGE:
+//                    if(currentUpload>=0 && currentUpload<pictures.size()-1){
+//                        adapter.notifyDataSetChanged();
+//
+//                        if(!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())){
+//                            uploadAvatar(pictures.get(currentUpload),info);
+//                        }
+//                    }else{
+//                        Toast.makeText(UploadAlbumActivity.this,"上传成功~",Toast.LENGTH_SHORT).show();
+//                        setResult(RESULT_OK);
+//                        finish();
+//                    }
+//                    break;
+//                case REFRESHADAPTER:
+//                    adapter.notifyDataSetChanged();
+//                    break;
+//            }
+//            super.handleMessage(msg);
+//        }
+//    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_album_activity);
-        Intent intent = new Intent(UploadAlbumActivity.this,GalleryCatergoryActivity.class);
-        startActivityForResult(intent,REQUEST_CATEGORY);
+        Intent intent = new Intent(UploadAlbumActivity.this, GalleryCatergoryActivity.class);
+        startActivityForResult(intent, REQUEST_CATEGORY);
         addFile = new LocalImageHelper.LocalFile();
         addFile.setThumbnailUri("addfile");
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -138,7 +173,7 @@ public class UploadAlbumActivity extends Activity{
      */
     private void initViews() {
         // TODO Auto-generated method stub
-        post_album_title = (TitleHeaderBar)findViewById(R.id.post_album_title);
+        post_album_title = (TitleHeaderBar) findViewById(R.id.post_album_title);
         post_album_title.getLeftTextView().setText("取消");
         post_album_title.getLeftTextView().setOnClickListener(new OnClickListener() {
             @Override
@@ -151,23 +186,23 @@ public class UploadAlbumActivity extends Activity{
             @Override
             public void onClick(View v) {
                 info = mContent.getText().toString().trim();
-                if(info!=null && info.length()>0){
+                if (info != null && info.length() > 0) {
                     post_album_title.getRightTextView().setEnabled(false);
-                    for(int i=0;i<pictures.size();i++){
-                        if("addfile".equals(pictures.get(i).getThumbnailUri())){
+                    for (int i = 0; i < pictures.size(); i++) {
+                        if ("addfile".equals(pictures.get(i).getThumbnailUri())) {
                             pictures.get(i).setIsupLoading(false);
-                        }else{
+                        } else {
                             pictures.get(i).setIsupLoading(true);
                         }
                     }
 
-                    if(currentUpload>=0 && currentUpload<pictures.size()){
-                        if(!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())){
-                            uploadAvatar(pictures.get(currentUpload),info);
+                    if (currentUpload >= 0 && currentUpload < pictures.size()) {
+                        if (!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())) {
+                            uploadAvatar(pictures.get(currentUpload), info);
                         }
                     }
-                }else{
-                    Toast.makeText(UploadAlbumActivity.this,"图片描述不能为空哦！",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UploadAlbumActivity.this, "图片描述不能为空哦！", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -175,27 +210,27 @@ public class UploadAlbumActivity extends Activity{
         mContent = (EditText) findViewById(R.id.post_content);
         textRemain = (TextView) findViewById(R.id.post_text_remain);
         editContainer = findViewById(R.id.post_edit_container);
-        image_to_upload = (GridView)findViewById(R.id.image_to_upload);
-        if(LocalImageHelper.getInstance()!=null && LocalImageHelper.getInstance().getCheckedItems()!=null && LocalImageHelper.getInstance().getCheckedItems().size()>0){
+        image_to_upload = (GridView) findViewById(R.id.image_to_upload);
+        if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null && LocalImageHelper.getInstance().getCheckedItems().size() > 0) {
             pictures.addAll(LocalImageHelper.getInstance().getCheckedItems());
         }
-        if(!pictures.contains(addFile)){
+        if (!pictures.contains(addFile)) {
             pictures.add(addFile);
         }
 
-        adapter = new UpLoadImageAdapter(this,pictures);
+        adapter = new UpLoadImageAdapter(this, pictures);
         image_to_upload.setAdapter(adapter);
         image_to_upload.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(pictures!=null){
-                    if(pictures.get(position).getThumbnailUri()!=null && !pictures.get(position).getThumbnailUri().equals("addfile")){
+                if (pictures != null) {
+                    if (pictures.get(position).getThumbnailUri() != null && !pictures.get(position).getThumbnailUri().equals("addfile")) {
                         Intent intent = new Intent(UploadAlbumActivity.this, GalleryDetailActivity.class);
                         intent.putExtra("preLook", true);
-                        intent.putExtra("currentIndex",position);
+                        intent.putExtra("currentIndex", position);
                         startActivityForResult(intent, REFRESH_CURRENT_IMAGES);
-                    }else{
-                        Intent intent = new Intent(UploadAlbumActivity.this,GalleryCatergoryActivity.class);
+                    } else {
+                        Intent intent = new Intent(UploadAlbumActivity.this, GalleryCatergoryActivity.class);
                         startActivityForResult(intent, REQUEST_CATEGORY);
                     }
                 }
@@ -220,25 +255,25 @@ public class UploadAlbumActivity extends Activity{
         });
     }
 
-    private void uploadAvatar(final LocalImageHelper.LocalFile localFile,final String info) {
-        String filepath=null;
-        if(localFile!=null){
+    private void uploadAvatar(final LocalImageHelper.LocalFile localFile, final String info) {
+        String filepath = null;
+        if (localFile != null) {
             try {
                 String[] project = new String[]{MediaStore.Images.Media.DATA};
                 Cursor cursor = UploadAlbumActivity.this.getContentResolver().query(Uri.parse(localFile.getOriginalUri()), project, null, null, null);
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                filepath= cursor.getString(columnIndex);
+                filepath = cursor.getString(columnIndex);
                 cursor.close();
-            }catch (Exception ex){
+            } catch (Exception ex) {
 
             }
 
-            if(filepath==null){
-                filepath="";
+            if (filepath == null) {
+                filepath = "";
             }
             final File file = new File(filepath);
-            if(file!=null){
+            if (file != null) {
                 OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
@@ -255,9 +290,9 @@ public class UploadAlbumActivity extends Activity{
                                             Message message = new Message();
                                             currentUpload++;
                                             if (info.isOK()) {
-                                                message.arg1=1;
+                                                message.arg1 = 1;
                                             }
-                                            message.what=UPLOAD_ONE_IMAGE;
+                                            message.what = UPLOAD_ONE_IMAGE;
                                             myHandler.sendMessage(message);
                                         }
                                     }, new UploadOptions(null, null, false,
@@ -265,7 +300,7 @@ public class UploadAlbumActivity extends Activity{
                                                 public void progress(String key, double percent) {
                                                     try {
 
-                                                        localFile.setCurrentProgress((int)percent*100);
+                                                        localFile.setCurrentProgress((int) percent * 100);
                                                         myHandler.sendEmptyMessage(REFRESHADAPTER);
                                                         //progressDialog.setContent((int) (percent * 100) + "%");
                                                     } catch (Exception e) {
@@ -273,7 +308,7 @@ public class UploadAlbumActivity extends Activity{
                                                 }
                                             }, null));
                         } else {
-                            if(currentUpload==pictures.size()-1){
+                            if (currentUpload == pictures.size() - 1) {
                                 finish();
                                 return;
                             }
@@ -285,7 +320,7 @@ public class UploadAlbumActivity extends Activity{
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        if(currentUpload==pictures.size()-1){
+                        if (currentUpload == pictures.size() - 1) {
                             finish();
                             return;
                         }
@@ -296,7 +331,7 @@ public class UploadAlbumActivity extends Activity{
 
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
-                        if(currentUpload==pictures.size()-1){
+                        if (currentUpload == pictures.size() - 1) {
                             finish();
                             return;
                         }
@@ -305,7 +340,7 @@ public class UploadAlbumActivity extends Activity{
                         adapter.notifyDataSetChanged();
                         myHandler.sendEmptyMessage(UPLOAD_ONE_IMAGE);
                     }
-                },info);
+                }, info);
             }
 
         }
@@ -318,20 +353,18 @@ public class UploadAlbumActivity extends Activity{
         beforeBack();
     }
 
-    public void beforeBack(){
-        if(LocalImageHelper.getInstance()!=null && LocalImageHelper.getInstance().getCheckedItems()!=null){
+    public void beforeBack() {
+        if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null) {
             LocalImageHelper.getInstance().getCheckedItems().clear();
         }
         finish();
     }
 
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-           // case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
+        // case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
                /* if (LocalImageHelper.getInstance().isResultOk()) {
                     LocalImageHelper.getInstance().setResultOk(false);
                     //获取选中的图片
@@ -368,49 +401,50 @@ public class UploadAlbumActivity extends Activity{
                 }
                 //清空选中的图片
                 LocalImageHelper.getInstance().getCheckedItems().clear();*/
-                //break;
-            if(requestCode==REFRESH_CURRENT_IMAGES) {
-                if (LocalImageHelper.getInstance() != null) {
-                    pictures.clear();
-                    if (LocalImageHelper.getInstance().getCheckedItems() != null && LocalImageHelper.getInstance().getCheckedItems().size() > 0) {
-                        pictures.addAll(LocalImageHelper.getInstance().getCheckedItems());
-                    }
-                    if (!pictures.contains(addFile)) {
-                        pictures.add(addFile);
-                    }
-                    image_to_upload.setAdapter(adapter);
+        //break;
+        if (requestCode == REFRESH_CURRENT_IMAGES) {
+            if (LocalImageHelper.getInstance() != null) {
+                pictures.clear();
+                if (LocalImageHelper.getInstance().getCheckedItems() != null && LocalImageHelper.getInstance().getCheckedItems().size() > 0) {
+                    pictures.addAll(LocalImageHelper.getInstance().getCheckedItems());
                 }
-            }else if(requestCode == REQUEST_CATEGORY && resultCode==RESULT_OK){
-                if(LocalImageHelper.getInstance()!=null && LocalImageHelper.getInstance().getCheckedItems()!=null){
-                    LocalImageHelper.getInstance().getCheckedItems().clear();
+                if (!pictures.contains(addFile)) {
+                    pictures.add(addFile);
                 }
-                finish();
-            }else if(requestCode == REQUEST_CATEGORY && resultCode==20){
-
-                if (LocalImageHelper.getInstance() != null) {
-                    pictures.clear();
-                    if (LocalImageHelper.getInstance().getCheckedItems() != null && LocalImageHelper.getInstance().getCheckedItems().size() > 0) {
-                        pictures.addAll(LocalImageHelper.getInstance().getCheckedItems());
-                    }
-                    if (!pictures.contains(addFile)) {
-                        pictures.add(addFile);
-                    }
-                    adapter.notifyDataSetChanged();
-                    image_to_upload.setAdapter(adapter);
-                }
+                image_to_upload.setAdapter(adapter);
             }
+        } else if (requestCode == REQUEST_CATEGORY && resultCode == RESULT_OK) {
+            if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null) {
+                LocalImageHelper.getInstance().getCheckedItems().clear();
+            }
+            finish();
+        } else if (requestCode == REQUEST_CATEGORY && resultCode == 20) {
+
+            if (LocalImageHelper.getInstance() != null) {
+                pictures.clear();
+                if (LocalImageHelper.getInstance().getCheckedItems() != null && LocalImageHelper.getInstance().getCheckedItems().size() > 0) {
+                    pictures.addAll(LocalImageHelper.getInstance().getCheckedItems());
+                }
+                if (!pictures.contains(addFile)) {
+                    pictures.add(addFile);
+                }
+                adapter.notifyDataSetChanged();
+                image_to_upload.setAdapter(adapter);
+            }
+        }
 
     }
 
-    class UpLoadImageAdapter extends BaseAdapter{
+    class UpLoadImageAdapter extends BaseAdapter {
         private Context context;
         private List<LocalImageHelper.LocalFile> uploadImages;
         private LayoutInflater inflater;
         private ImageLoader imageLoader;
-        public UpLoadImageAdapter(Context context,List<LocalImageHelper.LocalFile> uploadImages){
+
+        public UpLoadImageAdapter(Context context, List<LocalImageHelper.LocalFile> uploadImages) {
             this.context = context;
             this.uploadImages = uploadImages;
-            this.inflater =LayoutInflater.from(context);
+            this.inflater = LayoutInflater.from(context);
             imageLoader = ImageLoader.getInstance();
         }
 
@@ -426,25 +460,25 @@ public class UploadAlbumActivity extends Activity{
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = inflater.inflate(R.layout.upload_grid_item,null);
+            convertView = inflater.inflate(R.layout.upload_grid_item, null);
             FrameLayout gallery_frame = (FrameLayout) convertView.findViewById(R.id.gallery_frame);
             ImageView imgQueue = (ImageView) convertView.findViewById(R.id.imgQueue);
-            ProgressBar image_progress = (ProgressBar)convertView.findViewById(R.id.image_progress);
-            FrameLayout overLay = (FrameLayout)convertView.findViewById(R.id.overLay);
-            TextView progress_info = (TextView)convertView.findViewById(R.id.progress_info);
-            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - (3*LocalDisplay.dp2px(4)+LocalDisplay.dp2px(20))) / 4;
-            AbsListView.LayoutParams lytp = new AbsListView.LayoutParams(width,width);
+            ProgressBar image_progress = (ProgressBar) convertView.findViewById(R.id.image_progress);
+            FrameLayout overLay = (FrameLayout) convertView.findViewById(R.id.overLay);
+            TextView progress_info = (TextView) convertView.findViewById(R.id.progress_info);
+            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - (3 * LocalDisplay.dp2px(4) + LocalDisplay.dp2px(20))) / 4;
+            AbsListView.LayoutParams lytp = new AbsListView.LayoutParams(width, width);
             gallery_frame.setLayoutParams(lytp);
-            if(uploadImages.get(position).getThumbnailUri()!=null && uploadImages.get(position).getThumbnailUri().equals("addfile")){
+            if (uploadImages.get(position).getThumbnailUri() != null && uploadImages.get(position).getThumbnailUri().equals("addfile")) {
                 imgQueue.setImageResource(R.drawable.add_pictures);
-            }else{
+            } else {
                 ImageLoader.getInstance().displayImage(uploadImages.get(position).getThumbnailUri(), new ImageViewAware(imgQueue), options,
                         null, null, uploadImages.get(position).getOrientation());
             }
-            if(uploadImages.get(position).isupLoading()){
+            if (uploadImages.get(position).isupLoading()) {
                 overLay.setVisibility(View.VISIBLE);
-                progress_info.setText(uploadImages.get(position).getCurrentProgress()+"%");
-            }else{
+                progress_info.setText(uploadImages.get(position).getCurrentProgress() + "%");
+            } else {
                 overLay.setVisibility(View.GONE);
             }
 

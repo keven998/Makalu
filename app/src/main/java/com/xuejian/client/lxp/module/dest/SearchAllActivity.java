@@ -217,6 +217,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                     public void onTagClick(TagView tagView, Tag tag) {
                         if (mKeyTags!=null&&mKeyTags.size()>0){
                             mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
+                            searchAll(mKeyTags.get(tag.getId()).getTitle());
                         }
                     }
                 });

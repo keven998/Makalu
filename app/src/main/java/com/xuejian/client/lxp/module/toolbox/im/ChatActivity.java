@@ -87,6 +87,7 @@ import com.xuejian.client.lxp.common.widget.ExpandGridView;
 import com.xuejian.client.lxp.common.widget.PasteEditText;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
@@ -418,10 +419,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void setPanelAnimation() {
         LayoutTransition lt = new LayoutTransition();
- //       lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
-         lt.setDuration(LayoutTransition.APPEARING, 10);
+        //       lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
+        lt.setDuration(LayoutTransition.APPEARING, 10);
 //        lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
-         lt.setDuration(LayoutTransition.DISAPPEARING, 10);
+        lt.setDuration(LayoutTransition.DISAPPEARING, 10);
 //        lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
 //        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
         mExtraPanel.setLayoutTransition(lt);
@@ -653,84 +654,177 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if (isFastClick()) {
             return;
         }
-        int id = view.getId();
-        if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
-            String s = mEditTextContent.getText().toString();
-            sendText(s, 0);
-        } else if (id == R.id.btn_my_guide) {
-            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
-            try {
-                Intent intent = new Intent(mContext, StrategyListActivity.class);
+        switch (view.getId()) {
+            case R.id.btn_send:
+                String s = mEditTextContent.getText().toString();
+                sendText(s, 0);
+                break;
+            case R.id.btn_my_guide:
+                MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
+                try {
+                    Intent intent = new Intent(mContext, StrategyListActivity.class);
+                    intent.putExtra("chatType", chatType);
+                    intent.putExtra("toId", toChatUsername);
+                    intent.putExtra("conversation", conversation);
+                    intent.putExtra("userId", AccountManager.getCurrentUserId());
+                    intent.putExtra("isShare", true);
+                    //  intent.setAction("action.chat");
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.btn_take_picture:
+                selectPicFromCamera();
+                break;
+            case R.id.btn_picture:
+                selectPicFromLocal();
+                break;
+            case R.id.btn_location:
+                MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
+                startActivityForResult(new Intent(this, MapActivity.class), REQUEST_CODE_MAP);
+                break;
+            case R.id.iv_emoticons_normal:
+                hideKeyboard();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mExtraPanel.setVisibility(View.VISIBLE);
+                        iv_emoticons_normal.setVisibility(View.GONE);
+                        iv_emoticons_checked.setVisibility(View.VISIBLE);
+                        btnContainer.setVisibility(View.GONE);
+                        expressionContainer.setVisibility(View.VISIBLE);
+                    }
+                }, 100);
+                break;
+            case R.id.iv_emoticons_checked:
+                iv_emoticons_normal.setVisibility(View.VISIBLE);
+                iv_emoticons_checked.setVisibility(View.GONE);
+                btnContainer.setVisibility(View.GONE);
+                expressionContainer.setVisibility(View.GONE);
+                mExtraPanel.setVisibility(View.GONE);
+                showKeyboard(mEditTextContent);
+                break;
+            case  R.id.btn_note:
+                Intent intent = new Intent(mContext, SearchAllActivity.class);
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toChatUsername);
                 intent.putExtra("conversation", conversation);
                 intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", true);
-                //  intent.setAction("action.chat");
                 startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                break;
+            case  R.id.btn_viewspot:
+                Intent intent1 = new Intent(mContext, SearchAllActivity.class);
+                intent1.putExtra("chatType", chatType);
+                intent1.putExtra("toId", toChatUsername);
+                intent1.putExtra("conversation", conversation);
+                intent1.putExtra("userId", AccountManager.getCurrentUserId());
+                intent1.putExtra("isShare", true);
+                startActivity(intent1);
+                break;
+            case  R.id.btn_food:
+                Intent intent2 = new Intent(mContext, SearchAllActivity.class);
+                intent2.putExtra("chatType", chatType);
+                intent2.putExtra("toId", toChatUsername);
+                intent2.putExtra("conversation", conversation);
+                intent2.putExtra("userId", AccountManager.getCurrentUserId());
+                intent2.putExtra("isShare", true);
+                startActivity(intent2);
+                break;
+            case  R.id.btn_shopping:
+                Intent intent3 = new Intent(mContext, SearchAllActivity.class);
+                intent3.putExtra("chatType", chatType);
+                intent3.putExtra("toId", toChatUsername);
+                intent3.putExtra("conversation", conversation);
+                intent3.putExtra("userId", AccountManager.getCurrentUserId());
+                intent3.putExtra("isShare", true);
+                startActivity(intent3);
+                break;
+            default:
+                break;
         }
-//        else if (id == R.id.btn_dest) {
-//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpsearch");
-//            Intent intent = new Intent(mContext, SearchAllActivity.class);
-//            intent.putExtra("chatType", chatType);
-//            intent.putExtra("toId", toChatUsername);
-//            intent.putExtra("conversation", conversation);
-//            intent.putExtra("isShare", true);
-//            intent.setAction("action.chat");
-//            startActivityWithNoAnim(intent);
-//            overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
-//        }
-         /*else if (id == R.id.btn_location) {
-            ToastUtil.getInstance(this).showToast("发送位置");*/
-           /* MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
-            Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
-            intent.putExtra("chatType",chatType);
-            intent.putExtra("toId",toChatUsername);
-            intent.setAction("action.chat");
-            startActivity(intent);*/
-//            // 点击我的目的地图标
-//            JSONObject contentJson = new JSONObject();
+
+
+//        int id = view.getId();
+//        if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
+//            String s = mEditTextContent.getText().toString();
+//            sendText(s, 0);
+//        } else if (id == R.id.btn_my_guide) {
+//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
 //            try {
-//                contentJson.put("id","1");
-//                contentJson.put("desc","我的游记描述");
-//                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-//                contentJson.put("name","游记");
-//                sendText(contentJson.toString(), Constant.ExtType.TRAVELS);
-//            } catch (JSONException e) {
+//                Intent intent = new Intent(mContext, StrategyListActivity.class);
+//                intent.putExtra("chatType", chatType);
+//                intent.putExtra("toId", toChatUsername);
+//                intent.putExtra("conversation", conversation);
+//                intent.putExtra("userId", AccountManager.getCurrentUserId());
+//                intent.putExtra("isShare", true);
+//                //  intent.setAction("action.chat");
+//                startActivity(intent);
+//            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
-        //}
-        else if (id == R.id.btn_take_picture) {
-            selectPicFromCamera();// 点击照相图标
-        } else if (id == R.id.btn_picture) {
-            selectPicFromLocal(); // 点击图片图标
-        } else if (id == R.id.btn_location) { // 位置
-            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
-            startActivityForResult(new Intent(this, MapActivity.class), REQUEST_CODE_MAP);
-        } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
-            hideKeyboard();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mExtraPanel.setVisibility(View.VISIBLE);
-                    iv_emoticons_normal.setVisibility(View.GONE);
-                    iv_emoticons_checked.setVisibility(View.VISIBLE);
-                    btnContainer.setVisibility(View.GONE);
-                    expressionContainer.setVisibility(View.VISIBLE);
-                }
-            }, 100);
-        } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
-            iv_emoticons_normal.setVisibility(View.VISIBLE);
-            iv_emoticons_checked.setVisibility(View.GONE);
-            btnContainer.setVisibility(View.GONE);
-            expressionContainer.setVisibility(View.GONE);
-            mExtraPanel.setVisibility(View.GONE);
-            showKeyboard(mEditTextContent);
-        }
+//        }
+////        else if (id == R.id.btn_dest) {
+////            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpsearch");
+////            Intent intent = new Intent(mContext, SearchAllActivity.class);
+////            intent.putExtra("chatType", chatType);
+////            intent.putExtra("toId", toChatUsername);
+////            intent.putExtra("conversation", conversation);
+////            intent.putExtra("isShare", true);
+////            intent.setAction("action.chat");
+////            startActivityWithNoAnim(intent);
+////            overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
+////        }
+//         /*else if (id == R.id.btn_location) {
+//            ToastUtil.getInstance(this).showToast("发送位置");*/
+//           /* MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
+//            Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
+//            intent.putExtra("chatType",chatType);
+//            intent.putExtra("toId",toChatUsername);
+//            intent.setAction("action.chat");
+//            startActivity(intent);*/
+////            // 点击我的目的地图标
+////            JSONObject contentJson = new JSONObject();
+////            try {
+////                contentJson.put("id","1");
+////                contentJson.put("desc","我的游记描述");
+////                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
+////                contentJson.put("name","游记");
+////                sendText(contentJson.toString(), Constant.ExtType.TRAVELS);
+////            } catch (JSONException e) {
+////                e.printStackTrace();
+////            }
+//        //}
+//        else if (id == R.id.btn_take_picture) {
+//            selectPicFromCamera();// 点击照相图标
+//        } else if (id == R.id.btn_picture) {
+//            selectPicFromLocal(); // 点击图片图标
+//        } else if (id == R.id.btn_location) { // 位置
+//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
+//            startActivityForResult(new Intent(this, MapActivity.class), REQUEST_CODE_MAP);
+//        } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
+//            hideKeyboard();
+//
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mExtraPanel.setVisibility(View.VISIBLE);
+//                    iv_emoticons_normal.setVisibility(View.GONE);
+//                    iv_emoticons_checked.setVisibility(View.VISIBLE);
+//                    btnContainer.setVisibility(View.GONE);
+//                    expressionContainer.setVisibility(View.VISIBLE);
+//                }
+//            }, 100);
+//        } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
+//            iv_emoticons_normal.setVisibility(View.VISIBLE);
+//            iv_emoticons_checked.setVisibility(View.GONE);
+//            btnContainer.setVisibility(View.GONE);
+//            expressionContainer.setVisibility(View.GONE);
+//            mExtraPanel.setVisibility(View.GONE);
+//            showKeyboard(mEditTextContent);
+//        }
     }
 
     /**
@@ -1235,11 +1329,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             list.addAll(list1);
         } else if (i == 2) {
             list.addAll(reslist.subList(21, 40));
-        }else if (i==3){
+        } else if (i == 3) {
             list.addAll(reslist.subList(41, 60));
-        }else if (i==4){
+        } else if (i == 4) {
             list.addAll(reslist.subList(61, 80));
-        }else if (i==5){
+        } else if (i == 5) {
             list.addAll(reslist.subList(81, reslist.size()));
         }
         list.add("delete_expression");

@@ -22,6 +22,8 @@
     <drawable name="list_cell_item">#ffffff</drawable>
     <drawable name="list_cell_item_clicked">@color/color_disable</drawable>
 
+    <color name="black_overlay">#60000000</color>
+
     <color name="transparent_black">#aa000000</color>
     <color name="base_font_color">#2e2727</color>
     <color name="second_font_color">#626262</color>

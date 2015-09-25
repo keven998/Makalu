@@ -392,13 +392,6 @@ public class TravelApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        try {
-            StringEntity entity = new StringEntity(guideJson, "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
 
 
 
@@ -454,12 +447,6 @@ public class TravelApi extends BaseApi {
             jsonObject.put("guideId", id);
             jsonObject.put("action", "fork");
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         setDefaultParams(request);
@@ -569,12 +556,6 @@ public class TravelApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
 
      //   return HttpManager.request(request, callback);
@@ -614,14 +595,6 @@ public class TravelApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-
 
 //        request.setHttpMethod(PTRequest.POST);
 //        request.setUrl(SystemConfig.DEV_URL + MODIFY_GUIDE_LOC);

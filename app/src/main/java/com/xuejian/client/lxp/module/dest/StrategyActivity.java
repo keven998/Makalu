@@ -731,7 +731,7 @@ public class StrategyActivity extends PeachBaseActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = View.inflate(drawContext, R.layout.strategy_draw_list_cell, null);
+                convertView = View.inflate(drawContext, R.layout.strategy_menu_draw_list_cell, null);
             }
             place = (TextView) convertView.findViewById(R.id.user_been_place);
             place.setText(destinations.get(position).zhName);
