@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
@@ -79,6 +80,12 @@ public class UserAlbumInfoActivity extends Activity{
             super.handleMessage(msg);
             switch (msg.what){
                 case SAVE_LOCAL_SUCESS:
+
+
+                    Uri uri = (Uri)msg.obj;
+                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    intent.setData(uri);
+                    UserAlbumInfoActivity.this.sendBroadcast(intent);
                     Toast.makeText(UserAlbumInfoActivity.this, "保存成功~", Toast.LENGTH_SHORT).show();
                     break;
                 case SAVE_LOCAL_FAIL:
@@ -96,7 +103,6 @@ public class UserAlbumInfoActivity extends Activity{
         myPictures = getIntent().getParcelableArrayListExtra("myPictures");
         pic_ids = getIntent().getStringArrayListExtra("pic_ids");
         userid = AccountManager.getCurrentUserId();
-        Log.e("user album id",userid+"--------------------------");
         if(myPictures==null || pic_ids==null){
             finish();
             return;
@@ -261,7 +267,7 @@ public class UserAlbumInfoActivity extends Activity{
                     InputStream inputStream=null;
                     HttpURLConnection urlConnection=null;
                     try{
-                        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+                        String filePath = Environment.getExternalStorageDirectory().toString()+"/Download";
                         URL url=new URL(imageBean.full);
                         urlConnection= (HttpURLConnection)url.openConnection();
                         urlConnection.setDoOutput(true);
@@ -271,7 +277,7 @@ public class UserAlbumInfoActivity extends Activity{
                             inputStream = urlConnection.getInputStream();
                         }
 
-
+                        Log.e("pathuri","oooooooooo-------------------------");
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy_MM_dd_HH:mm:ss");
                         String filePrefix = simpleDateFormat.format(new Date());
                         String contentType = urlConnection.getContentType();
@@ -293,7 +299,17 @@ public class UserAlbumInfoActivity extends Activity{
                         while ((len = inputStream.read(buffer))!=-1){
                             fout.write(buffer,0,len);
                         }
-                        myHandler.sendEmptyMessage(SAVE_LOCAL_SUCESS);
+                        fout.flush();
+                        fout.close();
+                        try{
+                            MediaStore.Images.Media.insertImage(UserAlbumInfoActivity.this.getContentResolver(),outputFile.getAbsolutePath(),filename,null);
+                        }catch (Exception ex){
+
+                        }
+                        Message message = new Message();
+                        message.obj=Uri.fromFile(outputFile);
+                        message.what=SAVE_LOCAL_SUCESS;
+                        myHandler.sendMessage(message);
 
 
                     }catch (Exception ex){

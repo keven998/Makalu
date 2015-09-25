@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.dest.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.GuideViewUtils;
+import com.xuejian.client.lxp.module.dest.SelectCityActivity;
 
 /**
  * Created by xuyongchen on 15/9/23.
@@ -46,6 +48,13 @@ public class DestinationFragment extends PeachBaseFragment {
             @Override
             public void onIndicatorPageChange(int preItem, int currentItem) {
 
+            }
+        });
+        (view.findViewById(R.id.desty_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Intent intent = new Intent(getActivity(), SelectCityActivity.class);
+                 startActivity(intent);
             }
         });
         return view;

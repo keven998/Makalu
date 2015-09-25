@@ -37,6 +37,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.XDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
+import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.SearchExpertActivity;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
 
@@ -293,10 +294,10 @@ public class OverSeasFragment extends PeachBaseFragment {
             holder.rl_country.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent expertIntent = new Intent(getActivity(), GuilderListActivity.class);
-                    expertIntent.putExtra("countryId", item.id);
-                    expertIntent.putExtra("countryName", item.zhName);
-                    startActivity(expertIntent);
+                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
+                    intent.putExtra("id", item.id);
+                    intent.putExtra("isFromStrategy", false);
+                    startActivity(intent);
                 }
             });
             return convertView;
