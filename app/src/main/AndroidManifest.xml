@@ -102,6 +102,10 @@
         <activity android:name=".module.dest.SelectCityActivity"
             android:label="旅行派"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".module.dest.SearchDestyCityActivity"
+            android:label="旅行派"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".module.dest.SearchDestForPoiActivity"
             android:label="@string/app_name"

@@ -538,7 +538,6 @@ public class InCityFragment extends PeachBaseFragment{
                 holderView = new HolderView();
                 holderView.cityNameTv = (TextView) convertView.findViewById(R.id.des_title);
                 holderView.desBgImage = (ImageView) convertView.findViewById(R.id.des_bg_pic);
-                holderView.addIcon = (ImageView) convertView.findViewById(R.id.des_selected_icon);
                 convertView.setTag(holderView);
             }else{
                 holderView = (HolderView)convertView.getTag();
@@ -552,7 +551,7 @@ public class InCityFragment extends PeachBaseFragment{
                 }
 
             }
-            holderView.addIcon.setVisibility(View.GONE);
+
             return convertView;
         }
 
@@ -574,7 +573,7 @@ public class InCityFragment extends PeachBaseFragment{
         class HolderView{
             TextView cityNameTv;
             ImageView desBgImage;
-            ImageView addIcon;
+
         }
     }
 

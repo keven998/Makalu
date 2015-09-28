@@ -13,51 +13,12 @@
         android:orientation="vertical"
         android:layout_marginTop="52dp"
         >
-        <LinearLayout
-            android:id="@+id/desty_search_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            >
 
-            <EditText
-                android:id="@+id/desty_et_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/all_whitesolid_geyline"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="10dp"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:paddingLeft="8dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                android:singleLine="true"
-                android:textColor="@color/base_text_color_title"
-                android:textColorHint="@color/base_text_color_text_hint"
-                android:textSize="@dimen/text_size_14"
-                android:layout_gravity="center_vertical"
-                />
+
+            <!--Intent intent = new Intent(mContext,SearchSomeCityActivity.class);
+            intent.putExtra("keyWords",keyWords);
+            startActivityForResult(intent, REQUEST_CODE_SELECT_LOC);-->
             <!--   android:background="@drawable/button_normal_shape"-->
-            <TextView
-                android:id="@+id/desty_btn_search"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="15dp"
-                android:text="取消"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/color_text_ii"
-                android:textSize="@dimen/text_size_14" />
-        </LinearLayout>
         <com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager
             android:id="@+id/select_dest_viewPager"
             android:layout_width="match_parent"
@@ -89,7 +50,17 @@
             android:layout_centerInParent="true"
             />
 
-
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:drawableLeft="@drawable/expert_search"
+            android:textColor="@color/color_text_ii"
+            android:layout_alignParentRight="true"
+            />
     </RelativeLayout>
 
 

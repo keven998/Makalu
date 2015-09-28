@@ -7,13 +7,7 @@ import java.util.ArrayList;
  */
 public class CountryWithExpertsBean {
     public String id;
-    public String code;
+    public String itemId;
     public String zhName;
-    public String enName;
     public ArrayList<ImageBean> images = new ArrayList<ImageBean>();
-    public ArrayList<LocBean> destinations = new ArrayList<LocBean>();
-    public ContinentsBean continents;
-    public int expertCnt;
-    public int rank;
-
 }

@@ -55,10 +55,9 @@ public class SelectCityActivity extends PeachBaseActivity implements OnDestActio
     private String guideId;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
     //private HorizontalScrollView mScrollPanel;
+    private TextView tv_search;
 
     private ArrayList<String> allSelectedPics = new ArrayList<String>();
-    private EditText desty_et_search;
-    private TextView desty_btn_search;
     @Override
     public void onDestAdded(final LocBean locBean, boolean isEdit, String type) {
         if (allAddCityList.contains(locBean)) {
@@ -113,11 +112,11 @@ public class SelectCityActivity extends PeachBaseActivity implements OnDestActio
         View rootView = View.inflate(mContext, R.layout.activity_select_city, null);
         setContentView(rootView);
         initTitleBar();
-        desty_et_search = (EditText)rootView.findViewById(R.id.desty_et_search);
-        desty_btn_search = (TextView)rootView.findViewById(R.id.desty_btn_search);
+
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.in_out_indicator);
         mSelectDestVp = (FixedViewPager) rootView.findViewById(R.id.select_dest_viewPager);
         indicatorViewPager = new IndicatorViewPager(inOutIndicator, mSelectDestVp);
+        tv_search = (TextView)rootView.findViewById(R.id.tv_search);
         indicatorViewPager.setAdapter(new InOutFragmentAdapter(getSupportFragmentManager()));
         mSelectDestVp.setCanScroll(false);
         // 设置viewpager保留界面不重新加载的页面数量
@@ -144,38 +143,11 @@ public class SelectCityActivity extends PeachBaseActivity implements OnDestActio
 
         }
 
-        desty_et_search.addTextChangedListener(new TextWatcher() {
+        tv_search.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                desty_btn_search.setText("取消");
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length()>0){
-                    desty_btn_search.setText("搜索");
-                }else{
-                    desty_btn_search.setText("取消");
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        desty_btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final String keyWords=desty_et_search.getText().toString();
-                if(keyWords!=null && keyWords.trim().length()>0){
-                    Intent intent = new Intent(mContext,SearchSomeCityActivity.class);
-                    intent.putExtra("keyWords",keyWords);
-                    startActivityForResult(intent, REQUEST_CODE_SELECT_LOC);
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(SelectCityActivity.this,SearchDestyCityActivity.class);
+                SelectCityActivity.this.startActivity(intent);
             }
         });
     }

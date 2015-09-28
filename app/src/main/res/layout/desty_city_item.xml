@@ -5,7 +5,7 @@ android:layout_height="wrap_content"
 android:id="@+id/fl_country">
 
 <ImageView
-    android:id="@+id/des_bg_pic"
+    android:id="@+id/city_image"
     android:layout_width="match_parent"
     android:layout_height="@dimen/talent_loc_cell_height"
     android:scaleType="centerCrop" />
@@ -25,7 +25,7 @@ android:id="@+id/fl_country">
     android:layout_gravity="center"
     >
     <TextView
-        android:id="@+id/des_title"
+        android:id="@+id/city_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -35,14 +35,13 @@ android:id="@+id/fl_country">
         />
 
     <TextView
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:text="热门目的地"
         android:textSize="14sp"
         android:textColor="@color/white"
         android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
         />
 </LinearLayout>
 </FrameLayout>

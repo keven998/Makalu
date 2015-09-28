@@ -84,8 +84,8 @@ public class TravelApi extends BaseApi {
 
     //达人列表
     public final static String EXPERT_LIST = "/geo/countries";
-
     public final static String ANCILLARY_INFO = "/search/ancillary-info";
+    public final static String RECOMMEND_LIST="/geo/localities/recommendations?itemType=%s&isAbroad=%b";
     //    //景点列表
 //    /app/poi/viewspots
 //    //单个景点的信息
@@ -789,6 +789,16 @@ public class TravelApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + EXPERT_LIST);
         setDefaultParams(request);
        // return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
+
+    public static void getRecomendCountry(HttpCallBack callback,boolean isAbroad){
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(RECOMMEND_LIST,"locality",isAbroad));
+        setDefaultParams(request);
+        // return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request,"", callback);
     }
 }

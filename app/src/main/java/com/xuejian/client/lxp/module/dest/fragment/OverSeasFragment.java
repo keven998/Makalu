@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,24 +54,12 @@ import java.util.List;
 public class OverSeasFragment extends PeachBaseFragment {
 
     private ListView listView;
-
-
     private TalentLocAdapter adapter;
-    private ArrayList<Integer> headerPos = new ArrayList<Integer>();
-    private int lastPos = 0;
-    private String[] delta = {"亚洲", "欧洲", "北美洲", "南美洲", "非洲", "大洋洲"};
-    private String[] deltaEN = {"AS", "EU", "NA", "SA", "AF", "OC"};
-    List<String> lists;
-    List<String> listsEN;
-    List<String> continentNames = new ArrayList<>();
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.talentloc,container,false);
-        lists = Arrays.asList(delta);
-        listsEN = Arrays.asList(deltaEN);
         initView(view);
         initData();
         return view;
@@ -84,14 +73,15 @@ public class OverSeasFragment extends PeachBaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        TravelApi.getExpertList(new HttpCallBack() {
+
+        TravelApi.getRecomendCountry(new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
 
                 resizeData(expertResult.result);
-                PreferenceUtils.cacheData(getActivity(),"countryList",result.toString());
+                PreferenceUtils.cacheData(getActivity(), "countryList", result.toString());
             }
 
             @Override
@@ -101,41 +91,15 @@ public class OverSeasFragment extends PeachBaseFragment {
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-
+                DialogManager.getInstance().dissMissLoadingDialog();
             }
-        });
+        }, true);
     }
 
     private void resizeData(List<CountryWithExpertsBean> list) {
         adapter.getList().clear();
-        continentNames.clear();
-        for (int i = 0; i < 6; i++) {
-            adapter.getList().add(new ArrayList<CountryWithExpertsBean>());
-        }
-//        for (CountryWithExpertsBean bean : list) {
-//            adapter.getList().get(lists.indexOf(bean.continents.zhName)).add(bean);
-//        }
-        for (CountryWithExpertsBean bean : list) {
-            int p = listsEN.indexOf(bean.continents.code);
-            if (p>=0)adapter.getList().get(p).add(bean);
-        }
-
-        ArrayList<ArrayList<CountryWithExpertsBean>> del = new ArrayList<>();
-        for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
-            if (beans.size() == 0) {
-                del.add(beans);
-            } else {
-                sortCountries(beans);
-            }
-        }
-        adapter.getList().removeAll(del);
-//        adapter = new TalentLocAdapter(getActivity());
-//        listView.setAdapter(adapter);
-        getHeaderPos();
-        for (ArrayList<CountryWithExpertsBean> beans :  adapter.getList()) {
-            String name = beans.get(0).continents.zhName;
-        //    if ("美洲".equals(name))name = "南美洲";
-            continentNames.add(name);
+        if(list!=null && list.size()>0){
+            adapter.getList().addAll(list);
         }
         adapter.notifyDataSetChanged();
     }
@@ -155,7 +119,7 @@ public class OverSeasFragment extends PeachBaseFragment {
         listView = (ListView) view.findViewById(R.id.talent_loc_list);
 
 
-        ArrayList<ArrayList<CountryWithExpertsBean>> data = new ArrayList<>();
+        ArrayList<CountryWithExpertsBean>data = new ArrayList<>();
         adapter = new TalentLocAdapter(getActivity(),data);
         listView.setAdapter(adapter);
         String datas = PreferenceUtils.getCacheData(getActivity(), "countryList");
@@ -195,83 +159,57 @@ public class OverSeasFragment extends PeachBaseFragment {
 
 
 
-
-    public void getHeaderPos() {
-        headerPos.clear();
-        int pos = 0;
-        headerPos.add(pos);
-        for (int i = 0; i < adapter.getSectionCount() - 1; i++) {
-            pos += adapter.getCountInSection(i) + 1;
-            headerPos.add(pos);
-        }
-    }
-
-    private class TalentLocAdapter extends BaseSectionAdapter {
+    private class TalentLocAdapter extends BaseAdapter {
         private TextView header;
         private DisplayImageOptions poptions;
-        private ArrayList<ArrayList<CountryWithExpertsBean>> list;
+        private ArrayList<CountryWithExpertsBean> list;
         private Context mCxt;
         private ImageLoader mImgLoader;
 
-        public TalentLocAdapter(Context context,ArrayList<ArrayList<CountryWithExpertsBean>> list) {
+        public TalentLocAdapter(Context context,ArrayList<CountryWithExpertsBean> list) {
             mCxt = context;
             this.list = list;
             mImgLoader = ImageLoader.getInstance();
             poptions = new DisplayImageOptions.Builder()
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                    .showImageOnLoading(R.drawable.messages_bg_useravatar)
+                    .showImageOnFail(R.drawable.expert_country_list_bg)
+                    .showImageForEmptyUri(R.drawable.expert_country_list_bg)
+                    .showImageOnLoading(R.drawable.expert_country_list_bg)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisc(true)
                     .build();
         }
-        public ArrayList<ArrayList<CountryWithExpertsBean>> getList(){
+        public ArrayList<CountryWithExpertsBean> getList(){
             return list;
         }
+
         @Override
-        public int getContentItemViewType(int section, int position) {
+        public Object getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public long getItemId(int position) {
             return 0;
         }
 
         @Override
-        public int getHeaderItemViewType(int section) {
-            return 0;
-        }
-
-        @Override
-        public int getItemViewTypeCount() {
-            return 1;
-        }
-
-        @Override
-        public int getHeaderViewTypeCount() {
-            return 1;
-        }
-
-        @Override
-        public CountryWithExpertsBean getItem(int section, int position) {
-            return list.get(section).get(position);
-        }
-
-        @Override
-        public long getItemId(int section, int position) {
-            return getGlobalPositionForItem(section, position);
-        }
-
-        @Override
-        public View getItemView(int section, int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = View.inflate(mCxt, R.layout.talent_loc_cell_content, null);
             }
 
-            final CountryWithExpertsBean item = getItem(section, position);
+            final CountryWithExpertsBean item = list.get(position);
             ViewHolder holder = (ViewHolder) convertView.getTag();
             if (holder == null) {
                 holder = new ViewHolder();
                 holder.rl_country = (FrameLayout) convertView.findViewById(R.id.fl_country);
                 holder.bgImage = (ImageView) convertView.findViewById(R.id.talent_loc_img);
                 holder.numSum = (TextView) convertView.findViewById(R.id.talent_loc_num);
-                holder.loc = (TextView) convertView.findViewById(R.id.talent_loc_city);
                 convertView.setTag(holder);
             }
             if (item.images.size() > 0) {
@@ -280,17 +218,9 @@ public class OverSeasFragment extends PeachBaseFragment {
                 mImgLoader.displayImage("", holder.bgImage, poptions);
             }
 
-            if (!TextUtils.isEmpty(item.zhName)&&!TextUtils.isEmpty(item.enName)){
-                StringBuilder sb = new StringBuilder();
-                sb.append(item.zhName).append("\n").append(item.enName);
-                SpannableString zh =new SpannableString(sb);
-                zh.setSpan(new AbsoluteSizeSpan(24,true),0,item.zhName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                zh.setSpan(new TypefaceSpan("default-bold"),0,item.zhName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                zh.setSpan(new AbsoluteSizeSpan(18,true),item.zhName.length()+1,sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                holder.numSum.setText(zh);
-            }
 
-            holder.loc.setText(String.valueOf(item.expertCnt));
+            holder.numSum.setText(item.zhName+"");
+
             holder.rl_country.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -303,68 +233,15 @@ public class OverSeasFragment extends PeachBaseFragment {
             return convertView;
         }
 
-        @Override
-        public View getHeaderView(int section, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = View.inflate(mCxt, R.layout.talent_loc_cell_head, null);
-            }
-            header = (TextView) convertView.findViewById(R.id.talent_loc_head);
-            header.setText(getSectionStr(section));
-            return convertView;
-        }
-
-        @Override
-        public int getSectionCount() {
-            return list.size();
-        }
-
-        @Override
-        public int getCountInSection(int section) {
-            return list.get(section).size();
-        }
-
-        @Override
-        public String getSectionStr(int section) {
-            return list.get(section).get(0).continents.zhName;
-        }
-
-        @Override
-        public boolean doesSectionHaveHeader(int section) {
-            return true;
-        }
-
-        @Override
-        public boolean shouldListHeaderFloat(int headerIndex) {
-            return false;
-        }
 
         private class ViewHolder {
             private FrameLayout rl_country;
             private ImageView bgImage;
             private TextView numSum;
-            private TextView loc;
+
         }
     }
 
-    private void sortCountries(List<CountryWithExpertsBean> conversationList) {
-        Collections.sort(conversationList, new Comparator<CountryWithExpertsBean>() {
-            @Override
-            public int compare(final CountryWithExpertsBean con1, final CountryWithExpertsBean con2) {
 
-                long LastTime2 = con2.rank;
-                long LastTime1 = con1.rank;
-                if (LastTime1 == 0 || LastTime2 == 0) {
-                    return -1;
-                }
-                if (LastTime2 == LastTime1) {
-                    return 0;
-                } else if (LastTime2 < LastTime1) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            }
-        });
-    }
 
 }

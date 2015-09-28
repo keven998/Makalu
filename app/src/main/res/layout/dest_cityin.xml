@@ -32,8 +32,8 @@
             android:id="@+id/fl_city_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:dividerHeight="1px"
-            android:divider="@color/color_line"
+            android:divider="@null"
+            android:dividerHeight="0dp"
             >
 
         </com.xuejian.client.lxp.common.widget.ExpandListView>

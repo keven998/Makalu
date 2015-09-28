@@ -237,7 +237,7 @@ public class OutCityFragment extends PeachBaseFragment {
         private FlowLayout cityListFl;
         TextView cityNameTv;
         ImageView desBgImage;
-        ImageView addIcon;
+
         //private DisplayImageOptions poptions = UILUtils.getDefaultOption();
         private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
@@ -247,22 +247,19 @@ public class OutCityFragment extends PeachBaseFragment {
 
         @Override
         public View createView(LayoutInflater layoutInflater) {
-            View contentView = layoutInflater.inflate(R.layout.out_desty_city_image, null);
+            View contentView = layoutInflater.inflate(R.layout.out_item, null);
             cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
             desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
-            addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
+
             return contentView;
         }
 
         @Override
         public void showData(int position, final LocBean itemData) {
-
             cityNameTv.setText(itemData.zhName);
             if (itemData.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(itemData.images.get(0).url, desBgImage, poptions);
             }
-            addIcon.setVisibility(View.GONE);
-
         }
     }
 
