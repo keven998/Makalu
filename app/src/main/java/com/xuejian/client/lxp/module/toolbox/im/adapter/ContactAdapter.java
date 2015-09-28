@@ -155,7 +155,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
         } else if ("item_friends_request".equals(username)) {
             vh.nickView.setText("好友请求");
-            vh.avatarView.setImageResource(R.drawable.ic_contact_list_invent);
+            vh.avatarView.setImageResource(R.drawable.icon_friend_request);
             if (IMClient.getInstance().getUnAcceptMsg() > 0) {
                 vh.unreadMsgView.setVisibility(View.VISIBLE);
                 //         vh.unreadMsgView.setText(IMClient.getInstance().getUnAcceptMsg()+"");

@@ -84,6 +84,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     View headerView;
     RelativeLayout header;
     TravelNoteBean noteBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,6 +223,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     }
 
     private void bindGuideView(final PoiGuideBean bean) {
+        if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
         header = (RelativeLayout) headerView.findViewById(R.id.header);
         mSearchAllLv.addHeaderView(headerView);
@@ -260,11 +262,11 @@ public class SearchAllActivity extends PeachBaseActivity {
         } else {
             history_pannel.setVisibility(View.GONE);
         }
-        TravelApi.getRecommendKeywords(type,new HttpCallBack() {
+        TravelApi.getRecommendKeywords(type, new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
                 CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(), KeywordBean.class);
-                if (keyList.code==0){
+                if (keyList.code == 0) {
                     for (int i = 0; i < keyList.result.size(); i++) {
                         Tag tag = new Tag();
                         tag.setId(i);
@@ -341,10 +343,9 @@ public class SearchAllActivity extends PeachBaseActivity {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                     if (detailResult.code == 0) {
-                        if (detailResult.result.size()==0){
+                        if (detailResult.result.size() == 0) {
                             ToastUtil.getInstance(SearchAllActivity.this).showToast(String.format("没有找到“%s”的相关结果", keyword));
-                        }
-                        else bindNoteView(detailResult.result);
+                        } else bindNoteView(detailResult.result);
                     }
                 }
 
@@ -437,7 +438,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     }
 
     private void bindNoteView(final List<TravelNoteBean> beans) {
-       ListViewDataAdapter mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
+        ListViewDataAdapter mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
             public ViewHolderBase createViewHolder() {
                 TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(SearchAllActivity.this, true, false);
@@ -481,10 +482,9 @@ public class SearchAllActivity extends PeachBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if ("note".equals(type)){
+            if ("note".equals(type)) {
                 IMUtils.onShareResult(mContext, noteBean, requestCode, resultCode, data, null);
-            }
-            else if ("locality".equals(type)) {
+            } else if ("locality".equals(type)) {
                 IMUtils.onShareResult(mContext, (LocBean) temp, requestCode, resultCode, data, null);
             } else
                 IMUtils.onShareResult(mContext, (PoiDetailBean) temp, requestCode, resultCode, data, null);
