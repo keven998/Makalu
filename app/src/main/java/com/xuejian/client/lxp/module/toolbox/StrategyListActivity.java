@@ -296,7 +296,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 size = OtherApi.PAGE_SIZE;
             }
             List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
-            PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
+            if(!isFinishing())PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
         }
     }
 
@@ -307,12 +307,12 @@ public class StrategyListActivity extends PeachBaseActivity {
             if (requestCode == RESULT_PLAN_DETAIL) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
-                    PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+                    if(!isFinishing())PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
             } else if (requestCode == REQUEST_CODE_NEW_PLAN) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
-                    PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+                    if(!isFinishing())PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
                 mMyStrategyLv.doPullRefreshing(true, 0);
             }

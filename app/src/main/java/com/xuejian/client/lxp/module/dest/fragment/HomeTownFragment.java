@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,15 +37,15 @@ public class HomeTownFragment extends PeachBaseFragment {
 
     private ListView listView;
     private TalentLocAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.talentloc,container,false);
+        View view = inflater.inflate(R.layout.talentloc, container, false);
         initView(view);
         initData();
         return view;
     }
-
 
 
     private void initData() {
@@ -56,14 +55,15 @@ public class HomeTownFragment extends PeachBaseFragment {
             e.printStackTrace();
         }
 
-        TravelApi.getRecomendCountry(new HttpCallBack() {
+        TravelApi.getRecomendCountry(new HttpCallBack<String>() {
+
             @Override
-            public void doSuccess(Object result, String method) {
+            public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
 
                 resizeData(expertResult.result);
-                PreferenceUtils.cacheData(getActivity(), "mycountryList", result.toString());
+                if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "mycountryList", result.toString());
             }
 
             @Override
@@ -80,7 +80,7 @@ public class HomeTownFragment extends PeachBaseFragment {
 
     private void resizeData(List<CountryWithExpertsBean> list) {
         adapter.getList().clear();
-        if(list!=null && list.size()>0){
+        if (list != null && list.size() > 0) {
             adapter.getList().addAll(list);
         }
         adapter.notifyDataSetChanged();
@@ -88,16 +88,16 @@ public class HomeTownFragment extends PeachBaseFragment {
 
     private void initView(View view) {
         listView = (ListView) view.findViewById(R.id.talent_loc_list);
-        ArrayList<CountryWithExpertsBean>data = new ArrayList<>();
-        adapter = new TalentLocAdapter(getActivity(),data);
+        ArrayList<CountryWithExpertsBean> data = new ArrayList<>();
+        adapter = new TalentLocAdapter(getActivity(), data);
         listView.setAdapter(adapter);
         String datas = PreferenceUtils.getCacheData(getActivity(), "mycountryList");
 
-        if (!TextUtils.isEmpty(datas)){
+        if (!TextUtils.isEmpty(datas)) {
             CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(datas, CountryWithExpertsBean.class);
             try {
                 resizeData(expertResult.result);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -118,7 +118,6 @@ public class HomeTownFragment extends PeachBaseFragment {
     }
 
 
-
     private class TalentLocAdapter extends BaseAdapter {
         private TextView header;
         private DisplayImageOptions poptions;
@@ -126,7 +125,7 @@ public class HomeTownFragment extends PeachBaseFragment {
         private Context mCxt;
         private ImageLoader mImgLoader;
 
-        public TalentLocAdapter(Context context,ArrayList<CountryWithExpertsBean> list) {
+        public TalentLocAdapter(Context context, ArrayList<CountryWithExpertsBean> list) {
             mCxt = context;
             this.list = list;
             mImgLoader = ImageLoader.getInstance();
@@ -138,7 +137,8 @@ public class HomeTownFragment extends PeachBaseFragment {
                     .cacheOnDisc(true)
                     .build();
         }
-        public ArrayList<CountryWithExpertsBean> getList(){
+
+        public ArrayList<CountryWithExpertsBean> getList() {
             return list;
         }
 
@@ -179,7 +179,7 @@ public class HomeTownFragment extends PeachBaseFragment {
             }
 
 
-            holder.numSum.setText(item.zhName+"");
+            holder.numSum.setText(item.zhName + "");
 
             holder.rl_country.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -201,7 +201,6 @@ public class HomeTownFragment extends PeachBaseFragment {
 
         }
     }
-
 
 
 }

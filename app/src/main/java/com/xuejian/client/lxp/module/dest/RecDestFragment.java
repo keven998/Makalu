@@ -114,7 +114,7 @@ public class RecDestFragment extends PeachBaseFragment {
                 CommonJson4List<RecDestBean> destResult = CommonJson4List.fromJson(result, RecDestBean.class);
                 if (destResult.code == 0) {
                     bindView(destResult.result);
-                    PreferenceUtils.cacheData(getActivity(), "recommend_content", GsonTools.createGsonString(destResult.result));
+                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "recommend_content", GsonTools.createGsonString(destResult.result));
                 }
             }
 

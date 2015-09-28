@@ -264,10 +264,13 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
        // return HttpManager.request(request, callback);
     }
-    public static void getRecommendKeywords(HttpCallBack callback) {
+    public static void getRecommendKeywords(String type ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD);
+        if (!TextUtils.isEmpty(type)){
+            request.putUrlParams("itemType",type);
+        }
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
        // return HttpManager.request(request, callback);
@@ -277,7 +280,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD_CHAT);
-        request.putUrlParams("itemType",type);
+        request.putUrlParams("itemType", type);
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);

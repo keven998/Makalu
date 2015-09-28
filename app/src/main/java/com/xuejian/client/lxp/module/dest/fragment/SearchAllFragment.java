@@ -209,7 +209,7 @@ public class SearchAllFragment extends PeachBaseFragment {
         } else {
             history_pannel.setVisibility(View.GONE);
         }
-        TravelApi.getRecommendKeywords(new HttpCallBack() {
+        TravelApi.getRecommendKeywords(null,new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
                 CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(), KeywordBean.class);

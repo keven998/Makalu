@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,8 +34,6 @@ import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
-import com.xuejian.client.lxp.module.dest.OnDestActionListener;
-
 import com.xuejian.client.lxp.module.dest.SelectCityActivity;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
 
@@ -150,8 +147,8 @@ public class OutCityFragment extends PeachBaseFragment {
                 CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(result, CountryBean.class);
                 if (countryListResult.code == 0) {
                     bindOutView(countryListResult.result);
-                    PreferenceUtils.cacheData(getActivity(), "destination_outcountry", result);
-                    PreferenceUtils.cacheData(getActivity(), "outcountry_last_modify", CommonUtils.getLastModifyForHeader(headers));
+                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "destination_outcountry", result);
+                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "outcountry_last_modify", CommonUtils.getLastModifyForHeader(headers));
                 }
             }
 

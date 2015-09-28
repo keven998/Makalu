@@ -221,7 +221,7 @@ public class UserFragment extends PeachBaseFragment {
             }else if(requestCode == REQUEST_CODE_NEW_PLAN){
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
-                    PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
+                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
                 }
            //     getStrategyListData(user);
 

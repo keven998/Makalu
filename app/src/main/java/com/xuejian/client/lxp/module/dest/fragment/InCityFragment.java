@@ -154,8 +154,8 @@ public class InCityFragment extends PeachBaseFragment{
                 box.hideAll();
                 if (locListResult.code == 0) {
                     bindInView(locListResult.result);
-                    PreferenceUtils.cacheData(getActivity(), "destination_indest_group", result);
-                    PreferenceUtils.cacheData(getActivity(), "indest_group_last_modify", CommonUtils.getLastModifyForHeader(headers));
+                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "destination_indest_group", result);
+                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "indest_group_last_modify", CommonUtils.getLastModifyForHeader(headers));
                     LogUtil.d("last_modify", CommonUtils.getLastModifyForHeader(headers));
                 }
             }

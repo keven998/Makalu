@@ -488,7 +488,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             size = OtherApi.PAGE_SIZE;
         }
         List<StrategyBean> cd = planeList.subList(0, size);
-        PreferenceUtils.cacheData(getActivity(), String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
+        if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
     }
 
     @Override
@@ -510,7 +510,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
             }else if(requestCode == REQUEST_CODE_NEW_PLAN){
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
-                    PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
+                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
                 }
                 mCurrentPage=0;
                 getStrategyListData(user);

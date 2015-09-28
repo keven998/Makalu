@@ -260,45 +260,29 @@ public class SearchAllActivity extends PeachBaseActivity {
         } else {
             history_pannel.setVisibility(View.GONE);
         }
-        TravelApi.getTypeSearchRecommendKeywords(type, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-
-
-        TravelApi.getRecommendKeywords(new HttpCallBack() {
+        TravelApi.getRecommendKeywords(type,new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
                 CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(), KeywordBean.class);
-                for (int i = 0; i < keyList.result.size(); i++) {
-                    Tag tag = new Tag();
-                    tag.setId(i);
-                    tag.setChecked(true);
-                    tag.setTitle(keyList.result.get(i).zhName);
-                    mKeyTags.add(tag);
-                }
-                recomend_tag.setTags(mKeyTags);
-                recomend_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
-                    @Override
-                    public void onTagClick(TagView tagView, Tag tag) {
-                        if (mKeyTags != null && mKeyTags.size() > 0) {
-                            mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
-                            searchAll(mKeyTags.get(tag.getId()).getTitle());
-                        }
+                if (keyList.code==0){
+                    for (int i = 0; i < keyList.result.size(); i++) {
+                        Tag tag = new Tag();
+                        tag.setId(i);
+                        tag.setChecked(true);
+                        tag.setTitle(keyList.result.get(i).zhName);
+                        mKeyTags.add(tag);
                     }
-                });
+                    recomend_tag.setTags(mKeyTags);
+                    recomend_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
+                        @Override
+                        public void onTagClick(TagView tagView, Tag tag) {
+                            if (mKeyTags != null && mKeyTags.size() > 0) {
+                                mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
+                                searchAll(mKeyTags.get(tag.getId()).getTitle());
+                            }
+                        }
+                    });
+                }
             }
 
             @Override
@@ -461,7 +445,8 @@ public class SearchAllActivity extends PeachBaseActivity {
                     @Override
                     public void onSendClick(View view, TravelNoteBean itemData) {
                         noteBean = itemData;
-                        IMUtils.onClickImShare(mContext);
+                        IMUtils.showSendDialog(mContext, noteBean, chatType, toId, conversation, null);
+                        // IMUtils.onClickImShare(mContext);
                     }
                 });
                 return viewHolder;
