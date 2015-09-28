@@ -104,6 +104,20 @@ public class OverSeasFragment extends PeachBaseFragment {
         ArrayList<CountryWithExpertsBean>data = new ArrayList<>();
         adapter = new TalentLocAdapter(getActivity(),data);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try{
+                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
+                    intent.putExtra("id",adapter.getList().get(position).id);
+                    intent.putExtra("isFromStrategy", false);
+                    startActivity(intent);
+                }catch (Exception ex){
+
+                }
+
+            }
+        });
         String datas = PreferenceUtils.getCacheData(getActivity(), "countryList");
 
         if (!TextUtils.isEmpty(datas)){
@@ -201,17 +215,8 @@ public class OverSeasFragment extends PeachBaseFragment {
             }
 
 
-            holder.numSum.setText(item.zhName+"");
+            holder.numSum.setText(item.zhName + "");
 
-            holder.rl_country.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
-                    intent.putExtra("id", item.id);
-                    intent.putExtra("isFromStrategy", false);
-                    startActivity(intent);
-                }
-            });
             return convertView;
         }
 

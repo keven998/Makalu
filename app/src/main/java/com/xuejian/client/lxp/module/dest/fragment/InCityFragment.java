@@ -1,7 +1,6 @@
 package com.xuejian.client.lxp.module.dest.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -46,7 +45,6 @@ import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
 import com.xuejian.client.lxp.common.widget.ExpandListView;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
-import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.SelectCityActivity;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
 
@@ -76,7 +74,6 @@ public class InCityFragment extends PeachBaseFragment{
     protected List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
     private boolean isClickable;
-    OnDestActionListener mOnDestActionListener;
     private LruCache<String,Bitmap> mMemoryCache;
 
     public InCityFragment(boolean isClickable) {
@@ -175,15 +172,6 @@ public class InCityFragment extends PeachBaseFragment{
         });
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        try {
-            mOnDestActionListener = (OnDestActionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement On OnDestActionListener");
-        }
-        super.onAttach(activity);
-    }
 
     private void bindInView(List<GroupLocBean> result) {
         ArrayList<LocBean> allSelectLoc = null;
