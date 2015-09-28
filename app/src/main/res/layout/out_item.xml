@@ -7,11 +7,11 @@ android:id="@+id/fl_country">
 <ImageView
     android:id="@+id/des_bg_pic"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/talent_loc_cell_height"
+    android:layout_height="150dp"
     android:scaleType="centerCrop" />
 <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="@dimen/talent_loc_cell_height">
+    android:layout_height="150dp">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,7 +31,7 @@ android:id="@+id/fl_country">
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/white"
-        android:textSize="23sp"
+        android:textSize="18sp"
         />
 
     <TextView
