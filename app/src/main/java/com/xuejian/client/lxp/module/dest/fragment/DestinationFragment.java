@@ -36,6 +36,9 @@ public class DestinationFragment extends PeachBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.destination_fragment,container,false);
         densty_indicator = (FixedIndicatorView) view.findViewById(R.id.densty_indicator);
+        densty_indicator.setDividerPadding(0);
+        densty_indicator.setDividerDrawable(null);
+
         densty_viewpager = (FixedViewPager)view.findViewById(R.id.densty_viewpager);
         densty_viewpager.setCanScroll(false);
         densty_viewpager.setOffscreenPageLimit(3);
@@ -43,6 +46,7 @@ public class DestinationFragment extends PeachBaseFragment {
         densty_viewpager.setPrepareNumber(2);
         //densty_indicator.setDividerDrawable(getResources().getDrawable(R.color.color_line));
         indicatorViewPager = new IndicatorViewPager(densty_indicator, densty_viewpager);
+
         indicatorViewPager.setAdapter(new DenstyAdapter(getActivity().getSupportFragmentManager()));
         indicatorViewPager.setOnIndicatorPageChangeListener(new IndicatorViewPager.OnIndicatorPageChangeListener() {
             @Override

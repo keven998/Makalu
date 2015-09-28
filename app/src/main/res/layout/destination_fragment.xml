@@ -17,6 +17,8 @@
             android:layout_gravity="center"
             android:divider="@null"
             android:showDividers="none"
+            android:dividerPadding="0dp"
+
             /><!---->
        <ImageView
             android:id="@+id/desty_button"
