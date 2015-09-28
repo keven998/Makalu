@@ -86,7 +86,8 @@ public class CityPictureActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        id = AccountManager.CurrentUserId;
+        //id = AccountManager.CurrentUserId;
+        id = getIntent().getStringExtra("id");
         initData(id);
 
     }
@@ -145,12 +146,18 @@ public class CityPictureActivity extends PeachBaseActivity {
         mCityPicGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(CityPictureActivity.this, UserAlbumInfoActivity.class);
-                    intent.putExtra("currentIndex",position);
-                    intent.putParcelableArrayListExtra("myPictures", userPics);
-                    intent.putStringArrayListExtra("pic_ids", pic_ids);
-                    intent.putExtra("userid", id);
-                    startActivityForResult(intent, REQUEST_BIGPIC);
+                boolean isCity = false;
+                if ((!isUserPics && !isTalentAlbum) || !isUserPics) {
+                    isCity = true;
+                }
+
+                Intent intent = new Intent(CityPictureActivity.this, UserAlbumInfoActivity.class);
+                intent.putExtra("currentIndex", position);
+                intent.putParcelableArrayListExtra("myPictures", userPics);
+                intent.putStringArrayListExtra("pic_ids", pic_ids);
+                intent.putExtra("userid", id);
+                intent.putExtra("isCity",isCity);
+                startActivityForResult(intent, REQUEST_BIGPIC);
             }
         });
 
@@ -183,13 +190,6 @@ public class CityPictureActivity extends PeachBaseActivity {
                             AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(object.length());
                             picAdapter = new PicAdapter(userPics);
                             mCityPicGv.setAdapter(picAdapter);
-                            ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
-                            /* if (isUserPics) {
-                                newUserPics.add(new ImageBean());
-                            }*/
-                            for (int k = 0; k < userPics.size(); k++) {
-                                newUserPics.add(userPics.get(k));
-                            }
 
                         }
                     } catch (JSONException e) {
@@ -213,8 +213,33 @@ public class CityPictureActivity extends PeachBaseActivity {
                 @Override
                 public void doSuccess(String result, String method) {
                     CommonJson<LocAlbum> imageReuslt = CommonJson.fromJson(result, LocAlbum.class);
+                    JSONObject jsonObject=null;
                     if (imageReuslt.code == 0) {
-                        picAdapter = new PicAdapter(imageReuslt.result.album);
+                        try{
+
+                            userPics.clear();
+                            jsonObject = new JSONObject(result);
+                            if(imageReuslt.result.album.size()>0){
+
+                                JSONArray object = jsonObject.getJSONObject("result").getJSONArray("album");
+                                for (int i = 0; i < object.length(); i++) {
+                                    JSONObject imgArray = object.getJSONObject(i);
+
+                                    ImageBean ib = new ImageBean();
+                                    ib.url = imgArray.getString("url");
+                                    ib.thumb=imgArray.getString("url");
+                                    ib.full=imgArray.getString("originUrl");
+                                    //ib.caption=imgArray.getJSONObject(0).getString("caption")
+                                    userPics.add(ib);
+                                }
+                            }
+
+                        }catch (Exception ex){
+
+                        }
+
+
+                        picAdapter = new PicAdapter(userPics);
                         mCityPicGv.setAdapter(picAdapter);
                     }
 
