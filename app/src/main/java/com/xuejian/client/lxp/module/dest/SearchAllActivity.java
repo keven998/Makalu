@@ -15,19 +15,26 @@ import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
+import com.aizou.core.widget.listHelper.ListViewDataAdapter;
+import com.aizou.core.widget.listHelper.ViewHolderBase;
+import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.KeywordBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
+import com.xuejian.client.lxp.bean.PoiGuideBean;
 import com.xuejian.client.lxp.bean.SearchAllBean;
 import com.xuejian.client.lxp.bean.SearchTypeBean;
+import com.xuejian.client.lxp.bean.TravelNoteBean;
+import com.xuejian.client.lxp.common.api.OtherApi;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -38,7 +45,9 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.common.widget.TagView.TagView;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
+import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +76,14 @@ public class SearchAllActivity extends PeachBaseActivity {
     Object temp;
     String currentType;
     String conversation;
-
+    String type;
     private final List<Tag> mTags = new ArrayList<Tag>();
     private final List<Tag> mKeyTags = new ArrayList<Tag>();
     private TagListView history_tag;
-    private String [] keys;
+    private String[] keys;
+    View headerView;
+    RelativeLayout header;
+    TravelNoteBean noteBean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,13 +91,14 @@ public class SearchAllActivity extends PeachBaseActivity {
         toId = getIntent().getStringExtra("toId");
         chatType = getIntent().getStringExtra("chatType");
         conversation = getIntent().getStringExtra("conversation");
+        type = getIntent().getStringExtra("type");
         ButterKnife.inject(this);
         cleanHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 history_tag.cleanTags();
                 history_pannel.setVisibility(View.GONE);
-                SharePrefUtil.saveHistory(SearchAllActivity.this,"");
+                SharePrefUtil.saveHistory(mContext, String.format("%s_his", type), "");
             }
         });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +189,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         history_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
-                if (keys!=null&&keys.length>0){
+                if (keys != null && keys.length > 0) {
                     mEtSearch.setText(keys[tag.getId()]);
                 }
 
@@ -184,27 +197,92 @@ public class SearchAllActivity extends PeachBaseActivity {
         });
     }
 
+    public void getAncillaryInfo(String keyword) {
+        TravelApi.getAncillaryInfo(type, keyword, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
+                if (poiGuideResult.code == 0 && !TextUtils.isEmpty(poiGuideResult.result.itemType)) {
+                    bindGuideView(poiGuideResult.result);
+                } else {
+                    if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void bindGuideView(final PoiGuideBean bean) {
+        headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
+        header = (RelativeLayout) headerView.findViewById(R.id.header);
+        mSearchAllLv.addHeaderView(headerView);
+        header.setVisibility(View.VISIBLE);
+        TextView textView = (TextView) headerView.findViewById(R.id.tv_city_poi_desc);
+        textView.setText(bean.desc);
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PeachWebViewActivity.class);
+                if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
+                    intent.putExtra("url", bean.detailUrl);
+                    intent.putExtra("title", "美食攻略");
+                } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
+                    intent.putExtra("url", bean.detailUrl);
+                    intent.putExtra("title", "购物攻略");
+                }
+                startActivity(intent);
+            }
+        });
+    }
+
     private void setUpData() {
-        keys= getSearchHistory();
-        if (keys.length>0&&!TextUtils.isEmpty(keys[0])){
-            int count=0;
-            for (int i = keys.length-1; i >=0; i--) {
+        keys = getSearchHistory();
+        if (keys.length > 0 && !TextUtils.isEmpty(keys[0])) {
+            int count = 0;
+            for (int i = keys.length - 1; i >= 0; i--) {
                 Tag tag = new Tag();
                 tag.setId(i);
                 tag.setChecked(true);
                 tag.setTitle(keys[i]);
                 mTags.add(tag);
                 count++;
-                if (count==9)break;
+                if (count == 9) break;
             }
-        }else {
+        } else {
             history_pannel.setVisibility(View.GONE);
         }
+        TravelApi.getTypeSearchRecommendKeywords(type, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+
+
         TravelApi.getRecommendKeywords(new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
-                CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(),KeywordBean.class);
-                for (int i =0;i< keyList.result.size();i++) {
+                CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(), KeywordBean.class);
+                for (int i = 0; i < keyList.result.size(); i++) {
                     Tag tag = new Tag();
                     tag.setId(i);
                     tag.setChecked(true);
@@ -215,7 +293,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                 recomend_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
                     @Override
                     public void onTagClick(TagView tagView, Tag tag) {
-                        if (mKeyTags!=null&&mKeyTags.size()>0){
+                        if (mKeyTags != null && mKeyTags.size() > 0) {
                             mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
                             searchAll(mKeyTags.get(tag.getId()).getTitle());
                         }
@@ -256,7 +334,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     }
 
     private void searchAll(final String keyword) {
-        if(TextUtils.isEmpty(keyword)){
+        if (TextUtils.isEmpty(keyword)) {
             ToastUtil.getInstance(this).showToast("请输入关键词");
             return;
         }
@@ -266,56 +344,162 @@ public class SearchAllActivity extends PeachBaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        TravelApi.searchAll(keyword, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
-                if (searchAllResult.code == 0) {
-                    //          if (searchAllResult.result.s)
-                    bindView(keyword, searchAllResult.result);
+        if ("restaurant".equals(type) || "shopping".equals(type)) {
+            getAncillaryInfo(keyword);
+        }
+
+
+        if ("note".equals(type)) {
+            OtherApi.getTravelNoteByKeyword(keyword, 0, 30, new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
+                    if (detailResult.code == 0) {
+                        if (detailResult.result.size()==0){
+                            ToastUtil.getInstance(SearchAllActivity.this).showToast(String.format("没有找到“%s”的相关结果", keyword));
+                        }
+                        else bindNoteView(detailResult.result);
+                    }
                 }
-            }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                if (!isFinishing()) {
-                    ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
                 }
-            }
 
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        } else if ("vs".equals(type)) {
+            TravelApi.searchAll(keyword, "false", "true", "false", "false", "false", new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
+                    if (searchAllResult.code == 0) {
+                        //          if (searchAllResult.result.s)
+                        bindView(keyword, searchAllResult.result);
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    if (!isFinishing()) {
+                        ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        } else if ("restaurant".equals(type)) {
+            TravelApi.searchAll(keyword, "false", "false", "false", "true", "false", new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
+                    if (searchAllResult.code == 0) {
+                        //          if (searchAllResult.result.s)
+                        bindView(keyword, searchAllResult.result);
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    if (!isFinishing()) {
+                        ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        } else if ("shopping".equals(type)) {
+            TravelApi.searchAll(keyword, "false", "false", "false", "false", "true", new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
+                    if (searchAllResult.code == 0) {
+                        //          if (searchAllResult.result.s)
+                        bindView(keyword, searchAllResult.result);
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    if (!isFinishing()) {
+                        ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
+    }
+
+    private void bindNoteView(final List<TravelNoteBean> beans) {
+       ListViewDataAdapter mTravelNoteAdapter = new ListViewDataAdapter(new ViewHolderCreator() {
             @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
+            public ViewHolderBase createViewHolder() {
+                TravelNoteViewHolder viewHolder = new TravelNoteViewHolder(SearchAllActivity.this, true, false);
+                viewHolder.setOnSendClickListener(new TravelNoteViewHolder.OnSendClickListener() {
+                    @Override
+                    public void onSendClick(View view, TravelNoteBean itemData) {
+                        noteBean = itemData;
+                        IMUtils.onClickImShare(mContext);
+                    }
+                });
+                return viewHolder;
             }
         });
 
+        mSearchAllLv.setAdapter(mTravelNoteAdapter);
+        mTravelNoteAdapter.getDataList().addAll(beans);
+        mTravelNoteAdapter.notifyDataSetChanged();
     }
-    private String[] getSearchHistory(){
-        String save_Str = SharePrefUtil.getHistory(this);
+
+    private String[] getSearchHistory() {
+        String save_Str = SharePrefUtil.getHistory(this, String.format("%s_his", type));
         return save_Str.split(",");
     }
 
     private void saveHistory(String keyword) {
 
-        String save_Str = SharePrefUtil.getHistory(this);
+        String save_Str = SharePrefUtil.getHistory(this, String.format("%s_his", type));
         String[] hisArrays = save_Str.split(",");
         for (String s : hisArrays) {
-            if(s.equals(keyword))
-            {
+            if (s.equals(keyword)) {
                 return;
             }
         }
         StringBuilder sb = new StringBuilder(save_Str);
         sb.append(keyword + ",");
-        SharePrefUtil.saveHistory(this, sb.toString());
+        SharePrefUtil.saveHistory(this, String.format("%s_his", type), sb.toString());
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if ("locality".equals(currentType)) {
+            if ("note".equals(type)){
+                IMUtils.onShareResult(mContext, noteBean, requestCode, resultCode, data, null);
+            }
+            else if ("locality".equals(type)) {
                 IMUtils.onShareResult(mContext, (LocBean) temp, requestCode, resultCode, data, null);
             } else
                 IMUtils.onShareResult(mContext, (PoiDetailBean) temp, requestCode, resultCode, data, null);

@@ -39,10 +39,11 @@ public class SharePrefUtil {
 		sp.edit().putString(key, value).commit();
 		
 	}
-	public static void saveHistory(Context context, String value) {
-		if (sp == null)
+	public static void saveHistory(Context context,String key ,String value) {
+		if (sp == null){
 			sp = context.getSharedPreferences(HISTORY_NAME, 0);
-		sp.edit().putString("his", value).commit();
+		}
+		sp.edit().putString(key, value).commit();
 
 	}
 	
@@ -105,10 +106,10 @@ public class SharePrefUtil {
 		return sp.getString(key, defValue);
 	}
 
-	public static String getHistory(Context context) {
+	public static String getHistory(Context context,String key) {
 		if (sp == null)
 			sp = context.getSharedPreferences(HISTORY_NAME, 0);
-		return sp.getString("his", "");
+		return sp.getString(key, "");
 	}
 
 

@@ -9,4 +9,6 @@ public class PoiGuideBean {
     public ArrayList<ImageBean> images;
     public String desc;
     public String detailUrl;
+    public String itemType;
+    public String itemId;
 }

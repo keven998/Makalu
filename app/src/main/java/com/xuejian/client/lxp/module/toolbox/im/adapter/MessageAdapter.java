@@ -451,13 +451,13 @@ public class MessageAdapter extends BaseAdapter {
         ArrayList<H5MessageBean> list =new ArrayList<>();
         try {
             CommonJson4List<H5MessageBean> result = CommonJson4List.fromJson(message.getMessage(),H5MessageBean.class);
-            list.addAll( result.result);
+            list.addAll(result.result);
         }catch (Exception e){
             e.printStackTrace();
         }
 //        ArrayList<H5MessageBean> list =new ArrayList<>();
 //        for (int i = 0;i<7;i++){
-//                list.add(new H5MessageBean(i+"rdadaddfsfsfsfsdfad"));
+//                list.add(new H5MessageBean(i+"韩国签证有效期内可以往返几次啊？"));
 //        }
         ItemListAdapter adapter =new ItemListAdapter(activity,1,list);
         holder.itemListView.setAdapter(adapter);
@@ -590,7 +590,7 @@ public class MessageAdapter extends BaseAdapter {
      * @param position
      */
     private void handleTextMessage(MessageBean message, ViewHolder holder, final int position) {
-        Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
+     //   Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
         // 设置内容
         holder.tv.setText(SmileUtils.getSmiledText(context, message.getMessage()));
         // 设置长按事件监听

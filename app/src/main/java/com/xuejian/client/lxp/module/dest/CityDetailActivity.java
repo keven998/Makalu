@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +92,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     DisplayImageOptions options;
     ExpertAdapter adapter;
     ArrayList<ExpertBean> expertList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -266,12 +266,12 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 startActivity(new Intent(mContext, TravelExpertApplyActivity.class));
             }
         });
-        if (result==null||result.size()==0){
+        if (result == null || result.size() == 0) {
             rl_all_expert.setVisibility(View.GONE);
             apply_expert.setVisibility(View.VISIBLE);
             return;
         }
-        if (result.size()<2)apply_expert.setVisibility(View.VISIBLE);
+        if (result.size() < 2) apply_expert.setVisibility(View.VISIBLE);
 //        AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
 //        abp.height = 400;
 //        View footView = new View(mContext);
@@ -287,7 +287,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 startActivity(intent);
             }
         });
-        adapter=new ExpertAdapter(mContext,5);
+        adapter = new ExpertAdapter(mContext, 5);
         expertListview.setAdapter(adapter);
         adapter.getDataList().addAll(result);
         setListViewHeightBasedOnChildren(expertListview);
@@ -341,8 +341,8 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 CommonJson4List<TravelNoteBean> detailResult = CommonJson4List.fromJson(result, TravelNoteBean.class);
                 if (detailResult.code == 0) {
-           //         travelAdapter.getDataList().clear();
-            //        travelAdapter.getDataList().addAll(detailResult.result);
+                    //         travelAdapter.getDataList().clear();
+                    //        travelAdapter.getDataList().addAll(detailResult.result);
                     if (detailResult.result.size() > 0) {
                         //全部游记
 //                        findViewById(R.id.tv_all_note).setVisibility(View.VISIBLE);
@@ -355,7 +355,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 //                            }
 //                        });
                     }
-             //       setListViewHeightBasedOnChildren(travelLv);
+                    //       setListViewHeightBasedOnChildren(travelLv);
                 } else {
 //                    ToastUtil.getInstance(CityDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
@@ -616,40 +616,44 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             intent.putExtra("enable_bottom_bar", true);
             intent.putExtra("title", "旅行指南");//String.format("玩转%s", mCityNameTv.getText()));
             startActivity(intent);
-        } else {
-            Log.e("CLICK", "没有数据");
         }
     }
 
     public void intentToSpots(View view) {
-        Intent intent = new Intent(mContext, SpotListActivity.class);
-        ArrayList<LocBean> locList = new ArrayList<LocBean>();
-        locList.add(locDetailBean);
-        intent.putParcelableArrayListExtra("locList", locList);
-        intent.putExtra("type", TravelApi.PeachType.SPOT);
-        startActivity(intent);
+        if (locDetailBean != null) {
+            Intent intent = new Intent(mContext, SpotListActivity.class);
+            ArrayList<LocBean> locList = new ArrayList<LocBean>();
+            locList.add(locDetailBean);
+            intent.putParcelableArrayListExtra("locList", locList);
+            intent.putExtra("type", TravelApi.PeachType.SPOT);
+            startActivity(intent);
+        }
     }
 
     public void intentToFood(View view) {
-        Intent intent = new Intent(mContext, PoiListActivity.class);
-        ArrayList<LocBean> locList = new ArrayList<LocBean>();
-        locList.add(locDetailBean);
-        intent.putParcelableArrayListExtra("locList", locList);
-        intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
-        intent.putExtra("value", locDetailBean.diningTitles);
-        intent.putExtra("isFromCityDetail", true);
-        startActivity(intent);
+        if (locDetailBean != null) {
+            Intent intent = new Intent(mContext, PoiListActivity.class);
+            ArrayList<LocBean> locList = new ArrayList<LocBean>();
+            locList.add(locDetailBean);
+            intent.putParcelableArrayListExtra("locList", locList);
+            intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
+            intent.putExtra("value", locDetailBean.diningTitles);
+            intent.putExtra("isFromCityDetail", true);
+            startActivity(intent);
+        }
     }
 
     public void intentToShopping(View view) {
-        Intent intent = new Intent(mContext, PoiListActivity.class);
-        ArrayList<LocBean> locList = new ArrayList<LocBean>();
-        locList.add(locDetailBean);
-        intent.putParcelableArrayListExtra("locList", locList);
-        intent.putExtra("type", TravelApi.PeachType.SHOPPING);
-        intent.putExtra("value", locDetailBean.shoppingTitles);
-        intent.putExtra("isFromCityDetail", true);
-        startActivity(intent);
+        if (locDetailBean != null) {
+            Intent intent = new Intent(mContext, PoiListActivity.class);
+            ArrayList<LocBean> locList = new ArrayList<LocBean>();
+            locList.add(locDetailBean);
+            intent.putParcelableArrayListExtra("locList", locList);
+            intent.putExtra("type", TravelApi.PeachType.SHOPPING);
+            intent.putExtra("value", locDetailBean.shoppingTitles);
+            intent.putExtra("isFromCityDetail", true);
+            startActivity(intent);
+        }
     }
 
     @Override

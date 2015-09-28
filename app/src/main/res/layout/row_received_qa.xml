@@ -43,12 +43,23 @@
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_below="@id/tv_userid"
-            android:padding="10dp"
             android:layout_toRightOf="@id/iv_userhead"
             android:background="@drawable/message_bg_receive">
+            <TextView
+                android:id="@+id/list_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="根据提问，派派为您推荐了相关问题答案"
+                android:textSize="14sp"
+                android:gravity="left|center_vertical"
+                android:background="#99ccff"
+                android:padding="5dp"
+                android:textColor="@color/base_color_white"/>
             <com.xuejian.client.lxp.common.widget.ItemListView
+                android:layout_below="@+id/list_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
                 android:id="@+id/item_list"/>
             <!--<RelativeLayout-->
                 <!--android:id="@+id/rl_image"-->

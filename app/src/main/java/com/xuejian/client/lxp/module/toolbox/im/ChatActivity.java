@@ -713,6 +713,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 intent.putExtra("conversation", conversation);
                 intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", true);
+                intent.putExtra("type","note");
                 startActivity(intent);
                 break;
             case  R.id.btn_viewspot:
@@ -722,6 +723,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 intent1.putExtra("conversation", conversation);
                 intent1.putExtra("userId", AccountManager.getCurrentUserId());
                 intent1.putExtra("isShare", true);
+                intent1.putExtra("type","vs");
                 startActivity(intent1);
                 break;
             case  R.id.btn_food:
@@ -731,6 +733,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 intent2.putExtra("conversation", conversation);
                 intent2.putExtra("userId", AccountManager.getCurrentUserId());
                 intent2.putExtra("isShare", true);
+                intent2.putExtra("type","restaurant");
                 startActivity(intent2);
                 break;
             case  R.id.btn_shopping:
@@ -740,6 +743,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 intent3.putExtra("conversation", conversation);
                 intent3.putExtra("userId", AccountManager.getCurrentUserId());
                 intent3.putExtra("isShare", true);
+                intent3.putExtra("type","shopping");
                 startActivity(intent3);
                 break;
             default:
@@ -1189,9 +1193,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else {
             m.setSendType(1);
             messageList.add(m);
+
 //            MessageBean messageBean =new MessageBean();
 //            messageBean.setMessage("{\"title\":\"title\",\"desc\":\"desc\",\"image\":\"http://7xirnn.com1.z0.glb.clouddn.com/2ed2cb7c-ac84-4720-9aa0-b5bb8dba6795!thumb?e=1439527658&token=jU6KkDZdGYODmrPVh5sbBIkJX65y-Cea991uWpWZ:QmwHGiZqUA-Cg0p4hgxNLY8f6F4=\",\"url\":\"http://m.creatby.com/manage/book/b10qbu/\"}");
-//            messageBean.setType(18);
+//            messageBean.setType(17);
 //            messageBean.setSenderId(100014);
 //            messageBean.setSendType(1);
 //            messageBean.setCreateTime(System.currentTimeMillis());

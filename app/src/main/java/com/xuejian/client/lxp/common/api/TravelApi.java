@@ -75,6 +75,8 @@ public class TravelApi extends BaseApi {
     public final static String FAV = "/misc/favorites";
     //搜索
     public final static String SEARCH = "/search";
+    public final static String NEW_SEARCH = "/newSearch";
+
     //搜索联想
     public final static String SUGGEST = "/suggestions";
     //周边
@@ -83,7 +85,7 @@ public class TravelApi extends BaseApi {
     //达人列表
     public final static String EXPERT_LIST = "/geo/countries";
 
-
+    public final static String ANCILLARY_INFO = "/search/ancillary-info";
     //    //景点列表
 //    /app/poi/viewspots
 //    //单个景点的信息
@@ -116,6 +118,8 @@ public class TravelApi extends BaseApi {
     public final static String USERS = "/users/";
 
     public final static String RECOMMEND_KEYWORD ="/misc/hot-searches";
+
+    public final static String RECOMMEND_KEYWORD_CHAT ="/misc/chat-hot-searches";
     /**
      * 获取目的地推荐
      *
@@ -171,6 +175,16 @@ public class TravelApi extends BaseApi {
         }
         OkHttpClientManager.getInstance().request(request,"", callback);
      //   return HttpManager.request(request, callback);
+    }
+
+    public static void getAncillaryInfo(String type,String keyword, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + ANCILLARY_INFO);
+        request.putUrlParams("query", keyword);
+        request.putUrlParams("scope", type);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
     /**
@@ -258,6 +272,17 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
        // return HttpManager.request(request, callback);
     }
+
+    public static void getTypeSearchRecommendKeywords(String type , HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD_CHAT);
+        request.putUrlParams("itemType",type);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        // return HttpManager.request(request, callback);
+    }
+
 
     /**
      * 获取景点详情
@@ -683,21 +708,34 @@ public class TravelApi extends BaseApi {
     }
 
     //联合查询
-    public static void searchAll(String keyword, HttpCallBack callback) {
+    public static void searchAll(String keyword,String loc,String vs,String hotel,String restaurant,String shopping, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEARCH);
         request.putUrlParams("keyword", keyword);
-        request.putUrlParams("loc", "true");
-        request.putUrlParams("vs", "true");
-        request.putUrlParams("hotel", "true");
-        request.putUrlParams("restaurant", "true");
-        request.putUrlParams("shopping", "true");
+        request.putUrlParams("loc", loc);
+        request.putUrlParams("vs", vs);
+        request.putUrlParams("hotel", hotel);
+        request.putUrlParams("restaurant", restaurant);
+        request.putUrlParams("shopping", shopping);
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(50) + "");
         setDefaultParams(request);
     //    return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request,"", callback);
     }
+
+    public static void newSearch(String keyword,String type ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.BASE_URL + NEW_SEARCH);
+        request.putUrlParams("query", keyword);
+        request.putUrlParams("scope", type);
+        request.putUrlParams("imgWidth", LocalDisplay.dp2px(50) + "");
+        setDefaultParams(request);
+        //    return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
 
     //搜索地点
     public static void searchForType(String keyword, String type, String locId, int page, HttpCallBack callback) {

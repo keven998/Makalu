@@ -121,7 +121,7 @@ public class IMShareActivity extends PeachBaseActivity {
         List<ConversationBean> list = IMClient.getInstance().getConversationList();
         List<ConversationBean> del = new ArrayList<>();
         for (ConversationBean bean : list) {
-            if (bean.getFriendId()==10000||bean.getFriendId()==10001){
+            if (bean.getFriendId() == 10000 || bean.getFriendId() == 10001) {
                 del.add(bean);
             }
         }
@@ -207,9 +207,9 @@ public class IMShareActivity extends PeachBaseActivity {
                 final List<User> members = UserDBManager.getInstance().getGroupMember(itemData.getFriendId());
                 final List<Bitmap> membersAvatars = new ArrayList<>();
                 int s = 0;
-                try{
+                try {
                     s = Math.min(members.size(), 4);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
 
                 }
@@ -247,7 +247,11 @@ public class IMShareActivity extends PeachBaseActivity {
                 } else {
                     mAvatar.setImageResource(R.drawable.messages_bg_useravatar);
                 }
-                mName.setText(imUser.getNickName() != null ? imUser.getNickName() : " ");
+                if (imUser != null) {
+                    mName.setText(imUser.getNickName() != null ? imUser.getNickName() : " ");
+                } else {
+                    mName.setText("");
+                }
             } else {
                 if (imUser != null) {
                     // 本地或者服务器获取用户详情，以用来显示头像和nick

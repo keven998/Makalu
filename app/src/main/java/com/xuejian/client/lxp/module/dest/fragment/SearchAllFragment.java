@@ -94,7 +94,7 @@ public class SearchAllFragment extends PeachBaseFragment {
             public void onClick(View v) {
                 history_tag.cleanTags();
                 history_pannel.setVisibility(View.GONE);
-                SharePrefUtil.saveHistory(getActivity(), "");
+                SharePrefUtil.saveHistory(getActivity(),"his", "");
             }
         });
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -189,7 +189,7 @@ public class SearchAllFragment extends PeachBaseFragment {
     }
 
     private String[] getSearchHistory() {
-        String save_Str = SharePrefUtil.getHistory(getActivity());
+        String save_Str = SharePrefUtil.getHistory(getActivity(),"his");
         return save_Str.split(",");
     }
 
@@ -249,7 +249,7 @@ public class SearchAllFragment extends PeachBaseFragment {
     }
 
     private void saveHistory(String keyword) {
-        String save_Str = SharePrefUtil.getHistory(getActivity());
+        String save_Str = SharePrefUtil.getHistory(getActivity(),"his");
         String[] hisArrays = save_Str.split(",");
         for (String s : hisArrays) {
             if (s.equals(keyword)) {
@@ -258,7 +258,7 @@ public class SearchAllFragment extends PeachBaseFragment {
         }
         StringBuilder sb = new StringBuilder(save_Str);
         sb.append(keyword + ",");
-        SharePrefUtil.saveHistory(getActivity(), sb.toString());
+        SharePrefUtil.saveHistory(getActivity(), "his",sb.toString());
     }
 
     private void searchAll(final String keyword) {
@@ -272,7 +272,7 @@ public class SearchAllFragment extends PeachBaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        TravelApi.searchAll(keyword, new HttpCallBack<String>() {
+        TravelApi.searchAll(keyword,"true","true","true","true","true", new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();

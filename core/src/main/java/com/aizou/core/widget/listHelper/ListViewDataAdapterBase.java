@@ -1,8 +1,5 @@
 package com.aizou.core.widget.listHelper;
 
-import java.util.HashSet;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,7 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
     private static String LOG_TAG = "cube_list";
 
     protected ViewHolderCreator<ItemDataType> mViewHolderCreator;
-//    protected HashSet<Integer> mCreatedTag = new HashSet<Integer>();
+    //    protected HashSet<Integer> mCreatedTag = new HashSet<Integer>();
     private boolean mEnableCreateViewForMeasure = true;
 
     /**
@@ -56,9 +53,9 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
             holderBase = (ViewHolderBase<ItemDataType>) convertView.getTag();
         }
 
-            if (holderBase != null) {
-                holderBase.setItemData(position);
-                holderBase.showData(position, itemData);
+        if (holderBase != null) {
+            holderBase.setItemData(position);
+            holderBase.showData(position, itemData);
         }
         return convertView;
     }

@@ -21,8 +21,6 @@
 
     <drawable name="list_cell_item">#ffffff</drawable>
     <drawable name="list_cell_item_clicked">@color/color_disable</drawable>
-
-
     <color name="transparent_black">#aa000000</color>
     <color name="base_font_color">#2e2727</color>
     <color name="second_font_color">#626262</color>
@@ -58,6 +56,7 @@
     <color name="base_gary_bg">#EAEAEA</color>
     <color name="route_price_color">#E9625F</color>
     <color name="base_menu_color">#767E86</color>
+    <color name="black_overlay">#60000000</color>
 
     <color name="base_text_color_title">#515151</color>
     <color name="base_text_color_subtitle">#797979</color>

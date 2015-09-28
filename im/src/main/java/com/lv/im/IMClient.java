@@ -110,6 +110,18 @@ public class IMClient {
         }
     }
 
+    public static boolean isPushTurnOn(Context context) {
+        return PushManager.getInstance().isPushTurnedOn(context.getApplicationContext());
+    }
+
+    public static void initPushService(Context context) {
+        PushManager.getInstance().initialize(context.getApplicationContext());
+    }
+
+    public static void turnOnPushService(Context context) {
+        PushManager.getInstance().turnOnPush(context.getApplicationContext());
+    }
+
     public JSONArray getackList() {
         return acklist;
     }
@@ -511,7 +523,7 @@ public class IMClient {
     public int saveReceiveMsg(Message message) {
         countFrequency.addMessage();
         int result = db.saveReceiveMsg(message.getSenderId() + "", Msg2Bean(message), message.getConversation(), message.getGroupId(), message.getChatType());
-        if (result == 0 ) {
+        if (result == 0) {
             setLastMsg(message.getConversation(), message.getMsgId());
         }
         //       IMClient.lastSuccessFetch = message.getTimestamp();

@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler ,AMapLocationListener{
+public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler, AMapLocationListener {
     //    public final static int CODE_IM_LOGIN = 101;
 //    public static final int NEW_CHAT_REQUEST_CODE = 102;
     // 账号在别处登录
@@ -78,8 +78,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //TalentLocFragement
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
-   // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
-    private String[] tabTitle = {"消息","目的地", "搜索", "我的"};
+    // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
+    private String[] tabTitle = {"消息", "目的地", "搜索", "我的"};
     private TextView unreadMsg;
     private TextView regNotice;
     //Tab选项Tag
@@ -91,6 +91,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     SuperToast superToast;
     private boolean isPause;
     LocationManagerProxy mLocationManagerProxy;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -121,6 +122,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         initLocation();
     }
+
     private void initLocation() {
         mLocationManagerProxy = LocationManagerProxy.getInstance(this);
         mLocationManagerProxy.requestLocationData(
@@ -410,6 +412,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //            updateUnreadMsgCount();
 
         } else unreadMsg.setVisibility(View.GONE);
+        try {
+            if (!IMClient.isPushTurnOn(mContext)) {
+                System.out.println("push Off");
+                IMClient.initPushService(mContext);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -779,14 +789,14 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        if(aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0){
+        if (aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
             //获取位置信息
             Double geoLat = aMapLocation.getLatitude();
             Double geoLng = aMapLocation.getLongitude();
-            System.out.println("geoLat "+geoLat+" geoLat "+geoLng);
+            System.out.println("geoLat " + geoLat + " geoLat " + geoLng);
             LocationUtils utils = new LocationUtils();
             boolean isAbroad = utils.pointInPolygon(new LocationUtils.Point(geoLat, geoLng));
-            SharePrefUtil.saveBoolean(mContext, "isAbroad",isAbroad);
+            SharePrefUtil.saveBoolean(mContext, "isAbroad", isAbroad);
             mLocationManagerProxy.removeUpdates(this);
             mLocationManagerProxy.destroy();
         }
