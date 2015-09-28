@@ -70,6 +70,7 @@ public class UserAlbumInfoActivity extends Activity{
     private TextView description_detail;
     private ArrayList<String> pic_ids;
     private String userid;
+    private boolean isCity;
     private static final int REQUEST_EDIT_ALBUM=0x544;
     private static final int SAVE_LOCAL_SUCESS=0x545;
     private static final int SAVE_LOCAL_FAIL=0x546;
@@ -102,6 +103,7 @@ public class UserAlbumInfoActivity extends Activity{
         currentIndex = getIntent().getIntExtra("currentIndex", 0);
         myPictures = getIntent().getParcelableArrayListExtra("myPictures");
         pic_ids = getIntent().getStringArrayListExtra("pic_ids");
+        isCity = getIntent().getBooleanExtra("isCity", false);
         userid = AccountManager.getCurrentUserId();
         if(myPictures==null || pic_ids==null){
             finish();
@@ -113,6 +115,9 @@ public class UserAlbumInfoActivity extends Activity{
         headerBar = (RelativeLayout)findViewById(R.id.album_item_header_bar);
         galleryBottom =(FrameLayout) findViewById(R.id.gallery_bottom_panel);
         photo_setting = (ImageView)findViewById(R.id.photo_setting);
+        if(isCity){
+            photo_setting.setVisibility(View.GONE);
+        }
         description_detail = (TextView) findViewById(R.id.description_detail);
         ((View)findViewById(R.id.header_bar_photo_back)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,7 +282,7 @@ public class UserAlbumInfoActivity extends Activity{
                             inputStream = urlConnection.getInputStream();
                         }
 
-                        Log.e("pathuri","oooooooooo-------------------------");
+
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy_MM_dd_HH:mm:ss");
                         String filePrefix = simpleDateFormat.format(new Date());
                         String contentType = urlConnection.getContentType();
