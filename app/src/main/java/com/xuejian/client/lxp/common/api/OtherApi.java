@@ -87,7 +87,6 @@ public class OtherApi extends BaseApi {
         if(info!=null){
             sb.append("?caption="+info);
         }
-        Log.e("requestUrl",sb.toString()+"------------------");
         request.setUrl(sb.toString());
      //   request.setUrl(SystemConfig.DEV_URL + UPLOAD_TOKEN );
 
@@ -119,12 +118,12 @@ public class OtherApi extends BaseApi {
      * @return
      */
     public static void getAvatarUploadToken(HttpCallBack callback) {
-         getUploadToken(Scenario.PORTRAIT, "这是一张图片！！！！", callback);
+         getUploadToken(Scenario.PORTRAIT,null, callback);
     }
 
 
     public static void getAvatarAlbumUploadToken(HttpCallBack callback) {
-         getUploadToken(Scenario.ALBUM,"这是一张图片！！！！", callback);
+         getUploadToken(Scenario.ALBUM,null, callback);
     }
 
     public static void getAvatarAlbumUploadToken(HttpCallBack callback,String info) {

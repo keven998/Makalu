@@ -16,6 +16,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -101,15 +102,23 @@ public class UploadAlbumActivity extends Activity {
                             activity.adapter.notifyDataSetChanged();
 
                             if (!"addfile".equals(activity.pictures.get(activity.currentUpload).getThumbnailUri())) {
-                                activity.uploadAvatar(activity.pictures.get(activity.currentUpload), activity.info);
+                                int position =activity.currentUpload;
+                                activity.uploadAvatar(activity.pictures.get(activity.currentUpload), activity.info,position);
                             }
                         } else {
                             Toast.makeText(activity, "上传成功~", Toast.LENGTH_SHORT).show();
+                            if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null) {
+                                LocalImageHelper.getInstance().getCheckedItems().clear();
+                            }
                             activity.setResult(RESULT_OK);
                             activity.finish();
                         }
                         break;
                     case REFRESHADAPTER:
+                        /*int position = msg.arg1;
+                        if(activity.image_to_upload.getFirstVisiblePosition()>=position && position<=activity.image_to_upload.getLastVisiblePosition()){
+                            activity.image_to_upload.getChildAt(position).findViewById(R.id.);
+                        }*/
                         activity.adapter.notifyDataSetChanged();
                         break;
                 }
@@ -198,7 +207,7 @@ public class UploadAlbumActivity extends Activity {
 
                     if (currentUpload >= 0 && currentUpload < pictures.size()) {
                         if (!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())) {
-                            uploadAvatar(pictures.get(currentUpload), info);
+                            uploadAvatar(pictures.get(currentUpload), info,currentUpload);
                         }
                     }
                 } else {
@@ -255,7 +264,7 @@ public class UploadAlbumActivity extends Activity {
         });
     }
 
-    private void uploadAvatar(final LocalImageHelper.LocalFile localFile, final String info) {
+    private void uploadAvatar(final LocalImageHelper.LocalFile localFile, final String info,final int myposition) {
         String filepath = null;
         if (localFile != null) {
             try {
@@ -299,16 +308,17 @@ public class UploadAlbumActivity extends Activity {
                                             new UpProgressHandler() {
                                                 public void progress(String key, double percent) {
                                                     try {
-
-                                                        localFile.setCurrentProgress((int) percent * 100);
+                                                        localFile.setCurrentProgress((int)(percent * 100));
                                                         myHandler.sendEmptyMessage(REFRESHADAPTER);
-                                                        //progressDialog.setContent((int) (percent * 100) + "%");
                                                     } catch (Exception e) {
                                                     }
                                                 }
                                             }, null));
                         } else {
                             if (currentUpload == pictures.size() - 1) {
+                                if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null) {
+                                    LocalImageHelper.getInstance().getCheckedItems().clear();
+                                }
                                 finish();
                                 return;
                             }
@@ -321,6 +331,9 @@ public class UploadAlbumActivity extends Activity {
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
                         if (currentUpload == pictures.size() - 1) {
+                            if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null) {
+                                LocalImageHelper.getInstance().getCheckedItems().clear();
+                            }
                             finish();
                             return;
                         }
@@ -332,6 +345,9 @@ public class UploadAlbumActivity extends Activity {
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
                         if (currentUpload == pictures.size() - 1) {
+                            if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null) {
+                                LocalImageHelper.getInstance().getCheckedItems().clear();
+                            }
                             finish();
                             return;
                         }
@@ -476,7 +492,10 @@ public class UploadAlbumActivity extends Activity {
                         null, null, uploadImages.get(position).getOrientation());
             }
             if (uploadImages.get(position).isupLoading()) {
-                overLay.setVisibility(View.VISIBLE);
+
+                if(overLay.getVisibility()!=View.VISIBLE){
+                    overLay.setVisibility(View.VISIBLE);
+                }
                 progress_info.setText(uploadImages.get(position).getCurrentProgress() + "%");
             } else {
                 overLay.setVisibility(View.GONE);

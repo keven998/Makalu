@@ -150,7 +150,6 @@ public class CityPictureActivity extends PeachBaseActivity {
                     intent.putParcelableArrayListExtra("myPictures", userPics);
                     intent.putStringArrayListExtra("pic_ids", pic_ids);
                     intent.putExtra("userid", id);
-                    Log.e("citypic id",id+"--------------------------");
                     startActivityForResult(intent, REQUEST_BIGPIC);
             }
         });
@@ -164,7 +163,6 @@ public class CityPictureActivity extends PeachBaseActivity {
                 @Override
                 public void doSuccess(String result, String method) {
                     JSONObject jsonObject = null;
-                    Log.e("gelllery result",result+"------------------------");
                     try {
                         jsonObject = new JSONObject(result);
                         if (jsonObject.getInt("code") == 0) {
@@ -214,7 +212,6 @@ public class CityPictureActivity extends PeachBaseActivity {
             TravelApi.getCityGalley(id, new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
-                    Log.e("gelllery result2",result+"------------------------");
                     CommonJson<LocAlbum> imageReuslt = CommonJson.fromJson(result, LocAlbum.class);
                     if (imageReuslt.code == 0) {
                         picAdapter = new PicAdapter(imageReuslt.result.album);
@@ -416,101 +413,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
     }
 
-    private void uploadAvatar(final File file) {
-        CustomLoadingDialog dialog = null;
-        try {
-            dialog =   DialogManager.getInstance().showLoadingDialog(mContext, "0%");
-        }catch (Exception e){
 
-        }
-        final CustomLoadingDialog progressDialog = dialog;
-        OtherApi.getAvatarAlbumUploadToken(new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                Log.e("uploadresult",result+"-----------------------");
-                CommonJson<UploadTokenBean> tokenResult = CommonJson.fromJson(result, UploadTokenBean.class);
-                if (tokenResult.code == 0) {
-                    String token = tokenResult.result.uploadToken;
-                    String key = tokenResult.result.key;
-                    UploadManager uploadManager = new UploadManager();
-                    uploadManager.put(file, key, token,
-                            new UpCompletionHandler() {
-                                @Override
-                                public void complete(String key, ResponseInfo info, JSONObject response) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    Log.e("uploadresultInfo",info.isOK()+"----------------------");
-                                    if (info.isOK()) {
-                                        LogUtil.d(response.toString());
-                                        userPics.clear();
-                                        initData(id);
-//                                        ImageBean ib = new ImageBean();
-//                                        ib.url = Uri.fromFile(file).toString();
-//                                        //上传图片，最新的图片置首位显示处理
-//                                        ArrayList<ImageBean> newUserPics = new ArrayList<ImageBean>();
-//                                        for (int i = 0; i < userPics.size(); i++) {
-//                                            newUserPics.add(userPics.get(i));
-//                                        }
-//                                        userPics.clear();
-//                                        for (int j = 0; j <= newUserPics.size(); j++) {
-//                                            if (j == 0) {
-//                                                userPics.add(ib);
-//                                            } else {
-//                                                userPics.add(newUserPics.get(j - 1));
-//                                            }
-//                                        }
-//                                        AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(userPics.size());
-//                                        //userPics.add(ib);
-//                                        try {
-//                                            //上传图片，最新的图片置首位显示处理
-//                                            ArrayList<String> newPicId = new ArrayList<String>();
-//                                            for (int i = 0; i < pic_ids.size(); i++) {
-//                                                newPicId.add(pic_ids.get(i));
-//                                            }
-//                                            pic_ids.clear();
-//                                            for (int j = 0; j <= newPicId.size(); j++) {
-//                                                if (j == 0) {
-//                                                    pic_ids.add(response.getString("id"));
-//                                                } else {
-//                                                    pic_ids.add(newPicId.get(j - 1));
-//                                                }
-//                                            }
-//
-//                                            //pic_ids.add(response.getString("id"));
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                        picAdapter.addAll(userPics);
-//                                        picAdapter.notifyDataSetChanged();
-                                    }
-
-                                }
-                            }, new UploadOptions(null, null, false,
-                                    new UpProgressHandler() {
-                                        public void progress(String key, double percent) {
-                                            try {
-                                                progressDialog.setContent((int) (percent * 100) + "%");
-                                            } catch (Exception e) {
-                                            }
-                                        }
-                                    }, null));
-                } else {
-                    DialogManager.getInstance().dissMissLoadingDialog();
-                }
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                if (!isFinishing())
-                    ToastUtil.getInstance(CityPictureActivity.this).showToast(getResources().getString(R.string.request_network_failed));
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
 
 
     @Override
@@ -518,47 +421,6 @@ public class CityPictureActivity extends PeachBaseActivity {
 
         if (resultCode != RESULT_OK) {
             return;
-        }
-        if (requestCode == SelectPicUtils.REQUEST_CODE_LOCAL_ZOOM) {
-            Uri uri=null;
-            String path;
-            boolean flag=false;
-            if(data!=null){
-                if(data.getData()!=null){
-                    uri=data.getData();
-                    flag=true;
-                }else{
-                    if(data.getAction()!=null){
-                        uri=Uri.parse(data.getAction());
-                        flag=true;
-                    }else{
-                        flag=false;
-                    }
-                }
-            }
-
-            if(uri!=null && flag==true){
-                Cursor cursor = getContentResolver().query(uri,new String[]{MediaStore.Images.Media.DATA},null,null,null);
-                if(cursor!=null){
-                    cursor.moveToFirst();
-                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                    cursor.close();
-                    File pathFile = new File(path);
-                    pathFile.getParentFile().mkdirs();
-                    uploadAvatar(new File(path));
-                }
-            }else{
-                if (tempImage != null) {
-                    uploadAvatar(tempImage);
-
-                }
-            }
-
-        } else if (requestCode == SelectPicUtils.REQUEST_CODE_CAMERA) {
-            if (tempImage != null) {
-                uploadAvatar(tempImage);
-            }
-
         }else if(requestCode==REQUEST_BIGPIC && resultCode==RESULT_OK){
             ArrayList<ImageBean> tempDatas = data.getParcelableArrayListExtra("myPictures");
             ArrayList<String> tempId = data.getStringArrayListExtra("pic_ids");

@@ -22,7 +22,6 @@
     <drawable name="list_cell_item">#ffffff</drawable>
     <drawable name="list_cell_item_clicked">@color/color_disable</drawable>
 
-    <color name="black_overlay">#60000000</color>
 
     <color name="transparent_black">#aa000000</color>
     <color name="base_font_color">#2e2727</color>
@@ -83,6 +82,8 @@
     <color name="red_text_color">#FF2D2D</color>
     <color name="tips_text_gray_color">#909090</color>
     <color name="fragment_bg">#e4e4e4</color>
+    <color name="black_overlay_color">#60000000</color>
+
     <!-- Exceptions colors -->
     <color name="exception_button_color">#5fcf80</color>
     <color name="exception_button_color_second">#35c460</color>
