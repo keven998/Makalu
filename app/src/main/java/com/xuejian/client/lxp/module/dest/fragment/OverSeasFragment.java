@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
