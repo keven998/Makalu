@@ -76,7 +76,6 @@ public class InCityFragment extends PeachBaseFragment{
     protected List<InDestBean> incityList = new ArrayList<InDestBean>();
     InCityAdapter inCityAdapter;
     private boolean isClickable;
-    OnDestActionListener mOnDestActionListener;
     private LruCache<String,Bitmap> mMemoryCache;
 
     public InCityFragment(boolean isClickable) {
@@ -154,9 +153,11 @@ public class InCityFragment extends PeachBaseFragment{
                 box.hideAll();
                 if (locListResult.code == 0) {
                     bindInView(locListResult.result);
-                    PreferenceUtils.cacheData(getActivity(), "destination_indest_group", result);
-                    PreferenceUtils.cacheData(getActivity(), "indest_group_last_modify", CommonUtils.getLastModifyForHeader(headers));
-                    LogUtil.d("last_modify", CommonUtils.getLastModifyForHeader(headers));
+                    if (!getActivity().isFinishing()) {
+                        PreferenceUtils.cacheData(getActivity(), "destination_indest_group", result);
+                        PreferenceUtils.cacheData(getActivity(), "indest_group_last_modify", CommonUtils.getLastModifyForHeader(headers));
+                    }
+
                 }
             }
 
@@ -175,15 +176,6 @@ public class InCityFragment extends PeachBaseFragment{
         });
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        try {
-            mOnDestActionListener = (OnDestActionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement On OnDestActionListener");
-        }
-        super.onAttach(activity);
-    }
 
     private void bindInView(List<GroupLocBean> result) {
         ArrayList<LocBean> allSelectLoc = null;

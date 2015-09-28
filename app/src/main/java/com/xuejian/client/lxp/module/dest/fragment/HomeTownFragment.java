@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -50,30 +51,29 @@ public class HomeTownFragment extends PeachBaseFragment {
 
 
     private void initData() {
-        try {
+        /*try {
             DialogManager.getInstance().showLoadingDialog(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         TravelApi.getRecomendCountry(new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
+               // DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
-
                 resizeData(expertResult.result);
                 PreferenceUtils.cacheData(getActivity(), "mycountryList", result.toString());
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
+              //  DialogManager.getInstance().dissMissLoadingDialog();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-                DialogManager.getInstance().dissMissLoadingDialog();
+               // DialogManager.getInstance().dissMissLoadingDialog();
             }
         }, false);
     }
@@ -91,6 +91,20 @@ public class HomeTownFragment extends PeachBaseFragment {
         ArrayList<CountryWithExpertsBean>data = new ArrayList<>();
         adapter = new TalentLocAdapter(getActivity(),data);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try{
+                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
+                    intent.putExtra("id",adapter.getList().get(position).id);
+                    intent.putExtra("isFromStrategy", false);
+                    startActivity(intent);
+                }catch (Exception ex){
+
+                }
+
+            }
+        });
         String datas = PreferenceUtils.getCacheData(getActivity(), "mycountryList");
 
         if (!TextUtils.isEmpty(datas)){
@@ -179,17 +193,7 @@ public class HomeTownFragment extends PeachBaseFragment {
             }
 
 
-            holder.numSum.setText(item.zhName+"");
-
-            holder.rl_country.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
-                    intent.putExtra("id", item.id);
-                    intent.putExtra("isFromStrategy", false);
-                    startActivity(intent);
-                }
-            });
+            holder.numSum.setText(item.zhName + "");
             return convertView;
         }
 
