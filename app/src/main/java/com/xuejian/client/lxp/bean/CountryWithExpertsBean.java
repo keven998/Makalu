@@ -9,5 +9,6 @@ public class CountryWithExpertsBean {
     public String id;
     public String itemId;
     public String zhName;
+    public String enName;
     public ArrayList<ImageBean> images = new ArrayList<ImageBean>();
 }

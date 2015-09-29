@@ -526,12 +526,14 @@ public class InCityFragment extends PeachBaseFragment{
                 holderView = new HolderView();
                 holderView.cityNameTv = (TextView) convertView.findViewById(R.id.des_title);
                 holderView.desBgImage = (ImageView) convertView.findViewById(R.id.des_bg_pic);
+                holderView.locEnName = (TextView)convertView.findViewById(R.id.loc_en_name);
                 convertView.setTag(holderView);
             }else{
                 holderView = (HolderView)convertView.getTag();
             }
 
             holderView.cityNameTv.setText(groupLocBean.zhName);
+            holderView.locEnName.setText(groupLocBean.enName);
             if (groupLocBean.images!=null && groupLocBean.images.size() > 0) {
                 holderView.desBgImage.setTag(groupLocBean.images.get(0).url);
                 if(holderView.desBgImage.getTag()!=null && holderView.desBgImage.getTag().equals(groupLocBean.images.get(0).url)){
@@ -561,7 +563,7 @@ public class InCityFragment extends PeachBaseFragment{
         class HolderView{
             TextView cityNameTv;
             ImageView desBgImage;
-
+            TextView locEnName;
         }
     }
 

@@ -150,6 +150,7 @@ public class SearchDestyCityActivity extends Activity {
     private class CityViewHolder extends ViewHolderBase<LocBean> {
         TextView city_result;
         ImageView city_image;
+        TextView city_enname;
         private ImageLoader imageLoader = ImageLoader.getInstance();
         private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
                 .showImageOnFail(R.drawable.expert_country_list_bg)
@@ -163,12 +164,14 @@ public class SearchDestyCityActivity extends Activity {
             View contentView = layoutInflater.inflate(R.layout.desty_city_item, null);
             city_result = (TextView)contentView.findViewById(R.id.city_result);
             city_image = (ImageView)contentView.findViewById(R.id.city_image);
+            city_enname = (TextView)contentView.findViewById(R.id.loc_en_name);
             return contentView;
         }
 
         @Override
         public void showData(int position, final LocBean itemData) {
             city_result.setText(itemData.zhName);
+            city_enname.setText(itemData.enName);
             if(itemData.images!=null && itemData.images.size()>0){
                 imageLoader.displayImage(itemData.images.get(0).url,city_image,poptions);
             }

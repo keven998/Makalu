@@ -27,6 +27,8 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,6 +182,7 @@ public class HomeTownFragment extends PeachBaseFragment {
                 holder.rl_country = (FrameLayout) convertView.findViewById(R.id.fl_country);
                 holder.bgImage = (ImageView) convertView.findViewById(R.id.talent_loc_img);
                 holder.numSum = (TextView) convertView.findViewById(R.id.talent_loc_num);
+                holder.ennameText =(TextView) convertView.findViewById(R.id.loc_en_name);
                 convertView.setTag(holder);
             }
             if (item.images.size() > 0) {
@@ -188,8 +191,8 @@ public class HomeTownFragment extends PeachBaseFragment {
                 mImgLoader.displayImage("", holder.bgImage, poptions);
             }
 
-
-            holder.numSum.setText(item.zhName + "");
+            holder.ennameText.setText(item.enName+"");
+            holder.numSum.setText(item.zhName);
             return convertView;
         }
 
@@ -198,7 +201,7 @@ public class HomeTownFragment extends PeachBaseFragment {
             private FrameLayout rl_country;
             private ImageView bgImage;
             private TextView numSum;
-
+            private TextView ennameText;
         }
     }
 

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,6 +124,7 @@ public class OutCityFragment extends PeachBaseFragment {
 
     private void initData() {
         String data = PreferenceUtils.getCacheData(getActivity(), "destination_outcountry");
+        Log.e("cout city name",data+"---------------------------");
         if (!TextUtils.isEmpty(data)) {
             CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(data, CountryBean.class);
             if (countryListResult.code == 0) {
@@ -234,6 +236,7 @@ public class OutCityFragment extends PeachBaseFragment {
         private FlowLayout cityListFl;
         TextView cityNameTv;
         ImageView desBgImage;
+        TextView cityEnName;
 
         //private DisplayImageOptions poptions = UILUtils.getDefaultOption();
         private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
@@ -247,13 +250,14 @@ public class OutCityFragment extends PeachBaseFragment {
             View contentView = layoutInflater.inflate(R.layout.out_item, null);
             cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
             desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
-
+            cityEnName = (TextView)contentView.findViewById(R.id.loc_en_name);
             return contentView;
         }
 
         @Override
         public void showData(int position, final LocBean itemData) {
             cityNameTv.setText(itemData.zhName);
+            cityEnName.setText(itemData.enName);
             if (itemData.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(itemData.images.get(0).url, desBgImage, poptions);
             }
