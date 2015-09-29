@@ -14,7 +14,6 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -454,7 +453,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
             mTvCommentProperty.setText(String.format("%s | %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
             starbar.setRating(itemData.getRating());
-            Log.d("test", "item ratiing = " + itemData.getRating());
             ImageLoader.getInstance().displayImage(itemData.authorAvatar, mCommeterAvatar, options);
         }
     }

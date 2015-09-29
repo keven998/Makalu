@@ -37,7 +37,15 @@ public class LocBean implements Parcelable, ICreateShareDialog {
     public boolean isVote;
     public boolean traveled;
     public ArrayList<String> style=new ArrayList<String>();
+    public float rating;
+
     public LocBean() {
+    }
+    public float getRating() {
+        if (rating > 1) {
+            return rating;
+        }
+        return rating * 5;
     }
 
 
@@ -100,6 +108,7 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         dest.writeByte(this.isVote ? (byte) 1 : (byte) 0);
         dest.writeByte(this.traveled ? (byte) 1 : (byte) 0);
         dest.writeSerializable(this.style);
+        dest.writeFloat(this.rating);
     }
 
     private LocBean(Parcel in) {
@@ -123,6 +132,7 @@ public class LocBean implements Parcelable, ICreateShareDialog {
         this.isVote = (in.readByte() != 0);
         this.traveled = (in.readByte() != 0);
         this.style = (ArrayList<String>) in.readSerializable();
+        this.rating = in.readFloat();
     }
 
     public static final Creator<LocBean> CREATOR = new Creator<LocBean>() {

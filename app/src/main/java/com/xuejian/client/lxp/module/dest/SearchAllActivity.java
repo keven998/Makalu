@@ -198,13 +198,13 @@ public class SearchAllActivity extends PeachBaseActivity {
         });
     }
 
-    public void getAncillaryInfo(String keyword) {
+    public void getAncillaryInfo(final String keyword) {
         TravelApi.getAncillaryInfo(type, keyword, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
                 if (poiGuideResult.code == 0 &&poiGuideResult.result.desc!=null) {
-                    bindGuideView(poiGuideResult.result);
+                    bindGuideView(keyword ,poiGuideResult.result);
                 } else {
                     if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
                 }
@@ -222,10 +222,12 @@ public class SearchAllActivity extends PeachBaseActivity {
         });
     }
 
-    private void bindGuideView(final PoiGuideBean bean) {
+    private void bindGuideView(String keyword ,final PoiGuideBean bean) {
         if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
         header = (RelativeLayout) headerView.findViewById(R.id.header);
+        TextView title= (TextView) headerView.findViewById(R.id.title);
+        title.setText(String.format("%s攻略 >",keyword));
         mSearchAllLv.addHeaderView(headerView);
         header.setVisibility(View.VISIBLE);
         TextView textView = (TextView) headerView.findViewById(R.id.tv_city_poi_desc);

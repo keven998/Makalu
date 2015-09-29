@@ -44,7 +44,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -1166,13 +1165,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }, 100);
         } else {
             if (expressionContainer.getVisibility() == View.VISIBLE) {
-                Log.e("","我到这儿1------------------");
                 expressionContainer.setVisibility(View.GONE);
                 btnContainer.setVisibility(View.VISIBLE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
             } else {
-                Log.e("","我到这儿2------------------");
                 btnContainer.setVisibility(View.GONE);
                 mExtraPanel.setVisibility(View.GONE);
 

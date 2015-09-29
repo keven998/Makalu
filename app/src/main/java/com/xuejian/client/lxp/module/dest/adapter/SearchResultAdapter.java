@@ -7,8 +7,8 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
@@ -79,7 +79,7 @@ public class SearchResultAdapter extends BaseSectionAdapter {
     public View getItemView(int section, int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(mContext, R.layout.item_plan_day_detil, null);
+            convertView = View.inflate(mContext, R.layout.item_search_resultl, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -91,6 +91,7 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         final Object itemObject = typeBean.resultList.get(position);
         if (itemObject instanceof LocBean) {
             locBean = (LocBean) itemObject;
+            if (locBean.rating >= 0) holder.ratingBar.setRating(locBean.getRating());
             if (locBean.style.size() > 0)
                 holder.tvPoiTime.setText(locBean.style.get(0));
             holder.tvPoiTitle.setText(locBean.zhName);
@@ -126,12 +127,7 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         } else if (itemObject instanceof PoiDetailBean) {
 
             poiBean = (PoiDetailBean) itemObject;
-
-            if (!poiBean.getFormatRank().equals("0")) {
-                holder.tvPoiLevel.setText(poiBean.getFormatRank());
-            } else {
-                holder.tvPoiLevel.setText("N");
-            }
+            if (poiBean.rating >= 0) holder.ratingBar.setRating(poiBean.getRating());
             if (poiBean.style.size() > 0)
                 holder.tvPoiTime.setText(poiBean.style.get(0));
             holder.tvPoiTitle.setText(poiBean.zhName);
@@ -262,10 +258,6 @@ public class SearchResultAdapter extends BaseSectionAdapter {
      * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
      */
     static class ViewHolder {
-        @InjectView(R.id.tv_poi_level)
-        TextView tvPoiLevel;
-        @InjectView(R.id.tv_poi_save_level)
-        FrameLayout tvPoiSaveLevel;
         @InjectView(R.id.iv_poi_img)
         ImageView ivPoiImg;
         @InjectView(R.id.btn_send)
@@ -274,6 +266,8 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         TextView tvPoiTitle;
         @InjectView(R.id.tv_poi_time)
         TextView tvPoiTime;
+        @InjectView(R.id.rb_poi)
+        RatingBar ratingBar;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

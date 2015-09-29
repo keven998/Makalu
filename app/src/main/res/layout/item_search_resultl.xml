@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/option_cell_selector"
+    android:paddingLeft="12dp"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:id="@+id/iv_poi_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="6dp"
+        android:background="@color/app_backgroud"
+        android:scaleType="centerCrop" />
+
+    <CheckedTextView
+        android:id="@+id/btn_send"
+        android:layout_width="54dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/cell_selecter_btn"
+        android:gravity="center"
+        android:clickable="true"
+        android:textColor="@color/app_theme_color"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_poi_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/btn_send"
+        android:layout_toRightOf="@id/iv_poi_img"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:singleLine="true"
+        android:textColor="@color/color_text_ii"
+        android:textSize="16sp" />
+    <RatingBar
+        android:id="@+id/rb_poi"
+        style="@style/custom_rating_bar"
+        android:layout_below="@+id/tv_poi_title"
+        android:layout_toRightOf="@+id/iv_poi_img"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:numStars="5"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp" />
+    <TextView
+        android:id="@+id/tv_poi_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@id/rb_poi"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:layout_toLeftOf="@id/btn_send"
+        android:layout_toRightOf="@id/iv_poi_img"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:singleLine="true"
+        android:textColor="@color/color_text_iii"
+        android:textSize="10sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/iv_poi_img"
+        android:layout_marginTop="5dp"
+        android:background="@color/color_line" />
+
+</RelativeLayout>
+
+
