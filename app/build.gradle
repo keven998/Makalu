@@ -72,7 +72,7 @@ android {
         sougou {}
         pp {}
         leshop {}
-
+        shop360 {}
         productFlavors.all {
             flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }

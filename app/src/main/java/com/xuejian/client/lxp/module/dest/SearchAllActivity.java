@@ -203,8 +203,8 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
-                if (poiGuideResult.code == 0 &&poiGuideResult.result.desc!=null) {
-                    bindGuideView(keyword ,poiGuideResult.result);
+                if (poiGuideResult.code == 0 && poiGuideResult.result.desc != null) {
+                    bindGuideView(keyword, poiGuideResult.result);
                 } else {
                     if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
                 }
@@ -223,11 +223,17 @@ public class SearchAllActivity extends PeachBaseActivity {
     }
 
     private void bindGuideView(String keyword ,final PoiGuideBean bean) {
+        String typeString="";
+        if ("restaurant".equals(type)){
+            typeString = "美食";
+        }else if ("shopping".equals(type)){
+            typeString = "购物";
+        }
         if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
         header = (RelativeLayout) headerView.findViewById(R.id.header);
         TextView title= (TextView) headerView.findViewById(R.id.title);
-        title.setText(String.format("%s攻略 >",keyword));
+        title.setText(String.format("%s攻略 >",keyword+typeString));
         mSearchAllLv.addHeaderView(headerView);
         header.setVisibility(View.VISIBLE);
         TextView textView = (TextView) headerView.findViewById(R.id.tv_city_poi_desc);

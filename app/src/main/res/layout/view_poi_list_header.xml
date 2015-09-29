@@ -36,7 +36,7 @@
         android:layout_below="@id/tv_city_poi_desc"
         android:paddingBottom="20dp"
         android:paddingTop="4dp"
-        android:text="攻略"
+        android:text="更多"
         android:textColor="@color/app_theme_color"
         android:textSize="13sp" />
 </RelativeLayout>
