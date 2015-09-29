@@ -199,6 +199,7 @@ public class OverSeasFragment extends PeachBaseFragment {
                 holder.rl_country = (FrameLayout) convertView.findViewById(R.id.fl_country);
                 holder.bgImage = (ImageView) convertView.findViewById(R.id.talent_loc_img);
                 holder.numSum = (TextView) convertView.findViewById(R.id.talent_loc_num);
+                holder.enNameText = (TextView)convertView.findViewById(R.id.loc_en_name);
                 convertView.setTag(holder);
             }
             if (item.images.size() > 0) {
@@ -209,7 +210,7 @@ public class OverSeasFragment extends PeachBaseFragment {
 
 
             holder.numSum.setText(item.zhName + "");
-
+            holder.enNameText.setText(item.enName+"");
             return convertView;
         }
 
@@ -218,7 +219,7 @@ public class OverSeasFragment extends PeachBaseFragment {
             private FrameLayout rl_country;
             private ImageView bgImage;
             private TextView numSum;
-
+            private TextView enNameText;
         }
     }
 

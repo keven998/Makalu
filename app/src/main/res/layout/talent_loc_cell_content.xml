@@ -35,14 +35,13 @@
         />
 
     <TextView
-
+        android:id="@+id/loc_en_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="热门目的地"
         android:textSize="14sp"
         android:textColor="@color/white"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         />
     </LinearLayout>
 </FrameLayout>
