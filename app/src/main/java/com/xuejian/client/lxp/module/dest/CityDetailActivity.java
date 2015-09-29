@@ -385,45 +385,48 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             tv_like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!isVote) {
+                    if(detailBean.id!=null && AccountManager.getCurrentUserId()!=null){
+                        if (!isVote) {
 
-                        UserApi.vote(detailBean.id, new HttpCallBack() {
-                            @Override
-                            public void doSuccess(Object result, String method) {
-                                tv_like.setChecked(!isVote);
-                                isVote = !isVote;
-                            }
+                            UserApi.vote(detailBean.id, new HttpCallBack() {
+                                @Override
+                                public void doSuccess(Object result, String method) {
+                                    tv_like.setChecked(!isVote);
+                                    isVote = !isVote;
+                                }
 
-                            @Override
-                            public void doFailure(Exception error, String msg, String method) {
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
 
-                            }
+                                }
 
-                            @Override
-                            public void doFailure(Exception error, String msg, String method, int code) {
+                                @Override
+                                public void doFailure(Exception error, String msg, String method, int code) {
 
-                            }
-                        });
-                    } else {
-                        UserApi.unVote(detailBean.id, new HttpCallBack() {
-                            @Override
-                            public void doSuccess(Object result, String method) {
-                                tv_like.setChecked(!isVote);
-                                isVote = !isVote;
-                            }
+                                }
+                            });
+                        } else {
+                            UserApi.unVote(detailBean.id, new HttpCallBack() {
+                                @Override
+                                public void doSuccess(Object result, String method) {
+                                    tv_like.setChecked(!isVote);
+                                    isVote = !isVote;
+                                }
 
-                            @Override
-                            public void doFailure(Exception error, String msg, String method) {
+                                @Override
+                                public void doFailure(Exception error, String msg, String method) {
 
-                            }
+                                }
 
-                            @Override
-                            public void doFailure(Exception error, String msg, String method, int code) {
+                                @Override
+                                public void doFailure(Exception error, String msg, String method, int code) {
 
-                            }
-                        });
+                                }
+                            });
 
+                        }
                     }
+
                 }
             });
 
