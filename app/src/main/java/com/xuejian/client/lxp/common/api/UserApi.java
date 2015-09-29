@@ -92,7 +92,7 @@ public class UserApi extends BaseApi {
     public final static String LIKE = "/users/%s/likes";
     public final static String VOTE = "/geo/localities/%s/votes";
 
-    public final static String EXPERT_REQUEST = "/users/%s/expert-requests";
+    public final static String EXPERT_REQUEST = "/misc/expert-requests";
     public final static String BLOCK = "/users/%s/blacklist";
 
     public final static String EXPERT_SEARCH = "/users/experts?zone=%s";
@@ -603,7 +603,7 @@ public class UserApi extends BaseApi {
     public static void experRequest(String phoneNumber, long userId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
-        request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_REQUEST, AccountManager.getCurrentUserId()));
+        request.setUrl(SystemConfig.DEV_URL + EXPERT_REQUEST);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         JSONObject jsonObject = new JSONObject();
         try {
