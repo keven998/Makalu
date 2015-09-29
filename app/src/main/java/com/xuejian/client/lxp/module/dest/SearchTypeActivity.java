@@ -29,6 +29,7 @@ import com.xuejian.client.lxp.common.share.ICreateShareDialog;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
+import com.xuejian.client.lxp.module.dest.adapter.SearchResultAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.util.ArrayList;
@@ -50,13 +51,15 @@ public class SearchTypeActivity extends PeachBaseActivity {
     int curPage = 0;
     String type;
     String keyWord;
-    SearchAllAdapter mAdapter;
+    SearchResultAdapter mAdapter;
+    SearchAllAdapter mAdapter1;
     LocBean mLocBean;
     ArrayList<SearchTypeBean> typeBeans = new ArrayList<SearchTypeBean>();
     SearchTypeBean typeBean;
     String toId;
     String chatType;
     String conversation;
+    boolean fromChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
         toId = getIntent().getStringExtra("toId");
         conversation = getIntent().getStringExtra("conversation");
         chatType = getIntent().getStringExtra("chatType");
+        fromChat = getIntent().getBooleanExtra("fromChat", false);
         if (type.equals("loc")) {
             cityFilterTv.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
@@ -235,76 +239,153 @@ public class SearchTypeActivity extends PeachBaseActivity {
                 hasMore = false;
             }
         }
-        if (mAdapter == null) {
-            boolean isSend;
-            isSend = !TextUtils.isEmpty(toId);
-            mAdapter = new SearchAllAdapter(mContext, typeBeans, false, isSend);
-            mAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
-                @Override
-                public void onMoreResultClick(String type) {
 
-                }
+        if (fromChat) {
+            if (mAdapter == null) {
+                boolean isSend;
+                isSend = !TextUtils.isEmpty(toId);
 
-                @Override
-                public void onItemOnClick(String type, String id, Object object) {
-                    IntentUtils.intentToDetail(SearchTypeActivity.this, type, id);
+                mAdapter = new SearchResultAdapter(mContext, typeBeans, false, isSend);
+                mAdapter.setOnSearchResultClickListener(new SearchResultAdapter.OnSearchResultClickListener() {
+                    @Override
+                    public void onMoreResultClick(String type) {
 
-                }
+                    }
 
-                @Override
-                public void onSendClick(String type, String id, Object object) {
-                    MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
-                    IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
-                        @Override
-                        public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
-                            try {
-                                DialogManager.getInstance().showLoadingDialog(mContext);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                    @Override
+                    public void onItemOnClick(String type, String id, Object object) {
+                        IntentUtils.intentToDetail(SearchTypeActivity.this, type, id);
+
+                    }
+
+                    @Override
+                    public void onSendClick(String type, String id, Object object) {
+                        MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
+                        IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
+                            @Override
+                            public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
+                                try {
+                                    DialogManager.getInstance().showLoadingDialog(mContext);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+                                                Intent intent = new Intent(mContext, ChatActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                                intent.putExtra("conversation", conversation);
+                                                intent.putExtra("chatType", chatType);
+                                                intent.putExtra("friend_id", toId);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailed(int code) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onSuccess(String result) {
+                                    }
+                                });
                             }
-                            IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
-                                @Override
-                                public void onSuccess() {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            ToastUtil.getInstance(mContext).showToast("已发送~");
-                                            Intent intent = new Intent(mContext, ChatActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                            intent.putExtra("conversation", conversation);
-                                            intent.putExtra("chatType", chatType);
-                                            intent.putExtra("friend_id", toId);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                }
 
-                                @Override
-                                public void onFailed(int code) {
-                                    DialogManager.getInstance().dissMissLoadingDialog();
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+                            @Override
+                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            }
+                        });
+                    }
+                });
+                mSearchTypeLv.getRefreshableView().setAdapter(mAdapter);
+            } else {
+                mAdapter.notifyDataSetChanged();
 
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onSuccess(String result) {
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                        }
-                    });
-                }
-            });
-            mSearchTypeLv.getRefreshableView().setAdapter(mAdapter);
+            }
         } else {
-            mAdapter.notifyDataSetChanged();
+            if (mAdapter1 == null) {
+                boolean isSend;
+                isSend = !TextUtils.isEmpty(toId);
+                mAdapter1 = new SearchAllAdapter(mContext, typeBeans, false, isSend);
+                mAdapter1.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
+                    @Override
+                    public void onMoreResultClick(String type) {
+
+                    }
+
+                    @Override
+                    public void onItemOnClick(String type, String id, Object object) {
+                        IntentUtils.intentToDetail(SearchTypeActivity.this, type, id);
+
+                    }
+
+                    @Override
+                    public void onSendClick(String type, String id, Object object) {
+                        MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
+                        IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
+                            @Override
+                            public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
+                                try {
+                                    DialogManager.getInstance().showLoadingDialog(mContext);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("已发送~");
+                                                Intent intent = new Intent(mContext, ChatActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                                intent.putExtra("conversation", conversation);
+                                                intent.putExtra("chatType", chatType);
+                                                intent.putExtra("friend_id", toId);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailed(int code) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(mContext).showToast("好像发送失败了");
+
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onSuccess(String result) {
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            }
+                        });
+                    }
+                });
+                mSearchTypeLv.getRefreshableView().setAdapter(mAdapter1);
+            } else {
+                mAdapter1.notifyDataSetChanged();
+            }
         }
 
 
@@ -314,7 +395,8 @@ public class SearchTypeActivity extends PeachBaseActivity {
             if (curPage != 0) {
                 ToastUtil.getInstance(mContext).showToast("已加载完全部");
             }
-            // ptrLv.setScrollLoadEnabled(false);
+          //  mSearchTypeLv.onPullUpRefreshComplete();
+            // mSearchTypeLv.setScrollLoadEnabled(false);
         } else {
             mSearchTypeLv.setHasMoreData(true);
             mSearchTypeLv.onPullUpRefreshComplete();

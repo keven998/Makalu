@@ -71,7 +71,7 @@ public class HomeTownFragment extends PeachBaseFragment {
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
             }
-        }, false);
+        }, "false");
     }
 
     private void resizeData(List<CountryWithExpertsBean> list) {

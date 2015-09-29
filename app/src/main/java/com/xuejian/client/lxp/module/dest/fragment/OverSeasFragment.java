@@ -68,7 +68,7 @@ public class OverSeasFragment extends PeachBaseFragment {
             public void doFailure(Exception error, String msg, String method, int code) {
                 DialogManager.getInstance().dissMissLoadingDialog();
             }
-        }, true);
+        }, "true");
     }
 
     private void resizeData(List<CountryWithExpertsBean> list) {

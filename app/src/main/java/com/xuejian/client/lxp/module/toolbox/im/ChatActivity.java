@@ -711,7 +711,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 intent.putExtra("conversation", conversation);
                 intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", true);
-                intent.putExtra("type","note");
+                intent.putExtra("type","travelNote");
                 startActivity(intent);
                 break;
             case  R.id.btn_viewspot:

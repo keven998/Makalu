@@ -1,7 +1,6 @@
 package com.xuejian.client.lxp.common.api;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.aizou.core.http.GzipCompressingEntity;
 import com.aizou.core.http.HttpCallBack;
@@ -680,7 +679,6 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId));
-        Log.e("getPicrequest", SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "----------------------------");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
@@ -717,24 +715,14 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/" + picId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        String picDesStr = null;
         JSONObject jsonObject = new JSONObject();
         try{
-
             jsonObject.put("caption",picDesc);
-            picDesStr=jsonObject.toString();
-        }catch (Exception ex){
-
-        }
-        try{
-            StringEntity stringEntity = new StringEntity(picDesStr,"utf-8");
-            request.setBodyEntity(stringEntity);
         }catch (Exception ex){
 
         }
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
-        //return HttpManager.request(request, callback);
     }
     /**
      * 根据达人目的地id获取达人列表

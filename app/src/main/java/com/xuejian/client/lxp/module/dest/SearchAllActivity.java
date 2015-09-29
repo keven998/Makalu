@@ -46,7 +46,7 @@ import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.common.widget.TagView.TagView;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.dest.adapter.SearchAllAdapter;
+import com.xuejian.client.lxp.module.dest.adapter.SearchResultAdapter;
 import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
 
 import java.util.ArrayList;
@@ -203,7 +203,7 @@ public class SearchAllActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson<PoiGuideBean> poiGuideResult = CommonJson.fromJson(result, PoiGuideBean.class);
-                if (poiGuideResult.code == 0 && !TextUtils.isEmpty(poiGuideResult.result.itemType)) {
+                if (poiGuideResult.code == 0 &&poiGuideResult.result.desc!=null) {
                     bindGuideView(poiGuideResult.result);
                 } else {
                     if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
@@ -337,7 +337,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         }
 
 
-        if ("note".equals(type)) {
+        if ("travelNote".equals(type)) {
             OtherApi.getTravelNoteByKeyword(keyword, 0, 30, new HttpCallBack<String>() {
 
                 @Override
@@ -393,7 +393,6 @@ public class SearchAllActivity extends PeachBaseActivity {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
                     if (searchAllResult.code == 0) {
-                        //          if (searchAllResult.result.s)
                         bindView(keyword, searchAllResult.result);
                     }
                 }
@@ -532,8 +531,8 @@ public class SearchAllActivity extends PeachBaseActivity {
         }
         boolean isSend;
         isSend = !TextUtils.isEmpty(toId);
-        SearchAllAdapter searchAllAdapter = new SearchAllAdapter(this, typeBeans, true, isSend);
-        searchAllAdapter.setOnSearchResultClickListener(new SearchAllAdapter.OnSearchResultClickListener() {
+        SearchResultAdapter searchAllAdapter = new SearchResultAdapter(this, typeBeans, true, isSend);
+        searchAllAdapter.setOnSearchResultClickListener(new SearchResultAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
                 MobclickAgent.onEvent(SearchAllActivity.this, "button_item_all_search_result");
@@ -541,6 +540,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                 intent.putExtra("type", type);
                 intent.putExtra("keyWord", keyword);
                 intent.putExtra("chatType", chatType);
+                intent.putExtra("fromChat",true);
                 intent.putExtra("toId", toId);
                 intent.putExtra("conversation", conversation);
                 startActivity(intent);

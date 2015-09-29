@@ -669,7 +669,6 @@ public class StrategyActivity extends PeachBaseActivity {
                     bundle.putBoolean("isOwner", isOwner);
                     collectionFragment.setArguments(bundle);
                 }
-
                 return collectionFragment;
             }
         }

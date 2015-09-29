@@ -75,7 +75,6 @@ public class TravelApi extends BaseApi {
     public final static String FAV = "/misc/favorites";
     //搜索
     public final static String SEARCH = "/search";
-    public final static String NEW_SEARCH = "/newSearch";
 
     //搜索联想
     public final static String SUGGEST = "/suggestions";
@@ -85,7 +84,7 @@ public class TravelApi extends BaseApi {
     //达人列表
     public final static String EXPERT_LIST = "/geo/countries";
     public final static String ANCILLARY_INFO = "/search/ancillary-info";
-    public final static String RECOMMEND_LIST="/geo/localities/recommendations?itemType=%s&isAbroad=%b";
+    public final static String RECOMMEND_LIST="/geo/localities/recommendations";
     //    //景点列表
 //    /app/poi/viewspots
 //    //单个景点的信息
@@ -117,9 +116,8 @@ public class TravelApi extends BaseApi {
 
     public final static String USERS = "/users/";
 
-    public final static String RECOMMEND_KEYWORD ="/misc/hot-searches";
+    public final static String RECOMMEND_KEYWORD ="/search/hot-queries";
 
-    public final static String RECOMMEND_KEYWORD_CHAT ="/misc/chat-hot-searches";
     /**
      * 获取目的地推荐
      *
@@ -226,7 +224,7 @@ public class TravelApi extends BaseApi {
     public static void getRecommendPlan(String locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + String.format(RECOMMEND_PLAN,locId));
+        request.setUrl(SystemConfig.DEV_URL + String.format(RECOMMEND_PLAN, locId));
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
@@ -264,28 +262,18 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
        // return HttpManager.request(request, callback);
     }
+
     public static void getRecommendKeywords(String type ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD);
         if (!TextUtils.isEmpty(type)){
+            if (type.equals("vs"))type="viewspot";
             request.putUrlParams("scope",type);
         }
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
-       // return HttpManager.request(request, callback);
     }
-
-    public static void getTypeSearchRecommendKeywords(String type , HttpCallBack callback) {
-        PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD_CHAT);
-        request.putUrlParams("itemType", type);
-        setDefaultParams(request);
-        OkHttpClientManager.getInstance().request(request, "", callback);
-        // return HttpManager.request(request, callback);
-    }
-
 
     /**
      * 获取景点详情
@@ -422,7 +410,6 @@ public class TravelApi extends BaseApi {
         setDefaultParams(request);
 
 
-
 //        request.setHttpMethod(PTRequest.POST);
 //        request.setUrl(SystemConfig.DEV_URL+ GUIDE);
 //        request.putUrlParams("id", id);
@@ -495,7 +482,7 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + GUIDE + "/" + id);
         setDefaultParams(request);
-      //  return HttpManager.request(request, callBack);
+        //  return HttpManager.request(request, callBack);
         OkHttpClientManager.getInstance().request(request,"", callBack);
     }
 
@@ -702,7 +689,7 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         setDefaultParams(request);
       //  return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
     //目的地联想
@@ -727,17 +714,6 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request,"", callback);
     }
 
-    public static void newSearch(String keyword,String type ,HttpCallBack callback) {
-        PTRequest request = new PTRequest();
-        request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.BASE_URL + NEW_SEARCH);
-        request.putUrlParams("query", keyword);
-        request.putUrlParams("scope", type);
-        request.putUrlParams("imgWidth", LocalDisplay.dp2px(50) + "");
-        setDefaultParams(request);
-        //    return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
-    }
 
 
     //搜索地点
@@ -796,10 +772,11 @@ public class TravelApi extends BaseApi {
     }
 
 
-    public static void getRecomendCountry(HttpCallBack callback,boolean isAbroad){
+    public static void getRecomendCountry(HttpCallBack callback,String isAbroad){
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + String.format(RECOMMEND_LIST,"locality",isAbroad));
+        request.setUrl(SystemConfig.DEV_URL + RECOMMEND_LIST);
+        request.putUrlParams("abroad",isAbroad);
         setDefaultParams(request);
         // return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request,"", callback);

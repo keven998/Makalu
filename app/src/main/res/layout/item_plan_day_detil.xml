@@ -50,9 +50,8 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/cell_selecter_btn"
         android:gravity="center"
-        android:text="收集"
         android:clickable="true"
-        android:textColor="@color/theme_color"
+        android:textColor="@color/app_theme_color"
         android:textSize="13sp"
         android:visibility="gone" />
 
