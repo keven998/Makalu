@@ -156,14 +156,14 @@ public class CityPictureActivity extends PeachBaseActivity {
                 intent.putParcelableArrayListExtra("myPictures", userPics);
                 intent.putStringArrayListExtra("pic_ids", pic_ids);
                 intent.putExtra("userid", id);
-                intent.putExtra("isCity",isCity);
+                intent.putExtra("isCity", isCity);
                 startActivityForResult(intent, REQUEST_BIGPIC);
             }
         });
 
     }
 
-    private void initData(String id) {
+    private void initData(final String id) {
 
         if (isUserPics || isTalentAlbum) {
             UserApi.getUserPicAlbumn(String.valueOf(id), new HttpCallBack<String>() {
@@ -187,7 +187,13 @@ public class CityPictureActivity extends PeachBaseActivity {
 
                                 userPics.add(ib);
                             }
-                            AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(object.length());
+                            if(id!=null && id.equals(AccountManager.getInstance().getCurrentUserId())){
+                                if(AccountManager.getInstance().getLoginAccountInfo()!=null){
+                                    AccountManager.getInstance().getLoginAccountInfo().setAlbumCnt(object.length());
+                                }
+
+                            }
+
                             picAdapter = new PicAdapter(userPics);
                             mCityPicGv.setAdapter(picAdapter);
 
