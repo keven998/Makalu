@@ -63,8 +63,7 @@
                     android:layout_alignParentRight="true"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:src="@drawable/selector_ic_common_navigation_menu"
-                     />
+                    android:src="@drawable/selector_ic_common_navigation_menu" />
 
                 <ImageView
                     android:id="@+id/map_more"
@@ -114,15 +113,33 @@
                 </HorizontalScrollView>
 
             </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="55dp"
+                android:layout_marginLeft="5dp">
+
+                <TextView
+                    android:layout_width="45dp"
+                    android:layout_height="60dp"
+                    android:background="@color/transparent_black"
+                    android:gravity="bottom|center_horizontal"
+                    android:text="定位"
+                    android:textColor="@color/base_color_white" />
+
+            </FrameLayout>
+
             <ImageView
                 android:id="@+id/iv_my_location"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:scaleType="center"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="55dp"
+                android:layout_marginBottom="70dp"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/btn_my_location"/>
+                android:scaleType="center"
+                android:src="@drawable/btn_my_location" />
         </FrameLayout>
 
         <LinearLayout
@@ -135,23 +152,23 @@
             <TextView
                 android:id="@+id/tv_plan_index_title"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
-                android:textColor="@color/base_color_white"
-                android:padding="10dp"
-                android:gravity="center"
-                android:textSize="12sp"
+                android:layout_gravity="center_horizontal"
+                android:drawableLeft="@drawable/icon_my_trip"
                 android:drawablePadding="5dp"
+                android:gravity="center"
+                android:padding="10dp"
                 android:text="我的行程"
-                android:drawableLeft="@drawable/icon_my_trip"/>
+                android:textColor="@color/base_color_white"
+                android:textSize="12sp" />
 
             <ListView
                 android:id="@+id/plan_index"
-                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
                 android:divider="@null"
-                android:dividerHeight="0dp"/>
+                android:dividerHeight="0dp" />
         </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

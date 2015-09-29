@@ -73,7 +73,7 @@ public class MapActivity extends PeachBaseActivity implements AMapLocationListen
 
     private void showMap(double longtitude, double latitude, String addr) {
         aMap.clear();
-        aMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marka))
+        aMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_my_location))
                 .position(new LatLng(latitude,longtitude)).snippet(addr));
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longtitude), 19));
 
