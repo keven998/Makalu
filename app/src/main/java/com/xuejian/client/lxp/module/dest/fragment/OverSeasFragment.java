@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -52,18 +51,10 @@ public class OverSeasFragment extends PeachBaseFragment {
 
 
     private void initData() {
-        try {
-            DialogManager.getInstance().showLoadingDialog(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         TravelApi.getRecomendCountry(new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson4List<CountryWithExpertsBean> expertResult = CommonJson4List.fromJson(result.toString(), CountryWithExpertsBean.class);
-
                 resizeData(expertResult.result);
                 if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "countryList", result.toString());
             }

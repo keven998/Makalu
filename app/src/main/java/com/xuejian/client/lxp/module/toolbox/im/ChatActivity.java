@@ -66,7 +66,6 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.log.LogUtil;
 import com.aizou.core.widget.DotView;
 import com.lv.Audio.MediaRecordFunc;
 import com.lv.bean.MessageBean;
@@ -413,7 +412,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         super.onResume();
         MobclickAgent.onPageStart("page_lxp_chatting");
         MobclickAgent.onResume(this);
-        LogUtil.d("resume");
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
     }
 

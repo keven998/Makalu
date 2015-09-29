@@ -66,12 +66,10 @@ public class HomeTownFragment extends PeachBaseFragment {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-              //  DialogManager.getInstance().dissMissLoadingDialog();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-               // DialogManager.getInstance().dissMissLoadingDialog();
             }
         }, false);
     }

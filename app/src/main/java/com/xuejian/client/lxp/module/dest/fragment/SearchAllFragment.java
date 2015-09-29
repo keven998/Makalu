@@ -228,6 +228,8 @@ public class SearchAllFragment extends PeachBaseFragment {
                     public void onTagClick(TagView tagView, Tag tag) {
                         if (mKeyTags != null && mKeyTags.size() > 0) {
                             mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(tagView.getWindowToken(), 0);
                             searchAll(mKeyTags.get(tag.getId()).getTitle());
                         }
 

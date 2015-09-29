@@ -269,7 +269,7 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD);
         if (!TextUtils.isEmpty(type)){
-            request.putUrlParams("itemType",type);
+            request.putUrlParams("scope",type);
         }
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
