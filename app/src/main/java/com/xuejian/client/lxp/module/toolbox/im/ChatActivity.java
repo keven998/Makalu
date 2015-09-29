@@ -44,6 +44,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -417,12 +418,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void setPanelAnimation() {
         LayoutTransition lt = new LayoutTransition();
-        //       lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
-        lt.setDuration(LayoutTransition.APPEARING, 10);
-//        lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
-        lt.setDuration(LayoutTransition.DISAPPEARING, 10);
-//        lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-//        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+        lt.setStagger(LayoutTransition.CHANGE_APPEARING, 10);
+        lt.setStagger(LayoutTransition.APPEARING, 20);
+        lt.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        lt.setDuration(LayoutTransition.DISAPPEARING, 0);
+        lt.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        lt.setStartDelay(LayoutTransition.DISAPPEARING, 0);
         mExtraPanel.setLayoutTransition(lt);
     }
 
@@ -1165,13 +1166,16 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }, 100);
         } else {
             if (expressionContainer.getVisibility() == View.VISIBLE) {
+                Log.e("","我到这儿1------------------");
                 expressionContainer.setVisibility(View.GONE);
                 btnContainer.setVisibility(View.VISIBLE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.GONE);
             } else {
-                mExtraPanel.setVisibility(View.GONE);
+                Log.e("","我到这儿2------------------");
                 btnContainer.setVisibility(View.GONE);
+                mExtraPanel.setVisibility(View.GONE);
+
             }
 
         }
