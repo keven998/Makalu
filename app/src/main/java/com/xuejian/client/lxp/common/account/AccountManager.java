@@ -53,8 +53,10 @@ public class AccountManager {
     }
 
     public static String getCurrentUserId() {
-        if (TextUtils.isEmpty(CurrentUserId)){
-            CurrentUserId=String.valueOf(user.getUserId());
+        if(user!=null){
+            if (TextUtils.isEmpty(CurrentUserId)){
+                CurrentUserId=String.valueOf(user.getUserId());
+            }
         }
         return CurrentUserId;
     }
