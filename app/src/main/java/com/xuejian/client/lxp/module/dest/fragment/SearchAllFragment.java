@@ -202,6 +202,8 @@ public class SearchAllFragment extends PeachBaseFragment {
                 tag.setId(i);
                 tag.setChecked(true);
                 tag.setTitle(keys[i]);
+                tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+                tag.setTextColor(R.color.app_theme_color);
                 mTags.add(tag);
                 count++;
                 if (count==9)break;
@@ -218,6 +220,8 @@ public class SearchAllFragment extends PeachBaseFragment {
                     tag.setId(i);
                     tag.setChecked(true);
                     tag.setTitle(keyList.result.get(i).zhName);
+                    tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+                    tag.setTextColor(R.color.app_theme_color);
                     mKeyTags.add(tag);
                 }
                 recomend_tag.setmTagViewResId(R.layout.tag);

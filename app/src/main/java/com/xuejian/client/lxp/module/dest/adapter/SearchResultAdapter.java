@@ -20,8 +20,11 @@ import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.SearchTypeBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -89,11 +92,25 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         LocBean locBean = null;
         final PoiDetailBean poiBean;
         final Object itemObject = typeBean.resultList.get(position);
+        holder.tvPoiTime.removeAllViews();
         if (itemObject instanceof LocBean) {
+            holder.address_tv.setVisibility(View.GONE);
             locBean = (LocBean) itemObject;
             if (locBean.rating >= 0) holder.ratingBar.setRating(locBean.getRating());
-            if (locBean.style.size() > 0)
-                holder.tvPoiTime.setText(locBean.style.get(0));
+            if (locBean.style.size() > 0){
+                List<Tag> mKeyTags = new ArrayList<Tag>();
+                for (int i = 0; i < locBean.style.size()&& i<4; i++) {
+                    Tag tag = new Tag();
+                    tag.setId(i);
+                    tag.setChecked(true);
+                    tag.setTitle(locBean.style.get(i));
+                    tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+                    tag.setTextColor(R.color.color_text_iii);
+                    mKeyTags.add(tag);
+                }
+                holder.tvPoiTime.setTags(mKeyTags);
+            }
+
             holder.tvPoiTitle.setText(locBean.zhName);
             if (locBean.images != null && locBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(locBean.images.get(0).url, holder.ivPoiImg, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
@@ -128,8 +145,20 @@ public class SearchResultAdapter extends BaseSectionAdapter {
 
             poiBean = (PoiDetailBean) itemObject;
             if (poiBean.rating >= 0) holder.ratingBar.setRating(poiBean.getRating());
-            if (poiBean.style.size() > 0)
-                holder.tvPoiTime.setText(poiBean.style.get(0));
+            if (poiBean.style.size() > 0){
+                List<Tag> mKeyTags = new ArrayList<Tag>();
+                for (int i = 0; i < poiBean.style.size()&& i<4; i++) {
+                    Tag tag = new Tag();
+                    tag.setId(i);
+                    tag.setChecked(true);
+                    tag.setTitle(poiBean.style.get(i));
+                    tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+                    tag.setTextColor(R.color.color_text_iii);
+                    mKeyTags.add(tag);
+                }
+                holder.tvPoiTime.setmTagViewResId(R.layout.search_tag);
+                holder.tvPoiTime.setTags(mKeyTags);
+            }
             holder.tvPoiTitle.setText(poiBean.zhName);
             if (poiBean.images != null && poiBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiBean.images.get(0).url, holder.ivPoiImg, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
@@ -144,6 +173,15 @@ public class SearchResultAdapter extends BaseSectionAdapter {
                     }
                 }
             });
+
+            if(poiBean.address!=null){
+                holder.address_tv.setVisibility(View.VISIBLE);
+                holder.address_tv.setText(poiBean.address);
+            }else{
+                holder.address_tv.setVisibility(View.GONE);
+            }
+
+
             if (mIsSend) {
                 holder.btnSend.setText("发送");
                 holder.btnSend.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +207,7 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         }
         TextView typeName = (TextView) convertView.findViewById(R.id.type_name_tv);
         TextView searchMore = (TextView) convertView.findViewById(R.id.tv_search_more);
+
         final SearchTypeBean typeBean = mSearchList.get(section);
         if (typeBean.type.equals("loc")) {
             typeName.setText("城市");
@@ -265,10 +304,11 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         @InjectView(R.id.tv_poi_title)
         TextView tvPoiTitle;
         @InjectView(R.id.tv_poi_time)
-        TextView tvPoiTime;
+        TagListView tvPoiTime;
         @InjectView(R.id.rb_poi)
         RatingBar ratingBar;
-
+        @InjectView(R.id.address_tv)
+        TextView address_tv;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
