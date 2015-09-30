@@ -17,8 +17,7 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
     private boolean mIsDeleteMode;
     private OnTagCheckedChangedListener mOnTagCheckedChangedListener;
     private OnTagClickListener mOnTagClickListener;
-    private int mTagViewBackgroundResId;
-    private int mTagViewTextColorResId;
+
 
     public int getmTagViewResId() {
         return mTagViewResId;
@@ -86,15 +85,14 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
             localTagView.setTag(t);
         }
 
-        if (mTagViewTextColorResId == 0) {
+        if (t.getTextColor() == 0) {
             localTagView.setTextColor(getResources().getColor(R.color.app_theme_color));
         } else {
-            localTagView.setTextColor(getResources().getColor(mTagViewTextColorResId));
+            localTagView.setTextColor(getResources().getColor(t.getTextColor()));
         }
 
         if (t.getBackgroundResId()== 0) {
-            mTagViewBackgroundResId = R.drawable.all_whitesolid_greenline;
-            localTagView.setBackgroundResource(mTagViewBackgroundResId);
+            localTagView.setBackgroundResource(R.drawable.all_whitesolid_greenline);
         } else {
             localTagView.setBackgroundResource(t.getBackgroundResId());
         }
@@ -186,13 +184,7 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
         mOnTagClickListener = onTagClickListener;
     }
 
-    public void setTagViewBackgroundRes(int res) {
-        mTagViewBackgroundResId = res;
-    }
 
-    public void setTagViewTextColorRes(int res) {
-        mTagViewTextColorResId = res;
-    }
 
     public void setTags(List<? extends Tag> lists) {
         setTags(lists, false);

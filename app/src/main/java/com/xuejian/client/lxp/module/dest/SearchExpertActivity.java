@@ -289,7 +289,6 @@ public class SearchExpertActivity extends PeachBaseActivity {
                List<Tag> mTags = new ArrayList<Tag>();
                initData(mTags,eb.tags);
                vh.expert_tag.removeAllViews();
-               vh.expert_tag.setTagViewTextColorRes(R.color.white);
                vh.expert_tag.setmTagViewResId(R.layout.expert_tag);
                vh.expert_tag.setTags(mTags);
            }else{
@@ -325,6 +324,7 @@ public class SearchExpertActivity extends PeachBaseActivity {
                 tag.setTitle(tagStr.get(i));
                 tag.setId(i);
                 tag.setBackgroundResId(lebelColors[lastColor]);
+                tag.setTextColor(R.color.white);
                 mTags.add(tag);
                 lastColor=getNextColor(lastColor);
             }

@@ -101,6 +101,7 @@ public class SelectCityActivity extends PeachBaseActivity implements OnDestActio
     }
 
 
+
     @Override
     public void finish() {
         super.finish();
