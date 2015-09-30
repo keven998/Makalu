@@ -359,7 +359,7 @@ public class StrategyActivity extends PeachBaseActivity {
                         cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
                         cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
                         cdialog.setTitle("提示");
-                        cdialog.setMessage(String.format("已为你创建%d行程", strategyResult.result.itineraryDays));
+                        cdialog.setMessage(String.format("已为你创建%d天行程", strategyResult.result.itineraryDays));
                         cdialog.setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -404,7 +404,7 @@ public class StrategyActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-                System.out.println(code);
+
             }
         });
     }
