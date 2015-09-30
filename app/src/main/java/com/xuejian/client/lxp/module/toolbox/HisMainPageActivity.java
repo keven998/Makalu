@@ -639,11 +639,11 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                     tag.setTitle(tagStr.get(i));
                     tag.setId(i);
                     tag.setBackgroundResId(lebelColors[lastColor]);
+                    tag.setTextColor(R.color.white);
                     mTags.add(tag);
                     lastColor=getNextColor(lastColor);
                 }
                 expert_tag.removeAllViews();
-                expert_tag.setTagViewTextColorRes(R.color.white);
                 expert_tag.setmTagViewResId(R.layout.expert_tag);
                 expert_tag.setTags(mTags);
             }else{

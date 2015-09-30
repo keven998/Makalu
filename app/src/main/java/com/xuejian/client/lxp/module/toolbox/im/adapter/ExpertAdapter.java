@@ -134,9 +134,9 @@ public class ExpertAdapter extends BaseAdapter {
 
         if(eb.tags!=null && eb.tags.size()>0){
             List<Tag> mTags = new ArrayList<Tag>();
-            initData(mTags,eb.tags);
+            initData(mTags, eb.tags);
             vh.expert_tag.removeAllViews();
-            vh.expert_tag.setTagViewTextColorRes(R.color.white);
+
             vh.expert_tag.setmTagViewResId(R.layout.expert_tag);
             vh.expert_tag.setTags(mTags);
         }else{
@@ -171,6 +171,7 @@ public class ExpertAdapter extends BaseAdapter {
             tag.setTitle(tagStr.get(i));
             tag.setId(i);
             tag.setBackgroundResId(lebelColors[lastColor]);
+            tag.setTextColor(R.color.white);
             mTags.add(tag);
             lastColor=getNextColor(lastColor);
         }

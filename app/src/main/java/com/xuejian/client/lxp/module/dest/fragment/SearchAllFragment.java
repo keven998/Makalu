@@ -221,7 +221,6 @@ public class SearchAllFragment extends PeachBaseFragment {
                     mKeyTags.add(tag);
                 }
                 recomend_tag.setmTagViewResId(R.layout.tag);
-                recomend_tag.setTagViewBackgroundRes(R.drawable.all_whitesolid_greenline);
                 recomend_tag.setTags(mKeyTags);
                 recomend_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
                     @Override

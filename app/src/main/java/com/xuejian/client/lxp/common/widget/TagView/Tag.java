@@ -12,6 +12,7 @@ public class Tag implements Serializable {
     private int leftDrawableResId;
     private int rightDrawableResId;
     private String title;
+    private int textColor;
 
     public Tag() {
 
@@ -68,6 +69,13 @@ public class Tag implements Serializable {
 
     public void setTitle(String paramString) {
         this.title = paramString;
+    }
+
+    public int getTextColor() {
+        return textColor;
+    }
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
     }
 }
 

@@ -71,6 +71,8 @@ public class SearchAllActivity extends PeachBaseActivity {
     FrameLayout history_pannel;
     @InjectView(R.id.recomend_tag)
     TagListView recomend_tag;
+    @InjectView(R.id.history_lebel)
+    TextView historyLebel;
     String toId;
     String chatType;
     Object temp;
@@ -255,6 +257,31 @@ public class SearchAllActivity extends PeachBaseActivity {
     }
 
     private void setUpData() {
+
+        //historyLebel
+        int tagBackground=0;
+        int tagcolor=0;
+        if("restaurant".equals(type)){
+            historyLebel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.delecious_history,0,0,0);
+            tagBackground=R.drawable.all_whitesolid_yellowline;
+            tagcolor =R.color.tag_color_yellow;
+        }else if("shopping".equals(type)){
+            historyLebel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.shopping_history,0,0,0);
+            tagBackground=R.drawable.all_whitesolid_pinkline;
+            tagcolor = R.color.tag_color_pink;
+        }else if("travelNote".equals(type)){
+            historyLebel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.note_history,0,0,0);
+            tagBackground=R.drawable.all_whitesolid_greenline;
+            tagcolor = R.color.app_theme_color;
+        }else if("vs".equals(type)){
+            historyLebel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.place_history,0,0,0);
+            tagBackground=R.drawable.all_whitesolid_blueline;
+            tagcolor = R.color.tag_color_blue;
+        }else{
+            historyLebel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.home_history,0,0,0);
+            tagBackground=R.drawable.all_whitesolid_greenline;
+            tagcolor = R.color.app_theme_color;
+        }
         keys = getSearchHistory();
         if (keys.length > 0 && !TextUtils.isEmpty(keys[0])) {
             int count = 0;
@@ -263,6 +290,8 @@ public class SearchAllActivity extends PeachBaseActivity {
                 tag.setId(i);
                 tag.setChecked(true);
                 tag.setTitle(keys[i]);
+                tag.setBackgroundResId(tagBackground);
+                tag.setTextColor(tagcolor);
                 mTags.add(tag);
                 count++;
                 if (count == 9) break;
@@ -270,6 +299,8 @@ public class SearchAllActivity extends PeachBaseActivity {
         } else {
             history_pannel.setVisibility(View.GONE);
         }
+        final int tagBgRes = tagBackground;
+        final int tagTxRes = tagcolor;
         TravelApi.getRecommendKeywords(type, new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
@@ -280,6 +311,8 @@ public class SearchAllActivity extends PeachBaseActivity {
                         tag.setId(i);
                         tag.setChecked(true);
                         tag.setTitle(keyList.result.get(i).zhName);
+                        tag.setBackgroundResId(tagBgRes);
+                        tag.setTextColor(tagTxRes);
                         mKeyTags.add(tag);
                     }
                     recomend_tag.setTags(mKeyTags);
