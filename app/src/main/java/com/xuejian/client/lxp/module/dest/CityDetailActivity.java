@@ -272,7 +272,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             apply_expert.setVisibility(View.VISIBLE);
             return;
         }
-        if (result.size() < 2) apply_expert.setVisibility(View.VISIBLE);
+        if (result.size() <=2) apply_expert.setVisibility(View.VISIBLE);
 //        AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
 //        abp.height = 400;
 //        View footView = new View(mContext);

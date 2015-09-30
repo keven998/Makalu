@@ -353,16 +353,17 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:divider="@color/color_line"
-                    android:dividerHeight="1px" />
+                    android:dividerHeight="1px"
+                    />
 
                 <ImageView
                     android:layout_margin="5dp"
                     android:id="@+id/apply_expert"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/icon_expert_apply"
-                    android:visibility="gone"  />
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </ScrollView>

@@ -234,8 +234,8 @@ public class SearchAllActivity extends PeachBaseActivity {
         if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
         header = (RelativeLayout) headerView.findViewById(R.id.header);
-        TextView title= (TextView) headerView.findViewById(R.id.title);
-        title.setText(String.format("%s攻略 >",keyword+typeString));
+        TextView title= (TextView) headerView.findViewById(R.id.tv_more);
+        title.setText(String.format("全部%s攻略 >",keyword+typeString));
         mSearchAllLv.addHeaderView(headerView);
         header.setVisibility(View.VISIBLE);
         TextView textView = (TextView) headerView.findViewById(R.id.tv_city_poi_desc);
