@@ -93,24 +93,11 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         final PoiDetailBean poiBean;
         final Object itemObject = typeBean.resultList.get(position);
         holder.tvPoiTime.removeAllViews();
+        holder.tvPoiTime.setVisibility(View.GONE);
+        holder.ratingBar.setVisibility(View.GONE);
         if (itemObject instanceof LocBean) {
             holder.address_tv.setVisibility(View.GONE);
             locBean = (LocBean) itemObject;
-            if (locBean.rating >= 0) holder.ratingBar.setRating(locBean.getRating());
-            if (locBean.style.size() > 0){
-                List<Tag> mKeyTags = new ArrayList<Tag>();
-                for (int i = 0; i < locBean.style.size()&& i<4; i++) {
-                    Tag tag = new Tag();
-                    tag.setId(i);
-                    tag.setChecked(true);
-                    tag.setTitle(locBean.style.get(i));
-                    tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
-                    tag.setTextColor(R.color.color_text_iii);
-                    mKeyTags.add(tag);
-                }
-                holder.tvPoiTime.setTags(mKeyTags);
-            }
-
             holder.tvPoiTitle.setText(locBean.zhName);
             if (locBean.images != null && locBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(locBean.images.get(0).url, holder.ivPoiImg, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
@@ -142,8 +129,9 @@ public class SearchResultAdapter extends BaseSectionAdapter {
             }
 
         } else if (itemObject instanceof PoiDetailBean) {
-
+            holder.tvPoiTime.setVisibility(View.VISIBLE);
             poiBean = (PoiDetailBean) itemObject;
+            holder.ratingBar.setVisibility(View.VISIBLE);
             if (poiBean.rating >= 0) holder.ratingBar.setRating(poiBean.getRating());
             if (poiBean.style.size() > 0){
                 List<Tag> mKeyTags = new ArrayList<Tag>();

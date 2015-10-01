@@ -6,7 +6,9 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
@@ -18,8 +20,11 @@ import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.SearchTypeBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -89,6 +94,9 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         LocBean locBean = null;
         final PoiDetailBean poiBean;
         final Object itemObject = typeBean.resultList.get(position);
+        holder.tvPoiTime.removeAllViews();
+        holder.tvPoiTime.setVisibility(View.GONE);
+        holder.ratingBar.setVisibility(View.GONE);
         if (itemObject instanceof LocBean) {
             locBean = (LocBean) itemObject;
             holder.mNameTv.setText(locBean.zhName);
@@ -126,6 +134,9 @@ public class SearchAllAdapter extends BaseSectionAdapter {
             poiBean = (PoiDetailBean) itemObject;
             holder.mAddressTv.setText(poiBean.address);
             holder.mNameTv.setText(poiBean.zhName);
+            holder.tvPoiTime.setVisibility(View.VISIBLE);
+            holder.ratingBar.setVisibility(View.VISIBLE);
+            if (poiBean.rating >= 0) holder.ratingBar.setRating(poiBean.getRating());
             if (poiBean.address.equals("") || poiBean.address == null) {
                 holder.mAddressTv.setText(poiBean.zhName);
             }
@@ -133,6 +144,21 @@ public class SearchAllAdapter extends BaseSectionAdapter {
                 ImageLoader.getInstance().displayImage(poiBean.images.get(0).url, holder.mImageIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             } else {
                 holder.mImageIv.setImageDrawable(null);
+            }
+
+            if(poiBean.style.size()>0){
+                List<Tag> mKeyTags = new ArrayList<Tag>();
+                for (int i = 0; i < poiBean.style.size()&& i<4; i++) {
+                    Tag tag = new Tag();
+                    tag.setId(i);
+                    tag.setChecked(true);
+                    tag.setTitle(poiBean.style.get(i));
+                    tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+                    tag.setTextColor(R.color.color_text_iii);
+                    mKeyTags.add(tag);
+                }
+                holder.tvPoiTime.setmTagViewResId(R.layout.search_tag);
+                holder.tvPoiTime.setTags(mKeyTags);
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -249,8 +275,11 @@ public class SearchAllAdapter extends BaseSectionAdapter {
         @InjectView(R.id.address_tv)
         TextView mAddressTv;
         @InjectView(R.id.btn_send)
-        TextView mSendTv;
-
+        CheckedTextView mSendTv;
+        @InjectView(R.id.rb_poi)
+        RatingBar ratingBar;
+        @InjectView(R.id.tv_poi_time)
+        TagListView tvPoiTime;
         public ContentViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

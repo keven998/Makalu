@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,7 +85,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     private TagListView history_tag;
     private String[] keys;
     View headerView;
-    RelativeLayout header;
+    LinearLayout header;
     TravelNoteBean noteBean;
 
     @Override
@@ -233,9 +234,9 @@ public class SearchAllActivity extends PeachBaseActivity {
         }
         if (headerView != null) mSearchAllLv.removeHeaderView(headerView);
         headerView = View.inflate(mContext, R.layout.view_poi_list_header, null);
-        header = (RelativeLayout) headerView.findViewById(R.id.header);
+        header = (LinearLayout) headerView.findViewById(R.id.header);
         TextView title= (TextView) headerView.findViewById(R.id.title);
-        title.setText(String.format("%s攻略 >",keyword+typeString));
+        title.setText(String.format("全部%s攻略>",keyword+typeString));
         mSearchAllLv.addHeaderView(headerView);
         header.setVisibility(View.VISIBLE);
         TextView textView = (TextView) headerView.findViewById(R.id.tv_city_poi_desc);
