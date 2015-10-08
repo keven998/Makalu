@@ -43,6 +43,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
+import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.TravelExpertApplyActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.GuilderListActivity;
@@ -271,7 +272,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             apply_expert.setVisibility(View.VISIBLE);
             return;
         }
-        if (result.size() < 2) apply_expert.setVisibility(View.VISIBLE);
+        if (result.size() <=2) apply_expert.setVisibility(View.VISIBLE);
 //        AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
 //        abp.height = 400;
 //        View footView = new View(mContext);
@@ -376,7 +377,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
 
     private void bindView(final LocBean detailBean) {
 
-        if(detailBean!=null){
+        if (AccountManager.getInstance().getLoginAccount(mContext) != null) {
             final String[] ids = new String[1];
             ids[0] = detailBean.id;
             isVote = detailBean.isVote;
@@ -385,7 +386,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             tv_like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(detailBean.id!=null && AccountManager.getCurrentUserId()!=null){
+                    if (detailBean.id != null && AccountManager.getCurrentUserId() != null) {
                         if (!isVote) {
 
                             UserApi.vote(detailBean.id, new HttpCallBack() {
@@ -459,10 +460,16 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     });
                 }
             });
-            iv_create.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MobclickAgent.onEvent(CityDetailActivity.this, "navigation_item_lxp_city_create_plan");
+        }
+        iv_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MobclickAgent.onEvent(CityDetailActivity.this, "navigation_item_lxp_city_create_plan");
+                if (AccountManager.getInstance().getLoginAccount(mContext) == null) {
+                    Intent logIntent = new Intent(mContext, LoginActivity.class);
+                    startActivityWithNoAnim(logIntent);
+                    overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+                } else {
                     Intent intent = new Intent();
                     intent.setClass(CityDetailActivity.this, SelectDestActivity.class);
                     ArrayList<LocBean> locList = new ArrayList<LocBean>();
@@ -470,152 +477,153 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
                     intent.putExtra("locList", locList);
                     startActivity(intent);
                 }
-            });
-            recommend_plan.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, StrategyActivity.class);
-                    intent.putExtra("locId", detailBean.id);
-                    intent.putExtra("recommend", true);
-                    startActivity(intent);
-                }
-            });
-            recommend_note.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
-                    intent.putExtra("keyword", detailBean.zhName);
-                    intent.putExtra("id", locId);
-                    startActivity(intent);
-                }
-            });
 
-            rl_all_expert.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GuilderListActivity.class);
-                    intent.putExtra("zone", detailBean.zhName);
-                    startActivity(intent);
-                }
-            });
-            TextView titleTv = (TextView) findViewById(R.id.tv_title_bar_title);
-            titleTv.setText(detailBean.zhName);
 
-            locDetailBean = detailBean;
-            if (isFromStrategy) {
-                //  findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
             }
+        });
+        recommend_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, StrategyActivity.class);
+                intent.putExtra("locId", detailBean.id);
+                intent.putExtra("recommend", true);
+                startActivity(intent);
+            }
+        });
+        recommend_note.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                intent.putExtra("keyword", detailBean.zhName);
+                intent.putExtra("id", locId);
+                startActivity(intent);
+            }
+        });
+
+        rl_all_expert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, GuilderListActivity.class);
+                intent.putExtra("zone", detailBean.zhName);
+                startActivity(intent);
+            }
+        });
+        TextView titleTv = (TextView) findViewById(R.id.tv_title_bar_title);
+        titleTv.setText(detailBean.zhName);
+
+        locDetailBean = detailBean;
+        if (isFromStrategy) {
+            //  findViewById(R.id.tv_title_bar_right).setVisibility(View.GONE);
+        }
 //        findViewById(R.id.tv_title_bar_right).setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //                showActionDialog();
 //            }
 //        });
-            DisplayImageOptions options = new DisplayImageOptions.Builder()
-                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.empty_photo)
-                    .showImageOnFail(R.drawable.empty_photo)
-                    .resetViewBeforeLoading(true)
-                    .cacheOnDisk(true)
-                    .displayer(new RoundedBitmapDisplayer(10)) // 设置成圆角图片
-                    .build();
-            if (detailBean.images != null && detailBean.images.size() > 0) {
-                for (int i = 0; i < detailBean.images.size(); i++) {
-                    ImageLoader.getInstance().displayImage(detailBean.images.get(i).url, imageViews[i], options);
-                    if (i == 5) break;
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                .showImageForEmptyUri(R.drawable.empty_photo)
+                .showImageOnFail(R.drawable.empty_photo)
+                .resetViewBeforeLoading(true)
+                .cacheOnDisk(true)
+                .displayer(new RoundedBitmapDisplayer(10)) // 设置成圆角图片
+                .build();
+        if (detailBean.images != null && detailBean.images.size() > 0) {
+            for (int i = 0; i < detailBean.images.size(); i++) {
+                ImageLoader.getInstance().displayImage(detailBean.images.get(i).url, imageViews[i], options);
+                if (i == 5) break;
+            }
+        }
+        findViewById(R.id.ly1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MobclickAgent.onEvent(CityDetailActivity.this, "card_item_city_pictures");
+                Intent intent = new Intent(mContext, CityPictureActivity.class);
+                intent.putExtra("id", locDetailBean.id);
+                intent.putExtra("title", locDetailBean.zhName);
+                startActivityWithNoAnim(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
+
+        if (detailBean.imageCnt > 100) {
+            detailBean.imageCnt = 100;
+        }
+
+        mCityNameTv.setText(detailBean.zhName);
+        mCostTimeTv.setText(String.format("～推荐旅行 · %s～", detailBean.timeCostDesc));
+        foodTv.setOnClickListener(this);
+        shoppingTv.setOnClickListener(this);
+        spotsTv.setOnClickListener(this);
+        travelTv.setOnClickListener(this);
+
+        final String bt = String.format("～最佳季节：%s", detailBean.travelMonth);
+        bestMonthTv.setText(bt);
+
+        ViewTreeObserver observer1 = bestMonthTv.getViewTreeObserver();
+        observer1.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                TextView timeView = bestMonthTv;
+                int nc = timeView.getLayout().getLineEnd(0);
+                if (nc < bt.length() && nc < timeView.getText().length()) {
+                    String text = bt.substring(0, nc - 8);
+                    SpannableString planStr = new SpannableString("全文");
+                    planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    SpannableStringBuilder spb = new SpannableStringBuilder();
+                    spb.append(String.format("%s... ", text)).append(planStr);
+                    timeView.setText(spb);
+                    bestMonthTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent();
+                            intent.putExtra("content", detailBean.travelMonth);
+                            intent.putExtra("title", "最佳季节");
+                            intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
+                            startActivityWithNoAnim(intent);
+                        }
+                    });
                 }
             }
-            findViewById(R.id.ly1).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MobclickAgent.onEvent(CityDetailActivity.this, "card_item_city_pictures");
-                    Intent intent = new Intent(mContext, CityPictureActivity.class);
-                    intent.putExtra("id", locDetailBean.id);
-                    intent.putExtra("title", locDetailBean.zhName);
-                    startActivityWithNoAnim(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }
-            });
+        });
 
-            if (detailBean.imageCnt > 100) {
-                detailBean.imageCnt = 100;
-            }
-
-            mCityNameTv.setText(detailBean.zhName);
-            mCostTimeTv.setText(String.format("～推荐旅行 · %s～", detailBean.timeCostDesc));
-            foodTv.setOnClickListener(this);
-            shoppingTv.setOnClickListener(this);
-            spotsTv.setOnClickListener(this);
-            travelTv.setOnClickListener(this);
-
-            final String bt = String.format("～最佳季节：%s", detailBean.travelMonth);
-            bestMonthTv.setText(bt);
-
-            ViewTreeObserver observer1 = bestMonthTv.getViewTreeObserver();
-            observer1.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                @Override
-                public void onGlobalLayout() {
-                    TextView timeView = bestMonthTv;
-                    int nc = timeView.getLayout().getLineEnd(0);
-                    if (nc < bt.length() && nc < timeView.getText().length()) {
-                        String text = bt.substring(0, nc - 8);
+        final String desc = detailBean.desc;
+        mCityDesc.setText(desc);
+        ViewTreeObserver observer = mCityDesc.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                TextView descView = mCityDesc;
+                if (descView.getLineCount() > 1) {
+                    int numChars = descView.getLayout().getLineEnd(1);
+                    if (descView.getText().length() > numChars) {
+                        String text;
+                        if (IMUtils.isEnglish(desc)) {
+                            text = desc.substring(0, desc.substring(0, numChars - 4).lastIndexOf(" "));
+                        } else {
+                            text = desc.substring(0, numChars - 4);
+                        }
                         SpannableString planStr = new SpannableString("全文");
                         planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         SpannableStringBuilder spb = new SpannableStringBuilder();
                         spb.append(String.format("%s... ", text)).append(planStr);
-                        timeView.setText(spb);
-                        bestMonthTv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent();
-                                intent.putExtra("content", detailBean.travelMonth);
-                                intent.putExtra("title", "最佳季节");
-                                intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
-                                startActivityWithNoAnim(intent);
-                            }
-                        });
+                        descView.setText(spb);
                     }
                 }
-            });
-
-            final String desc = detailBean.desc;
-            mCityDesc.setText(desc);
-            ViewTreeObserver observer = mCityDesc.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    TextView descView = mCityDesc;
-                    if (descView.getLineCount() > 1) {
-                        int numChars = descView.getLayout().getLineEnd(1);
-                        if (descView.getText().length() > numChars) {
-                            String text;
-                            if (IMUtils.isEnglish(desc)) {
-                                text = desc.substring(0, desc.substring(0, numChars - 4).lastIndexOf(" "));
-                            } else {
-                                text = desc.substring(0, numChars - 4);
-                            }
-                            SpannableString planStr = new SpannableString("全文");
-                            planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, planStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            SpannableStringBuilder spb = new SpannableStringBuilder();
-                            spb.append(String.format("%s... ", text)).append(planStr);
-                            descView.setText(spb);
-                        }
-                    }
-                }
-            });
-            mCityDesc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putExtra("content", desc);
-                    intent.putExtra("title", "城市简介");
-                    intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
-                    startActivityWithNoAnim(intent);
-                }
-            });
-        }
-
+            }
+        });
+        mCityDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("content", desc);
+                intent.putExtra("title", "城市简介");
+                intent.setClass(CityDetailActivity.this, ReadMoreActivity.class);
+                startActivityWithNoAnim(intent);
+            }
+        });
 
     }
 

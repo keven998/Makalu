@@ -84,7 +84,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
         // 初始化引导图片列表
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 5; i++) {
             if (i == 0) {
                 View view = View.inflate(this, R.layout.guide_ad, null);
                 //      ImageView earthIv = (ImageView) view.findViewById(R.id.iv_guide_earth);
@@ -102,10 +102,10 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
                 View view = View.inflate(this, R.layout.guide_3, null);
                 views.add(view);
             }
-//            else if (i == 4) {
-//                View view = View.inflate(this, R.layout.guide_4, null);
-//                views.add(view);
-//            }
+            else if (i == 4) {
+                View view = View.inflate(this, R.layout.guide_4, null);
+                views.add(view);
+            }
         }
 
         vp = (ViewPager) findViewById(R.id.viewpager);
