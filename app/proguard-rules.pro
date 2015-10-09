@@ -15,8 +15,13 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
--dontwarn com.baidu.**
+-dontwarn rx.internal.**
+-dontwarn com.squareup.**
+-dontwarn com.lv.**
+-dontwarn com.amap.api.**
+-dontwarn com.alibaba.fastjson.**
+-dontwarn butterknife.internal.**
+-dontwarn okio.**
 -keep class org.lucasr.twowayview.** { *; }
 -keep class com.baidu.** { *; }
 -keep class vi.com.gdi.bgl.android.**{*;}
@@ -26,7 +31,7 @@
 -keep public class * extends android.app.FragmentActivity
 
 # 高德地图
- -libraryjars /libs/android-support-v4.jar  -dontwarn android.support.v4.**
+# -libraryjars /libs/android-support-v4.jar  -dontwarn android.support.v4.**
 -keep class com.amap.api.**  {*;}
 -keep class com.autonavi.**  {*;}
 -keep class com.a.a.**  {*;}
@@ -122,7 +127,7 @@
 -dontwarn com.tencent.weibo.sdk.**
 -dontwarn com.facebook.**
 
--libraryjars libs/SocialSDK_QQZone_2.jar
+#-libraryjars libs/qiniu-android-sdk-7.0.1.jar
 
 -keep enum com.facebook.**
 -keepattributes Exceptions,InnerClasses,Signature
