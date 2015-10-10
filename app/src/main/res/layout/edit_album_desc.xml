@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:layout_margin="10dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/pic_loadfail"
+        android:src="@drawable/ic_default_picture"
         />
     <EditText
         android:id="@+id/album_info"

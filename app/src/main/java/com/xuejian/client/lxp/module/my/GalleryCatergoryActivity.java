@@ -1,31 +1,20 @@
 package com.xuejian.client.lxp.module.my;
 
 import android.app.Activity;
-
-/**
- * Created by xuyongchen on 15/9/18.
- */
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizou.core.base.BaseApplication;
 import com.aizou.core.utils.LocalDisplay;
@@ -34,12 +23,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
-
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.utils.LocalImageHelper;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +34,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * Created by xuyongchen on 15/9/18.
+ */
 
 /**
  * Created by linjizong on 15/6/12.
@@ -190,9 +181,9 @@ public class GalleryCatergoryActivity extends Activity {
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
                     .cacheOnDisk(false)
-                    .showImageForEmptyUri(R.drawable.pic_loadfail)
-                    .showImageOnFail(R.drawable.pic_loadfail)
-                    .showImageOnLoading(R.drawable.pic_loadfail)
+                    .showImageForEmptyUri(R.drawable.ic_default_picture)
+                    .showImageOnFail(R.drawable.ic_default_picture)
+                    .showImageOnLoading(R.drawable.ic_default_picture)
                     .bitmapConfig(Bitmap.Config.RGB_565)
                     .setImageSize(new ImageSize(LocalDisplay.SCREEN_WIDTH_PIXELS/4, 0))
                     .displayer(new SimpleBitmapDisplayer()).build();

@@ -34,7 +34,6 @@
             android:layout_width="52dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:onClick="sendLocation"
             android:layout_centerVertical="true"
             android:background="@drawable/common_tab_bg"
             android:enabled="false"

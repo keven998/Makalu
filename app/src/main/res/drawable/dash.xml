@@ -6,5 +6,5 @@
         android:color="@color/base_divider_color"
         android:width="1dp"/>
         <!--android:dashWidth="3dp"
-        android:dashGap="3dp-->"
+        android:dashGap="3dp-->
 </shape>

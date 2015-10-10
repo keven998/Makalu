@@ -41,7 +41,6 @@
             android:layout_marginRight="3dp"
             android:background="@null"
             android:paddingRight="5dp"
-            android:overlapAnchor="false"
             android:spinnerMode="dropdown"
             android:dropDownVerticalOffset="0dp"
             android:dropDownWidth="65dp"/>

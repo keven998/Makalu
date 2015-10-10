@@ -417,9 +417,9 @@ public class StrategyListActivity extends PeachBaseActivity {
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.pic_loadfail)
-                    .showImageOnLoading(R.drawable.pic_loadfail)
-                    .showImageForEmptyUri(R.drawable.pic_loadfail)
+                    .showImageOnFail(R.drawable.ic_default_picture)
+                    .showImageOnLoading(R.drawable.ic_default_picture)
+                    .showImageForEmptyUri(R.drawable.ic_default_picture)
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 

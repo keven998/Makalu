@@ -21,7 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.text.Spannable;
+import android.support.v4.util.LongSparseArray;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -87,7 +86,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -143,12 +141,12 @@ public class MessageAdapter extends BaseAdapter {
     private String friendId;
     private LayoutInflater inflater;
     private Activity activity;
-    private HashMap<Long, User> groupMembers = new HashMap<Long, User>();
     private DisplayImageOptions picOptions;
+    private LongSparseArray<User> groupMembers = new LongSparseArray<>();
     private Context context;
     private String chatType;
     private String conversation;
-    private HashMap<Long, Timer> timers = new HashMap<>();
+    private LongSparseArray<Timer> timers = new LongSparseArray<>();
 
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
@@ -473,6 +471,7 @@ public class MessageAdapter extends BaseAdapter {
         // 群聊时，显示接收的消息的发送人的名称
         if (message.getSendType() == TYPE_REV) {
             if ("group".equals(chatType)) {
+
                 User user = groupMembers.get(message.getSenderId());
                 if (user == null) {
                     user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
@@ -540,6 +539,7 @@ public class MessageAdapter extends BaseAdapter {
         if (message.getSendType() == 0) {
             View statusView = convertView.findViewById(R.id.msg_status);
             // 重发按钮点击事件
+            statusView.setClickable(false);
             statusView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -618,6 +618,7 @@ public class MessageAdapter extends BaseAdapter {
                 case 2: // 发送失败
                     holder.pb.setVisibility(View.GONE);
                     holder.staus_iv.setVisibility(View.VISIBLE);
+                    holder.staus_iv.setClickable(true);
                     break;
                 default:
                     break;
@@ -815,6 +816,7 @@ public class MessageAdapter extends BaseAdapter {
                 case 2: // 发送失败
                     holder.pb.setVisibility(View.GONE);
                     holder.staus_iv.setVisibility(View.VISIBLE);
+                    holder.staus_iv.setClickable(true);
                     break;
                 case 1: // 发送中
                     holder.pb.setVisibility(View.VISIBLE);
@@ -906,6 +908,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.pb.setVisibility(View.GONE);
                 holder.tv.setVisibility(View.GONE);
                 holder.staus_iv.setVisibility(View.VISIBLE);
+                holder.staus_iv.setClickable(true);
                 break;
             case 1:
                 holder.staus_iv.setVisibility(View.GONE);
@@ -918,7 +921,7 @@ public class MessageAdapter extends BaseAdapter {
 
                 // set a timer
                 //    if (message.getStatus()==1) sendPictureMessage(message, holder);
-                if (timers.containsKey(message.getLocalId())) {
+                if (timers.indexOfKey(message.getLocalId())>=0) {
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "already exist time Task");
                     }
@@ -951,6 +954,7 @@ public class MessageAdapter extends BaseAdapter {
                                     // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
                                     // message.setProgress(0);
                                     holder.staus_iv.setVisibility(View.VISIBLE);
+                                    holder.staus_iv.setClickable(true);
 //                                    Toast.makeText(activity,
 //                                            activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                                            .show();
@@ -1255,6 +1259,7 @@ public class MessageAdapter extends BaseAdapter {
             case 2:
                 holder.pb.setVisibility(View.GONE);
                 holder.staus_iv.setVisibility(View.VISIBLE);
+                holder.staus_iv.setClickable(true);
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
@@ -1521,6 +1526,7 @@ public class MessageAdapter extends BaseAdapter {
             case 2:
                 holder.pb.setVisibility(View.GONE);
                 holder.staus_iv.setVisibility(View.VISIBLE);
+                holder.staus_iv.setClickable(true);
                 break;
             case 1:
                 holder.pb.setVisibility(View.VISIBLE);
@@ -1546,6 +1552,7 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.GONE);
                                 holder.staus_iv.setVisibility(View.VISIBLE);
+                                holder.staus_iv.setClickable(true);
                                 updateStatus(message, 2);
                             }
                         });
@@ -1579,6 +1586,7 @@ public class MessageAdapter extends BaseAdapter {
             @Override
             public void onFailed(int code) {
                 message.setStatus(2);
+                holder.staus_iv.setClickable(true);
                 updateSendedView(message, holder);
                 if (code == 403) {
                     activity.runOnUiThread(new Runnable() {
@@ -1757,6 +1765,7 @@ public class MessageAdapter extends BaseAdapter {
                             holder.pb.setVisibility(View.GONE);
                             holder.tv.setVisibility(View.GONE);
                             holder.staus_iv.setVisibility(View.VISIBLE);
+                            holder.staus_iv.setClickable(true);
                             if (errorCode == 403){
                                 if (("single").equals(chatType)){
                                     ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
@@ -1827,6 +1836,7 @@ public class MessageAdapter extends BaseAdapter {
                 } else if (message.getStatus() == 2) {
                     holder.pb.setVisibility(View.GONE);
                     holder.staus_iv.setVisibility(View.VISIBLE);
+                    holder.staus_iv.setClickable(true);
 //                    Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 //                            .show();
                     if (activity != null && !activity.isFinishing())

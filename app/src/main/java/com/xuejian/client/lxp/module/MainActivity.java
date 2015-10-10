@@ -49,7 +49,6 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.fragment.DestinationFragment;
 import com.xuejian.client.lxp.module.dest.fragment.SearchAllFragment;
-
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.MyFragment;
 import com.xuejian.client.lxp.module.my.UserFragment;
@@ -245,6 +244,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private void initData() {
         //网络更新好友列表
         getContactFromServer();
+
+//        ArrayMap
+//        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+//        JobInfo jobInfo = new JobInfo.Builder()
+//                .setMinimumLatency()
+//                .build();
     }
 
     private void getContactFromServer() {
@@ -291,6 +296,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         });
     }
+
 
     private void refreshChatHistoryFragment() {
         TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");

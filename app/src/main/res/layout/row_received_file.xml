@@ -24,7 +24,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:onClick="contactDetails"
             android:scaleType="fitCenter"
             android:src="@drawable/messages_bg_useravatar"/>
 

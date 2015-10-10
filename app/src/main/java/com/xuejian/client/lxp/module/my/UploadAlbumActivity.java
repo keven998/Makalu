@@ -16,7 +16,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -168,9 +167,9 @@ public class UploadAlbumActivity extends Activity {
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(false)
-                .showImageForEmptyUri(R.drawable.pic_loadfail)
-                .showImageOnFail(R.drawable.pic_loadfail)
-                .showImageOnLoading(R.drawable.pic_loadfail)
+                .showImageForEmptyUri(R.drawable.ic_default_picture)
+                .showImageOnFail(R.drawable.ic_default_picture)
+                .showImageOnLoading(R.drawable.ic_default_picture)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .displayer(new SimpleBitmapDisplayer()).build();
         initViews();

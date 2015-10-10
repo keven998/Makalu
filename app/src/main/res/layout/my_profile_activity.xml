@@ -192,7 +192,7 @@
                         android:layout_height="100dp"
                         android:layout_gravity="center_vertical"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/pic_loadfail"
+                        android:src="@drawable/ic_default_picture"
                         android:visibility="gone" />
 
                     <ImageView
@@ -202,7 +202,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/pic_loadfail"
+                        android:src="@drawable/ic_default_picture"
                         android:visibility="gone" />
 
                     <ImageView
@@ -212,7 +212,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/pic_loadfail"
+                        android:src="@drawable/ic_default_picture"
                         android:visibility="gone" />
 
                     <FrameLayout

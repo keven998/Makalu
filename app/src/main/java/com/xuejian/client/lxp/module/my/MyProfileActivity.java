@@ -709,8 +709,8 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
         for (; i < picList.size() && i < 3; i++) {
             final int pos = i;
             ImageLoader.getInstance().displayImage(picList.get(i), myImageView[i], new DisplayImageOptions.Builder()
-                    .showImageForEmptyUri(R.drawable.pic_loadfail)
-                    .showImageOnFail(R.drawable.pic_loadfail)
+                    .showImageForEmptyUri(R.drawable.ic_default_picture)
+                    .showImageOnFail(R.drawable.ic_default_picture)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
                     .build());

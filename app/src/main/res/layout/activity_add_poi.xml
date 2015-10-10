@@ -83,7 +83,6 @@
             android:background="@color/base_color_white"
             android:dropDownVerticalOffset="10dp"
             android:gravity="center_horizontal"
-            android:overlapAnchor="false"
             android:spinnerMode="dropdown" />
 
         <Spinner
@@ -97,7 +96,6 @@
             android:background="@color/base_color_white"
             android:dropDownVerticalOffset="10dp"
             android:gravity="center_horizontal"
-            android:overlapAnchor="false"
             android:spinnerMode="dropdown" />
     </LinearLayout>
 

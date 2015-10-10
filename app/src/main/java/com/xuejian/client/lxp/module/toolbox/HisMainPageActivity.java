@@ -1046,8 +1046,8 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             View view = View.inflate(mContext, R.layout.my_all_pics_cell, null);
             final int pos = i;
             ImageLoader.getInstance().displayImage(picList.get(i), pictures[i], new DisplayImageOptions.Builder()
-                    .showImageForEmptyUri(R.drawable.pic_loadfail)
-                    .showImageOnFail(R.drawable.pic_loadfail)
+                    .showImageForEmptyUri(R.drawable.ic_default_picture)
+                    .showImageOnFail(R.drawable.ic_default_picture)
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                     .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中
                     .build());
