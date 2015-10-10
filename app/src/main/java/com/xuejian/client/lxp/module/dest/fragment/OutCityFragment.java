@@ -58,7 +58,8 @@ public class OutCityFragment extends PeachBaseFragment {
     DynamicBox box;
     private Drawable add, selected;
     private boolean isClickable;
-    private CountryBean lastCountryBean;
+
+    private int currentIndex=0;
     public OutCityFragment(boolean isClickable) {
         this.isClickable = isClickable;
     }
@@ -102,19 +103,17 @@ public class OutCityFragment extends PeachBaseFragment {
         mCountryMame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                if(lastCountryBean!=null){
-                    lastCountryBean.isSelect=false;
-                }
+                currentIndex=position;
+                outContryNameAdapter.notifyDataSetChanged();
                 final CountryBean currentCountryBean = outContryNameAdapter.getDataList().get(position);
-                lastCountryBean=currentCountryBean;
-                lastCountryBean.isSelect=true;
                 ArrayList<LocBean> citys = currentCountryBean.destinations;
                 if(citys==null){
-                    citys=new ArrayList<LocBean>();
+                    citys =new ArrayList<LocBean>();
                 }
                 outCountryAdapter.getDataList().clear();
                 outCountryAdapter.getDataList().addAll(citys);
                 outCountryAdapter.notifyDataSetChanged();
+
             }
         });
 
@@ -124,7 +123,6 @@ public class OutCityFragment extends PeachBaseFragment {
 
     private void initData() {
         String data = PreferenceUtils.getCacheData(getActivity(), "destination_outcountry");
-        Log.e("cout city name",data+"---------------------------");
         if (!TextUtils.isEmpty(data)) {
             CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(data, CountryBean.class);
             if (countryListResult.code == 0) {
@@ -193,13 +191,17 @@ public class OutCityFragment extends PeachBaseFragment {
         }
         outContryNameAdapter.getDataList().addAll(result);
         outContryNameAdapter.notifyDataSetChanged();
-        mCountryMame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mCountryMame.performItemClick(mCountryMame.getChildAt(0), 0, 0);
-            }
-        }, 200);
 
+        if(outContryNameAdapter.getDataList()!=null && outContryNameAdapter.getDataList().size()>0){
+            final CountryBean currentCountryBean = outContryNameAdapter.getDataList().get(0);
+            ArrayList<LocBean> citys = currentCountryBean.destinations;
+            if(citys==null){
+                citys =new ArrayList<LocBean>();
+            }
+            outCountryAdapter.getDataList().clear();
+            outCountryAdapter.getDataList().addAll(citys);
+            outCountryAdapter.notifyDataSetChanged();
+        }
 
     }
 
@@ -223,7 +225,7 @@ public class OutCityFragment extends PeachBaseFragment {
         @Override
         public void showData(int position, final CountryBean itemData) {
             contry_name.setText(itemData.zhName);
-            if(itemData.isSelect){
+            if(currentIndex==position){
                 contry_name.setTextColor(getActivity().getResources().getColor(R.color.color_text_i));
             }else{
                 contry_name.setTextColor(getActivity().getResources().getColor(R.color.color_text_iii));
