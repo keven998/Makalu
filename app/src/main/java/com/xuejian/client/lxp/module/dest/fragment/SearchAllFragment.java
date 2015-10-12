@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +76,8 @@ public class SearchAllFragment extends PeachBaseFragment {
         //toId = getIntent().getStringExtra("toId");
         //chatType = getIntent().getStringExtra("chatType");
         //conversation = getIntent().getStringExtra("conversation");
+        Context contextTheme = new ContextThemeWrapper(getActivity().getApplicationContext(),R.style.horizontal_slide);
+        inflater.cloneInContext(contextTheme);
         View rootView = inflater.inflate(R.layout.activity_search_all, container, false);
         mEtSearch = (EditText) rootView.findViewById(R.id.et_search);
         mBtnSearch = (TextView) rootView.findViewById(R.id.btn_search);
@@ -224,7 +227,7 @@ public class SearchAllFragment extends PeachBaseFragment {
                     tag.setTextColor(R.color.app_theme_color);
                     mKeyTags.add(tag);
                 }
-                recomend_tag.setmTagViewResId(R.layout.tag);
+               // recomend_tag.setmTagViewResId(R.layout.tag);
                 recomend_tag.setTags(mKeyTags);
                 recomend_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
                     @Override
