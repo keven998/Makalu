@@ -15,3 +15,19 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn com.igexin.**
+-keep class com.igexin.**{*;}
+-dontwarn rx.internal.**
+-dontwarn com.squareup.**
+-dontwarn com.lv.**
+-dontwarn com.amap.api.**
+-dontwarn com.alibaba.fastjson.**
+-dontwarn butterknife.internal.**
+-dontwarn okio.**
+-keep class org.lucasr.twowayview.** { *; }
+-keep class com.baidu.** { *; }
+-keep class vi.com.gdi.bgl.android.**{*;}
+-keep class android.support.v4.** { *; }
+-keep public class * extends android.support.v4.**
+-keep public class * extends android.app.Fragment
+-keep public class * extends android.app.FragmentActivity

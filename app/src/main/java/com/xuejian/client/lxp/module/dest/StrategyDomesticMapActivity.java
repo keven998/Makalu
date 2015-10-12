@@ -272,7 +272,11 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
         aMap.clear();
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (int k = 0; k < beans.size(); k++) {
-            builder.include(new LatLng(beans.get(k).location.coordinates[1], beans.get(k).location.coordinates[0]));
+            try {
+                builder.include(new LatLng(beans.get(k).location.coordinates[1], beans.get(k).location.coordinates[0]));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                     .position(new LatLng(beans.get(k).location.coordinates[1], beans.get(k).location.coordinates[0])).snippet(beans.get(k).zhName)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marker)).draggable(true));
