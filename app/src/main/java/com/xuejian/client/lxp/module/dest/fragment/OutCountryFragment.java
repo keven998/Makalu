@@ -58,7 +58,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     DynamicBox box;
     private Drawable add, selected;
     private boolean isClickable;
-    private CountryBean lastCountryBean;
+    private int mCurrentIndex=0;
     public OutCountryFragment(boolean isClickable) {
         this.isClickable = isClickable;
     }
@@ -107,12 +107,9 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         mCountryMame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                if(lastCountryBean!=null){
-                    lastCountryBean.isSelect=false;
-                }
+                mCurrentIndex=position;
+                outContryNameAdapter.notifyDataSetChanged();
                 final CountryBean currentCountryBean = outContryNameAdapter.getDataList().get(position);
-                lastCountryBean=currentCountryBean;
-                lastCountryBean.isSelect=true;
                 ArrayList<LocBean> citys = currentCountryBean.destinations;
                 if(citys==null){
                     citys=new ArrayList<LocBean>();
@@ -202,12 +199,16 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         }
         outContryNameAdapter.getDataList().addAll(result);
         outContryNameAdapter.notifyDataSetChanged();
-        mCountryMame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mCountryMame.performItemClick(mCountryMame.getChildAt(0), 0, 0);
+        if(outContryNameAdapter.getDataList()!=null && outContryNameAdapter.getDataList().size()>0){
+            final CountryBean currentCountryBean = outContryNameAdapter.getDataList().get(0);
+            ArrayList<LocBean> citys = currentCountryBean.destinations;
+            if(citys==null){
+                citys=new ArrayList<LocBean>();
             }
-        }, 200);
+            outCountryAdapter.getDataList().clear();
+            outCountryAdapter.getDataList().addAll(citys);
+            outCountryAdapter.notifyDataSetChanged();
+        }
 
 
     }
@@ -256,7 +257,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
         @Override
         public void showData(int position, final CountryBean itemData) {
             contry_name.setText(itemData.zhName);
-            if(itemData.isSelect){
+            if(mCurrentIndex==position){
                 contry_name.setTextColor(getActivity().getResources().getColor(R.color.color_text_i));
             }else{
                 contry_name.setTextColor(getActivity().getResources().getColor(R.color.color_text_iii));

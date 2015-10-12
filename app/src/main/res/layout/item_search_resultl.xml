@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/iv_poi_img"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@color/app_backgroud"
@@ -76,7 +76,7 @@
         android:gravity="center"
         android:clickable="true"
         android:textColor="@color/white"
-        android:textSize="13sp"
+        android:textSize="11sp"
         android:visibility="gone"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"

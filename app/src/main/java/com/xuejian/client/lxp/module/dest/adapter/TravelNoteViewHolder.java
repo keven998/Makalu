@@ -27,7 +27,7 @@ import java.util.Date;
 public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     View view;
     RelativeLayout mSendRl;
-    Button mSendBtn;
+    TextView mSendBtn;
     ImageView mTravelIv;
     TextView mNoteNameTv;
     TextView mNoteDescTv;
@@ -66,7 +66,7 @@ public class TravelNoteViewHolder extends ViewHolderBase<TravelNoteBean> {
     public View createView(LayoutInflater layoutInflater) {
         view = layoutInflater.inflate(R.layout.row_travels, null);
         mSendRl = (RelativeLayout) view.findViewById(R.id.rl_send);
-        mSendBtn = (Button) view.findViewById(R.id.btn_send);
+        mSendBtn = (TextView) view.findViewById(R.id.btn_send);
         mTravelIv = (ImageView) view.findViewById(R.id.iv_travels);
         mNoteNameTv = (TextView) view.findViewById(R.id.tv_note_title);
         mNoteDescTv = (TextView) view.findViewById(R.id.tv_travels_desc);

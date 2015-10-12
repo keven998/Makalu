@@ -9,15 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/talent_loc_cell_height"
         android:scaleType="centerCrop" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/talent_loc_cell_height">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/talent_loc_cell_height"
             android:scaleType="centerCrop"
             android:src="@drawable/expert_country_list_bg"/>
-    </FrameLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

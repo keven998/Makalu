@@ -11,11 +11,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/base_color_white_trans"
-        android:paddingBottom="14dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="20dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="12dp"
         android:textColor="@color/color_text_i"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_search_more"
@@ -24,8 +24,6 @@
         android:layout_gravity="right"
         android:gravity="center_vertical"
         android:paddingRight="10dp"
-        android:paddingTop="3dp"
         android:textColor="@color/color_text_ii"
         android:textSize="12sp" />
-
 </FrameLayout>
