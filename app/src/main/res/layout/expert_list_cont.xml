@@ -67,10 +67,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_expert_loc"
-        android:layout_marginLeft="80dp"
+        android:layout_marginLeft="85dp"
         android:layout_marginTop="7dp"
         android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         f:horizontalSpace="8dp"
         f:orientation="horizontal"
@@ -86,5 +85,5 @@
         android:gravity="left"
         android:lines="3"
         android:textColor="@color/color_text_ii"
-        android:textSize="15sp" />
+        android:textSize="14sp" />
 </RelativeLayout>

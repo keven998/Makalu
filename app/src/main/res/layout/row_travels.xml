@@ -74,17 +74,21 @@
         android:layout_width="fill_parent"
         android:layout_height="85dp">
 
-        <Button
+        <TextView
             android:id="@+id/btn_send"
-            android:layout_width="44dp"
-            android:layout_height="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/selecter_theme_btn_radius_4"
             android:text="发送"
             android:textColor="@color/base_color_white"
-            android:textSize="13sp"
+            android:textSize="11sp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:visibility="visible" />
     </RelativeLayout>
 
