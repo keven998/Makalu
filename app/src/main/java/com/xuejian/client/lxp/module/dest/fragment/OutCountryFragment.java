@@ -10,13 +10,16 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
@@ -268,6 +271,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     private class OutCountryViewHolder extends ViewHolderBase<LocBean> {
         private TextView sectionTv;
         private FlowLayout cityListFl;
+        FrameLayout outframe;
         TextView cityNameTv;
         ImageView desBgImage;
         ImageView addIcon;
@@ -284,6 +288,10 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
             cityNameTv = (TextView) contentView.findViewById(R.id.des_title);
             desBgImage = (ImageView) contentView.findViewById(R.id.des_bg_pic);
             addIcon = (ImageView) contentView.findViewById(R.id.des_selected_icon);
+            outframe = (FrameLayout)contentView.findViewById(R.id.des_out_frame);
+            int width = (LocalDisplay.SCREEN_WIDTH_PIXELS - (LocalDisplay.dp2px(80))) / 3;
+            AbsListView.LayoutParams lytp = new AbsListView.LayoutParams(width,width);
+            outframe.setLayoutParams(lytp);
             return contentView;
         }
 
