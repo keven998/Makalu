@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,7 +91,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     SuperToast superToast;
     private boolean isPause;
     LocationManagerProxy mLocationManagerProxy;
-
+    private SparseBooleanArray infoStatus = new SparseBooleanArray();
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -486,7 +487,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         updateUnreadMsgCount();
         try {
-            if (!TextUtils.isEmpty(groupId) && UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId)) == null) {
+            if (!TextUtils.isEmpty(groupId) &&!infoStatus.get(Integer.parseInt(groupId),false)&& UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId)) == null) {
+                infoStatus.put(Integer.parseInt(groupId),true);
                 GroupApi.getGroupInfo(groupId, new HttpCallBack() {
                     @Override
                     public void doSuccess(Object result, String method) {
@@ -522,7 +524,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
                     }
                 });
-            } else if (TextUtils.isEmpty(groupId) && UserDBManager.getInstance().getContactByUserId(m.getSenderId()) == null) {
+            } else if (TextUtils.isEmpty(groupId) &&!infoStatus.get((int)m.getSenderId(),false)&& UserDBManager.getInstance().getContactByUserId(m.getSenderId()) == null) {
+                infoStatus.put((int)m.getSenderId(),true);
                 UserApi.getUserInfo(String.valueOf(m.getSenderId()), new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {

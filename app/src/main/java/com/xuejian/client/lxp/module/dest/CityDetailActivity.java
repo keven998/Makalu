@@ -272,7 +272,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
             apply_expert.setVisibility(View.VISIBLE);
             return;
         }
-        if (result.size() <=2) apply_expert.setVisibility(View.VISIBLE);
+        if (result.size() <= 2) apply_expert.setVisibility(View.VISIBLE);
 //        AbsListView.LayoutParams abp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
 //        abp.height = 400;
 //        View footView = new View(mContext);
@@ -291,7 +291,11 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
         adapter = new ExpertAdapter(mContext, 5);
         expertListview.setAdapter(adapter);
         adapter.getDataList().addAll(result);
-        setListViewHeightBasedOnChildren(expertListview);
+        try {
+            setListViewHeightBasedOnChildren(expertListview);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void getTravelNotesbyKeyword(final String keyword) {

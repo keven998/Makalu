@@ -26,8 +26,8 @@ android {
         applicationId "com.xuejian.client.lxp"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 9
-        versionName "2.0.3"
+        versionCode 10
+        versionName "2.0.4"
         multiDexEnabled true
     }
     buildTypes {
@@ -36,8 +36,8 @@ android {
         }
         release {
             manifestPlaceholders = [AMAP_KEY: "f20e266c3a0f9cf4d232dcfa4eeb72d6"]
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            ///shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->

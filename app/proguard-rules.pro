@@ -15,6 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn com.igexin.**
+-keep class com.igexin.**{*;}
 -dontwarn rx.internal.**
 -dontwarn com.squareup.**
 -dontwarn com.lv.**

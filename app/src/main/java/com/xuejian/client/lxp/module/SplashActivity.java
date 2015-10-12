@@ -18,7 +18,6 @@ import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -46,7 +45,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
     int REGESTER_REQUEST = 5;
     int LOGIN_REQUEST = 6;
     private Long NEWUSER = 1l;
-    public static SplashActivity instance=null;
+    public static SplashActivity instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         initView();
         MobclickAgent.updateOnlineConfig(this);
         initData();
-        instance=this;
+        instance = this;
     }
 
     protected void initData() {
@@ -76,8 +75,8 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                 .showImageForEmptyUri(R.drawable.bg_splash)
                 .showImageOnLoading(R.drawable.bg_splash)
                 .build();
-               // .imageScaleType(ImageScaleType.)
-               //
+        // .imageScaleType(ImageScaleType.)
+        //
         // 延长2秒后进入主界面
 
         handler = new Handler();
@@ -147,7 +146,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                     }
 
                 } else {
-                  //  ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
+                    //  ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
                 }
             }
 
@@ -195,7 +194,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.sp_log:
                 Intent logActivity = new Intent(SplashActivity.this, LoginActivity.class); //
-                logActivity.putExtra("isFromSplash",true);
+                logActivity.putExtra("isFromSplash", true);
                 startActivityForResult(logActivity, LOGIN_REQUEST);
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                 break;
@@ -227,14 +226,14 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             User user = (User) data.getSerializableExtra("user");
             try {
                 DialogManager.getInstance().showLoadingDialog(this, "正在登录");
-            }catch (Exception e){
+            } catch (Exception e) {
                 DialogManager.getInstance().dissMissLoadingDialog();
             }
 
             imLogin(user);
         } else {
-           // finish();
-           // overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            // finish();
+            // overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 
@@ -243,7 +242,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         UserDBManager.getInstance().initDB(user.getUserId() + "");
         UserDBManager.getInstance().saveContact(user);
         int version = SharePrefUtil.getInt(this, "dbversion", 0);
-        IMClient.getInstance().initDB(String.valueOf(user.getUserId()),1,version);
+        IMClient.getInstance().initDB(String.valueOf(user.getUserId()), 1, version);
         SharePrefUtil.saveInt(this, "dbversion", 1);
         //3、存入内存
         AccountManager.getInstance().setLogin(true);

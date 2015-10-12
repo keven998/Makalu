@@ -1,90 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:f="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rl_expert_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/base_color_white"
-    android:paddingBottom="10dp">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_expert_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/level_bg"
-        android:gravity="center_horizontal|bottom"
-        android:textColor="@color/base_color_white"
-        android:textSize="13sp" />
-
-    <FrameLayout
-        android:id="@+id/fl_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/ic_home_more_avatar_unknown_round" />
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="12dp"
-            android:src="@drawable/king_head" />
-
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/tv_expert_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_toRightOf="@+id/fl_avatar"
-        android:textColor="@color/color_text_ii"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/tv_expert_loc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_expert_name"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/fl_avatar"
-        android:textColor="@color/color_text_iii"
-        android:textSize="13sp" />
-
-    <com.xuejian.client.lxp.common.widget.TagView.TagListView
-        android:id="@+id/expert_tag"
+    <RelativeLayout
+        android:id="@+id/rl_expert_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_expert_loc"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="7dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        f:horizontalSpace="8dp"
-        f:orientation="horizontal"
-        f:verticalSpace="6dp" />
+        android:background="@color/base_color_white"
+        android:paddingBottom="10dp">
 
-    <TextView
-        android:id="@+id/tv_pi_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/expert_tag"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/fl_avatar"
-        android:gravity="left"
-        android:lines="3"
-        android:textColor="@color/color_text_ii"
-        android:textSize="15sp" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_expert_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/level_bg"
+            android:gravity="center_horizontal|bottom"
+            android:textColor="@color/base_color_white"
+            android:textSize="13sp" />
+
+        <FrameLayout
+            android:id="@+id/fl_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_home_more_avatar_unknown_round" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/king_head" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_expert_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/fl_avatar"
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_expert_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_expert_name"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/fl_avatar"
+            android:textColor="@color/color_text_iii"
+            android:textSize="13sp" />
+
+        <com.xuejian.client.lxp.common.widget.TagView.TagListView
+            android:id="@+id/expert_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_expert_loc"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="7dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            f:horizontalSpace="8dp"
+            f:orientation="horizontal"
+            f:verticalSpace="6dp" />
+
+        <TextView
+            android:id="@+id/tv_pi_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expert_tag"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/fl_avatar"
+            android:gravity="left"
+            android:lines="3"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</LinearLayout>

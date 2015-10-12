@@ -9,10 +9,6 @@ import com.igexin.sdk.PushManager;
 import com.lv.Listener.FetchListener;
 import com.lv.Listener.HttpCallback;
 import com.lv.Listener.UploadListener;
-import com.lv.utils.Config;
-import com.lv.utils.CryptUtils;
-import com.lv.utils.PictureUtil;
-import com.lv.utils.TimeUtils;
 import com.lv.bean.Conversation;
 import com.lv.bean.ConversationBean;
 import com.lv.bean.InventMessage;
@@ -22,6 +18,10 @@ import com.lv.bean.SendMessageBean;
 import com.lv.data.MessageDB;
 import com.lv.net.HttpUtils;
 import com.lv.net.UploadUtils;
+import com.lv.utils.Config;
+import com.lv.utils.CryptUtils;
+import com.lv.utils.PictureUtil;
+import com.lv.utils.TimeUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -132,7 +132,7 @@ public class IMClient {
 
     public void add2ackList(String id) {
         acklist.put(id);
-//        if (!isRunning) {
+ //        if (!isRunning) {
 //            ack(countFrequency.getFrequency() * 5);
 //        }
 
@@ -580,7 +580,6 @@ public class IMClient {
             return 0;
         }
     }
-
     public List<InventMessage> getInventMessages() {
         return db.getInventMessages();
     }

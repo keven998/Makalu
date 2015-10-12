@@ -260,10 +260,14 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 if (bean.location != null && bean.location.coordinates != null) {
                     Uri mUri = Uri.parse("geo:" + bean.location.coordinates[1] + "," + bean.location.coordinates[0] + "?q=" + bean.zhName);
                     Intent mIntent = new Intent(Intent.ACTION_VIEW, mUri);
-                    if (CommonUtils.checkIntent(mContext, mIntent)) {
-                        startActivity(mIntent);
-                    } else {
-                        ToastUtil.getInstance(mContext).showToast("没有安装地图应用");
+                    try {
+                        if (CommonUtils.checkIntent(mContext, mIntent)) {
+                            startActivity(mIntent);
+                        } else {
+                            ToastUtil.getInstance(mContext).showToast("没有安装地图应用");
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 }
             }
