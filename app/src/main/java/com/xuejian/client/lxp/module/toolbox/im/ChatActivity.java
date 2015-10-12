@@ -1181,14 +1181,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     public void onMsgArrive(MessageBean m, String groupId) {
         if ("single".equals(chatType) && !groupId.equals(String.valueOf(0))) {
-            if (isLongEnough())
-                Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+         //   if (isLongEnough())
+          //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("single".equals(chatType) && !toChatUsername.equals(String.valueOf(m.getSenderId())))) {
-            if (isLongEnough())
-                Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+          //  if (isLongEnough())
+          //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("group".equals(chatType) && !toChatUsername.equals(groupId))) {
-            if (isLongEnough())
-                Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+           // if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else {
             m.setSendType(1);
             messageList.add(m);
@@ -1578,10 +1577,4 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private static long mSendTime;
 
-    public static boolean isLongEnough() {
-        long currentTime = System.currentTimeMillis();
-        long time = currentTime - mSendTime;
-        mSendTime = currentTime;
-        return !(0 < time && time < 1000);
-    }
 }

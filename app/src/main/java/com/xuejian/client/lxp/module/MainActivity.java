@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -59,6 +63,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -85,13 +90,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //Tab选项Tag
     private String mTagArray[] = {"Talk", "Travel", "Soso", "My"};
 
-    private boolean FromBounce;
+    private boolean FromBounce, ring, vib;
     private Vibrator vibrator;
     PopupWindow mPop;
     SuperToast superToast;
     private boolean isPause;
     LocationManagerProxy mLocationManagerProxy;
     private SparseBooleanArray infoStatus = new SparseBooleanArray();
+    private MediaPlayer mMediaPlayer;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -111,9 +118,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        intentFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         registerReceiver(connectionReceiver, intentFilter);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
+        getAlarmParams();
         if (AccountManager.getInstance().getLoginAccount(this) != null) {
             if (IMClient.getInstance().isDbEmpty()) {
                 imLogin(AccountManager.getInstance().getLoginAccount(this));
@@ -487,8 +495,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         updateUnreadMsgCount();
         try {
-            if (!TextUtils.isEmpty(groupId) &&!infoStatus.get(Integer.parseInt(groupId),false)&& UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId)) == null) {
-                infoStatus.put(Integer.parseInt(groupId),true);
+            if (!TextUtils.isEmpty(groupId) && !infoStatus.get(Integer.parseInt(groupId), false) && UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId)) == null) {
+                infoStatus.put(Integer.parseInt(groupId), true);
                 GroupApi.getGroupInfo(groupId, new HttpCallBack() {
                     @Override
                     public void doSuccess(Object result, String method) {
@@ -524,8 +532,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
                     }
                 });
-            } else if (TextUtils.isEmpty(groupId) &&!infoStatus.get((int)m.getSenderId(),false)&& UserDBManager.getInstance().getContactByUserId(m.getSenderId()) == null) {
-                infoStatus.put((int)m.getSenderId(),true);
+            } else if (TextUtils.isEmpty(groupId) && !infoStatus.get((int) m.getSenderId(), false) && UserDBManager.getInstance().getContactByUserId(m.getSenderId()) == null) {
+                infoStatus.put((int) m.getSenderId(), true);
                 UserApi.getUserInfo(String.valueOf(m.getSenderId()), new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
@@ -564,14 +572,33 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         } catch (Exception e) {
         }
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer();
+            try {
+                mMediaPlayer.setDataSource(mContext, uri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                mMediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mMediaPlayer.setLooping(false); //循环播放
+        }
+
 
         if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
             if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
                 //   vibrator.vibrate(500);
+
+                if (ring&&isLongEnough()) mMediaPlayer.start();
                 if (HandleImMessage.showNotice(mContext) && isPause && isLongEnough())
                     superToast.show();
             } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
                 //    vibrator.vibrate(500);
+                if (ring&&isLongEnough()) mMediaPlayer.start();
                 if (HandleImMessage.showNotice(mContext) && isPause && isLongEnough())
                     superToast.show();
             }
@@ -651,6 +678,23 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
     }
 
+    public void getAlarmParams() {
+        AudioManager volMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        switch (volMgr.getRingerMode()) {
+            case AudioManager.RINGER_MODE_SILENT:
+            case AudioManager.RINGER_MODE_VIBRATE:
+                vib = true;
+                ring = false;
+                break;
+            case AudioManager.RINGER_MODE_NORMAL:
+                ring = true;
+                vib = false;
+                break;
+            default:
+                break;
+        }
+    }
+
     public void setUpGroupMemeber(final String groupId) {
         //fetch info
         GroupApi.getGroupMemberInfo(groupId, new HttpCallBack() {
@@ -720,6 +764,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     //IMClient.initIM(getApplicationContext());
                     IMClient.getInstance().initAckAndFetch();
                 }
+            } else if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(acton)) {
+                System.out.println(acton);
+                getAlarmParams();
             }
         }
     };
@@ -763,6 +810,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (connectionReceiver != null) {
             unregisterReceiver(connectionReceiver);
             connectionReceiver = null;
+        }
+        if(mMediaPlayer != null){
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+        }
+        if(vibrator != null){
+            vibrator.cancel();
         }
         HandleImMessage.getInstance().unregisterMessageListener(this);
     }
@@ -810,4 +864,5 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             mLocationManagerProxy.destroy();
         }
     }
+
 }
