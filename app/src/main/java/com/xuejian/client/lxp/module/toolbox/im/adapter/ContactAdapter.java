@@ -129,6 +129,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
         } else {
             vh = (ViewHolder1) convertView.getTag();
         }
+        vh.dividerView.setVisibility(View.GONE);
         final User user = getItem(position);
         String username = user.getNickName();
         String header = user.getHeader();
@@ -139,7 +140,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
             } else {
                 vh.sectionHeader.setVisibility(View.VISIBLE);
                 vh.sectionHeader.setText(header);
-                vh.dividerView.setVisibility(View.VISIBLE);
+               // vh.dividerView.setVisibility(View.VISIBLE);
             }
         } else {
             vh.sectionHeader.setVisibility(View.GONE);

@@ -34,7 +34,7 @@ public class SimpleViewPagerIndicator extends LinearLayout {
     public SimpleViewPagerIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint.setColor(mIndicatorColor);
-        mPaint.setStrokeWidth(9.0F);
+        mPaint.setStrokeWidth(1.0F);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SimpleViewPagerIndicator extends LinearLayout {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         canvas.save();
-        canvas.translate(mTranslationX, getHeight() - 2);
+        canvas.translate(mTranslationX, getHeight() - 1);
         canvas.drawLine(0, 0, mTabWidth, 0, mPaint);
         canvas.restore();
     }
@@ -106,7 +106,7 @@ public class SimpleViewPagerIndicator extends LinearLayout {
             tv.setGravity(Gravity.CENTER);
             tv.setTextColor(COLOR_TEXT_NORMAL);
             tv.setText(mTitles[i]);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             tv.setLayoutParams(lp);
             views[i] =tv;
             tv.setOnClickListener(new OnClickListener() {
