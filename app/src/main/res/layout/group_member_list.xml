@@ -28,7 +28,7 @@
             android:layout_marginLeft="18dp"
             android:background="@drawable/round_avatar_bg"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_home_talklist_default_avatar"
+            android:src="@drawable/ic_home_more_avatar_unknown_round"
             android:visibility="visible" />
 
         <TextView

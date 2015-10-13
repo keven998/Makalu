@@ -58,7 +58,7 @@
             android:layout_height="60dp"
             android:scaleType="fitXY"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_home_talklist_default_avatar" />
+            android:src="@drawable/ic_home_more_avatar_unknown_round" />
         
         <TextView
             android:id="@+id/tv_nick"
