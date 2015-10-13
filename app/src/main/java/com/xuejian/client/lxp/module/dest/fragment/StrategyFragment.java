@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,6 +148,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                 @Override
                 public void doSuccess(String result, String method) {
                     isLoading = false;
+
                     CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
                     if (strategyListResult.code == 0) {
                         List<StrategyBean> tempStragy = strategyListResult.result;
@@ -201,8 +203,6 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
     @Override
     public void onResume() {
         super.onResume();
-        mCurrentPage = 0;
-        getStrategyListData(userId);
     }
 
     @Override
