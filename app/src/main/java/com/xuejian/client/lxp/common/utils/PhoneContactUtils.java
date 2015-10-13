@@ -81,7 +81,7 @@ public class PhoneContactUtils {
         try {
             if(allMember!=null && allMember.size()>0){
                     for(int i=0;i<allMember.size();i++){
-                        if(allMember.get(i)!=null && allMember.get(i).tel.replaceAll(" ","").contains(keyword) || allMember.get(i).name.contains(keyword)){
+                        if(allMember.get(i)!=null && allMember.get(i).tel.replaceAll(" ","").contains(keyword) || allMember.get(i).name.contains(keyword) || (allMember.get(i).name!=null && allMember.get(i).name.toLowerCase().contains(keyword.toLowerCase()))){
                             contactList.add(allMember.get(i));
                         }
                     }
