@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.GsonTools;
+import com.aizou.core.utils.SharedPreferencesUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
@@ -116,6 +117,7 @@ public class UserFragment extends PeachBaseFragment {
             MainActivity activity = (MainActivity) getActivity();
             activity.setTabForLogout();
         }
+
     }
 
     public void initHeadTitleView(User user) {
@@ -162,6 +164,8 @@ public class UserFragment extends PeachBaseFragment {
             otherInfos.setText(otherSb.toString());
         }
     }
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

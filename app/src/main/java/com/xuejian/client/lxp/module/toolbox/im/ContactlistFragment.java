@@ -27,6 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.utils.SharedPreferencesUtil;
 import com.aizou.core.widget.SideBar;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -171,9 +172,13 @@ public class ContactlistFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("page_friends_lists");
-        if (!hidden) {
+        boolean needfresh= SharedPreferencesUtil.getBooleanValue(getActivity(), "contactNeedRefresh", false);
+        if (!hidden || needfresh) {
+            SharedPreferencesUtil.saveValue(getActivity(),"contactNeedRefresh",false);
             refresh();
         }
+
+
     }
 
     @Override
