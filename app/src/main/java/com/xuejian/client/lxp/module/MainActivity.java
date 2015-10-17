@@ -495,7 +495,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         updateUnreadMsgCount();
         try {
-            if (!TextUtils.isEmpty(groupId) && !infoStatus.get(Integer.parseInt(groupId), false) && UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId)) == null) {
+            if (Integer.parseInt(groupId) != 0 && !infoStatus.get(Integer.parseInt(groupId), false) && UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId)) == null) {
                 infoStatus.put(Integer.parseInt(groupId), true);
                 GroupApi.getGroupInfo(groupId, new HttpCallBack() {
                     @Override
@@ -532,7 +532,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
                     }
                 });
-            } else if (TextUtils.isEmpty(groupId) && !infoStatus.get((int) m.getSenderId(), false) && UserDBManager.getInstance().getContactByUserId(m.getSenderId()) == null) {
+            } else if (Integer.parseInt(groupId) == 0 && !infoStatus.get((int) m.getSenderId(), false) && UserDBManager.getInstance().getContactByUserId(m.getSenderId()) == null) {
                 infoStatus.put((int) m.getSenderId(), true);
                 UserApi.getUserInfo(String.valueOf(m.getSenderId()), new HttpCallBack<String>() {
                     @Override
@@ -572,8 +572,8 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         } catch (Exception e) {
         }
-        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (mMediaPlayer == null) {
+            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             mMediaPlayer = new MediaPlayer();
             try {
                 mMediaPlayer.setDataSource(mContext, uri);
@@ -592,15 +592,26 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (m.getSenderId() != Long.parseLong(AccountManager.getCurrentUserId())) {
             if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) != 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, groupId)) {
                 //   vibrator.vibrate(500);
-
-                if (ring&&isLongEnough()) mMediaPlayer.start();
-                if (HandleImMessage.showNotice(mContext) && isPause && isLongEnough())
-                    superToast.show();
+                if (isLongEnough()) {
+                    try {
+                        if (ring) mMediaPlayer.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (HandleImMessage.showNotice(mContext) && isPause)
+                        superToast.show();
+                }
             } else if (SettingConfig.getInstance().getLxqPushSetting(MainActivity.this) && Integer.parseInt(groupId) == 0 && !SettingConfig.getInstance().getLxpNoticeSetting(MainActivity.this, m.getSenderId() + "")) {
                 //    vibrator.vibrate(500);
-                if (ring&&isLongEnough()) mMediaPlayer.start();
-                if (HandleImMessage.showNotice(mContext) && isPause && isLongEnough())
-                    superToast.show();
+                if (isLongEnough()) {
+                    try {
+                        if (ring) mMediaPlayer.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (HandleImMessage.showNotice(mContext) && isPause)
+                        superToast.show();
+                }
             }
         }
 
@@ -745,7 +756,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String acton = intent.getAction();
+            String acton = "";
+            if (intent != null) {
+                acton = intent.getAction();
+            }
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(acton)) {
                 ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -765,7 +779,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     IMClient.getInstance().initAckAndFetch();
                 }
             } else if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(acton)) {
-                System.out.println(acton);
                 getAlarmParams();
             }
         }
@@ -811,11 +824,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             unregisterReceiver(connectionReceiver);
             connectionReceiver = null;
         }
-        if(mMediaPlayer != null){
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
         }
-        if(vibrator != null){
+        if (vibrator != null) {
             vibrator.cancel();
         }
         HandleImMessage.getInstance().unregisterMessageListener(this);

@@ -21,7 +21,7 @@ android {
         }
     }
     compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    buildToolsVersion '23.0.1'
     defaultConfig {
         applicationId "com.xuejian.client.lxp"
         minSdkVersion 14
@@ -74,6 +74,7 @@ android {
         pp {}
         leshop {}
         shop360 {}
+        google{}
         productFlavors.all {
 
             flavor ->

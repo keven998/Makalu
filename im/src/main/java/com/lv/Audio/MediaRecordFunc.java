@@ -37,7 +37,7 @@ public class MediaRecordFunc {
                 try {
                     try {
                         mMediaRecorder.prepare();
-                    }catch (Throwable e){
+                    } catch (Throwable e) {
                         return 1010;
                     }
 
@@ -65,7 +65,7 @@ public class MediaRecordFunc {
                     return 1000;
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                     return 1010;
+                    return 1010;
                 }
             }
 
@@ -78,28 +78,29 @@ public class MediaRecordFunc {
         // 判断是否有外部存储设备sdcard/
         if (AudioFileFunc.isSdcardExit()) {
 
-                if (mMediaRecorder == null)
-                    if (!createMediaRecord());
+            if (mMediaRecorder == null)
+                if (!createMediaRecord()) ;
+            try {
                 try {
-                    try {
-                        mMediaRecorder.prepare();
-                    }catch (Throwable e){
-
-                    }
-
-                    mMediaRecorder.start();
-                    try{
-                        Thread.sleep(10);
-                    }catch(Exception ex){
-
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    mMediaRecorder.prepare();
+                } catch (Throwable e) {
 
                 }
 
+                mMediaRecorder.start();
+                try {
+                    Thread.sleep(10);
+                } catch (Exception ex) {
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+
+            }
+
         }
     }
+
     private boolean createMediaRecord() {
         mMediaRecorder = new MediaRecorder();
 

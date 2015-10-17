@@ -201,7 +201,11 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
     @Override
     public void onResume() {
         super.onResume();
+
+
         mCurrentPage = 0;
+
+        
         getStrategyListData(userId);
     }
 
