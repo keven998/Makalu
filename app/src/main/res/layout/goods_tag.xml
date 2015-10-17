@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xuejian.client.lxp.common.widget.TagView.TagView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="0.0dip"
+    android:minWidth="0.0dip"
+    android:paddingTop="2dip"
+    android:paddingBottom="2dip"
+    android:textSize="11sp"
+    android:focusable="false"
+    android:clickable="false"
+    android:focusableInTouchMode="false"
+    />

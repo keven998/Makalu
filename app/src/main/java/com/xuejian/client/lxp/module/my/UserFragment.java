@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.utils.GsonTools;
-import com.aizou.core.utils.SharedPreferencesUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
@@ -32,6 +31,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.fragment.StrategyFragment;
+import com.xuejian.client.lxp.module.goods.GoodsList;
 import com.xuejian.client.lxp.module.toolbox.im.ContactlistFragment;
 
 import butterknife.ButterKnife;
@@ -84,8 +84,10 @@ public class UserFragment extends PeachBaseFragment {
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
+                Intent settingIntent = new Intent(getActivity(), GoodsList.class);
                 startActivity(settingIntent);
+//                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
+//                startActivity(settingIntent);
             }
         });
         mTopview.setOnClickListener(new View.OnClickListener() {

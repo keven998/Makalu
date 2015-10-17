@@ -512,7 +512,9 @@
             android:name=".module.dest.PoiSaveActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
-
+        <activity
+            android:name=".module.goods.GoodsList"
+            android:screenOrientation="portrait"/>
         <receiver android:name="com.xuejian.client.lxp.common.receiver.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
