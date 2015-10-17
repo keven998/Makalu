@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_home_talklist_default_avatar" />
+        android:src="@drawable/ic_home_more_avatar_unknown_round" />
 
     <TextView
         android:id="@+id/name"

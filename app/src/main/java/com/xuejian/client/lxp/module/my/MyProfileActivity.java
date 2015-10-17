@@ -368,6 +368,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
                     if (userResult.code == 0) {
                         AccountManager.getInstance().saveLoginAccount(MyProfileActivity.this, userResult.result);
                         AccountManager.getInstance().setLoginAccountInfo(userResult.result);
+                        UserDBManager.getInstance().saveContact(userResult.result);
                         if (userResult.result != null) bindView(userResult.result);
                     }
                 }

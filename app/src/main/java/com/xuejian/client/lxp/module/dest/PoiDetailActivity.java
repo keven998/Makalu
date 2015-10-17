@@ -436,8 +436,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         public CommentViewHolder(Activity context) {
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.ic_home_talklist_default_avatar)
-                    .showImageOnFail(R.drawable.ic_home_talklist_default_avatar)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                     .resetViewBeforeLoading(true)
                     .cacheOnDisk(true)
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(29))) // 设置成圆角图片

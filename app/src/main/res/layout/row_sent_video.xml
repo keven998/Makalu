@@ -24,7 +24,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:background="@drawable/ic_home_talklist_default_avatar"
+            android:background="@drawable/ic_home_more_avatar_unknown_round"
             android:scaleType="fitXY" />
 
         <LinearLayout

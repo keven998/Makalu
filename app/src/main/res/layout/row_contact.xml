@@ -34,7 +34,7 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_home_talklist_default_avatar" />
+            android:src="@drawable/ic_home_more_avatar_unknown_round" />
 
         <LinearLayout
             android:layout_width="match_parent"

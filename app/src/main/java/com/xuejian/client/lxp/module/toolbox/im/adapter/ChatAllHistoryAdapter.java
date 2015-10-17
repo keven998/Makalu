@@ -149,12 +149,12 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                                     if (!TextUtils.isEmpty(user.getAvatarSmall())) {
                                         Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize, UILUtils.getDefaultOption());
                                         if (bitmap == null) {
-                                            bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_home_talklist_default_avatar);
+                                            bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_home_more_avatar_unknown_round);
                                         }
                                         membersAvatars.add(bitmap);
                                     }
                                 } else {
-                                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_home_talklist_default_avatar);
+                                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_home_more_avatar_unknown_round);
                                     membersAvatars.add(bitmap);
                                 }
                             }
@@ -207,7 +207,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 // 本地或者服务器获取用户详情，以用来显示头像和nick
 //                holder.avatar.setBackgroundResource(R.drawable.default_avatar);
                 final ViewHolder finalHolder = holder;
-                holder.avatar.setImageResource(R.drawable.ic_home_talklist_default_avatar);
+                holder.avatar.setImageResource(R.drawable.ic_home_more_avatar_unknown_round);
                 if (user.getUserId() == 10001) {
                     finalHolder.avatar.setImageResource(R.drawable.lvxingwenwen);
                 } else if (user.getUserId() == 10000) {
@@ -224,7 +224,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 }
             } else {
                 holder.name.setText("");
-                holder.avatar.setImageResource(R.drawable.ic_home_talklist_default_avatar);
+                holder.avatar.setImageResource(R.drawable.ic_home_more_avatar_unknown_round);
             }
 
         }

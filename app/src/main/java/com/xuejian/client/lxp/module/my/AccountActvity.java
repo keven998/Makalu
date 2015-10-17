@@ -15,6 +15,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -59,6 +60,7 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
@@ -844,6 +846,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         }catch (Exception e){
         }
         final CustomLoadingDialog progressDialog = dialog;
+
         OtherApi.getAvatarUploadToken(new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -889,7 +892,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                         public void progress(String key, double percent) {
                                             try {
                                                 progressDialog.setContent((int) (percent * 100) + "%");
-                                            }catch (Exception e){
+                                            } catch (Exception e) {
 
                                             }
 
@@ -925,6 +928,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         } catch (Exception e) {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
+
         UserApi.editUserAvatar(user, url, new HttpCallBack<String>() {
 
 

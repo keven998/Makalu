@@ -147,6 +147,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
                 @Override
                 public void doSuccess(String result, String method) {
                     isLoading = false;
+
                     CommonJson4List<StrategyBean> strategyListResult = CommonJson4List.fromJson(result, StrategyBean.class);
                     if (strategyListResult.code == 0) {
                         List<StrategyBean> tempStragy = strategyListResult.result;
@@ -201,11 +202,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
     @Override
     public void onResume() {
         super.onResume();
-
-
         mCurrentPage = 0;
-
-        
         getStrategyListData(userId);
     }
 

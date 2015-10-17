@@ -199,6 +199,13 @@ public class GroupDetailFragment extends PeachBaseFragment {
                 case REQUEST_CODE_MODIFY_GROUP_NAME: // 修改群名称
                     groupNameTv.setText(data.getStringExtra("groupName"));
                     ((ChatActivity)getActivity()).setTitleText(data.getStringExtra("groupName"));
+                   // group = UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
+                    if(group!=null){
+                        group.setNickName(data.getStringExtra("groupName"));
+                        UserDBManager.getInstance().saveContact(group);
+                    }
+
+
                     break;
                 default:
                     break;

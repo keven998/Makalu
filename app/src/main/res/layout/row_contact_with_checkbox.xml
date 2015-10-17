@@ -42,7 +42,7 @@
             android:layout_marginLeft="12dp"
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_home_talklist_default_avatar" />
+            android:src="@drawable/ic_home_more_avatar_unknown_round" />
 
         <TextView
             android:id="@+id/name"

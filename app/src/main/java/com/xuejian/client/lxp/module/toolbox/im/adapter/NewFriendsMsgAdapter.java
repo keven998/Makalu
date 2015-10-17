@@ -16,6 +16,7 @@ package com.xuejian.client.lxp.module.toolbox.im.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
+import com.aizou.core.utils.SharedPreferencesUtil;
 import com.lv.bean.InventMessage;
 import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -54,8 +56,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
         this.context = context;
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                .showImageOnFail(R.drawable.messages_bg_useravatar)
+                .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                 .cacheOnDisk(true)
                         // 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(19))) // 设置成圆角图片
@@ -167,8 +169,10 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InventMessage> {
                 UserDBManager.getInstance().saveContact(imUser);
                 AccountManager.getInstance().getContactList(context).put(imUser.getUserId(), imUser);
                 msg.setStatus(1);
+                SharedPreferencesUtil.saveValue(context,"contactNeedRefresh",true);
                 IMClient.getInstance().addTips(String.valueOf(imUser.getUserId()), "你已添加" + imUser.getNickName() + "为朋友，现在可以开始聊天了", "single");
                 IMClient.getInstance().updateInventMsgStatus(imUser.getUserId(), 1);
+
                 //   (context).startActivity(new Intent(context, HisMainPageActivity.class).putExtra("userId", msg.getUserId().intValue()));
             }
 
