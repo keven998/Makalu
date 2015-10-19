@@ -67,7 +67,11 @@ public class SearchExpertActivity extends PeachBaseActivity {
     ImageView iv_clean;
     ExpertAdapter adapter;
     private int[] lebelColors =new int[]{
-            R.drawable.all_light_green_label,R.drawable.all_light_red_label,R.drawable.all_light_perple_label,R.drawable.all_light_blue_label,R.drawable.all_light_yellow_label
+            R.drawable.all_light_green_label,
+            R.drawable.all_light_red_label,
+            R.drawable.all_light_perple_label,
+            R.drawable.all_light_blue_label,
+            R.drawable.all_light_yellow_label
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {

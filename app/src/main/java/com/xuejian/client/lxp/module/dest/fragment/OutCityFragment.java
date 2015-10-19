@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -240,7 +239,6 @@ public class OutCityFragment extends PeachBaseFragment {
         ImageView desBgImage;
         TextView cityEnName;
 
-        //private DisplayImageOptions poptions = UILUtils.getDefaultOption();
         private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
