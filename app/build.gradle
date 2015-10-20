@@ -108,6 +108,8 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
   //  compile files('libs/qiniu-android-sdk-7.0.1.jar')
     compile files('libs/Android_Location_V1.3.0.jar')
+    compile files('libs/alipaySDK-20151014.jar')
+
     //compile 'com.airbnb.android:airmapview:1.2.0'
     //compile files('libs/airmapview-1.1.5-sources.jar')
     //compile(name: 'airmapview-1.1.5', ext: 'aar')

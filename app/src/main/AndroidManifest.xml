@@ -512,12 +512,27 @@
             android:name=".module.dest.PoiSaveActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
+
         <activity
             android:name=".module.goods.GoodsList"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".module.goods.DestinationActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".module.pay.AlipayDetailActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+
         <receiver android:name="com.xuejian.client.lxp.common.receiver.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
