@@ -84,10 +84,10 @@ public class UserFragment extends PeachBaseFragment {
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent settingIntent = new Intent(getActivity(), GoodsList.class);
+                //Intent settingIntent = new Intent(getActivity(), GoodsList.class);
+                //startActivity(settingIntent);
+                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
                 startActivity(settingIntent);
-//                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
-//                startActivity(settingIntent);
             }
         });
         mTopview.setOnClickListener(new View.OnClickListener() {
