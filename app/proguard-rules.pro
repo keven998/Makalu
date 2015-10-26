@@ -16,6 +16,12 @@
 #   public *;
 #}
 
+#AutoScrollViewPager
+-keep class cn.trinea.android.** { *; }
+-keepclassmembers class cn.trinea.android.** { *; }
+-dontwarn cn.trinea.android.**
+
+
 -dontwarn com.igexin.**
 -keep class com.igexin.**{*;}
 -dontwarn rx.internal.**

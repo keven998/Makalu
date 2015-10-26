@@ -38,5 +38,6 @@
 
     <dimen name="operation_section_height">238dp</dimen>
     <dimen name="spot_detail_picture_height">280dp</dimen>
+    <dimen name="goods_main_viewpager_height">224dp</dimen>
 
 </resources>
