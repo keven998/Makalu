@@ -38,6 +38,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     CircleLayout circleLayout;
     LinearLayout menu;
     ImageView showMenu;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
             public void onClick(View v) {
                 showMenu.setVisibility(View.GONE);
                 menu.setVisibility(View.VISIBLE);
-                Animation animation = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_in_from_right);
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_right);
                 menu.startAnimation(animation);
             }
         });
@@ -95,14 +96,17 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 
     @Override
     public void onRotationFinished(View view, String name) {
-        ((CircleTextView)view).setTextColor(getResources().getColor(R.color.app_theme_color));
-        ((CircleTextView)view).setTextSize(14f);
+        ((CircleTextView) view).setTextColor(getResources().getColor(R.color.app_theme_color));
+        ((CircleTextView) view).setTextSize(14f);
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        System.out.println("scrollState "+scrollState);
-        if (scrollState==SCROLL_STATE_FLING||scrollState==SCROLL_STATE_TOUCH_SCROLL){
+        if (scrollState == SCROLL_STATE_FLING || scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+            if (menu.getVisibility() == View.VISIBLE) {
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_to_right);
+                menu.startAnimation(animation);
+            }
             showMenu.setVisibility(View.VISIBLE);
             menu.setVisibility(View.GONE);
         }
@@ -115,7 +119,6 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 
 
     private class TalentLocAdapter extends BaseAdapter {
-        private TextView header;
         private DisplayImageOptions poptions;
         private ArrayList<CountryWithExpertsBean> list;
         private Context mCxt;
@@ -146,7 +149,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         @Override
         public int getCount() {
             return 10;
-         //   return list.size();
+            //   return list.size();
         }
 
         @Override
@@ -166,18 +169,18 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                 holder.rl_country = (FrameLayout) convertView.findViewById(R.id.fl_country);
                 holder.bgImage = (ImageView) convertView.findViewById(R.id.talent_loc_img);
                 holder.numSum = (TextView) convertView.findViewById(R.id.talent_loc_num);
-                holder.ennameText =(TextView) convertView.findViewById(R.id.loc_en_name);
+                holder.ennameText = (TextView) convertView.findViewById(R.id.loc_en_name);
                 convertView.setTag(holder);
             }
 
-            if (flag){
+            if (flag) {
                 mImgLoader.displayImage("http://images.taozilvxing.com/78b3baf2f60d02ea70d7a8a30dfaf0b1?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!994x460a4a186/thumbnail/1200", holder.bgImage, poptions);
-                flag=false;
-            }else {
-                flag=true;
+                flag = false;
+            } else {
+                flag = true;
                 mImgLoader.displayImage("http://images.taozilvxing.com/af563f2f2e6bea2560857c6026e428a1?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!998x570a2a2/thumbnail/1200", holder.bgImage, poptions);
             }
-             holder.ennameText.setText("China");
+            holder.ennameText.setText("China");
             holder.numSum.setText("中国");
             return convertView;
         }
@@ -190,8 +193,6 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
             private TextView ennameText;
         }
     }
-
-
 
 
 }

@@ -54,6 +54,7 @@
             android:layout_height="60dp"
             android:layout_gravity="right|center_vertical"
             android:src="@drawable/icon_show_button"/>
+        <include layout="@layout/component_fake_search"/>
     </FrameLayout>
 
 </LinearLayout>
