@@ -16,25 +16,23 @@
     android:layout_marginRight="7dp">
     <ImageView
         android:id="@+id/iv_poi_img"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:background="@color/app_backgroud"
         android:scaleType="centerCrop"
         android:layout_gravity="center_vertical"
         />
-    <ImageView
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/icon_goods_name_bg"/>
-    <com.xuejian.client.lxp.common.widget.RotateTextview
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:text="店名"
-        android:textSize="13sp"
-        android:gravity="center"
+    <TextView
+        android:layout_margin="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="店名店名"
+        android:padding="2dp"
+        android:textSize="12sp"
         android:textColor="@color/base_color_white"
-        rotate:rotate="315"/>
+        android:background="@drawable/round_corner_bg"
+        android:maxWidth="80dp"/>
+
 </FrameLayout>
 
 
@@ -68,6 +66,7 @@
             android:textSize="12sp" />
 
         <com.xuejian.client.lxp.common.widget.TagView.TagListView
+            android:layout_marginTop="5dp"
             android:id="@+id/tv_goods_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,8 +77,14 @@
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/icon_positive"/>
             <TextView
-                android:drawableLeft="@drawable/icon_positive"
                 android:id="@+id/tv_goods_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,8 +92,9 @@
                 android:gravity="center_vertical"
                 android:layout_centerVertical="true"
                 android:singleLine="true"
+                android:layout_marginLeft="2dp"
                 android:text="100%满意"
-                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@+id/icon"
                 android:textColor="@color/color_text_iii"
                 android:textSize="12sp" />
 
@@ -115,7 +121,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
                 android:text="¥2198"
-                android:textColor="@color/app_theme_color"
+                android:textColor="#ff3300"
                 android:textSize="15sp" />
             <TextView
                 android:id="@+id/tv_goods_price"

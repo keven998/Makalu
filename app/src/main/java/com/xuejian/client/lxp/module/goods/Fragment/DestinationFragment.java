@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.goods.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView;
+import com.xuejian.client.lxp.module.goods.CountryListActivity;
 
 import java.util.ArrayList;
 
@@ -66,7 +68,8 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(getActivity(), CountryListActivity.class);
+                startActivity(intent);
             }
         });
         showMenu.setOnClickListener(new View.OnClickListener() {

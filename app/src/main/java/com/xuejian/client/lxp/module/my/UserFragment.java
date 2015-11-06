@@ -31,8 +31,6 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.fragment.StrategyFragment;
-import com.xuejian.client.lxp.module.goods.CountryListActivity;
-import com.xuejian.client.lxp.module.goods.GoodsList;
 import com.xuejian.client.lxp.module.toolbox.im.ContactlistFragment;
 
 import butterknife.ButterKnife;
@@ -86,19 +84,15 @@ public class UserFragment extends PeachBaseFragment {
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent settingIntent = new Intent(getActivity(), CountryListActivity.class);
+                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
                 startActivity(settingIntent);
-//                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
-//                startActivity(settingIntent);
             }
         });
         mTopview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), GoodsList.class);
+                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
                 startActivity(intent);
-//                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
-//                startActivity(intent);
             }
         });
         iv_createPlan.setOnClickListener(new View.OnClickListener() {

@@ -49,6 +49,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
     LinearLayout llPics;
     ArrayList<String> picList = new ArrayList<>();
     DisplayImageOptions options;
+    ArrayList<ArrayList<String>> data= new ArrayList<>();
     private final List<Tag> mTags = new ArrayList<Tag>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -181,12 +182,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         @Override
         public int getContentItemViewType(int section, int position) {
-            return 1;
+            return 0;
         }
 
         @Override
         public int getHeaderItemViewType(int section) {
-            return 1;
+            return 0;
         }
 
         @Override
@@ -201,12 +202,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         @Override
         public Object getItem(int section, int position) {
-            return null;
+          return data.get(section).get(position);
         }
 
         @Override
         public long getItemId(int section, int position) {
-            return 0;
+            return getGlobalPositionForItem(section, position);
         }
 
         @Override
@@ -237,12 +238,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         @Override
         public int getSectionCount() {
-            return 3;
+            return data.size();
         }
 
         @Override
         public int getCountInSection(int section) {
-            return 1;
+            return data.get(section).size();
         }
 
         @Override
@@ -257,7 +258,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         @Override
         public boolean isEnabled(int position) {
-            return true;
+            return !isHeader(position);
         }
 
         /**
@@ -288,6 +289,13 @@ public class GoodsMainFragment extends PeachBaseFragment {
         }
     }
     private void initData() {
+        for (int i = 0; i < 3; i++) {
+            data.add(new ArrayList<String>());
+            for (int j = 0; j < 2; j++) {
+                data.get(i).add(String.valueOf(j));
+            }
+        }
+
         int lastColor = new Random().nextInt(4);
         for (int i = 0; i < 3; i++) {
             Tag tag = new Tag();

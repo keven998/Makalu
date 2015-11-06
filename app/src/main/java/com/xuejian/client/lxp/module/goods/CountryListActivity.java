@@ -1,11 +1,13 @@
 package com.xuejian.client.lxp.module.goods;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -18,6 +20,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
+import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -40,6 +43,13 @@ public class CountryListActivity extends PeachBaseActivity {
         titleBar.enableBackKey(true);
         titleBar.getTitleTextView().setText("国家名");
         gvCountry.setAdapter(new CountryAdapter(this));
+        gvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(CountryListActivity.this, CityInfoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     class CountryAdapter extends BaseAdapter {

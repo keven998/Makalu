@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.dest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.module.goods.GoodsList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,12 +55,26 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
         View footView = View.inflate(this,R.layout.footer_show_all,null);
+        TextView showMore = (TextView) footView.findViewById(R.id.tv_show_all);
+        ImageView back = (ImageView) findViewById(R.id.iv_nav_back);
         tvStoreNum = (TextView) headView.findViewById(R.id.tv_store_num);
         tvRecommendTime = (TextView) headView.findViewById(R.id.tv_recommend_time);
         tvCountryPicNum = (TextView) headView.findViewById(R.id.tv_country_pic_num);
         tvCountryName = (TextView) headView.findViewById(R.id.tv_country_name);
         tvCountryNameEn = (TextView) headView.findViewById(R.id.tv_country_name_en);
-
+        showMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CityInfoActivity.this, GoodsList.class);
+                startActivity(intent);
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               finish();
+            }
+        });
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
         viewPager.setAdapter(new GoodsPageAdapter(this, null));
         listView.addHeaderView(headView);
