@@ -33,4 +33,7 @@ dependencies {
     compile files('libs/gson-2.2.4.jar')
     compile files('libs/NineOldAndroid-2.4.0.jar')
     compile files('libs/uil.jar')
+    compile files('libs/httpclient-cache-4.2.3.jar')
+    compile files('libs/httpclient-4.2.3.jar')
+    compile files('libs/httpclient-android-4.3.5.1.jar')
 }

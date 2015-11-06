@@ -518,6 +518,12 @@
         <activity
             android:name=".module.goods.DestinationActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.RNView.ReactMainPage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+            android:screenOrientation="portrait" />
         <receiver android:name="com.xuejian.client.lxp.common.receiver.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />

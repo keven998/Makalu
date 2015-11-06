@@ -20,12 +20,12 @@ android {
             keyPassword "android"
         }
     }
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '23.0.1'
     defaultConfig {
         applicationId "com.xuejian.client.lxp"
-        minSdkVersion 14
-        targetSdkVersion 22
+        minSdkVersion 16
+        targetSdkVersion 23
         versionCode 10
         versionName "2.0.4"
         multiDexEnabled true
@@ -100,10 +100,10 @@ dependencies {
     compile project(':im')
     compile project(':library')
     compile files('libs/locSDK_3.3.jar')
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:support-v4:23.0.1'
+ //   compile 'com.android.support:appcompat-v7:23.2.0'
+ //   compile 'com.android.support:cardview-v7:23.2.0'
+   compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.jakewharton:butterknife:6.0.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
   //  compile files('libs/qiniu-android-sdk-7.0.1.jar')
@@ -123,6 +123,7 @@ dependencies {
     compile files('libs/AMap_ Location_v1.4.0.1_20150910.jar')
   //  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
    // releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    compile 'com.facebook.react:react-native:0.13.0'
 
 }
 

@@ -29,6 +29,7 @@ import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.common.widget.SimpleViewPagerIndicator;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.fragment.StrategyFragment;
 import com.xuejian.client.lxp.module.goods.GoodsList;
@@ -84,7 +85,7 @@ public class UserFragment extends PeachBaseFragment {
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent settingIntent = new Intent(getActivity(), GoodsList.class);
+                Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
                 startActivity(settingIntent);
 //                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
 //                startActivity(settingIntent);

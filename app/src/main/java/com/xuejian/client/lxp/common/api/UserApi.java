@@ -2,7 +2,6 @@ package com.xuejian.client.lxp.common.api;
 
 import android.text.TextUtils;
 
-import com.aizou.core.http.GzipCompressingEntity;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.OkHttpClientManager;
 import com.aizou.core.http.entity.PTHeader;
@@ -13,12 +12,10 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.db.User;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -112,12 +109,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
@@ -140,12 +131,6 @@ public class UserApi extends BaseApi {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
@@ -172,12 +157,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
@@ -195,12 +174,6 @@ public class UserApi extends BaseApi {
             jsonObject.put("password", pwd);
             jsonObject.put("validationCode", captcha);
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
@@ -224,12 +197,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
@@ -247,12 +214,6 @@ public class UserApi extends BaseApi {
             jsonObject.put("token", token);
             jsonObject.put("newPassword", pwd);
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
@@ -273,12 +234,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         // return HttpManager.request(request, callback);
@@ -295,12 +250,6 @@ public class UserApi extends BaseApi {
             jsonObject.put("loginName", loginName);
             jsonObject.put("password", pwd);
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
@@ -324,12 +273,6 @@ public class UserApi extends BaseApi {
             }
             jsonObject.put("tracks", jsonArray);
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
@@ -433,12 +376,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //    return HttpManager.request(request, callback);
@@ -495,12 +432,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
@@ -524,12 +455,6 @@ public class UserApi extends BaseApi {
             jsonObject.put("action", 1);
             jsonObject.put("message", message);
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
@@ -588,12 +513,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
@@ -612,12 +531,6 @@ public class UserApi extends BaseApi {
                 jsonObject.put("userId", userId);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         setDefaultParams(request);
@@ -791,13 +704,6 @@ public class UserApi extends BaseApi {
             }
             rootObject.put("contacts", jsonArray);
             rootObject.put("action", "addressbook");
-            try {
-                StringEntity entity = new StringEntity(rootObject.toString(), "utf-8");
-//                request.setBodyEntity( entity);
-                request.setBodyEntity(new GzipCompressingEntity(entity));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
             LogUtil.d(rootObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -819,12 +725,6 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
@@ -841,12 +741,6 @@ public class UserApi extends BaseApi {
         try {
             jsonObject.put("mute", value);
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
@@ -867,12 +761,6 @@ public class UserApi extends BaseApi {
             jsonObject.put("userId", Long.parseLong(AccountManager.getCurrentUserId()));
 
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
@@ -902,12 +790,6 @@ public class UserApi extends BaseApi {
         try {
             jsonObject.put("userId", Long.parseLong(userId));
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());

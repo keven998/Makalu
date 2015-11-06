@@ -14,8 +14,6 @@
 package com.xuejian.client.lxp.common.utils;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,7 +25,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -35,14 +33,13 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xuejian.client.lxp.bean.StartCity;
-
-import org.apache.http.Header;
-import org.apache.http.util.EncodingUtils;
+import com.xuejian.client.lxp.common.httpclient.Header;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,6 +48,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -219,13 +217,54 @@ public class CommonUtils {
             byte[] buffer = new byte[lenght];
             // 将文件中的数据读到byte数组中
             in.read(buffer);
-            result = EncodingUtils.getString(buffer, "utf-8");
+            result =  getString(buffer, "utf-8");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
+    public static String getString(final byte[] data, final String charset) {
+         notNull(data, "Input");
+        return getString(data, 0, data.length, charset);
+    }
 
+    public static String getString(
+            final byte[] data,
+            int offset,
+            int length,
+            String charset) {
+        notNull(data, "Input");
+        notEmpty(charset, "Charset");
+        try {
+            return new String(data, offset, length, charset);
+        } catch (UnsupportedEncodingException e) {
+            return new String(data, offset, length);
+        }
+    }
+    public static <T extends CharSequence> T notEmpty(final T argument, final String name) {
+        if (argument == null) {
+            throw new IllegalArgumentException(name + " may not be null");
+        }
+        if (TextUtils.isEmpty(argument)) {
+            throw new IllegalArgumentException(name + " may not be empty");
+        }
+        return argument;
+    }
+    public static <T> T notNull(final T argument, final String name) {
+        if (argument == null) {
+            throw new IllegalArgumentException(name + " may not be null");
+        }
+        return argument;
+    }
+    public static <E, T extends Collection<E>> T notEmpty(final T argument, final String name) {
+        if (argument == null) {
+            throw new IllegalArgumentException(name + " may not be null");
+        }
+        if (argument.isEmpty()) {
+            throw new IllegalArgumentException(name + " may not be empty");
+        }
+        return argument;
+    }
     public static void fixInputMethodManagerLeak(Context destContext) {
         if (destContext == null) {
             return;

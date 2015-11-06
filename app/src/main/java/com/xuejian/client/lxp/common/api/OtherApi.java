@@ -1,7 +1,5 @@
 package com.xuejian.client.lxp.common.api;
 
-import android.util.Log;
-
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.OkHttpClientManager;
 import com.aizou.core.http.entity.PTHeader;
@@ -10,11 +8,8 @@ import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.xuejian.client.lxp.config.SystemConfig;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Rjm on 2014/11/10.
@@ -227,12 +222,6 @@ public class OtherApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callBack);
       //  return HttpManager.request(request, callBack);
@@ -256,12 +245,6 @@ public class OtherApi extends BaseApi {
             jsonObject.put("body", content);
 
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());

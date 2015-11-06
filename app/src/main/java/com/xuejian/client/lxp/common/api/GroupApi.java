@@ -6,12 +6,9 @@ import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
 import com.xuejian.client.lxp.config.SystemConfig;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by yibiao.qin on 2015/6/19.
@@ -33,13 +30,6 @@ public class GroupApi extends BaseApi{
         request.setUrl(SystemConfig.DEV_URL + CreateGroup);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(requestBody, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        request.setBodyEntity(entity);
         OkHttpClientManager.getInstance().request(request, requestBody, callback);
       //  return HttpManager.request(request, callback);
     }
@@ -80,13 +70,6 @@ public class GroupApi extends BaseApi{
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + GroupId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(requestBody, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        request.setBodyEntity(entity);
         OkHttpClientManager.getInstance().request(request, requestBody, callback);
     //    return HttpManager.request(request, callback);
     }
@@ -123,13 +106,6 @@ public class GroupApi extends BaseApi{
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(object.toString(), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        request.setBodyEntity(entity);
         OkHttpClientManager.getInstance().request(request, object.toString(), callback);
      //   return HttpManager.request(request, callback);
     }
@@ -161,13 +137,6 @@ public class GroupApi extends BaseApi{
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(object.toString(), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        request.setBodyEntity(entity);
         OkHttpClientManager.getInstance().request(request, object.toString(), callback);
    //     return HttpManager.request(request, callback);
     }

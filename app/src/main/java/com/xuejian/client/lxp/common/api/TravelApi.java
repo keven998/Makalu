@@ -12,12 +12,10 @@ import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.SystemConfig;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -382,12 +380,6 @@ public class TravelApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
       //  return HttpManager.request(request, callback);
@@ -506,12 +498,6 @@ public class TravelApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
        // return HttpManager.request(request, callback);
@@ -536,12 +522,6 @@ public class TravelApi extends BaseApi {
             jsonObject.put("id", id);
             jsonObject.put("updateTime", time);
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
