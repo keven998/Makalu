@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.goods.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -9,26 +10,26 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
+import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 .showImageOnFail(R.drawable.ic_default_picture)
                 .showImageOnLoading(R.drawable.ic_default_picture)
                 .showImageForEmptyUri(R.drawable.ic_default_picture)
-                .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10)))
+             //   .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
@@ -75,6 +76,13 @@ public class GoodsMainFragment extends PeachBaseFragment {
         viewPager.setAdapter(new GoodsPageAdapter(getActivity(), null));
         listView.addHeaderView(headView);
         listView.setAdapter(new RecommendGoodsAdapter(getActivity()));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
+                startActivity(settingIntent);
+            }
+        });
         viewPager.startAutoScroll();
         viewPager.setInterval(2000);
         viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE);

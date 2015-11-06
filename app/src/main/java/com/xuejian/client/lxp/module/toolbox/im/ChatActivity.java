@@ -93,8 +93,12 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -213,11 +217,55 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private final MyHandler handler = new MyHandler(this);
 
     private boolean isRecord;
+    public void update() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection conn = null;
+                File localObject = new File(getFilesDir(), "ReactNativeDevBundle.js");
+                if (( localObject).exists()) {
+//                    boolean result = ( localObject).delete();
+//                    System.out.println("删除 " + result);
+                }
+                File[] filesss = getFilesDir().listFiles();
+                System.out.println(filesss.length);
+                try {
 
+                    URL downloadUrl = new URL("http://7xiktj.com1.z0.glb.clouddn.com/ReactNativeDevBundle.js.png");
+                    conn = (HttpURLConnection) downloadUrl.openConnection();
+                    conn.setConnectTimeout(5000);
+                    conn.setRequestMethod("GET");
+                    if (conn.getResponseCode() == 200) {
+                        File newfile = new File(getFilesDir(), "ReactNativeDevBundle.js");
+                        FileOutputStream output = new FileOutputStream(newfile);
+                        InputStream input = null;
+                        input = conn.getInputStream();
+                        byte[] voice_bytes = new byte[1024];
+                        int len1 = -1;
+                        while ((len1 = input.read(voice_bytes)) != -1) {
+                            output.write(voice_bytes, 0, len1);
+                        }
+                        output.flush();
+                        input.close();
+                        output.close();
+                        System.out.println("替换成功");
+                        File[] files = getFilesDir().listFiles();
+                        for (File file : files) {
+                            System.out.println(file.getName());
+                            System.out.println(file.getTotalSpace());
+                        }
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }).start();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+    //    update();
         Intent intent = getIntent();
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");

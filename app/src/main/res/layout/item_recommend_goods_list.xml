@@ -9,8 +9,7 @@
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:layout_marginLeft="7dp"
-    android:layout_marginRight="7dp">
+    >
     <ImageView
         android:id="@+id/iv_goods_img"
         android:layout_width="match_parent"
@@ -40,7 +39,7 @@
         android:text="韩国"
         android:textSize="15sp"
         android:layout_marginBottom="35dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="7dp"
         android:drawableLeft="@drawable/search_total_place"
         android:textColor="@color/base_color_white"
         android:layout_gravity="bottom|left"
@@ -91,7 +90,7 @@
         android:textColor="@color/color_text_ii"
         android:drawablePadding="2dp"
         android:layout_marginBottom="3dp"
-        android:layout_marginLeft="2dp"
+        android:layout_marginLeft="7dp"
         android:drawableLeft="@drawable/icon_recommend_tag"
         android:text="保的家庭酒店"/>
 </FrameLayout>

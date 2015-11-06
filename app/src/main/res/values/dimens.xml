@@ -25,5 +25,5 @@
 
     <dimen name="spot_detail_picture_height">148dp</dimen>
     <dimen name="goods_main_viewpager_height">120dp</dimen>
-
+    <dimen name="city_viewpager_height">84dp</dimen>
 </resources>

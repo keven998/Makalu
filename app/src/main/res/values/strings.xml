@@ -31,4 +31,13 @@
 
     <string name="baidu">baidu</string>
     <string name="android_market">androidMarket</string>
+    <string name="city_detail_info">简介</string>
+    <string name="city_detail_notice">指南</string>
+    <string name="city_detail_traffic">交通</string>
+    <string name="city_detail_viewspot">景点</string>
+    <string name="city_detail_plan">行程</string>
+    <string name="city_detail_note">游记</string>
+    <string name="city_detail_food">美食</string>
+    <string name="city_detail_shopping">购物</string>
+    <string name="city_detail_goods">当地玩乐</string>
 </resources>

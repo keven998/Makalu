@@ -52,6 +52,7 @@
     <color name="base_color_line_color">#d9d9d9</color>
     <color name="half_transparent_color">#e0000000</color>
     <color name="minhalf_transparent_color">#30000000</color>
+    <color name="quarter_transparent_color">#70000000</color>
     <color name="transparent_color">#00000000</color>
     <color name="base_content_color">#22b59a</color>
     <color name="base_gary_bg">#EAEAEA</color>

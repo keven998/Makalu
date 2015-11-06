@@ -29,9 +29,9 @@ import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.common.widget.SimpleViewPagerIndicator;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
-import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.fragment.StrategyFragment;
+import com.xuejian.client.lxp.module.goods.CountryListActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 import com.xuejian.client.lxp.module.toolbox.im.ContactlistFragment;
 
@@ -69,6 +69,7 @@ public class UserFragment extends PeachBaseFragment {
     DisplayImageOptions options;
     private static final int RESULT_PLAN_DETAIL = 0x222;
     public static final int REQUEST_CODE_NEW_PLAN = 0x22;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,7 +86,7 @@ public class UserFragment extends PeachBaseFragment {
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
+                Intent settingIntent = new Intent(getActivity(), CountryListActivity.class);
                 startActivity(settingIntent);
 //                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
 //                startActivity(settingIntent);
@@ -94,8 +95,10 @@ public class UserFragment extends PeachBaseFragment {
         mTopview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+                Intent intent = new Intent(getActivity(), GoodsList.class);
                 startActivity(intent);
+//                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+//                startActivity(intent);
             }
         });
         iv_createPlan.setOnClickListener(new View.OnClickListener() {
@@ -132,16 +135,16 @@ public class UserFragment extends PeachBaseFragment {
                 nameSb.append(user.getNickName());
                 nameLenth = user.getNickName().length();
             }
-            int idLenght=0;
+            int idLenght = 0;
             if (user.getUserId() != null) {
                 nameSb.append("  " + user.getUserId());
-                idLenght=(user.getUserId()+"").length();
+                idLenght = (user.getUserId() + "").length();
             }
             SpannableString spannableString = new SpannableString(nameSb.toString());
-            if(idLenght>0){
-                spannableString.setSpan(new AbsoluteSizeSpan(13,true),nameLenth+2,nameLenth+2+idLenght,0);
+            if (idLenght > 0) {
+                spannableString.setSpan(new AbsoluteSizeSpan(13, true), nameLenth + 2, nameLenth + 2 + idLenght, 0);
                 nameAndId.setText(spannableString);
-            }else{
+            } else {
                 nameAndId.setText(nameSb.toString());
             }
             StringBuffer otherSb = new StringBuffer();
@@ -174,13 +177,15 @@ public class UserFragment extends PeachBaseFragment {
         super.onActivityCreated(savedInstanceState);
         User user = AccountManager.getInstance().getLoginAccount(getActivity());
     }
-    public ContactlistFragment createContactlistFragment(){
+
+    public ContactlistFragment createContactlistFragment() {
         ContactlistFragment fragment = new ContactlistFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isAddFriend",true);
+        bundle.putBoolean("isAddFriend", true);
         fragment.setArguments(bundle);
         return fragment;
     }
+
     private void initDatas() {
         mViewpager.setScanScroll(false);
         mIndicator.setTitles(mTitles);
@@ -209,9 +214,9 @@ public class UserFragment extends PeachBaseFragment {
         mIndicator.setOnIndicatorChangeListenr(new SimpleViewPagerIndicator.OnIndicatorChangeListenr() {
             @Override
             public void OnIndicatorChange(int postion) {
-                if (postion==0){
+                if (postion == 0) {
                     iv_createPlan.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     iv_createPlan.setVisibility(View.GONE);
                 }
                 mIndicator.scroll(0, postion);
@@ -225,18 +230,20 @@ public class UserFragment extends PeachBaseFragment {
         if (resultCode == getActivity().RESULT_OK) {
             if (requestCode == RESULT_PLAN_DETAIL) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
-            }else if(requestCode == REQUEST_CODE_NEW_PLAN){
+            } else if (requestCode == REQUEST_CODE_NEW_PLAN) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
-                    if (getActivity()!=null)PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
+                    if (getActivity() != null)
+                        PreferenceUtils.cacheData(getActivity(), "last_strategy", GsonTools.createGsonString(sb));
                 }
-           //     getStrategyListData(user);
+                //     getStrategyListData(user);
 
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

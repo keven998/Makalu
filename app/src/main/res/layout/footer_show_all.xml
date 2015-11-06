@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/tv_show_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查看全部玩乐"
+        android:textSize="17sp"
+        android:textColor="@color/app_theme_color"
+        android:gravity="center"/>
+</LinearLayout>

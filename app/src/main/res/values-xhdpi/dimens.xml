@@ -40,4 +40,5 @@
     <dimen name="spot_detail_picture_height">260dp</dimen>
     <dimen name="talent_loc_cell_height">180dp</dimen>
     <dimen name="goods_main_viewpager_height">208dp</dimen>
+    <dimen name="city_viewpager_height">145dp</dimen>
 </resources>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_backgroud"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/city_viewpager_height">
+
+        <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
+            android:id="@+id/vp_pic"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/city_viewpager_height" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_country_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="新加坡"
+                android:textColor="@color/base_color_white"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_country_name_en"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="10dp"
+                android:text="Singapore"
+                android:textColor="@color/base_color_white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="3dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_pic_num" />
+
+            <TextView
+                android:id="@+id/tv_country_pic_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:text="1/4"
+                android:textColor="@color/base_color_white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_backgroud"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_recommend_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="推荐旅行时间：12-15"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_store_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:drawableLeft="@drawable/icon_store"
+            android:drawablePadding="4dp"
+            android:layout_centerVertical="true"
+            android:text="26"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_btn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/base_color_white"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <FrameLayout
+                android:id="@+id/btn_info"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_info" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_info"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_travel_notice"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_travel_notice" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_notice"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_traffic"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_traffic" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_traffic"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_viewspot"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_viewspot" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_viewspot"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:weightSum="4">
+
+            <FrameLayout
+                android:id="@+id/btn_plan"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_plan" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_plan"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_note"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_note" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_note"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_food"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_food" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_food"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_shopping"
+                android:layout_width="0dp"
+                android:layout_height="74dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="onClick">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:src="@drawable/icon_shopping" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/city_detail_shopping"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="11sp" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/base_color_white"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_goods"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/icon_local_goods" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/iv_goods"
+            android:text="@string/city_detail_goods"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="7dp"
+        android:background="@color/app_theme_color" />
+</LinearLayout>

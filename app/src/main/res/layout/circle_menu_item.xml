@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="推荐"
+        android:textSize="12sp"
+        android:textColor="@color/base_color_white" />
+
+
+    <com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="亚洲"
+        android:textSize="12sp"
+        android:textColor="@color/base_color_white" />
+
+
+    <com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="欧洲"
+        android:textSize="12sp"
+        android:textColor="@color/base_color_white" />
+
+
+    <com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="非洲"
+        android:textSize="12sp"
+        android:textColor="@color/base_color_white" />
+
+
+    <com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="北美洲"
+        android:textSize="12sp"
+        android:textColor="@color/base_color_white" />
+
+
+    <com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="大洋洲"
+        android:textSize="12sp"
+        android:textColor="@color/base_color_white" />
+
+
+    <com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="南美洲"
+        android:textSize="12sp"
+        android:textColor="@color/base_color_white" />
+
+</merge>
