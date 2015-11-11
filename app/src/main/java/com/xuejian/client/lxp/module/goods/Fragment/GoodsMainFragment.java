@@ -86,7 +86,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
         });
         viewPager.startAutoScroll();
         viewPager.setInterval(2000);
-        viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE);
+        viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
         dotView.setNum(4);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

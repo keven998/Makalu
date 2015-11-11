@@ -31,8 +31,8 @@ public class TestActivity extends PeachBaseActivity implements DefaultHardwareBa
       //  mReactRootView = new ReactRootView(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
-            //            .setBundleAssetName("ReactNativeDevBundle.js")
-                .setBundleAssetName("index.android.bundle")
+                         .setBundleAssetName("ReactNativeDevBundle.js")
+          //      .setBundleAssetName("index.android.bundle")
                 .setJSMainModuleName("./src/index.android")
                         //       .setJSMainModuleName("./src/GoodDetailInfo")
                 .addPackage(new MyReactPackage())

@@ -40,4 +40,11 @@
     <string name="city_detail_food">美食</string>
     <string name="city_detail_shopping">购物</string>
     <string name="city_detail_goods">当地玩乐</string>
+    <string name="order_input">订单填写</string>
+    <string name="add_member">添加旅客</string>
+    <string name="choice_date">选择日期</string>
+    <string name="common_user_info">常用旅客信息</string>
+    <string name="confirm">确定</string>
+    <string name="edit_user_info">编辑旅客信息</string>
+    <string name="save">保存</string>
 </resources>

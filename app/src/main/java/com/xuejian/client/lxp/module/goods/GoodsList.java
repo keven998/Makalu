@@ -102,7 +102,6 @@ public class GoodsList extends PeachBaseActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
         StringSpinnerAdapter mSortListAdapter = new StringSpinnerAdapter(mContext, SortList);
         sortSpinner.setAdapter(mSortListAdapter);
         sortSpinner.setSelection(0, true);

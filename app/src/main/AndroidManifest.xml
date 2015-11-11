@@ -40,7 +40,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="getui.permission.GetuiService.com.aizou.peachtravel" />
 
     <!--自定义权限-->
@@ -533,6 +533,35 @@
         <activity
             android:name=".module.dest.CityInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.umeng.socialize.view.ShareActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.goods.OrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.goods.DatePickActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.goods.CommonUserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1104433490" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.tencent.connect.common.AssistActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait">
+        </activity>
         <receiver android:name="com.xuejian.client.lxp.common.receiver.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />

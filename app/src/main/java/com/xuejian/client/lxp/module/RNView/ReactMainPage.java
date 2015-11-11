@@ -34,14 +34,14 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showLoading();
-     //   prepareJSBundle();
+         prepareJSBundle();
         mReactRootView = new ReactRootView(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
-         //        .setBundleAssetName("ReactNativeDevBundle.js")
-                 .setBundleAssetName("index.android.bundle")
+                  .setBundleAssetName("ReactNativeDevBundle.js")
+             //    .setBundleAssetName("index.android.bundle")
                 .setJSMainModuleName("./src/index.android")
-                        //         .setJSMainModuleName("./src/GoodDetailInfo")
+                      //         .setJSMainModuleName("./src/GoodDetailInfo")
                 .addPackage(new MyReactPackage())
                 .setUseDeveloperSupport(true)
                 .setInitialLifecycleState(LifecycleState.RESUMED)

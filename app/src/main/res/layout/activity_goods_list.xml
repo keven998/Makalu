@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -59,11 +60,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/base_color_white"
-                android:dropDownVerticalOffset="10dp"
+                android:dropDownVerticalOffset="45dp"
                 android:gravity="center_horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:spinnerMode="dropdown" />
+                android:spinnerMode="dropdown"/>
 
             <Spinner
                 android:id="@+id/sort_spinner"
@@ -71,7 +72,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/base_color_white"
-                android:dropDownVerticalOffset="10dp"
+                android:dropDownVerticalOffset="45dp"
                 android:gravity="center_horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"

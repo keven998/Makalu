@@ -56,6 +56,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
         View footView = View.inflate(this,R.layout.footer_show_all,null);
         TextView showMore = (TextView) footView.findViewById(R.id.tv_show_all);
+        showMore.setText("查看全部玩乐");
         ImageView back = (ImageView) findViewById(R.id.iv_nav_back);
         tvStoreNum = (TextView) headView.findViewById(R.id.tv_store_num);
         tvRecommendTime = (TextView) headView.findViewById(R.id.tv_recommend_time);

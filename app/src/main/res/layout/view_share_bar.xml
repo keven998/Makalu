@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="14dp"
-        android:text="转发到其它平台"
+        android:text="分享到其它平台"
         android:textColor="@color/base_text_color_title"
         android:textSize="17sp" />
 

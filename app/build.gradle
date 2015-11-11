@@ -74,7 +74,7 @@ android {
         pp {}
         leshop {}
         shop360 {}
-        google{}
+        google {}
         productFlavors.all {
 
             flavor ->
@@ -101,12 +101,12 @@ dependencies {
     compile project(':library')
     compile files('libs/locSDK_3.3.jar')
     compile 'com.android.support:support-v4:23.0.1'
- //   compile 'com.android.support:appcompat-v7:23.2.0'
- //   compile 'com.android.support:cardview-v7:23.2.0'
-   compile 'com.android.support:recyclerview-v7:23.0.1'
+    //   compile 'com.android.support:appcompat-v7:23.2.0'
+    //   compile 'com.android.support:cardview-v7:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.jakewharton:butterknife:6.0.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-  //  compile files('libs/qiniu-android-sdk-7.0.1.jar')
+    //  compile files('libs/qiniu-android-sdk-7.0.1.jar')
     compile files('libs/Android_Location_V1.3.0.jar')
     //compile 'com.airbnb.android:airmapview:1.2.0'
     //compile files('libs/airmapview-1.1.5-sources.jar')
@@ -121,10 +121,11 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.13'
     compile files('libs/AMap_2DMap_v2.6.0_20150916.jar')
     compile files('libs/AMap_ Location_v1.4.0.1_20150910.jar')
-  //  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-   // releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    //  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    // releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
     compile 'com.facebook.react:react-native:0.13.0'
-     compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    compile 'com.squareup:android-times-square:1.6.4@aar'
 
 }
 
@@ -134,7 +135,8 @@ def releaseTime() {
 
 final def TARGET_BUNDLE_DIR = 'app/src/main/assets/'
 final def TARGET_BUNDLE_FILE = 'ReactNativeDevBundle.js'
-final def DOWNLOAD_URL = 'http://localhost:8081/src/index.android.bundle?platform=android&dev=false&minify=true'
+final
+def DOWNLOAD_URL = 'http://localhost:8081/src/index.android.bundle?platform=android&dev=false&minify=true'
 //final def DOWNLOAD_URL = 'http://localhost:8081/src/index.android.bundle?platform=android&dev=false'
 
 task downloadJSBundle << {
@@ -148,11 +150,11 @@ task downloadJSBundle << {
     }
 
     try {
-        new URL(DOWNLOAD_URL).withInputStream{ i -> f.withOutputStream{ it << i }}
+        new URL(DOWNLOAD_URL).withInputStream { i -> f.withOutputStream { it << i } }
     } catch (Exception e) {
         e.printStackTrace()
     }
 
 }
 
-//preBuild.dependsOn downloadJSBundle
+preBuild.dependsOn downloadJSBundle

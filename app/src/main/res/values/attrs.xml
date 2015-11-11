@@ -89,4 +89,7 @@
     <declare-styleable name="CircleItem">
         <attr name="item_name" format="string" />
     </declare-styleable>
+    <declare-styleable name="NumberPicker">
+        <attr name="default_num" format="integer" />
+    </declare-styleable>
 </resources>

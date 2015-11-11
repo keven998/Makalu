@@ -8,7 +8,7 @@
     >
 <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="165dp"
     >
     <ImageView
         android:id="@+id/iv_goods_img"
@@ -26,7 +26,6 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:padding="12dp"
-        android:background="@color/minhalf_transparent_color"
         android:text="保的家庭酒店"
         android:textColor="@color/base_color_white"
         android:textSize="19sp"
@@ -38,40 +37,40 @@
         android:layout_height="wrap_content"
         android:text="韩国"
         android:textSize="15sp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginLeft="7dp"
         android:drawableLeft="@drawable/search_total_place"
         android:textColor="@color/base_color_white"
         android:layout_gravity="bottom|left"
         />
     <FrameLayout
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="bottom|right"
         android:layout_marginRight="10dp">
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:src="@drawable/icon_price"
             />
         <LinearLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_goods_price"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center_horizontal|top"
                 android:gravity="center_horizontal|bottom"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:text="¥2342"/>
             <TextView
                 android:id="@+id/tv_goods_current_price"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center_horizontal|bottom"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:gravity="center_horizontal|top"
                 android:textColor="@color/base_color_white"
                 android:text="¥2342"/>
