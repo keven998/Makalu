@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.goods;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  */
 public class CommonUserInfoActivity extends PeachBaseActivity {
 
+    private int EDIT_INFO = 103;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,14 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         memberList.setAdapter(new UserAdapter(mContext, true));
         View footView = View.inflate(this, R.layout.footer_add_member_grey_line, null);
         memberList.addFooterView(footView);
+        TextView addMember = (TextView) footView.findViewById(R.id.add_member);
+        addMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CommonUserInfoActivity.this,UserInfoEditActivity.class);
+                startActivityForResult(intent,EDIT_INFO);
+            }
+        });
     }
 
     public class UserAdapter extends BaseAdapter {

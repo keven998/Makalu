@@ -46,5 +46,5 @@
     <string name="common_user_info">常用旅客信息</string>
     <string name="confirm">确定</string>
     <string name="edit_user_info">编辑旅客信息</string>
-    <string name="save">保存</string>
+    <string name="save_info">保存</string>
 </resources>
