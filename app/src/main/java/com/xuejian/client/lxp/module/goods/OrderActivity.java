@@ -30,8 +30,6 @@ public class OrderActivity extends PeachBaseActivity implements View.OnClickList
 
     @InjectView(R.id.tv_goods_name)
     TextView tvGoodsName;
-    @InjectView(R.id.tv_goods_price)
-    TextView tvGoodsPrice;
     @InjectView(R.id.tv_date)
     TextView tvDate;
     @InjectView(R.id.tv_select_date)
@@ -56,8 +54,6 @@ public class OrderActivity extends PeachBaseActivity implements View.OnClickList
     TextView tvTitle;
     @InjectView(R.id.tv_address_book)
     TextView  tv_address_book;
-    @InjectView(R.id.tv_address_book1)
-    TextView  tv_address_book1;
     public static int SELECTED_DATE = 101;
     public static int SELECTED_USER = 102;
     @Override
@@ -66,7 +62,6 @@ public class OrderActivity extends PeachBaseActivity implements View.OnClickList
         setContentView(R.layout.activity_order);
         ButterKnife.inject(this);
         tv_address_book.setOnClickListener(this);
-        tv_address_book1.setOnClickListener(this);
         ListView packageList = (ListView) findViewById(R.id.lv_choose);
         packageList.setAdapter(new CommonAdapter(mContext, R.layout.item_package_info, true));
         setListViewHeightBasedOnChildren(packageList);
@@ -90,7 +85,6 @@ public class OrderActivity extends PeachBaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_address_book:
-            case R.id.tv_address_book1:
                 Intent intent = new Intent(OrderActivity.this,CommonUserInfoActivity.class);
                 startActivityForResult(intent,SELECTED_USER);
                 break;

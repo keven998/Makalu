@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/iv_goods_img"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginLeft="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_toRightOf="@+id/iv_goods_img"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:weightSum="4">
+
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="北京直飞1泰国"
+                android:textColor="@color/color_text_ii"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_goods_package"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="套餐名"
+                android:textColor="@color/color_text_ii"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_goods_time"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="预约日期;2015年11月12日"
+                android:textColor="@color/color_text_ii"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_goods_price"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="¥12224"
+                android:textColor="@color/color_text_ii"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <TextView
+            android:id="@+id/tv_order_status"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="申请退款中"
+            android:textColor="@color/color_text_ii"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_connect_seller"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:text="联系卖家"
+            android:textColor="@color/app_theme_color"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <TextView
+            android:id="@+id/tv_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/pay_bg"
+            android:gravity="center_vertical"
+            android:padding="7dp"
+            android:text="立即支付"
+            android:textColor="@color/base_color_white"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+</LinearLayout>

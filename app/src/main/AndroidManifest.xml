@@ -549,6 +549,9 @@
             android:name=".module.goods.UserInfoEditActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".module.goods.OrderListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true" >
