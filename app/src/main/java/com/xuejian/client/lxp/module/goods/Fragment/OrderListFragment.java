@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
@@ -46,14 +45,15 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         for (int i = 0; i < 20; i++) {
             list.add("" + i);
         }
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager =new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(new OrderListAdapter(getActivity(),
                 list));
     }
 
     @Override
     public void onRefresh() {
-        Toast.makeText(getActivity(), "Refresh", Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -63,8 +63,10 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         }, 2000);
     }
 
-    class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
-
+    static class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
+        public interface OnItemClickListener{
+            void onItemClick(View view, int position);
+        }
         private List<String> mValues;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -96,5 +98,9 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         public int getItemCount() {
             return mValues.size();
         }
+        public void setOnItemClickListener(){
+
+        }
+
     }
 }
