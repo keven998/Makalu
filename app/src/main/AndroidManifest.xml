@@ -537,7 +537,7 @@
             android:name="com.umeng.socialize.view.ShareActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.goods.OrderActivity"
+            android:name=".module.goods.OrderCreateActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.DatePickActivity"
@@ -550,6 +550,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.OrderListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.goods.OrderDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"

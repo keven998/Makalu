@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.goods.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +51,16 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         LinearLayoutManager linearLayoutManager =new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new OrderListAdapter(getActivity(),
-                list));
+        OrderListAdapter adapter = new OrderListAdapter(getActivity(),
+                list);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -67,14 +78,16 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         public interface OnItemClickListener{
             void onItemClick(View view, int position);
         }
+        private OnItemClickListener listener;
         private List<String> mValues;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final ImageView mImageView;
-
+            public final TextView tvGoodsName;
             public ViewHolder(View view) {
                 super(view);
                 mImageView = (ImageView) view.findViewById(R.id.iv_goods_img);
+                tvGoodsName = (TextView) view.findViewById(R.id.tv_goods_name);
             }
         }
 
@@ -90,16 +103,25 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+
             ImageLoader.getInstance().displayImage("http://taozi-uploads.qiniudn.com/avt_100004_1443601212983.jpg", holder.mImageView, UILUtils.getDefaultOption());
+            holder.mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener!=null){
+                        listener.onItemClick(holder.itemView,position);
+                    }
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
             return mValues.size();
         }
-        public void setOnItemClickListener(){
-
+        public void setOnItemClickListener(OnItemClickListener listener){
+            this.listener = listener;
         }
 
     }

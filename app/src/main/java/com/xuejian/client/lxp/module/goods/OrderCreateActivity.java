@@ -26,7 +26,7 @@ import butterknife.InjectView;
 /**
  * Created by yibiao.qin on 2015/11/9.
  */
-public class OrderActivity extends PeachBaseActivity implements View.OnClickListener{
+public class OrderCreateActivity extends PeachBaseActivity implements View.OnClickListener{
 
     @InjectView(R.id.tv_goods_name)
     TextView tvGoodsName;
@@ -75,7 +75,7 @@ public class OrderActivity extends PeachBaseActivity implements View.OnClickList
         tvSelectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderActivity.this,DatePickActivity.class);
+                Intent intent = new Intent(OrderCreateActivity.this,DatePickActivity.class);
                 startActivityForResult(intent,SELECTED_DATE);
             }
         });
@@ -85,7 +85,7 @@ public class OrderActivity extends PeachBaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_address_book:
-                Intent intent = new Intent(OrderActivity.this,CommonUserInfoActivity.class);
+                Intent intent = new Intent(OrderCreateActivity.this,CommonUserInfoActivity.class);
                 startActivityForResult(intent,SELECTED_USER);
                 break;
         }
