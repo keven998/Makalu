@@ -242,6 +242,9 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="80dp"
                         android:layout_marginRight="10dp"
+                        android:textColor="@color/color_text_ii"
+                        android:paddingLeft="10dp"
+                        android:textSize="14sp"
                         android:background="@drawable/bg_common" />
 
                     <TextView
@@ -298,6 +301,9 @@
                         android:layout_marginLeft="80dp"
                         android:layout_marginRight="10dp"
                         android:inputType="phone"
+                        android:textColor="@color/color_text_ii"
+                        android:paddingLeft="10dp"
+                        android:textSize="14sp"
                         android:background="@drawable/bg_common" />
                 </FrameLayout>
             </LinearLayout>
@@ -343,6 +349,9 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="80dp"
                         android:layout_marginRight="10dp"
+                        android:textColor="@color/color_text_ii"
+                        android:paddingLeft="10dp"
+                        android:textSize="14sp"
                         android:background="@drawable/bg_common" />
                 </FrameLayout>
             </LinearLayout>
@@ -380,6 +389,9 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="80dp"
                         android:layout_marginRight="10dp"
+                        android:textColor="@color/color_text_ii"
+                        android:paddingLeft="10dp"
+                        android:textSize="14sp"
                         android:background="@drawable/bg_common" />
                 </FrameLayout>
             </LinearLayout>
@@ -419,6 +431,9 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="80dp"
                         android:layout_marginRight="10dp"
+                        android:textColor="@color/color_text_ii"
+                        android:paddingLeft="10dp"
+                        android:textSize="14sp"
                         android:background="@drawable/bg_common"
                         android:lines="4" />
                 </FrameLayout>
@@ -435,7 +450,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="@color/base_color_white"
-                android:checked="true"
                 android:drawableLeft="@drawable/checker_for_checkbox"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
@@ -443,7 +457,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
-                android:text="我已阅读并同意《旅行派条款》"
+                android:textColorLink="@color/app_theme_color"
                 android:textColor="@color/color_text_iii"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -468,12 +482,13 @@
             android:textSize="19sp" />
 
         <TextView
+            android:id="@+id/tv_submit_order"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:background="@color/price_color"
             android:gravity="center"
-            android:text="提交订单"
+            android:text="@string/submit_order"
             android:textColor="@color/base_color_white"
             android:textSize="19sp" />
     </LinearLayout>

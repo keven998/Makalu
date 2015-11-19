@@ -10,11 +10,10 @@ import com.squareup.timessquare.CalendarPickerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 
-import java.util.ArrayList;
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by yibiao.qin on 2015/11/10.
@@ -32,18 +31,19 @@ public class DatePickActivity extends PeachBaseActivity {
         Date today = new Date();
         calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
         calendar.init(today, nextYear.getTime())
-                .inMode(CalendarPickerView.SelectionMode.MULTIPLE);
+                .inMode(CalendarPickerView.SelectionMode.SINGLE);
               //  .withSelectedDate(today);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                List<Date> dates = calendar.getSelectedDates();
-                ArrayList<String> data = new ArrayList<String>();
-                for (Date date : dates) {
-                    data.add(date.toString());
-                }
-                intent.putExtra("date",data);
+                Date date = calendar.getSelectedDate();
+//                ArrayList<String> data = new ArrayList<String>();
+//                for (Date date : dates) {
+//                    data.add(date.toString());
+//                }
+                String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                intent.putExtra("date",s);
                 setResult(RESULT_OK, intent);
                 finish();
             }

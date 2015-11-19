@@ -18,7 +18,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.module.goods.DrawbackActivity;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
+import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,18 +82,23 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         }
         private OnItemClickListener listener;
         private List<String> mValues;
-
+        private Context mContext;
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final ImageView mImageView;
             public final TextView tvGoodsName;
+            public final TextView tvPay;
+            public final TextView tvCancel;
             public ViewHolder(View view) {
                 super(view);
                 mImageView = (ImageView) view.findViewById(R.id.iv_goods_img);
                 tvGoodsName = (TextView) view.findViewById(R.id.tv_goods_name);
+                tvPay = (TextView) view.findViewById(R.id.tv_pay);
+                tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
             }
         }
 
         public OrderListAdapter(Context context, List<String> items) {
+            mContext = context;
             mValues = items;
         }
 
@@ -109,9 +116,23 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
             holder.mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener!=null){
-                        listener.onItemClick(holder.itemView,position);
+                    if (listener != null) {
+                        listener.onItemClick(holder.itemView, position);
                     }
+                }
+            });
+            holder.tvPay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PaymentActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
+            holder.tvCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, DrawbackActivity.class);
+                    mContext.startActivity(intent);
                 }
             });
         }

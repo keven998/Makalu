@@ -22,22 +22,53 @@ import java.util.ArrayList;
 public class CommonUserInfoActivity extends PeachBaseActivity {
 
     private int EDIT_INFO = 103;
+    TextView tvBack;
+    TextView tv_confirm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_user);
-        ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
-        memberList.setAdapter(new UserAdapter(mContext, true));
-        View footView = View.inflate(this, R.layout.footer_add_member_grey_line, null);
-        memberList.addFooterView(footView);
-        TextView addMember = (TextView) footView.findViewById(R.id.add_member);
-        addMember.setOnClickListener(new View.OnClickListener() {
+        int type = getIntent().getIntExtra("ListType",-1);
+        tvBack = (TextView) findViewById(R.id.tv_title_back);
+        tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CommonUserInfoActivity.this,UserInfoEditActivity.class);
-                startActivityForResult(intent,EDIT_INFO);
+                finish();
             }
         });
+        tv_confirm = (TextView) findViewById(R.id.tv_confirm);
+        initView(type);
+
+    }
+
+    private void initView(int type) {
+        TextView title = (TextView) findViewById(R.id.title);
+        if (type==1){
+            title.setText(R.string.common_user_info);
+            ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
+            memberList.setAdapter(new UserAdapter(mContext, true));
+            View footView = View.inflate(this, R.layout.footer_add_member_grey_line, null);
+            memberList.addFooterView(footView);
+            TextView addMember = (TextView) footView.findViewById(R.id.add_member);
+            addMember.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CommonUserInfoActivity.this,UserInfoEditActivity.class);
+                    startActivityForResult(intent, EDIT_INFO);
+                }
+            });
+            tv_confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+        }else if (type==2){
+            title.setText(R.string.user_info);
+            ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
+            memberList.setAdapter(new UserInfoAdapter());
+        }
     }
 
     public class UserAdapter extends BaseAdapter {
@@ -109,5 +140,49 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         }
     }
 
+    public class UserInfoAdapter extends BaseAdapter {
 
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder1 viewHolder1;
+
+            if (convertView == null) {
+                convertView = View.inflate(mContext, R.layout.item_order_users, null);
+
+                viewHolder1 = new ViewHolder1();
+                viewHolder1.username = (TextView) convertView.findViewById(R.id.tv_name);
+                viewHolder1.id = (TextView) convertView.findViewById(R.id.tv_id);
+                viewHolder1.tel = (TextView) convertView.findViewById(R.id.tv_tel);
+                viewHolder1.title = (TextView) convertView.findViewById(R.id.tv_num);
+                convertView.setTag(viewHolder1);
+
+            } else {
+                viewHolder1 = (ViewHolder1) convertView.getTag();
+            }
+            viewHolder1.title.setText(String.format("旅客%d:",position+1));
+            return convertView;
+        }
+
+        class ViewHolder1 {
+            private TextView username;
+            private TextView tel;
+            private TextView id;
+            private TextView title;
+        }
+    }
 }

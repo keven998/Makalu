@@ -9,15 +9,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:padding="5dp"
+        >
 
         <ImageView
+            android:layout_marginTop="5dp"
             android:id="@+id/iv_goods_img"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_marginLeft="10dp" />
 
         <LinearLayout
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:layout_toRightOf="@+id/iv_goods_img"
@@ -106,6 +109,20 @@
         android:layout_height="55dp">
 
         <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tv_pay"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/pay_bg"
+            android:gravity="center_vertical"
+            android:padding="7dp"
+            android:text="@string/cancel_order"
+            android:textColor="@color/base_color_white"
+            android:textSize="13sp" />
+
+        <TextView
             android:id="@+id/tv_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -115,7 +132,7 @@
             android:background="@drawable/pay_bg"
             android:gravity="center_vertical"
             android:padding="7dp"
-            android:text="立即支付"
+            android:text="@string/pay_it_now"
             android:textColor="@color/base_color_white"
             android:textSize="13sp" />
     </RelativeLayout>

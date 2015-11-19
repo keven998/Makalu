@@ -80,6 +80,8 @@
             android:id="@+id/et_family_name"
             android:layout_width="0dp"
             android:layout_height="52dp"
+            android:hint="你的姓氏"
+            android:textColorHint="@color/color_text_v"
             android:background="@color/base_color_white"
             android:textColor="@color/color_text_iii"
             android:textSize="14sp"
@@ -127,6 +129,8 @@
             android:id="@+id/et_name"
             android:layout_width="0dp"
             android:layout_height="52dp"
+            android:hint="你的名字"
+            android:textColorHint="@color/color_text_v"
             android:background="@color/base_color_white"
             android:textColor="@color/color_text_iii"
             android:textSize="14sp"
@@ -233,7 +237,7 @@
             android:textSize="14sp"
             android:gravity="left|center_vertical"
             android:paddingLeft="20dp"
-            android:text="1990-11-04"
+            android:text="1990-01-01"
             />
         <ImageView
             android:id="@+id/iv_select_birthday"

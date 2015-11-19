@@ -55,4 +55,16 @@
     <string name="consumption_time">使用日期:</string>
     <string name="reserve_count">预定数量:</string>
     <string name="order_price">订购金额</string>
+    <string name="cancel_order">取消订单</string>
+    <string name="pay_it_now">立即支付</string>
+    <string name="submit_order">提交订单</string>
+    <string name="user_info">旅客信息</string>
+    <string name="payment">付款方式</string>
+    <string name="choose_payment">选择支付方式</string>
+    <string name="alipay">支付宝</string>
+    <string name="weixin_pay">微信支付</string>
+    <string name="apply_for_drawback">申请退款</string>
+    <string name="reason_for_drawback">退款原因</string>
+    <string name="leave_message">留言</string>
+    <string name="submit_apply">提交申请</string>
 </resources>

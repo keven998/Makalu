@@ -20,14 +20,13 @@
             android:paddingRight="30dp" />
 
         <TextView
-            android:id="@+id/strategy_title"
+            android:id="@+id/title"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/common_user_info"
             android:textColor="@color/color_text_ii"
             android:textSize="18sp" />
 

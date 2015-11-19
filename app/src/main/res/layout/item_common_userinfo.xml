@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="45dp"
+            android:layout_marginLeft="40dp"
             android:textSize="15sp"
             android:textColor="@color/color_text_ii"
             android:text="身份证1231533534535636" />

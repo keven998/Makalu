@@ -3,6 +3,11 @@ package com.xuejian.client.lxp.module.goods;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,11 +17,12 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.widget.NumberPicker;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 import java.util.ArrayList;
 
@@ -26,7 +32,7 @@ import butterknife.InjectView;
 /**
  * Created by yibiao.qin on 2015/11/9.
  */
-public class OrderCreateActivity extends PeachBaseActivity implements View.OnClickListener{
+public class OrderCreateActivity extends PeachBaseActivity implements View.OnClickListener {
 
     @InjectView(R.id.tv_goods_name)
     TextView tvGoodsName;
@@ -47,21 +53,26 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     @InjectView(R.id.et_message)
     EditText etMessage;
     @InjectView(R.id.ctv_1)
-    CheckedTextView ctv1;
+    CheckedTextView ctvAgreement;
     @InjectView(R.id.tv_title_back)
     TextView tvTitleBack;
     @InjectView(R.id.strategy_title)
     TextView tvTitle;
     @InjectView(R.id.tv_address_book)
-    TextView  tv_address_book;
+    TextView tv_address_book;
+    @InjectView(R.id.tv_submit_order)
+    TextView tvSubmitOrder;
     public static int SELECTED_DATE = 101;
     public static int SELECTED_USER = 102;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         ButterKnife.inject(this);
         tv_address_book.setOnClickListener(this);
+        tvSubmitOrder.setOnClickListener(this);
+        ctvAgreement.setOnClickListener(this);
         ListView packageList = (ListView) findViewById(R.id.lv_choose);
         packageList.setAdapter(new CommonAdapter(mContext, R.layout.item_package_info, true));
         setListViewHeightBasedOnChildren(packageList);
@@ -75,18 +86,44 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         tvSelectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderCreateActivity.this,DatePickActivity.class);
-                startActivityForResult(intent,SELECTED_DATE);
+                Intent intent = new Intent(OrderCreateActivity.this, DatePickActivity.class);
+                startActivityForResult(intent, SELECTED_DATE);
             }
         });
+
+
+        ctvAgreement.setChecked(true);
+        SpannableString priceStr = new SpannableString("《旅行派条款》");
+   //     priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        priceStr.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Intent aboutIntent = new Intent(OrderCreateActivity.this, PeachWebViewActivity.class);
+                aboutIntent.putExtra("url", H5Url.AGREEMENT);
+                aboutIntent.putExtra("title", "注册协议");
+                startActivity(aboutIntent);
+            }
+        }, 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder spb = new SpannableStringBuilder();
+        spb.append("我已阅读并同意:").append(priceStr);
+        ctvAgreement.setText(spb);
+        ctvAgreement.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_address_book:
-                Intent intent = new Intent(OrderCreateActivity.this,CommonUserInfoActivity.class);
-                startActivityForResult(intent,SELECTED_USER);
+                Intent intent = new Intent(OrderCreateActivity.this, CommonUserInfoActivity.class);
+                intent.putExtra("ListType", 1);
+                startActivityForResult(intent, SELECTED_USER);
+                break;
+            case R.id.tv_submit_order:
+                Intent intent1 = new Intent(OrderCreateActivity.this, OrderListActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.ctv_1:
+                ctvAgreement.setChecked(!ctvAgreement.isChecked());
                 break;
         }
     }
@@ -202,17 +239,22 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==RESULT_OK){
-            if (requestCode==SELECTED_DATE){
-                ArrayList<String> list = data.getStringArrayListExtra("date");
-                if (list.size()>0){
-                    StringBuilder sb = new StringBuilder();
-                    for (String s : list) {
-                        sb.append(s+"\n");
-                    }
-                    Toast.makeText(mContext,sb.toString(),Toast.LENGTH_SHORT).show();
-                }
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECTED_DATE) {
+                String date = data.getStringExtra("date");
+//                if (list.size()>0){
+//                    StringBuilder sb = new StringBuilder();
+//                    for (String s : list) {
+//                        sb.append(s+"\n");
+//                    }
+                tvDate.setText(date);
+                // Toast.makeText(mContext, date, Toast.LENGTH_SHORT).show();
+            }else if (requestCode == SELECTED_USER){
+                etName.setText("赵小琴");
+                etTel.setText("13567683453");
+                etEmail.setText("1234235365@gmail.com");
             }
         }
     }
+
 }
