@@ -24,8 +24,6 @@ import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.widget.NumberPicker;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
-import java.util.ArrayList;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -94,7 +92,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 
         ctvAgreement.setChecked(true);
         SpannableString priceStr = new SpannableString("《旅行派条款》");
-   //     priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //     priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         priceStr.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
@@ -132,18 +130,11 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 
         private Context mContext;
         private int ResId;
-        private ArrayList<Boolean> status;
         private int lastId;
 
         public CommonAdapter(Context c, int ResId, boolean selected) {
             mContext = c;
             this.ResId = ResId;
-            if (selected) {
-                status = new ArrayList<>();
-                status.add(true);
-                status.add(false);
-                status.add(false);
-            }
 
         }
 
@@ -181,8 +172,6 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 viewHolder1.content.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        status.set(lastId, false);
-                        status.set(position, true);
                         lastId = position;
                         notifyDataSetChanged();
                     }
@@ -190,8 +179,10 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 viewHolder1.content.setText("套餐A五星级酒店");
                 if (position == lastId) {
                     viewHolder1.content.setBackgroundResource(R.drawable.icon_package_bg_selected);
+                    viewHolder1.content.setPadding(10,0,0,0);
                 } else {
                     viewHolder1.content.setBackgroundResource(R.drawable.icon_package_bg_default);
+                    viewHolder1.content.setPadding(10,0,0,0);
                 }
             } else if (ResId == R.layout.item_member_info) {
 
@@ -249,7 +240,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 //                    }
                 tvDate.setText(date);
                 // Toast.makeText(mContext, date, Toast.LENGTH_SHORT).show();
-            }else if (requestCode == SELECTED_USER){
+            } else if (requestCode == SELECTED_USER) {
                 etName.setText("赵小琴");
                 etTel.setText("13567683453");
                 etEmail.setText("1234235365@gmail.com");

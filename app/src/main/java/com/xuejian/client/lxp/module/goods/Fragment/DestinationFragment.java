@@ -12,18 +12,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
-import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
+import com.xuejian.client.lxp.bean.CountryBean;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView;
 import com.xuejian.client.lxp.module.goods.CountryListActivity;
@@ -36,22 +38,41 @@ import java.util.ArrayList;
 public class DestinationFragment extends PeachBaseFragment implements CircleLayout.OnRotationFinishedListener, AbsListView.OnScrollListener {
     private ListView listView;
     private TalentLocAdapter adapter;
-    boolean flag = true;
     CircleLayout circleLayout;
     LinearLayout menu;
     ImageView showMenu;
-
+    String [] code = new String[]{"RCOM","AS","EU","AF","NA","OC","SA"};
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_destination, container, false);
         initView(view);
-        initData();
+        getData(code[0]);
         return view;
     }
 
 
-    private void initData() {
+    private void getData(String code) {
+        TravelApi.getCountryList(code, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<CountryBean> list = CommonJson4List.fromJson(result, CountryBean.class);
+                adapter.getList().clear();
+                adapter.getList().addAll(list.result);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
 
@@ -62,13 +83,15 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         circleLayout.setOnRotationFinishedListener(this);
         listView = (ListView) view.findViewById(R.id.talent_loc_list);
         listView.setOnScrollListener(this);
-        ArrayList<CountryWithExpertsBean> data = new ArrayList<>();
+        ArrayList<CountryBean> data = new ArrayList<>();
         adapter = new TalentLocAdapter(getActivity(), data);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), CountryListActivity.class);
+                intent.putExtra("id",adapter.getItem(position).id);
+                intent.putExtra("name",adapter.getItem(position).zhName);
                 startActivity(intent);
             }
         });
@@ -101,6 +124,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     public void onRotationFinished(View view, String name) {
         ((CircleTextView) view).setTextColor(getResources().getColor(R.color.app_theme_color));
         ((CircleTextView) view).setTextSize(14f);
+        getData(code[Integer.parseInt(name)]);
     }
 
     @Override
@@ -123,11 +147,11 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 
     private class TalentLocAdapter extends BaseAdapter {
         private DisplayImageOptions poptions;
-        private ArrayList<CountryWithExpertsBean> list;
+        private ArrayList<CountryBean> list;
         private Context mCxt;
         private ImageLoader mImgLoader;
 
-        public TalentLocAdapter(Context context, ArrayList<CountryWithExpertsBean> list) {
+        public TalentLocAdapter(Context context, ArrayList<CountryBean> list) {
             mCxt = context;
             this.list = list;
             mImgLoader = ImageLoader.getInstance();
@@ -140,60 +164,55 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                     .build();
         }
 
-        public ArrayList<CountryWithExpertsBean> getList() {
+        public ArrayList<CountryBean> getList() {
             return list;
         }
 
         @Override
-        public Object getItem(int position) {
+        public CountryBean getItem(int position) {
             return list.get(position);
         }
 
         @Override
         public int getCount() {
-            return 10;
-            //   return list.size();
+            return list.size();
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            final CountryBean bean = (CountryBean) getItem(position);
             if (convertView == null) {
                 convertView = View.inflate(mCxt, R.layout.cell_destinaiton, null);
-            }
-
-            ViewHolder holder = (ViewHolder) convertView.getTag();
-            if (holder == null) {
                 holder = new ViewHolder();
-                holder.rl_country = (FrameLayout) convertView.findViewById(R.id.fl_country);
-                holder.bgImage = (ImageView) convertView.findViewById(R.id.talent_loc_img);
-                holder.numSum = (TextView) convertView.findViewById(R.id.talent_loc_num);
-                holder.ennameText = (TextView) convertView.findViewById(R.id.loc_en_name);
+                holder.bgImage = (ImageView) convertView.findViewById(R.id.iv_country_img);
+                holder.zhName = (TextView) convertView.findViewById(R.id.tv_country_zh_name);
+                holder.enName = (TextView) convertView.findViewById(R.id.tv_country_en_name);
+                holder.storeCount = (TextView) convertView.findViewById(R.id.tv_store_num);
                 convertView.setTag(holder);
-            }
-
-            if (flag) {
-                mImgLoader.displayImage("http://images.taozilvxing.com/78b3baf2f60d02ea70d7a8a30dfaf0b1?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!994x460a4a186/thumbnail/1200", holder.bgImage, poptions);
-                flag = false;
             } else {
-                flag = true;
-                mImgLoader.displayImage("http://images.taozilvxing.com/af563f2f2e6bea2560857c6026e428a1?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!998x570a2a2/thumbnail/1200", holder.bgImage, poptions);
+                holder = (ViewHolder) convertView.getTag();
             }
-            holder.ennameText.setText("China");
-            holder.numSum.setText("中国");
+            if (bean.images.size() > 0) {
+                mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
+            }
+            holder.enName.setText(bean.enName);
+            holder.zhName.setText(bean.zhName);
+            holder.storeCount.setText(String.valueOf(bean.commodityCnt));
             return convertView;
         }
 
 
         private class ViewHolder {
-            private FrameLayout rl_country;
             private ImageView bgImage;
-            private TextView numSum;
-            private TextView ennameText;
+            private TextView zhName;
+            private TextView enName;
+            private TextView storeCount;
         }
     }
 

@@ -21,21 +21,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_country_name"
+                android:id="@+id/tv_city_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="新加坡"
                 android:textColor="@color/base_color_white"
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/tv_country_name_en"
+                android:id="@+id/tv_city_name_en"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="10dp"
-                android:text="Singapore"
                 android:textColor="@color/base_color_white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -59,7 +57,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:text="1/4"
                 android:textColor="@color/base_color_white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -73,14 +70,17 @@
 
         <TextView
             android:id="@+id/tv_recommend_time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="推荐旅行时间：12-15"
+            android:layout_marginRight="40dp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="@color/color_text_ii"
             android:textSize="15sp" />
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:id="@+id/tv_store_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +89,6 @@
             android:drawableLeft="@drawable/icon_store"
             android:drawablePadding="4dp"
             android:layout_centerVertical="true"
-            android:text="26"
             android:textColor="@color/color_text_ii"
             android:textSize="15sp" />
     </RelativeLayout>

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -22,7 +23,10 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.CityBean;
 import com.xuejian.client.lxp.bean.ImageBean;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.module.goods.GoodsList;
@@ -40,18 +44,18 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
     ListView listView;
     AutoScrollViewPager viewPager;
-    ArrayList<String> picList = new ArrayList<>();
     private final List<Tag> mTags = new ArrayList<Tag>();
     TextView tvCountryName;
     TextView tvCountryNameEn;
     TextView tvCountryPicNum;
     TextView tvRecommendTime;
     TextView tvStoreNum;
-
+    String id;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_info);
+        id = getIntent().getStringExtra("id");
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
         View footView = View.inflate(this,R.layout.footer_show_all,null);
@@ -61,8 +65,8 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         tvStoreNum = (TextView) headView.findViewById(R.id.tv_store_num);
         tvRecommendTime = (TextView) headView.findViewById(R.id.tv_recommend_time);
         tvCountryPicNum = (TextView) headView.findViewById(R.id.tv_country_pic_num);
-        tvCountryName = (TextView) headView.findViewById(R.id.tv_country_name);
-        tvCountryNameEn = (TextView) headView.findViewById(R.id.tv_country_name_en);
+        tvCountryName = (TextView) headView.findViewById(R.id.tv_city_name);
+        tvCountryNameEn = (TextView) headView.findViewById(R.id.tv_city_name_en);
         showMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,14 +77,66 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               finish();
+                finish();
             }
         });
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
-        viewPager.setAdapter(new GoodsPageAdapter(this, null));
         listView.addHeaderView(headView);
         listView.addFooterView(footView);
         listView.setAdapter(new RecommendGoodsAdapter(this));
+
+        initData(id);
+
+
+
+
+    }
+
+    private void initData(String id) {
+        TravelApi.getCityInfo(id, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<CityBean> bean = CommonJson.fromJson(result,CityBean.class);
+                bindView(bean.result);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+        TravelApi.getCityDetail(id,"", new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void bindView(final CityBean bean) {
+        tvCountryName.setText(bean.zhName);
+        tvCountryNameEn.setText(bean.enName);
+        tvRecommendTime.setText(String.format("推荐游玩时间:%s",bean.travelMonth));
+        tvStoreNum.setText(String.valueOf(bean.commodityCnt));
+        System.out.println("size " + bean.images.size());
+        tvCountryPicNum.setText(String.format("%d/%d", 1, bean.images.size()));
+        viewPager.setAdapter(new GoodsPageAdapter(this, bean.images));
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -89,7 +145,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
             @Override
             public void onPageSelected(int position) {
-                tvCountryPicNum.setText(String.format("%d/4",position + 1));
+                tvCountryPicNum.setText(String.format("%d/%d", position + 1,bean.images.size()));
             }
 
             @Override
@@ -97,10 +153,6 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
             }
         });
-        for (int i = 0; i < 6; i++) {
-            picList.add("http://images.taozilvxing.com/c8915e680131f7e94358c52d50de9b70?imageView2/2/w/200");
-        }
-
     }
 
     @Override
@@ -120,7 +172,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
         @Override
         public int getCount() {
-            return 4;
+            return mDatas.size();
         }
 
         @Override
@@ -135,8 +187,8 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             imageView.setLayoutParams(layoutParams);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
-            //      ImageBean ib = mDatas.get(position);
-            ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/d42dfcd90bcbbb1ebb0598031eda45fc?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!1982x1238a54a80/thumbnail/480", imageView, UILUtils.getDefaultOption());
+            ImageBean ib = mDatas.get(position);
+            ImageLoader.getInstance().displayImage(ib.url, imageView, UILUtils.getDefaultOption());
             container.addView(imageView, 0);
             return imageView;
         }

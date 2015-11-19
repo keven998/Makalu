@@ -18,6 +18,8 @@ public class CountryBean implements Parcelable {
     public ArrayList<LocBean> destinations = new ArrayList<LocBean>();
     public boolean isOpened;
     public boolean isSelect;
+    public int rank;
+    public int commodityCnt;
 
     @Override
     public int describeContents() {
@@ -33,6 +35,8 @@ public class CountryBean implements Parcelable {
         dest.writeString(this.desc);
         dest.writeSerializable(this.images);
         dest.writeSerializable(this.destinations);
+        dest.writeInt(this.rank);
+        dest.writeInt(this.commodityCnt);
     }
 
     public CountryBean() {
@@ -46,6 +50,8 @@ public class CountryBean implements Parcelable {
         this.desc = in.readString();
         this.images = (ArrayList<ImageBean>) in.readSerializable();
         this.destinations = (ArrayList<LocBean>) in.readSerializable();
+        this.rank = in.readInt();
+        this.commodityCnt = in.readInt();
     }
 
     public static final Creator<CountryBean> CREATOR = new Creator<CountryBean>() {

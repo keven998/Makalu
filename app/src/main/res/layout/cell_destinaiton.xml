@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/talent_loc_img"
+        android:id="@+id/iv_country_img"
         android:layout_width="match_parent"
         android:layout_height="@dimen/talent_loc_cell_height"
         android:scaleType="centerCrop" />
@@ -38,7 +38,7 @@
                 android:background="#60ffffff" />
 
             <TextView
-                android:id="@+id/talent_loc_num"
+                android:id="@+id/tv_country_zh_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -56,7 +56,7 @@
                 android:background="#60ffffff"  />
 
             <TextView
-                android:id="@+id/loc_en_name"
+                android:id="@+id/tv_country_en_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -67,7 +67,7 @@
 
 
         <TextView
-            android:id="@+id/tv_city_num"
+            android:id="@+id/tv_store_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

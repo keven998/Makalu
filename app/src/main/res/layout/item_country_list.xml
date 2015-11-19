@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="456"
             android:drawablePadding="2dp"
+            android:text="23"
             android:textColor="@color/base_color_white"
             android:drawableTop="@drawable/icon_store_white"
             android:textSize="10sp" />
@@ -37,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="韩国\nKorea"
         android:textColor="@color/base_color_white"
         android:textSize="14sp" />
 </FrameLayout>

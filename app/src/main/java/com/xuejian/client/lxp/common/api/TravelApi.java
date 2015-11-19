@@ -116,6 +116,44 @@ public class TravelApi extends BaseApi {
 
     public final static String RECOMMEND_KEYWORD ="/search/hot-queries";
 
+
+    public final static String COUNTRY_LIST="/geo/countries";
+    public final static String CITY_LIST="/geo/localities";
+
+    public static void getCountryList(String code, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + COUNTRY_LIST);
+        request.putUrlParams("continentCode", code);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
+    public static void getCityList(String countryId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CITY_LIST);
+        request.putUrlParams("countryId", countryId);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
+    public static void getCityInfo(String cityId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CITY_LIST + "/" + cityId);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
+    public static void getCityDetail(String cityId, String field ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CITY_LIST + "/" + cityId + "/details");
+        request.putUrlParams("countryId", field);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
     /**
      * 获取目的地推荐
      *

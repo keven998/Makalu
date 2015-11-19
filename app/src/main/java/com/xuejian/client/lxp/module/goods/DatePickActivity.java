@@ -25,27 +25,32 @@ public class DatePickActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
         TextView back = (TextView) findViewById(R.id.tv_title_back);
-        final CalendarPickerView calendar=(CalendarPickerView) findViewById(R.id.calendar_view);
+        final CalendarPickerView calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
         calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
         calendar.init(today, nextYear.getTime())
                 .inMode(CalendarPickerView.SelectionMode.SINGLE);
-              //  .withSelectedDate(today);
+        //  .withSelectedDate(today);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+
                 Date date = calendar.getSelectedDate();
 //                ArrayList<String> data = new ArrayList<String>();
 //                for (Date date : dates) {
 //                    data.add(date.toString());
 //                }
-                String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                intent.putExtra("date",s);
-                setResult(RESULT_OK, intent);
-                finish();
+                try {
+                    Intent intent = new Intent();
+                    String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                    intent.putExtra("date", s);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
