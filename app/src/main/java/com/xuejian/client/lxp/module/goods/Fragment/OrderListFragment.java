@@ -18,7 +18,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.module.goods.DrawbackActivity;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
@@ -30,6 +29,18 @@ import java.util.List;
  */
 public class OrderListFragment extends PeachBaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     SwipeRefreshLayout mSwipeRefreshWidget;
+    private int type;
+    public static final int ALL =1;
+    public static final int NEED_PAY =2;
+    public static final int PROCESS =3;
+    public static final int AVAILABLE =4;
+    public static final int DRAWBACK =5;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        type = getArguments().getInt("type");
+    }
 
     @Nullable
     @Override
@@ -37,10 +48,14 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         View view = (View) inflater.inflate(
                 R.layout.fragment_order_list, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerview);
+        TextView empty = (TextView) view.findViewById(R.id.empty_view);
         mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setOnRefreshListener(this);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.app_theme_color);
         setupRecyclerView(rv);
+//        rv.setVisibility(View.GONE);
+//        empty.setVisibility(View.VISIBLE);
+//        empty.setText("您没有处理中的订单");
         return view;
     }
 
@@ -125,13 +140,6 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PaymentActivity.class);
-                    mContext.startActivity(intent);
-                }
-            });
-            holder.tvCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, DrawbackActivity.class);
                     mContext.startActivity(intent);
                 }
             });

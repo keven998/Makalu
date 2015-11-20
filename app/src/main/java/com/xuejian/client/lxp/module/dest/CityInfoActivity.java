@@ -145,12 +145,23 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
             @Override
             public void onPageSelected(int position) {
-                tvCountryPicNum.setText(String.format("%d/%d", position + 1,bean.images.size()));
+                tvCountryPicNum.setText(String.format("%d/%d", position + 1, bean.images.size()));
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+
+
+        findViewById(R.id.btn_note).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                intent.putExtra("keyword", bean.zhName);
+                intent.putExtra("id", bean.id);
+                startActivity(intent);
             }
         });
     }

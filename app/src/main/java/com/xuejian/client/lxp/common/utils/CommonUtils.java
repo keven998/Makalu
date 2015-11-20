@@ -436,4 +436,12 @@ public class CommonUtils {
         }
         return -1;
     }
+
+    public static String formatDuring(long mss) {
+        long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (mss % (1000 * 60)) / 1000;
+        return hours + " 小时 " + minutes + " 分 "
+                + seconds + " 秒 ";
+    }
 }

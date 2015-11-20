@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/my_panpan_frame"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_bar_height"
+            android:background="@color/base_color_white">
+
+            <ImageView
+                android:id="@+id/setting_head_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="12dp"
+                android:paddingRight="30dp"
+                android:scaleType="center"
+                android:src="@drawable/selector_ic_nav_back"
+                android:visibility="gone" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="我的·旅行派"
+                android:textColor="@color/color_text_ii"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/setting_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="32dp"
+                android:paddingRight="14dp"
+                android:singleLine="true"
+                android:text="设置"
+                android:textColor="@color/color_text_ii"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_line" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/user_info_pannel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="25dp">
+
+
+            <com.xuejian.client.lxp.common.widget.RoundImageBoarderView
+                android:id="@+id/user_avatar"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                imagecontrol:border_outside_color="#FFFFFFFE"
+                imagecontrol:border_thickness="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
+
+

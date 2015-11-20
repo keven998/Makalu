@@ -67,4 +67,9 @@
     <string name="reason_for_drawback">退款原因</string>
     <string name="leave_message">留言</string>
     <string name="submit_apply">提交申请</string>
+    <string name="departure_date">出行日期</string>
+    <string name="select_date">选择日期</string>
+    <string name="edit">编辑</string>
+    <string name="add_user_info">添加旅客信息</string>
+    <string name="select__contact">选择旅客为联系人</string>
 </resources>

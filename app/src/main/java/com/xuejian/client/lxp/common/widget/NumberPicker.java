@@ -26,7 +26,7 @@ public class NumberPicker extends FrameLayout {
         int num = 0;
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.NumberPicker);
-            num = array.getInteger(R.styleable.NumberPicker_default_num, 0);
+            num = array.getInteger(R.styleable.NumberPicker_default_num, 1);
             array.recycle();
         }
         number.setText(String.valueOf(num));
@@ -57,6 +57,7 @@ public class NumberPicker extends FrameLayout {
     public void setListenr(OnButtonClick listenr) {
         this.listenr = listenr;
     }
+
 
     public interface OnButtonClick {
         void OnValueChange(int value);

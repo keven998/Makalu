@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.PassengerBean;
 
 import java.util.ArrayList;
 
@@ -24,11 +25,16 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
     private int EDIT_INFO = 103;
     TextView tvBack;
     TextView tv_confirm;
+    private ArrayList<PassengerBean> passengerList = new ArrayList<>();
+    private ArrayList<PassengerBean> selectedPassengerList = new ArrayList<>();
+    private PassengerBean passenger;
+    UserAdapter userAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_user);
-        int type = getIntent().getIntExtra("ListType",-1);
+        int type = getIntent().getIntExtra("ListType", -1);
+        boolean multiple = getIntent().getBooleanExtra("multiple",true);
         tvBack = (TextView) findViewById(R.id.tv_title_back);
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,35 +42,57 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 finish();
             }
         });
+        for (int i = 0; i < 3; i++) {
+            PassengerBean bean = new PassengerBean();
+            bean.id = "53452454253";
+            bean.tel = "1384656365564";
+            bean.lastName = "Zhao";
+            bean.firstName = "Xiaoqin" + i;
+            passengerList.add(bean);
+        }
+        passenger = passengerList.get(0);
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
-        initView(type);
+        initView(type,multiple);
 
     }
 
-    private void initView(int type) {
+    private void initView(int type, final boolean multiple) {
         TextView title = (TextView) findViewById(R.id.title);
-        if (type==1){
+        if (type == 1) {
             title.setText(R.string.common_user_info);
             ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
-            memberList.setAdapter(new UserAdapter(mContext, true));
+            userAdapter = new UserAdapter(mContext, multiple);
+            memberList.setAdapter(userAdapter);
             View footView = View.inflate(this, R.layout.footer_add_member_grey_line, null);
-            memberList.addFooterView(footView);
+            if (multiple){
+                memberList.addFooterView(footView);
+            }
             TextView addMember = (TextView) footView.findViewById(R.id.add_member);
             addMember.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(CommonUserInfoActivity.this,UserInfoEditActivity.class);
+                    Intent intent = new Intent(CommonUserInfoActivity.this, UserInfoEditActivity.class);
                     startActivityForResult(intent, EDIT_INFO);
                 }
             });
             tv_confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setResult(RESULT_OK);
-                    finish();
+                    if (multiple){
+                        Intent intent = new Intent();
+                        intent.putExtra("passenger", selectedPassengerList);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }else {
+                        Intent intent = new Intent();
+                        intent.putExtra("passenger", passenger);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
                 }
             });
-        }else if (type==2){
+        } else if (type == 2) {
             title.setText(R.string.user_info);
             ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             memberList.setAdapter(new UserInfoAdapter());
@@ -74,28 +102,22 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
     public class UserAdapter extends BaseAdapter {
 
         private Context mContext;
-        private ArrayList<Boolean> status;
         private int lastId;
+        private boolean multiple;
 
-        public UserAdapter(Context c, boolean selected) {
+        public UserAdapter(Context c, boolean multiple) {
             mContext = c;
-            if (selected) {
-                status = new ArrayList<>();
-                status.add(true);
-                status.add(false);
-                status.add(false);
-            }
-
+            this.multiple = multiple;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return passengerList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return passengerList.get(position);
         }
 
         @Override
@@ -105,11 +127,10 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder1 viewHolder1;
+            final ViewHolder1 viewHolder1;
 
             if (convertView == null) {
                 convertView = View.inflate(mContext, R.layout.item_common_userinfo, null);
-
                 viewHolder1 = new ViewHolder1();
                 viewHolder1.username = (CheckedTextView) convertView.findViewById(R.id.ctv_username);
                 viewHolder1.id = (TextView) convertView.findViewById(R.id.tv_id);
@@ -119,17 +140,38 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             } else {
                 viewHolder1 = (ViewHolder1) convertView.getTag();
             }
+            final PassengerBean bean = (PassengerBean) getItem(position);
+
+
             viewHolder1.username.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    status.set(lastId, false);
-                    status.set(position, true);
-                    lastId = position;
-                    notifyDataSetChanged();
+                    if (multiple) {
+                        viewHolder1.username.setChecked(!viewHolder1.username.isChecked());
+                        if (viewHolder1.username.isChecked()) {
+                            selectedPassengerList.add(bean);
+                        } else {
+                            selectedPassengerList.remove(bean);
+                        }
+                    } else {
+                        lastId = position;
+                        passenger = bean;
+                        notifyDataSetChanged();
+                    }
                 }
             });
-            viewHolder1.username.setText("赵小琴zhaoxiaoqin");
-            viewHolder1.username.setChecked(position == lastId);
+            if (multiple) {
+                viewHolder1.edit.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder1.edit.setVisibility(View.INVISIBLE);
+            }
+            viewHolder1.username.setText(bean.firstName + " " + bean.lastName);
+            viewHolder1.id.setText(String.format("护照 %s", bean.id));
+
+            if (!multiple) {
+                viewHolder1.username.setChecked(position == lastId);
+            }
+
             return convertView;
         }
 
@@ -174,7 +216,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             } else {
                 viewHolder1 = (ViewHolder1) convertView.getTag();
             }
-            viewHolder1.title.setText(String.format("旅客%d:",position+1));
+            viewHolder1.title.setText(String.format("旅客%d:", position + 1));
             return convertView;
         }
 
@@ -183,6 +225,18 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             private TextView tel;
             private TextView id;
             private TextView title;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == EDIT_INFO) {
+                PassengerBean bean = data.getParcelableExtra("passenger");
+                passengerList.add(bean);
+                userAdapter.notifyDataSetChanged();
+            }
         }
     }
 }

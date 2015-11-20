@@ -22,6 +22,7 @@
         android:id="@+id/tv_dialog_message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:paddingBottom="20dp"
         android:paddingLeft="14dp"
         android:paddingRight="14dp"

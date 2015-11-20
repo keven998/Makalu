@@ -29,17 +29,19 @@ public class OrderListActivity extends PeachBaseActivity {
         }
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabTextColors(getResources().getColor(R.color.color_text_ii),getResources().getColor(R.color.price_color));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.color_text_ii), getResources().getColor(R.color.price_color));
     }
+
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new OrderListFragment(), "全部");
-        adapter.addFragment(new OrderListFragment(), "待付款");
-        adapter.addFragment(new OrderListFragment(), "处理中");
-        adapter.addFragment(new OrderListFragment(), "可使用");
-        adapter.addFragment(new OrderListFragment(), "退款");
+        adapter.addFragment(new OrderListFragment(), "全部",OrderListFragment.ALL);
+        adapter.addFragment(new OrderListFragment(), "待付款",OrderListFragment.NEED_PAY);
+        adapter.addFragment(new OrderListFragment(), "待卖家确认",OrderListFragment.PROCESS);
+        adapter.addFragment(new OrderListFragment(), "可使用",OrderListFragment.AVAILABLE);
+        adapter.addFragment(new OrderListFragment(), "退款",OrderListFragment.DRAWBACK);
         viewPager.setAdapter(adapter);
     }
+
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
@@ -48,7 +50,10 @@ public class OrderListActivity extends PeachBaseActivity {
             super(fm);
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        public void addFragment(Fragment fragment, String title, int type) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", type);
+            fragment.setArguments(bundle);
             mFragments.add(fragment);
             mFragmentTitles.add(title);
         }

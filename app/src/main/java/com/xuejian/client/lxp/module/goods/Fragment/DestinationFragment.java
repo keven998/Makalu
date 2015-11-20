@@ -26,6 +26,7 @@ import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.widget.VerticalTextView;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView;
 import com.xuejian.client.lxp.module.goods.CountryListActivity;
@@ -40,8 +41,9 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     private TalentLocAdapter adapter;
     CircleLayout circleLayout;
     LinearLayout menu;
-    ImageView showMenu;
+    VerticalTextView showMenu;
     String [] code = new String[]{"RCOM","AS","EU","AF","NA","OC","SA"};
+    String [] zhName = new String[]{"推荐","亚洲","欧洲","非洲","南美洲","大洋洲","南美洲"};
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 
 
     private void initView(View view) {
-        showMenu = (ImageView) view.findViewById(R.id.iv_show);
+        showMenu = (VerticalTextView) view.findViewById(R.id.iv_show);
         menu = (LinearLayout) view.findViewById(R.id.ll_round_menu);
         circleLayout = (CircleLayout) view.findViewById(R.id.circle_layout);
         circleLayout.setOnRotationFinishedListener(this);
@@ -90,8 +92,8 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), CountryListActivity.class);
-                intent.putExtra("id",adapter.getItem(position).id);
-                intent.putExtra("name",adapter.getItem(position).zhName);
+                intent.putExtra("id", adapter.getItem(position).id);
+                intent.putExtra("name", adapter.getItem(position).zhName);
                 startActivity(intent);
             }
         });
@@ -104,6 +106,9 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                 menu.startAnimation(animation);
             }
         });
+        showMenu.setTextColor(getResources().getColor(R.color.base_color_white));
+        showMenu.setTextSize(12);
+        showMenu.setText("推荐");
     }
 
     @Override
@@ -125,6 +130,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         ((CircleTextView) view).setTextColor(getResources().getColor(R.color.app_theme_color));
         ((CircleTextView) view).setTextSize(14f);
         getData(code[Integer.parseInt(name)]);
+        showMenu.setText(zhName[Integer.parseInt(name)]);
     }
 
     @Override

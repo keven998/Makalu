@@ -68,7 +68,7 @@
             android:textSize="15sp"
             android:gravity="left|center_vertical"
             android:paddingLeft="10dp"
-            android:text="姓" />
+            android:text="姓(英文)" />
 
         <View
             android:layout_width="1px"
@@ -77,24 +77,16 @@
 
         <EditText
             android:paddingLeft="20dp"
-            android:id="@+id/et_family_name"
+            android:id="@+id/et_last_name"
             android:layout_width="0dp"
             android:layout_height="52dp"
-            android:hint="你的姓氏"
+            android:hint="Last Name,如Zhang"
             android:textColorHint="@color/color_text_v"
             android:background="@color/base_color_white"
-            android:textColor="@color/color_text_iii"
+            android:textColor="@color/color_text_ii"
             android:textSize="14sp"
-            android:layout_weight="1" />
+            android:layout_weight="2" />
 
-        <EditText
-            android:id="@+id/et_family_name_pinyin"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:background="@color/base_color_white"
-            android:textColor="@color/color_text_iii"
-            android:textSize="14sp"
-            android:layout_weight="1" />
     </LinearLayout>
 
     <View
@@ -117,7 +109,7 @@
             android:textSize="15sp"
             android:gravity="left|center_vertical"
             android:paddingLeft="10dp"
-            android:text="名" />
+            android:text="名(英文)" />
 
         <View
             android:layout_width="1px"
@@ -126,24 +118,16 @@
 
         <EditText
             android:paddingLeft="20dp"
-            android:id="@+id/et_name"
+            android:id="@+id/et_first_name"
             android:layout_width="0dp"
             android:layout_height="52dp"
-            android:hint="你的名字"
+            android:hint="First Name,如Xiaoxiao"
             android:textColorHint="@color/color_text_v"
             android:background="@color/base_color_white"
-            android:textColor="@color/color_text_iii"
+            android:textColor="@color/color_text_ii"
             android:textSize="14sp"
-            android:layout_weight="1" />
+            android:layout_weight="2" />
 
-        <EditText
-            android:id="@+id/et_name_pinyin"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:background="@color/base_color_white"
-            android:textColor="@color/color_text_iii"
-            android:textSize="14sp"
-            android:layout_weight="1" />
     </LinearLayout>
 
     <View
@@ -152,6 +136,7 @@
         android:background="@color/color_line" />
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:orientation="horizontal"
@@ -201,12 +186,9 @@
         </RadioGroup>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/color_line" />
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:orientation="horizontal"
@@ -248,10 +230,6 @@
             android:src="@drawable/icon_date_pick"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/color_line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -279,12 +257,13 @@
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_weight="2"
+            android:inputType="phone"
             android:background="@color/base_color_white"
-            android:textColor="@color/color_text_iii"
+            android:textColor="@color/color_text_ii"
             android:textSize="14sp"
             android:gravity="left|center_vertical"
             android:paddingLeft="20dp"
-            android:text="13486467692" />
+            />
     </LinearLayout>
 
     <View
@@ -323,7 +302,10 @@
             android:dropDownVerticalOffset="40dp"
             android:layout_height="40dp"/>
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -352,10 +334,14 @@
             android:layout_height="52dp"
             android:layout_weight="2"
             android:gravity="left|center_vertical"
-            android:textColor="@color/color_text_iii"
+            android:textColor="@color/color_text_ii"
             android:background="@color/base_color_white"
             android:textSize="14sp"
             android:paddingLeft="20dp"
-            android:text="134676986423564" />
+             />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
 </LinearLayout>

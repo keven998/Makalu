@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.pay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.module.goods.OrderListActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -41,7 +43,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         ctvWeixin.setOnClickListener(this);
         ctvAlipay.setOnClickListener(this);
         tvTitleBack.setOnClickListener(this);
-
+        tvPay.setOnClickListener(this);
 
         SpannableString priceStr = new SpannableString("¥35353");
         priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -68,6 +70,10 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                 break;
             case R.id.tv_title_back:
                 finish();
+                break;
+            case R.id.tv_pay:
+                Intent tv_pay = new Intent(PaymentActivity.this,OrderListActivity.class);
+                startActivity(tv_pay);
                 break;
         }
     }

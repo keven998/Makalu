@@ -553,6 +553,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.OrderDetailActivity"
+            android:theme="@style/Transparent"
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.pay.PaymentActivity"

@@ -2,20 +2,22 @@ package com.xuejian.client.lxp.module.goods;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.PassengerBean;
 import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
 
 import java.text.ParseException;
@@ -36,20 +38,10 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     TextView tvTitleBack;
     @InjectView(R.id.tv_confirm)
     TextView tvConfirm;
-    @InjectView(R.id.et_family_name)
-    EditText etFamilyName;
-    @InjectView(R.id.et_family_name_pinyin)
-    EditText etFamilyNamePinyin;
-    @InjectView(R.id.et_name)
-    EditText etName;
-    @InjectView(R.id.et_name_pinyin)
-    EditText etNamePinyin;
-    @InjectView(R.id.rb_women)
-    RadioButton rbWomen;
-    @InjectView(R.id.rb_men)
-    RadioButton rbMen;
-    @InjectView(R.id.rg_sex)
-    RadioGroup rgSex;
+    @InjectView(R.id.et_last_name)
+    EditText etLastName;
+    @InjectView(R.id.et_first_name)
+    EditText etFirstName;
     @InjectView(R.id.tv_birthday)
     TextView tvBirthday;
     @InjectView(R.id.iv_select_birthday)
@@ -66,6 +58,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         setContentView(R.layout.activity_info_edit);
         ButterKnife.inject(this);
         tvTitleBack.setOnClickListener(this);
+        tvConfirm.setOnClickListener(this);
         ivSelectBirthday.setOnClickListener(this);
         String [] mItems =new String[]{"护照","身份证"};
         StringSpinnerAdapter mTypeListAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(mItems));
@@ -90,6 +83,33 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
                 break;
             case R.id.iv_select_birthday:
                 SelectBirthday();
+                break;
+            case R.id.tv_confirm:
+                Intent intent = new Intent();
+                PassengerBean bean = new PassengerBean();
+                if(TextUtils.isEmpty(etFirstName.getText().toString())){
+                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(etLastName.getText().toString())){
+                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(etTel.getText().toString())){
+                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(etId.getText().toString())){
+                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                bean.lastName = etLastName.getText().toString();
+                bean.firstName = etFirstName.getText().toString();
+                bean.id = etId.getText().toString();
+                bean.tel = etTel.getText().toString();
+                intent.putExtra("passenger",bean);
+                setResult(RESULT_OK, intent);
+                finish();
                 break;
         }
     }

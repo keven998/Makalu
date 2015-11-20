@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/base_color_white"
-            android:checked="true"
             android:drawableLeft="@drawable/checker_for_checkbox"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
@@ -25,7 +24,6 @@
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:text="赵小琴zhaoxiaoqin"
             android:textColor="@color/color_text_ii"
             android:textSize="15sp" />
 
@@ -34,10 +32,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="47dp"
             android:textSize="15sp"
             android:textColor="@color/color_text_ii"
-            android:text="身份证1231533534535636" />
+              />
     </LinearLayout>
 
     <ImageView

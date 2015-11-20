@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_drag"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="52dp"
-    android:background="@drawable/option_cell_selector">
-    <View
+    android:layout_height="52dp">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentTop="true"
-        android:hardwareAccelerated="false"
-        android:layout_marginTop="1dp"
-        android:layerType="software"
-        android:background="@drawable/dash_line_green" />
-    <ImageButton
-        android:id="@+id/iv_delete_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:background="@null"
-        android:paddingBottom="14dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="14dp"
-        android:scaleType="center"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/icon_sum" />
+        android:layout_height="52dp"
+        android:background="@drawable/option_cell_selector">
 
-    <TextView
-        android:id="@+id/tv_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:gravity="center"
-        android:textColor="@color/color_text_iii"
-        android:textSize="13sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/dash_line_green"
+            android:hardwareAccelerated="false"
+            android:layerType="software" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_member"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:textColor="@color/color_text_iii"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+</LinearLayout>
+
