@@ -206,6 +206,8 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
             }
             if (bean.images.size() > 0) {
                 mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
+            }else {
+                mImgLoader.displayImage("", holder.bgImage, poptions);
             }
             holder.enName.setText(bean.enName);
             holder.zhName.setText(bean.zhName);

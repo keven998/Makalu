@@ -153,6 +153,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 if (checkOrder())return;
                 Intent intent1 = new Intent(OrderCreateActivity.this, OrderDetailActivity.class);
                 startActivity(intent1);
+                finish();
                 break;
             case R.id.ctv_1:
                 ctvAgreement.setChecked(!ctvAgreement.isChecked());

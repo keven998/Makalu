@@ -1,4 +1,4 @@
-package com.xuejian.client.lxp.module.my;
+package com.xuejian.client.lxp.module.my.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +32,7 @@ import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.fragment.StrategyFragment;
 import com.xuejian.client.lxp.module.goods.OrderCreateActivity;
+import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactlistFragment;
 
 import butterknife.ButterKnife;

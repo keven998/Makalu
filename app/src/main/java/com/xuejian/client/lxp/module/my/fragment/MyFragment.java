@@ -1,4 +1,4 @@
-package com.xuejian.client.lxp.module.my;
+package com.xuejian.client.lxp.module.my.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -51,6 +51,8 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.dest.SelectDestActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.my.MyProfileActivity;
+import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
 import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;

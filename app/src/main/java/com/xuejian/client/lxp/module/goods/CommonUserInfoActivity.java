@@ -93,6 +93,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 }
             });
         } else if (type == 2) {
+            tv_confirm.setVisibility(View.GONE);
             title.setText(R.string.user_info);
             ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             memberList.setAdapter(new UserInfoAdapter());

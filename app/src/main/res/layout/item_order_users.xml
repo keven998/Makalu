@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="赵小琴 zhaoxiaoqin"
+            android:text="Zhaoxiaoqin"
             android:layout_gravity="center_vertical"
             android:textColor="@color/color_text_ii"
             android:textSize="14sp" />
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="护照 46564646246473836"
+            android:text="护照 EA564646246473836"
             android:layout_gravity="center_vertical"
             android:textColor="@color/color_text_ii"
             android:textSize="14sp" />

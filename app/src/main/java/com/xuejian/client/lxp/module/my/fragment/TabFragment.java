@@ -1,4 +1,4 @@
-package com.xuejian.client.lxp.module.my;
+package com.xuejian.client.lxp.module.my.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -55,8 +55,8 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.goods.Fragment.DestinationFragment;
 import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
-import com.xuejian.client.lxp.module.my.MyFragment;
-import com.xuejian.client.lxp.module.my.UserFragment;
+import com.xuejian.client.lxp.module.my.fragment.MyFragment;
+import com.xuejian.client.lxp.module.my.fragment.MyInfoFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
 import org.json.JSONArray;
@@ -79,7 +79,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, DestinationFragment.class, GoodsMainFragment.class, UserFragment.class};
+    private Class fragmentArray[] = {TalkFragment.class, DestinationFragment.class, GoodsMainFragment.class, MyInfoFragment.class};
     //TalentLocFragement
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
@@ -219,11 +219,30 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             public void doSuccess(Object result, String method) {
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
-                    AccountManager.getInstance().setLoginAccountInfo(Info.result);
-                    UserFragment myFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag("My");
-                    if (myFragment != null && Info.result != null) {
-                        myFragment.initHeadTitleView(Info.result);
-                    }
+                    /**
+                     *
+                     *
+                     *
+                     *
+                     *
+                     *
+                     *
+                     *
+                     * 替換舊的MyFragment
+                     *
+                     *
+                     *
+                     *
+                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
+                     UserFragment myFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag("My");
+                     if (myFragment != null && Info.result != null) {
+                     myFragment.initHeadTitleView(Info.result);
+                     }
+
+                     *
+                     *
+                     */
+
                 }
             }
 

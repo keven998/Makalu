@@ -27,6 +27,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
+        findViewById(R.id.iv_nav_back).setOnClickListener(this);
         TextView tvGoodsName = (TextView) findViewById(R.id.tv_goods_name);
         findViewById(R.id.user_info).setOnClickListener(this);
         findViewById(R.id.tv_pay).setOnClickListener(this);
@@ -57,7 +58,20 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             case R.id.tv_pay:
                 showActionDialog();
                 break;
+            case R.id.iv_nav_back:
+                Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
+                startActivity(tv_title_back);
+                finish();
+                break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
+        startActivity(tv_title_back);
+        finish();
     }
 
     private void showActionDialog() {
