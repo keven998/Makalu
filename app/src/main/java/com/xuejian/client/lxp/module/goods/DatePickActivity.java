@@ -31,11 +31,13 @@ public class DatePickActivity extends PeachBaseActivity {
         Date today = new Date();
         calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
         calendar.init(today, nextYear.getTime())
-                .inMode(CalendarPickerView.SelectionMode.SINGLE);
+                .inMode(CalendarPickerView.SelectionMode.RANGE);
         //  .withSelectedDate(today);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
 
                 Date date = calendar.getSelectedDate();
 //                ArrayList<String> data = new ArrayList<String>();

@@ -42,8 +42,9 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     CircleLayout circleLayout;
     LinearLayout menu;
     VerticalTextView showMenu;
-    String [] code = new String[]{"RCOM","AS","EU","AF","NA","OC","SA"};
-    String [] zhName = new String[]{"推荐","亚洲","欧洲","非洲","南美洲","大洋洲","南美洲"};
+    String[] code = new String[]{"RCOM", "AS", "EU", "AF", "NA", "OC", "SA"};
+    String[] zhName = new String[]{"推荐", "亚洲", "欧洲", "非洲", "南美洲", "大洋洲", "南美洲"};
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +64,13 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                 adapter.getList().clear();
                 adapter.getList().addAll(list.result);
                 adapter.notifyDataSetChanged();
+
+                if (menu.getVisibility() == View.VISIBLE) {
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_to_right);
+                    menu.startAnimation(animation);
+                    showMenu.setVisibility(View.VISIBLE);
+                    menu.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -206,7 +214,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
             }
             if (bean.images.size() > 0) {
                 mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
-            }else {
+            } else {
                 mImgLoader.displayImage("", holder.bgImage, poptions);
             }
             holder.enName.setText(bean.enName);

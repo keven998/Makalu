@@ -83,28 +83,6 @@ public class TravelApi extends BaseApi {
     public final static String EXPERT_LIST = "/geo/countries";
     public final static String ANCILLARY_INFO = "/search/ancillary-info";
     public final static String RECOMMEND_LIST="/geo/localities/recommendations";
-    //    //景点列表
-//    /app/poi/viewspots
-//    //单个景点的信息
-//    /app/poi/viewspots/:id
-//    //景点的用户评论
-//    /app/poi/viewspots/:id/comments
-//    //景点的详细介绍
-//    /app/poi/viewspots/:id/descriptions
-//    //单个景点的深度攻略（HTML页面）
-//    /app/poi/viewspots/:id/details
-//    //餐厅列表
-//    /app/poi/restaurants
-//    //单个餐厅的信息
-//    /app/poi/restaurants/:id
-//    //餐厅的评论
-//    /app/poi/restaurants/:id/comments
-//    //商场列表
-//    /app/poi/shopping
-//    //单个商场的信息
-//    /app/poi/shopping/:id
-//    //商场的评论
-//    /app/poi/shopping/:id/comments
     //poi 列表
     public final static String POI_LIST = "/poi/%s";
     //单个POI的信息
@@ -116,9 +94,33 @@ public class TravelApi extends BaseApi {
 
     public final static String RECOMMEND_KEYWORD ="/search/hot-queries";
 
-
+    // 国家列表
     public final static String COUNTRY_LIST="/geo/countries";
+
+    // 城市列表
     public final static String CITY_LIST="/geo/localities";
+
+    // 首页专栏
+    public final static String MAIN_PAGE="/columns";
+
+    // 首页推荐
+    public final static String RECOMMEND="/recommend";
+
+    public static void getRecommend(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + RECOMMEND);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
+    public static void getMainPageColumns(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + MAIN_PAGE);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
 
     public static void getCountryList(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();

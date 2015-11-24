@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.section.BaseSectionAdapter;
@@ -25,7 +26,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
-import com.xuejian.client.lxp.bean.ImageBean;
+import com.xuejian.client.lxp.bean.ColumnBean;
+import com.xuejian.client.lxp.bean.RecommendCommodityBean;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
@@ -49,8 +53,9 @@ public class GoodsMainFragment extends PeachBaseFragment {
     LinearLayout llPics;
     ArrayList<String> picList = new ArrayList<>();
     DisplayImageOptions options;
-    ArrayList<ArrayList<String>> data= new ArrayList<>();
+    ArrayList<ArrayList<String>> data = new ArrayList<>();
     private final List<Tag> mTags = new ArrayList<Tag>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +66,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 .showImageOnFail(R.drawable.ic_default_picture)
                 .showImageOnLoading(R.drawable.ic_default_picture)
                 .showImageForEmptyUri(R.drawable.ic_default_picture)
-             //   .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10)))
+                        //   .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
     }
 
@@ -73,45 +78,15 @@ public class GoodsMainFragment extends PeachBaseFragment {
         hsPic = (HorizontalScrollView) headView.findViewById(R.id.hs_pic);
         dotView = (DotView) headView.findViewById(R.id.dot_view);
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
-        initData();
-        viewPager.setAdapter(new GoodsPageAdapter(getActivity(), null));
         listView.addHeaderView(headView);
-        listView.setAdapter(new RecommendGoodsAdapter(getActivity()));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
-                startActivity(settingIntent);
-            }
-        });
-        viewPager.startAutoScroll();
-        viewPager.setInterval(2000);
-        viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
-        dotView.setNum(4);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        initData();
+        getData();
+        getListData();
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                dotView.setSelected(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        for (int i = 0; i < 6; i++) {
-            picList.add("http://images.taozilvxing.com/c8915e680131f7e94358c52d50de9b70?imageView2/2/w/200");
-        }
-        initScrollView(v);
         return v;
     }
 
-    private void initScrollView(View v) {
+    private void initScrollView() {
         hsPic.removeAllViews();
         llPics = new LinearLayout(getActivity());
         llPics.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -132,19 +107,137 @@ public class GoodsMainFragment extends PeachBaseFragment {
         hsPic.addView(llPics);
     }
 
+    public void getListData() {
+
+        TravelApi.getRecommend(new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<RecommendCommodityBean> list = CommonJson4List.fromJson(result, RecommendCommodityBean.class);
+
+//                Observable.from(list.result)
+//                        .map(new Func1<RecommendCommodityBean, Object>() {
+//                            @Override
+//                            public Object call(RecommendCommodityBean recommendCommodityBean) {
+//                                return null;
+//                            }
+//                        })
+//                        .observeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe();
+
+                resizeData(list.result);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void resizeData(List<RecommendCommodityBean> result) {
+        ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data = new ArrayList<>();
+        ArrayList<String> sectionName = new ArrayList<>();
+        for (int i = 0; i < result.size(); i++) {
+            sectionName.add(i, result.get(i).getTopicType());
+            data.add(i, result.get(i).getCommodities());
+        }
+        bindListView(data, sectionName);
+    }
+
+    private void bindListView(ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data, ArrayList<String> sectionName) {
+        listView.setAdapter(new RecommendGoodsAdapter(getActivity(), data, sectionName));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
+                startActivity(settingIntent);
+            }
+        });
+    }
+
+
+    public void getData() {
+        TravelApi.getMainPageColumns(new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<ColumnBean> list = CommonJson4List.fromJson(result, ColumnBean.class);
+                bindView(list.result);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void bindView(List<ColumnBean> result) {
+        String slide = result.get(0).getColumnType();
+        String special = result.get(1).getColumnType();
+        if ("slide".equals(slide)) {
+            GoodsPageAdapter adapter = new GoodsPageAdapter(getActivity(), result.get(0).getColumns());
+            viewPager.setAdapter(adapter);
+            viewPager.startAutoScroll();
+            viewPager.setInterval(2000);
+            viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
+            dotView.setNum(adapter.getCount());
+            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    dotView.setSelected(position);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+        } else if ("special".equals(special)) {
+            ArrayList<ColumnBean.ColumnsEntity> list = result.get(1).getColumns();
+            for (ColumnBean.ColumnsEntity entity : list) {
+                if (entity.getImages().size() > 0) {
+                    picList.add(entity.getImages().get(0).url);
+                }
+            }
+            initScrollView();
+        }
+    }
+
+
     class GoodsPageAdapter extends PagerAdapter {
 
         private Context mContext;
-        private ArrayList<ImageBean> mDatas;
+        private ArrayList<ColumnBean.ColumnsEntity> mDatas;
 
-        public GoodsPageAdapter(Context context, ArrayList<ImageBean> datas) {
+        public GoodsPageAdapter(Context context, ArrayList<ColumnBean.ColumnsEntity> datas) {
             mDatas = datas;
             mContext = context;
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return mDatas.size();
+        }
+
+        public ArrayList<ColumnBean.ColumnsEntity> getmDatas() {
+            return mDatas;
         }
 
         @Override
@@ -159,8 +252,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
             imageView.setLayoutParams(layoutParams);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
-            //      ImageBean ib = mDatas.get(position);
-            ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/d42dfcd90bcbbb1ebb0598031eda45fc?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!1982x1238a54a80/thumbnail/480", imageView, UILUtils.getDefaultOption());
+
+            if (mDatas.get(position).getImages().size() > 0) {
+                ImageLoader.getInstance().displayImage(mDatas.get(position).getImages().get(0).url, imageView, UILUtils.getDefaultOption());
+            } else {
+                ImageLoader.getInstance().displayImage("", imageView, UILUtils.getDefaultOption());
+            }
             container.addView(imageView, 0);
             return imageView;
         }
@@ -175,9 +272,13 @@ public class GoodsMainFragment extends PeachBaseFragment {
     class RecommendGoodsAdapter extends BaseSectionAdapter {
 
         private Context mContex;
+        private ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data;
+        private ArrayList<String> sectionName;
 
-        public RecommendGoodsAdapter(Context c) {
+        public RecommendGoodsAdapter(Context c, ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data, ArrayList<String> sectionName) {
             mContex = c;
+            this.data = data;
+            this.sectionName = sectionName;
         }
 
         @Override
@@ -202,7 +303,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         @Override
         public Object getItem(int section, int position) {
-          return data.get(section).get(position);
+            return data.get(section).get(position);
         }
 
         @Override
@@ -217,12 +318,18 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 convertView = View.inflate(mContex, R.layout.item_recommend_goods_list, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+            RecommendCommodityBean.CommoditiesEntity bean = (RecommendCommodityBean.CommoditiesEntity) getItem(section,position);
+            viewHolder.tvGoodsPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getMarketPrice() * 10) / 10))));
             viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/af563f2f2e6bea2560857c6026e428a1?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!998x570a2a2/thumbnail/960", viewHolder.ivGoodsImg, options);
+            if (bean.getImages().size()>0){
+                ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, options);
+            }else {
+                ImageLoader.getInstance().displayImage("", viewHolder.ivGoodsImg, options);
+            }
             viewHolder.goodsTag.removeAllViews();
             viewHolder.goodsTag.setmTagViewResId(R.layout.goods_tag);
             viewHolder.goodsTag.setTags(mTags);
@@ -231,8 +338,9 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         @Override
         public View getHeaderView(int section, View convertView, ViewGroup parent) {
-            convertView = View.inflate(mContex,R.layout.item_goods_section,null);
+            convertView = View.inflate(mContex, R.layout.item_goods_section, null);
             TextView tv = (TextView) convertView.findViewById(R.id.tv_goods_section);
+            tv.setText(sectionName.get(section));
             return convertView;
         }
 
@@ -245,6 +353,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
         public int getCountInSection(int section) {
             return data.get(section).size();
         }
+
 
         @Override
         public boolean doesSectionHaveHeader(int section) {
@@ -267,7 +376,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
          *
          * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
          */
-         class ViewHolder {
+        class ViewHolder {
             @InjectView(R.id.iv_goods_img)
             ImageView ivGoodsImg;
             @InjectView(R.id.tv_goods_name)
@@ -288,6 +397,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
             }
         }
     }
+
     private void initData() {
         for (int i = 0; i < 3; i++) {
             data.add(new ArrayList<String>());
@@ -301,7 +411,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
             Tag tag = new Tag();
             tag.setTitle("服务" + i);
             tag.setId(i);
-          //  tag.setBackgroundResId();
+            //  tag.setBackgroundResId();
             tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
             tag.setTextColor(R.color.app_theme_color);
             mTags.add(tag);
