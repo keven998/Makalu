@@ -106,6 +106,37 @@ public class TravelApi extends BaseApi {
     // 首页推荐
     public final static String RECOMMEND="/recommend";
 
+    // 商品列表
+    public final static String COMMODITY_LIST="/marketplace/commodities";
+
+    // 商品列表
+    public final static String CATEGORY_LIST="/marketplace/commodities/categories";
+
+
+    public static void getCategoryList(String localityId,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CATEGORY_LIST);
+        request.putUrlParams("locality",localityId);
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
+    public static void getCommodityList(String sellerId,String localityId,String category,String sortBy,String sort,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + COMMODITY_LIST);
+        if (!TextUtils.isEmpty(sellerId))request.putUrlParams("seller", sellerId);
+        if (!TextUtils.isEmpty(localityId))request.putUrlParams("locality",localityId);
+        if (!TextUtils.isEmpty(category))request.putUrlParams("category",category);
+        if (!TextUtils.isEmpty(sortBy)){
+            request.putUrlParams("sortBy",sortBy);
+            request.putUrlParams("sort",sort);
+        }
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request,"", callback);
+    }
+
     public static void getRecommend(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

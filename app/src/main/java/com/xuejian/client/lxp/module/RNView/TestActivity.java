@@ -29,6 +29,7 @@ public class TestActivity extends PeachBaseActivity implements DefaultHardwareBa
         super.onCreate(savedInstanceState);
         showLoading();
       //  mReactRootView = new ReactRootView(this);
+        long storeId = getIntent().getLongExtra("storeId",100);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
                          .setBundleAssetName("ReactNativeDevBundle.js")
@@ -42,7 +43,7 @@ public class TestActivity extends PeachBaseActivity implements DefaultHardwareBa
         setContentView(R.layout.activity_rnview_store);
         mReactRootView = (ReactRootView) findViewById(R.id.root_view);
         Bundle bundle = new Bundle();
-        bundle.putString("haha", "hehe");
+        bundle.putLong("storeId", storeId);
         mReactRootView.startReactApplication(mReactInstanceManager, "Test", bundle);
         TextView back = (TextView) findViewById(R.id.tv_title_back);
         back.setOnClickListener(new View.OnClickListener() {

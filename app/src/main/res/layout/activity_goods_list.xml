@@ -54,30 +54,35 @@
             android:orientation="horizontal"
             android:padding="11dp">
 
-            <Spinner
+            <TextView
                 android:id="@+id/type_spinner"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/base_color_white"
-                android:dropDownVerticalOffset="45dp"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:spinnerMode="dropdown"/>
+                android:text="全部类型"
+                android:textColor="@color/color_text_ii" />
 
-            <Spinner
+            <TextView
                 android:id="@+id/sort_spinner"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/base_color_white"
-                android:dropDownVerticalOffset="45dp"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:spinnerMode="dropdown" />
+                android:text="推荐排序"
+                android:textColor="@color/color_text_ii" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line" />
 
         <com.aizou.core.widget.prv.PullToRefreshListView
             android:id="@+id/lv_poi_list"
@@ -94,11 +99,11 @@
 
     <ImageView
         android:id="@+id/iv_toTop"
-        android:layout_gravity="bottom|right"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginRight="10dp"
+        android:layout_gravity="bottom|right"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/icon_totop"/>
+        android:layout_marginRight="10dp"
+        android:src="@drawable/icon_totop" />
 
 </merge>

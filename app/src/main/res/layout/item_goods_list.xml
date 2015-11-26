@@ -23,10 +23,10 @@
         android:layout_gravity="center_vertical"
         />
     <TextView
+        android:id="@+id/tv_store_name"
         android:layout_margin="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="店名店名"
         android:padding="2dp"
         android:textSize="12sp"
         android:textColor="@color/base_color_white"
@@ -49,8 +49,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="left"
-            android:singleLine="true"
-            android:text="包佳德家庭式酒店"
             android:textColor="@color/color_text_ii"
             android:textSize="16sp" />
         <TextView
@@ -93,7 +91,6 @@
                 android:layout_centerVertical="true"
                 android:singleLine="true"
                 android:layout_marginLeft="2dp"
-                android:text="100%满意"
                 android:layout_toRightOf="@+id/icon"
                 android:textColor="@color/color_text_iii"
                 android:textSize="12sp" />
@@ -107,7 +104,6 @@
                 android:layout_centerVertical="true"
                 android:singleLine="true"
                 android:layout_marginLeft="5dp"
-                android:text="销量：1234"
                 android:textColor="@color/color_text_iii"
                 android:textSize="12sp" />
 
@@ -120,7 +116,6 @@
                 android:singleLine="true"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
-                android:text="¥2198"
                 android:textColor="#ff3300"
                 android:textSize="15sp" />
             <TextView
@@ -132,7 +127,6 @@
                 android:singleLine="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toLeftOf="@+id/tv_goods_current_price"
-                android:text="¥2198"
                 android:textColor="@color/color_text_iii"
                 android:textSize="12sp" />
         </RelativeLayout>
