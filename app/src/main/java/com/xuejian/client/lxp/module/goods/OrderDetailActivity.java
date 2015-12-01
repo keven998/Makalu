@@ -12,47 +12,94 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckedTextView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.OrderBean;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/11/13.
  */
-public class OrderDetailActivity extends PeachBaseActivity implements View.OnClickListener{
+public class OrderDetailActivity extends PeachBaseActivity implements View.OnClickListener {
+
+    @InjectView(R.id.iv_nav_back)
+    ImageView ivNavBack;
+    @InjectView(R.id.tv_title_bar_title)
+    TextView tvTitleBarTitle;
+    @InjectView(R.id.tv_pay_state)
+    TextView tvPayState;
+    @InjectView(R.id.tv_pay_feedback)
+    TextView tvPayFeedback;
+    @InjectView(R.id.tv_goods_name)
+    TextView tvGoodsName;
+    @InjectView(R.id.tv_order_id)
+    TextView tvOrderId;
+    @InjectView(R.id.tv_order_package)
+    TextView tvOrderPackage;
+    @InjectView(R.id.tv_order_date)
+    TextView tvOrderDate;
+    @InjectView(R.id.tv_order_num)
+    TextView tvOrderNum;
+    @InjectView(R.id.tv_order_price)
+    TextView tvOrderPrice;
+    @InjectView(R.id.iv_goods)
+    ImageView ivGoods;
+    @InjectView(R.id.tv_order_store_name)
+    TextView tvOrderStoreName;
+    @InjectView(R.id.userinfo)
+    TextView userinfo;
+    @InjectView(R.id.tv_order_traveller_count)
+    TextView tvOrderTravellerCount;
+    @InjectView(R.id.user_info)
+    RelativeLayout userInfo;
+    @InjectView(R.id.tv_order_contact_name)
+    TextView tvOrderContactName;
+    @InjectView(R.id.tv_order_contact_tel)
+    TextView tvOrderContactTel;
+    @InjectView(R.id.tv_order_message)
+    TextView tvOrderMessage;
+    @InjectView(R.id.tv_pay)
+    TextView tvPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
-        findViewById(R.id.iv_nav_back).setOnClickListener(this);
-        TextView tvGoodsName = (TextView) findViewById(R.id.tv_goods_name);
-        findViewById(R.id.user_info).setOnClickListener(this);
-        findViewById(R.id.tv_pay).setOnClickListener(this);
-        tvGoodsName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
-        tvGoodsName.getPaint().setAntiAlias(true);//抗锯齿
-        final TextView feedBack = (TextView) findViewById(R.id.tv_pay_feedback);
-        CountDownTimer countDownTimer = new CountDownTimer(1000000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                feedBack.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
-            }
+        ButterKnife.inject(this);
+        String type = getIntent().getStringExtra("type");
+        switch (type) {
+            case "pendingOrder":
+                OrderBean bean = getIntent().getParcelableExtra("order");
+                bindView(bean);
+                break;
+            case "orderDetail":
+                getData(getIntent().getLongExtra("orderId",-1));
+                break;
+            default:
+                break;
+        }
 
-            @Override
-            public void onFinish() {
-
-            }
-        }.start();
+        ivNavBack.setOnClickListener(this);
+        userInfo.setOnClickListener(this);
+        tvPay.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.user_info:
-                Intent intent = new Intent(OrderDetailActivity.this,CommonUserInfoActivity.class);
-                intent.putExtra("ListType",2);
+                Intent intent = new Intent(OrderDetailActivity.this, CommonUserInfoActivity.class);
+                intent.putExtra("ListType", 2);
                 startActivity(intent);
                 break;
             case R.id.tv_pay:
@@ -65,6 +112,57 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 break;
         }
     }
+
+    public void getData(long orderId) {
+        if (orderId<=0)return;
+        TravelApi.getOrderDetail(orderId, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
+                bindView(bean.result);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void bindView(OrderBean bean) {
+        tvGoodsName.setText(bean.getCommodity().getTitle());
+        tvGoodsName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+        tvGoodsName.getPaint().setAntiAlias(true);//抗锯齿
+        tvOrderId.setText(String.valueOf(bean.getOrderId()));
+        tvOrderPackage.setText(bean.getPlanId());
+        tvOrderDate.setText(bean.getRendezvousTime());
+        tvOrderNum.setText(String.valueOf(bean.getQuantity()));
+        tvOrderPrice.setText(String.valueOf(bean.getTotalPrice()));
+
+        tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
+
+        tvOrderContactName.setText(bean.getContact().getGivenName()+" "+bean.getContact().getSurname());
+        tvOrderContactTel.setText(bean.getContact().getTel().getDialCode()+"-"+bean.getContact().getTel().getNumber());
+        tvOrderMessage.setText(bean.getComment());
+
+        CountDownTimer countDownTimer = new CountDownTimer(1000000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                tvPayFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
+            }
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -84,7 +182,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Intent tv_pay = new Intent(OrderDetailActivity.this,OrderListActivity.class);
+                Intent tv_pay = new Intent(OrderDetailActivity.this, OrderListActivity.class);
                 startActivity(tv_pay);
             }
         });
@@ -92,7 +190,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Intent tv_pay = new Intent(OrderDetailActivity.this,OrderListActivity.class);
+                Intent tv_pay = new Intent(OrderDetailActivity.this, OrderListActivity.class);
                 startActivity(tv_pay);
 
             }

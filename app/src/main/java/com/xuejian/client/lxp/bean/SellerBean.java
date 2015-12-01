@@ -1,11 +1,14 @@
 package com.xuejian.client.lxp.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by yibiao.qin on 2015/11/23.
  */
-public class SellerBean {
+public class SellerBean implements Parcelable {
 
     /**
      * sellerId : 100012
@@ -90,4 +93,45 @@ public class SellerBean {
     public List<String> getPhone() {
         return phone;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.sellerId);
+        dest.writeString(this.name);
+        dest.writeStringList(this.lang);
+        dest.writeInt(this.favorCnt);
+        dest.writeStringList(this.serviceZones);
+        dest.writeStringList(this.bankAccounts);
+        dest.writeStringList(this.email);
+        dest.writeStringList(this.phone);
+    }
+
+    public SellerBean() {
+    }
+
+    protected SellerBean(Parcel in) {
+        this.sellerId = in.readLong();
+        this.name = in.readString();
+        this.lang = in.createStringArrayList();
+        this.favorCnt = in.readInt();
+        this.serviceZones = in.createStringArrayList();
+        this.bankAccounts = in.createStringArrayList();
+        this.email = in.createStringArrayList();
+        this.phone = in.createStringArrayList();
+    }
+
+    public static final Parcelable.Creator<SellerBean> CREATOR = new Parcelable.Creator<SellerBean>() {
+        public SellerBean createFromParcel(Parcel source) {
+            return new SellerBean(source);
+        }
+
+        public SellerBean[] newArray(int size) {
+            return new SellerBean[size];
+        }
+    };
 }

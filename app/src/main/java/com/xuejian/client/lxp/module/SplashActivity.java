@@ -146,7 +146,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                     }
 
                 } else {
-                    //  ToastUtil.getInstance(SplashActivity.this).showToast("请求也是失败了");
                 }
             }
 

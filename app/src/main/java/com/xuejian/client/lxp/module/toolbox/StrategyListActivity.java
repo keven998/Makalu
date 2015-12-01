@@ -87,6 +87,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     private boolean newCreate;
     private String newId;
     private ArrayList<StrategyBean> strategyBeans;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -115,11 +116,11 @@ public class StrategyListActivity extends PeachBaseActivity {
 
     private void resetMemberValue(Intent intent) {
         userId = intent.getStringExtra("userId");
-        if (TextUtils.isEmpty(userId)){
+        if (TextUtils.isEmpty(userId)) {
             finish();
             return;
         }
-        if (AccountManager.getInstance().getLoginAccount(StrategyListActivity.this)!=null){
+        if (AccountManager.getInstance().getLoginAccount(StrategyListActivity.this) != null) {
             isOwner = (AccountManager.getInstance().getLoginAccount(this) != null) && userId.equals(AccountManager.getCurrentUserId());
             user = UserDBManager.getInstance().getContactByUserId(Long.parseLong(userId));
         }
@@ -128,8 +129,8 @@ public class StrategyListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        newCreate = SharePrefUtil.getBoolean(mContext,"newPlan",false);
-        newId = SharePrefUtil.getString(mContext,"newPlanId","");
+        newCreate = SharePrefUtil.getBoolean(mContext, "newPlan", false);
+        newId = SharePrefUtil.getString(mContext, "newPlanId", "");
         getStrategyListData(0, mContentType);
         MobclickAgent.onPageStart("page_lxp_plan_lists");
         MobclickAgent.onResume(this);
@@ -140,7 +141,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         super.onPause();
         MobclickAgent.onPageEnd("page_lxp_plan_lists");
         newCopy = false;
-        SharePrefUtil.saveBoolean(mContext,"newPlan",false);
+        SharePrefUtil.saveBoolean(mContext, "newPlan", false);
         MobclickAgent.onPause(this);
     }
 
@@ -155,7 +156,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         listView.setHasMoreData(false);
         isShare = getIntent().getBooleanExtra("isShare", false);
         strategyBeans = new ArrayList<StrategyBean>();
-        mStrategyListAdapter = new StrategyAdapter(this,strategyBeans,isOwner);
+        mStrategyListAdapter = new StrategyAdapter(this, strategyBeans, isOwner);
         if (!isOwner) {
             findViewById(R.id.ivb_content_filter).setVisibility(View.INVISIBLE);
             create_plan.setVisibility(View.GONE);
@@ -191,7 +192,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(StrategyListActivity.this,"navigation_item_plan_create");
+                        MobclickAgent.onEvent(StrategyListActivity.this, "navigation_item_plan_create");
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
                     }
@@ -209,11 +210,11 @@ public class StrategyListActivity extends PeachBaseActivity {
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isShare){
-                    Intent intent =new Intent();
-                    intent .putExtra("friend_id",toId);
-                    intent.putExtra("conversation",conversation);
-                    intent.putExtra("chatType",chatType);
+                if (isShare) {
+                    Intent intent = new Intent();
+                    intent.putExtra("friend_id", toId);
+                    intent.putExtra("conversation", conversation);
+                    intent.putExtra("chatType", chatType);
                     intent.setClass(StrategyListActivity.this, ChatActivity.class);
                     startActivity(intent);
                 }
@@ -224,7 +225,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         findViewById(R.id.ivb_content_filter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(StrategyListActivity.this,"navigation_item_plans_status_filter");
+                MobclickAgent.onEvent(StrategyListActivity.this, "navigation_item_plans_status_filter");
                 String[] names = {"全部", "只看计划", "只看已签到"};
                 final MoreDialog dialog = new MoreDialog(StrategyListActivity.this);
                 dialog.setMoreStyle(false, 13, names);
@@ -296,7 +297,8 @@ public class StrategyListActivity extends PeachBaseActivity {
                 size = OtherApi.PAGE_SIZE;
             }
             List<StrategyBean> cd = mStrategyListAdapter.getDataList().subList(0, size);
-            if(!isFinishing())PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
+            if (!isFinishing())
+                PreferenceUtils.cacheData(StrategyListActivity.this, String.format("%s_plans", AccountManager.getCurrentUserId()), GsonTools.createGsonString(cd));
         }
     }
 
@@ -307,12 +309,14 @@ public class StrategyListActivity extends PeachBaseActivity {
             if (requestCode == RESULT_PLAN_DETAIL) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
-                    if(!isFinishing())PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+                    if (!isFinishing())
+                        PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
             } else if (requestCode == REQUEST_CODE_NEW_PLAN) {
                 StrategyBean sb = data.getParcelableExtra("strategy");
                 if (sb != null) {
-                    if(!isFinishing())PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
+                    if (!isFinishing())
+                        PreferenceUtils.cacheData(this, "last_strategy", GsonTools.createGsonString(sb));
                 }
                 mMyStrategyLv.doPullRefreshing(true, 0);
             }
@@ -392,7 +396,7 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
 
-    private class StrategyAdapter extends BaseSwipeAdapter{
+    private class StrategyAdapter extends BaseSwipeAdapter {
         TextView plane_spans;
         TextView tv_day;
         TextView city_hasGone;
@@ -409,9 +413,10 @@ public class StrategyListActivity extends PeachBaseActivity {
         private LinearLayout swipe_ll;
         ImageView plane_pic;
         private DisplayImageOptions picOptions;
-        public StrategyAdapter(Context context,ArrayList<StrategyBean>data, boolean isOwner) {
+
+        public StrategyAdapter(Context context, ArrayList<StrategyBean> data, boolean isOwner) {
             this.context = context;
-            this.data=data;
+            this.data = data;
             this.isOwner = isOwner;
             picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
@@ -427,9 +432,11 @@ public class StrategyListActivity extends PeachBaseActivity {
         public long getItemId(int position) {
             return 0;
         }
-        public ArrayList<StrategyBean> getDataList(){
+
+        public ArrayList<StrategyBean> getDataList() {
             return data;
         }
+
         @Override
         public Object getItem(int position) {
             return data.get(position);
@@ -448,7 +455,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         @Override
         public View generateView(int position, ViewGroup parent) {
             View v = LayoutInflater.from(context).inflate(R.layout.travel_plane_item, null);
-            swipe_ll = (LinearLayout)v.findViewById(R.id.swipe_bg_ll);
+            swipe_ll = (LinearLayout) v.findViewById(R.id.swipe_bg_ll);
             return v;
         }
 
@@ -470,25 +477,24 @@ public class StrategyListActivity extends PeachBaseActivity {
         public void showData(final StrategyBean itemData) {
             plane_spans.setText(String.format("%s天", String.valueOf(itemData.dayCnt)));
             city_hasGone.setText(itemData.summary);
-            if (newCopy&&itemData.id.equals(copyId)) {
+            if (newCopy && itemData.id.equals(copyId)) {
                 SpannableString planStr = new SpannableString(String.format("(新复制)%s", itemData.title));
                 planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 plane_title.setText(planStr);
-            }else if (newCreate&&itemData.id.equals(newId)) {
+            } else if (newCreate && itemData.id.equals(newId)) {
                 SpannableString planStr = new SpannableString(String.format("(新建)%s", itemData.title));
                 planStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_checked)), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 plane_title.setText(planStr);
-            }
-            else {
+            } else {
                 plane_title.setText(itemData.title);
             }
-            if(itemData.images!=null && itemData.images.size()>0 ){
+            if (itemData.images != null && itemData.images.size() > 0) {
                 plane_pic.setTag(itemData.images.get(0).url);
-                if(plane_pic.getTag()!=null && plane_pic.getTag().equals(itemData.images.get(0).url)){
-                    ImageLoader.getInstance().displayImage(itemData.images.get(0).url, plane_pic,picOptions);
+                if (plane_pic.getTag() != null && plane_pic.getTag().equals(itemData.images.get(0).url)) {
+                    ImageLoader.getInstance().displayImage(itemData.images.get(0).url, plane_pic, picOptions);
                 }
 
-            }else{
+            } else {
                 ImageLoader.getInstance().displayImage("", plane_pic, picOptions);
             }
             create_time.setText("创建：" + new SimpleDateFormat("yyyy-MM-dd").format(new Date(itemData.updateTime)));
@@ -526,7 +532,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             mCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(StrategyListActivity.this,"ell_item_plans_change_status");
+                    MobclickAgent.onEvent(StrategyListActivity.this, "ell_item_plans_change_status");
                     if (itemData.status.equals("planned")) {
                         haveBeenVisited(itemData);
                         mStrategyListAdapter.notifyDataSetChanged();
@@ -587,10 +593,8 @@ public class StrategyListActivity extends PeachBaseActivity {
     }
 
 
-
-
     private void deleteItem(final StrategyBean itemData) {
-        MobclickAgent.onEvent(StrategyListActivity.this,"cell_item_plans_delete");
+        MobclickAgent.onEvent(StrategyListActivity.this, "cell_item_plans_delete");
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         dialog.setTitleIcon(R.drawable.ic_dialog_tip);

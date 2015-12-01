@@ -282,7 +282,7 @@ public class GoodsList extends PeachBaseActivity {
             }
             SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
             if (bean.getImages().size() > 0) {
-                ImageLoader.getInstance().displayImage(bean.getImages().get(0).getUrl(), holder.ivGoods, picOptions);
+                ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, holder.ivGoods, picOptions);
             }
             holder.tvGoodsName.setText(bean.getTitle());
             holder.tvGoodsCurrentPrice.setText("¥" + String.valueOf((double) Math.round(bean.getPrice() * 10 / 10)));

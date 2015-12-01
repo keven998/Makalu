@@ -20,11 +20,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.OrderBean;
 import com.xuejian.client.lxp.bean.PassengerBean;
 import com.xuejian.client.lxp.common.api.H5Url;
+import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.NumberPicker;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
@@ -75,6 +79,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     CommonAdapter memberAdapter;
     ListView memberList;
     private int goodsNum = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,14 +151,12 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             case R.id.tv_address_book:
                 Intent intent = new Intent(OrderCreateActivity.this, CommonUserInfoActivity.class);
                 intent.putExtra("ListType", 1);
-                intent.putExtra("multiple",false);
+                intent.putExtra("multiple", false);
                 startActivityForResult(intent, SELECTED_USER);
                 break;
             case R.id.tv_submit_order:
-                if (checkOrder())return;
-                Intent intent1 = new Intent(OrderCreateActivity.this, OrderDetailActivity.class);
-                startActivity(intent1);
-                finish();
+                if (checkOrder()) return;
+                submitOrder();
                 break;
             case R.id.ctv_1:
                 ctvAgreement.setChecked(!ctvAgreement.isChecked());
@@ -174,29 +177,59 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        notice();
+    }
+
+    public void submitOrder() {
+        TravelApi.createOrder(78668897366l, "cc97e9ac-16a7-4036-9d9d-08101031a3d7", tvDate.getText().toString(), goodsNum, etTel.getText().toString(), "", etFirstName.getText().toString(), etLastName.getText().toString(), "",passengerList ,new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
+                Intent intent = new Intent(OrderCreateActivity.this, OrderDetailActivity.class);
+                intent.putExtra("type","pendingOrder");
+                intent.putExtra("order",bean.result);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
     private boolean checkOrder() {
-        if(TextUtils.isEmpty(tvDate.getText().toString())) {
+        if (TextUtils.isEmpty(tvDate.getText().toString())) {
             Toast.makeText(mContext, "请选择出行日期", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if(TextUtils.isEmpty(etFirstName.getText().toString())){
+        if (TextUtils.isEmpty(etFirstName.getText().toString())) {
             Toast.makeText(mContext, "请填写旅客信息", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if(TextUtils.isEmpty(etLastName.getText().toString())){
+        if (TextUtils.isEmpty(etLastName.getText().toString())) {
             Toast.makeText(mContext, "请填写旅客信息", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if(TextUtils.isEmpty(etTel.getText().toString())){
-            Toast.makeText(mContext,"请填写旅客信息",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(etTel.getText().toString())) {
+            Toast.makeText(mContext, "请填写旅客信息", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if(!ctvAgreement.isChecked()){
-            Toast.makeText(mContext,"请确认《旅行派条款》",Toast.LENGTH_SHORT).show();
+        if (!ctvAgreement.isChecked()) {
+            Toast.makeText(mContext, "请确认《旅行派条款》", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if(goodsNum<=0){
-            Toast.makeText(mContext,"请至少选择一件商品",Toast.LENGTH_SHORT).show();
+        if (goodsNum <= 0) {
+            Toast.makeText(mContext, "请至少选择一件商品", Toast.LENGTH_SHORT).show();
             return true;
         }
         return false;
@@ -282,7 +315,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 } else {
                     holder = (ViewHolder) convertView.getTag();
                 }
-                holder.content.setText(bean.lastName+" "+bean.firstName);
+                holder.content.setText(bean.lastName + " " + bean.firstName);
             }
             return convertView;
         }
@@ -323,13 +356,12 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 tvDate.setText(date);
             } else if (requestCode == SELECTED_USER) {
                 PassengerBean bean = data.getParcelableExtra("passenger");
-                if (bean!=null){
+                if (bean != null) {
                     etFirstName.setText(bean.firstName);
                     etLastName.setText(bean.lastName);
                     etTel.setText(bean.tel);
                 }
-            }
-            else if (requestCode == EDIT_USER_LIST) {
+            } else if (requestCode == EDIT_USER_LIST) {
                 ArrayList<PassengerBean> list = data.getParcelableArrayListExtra("passenger");
                 passengerList.clear();
                 passengerList.addAll(list);
@@ -345,9 +377,10 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             }
         }
     }
+
     private void notice() {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-         dialog.setTitle("提示");
+        dialog.setTitle("提示");
         dialog.setMessage("离开页面将清除填写内容，确定离开吗？");
         dialog.setPositiveButton("离开", new View.OnClickListener() {
             @Override

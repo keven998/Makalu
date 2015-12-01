@@ -1,11 +1,14 @@
 package com.xuejian.client.lxp.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by yibiao.qin on 2015/11/26.
  */
-public class SimpleCommodityBean {
+public class SimpleCommodityBean implements Parcelable {
 
     /**
      * commodityId : 12477930216
@@ -26,27 +29,12 @@ public class SimpleCommodityBean {
     private double price;
     private double rating;
     private int salesVolume;
-    /**
-     * sellerId : 100012
-     * name : 天意小馆
-     * user : {"userId":100012,"nickname":"","avatar":null}
-     * qualifications : []
-     * rating : 0.0
-     * cover : null
-     */
-
-    private SellerEntity seller;
+    private SellerBean seller;
     private Object locality;
-    /**
-     * url : http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc
-     */
+    private CoverBean cover;
+    private List<ImageBean> images;
 
-    private CoverEntity cover;
-    /**
-     * url : http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc
-     */
 
-    private List<ImagesEntity> images;
 
     public void setCommodityId(long commodityId) {
         this.commodityId = commodityId;
@@ -72,7 +60,7 @@ public class SimpleCommodityBean {
         this.salesVolume = salesVolume;
     }
 
-    public void setSeller(SellerEntity seller) {
+    public void setSeller(SellerBean seller) {
         this.seller = seller;
     }
 
@@ -80,11 +68,11 @@ public class SimpleCommodityBean {
         this.locality = locality;
     }
 
-    public void setCover(CoverEntity cover) {
+    public void setCover(CoverBean cover) {
         this.cover = cover;
     }
 
-    public void setImages(List<ImagesEntity> images) {
+    public void setImages(List<ImageBean> images) {
         this.images = images;
     }
 
@@ -112,7 +100,7 @@ public class SimpleCommodityBean {
         return salesVolume;
     }
 
-    public SellerEntity getSeller() {
+    public SellerBean getSeller() {
         return seller;
     }
 
@@ -120,128 +108,57 @@ public class SimpleCommodityBean {
         return locality;
     }
 
-    public CoverEntity getCover() {
+    public CoverBean getCover() {
         return cover;
     }
 
-    public List<ImagesEntity> getImages() {
+    public List<ImageBean> getImages() {
         return images;
     }
 
-    public static class SellerEntity {
-        private int sellerId;
-        private String name;
-        /**
-         * userId : 100012
-         * nickname :
-         * avatar : null
-         */
 
-        private UserEntity user;
-        private double rating;
-        private Object cover;
-        private List<?> qualifications;
-
-        public void setSellerId(int sellerId) {
-            this.sellerId = sellerId;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setUser(UserEntity user) {
-            this.user = user;
-        }
-
-        public void setRating(double rating) {
-            this.rating = rating;
-        }
-
-        public void setCover(Object cover) {
-            this.cover = cover;
-        }
-
-        public void setQualifications(List<?> qualifications) {
-            this.qualifications = qualifications;
-        }
-
-        public int getSellerId() {
-            return sellerId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public UserEntity getUser() {
-            return user;
-        }
-
-        public double getRating() {
-            return rating;
-        }
-
-        public Object getCover() {
-            return cover;
-        }
-
-        public List<?> getQualifications() {
-            return qualifications;
-        }
-
-        public static class UserEntity {
-            private int userId;
-            private String nickname;
-            private Object avatar;
-
-            public void setUserId(int userId) {
-                this.userId = userId;
-            }
-
-            public void setNickname(String nickname) {
-                this.nickname = nickname;
-            }
-
-            public void setAvatar(Object avatar) {
-                this.avatar = avatar;
-            }
-
-            public int getUserId() {
-                return userId;
-            }
-
-            public String getNickname() {
-                return nickname;
-            }
-
-            public Object getAvatar() {
-                return avatar;
-            }
-        }
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public static class CoverEntity {
-        private String url;
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getUrl() {
-            return url;
-        }
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.commodityId);
+        dest.writeString(this.title);
+        dest.writeDouble(this.marketPrice);
+        dest.writeDouble(this.price);
+        dest.writeDouble(this.rating);
+        dest.writeInt(this.salesVolume);
+        dest.writeParcelable(this.seller, 0);
+   //     dest.writeParcelable(this.locality, flags);
+        dest.writeParcelable(this.cover, 0);
+        dest.writeTypedList(images);
     }
 
-    public static class ImagesEntity {
-        private String url;
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getUrl() {
-            return url;
-        }
+    public SimpleCommodityBean() {
     }
+
+    protected SimpleCommodityBean(Parcel in) {
+        this.commodityId = in.readLong();
+        this.title = in.readString();
+        this.marketPrice = in.readDouble();
+        this.price = in.readDouble();
+        this.rating = in.readDouble();
+        this.salesVolume = in.readInt();
+        this.seller = in.readParcelable(SellerBean.class.getClassLoader());
+  //      this.locality = in.readParcelable(Object.class.getClassLoader());
+        this.cover = in.readParcelable(CoverBean.class.getClassLoader());
+        this.images = in.createTypedArrayList(ImageBean.CREATOR);
+    }
+
+    public static final Parcelable.Creator<SimpleCommodityBean> CREATOR = new Parcelable.Creator<SimpleCommodityBean>() {
+        public SimpleCommodityBean createFromParcel(Parcel source) {
+            return new SimpleCommodityBean(source);
+        }
+
+        public SimpleCommodityBean[] newArray(int size) {
+            return new SimpleCommodityBean[size];
+        }
+    };
 }

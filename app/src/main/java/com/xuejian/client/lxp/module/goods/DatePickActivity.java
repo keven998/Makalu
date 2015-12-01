@@ -10,7 +10,7 @@ import com.squareup.timessquare.CalendarPickerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,7 +31,7 @@ public class DatePickActivity extends PeachBaseActivity {
         Date today = new Date();
         calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
         calendar.init(today, nextYear.getTime())
-                .inMode(CalendarPickerView.SelectionMode.RANGE);
+                .inMode(CalendarPickerView.SelectionMode.SINGLE);
         //  .withSelectedDate(today);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +46,8 @@ public class DatePickActivity extends PeachBaseActivity {
 //                }
                 try {
                     Intent intent = new Intent();
-                    String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                    String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                 //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
                     intent.putExtra("date", s);
                     setResult(RESULT_OK, intent);
                     finish();
