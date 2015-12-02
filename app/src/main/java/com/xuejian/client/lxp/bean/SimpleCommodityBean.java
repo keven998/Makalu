@@ -33,8 +33,16 @@ public class SimpleCommodityBean implements Parcelable {
     private Object locality;
     private CoverBean cover;
     private List<ImageBean> images;
+    private List<PlanBean> plans;
 
 
+    public List<PlanBean> getPlans() {
+        return plans;
+    }
+
+    public void setPlans(List<PlanBean> plans) {
+        this.plans = plans;
+    }
 
     public void setCommodityId(long commodityId) {
         this.commodityId = commodityId;
@@ -131,9 +139,10 @@ public class SimpleCommodityBean implements Parcelable {
         dest.writeDouble(this.rating);
         dest.writeInt(this.salesVolume);
         dest.writeParcelable(this.seller, 0);
-   //     dest.writeParcelable(this.locality, flags);
+      //  dest.writeParcelable(this.locality, flags);
         dest.writeParcelable(this.cover, 0);
         dest.writeTypedList(images);
+        dest.writeTypedList(plans);
     }
 
     public SimpleCommodityBean() {
@@ -147,9 +156,10 @@ public class SimpleCommodityBean implements Parcelable {
         this.rating = in.readDouble();
         this.salesVolume = in.readInt();
         this.seller = in.readParcelable(SellerBean.class.getClassLoader());
-  //      this.locality = in.readParcelable(Object.class.getClassLoader());
+ //       this.locality = in.readParcelable(Object.class.getClassLoader());
         this.cover = in.readParcelable(CoverBean.class.getClassLoader());
         this.images = in.createTypedArrayList(ImageBean.CREATOR);
+        this.plans = in.createTypedArrayList(PlanBean.CREATOR);
     }
 
     public static final Parcelable.Creator<SimpleCommodityBean> CREATOR = new Parcelable.Creator<SimpleCommodityBean>() {

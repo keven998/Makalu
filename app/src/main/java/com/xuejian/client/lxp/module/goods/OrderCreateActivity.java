@@ -21,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
+import com.jakewharton.scalpel.ScalpelFrameLayout;
+import com.xuejian.client.lxp.BuildConfig;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
-import com.xuejian.client.lxp.bean.PassengerBean;
+import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -75,7 +77,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     public static int SELECTED_DATE = 101;
     public static int SELECTED_USER = 102;
     public static int EDIT_USER_LIST = 103;
-    private ArrayList<PassengerBean> passengerList = new ArrayList<>();
+    private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     CommonAdapter memberAdapter;
     ListView memberList;
     private int goodsNum = 1;
@@ -83,7 +85,15 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order);
+        if (BuildConfig.DEBUG){
+            View view = getLayoutInflater().inflate(R.layout.activity_order,null);
+            ScalpelFrameLayout sView  = new ScalpelFrameLayout(this);
+            //sView.setLayerInteractionEnabled(true);
+            sView.addView(view);
+            setContentView(sView);
+        }else {
+            setContentView(R.layout.activity_order);
+        }
         ButterKnife.inject(this);
         tv_address_book.setOnClickListener(this);
         tvSubmitOrder.setOnClickListener(this);
@@ -182,7 +192,6 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         super.onBackPressed();
         notice();
     }
-
     public void submitOrder() {
         TravelApi.createOrder(78668897366l, "cc97e9ac-16a7-4036-9d9d-08101031a3d7", tvDate.getText().toString(), goodsNum, etTel.getText().toString(), "", etFirstName.getText().toString(), etLastName.getText().toString(), "",passengerList ,new HttpCallBack<String>() {
             @Override
@@ -304,7 +313,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     //  viewHolder1.content.setPadding(10,0,0,0);
                 }
             } else if (ResId == R.layout.item_member_info) {
-                PassengerBean bean = (PassengerBean) getItem(position);
+                TravellerBean bean = (TravellerBean) getItem(position);
                 if (convertView == null) {
                     convertView = View.inflate(mContext, ResId, null);
 
@@ -315,7 +324,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 } else {
                     holder = (ViewHolder) convertView.getTag();
                 }
-                holder.content.setText(bean.lastName + " " + bean.firstName);
+                holder.content.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
             }
             return convertView;
         }
@@ -355,14 +364,14 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 String date = data.getStringExtra("date");
                 tvDate.setText(date);
             } else if (requestCode == SELECTED_USER) {
-                PassengerBean bean = data.getParcelableExtra("passenger");
+                TravellerBean bean = data.getParcelableExtra("passenger");
                 if (bean != null) {
-                    etFirstName.setText(bean.firstName);
-                    etLastName.setText(bean.lastName);
-                    etTel.setText(bean.tel);
+                    etFirstName.setText(bean.getTraveller().getGivenName());
+                    etLastName.setText(bean.getTraveller().getSurname());
+                    etTel.setText(bean.getTraveller().getTel().getDialCode()+"-"+bean.getTraveller().getTel().getNumber());
                 }
             } else if (requestCode == EDIT_USER_LIST) {
-                ArrayList<PassengerBean> list = data.getParcelableArrayListExtra("passenger");
+                ArrayList<TravellerBean> list = data.getParcelableArrayListExtra("passenger");
                 passengerList.clear();
                 passengerList.addAll(list);
                 memberAdapter.notifyDataSetChanged();

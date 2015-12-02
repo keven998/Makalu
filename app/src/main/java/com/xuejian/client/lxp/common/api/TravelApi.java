@@ -9,7 +9,7 @@ import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.xuejian.client.lxp.bean.LocBean;
-import com.xuejian.client.lxp.bean.PassengerBean;
+import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.SystemConfig;
 
@@ -120,6 +120,72 @@ public class TravelApi extends BaseApi {
     // 订单详情
     public final static String ORDER_DETAIL = "/marketplace/orders/%s";
 
+    // 旅客信息
+    public final static String TRAVELLER_INFO = "/users/%d/travellers";
+
+    // 修改旅客信息
+    public final static String EDIT_TRAVELLER_INFO = "/users/%d/travellers/%s";
+
+
+    public static void getTravellers(long orderId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRAVELLER_INFO, orderId));
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void editTraveller
+            (long userId, String key,String surname, String givenName, String gender, long birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL + String.format(EDIT_TRAVELLER_INFO,userId,key));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("surname", surname);
+            jsonObject.put("givenName", givenName);
+            jsonObject.put("gender", gender);
+            jsonObject.put("birthday", birthday);
+            jsonObject.put("idProof", idProof);
+            jsonObject.put("tel", tel);
+            jsonObject.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
+
+    public static void createTraveller
+            (long userId, String surname, String givenName, String gender, long birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRAVELLER_INFO,userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("surname", surname);
+            jsonObject.put("givenName", givenName);
+            jsonObject.put("gender", gender);
+            jsonObject.put("birthday", birthday);
+            jsonObject.put("idProof", idProof);
+            jsonObject.put("tel", tel);
+            jsonObject.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
 
     public static void getOrderDetail(long orderId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -140,7 +206,7 @@ public class TravelApi extends BaseApi {
 
 
     public static void createOrder
-            (long commodityId, String planId, String rendezvousTime, int quantity, String contactPhone, String contactEmail, String contactSurname, String contactGivenName, String contactComment, ArrayList<PassengerBean> list, HttpCallBack callback) {
+            (long commodityId, String planId, String rendezvousTime, int quantity, String contactPhone, String contactEmail, String contactSurname, String contactGivenName, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CREATE_ORDER);
@@ -159,8 +225,8 @@ public class TravelApi extends BaseApi {
             jsonObject.put("contactComment", contactComment);
             if (list != null && list.size() > 0) {
                 JSONArray array = new JSONArray();
-                for (PassengerBean bean : list) {
-                    array.put(bean.id);
+                for (TravellerBean bean : list) {
+                    array.put(bean.getTraveller().getIdentities().get(0).getNumber());
                 }
                 jsonObject.put("travellers", array);
             }

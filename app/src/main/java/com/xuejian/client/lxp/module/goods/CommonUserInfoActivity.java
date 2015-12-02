@@ -11,9 +11,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.PassengerBean;
+import com.xuejian.client.lxp.bean.TravellerBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 
 import java.util.ArrayList;
 
@@ -25,10 +29,11 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
     private int EDIT_INFO = 103;
     TextView tvBack;
     TextView tv_confirm;
-    private ArrayList<PassengerBean> passengerList = new ArrayList<>();
-    private ArrayList<PassengerBean> selectedPassengerList = new ArrayList<>();
-    private PassengerBean passenger;
+    private ArrayList<TravellerBean> passengerList = new ArrayList<>();
+    private ArrayList<TravellerBean> selectedPassengerList = new ArrayList<>();
+    private TravellerBean passenger;
     UserAdapter userAdapter;
+    UserInfoAdapter userInfoAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,19 +47,55 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 finish();
             }
         });
-        for (int i = 0; i < 3; i++) {
-            PassengerBean bean = new PassengerBean();
-            bean.id = "53452454253";
-            bean.tel = "1384656365564";
-            bean.lastName = "Zhao";
-            bean.firstName = "Xiaoqin" + i;
-            passengerList.add(bean);
-        }
-        passenger = passengerList.get(0);
+//        for (int i = 0; i < 3; i++) {
+//            TravellerBean bean = new TravellerBean();
+//            TravellerEntity traveller =new TravellerEntity();
+//            IdentityBean identityBean = new IdentityBean();
+//            identityBean.setNumber("53452454253");
+//            identityBean.setIdType("chineseID");
+//            traveller.setGivenName("Xiaoqin");
+//            traveller.setSurname("Zhao");
+//            TelBean tel = new TelBean();
+//            tel.setDialCode(86);
+//            tel.setNumber(1384656365564l);
+//            traveller.setTel(tel);
+//            ArrayList<IdentityBean> identityBeanArrayList = new ArrayList<>();
+//            identityBeanArrayList.add(identityBean);
+//            traveller.setIdentities(identityBeanArrayList);
+//            bean.setTraveller(traveller);
+//            passengerList.add(bean);
+//        }
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
         initView(type,multiple);
+        getData();
 
     }
+
+    public void getData(){
+        long userId = AccountManager.getInstance().getLoginAccount(mContext).getUserId();
+        TravelApi.getTravellers(userId, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<TravellerBean> list = CommonJson4List.fromJson(result,TravellerBean.class);
+                passengerList.addAll(list.result);
+                if (passengerList.size()>0){
+                    passenger = passengerList.get(0);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
 
     private void initView(int type, final boolean multiple) {
         TextView title = (TextView) findViewById(R.id.title);
@@ -72,6 +113,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(CommonUserInfoActivity.this, UserInfoEditActivity.class);
+                    intent.putExtra("type","create");
                     startActivityForResult(intent, EDIT_INFO);
                 }
             });
@@ -96,7 +138,8 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             tv_confirm.setVisibility(View.GONE);
             title.setText(R.string.user_info);
             ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
-            memberList.setAdapter(new UserInfoAdapter());
+            userInfoAdapter = new UserInfoAdapter();
+            memberList.setAdapter(userInfoAdapter);
         }
     }
 
@@ -141,7 +184,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             } else {
                 viewHolder1 = (ViewHolder1) convertView.getTag();
             }
-            final PassengerBean bean = (PassengerBean) getItem(position);
+            final TravellerBean bean = (TravellerBean) getItem(position);
 
 
             viewHolder1.username.setOnClickListener(new View.OnClickListener() {
@@ -166,9 +209,18 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             } else {
                 viewHolder1.edit.setVisibility(View.INVISIBLE);
             }
-            viewHolder1.username.setText(bean.firstName + " " + bean.lastName);
-            viewHolder1.id.setText(String.format("护照 %s", bean.id));
-
+            viewHolder1.username.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
+            viewHolder1.id.setText(String.format("护照 %s", bean.getTraveller().getIdentities().get(0).getNumber()));
+            viewHolder1.edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra("type", "edit");
+                    intent.putExtra("passenger", bean);
+                    intent.setClass(CommonUserInfoActivity.this, UserInfoEditActivity.class);
+                    startActivity(intent);
+                }
+            });
             if (!multiple) {
                 viewHolder1.username.setChecked(position == lastId);
             }
@@ -234,7 +286,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == EDIT_INFO) {
-                PassengerBean bean = data.getParcelableExtra("passenger");
+                TravellerBean bean = data.getParcelableExtra("passenger");
                 passengerList.add(bean);
                 userAdapter.notifyDataSetChanged();
             }

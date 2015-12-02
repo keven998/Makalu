@@ -126,6 +126,7 @@ dependencies {
     compile 'com.facebook.react:react-native:0.13.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.squareup:android-times-square:1.6.4@aar'
+    compile 'com.jakewharton.scalpel:scalpel:1.1.2'
 
 }
 

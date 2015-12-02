@@ -15,13 +15,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.PassengerBean;
+import com.xuejian.client.lxp.bean.IdentityBean;
+import com.xuejian.client.lxp.bean.TelBean;
+import com.xuejian.client.lxp.bean.TravellerBean;
+import com.xuejian.client.lxp.bean.TravellerEntity;
+import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,27 +63,43 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     EditText etId;
     @InjectView(R.id.type_spinner)
     Spinner spinner;
+    String idType ="passport";
+    String type = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_edit);
         ButterKnife.inject(this);
+        type = getIntent().getStringExtra("type");
         tvTitleBack.setOnClickListener(this);
         tvConfirm.setOnClickListener(this);
         ivSelectBirthday.setOnClickListener(this);
-        String [] mItems =new String[]{"护照","身份证"};
+        String[] mItems = new String[]{"护照", "身份证"};
+        final String[] idTypeArray = new String[]{"passport", "chineseID"};
         StringSpinnerAdapter mTypeListAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(mItems));
         spinner.setAdapter(mTypeListAdapter);
         spinner.setSelection(0, true);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                idType = idTypeArray[position];
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        if ("edit".equals(type)){
+            TravellerBean bean1 = getIntent().getParcelableExtra("passenger");
+            bindView(bean1);
+        }
+    }
+
+    private void bindView(TravellerBean bean) {
+        etLastName.setText(bean.getTraveller().getSurname());
+        etFirstName.setText(bean.getTraveller().getGivenName());
+        etTel.setText(bean.getTraveller().getTel().getDialCode()+"-"+bean.getTraveller().getTel().getNumber());
+        etId.setText(bean.getTraveller().getIdentities().get(0).getNumber()+"");
     }
 
     @Override
@@ -85,33 +112,137 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
                 SelectBirthday();
                 break;
             case R.id.tv_confirm:
-                Intent intent = new Intent();
-                PassengerBean bean = new PassengerBean();
-                if(TextUtils.isEmpty(etFirstName.getText().toString())){
-                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+
+                if (TextUtils.isEmpty(etFirstName.getText().toString())) {
+                    Toast.makeText(mContext, "请填写完整旅客信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(etLastName.getText().toString())){
-                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(etLastName.getText().toString())) {
+                    Toast.makeText(mContext, "请填写完整旅客信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(etTel.getText().toString())){
-                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(etTel.getText().toString())) {
+                    Toast.makeText(mContext, "请填写完整旅客信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(etId.getText().toString())){
-                    Toast.makeText(mContext,"请填写完整旅客信息",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(etId.getText().toString())) {
+                    Toast.makeText(mContext, "请填写完整旅客信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                bean.lastName = etLastName.getText().toString();
-                bean.firstName = etFirstName.getText().toString();
-                bean.id = etId.getText().toString();
-                bean.tel = etTel.getText().toString();
-                intent.putExtra("passenger",bean);
-                setResult(RESULT_OK, intent);
-                finish();
+
+                switch (type){
+                    case "create":
+                        TravellerBean bean = new TravellerBean();
+                        TravellerEntity traveller = new TravellerEntity();
+                        IdentityBean identityBean = new IdentityBean();
+                        identityBean.setNumber(etId.getText().toString());
+                        identityBean.setIdType(idType);
+                        traveller.setGivenName(etFirstName.getText().toString());
+                        traveller.setSurname(etLastName.getText().toString());
+                        TelBean tel = new TelBean();
+                        tel.setDialCode(86);
+                        tel.setNumber(Long.parseLong(etTel.getText().toString()));
+                        traveller.setTel(tel);
+                        ArrayList<IdentityBean> identityBeanArrayList = new ArrayList<>();
+                        identityBeanArrayList.add(identityBean);
+                        traveller.setIdentities(identityBeanArrayList);
+                        bean.setTraveller(traveller);
+                        submitTraveller(bean);
+                        break;
+                    case "edit":
+                        TravellerBean bean1 = getIntent().getParcelableExtra("passenger");
+                        TravellerEntity traveller1 = new TravellerEntity();
+                        IdentityBean identityBean1 = new IdentityBean();
+                        identityBean1.setNumber(etId.getText().toString());
+                        identityBean1.setIdType(idType);
+                        traveller1.setGivenName(etFirstName.getText().toString());
+                        traveller1.setSurname(etLastName.getText().toString());
+                        TelBean tel1 = new TelBean();
+                        tel1.setDialCode(86);
+                        tel1.setNumber(Long.parseLong(etTel.getText().toString()));
+                        traveller1.setTel(tel1);
+                        ArrayList<IdentityBean> identityBeanArrayList1 = new ArrayList<>();
+                        identityBeanArrayList1.add(identityBean1);
+                        traveller1.setIdentities(identityBeanArrayList1);
+                        bean1.setTraveller(traveller1);
+                        editTraveller(bean1);
+                        break;
+                    default:
+                        break;
+                }
+
                 break;
         }
+    }
+
+    public void editTraveller(final TravellerBean bean){
+        JSONObject idProof = new JSONObject();
+        JSONObject tel = new JSONObject();
+        try {
+            idProof.put("idType", bean.getTraveller().getIdentities().get(0).getIdType());
+            idProof.put("number", bean.getTraveller().getIdentities().get(0).getNumber());
+            tel.put("dialCode", bean.getTraveller().getTel().getDialCode());
+            tel.put("number", bean.getTraveller().getTel().getNumber());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long userId = AccountManager.getInstance().getLoginAccount(mContext).getUserId();
+        TravelApi.editTraveller(userId,bean.getKey(), bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", 0, idProof, tel, "", new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<TravellerBean> traveller = CommonJson.fromJson(result,TravellerBean.class);
+                Intent intent = new Intent();
+                intent.putExtra("passenger", traveller.result);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void submitTraveller(final TravellerBean bean) {
+        JSONObject idProof = new JSONObject();
+        JSONObject tel = new JSONObject();
+        try {
+            idProof.put("idType", bean.getTraveller().getIdentities().get(0).getIdType());
+            idProof.put("number", bean.getTraveller().getIdentities().get(0).getNumber());
+            tel.put("dialCode", bean.getTraveller().getTel().getDialCode());
+            tel.put("number", bean.getTraveller().getTel().getNumber());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        long userId = AccountManager.getInstance().getLoginAccount(mContext).getUserId();
+        TravelApi.createTraveller(userId, bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", 0, idProof, tel, "", new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<TravellerBean> traveller = CommonJson.fromJson(result,TravellerBean.class);
+                Intent intent = new Intent();
+                intent.putExtra("passenger", traveller.result);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+
     }
 
     private void SelectBirthday() {

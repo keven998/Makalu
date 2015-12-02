@@ -42,32 +42,32 @@ public class OrderBean implements Parcelable {
     private String status;
     private List<String> travellers;
     private List<String> commodityTimeRange;
-    private String createTime;
-    private String updateTime;
-    private String expireTime;
+    private long createTime;
+    private long updateTime;
+    private long expireTime;
 
 
-    public String getUpdateTime() {
+    public long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(String updateTime) {
+    public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
-    public String getExpireTime() {
+    public long getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(String expireTime) {
+    public void setExpireTime(long expireTime) {
         this.expireTime = expireTime;
     }
 
@@ -195,9 +195,9 @@ public class OrderBean implements Parcelable {
         dest.writeString(this.status);
         dest.writeStringList(this.travellers);
         dest.writeStringList(this.commodityTimeRange);
-        dest.writeString(this.createTime);
-        dest.writeString(this.updateTime);
-        dest.writeString(this.expireTime);
+        dest.writeLong(this.createTime);
+        dest.writeLong(this.updateTime);
+        dest.writeLong(this.expireTime);
     }
 
     public OrderBean() {
@@ -217,9 +217,9 @@ public class OrderBean implements Parcelable {
         this.status = in.readString();
         this.travellers = in.createStringArrayList();
         this.commodityTimeRange = in.createStringArrayList();
-        this.createTime = in.readString();
-        this.updateTime = in.readString();
-        this.expireTime = in.readString();
+        this.createTime = in.readLong();
+        this.updateTime = in.readLong();
+        this.expireTime = in.readLong();
     }
 
     public static final Parcelable.Creator<OrderBean> CREATOR = new Parcelable.Creator<OrderBean>() {
