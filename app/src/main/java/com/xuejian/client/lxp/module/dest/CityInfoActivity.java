@@ -9,6 +9,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,10 +26,13 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CityBean;
 import com.xuejian.client.lxp.bean.ImageBean;
+import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 
 import java.util.ArrayList;
@@ -51,6 +55,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     TextView tvRecommendTime;
     TextView tvStoreNum;
     String id;
+    RecommendGoodsAdapter adapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +76,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CityInfoActivity.this, GoodsList.class);
+                intent.putExtra("id",id);
                 startActivity(intent);
             }
         });
@@ -83,8 +89,17 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
         listView.addHeaderView(headView);
         listView.addFooterView(footView);
-        listView.setAdapter(new RecommendGoodsAdapter(this));
-
+        adapter = new RecommendGoodsAdapter(this,3);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(CityInfoActivity.this, ReactMainPage.class);
+                intent.putExtra("commodityId",id);
+                startActivity(intent);
+            }
+        });
         initData(id);
 
 
@@ -111,10 +126,31 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
             }
         });
-        TravelApi.getCityDetail(id,"", new HttpCallBack<String>() {
+        TravelApi.getCityDetail(id, "", new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
 
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+
+        TravelApi.getCommodityList(null, id, null, null, null, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
+                adapter.getDataList().clear();
+                adapter.getDataList().addAll(list.result);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -212,17 +248,20 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
     class RecommendGoodsAdapter extends BaseAdapter {
         private DisplayImageOptions options;
-        private Context mContex;
-
-        public RecommendGoodsAdapter(Context c) {
-            mContex = c;
+        private Context mContext;
+        private ArrayList<SimpleCommodityBean> data;
+        private int maxCount;
+        public RecommendGoodsAdapter(Context c,int maxCount) {
+            this.maxCount = maxCount;
+            data = new ArrayList<>();
+            mContext = c;
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.ic_default_picture)
-                    .showImageOnLoading(R.drawable.ic_default_picture)
-                    .showImageForEmptyUri(R.drawable.ic_default_picture)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnLoading(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(60)))
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
@@ -232,35 +271,55 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             return true;
         }
 
+        public ArrayList<SimpleCommodityBean> getDataList() {
+            return data;
+        }
+
         @Override
         public int getCount() {
-            return 2;
+            if (data.size()>maxCount){
+                return maxCount;
+            }else {
+                return data.size();
+            }
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return data.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return data.get(position).getCommodityId();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
             if (convertView == null) {
-                convertView = View.inflate(mContex, R.layout.item_city_info_goods, null);
+                convertView = View.inflate(mContext, R.layout.item_city_info_goods, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+            SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
+
+            viewHolder.tvShopName.setText(bean.getTitle());
+            viewHolder.tvGoodsCurrentPrice.setText("¥" + String.valueOf((double) Math.round(bean.getPrice() * 10 / 10)));
+            viewHolder.tvGoodsPrice.setText("¥" + String.valueOf((double) Math.round(bean.getMarketPrice() * 10 / 10)));
             viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/af563f2f2e6bea2560857c6026e428a1?imageMogr2/auto-orient/strip/gravity/NorthWest/crop/!998x570a2a2/thumbnail/960", viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
-            ImageLoader.getInstance().displayImage("http://images.taozilvxing.com/a5c320585c1a9667facb10bd60d0f881?imageView2/2/w/1200", viewHolder.ivAvatar, options);
+            viewHolder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
+            viewHolder.tvGoodsRecommend.setText(bean.getRating() * 100 + "%");
+
+            if (bean.getImages().size()>0){
+                ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
+            }else {
+                ImageLoader.getInstance().displayImage("", viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
+            }
+            ImageLoader.getInstance().displayImage("", viewHolder.ivAvatar, options);
             return convertView;
         }
 

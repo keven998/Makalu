@@ -40,7 +40,7 @@ public class OrderBean implements Parcelable {
     private int quantity;
     private String comment;
     private String status;
-    private List<String> travellers;
+    private List<TravellerEntity> travellers;
     private List<String> commodityTimeRange;
     private long createTime;
     private long updateTime;
@@ -115,7 +115,7 @@ public class OrderBean implements Parcelable {
         this.status = status;
     }
 
-    public void setTravellers(List<String > travellers) {
+    public void setTravellers(List<TravellerEntity > travellers) {
         this.travellers = travellers;
     }
 
@@ -193,7 +193,7 @@ public class OrderBean implements Parcelable {
         dest.writeInt(this.quantity);
         dest.writeString(this.comment);
         dest.writeString(this.status);
-        dest.writeStringList(this.travellers);
+        dest.writeTypedList(travellers);
         dest.writeStringList(this.commodityTimeRange);
         dest.writeLong(this.createTime);
         dest.writeLong(this.updateTime);
@@ -215,7 +215,7 @@ public class OrderBean implements Parcelable {
         this.quantity = in.readInt();
         this.comment = in.readString();
         this.status = in.readString();
-        this.travellers = in.createStringArrayList();
+        this.travellers = in.createTypedArrayList(TravellerEntity.CREATOR);
         this.commodityTimeRange = in.createStringArrayList();
         this.createTime = in.readLong();
         this.updateTime = in.readLong();

@@ -226,7 +226,7 @@ public class TravelApi extends BaseApi {
             if (list != null && list.size() > 0) {
                 JSONArray array = new JSONArray();
                 for (TravellerBean bean : list) {
-                    array.put(bean.getTraveller().getIdentities().get(0).getNumber());
+                    array.put(bean.getKey());
                 }
                 jsonObject.put("travellers", array);
             }

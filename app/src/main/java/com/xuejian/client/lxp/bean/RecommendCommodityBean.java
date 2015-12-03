@@ -23,13 +23,13 @@ public class RecommendCommodityBean {
      * images : 图片
      */
 
-    private ArrayList<CommoditiesEntity> commodities;
+    private ArrayList<SimpleCommodityBean> commodities;
 
     public void setTopicType(String topicType) {
         this.topicType = topicType;
     }
 
-    public void setCommodities(ArrayList<CommoditiesEntity> commodities) {
+    public void setCommodities(ArrayList<SimpleCommodityBean> commodities) {
         this.commodities = commodities;
     }
 
@@ -37,65 +37,8 @@ public class RecommendCommodityBean {
         return topicType;
     }
 
-    public ArrayList<CommoditiesEntity> getCommodities() {
+    public ArrayList<SimpleCommodityBean> getCommodities() {
         return commodities;
     }
 
-    public static class CommoditiesEntity {
-        private String title;
-        private double marketPrice;
-        private int price;
-        private double rating;
-        private int salesVolume;
-
-        private ArrayList<ImageBean> images;
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public void setMarketPrice(double marketPrice) {
-            this.marketPrice = marketPrice;
-        }
-
-        public void setPrice(int price) {
-            this.price = price;
-        }
-
-        public void setRating(double rating) {
-            this.rating = rating;
-        }
-
-        public void setSalesVolume(int salesVolume) {
-            this.salesVolume = salesVolume;
-        }
-
-        public void setImages(ArrayList<ImageBean> images) {
-            this.images = images;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public double getMarketPrice() {
-            return marketPrice;
-        }
-
-        public int getPrice() {
-            return price;
-        }
-
-        public double getRating() {
-            return rating;
-        }
-
-        public int getSalesVolume() {
-            return salesVolume;
-        }
-
-        public ArrayList<ImageBean> getImages() {
-            return images;
-        }
-    }
 }

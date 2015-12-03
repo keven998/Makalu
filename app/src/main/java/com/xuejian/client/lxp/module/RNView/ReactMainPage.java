@@ -42,6 +42,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        long commodityId = getIntent().getLongExtra("commodityId",-1);
         showLoading();
         prepareJSBundle();
         mReactRootView = new ReactRootView(this);
@@ -57,7 +58,8 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                 .build();
         setContentView(R.layout.activity_rnview);
         mReactRootView = (ReactRootView) findViewById(R.id.root_view);
-        getData(78668897366l);
+        getData(commodityId);
+
 //        Bundle bundle = new Bundle();
 //        bundle.putString("haha", "hehe");
 //        mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
@@ -106,6 +108,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     }
 
     public void getData(long commodityId) {
+        if (commodityId<=0)return;
         TravelApi.getCommodity(commodityId, new HttpCallBack<String>() {
 
             @Override

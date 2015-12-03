@@ -16,8 +16,13 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
-import com.xuejian.client.lxp.module.goods.OrderCreateActivity;
+import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
+import com.xuejian.client.lxp.module.my.SettingActivity;
+import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
+import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -51,7 +56,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RelativeLayout rlMyContact;
     @InjectView(R.id.rl_my_common_user)
     RelativeLayout rlMyCommonUser;
-
+    User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +80,32 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         tvProcess.setOnClickListener(this);
         tvAvailable.setOnClickListener(this);
         tvDrawback.setOnClickListener(this);
-        ImageLoader.getInstance().displayImage(AccountManager.getInstance().getLoginAccount(getActivity()).getAvatar(), userAvatar, options);
-
+        rlMyCollection.setOnClickListener(this);
+        rlMyCommonUser.setOnClickListener(this);
+        rlMyContact.setOnClickListener(this);
+        rlMyPlan.setOnClickListener(this);
+        user = AccountManager.getInstance().getLoginAccount(getActivity());
+        initHeadTitleView(user);
         return view;
+    }
+
+    public void initHeadTitleView(User user) {
+        if (user!=null){
+            tvNickname.setText(user.getNickName());
+            ImageLoader.getInstance().displayImage(user.getAvatar(), userAvatar, options);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        User user = AccountManager.getInstance().getLoginAccount(getActivity());
+        if (user != null) {
+            initHeadTitleView(user);
+        } else {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.setTabForLogout();
+        }
     }
 
     @Override
@@ -90,7 +118,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.setting_btn:
-                Intent setting_btn = new Intent(getActivity(), OrderCreateActivity.class);
+                Intent setting_btn = new Intent(getActivity(), SettingActivity.class);
                 startActivity(setting_btn);
                 break;
             case R.id.tv_all_order:
@@ -116,6 +144,29 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 Intent tv_drawback = new Intent(getActivity(), OrderListActivity.class);
                 tv_drawback.putExtra("page",4);
                 startActivity(tv_drawback);
+                break;
+            case R.id.rl_my_collection:
+                break;
+            case R.id.rl_my_plan:
+                Intent planIntent = new Intent();
+                planIntent.setClass(getActivity(), StrategyListActivity.class);
+                planIntent.putExtra("isShare", false);
+                planIntent.putExtra("isOwner",true);
+                if (user!=null)planIntent.putExtra("userId",String.valueOf(user.getUserId()));
+                startActivity(planIntent);
+                break;
+            case R.id.rl_my_contact:
+                Intent contactIntent = new Intent();
+                contactIntent.setClass(getActivity(), ContactActivity.class);
+                startActivity(contactIntent);
+                break;
+            case R.id.rl_my_common_user:
+                Intent userIntent = new Intent();
+                userIntent.setClass(getActivity(), CommonUserInfoActivity.class);
+                userIntent.putExtra("ListType",2);
+                startActivity(userIntent);
+                break;
+            default:
                 break;
         }
     }

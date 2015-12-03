@@ -30,7 +30,7 @@ public class SimpleCommodityBean implements Parcelable {
     private double rating;
     private int salesVolume;
     private SellerBean seller;
-    private Object locality;
+    private localityBean locality;
     private CoverBean cover;
     private List<ImageBean> images;
     private List<PlanBean> plans;
@@ -72,7 +72,7 @@ public class SimpleCommodityBean implements Parcelable {
         this.seller = seller;
     }
 
-    public void setLocality(Object locality) {
+    public void setLocality(localityBean locality) {
         this.locality = locality;
     }
 
@@ -112,7 +112,7 @@ public class SimpleCommodityBean implements Parcelable {
         return seller;
     }
 
-    public Object getLocality() {
+    public localityBean getLocality() {
         return locality;
     }
 
@@ -139,7 +139,7 @@ public class SimpleCommodityBean implements Parcelable {
         dest.writeDouble(this.rating);
         dest.writeInt(this.salesVolume);
         dest.writeParcelable(this.seller, 0);
-      //  dest.writeParcelable(this.locality, flags);
+        dest.writeParcelable(this.locality, flags);
         dest.writeParcelable(this.cover, 0);
         dest.writeTypedList(images);
         dest.writeTypedList(plans);
@@ -156,7 +156,7 @@ public class SimpleCommodityBean implements Parcelable {
         this.rating = in.readDouble();
         this.salesVolume = in.readInt();
         this.seller = in.readParcelable(SellerBean.class.getClassLoader());
- //       this.locality = in.readParcelable(Object.class.getClassLoader());
+        this.locality = in.readParcelable(Object.class.getClassLoader());
         this.cover = in.readParcelable(CoverBean.class.getClassLoader());
         this.images = in.createTypedArrayList(ImageBean.CREATOR);
         this.plans = in.createTypedArrayList(PlanBean.CREATOR);

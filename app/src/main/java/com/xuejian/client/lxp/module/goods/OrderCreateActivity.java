@@ -26,6 +26,7 @@ import com.xuejian.client.lxp.BuildConfig;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
+import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -81,7 +82,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     CommonAdapter memberAdapter;
     ListView memberList;
     private int goodsNum = 1;
-
+    String commodityId;
+    ArrayList<PlanBean> planList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,9 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             setContentView(R.layout.activity_order);
         }
         ButterKnife.inject(this);
+        final ArrayList<PlanBean> data = getIntent().getParcelableArrayListExtra("planList");
+        planList = data;
+        commodityId = getIntent().getStringExtra("commodityId");
         tv_address_book.setOnClickListener(this);
         tvSubmitOrder.setOnClickListener(this);
         ctvAgreement.setOnClickListener(this);
@@ -103,12 +108,12 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         tvTitleBack.setOnClickListener(this);
 
         ListView packageList = (ListView) findViewById(R.id.lv_choose);
-        packageList.setAdapter(new CommonAdapter(mContext, R.layout.item_package_info, true));
+        packageList.setAdapter(new CommonAdapter(mContext, R.layout.item_package_info, true, data));
         setListViewHeightBasedOnChildren(packageList);
 
 
         memberList = (ListView) findViewById(R.id.lv_members);
-        memberAdapter = new CommonAdapter(mContext, R.layout.item_member_info, false);
+        memberAdapter = new CommonAdapter(mContext, R.layout.item_member_info, false,null);
         memberList.setAdapter(memberAdapter);
         setListViewHeightBasedOnChildren(memberList);
         if (memberAdapter.getCount() > 0) {
@@ -124,6 +129,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OrderCreateActivity.this, DatePickActivity.class);
+                intent.putExtra("planList",data);
                 startActivityForResult(intent, SELECTED_DATE);
             }
         });
@@ -189,11 +195,11 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+       // super.onBackPressed();
         notice();
     }
     public void submitOrder() {
-        TravelApi.createOrder(78668897366l, "cc97e9ac-16a7-4036-9d9d-08101031a3d7", tvDate.getText().toString(), goodsNum, etTel.getText().toString(), "", etFirstName.getText().toString(), etLastName.getText().toString(), "",passengerList ,new HttpCallBack<String>() {
+        TravelApi.createOrder(Long.parseLong(commodityId), planList.get(0).getPlanId(), tvDate.getText().toString(), goodsNum, etTel.getText().toString(), "", etFirstName.getText().toString(), etLastName.getText().toString(), "",passengerList ,new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
@@ -249,8 +255,9 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         private Context mContext;
         private int ResId;
         private int lastId;
-
-        public CommonAdapter(Context c, int ResId, boolean selected) {
+        private ArrayList<PlanBean> packageList;
+        public CommonAdapter(Context c, int ResId, boolean selected,ArrayList<PlanBean>list) {
+            packageList = list;
             mContext = c;
             this.ResId = ResId;
 
@@ -259,7 +266,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         @Override
         public int getCount() {
             if (ResId == R.layout.item_package_info) {
-                return 3;
+                return packageList.size();
             } else if (ResId == R.layout.item_member_info) {
                 return passengerList.size();
             }
@@ -269,7 +276,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         @Override
         public Object getItem(int position) {
             if (ResId == R.layout.item_package_info) {
-                return null;
+                return packageList.get(position);
             } else if (ResId == R.layout.item_member_info) {
                 return passengerList.get(position);
             }
@@ -278,7 +285,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
@@ -303,8 +310,9 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                         notifyDataSetChanged();
                     }
                 });
-                viewHolder1.packageName.setText("套餐A五星级酒店");
-                viewHolder1.packagePrice.setText("¥44332起");
+                PlanBean bean= (PlanBean) getItem(position);
+                viewHolder1.packageName.setText(bean.getTitle());
+                viewHolder1.packagePrice.setText(String.format("¥%d起",bean.getPrice()));
                 if (position == lastId) {
                     viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_selected);
                     //  viewHolder1.content.setPadding(10,0,0,0);
@@ -368,7 +376,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 if (bean != null) {
                     etFirstName.setText(bean.getTraveller().getGivenName());
                     etLastName.setText(bean.getTraveller().getSurname());
-                    etTel.setText(bean.getTraveller().getTel().getDialCode()+"-"+bean.getTraveller().getTel().getNumber());
+                    etTel.setText(bean.getTraveller().getTel().getNumber()+"");
                 }
             } else if (requestCode == EDIT_USER_LIST) {
                 ArrayList<TravellerBean> list = data.getParcelableArrayListExtra("passenger");

@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.goods;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
+import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,19 +69,28 @@ public class GoodsList extends PeachBaseActivity {
     private String[] sortValue = new String[]{"salesVolume","price","price"};
 
     private String currentType;
+    String locId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_list);
         ButterKnife.inject(this);
-
+        locId = getIntent().getStringExtra("id");
 
         goodsList.setPullLoadEnabled(false);
         goodsList.setPullRefreshEnabled(false);
         goodsList.setScrollLoadEnabled(true);
         goodsList.setHasMoreData(false);
         adapter = new GoodsListAdapter(mContext);
-
+        goodsList.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(GoodsList.this, ReactMainPage.class);
+                intent.putExtra("commodityId",id);
+                startActivity(intent);
+            }
+        });
 
         goodsList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -104,12 +115,12 @@ public class GoodsList extends PeachBaseActivity {
                 goodsList.getRefreshableView().setSelection(0);
             }
         });
-        getCategory();
-        getData(0,"100012",null,null,null);
+        getCategory(locId);
+        getData(0,null,locId,null,null);
     }
 
-    private void getCategory() {
-        TravelApi.getCategoryList("55fbe42eb257b61c149e784a", new HttpCallBack<String>() {
+    private void getCategory(String id) {
+        TravelApi.getCategoryList(id, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
@@ -188,7 +199,7 @@ public class GoodsList extends PeachBaseActivity {
                         //    lv.setSelection(headerPos.get(position));
                         currentType = bean.category.get(position);
                         typeSpinner.setText(currentType);
-                        getData(0, "100012", null, currentType,null);
+                        getData(0, null, locId, currentType,null);
                         if (categoryDialog != null) categoryDialog.dismiss();
                     }
                 });
@@ -214,7 +225,7 @@ public class GoodsList extends PeachBaseActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         //    lv.setSelection(headerPos.get(position));
                         sortSpinner.setText(SortList.get(position));
-                        getData(0, "100012", null, currentType, sortValue[position]);
+                        getData(0, null, locId, currentType, sortValue[position]);
 
                         if (sortDialog != null) sortDialog.dismiss();
                     }
@@ -267,7 +278,7 @@ public class GoodsList extends PeachBaseActivity {
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return mDataList.get(position).getCommodityId();
         }
 
         @Override

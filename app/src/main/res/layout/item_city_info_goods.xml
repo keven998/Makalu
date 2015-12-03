@@ -7,27 +7,22 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        >
+        android:layout_height="180dp">
 
         <ImageView
             android:id="@+id/iv_goods_img"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_home_avatar_unknown" />
 
-        <FrameLayout
+        <ImageView
+            android:id="@+id/iv_avatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="bottom|right"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp">
-
-            <ImageView
-                android:id="@+id/iv_avatar"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
-        </FrameLayout>
+            android:layout_marginBottom="25dp"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:id="@+id/tv_shop_name"
@@ -36,7 +31,8 @@
             android:layout_gravity="bottom|left"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="8dp"
-            android:text="保的家庭酒店"
+            android:layout_marginRight="50dp"
+            android:maxLines="2"
             android:textColor="@color/color_text_ii"
             android:textSize="16sp" />
     </FrameLayout>
@@ -53,7 +49,6 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:text="销量:1234"
             android:textColor="@color/color_text_iii"
             android:textSize="12sp" />
 
@@ -73,7 +68,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/ic"
-            android:text="100%"
             android:textColor="@color/color_text_iii"
             android:textSize="12sp" />
 
@@ -84,7 +78,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:text="¥2453"
             android:textColor="#ff3300"
             android:textSize="18sp" />
 
@@ -95,10 +88,10 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/tv_goods_current_price"
-            android:text="¥3433"
             android:textColor="@color/color_text_iii"
             android:textSize="14sp" />
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"

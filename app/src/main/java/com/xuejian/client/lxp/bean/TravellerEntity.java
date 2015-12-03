@@ -23,7 +23,6 @@ public class TravellerEntity implements Parcelable {
      * number : 1201011999....
      * idType : chineseID
      */
-
     private List<IdentityBean> identities;
 
     public void setSurname(String surname) {

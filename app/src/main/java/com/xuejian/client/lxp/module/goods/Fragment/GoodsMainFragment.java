@@ -10,7 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +28,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ColumnBean;
 import com.xuejian.client.lxp.bean.RecommendCommodityBean;
+import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
@@ -142,7 +143,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
     }
 
     private void resizeData(List<RecommendCommodityBean> result) {
-        ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data = new ArrayList<>();
+        ArrayList<ArrayList<SimpleCommodityBean>> data = new ArrayList<>();
         ArrayList<String> sectionName = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
             sectionName.add(i, result.get(i).getTopicType());
@@ -151,15 +152,8 @@ public class GoodsMainFragment extends PeachBaseFragment {
         bindListView(data, sectionName);
     }
 
-    private void bindListView(ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data, ArrayList<String> sectionName) {
+    private void bindListView(ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName) {
         listView.setAdapter(new RecommendGoodsAdapter(getActivity(), data, sectionName));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
-                startActivity(settingIntent);
-            }
-        });
     }
 
 
@@ -185,39 +179,40 @@ public class GoodsMainFragment extends PeachBaseFragment {
     }
 
     private void bindView(List<ColumnBean> result) {
-        String slide = result.get(0).getColumnType();
-        String special = result.get(1).getColumnType();
-        if ("slide".equals(slide)) {
-            GoodsPageAdapter adapter = new GoodsPageAdapter(getActivity(), result.get(0).getColumns());
-            viewPager.setAdapter(adapter);
-            viewPager.startAutoScroll();
-            viewPager.setInterval(2000);
-            viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
-            dotView.setNum(adapter.getCount());
-            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                }
+        for (ColumnBean columnBean : result) {
+            if ("slide".equals(columnBean.getColumnType())) {
+                GoodsPageAdapter adapter = new GoodsPageAdapter(getActivity(), result.get(0).getColumns());
+                viewPager.setAdapter(adapter);
+                viewPager.startAutoScroll();
+                viewPager.setInterval(2000);
+                viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
+                dotView.setNum(adapter.getCount());
+                viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    }
 
-                @Override
-                public void onPageSelected(int position) {
-                    dotView.setSelected(position);
-                }
+                    @Override
+                    public void onPageSelected(int position) {
+                        dotView.setSelected(position);
+                    }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
 
+                    }
+                });
+            } else if ("special".equals(columnBean.getColumnType())) {
+                ArrayList<ColumnBean.ColumnsEntity> list = result.get(1).getColumns();
+                for (ColumnBean.ColumnsEntity entity : list) {
+                    if (entity.getImages().size() > 0) {
+                        picList.add(entity.getImages().get(0).url);
+                    }
                 }
-            });
-        } else if ("special".equals(special)) {
-            ArrayList<ColumnBean.ColumnsEntity> list = result.get(1).getColumns();
-            for (ColumnBean.ColumnsEntity entity : list) {
-                if (entity.getImages().size() > 0) {
-                    picList.add(entity.getImages().get(0).url);
-                }
+                initScrollView();
             }
-            initScrollView();
         }
+
     }
 
 
@@ -272,10 +267,10 @@ public class GoodsMainFragment extends PeachBaseFragment {
     class RecommendGoodsAdapter extends BaseSectionAdapter {
 
         private Context mContex;
-        private ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data;
+        private ArrayList<ArrayList<SimpleCommodityBean>> data;
         private ArrayList<String> sectionName;
 
-        public RecommendGoodsAdapter(Context c, ArrayList<ArrayList<RecommendCommodityBean.CommoditiesEntity>> data, ArrayList<String> sectionName) {
+        public RecommendGoodsAdapter(Context c, ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName) {
             mContex = c;
             this.data = data;
             this.sectionName = sectionName;
@@ -321,10 +316,14 @@ public class GoodsMainFragment extends PeachBaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            RecommendCommodityBean.CommoditiesEntity bean = (RecommendCommodityBean.CommoditiesEntity) getItem(section,position);
+            final SimpleCommodityBean bean = (SimpleCommodityBean) getItem(section,position);
+            viewHolder.tvGoodsLoc.setText(bean.getLocality().getZhName());
+            viewHolder.tvGoodsName.setText(bean.getTitle());
+            viewHolder.tvShopName.setText(bean.getSeller().getName());
             viewHolder.tvGoodsPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getMarketPrice() * 10) / 10))));
             viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
+            viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getPrice() * 10) / 10))));
             if (bean.getImages().size()>0){
                 ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, options);
             }else {
@@ -333,6 +332,14 @@ public class GoodsMainFragment extends PeachBaseFragment {
             viewHolder.goodsTag.removeAllViews();
             viewHolder.goodsTag.setmTagViewResId(R.layout.goods_tag);
             viewHolder.goodsTag.setTags(mTags);
+            viewHolder.container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
+                    settingIntent.putExtra("commodityId", bean.getCommodityId());
+                    startActivity(settingIntent);
+                }
+            });
             return convertView;
         }
 
@@ -391,7 +398,8 @@ public class GoodsMainFragment extends PeachBaseFragment {
             TextView tvShopName;
             @InjectView(R.id.goods_tag)
             TagListView goodsTag;
-
+            @InjectView(R.id.fl_container)
+            FrameLayout container;
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);
             }

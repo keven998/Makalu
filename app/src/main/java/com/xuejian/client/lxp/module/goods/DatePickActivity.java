@@ -9,8 +9,10 @@ import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.PlanBean;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,16 +22,18 @@ import java.util.Date;
  */
 public class DatePickActivity extends PeachBaseActivity {
 
+    ArrayList<PlanBean> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
+        list = getIntent().getParcelableArrayListExtra("planList");
         TextView back = (TextView) findViewById(R.id.tv_title_back);
         final CalendarPickerView calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
-        calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
+        calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator(list)));
         calendar.init(today, nextYear.getTime())
                 .inMode(CalendarPickerView.SelectionMode.SINGLE);
         //  .withSelectedDate(today);

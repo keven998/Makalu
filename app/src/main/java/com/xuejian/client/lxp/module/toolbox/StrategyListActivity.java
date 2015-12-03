@@ -88,6 +88,15 @@ public class StrategyListActivity extends PeachBaseActivity {
     private String newId;
     private ArrayList<StrategyBean> strategyBeans;
 
+    /**
+     * 需要的数据
+     * toId ： 用户ID
+     * chatType ： 聊天类型
+     * conversation ： 会话ID
+     * copyId ：复制计划的ID
+     * newCopy ： 是否复制
+     * isShare ：是否分享
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
