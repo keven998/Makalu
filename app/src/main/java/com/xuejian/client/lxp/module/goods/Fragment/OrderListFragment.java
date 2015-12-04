@@ -21,14 +21,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.bean.OrderBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,17 +44,16 @@ import java.util.List;
 public class OrderListFragment extends PeachBaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     SwipeRefreshLayout mSwipeRefreshWidget;
     private int type;
-    public static final int ALL =1;
-    public static final int NEED_PAY =2;
-    public static final int PROCESS =3;
-    public static final int AVAILABLE =4;
-    public static final int DRAWBACK =5;
-    public static int color;
+    public static final int ALL = 1;
+    public static final int NEED_PAY = 2;
+    public static final int PROCESS = 3;
+    public static final int AVAILABLE = 4;
+    public static final int DRAWBACK = 5;
+    OrderListAdapter adapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         type = getArguments().getInt("type");
-        color = getResources().getColor(R.color.price_color);
     }
 
     @Nullable
@@ -64,25 +70,56 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
 //        rv.setVisibility(View.GONE);
 //        empty.setVisibility(View.VISIBLE);
 //        empty.setText("您没有处理中的订单");
+       switch (type){
+           case ALL:
+               getOrder("");
+               break;
+           case NEED_PAY:
+               getOrder("pending");
+               break;
+           default:
+               break;
+       }
+
         return view;
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
-        List<String> list = new ArrayList<>();
+    public void getOrder(String status) {
+        long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
+        TravelApi.getOrderList(userId, status, new HttpCallBack<String>() {
 
-        for (int i = 0; i < 20; i++) {
-            list.add("" + i);
-        }
-        LinearLayoutManager linearLayoutManager =new LinearLayoutManager(getActivity());
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<OrderBean> list = CommonJson4List.fromJson(result, OrderBean.class);
+                adapter.getDataList().clear();
+                adapter.getDataList().addAll(list.result);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void setupRecyclerView(RecyclerView recyclerView) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-        OrderListAdapter adapter = new OrderListAdapter(getActivity(),
-                list,type);
+        adapter = new OrderListAdapter(getActivity(), type);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View view, int position , long id) {
                 Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                intent.putExtra("type", "orderDetail");
+                intent.putExtra("orderId", id);
                 startActivity(intent);
             }
         });
@@ -100,13 +137,15 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
     }
 
     static class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
-        public interface OnItemClickListener{
-            void onItemClick(View view, int position);
+        public interface OnItemClickListener {
+            void onItemClick(View view, int position,long id);
         }
+
         private OnItemClickListener listener;
-        private List<String> mValues;
+        private List<OrderBean> mValues;
         private Context mContext;
         private int type;
+
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final RelativeLayout rlNeedPay;
             public final TextView tvNeedPayState;
@@ -128,36 +167,48 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
 
             public final ImageView mImageView;
             public final TextView tvGoodsName;
+            public final TextView tvPackageName;
+            public final TextView tvDate;
             public ViewHolder(View view) {
                 super(view);
 
-                rlNeedPay  = (RelativeLayout) view.findViewById(R.id.rl_need_pay);
-                tvNeedPayState  = (TextView) view.findViewById(R.id.tv_need_pay_state);
-                tvNeedPayTalk  = (TextView) view.findViewById(R.id.tv_need_pay_talk);
-                tvNeedPayPay  = (TextView) view.findViewById(R.id.tv_pay);
+                rlNeedPay = (RelativeLayout) view.findViewById(R.id.rl_need_pay);
+                tvNeedPayState = (TextView) view.findViewById(R.id.tv_need_pay_state);
+                tvNeedPayTalk = (TextView) view.findViewById(R.id.tv_need_pay_talk);
+                tvNeedPayPay = (TextView) view.findViewById(R.id.tv_pay);
 
-                rlProcess  = (RelativeLayout) view.findViewById(R.id.rl_process);
-                tvProcessState  = (TextView) view.findViewById(R.id.tv_process_state);
-                tvProcessTalk  = (TextView) view.findViewById(R.id.tv_process_talk);
+                rlProcess = (RelativeLayout) view.findViewById(R.id.rl_process);
+                tvProcessState = (TextView) view.findViewById(R.id.tv_process_state);
+                tvProcessTalk = (TextView) view.findViewById(R.id.tv_process_talk);
 
-                rlAvailable  = (RelativeLayout) view.findViewById(R.id.rl_available);
-                tvAvailableState  = (TextView) view.findViewById(R.id.tv_available_state);
-                tvAvailableTalk  = (TextView) view.findViewById(R.id.tv_available_talk);
-                tvAvailableMessage  = (TextView) view.findViewById(R.id.tv_available_message);
+                rlAvailable = (RelativeLayout) view.findViewById(R.id.rl_available);
+                tvAvailableState = (TextView) view.findViewById(R.id.tv_available_state);
+                tvAvailableTalk = (TextView) view.findViewById(R.id.tv_available_talk);
+                tvAvailableMessage = (TextView) view.findViewById(R.id.tv_available_message);
 
-                rlDrawBack  = (RelativeLayout) view.findViewById(R.id.rl_drawback);
-                tvDrawBackState  = (TextView) view.findViewById(R.id.tv_drawback_state);
-                tvDrawBackTalk  = (TextView) view.findViewById(R.id.tv_drawback_talk);
+                rlDrawBack = (RelativeLayout) view.findViewById(R.id.rl_drawback);
+                tvDrawBackState = (TextView) view.findViewById(R.id.tv_drawback_state);
+                tvDrawBackTalk = (TextView) view.findViewById(R.id.tv_drawback_talk);
 
                 mImageView = (ImageView) view.findViewById(R.id.iv_goods_img);
                 tvGoodsName = (TextView) view.findViewById(R.id.tv_goods_name);
+                tvDate = (TextView) view.findViewById(R.id.tv_goods_time);
+                tvPackageName = (TextView) view.findViewById(R.id.tv_goods_package);
             }
         }
 
-        public OrderListAdapter(Context context, List<String> items,int type) {
+        public OrderListAdapter(Context context, int type) {
             mContext = context;
-            mValues = items;
+            mValues = new ArrayList<>();
             this.type = type;
+        }
+
+        public Object getItem(int position) {
+            return mValues.get(position);
+        }
+
+        public List<OrderBean> getDataList() {
+            return mValues;
         }
 
         @Override
@@ -169,21 +220,23 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            final OrderBean bean = (OrderBean) getItem(position);
 
-            switch (type){
-                case PROCESS:
+            switch (bean.getStatus()) {
+                case "paid":
                     holder.rlProcess.setVisibility(View.VISIBLE);
                     break;
-                case AVAILABLE:
+                case "committed":
                     holder.rlAvailable.setVisibility(View.VISIBLE);
                     break;
-                case DRAWBACK:
+                case "refundApplied":
                     holder.rlDrawBack.setVisibility(View.VISIBLE);
                     break;
-                case NEED_PAY:
+                case "pending":
                     holder.rlNeedPay.setVisibility(View.VISIBLE);
-                    SpannableString priceStr = new SpannableString("¥35353");
-                    priceStr.setSpan(new ForegroundColorSpan(color), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    SpannableString priceStr = new SpannableString("¥"+String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10)));
+                    priceStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     priceStr.setSpan(new AbsoluteSizeSpan(13, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     SpannableStringBuilder spb = new SpannableStringBuilder();
                     spb.append("待付款:").append(priceStr);
@@ -193,7 +246,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                     holder.rlNeedPay.setVisibility(View.VISIBLE);
                     holder.rlNeedPay.setVisibility(View.VISIBLE);
                     SpannableString str = new SpannableString("¥35353");
-                    str.setSpan(new ForegroundColorSpan(color), 0, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    str.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     str.setSpan(new AbsoluteSizeSpan(13, true), 0, str.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     SpannableStringBuilder spb1 = new SpannableStringBuilder();
                     spb1.append("待付款:").append(str);
@@ -201,17 +254,23 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                     break;
             }
 
-
-            ImageLoader.getInstance().displayImage("http://taozi-uploads.qiniudn.com/avt_100004_1443601212983.jpg", holder.mImageView, UILUtils.getDefaultOption());
+            holder.tvGoodsName.setText(bean.getCommodity().getTitle());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            holder.tvDate.setText(String.format("出行日期;%s",format.format(new Date(bean.getRendezvousTime()))));
+            holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle()+" x"+bean.getQuantity());
+            if (bean.getCommodity().getImages()!=null&&bean.getCommodity().getImages().size()>0){
+                ImageLoader.getInstance().displayImage(bean.getCommodity().getImages().get(0).url, holder.mImageView, UILUtils.getDefaultOption());
+            }else {
+                ImageLoader.getInstance().displayImage("", holder.mImageView, UILUtils.getDefaultOption());
+            }
             holder.mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(holder.itemView, position);
+                        listener.onItemClick(holder.itemView, position,bean.getOrderId());
                     }
                 }
             });
-
 
             holder.tvNeedPayPay.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -226,7 +285,8 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         public int getItemCount() {
             return mValues.size();
         }
-        public void setOnItemClickListener(OnItemClickListener listener){
+
+        public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
 

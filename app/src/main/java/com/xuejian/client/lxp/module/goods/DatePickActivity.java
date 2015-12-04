@@ -10,9 +10,9 @@ import com.squareup.timessquare.CalendarPickerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.PlanBean;
+import com.xuejian.client.lxp.bean.PriceBean;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,18 +22,18 @@ import java.util.Date;
  */
 public class DatePickActivity extends PeachBaseActivity {
 
-    ArrayList<PlanBean> list;
+     PlanBean planData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
-        list = getIntent().getParcelableArrayListExtra("planList");
-        TextView back = (TextView) findViewById(R.id.tv_title_back);
+        planData = getIntent().getParcelableExtra("planList");
+        final TextView back = (TextView) findViewById(R.id.tv_title_back);
         final CalendarPickerView calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
-        calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator(list)));
+        calendar.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator(planData)));
         calendar.init(today, nextYear.getTime())
                 .inMode(CalendarPickerView.SelectionMode.SINGLE);
         //  .withSelectedDate(today);
@@ -48,11 +48,15 @@ public class DatePickActivity extends PeachBaseActivity {
 //                for (Date date : dates) {
 //                    data.add(date.toString());
 //                }
+                int price = SampleDecorator.getPrice(planData, date);
                 try {
                     Intent intent = new Intent();
                     String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
                  //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                    intent.putExtra("date", s);
+                    PriceBean bean = new PriceBean();
+                    bean.setDate(s);
+                    bean.setPrice(price);
+                    intent.putExtra("date_price", bean);
                     setResult(RESULT_OK, intent);
                     finish();
                 } catch (Exception e) {

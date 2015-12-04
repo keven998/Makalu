@@ -24,6 +24,9 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -97,11 +100,6 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.user_info:
-                Intent intent = new Intent(OrderDetailActivity.this, CommonUserInfoActivity.class);
-                intent.putExtra("ListType", 2);
-                startActivity(intent);
-                break;
             case R.id.tv_pay:
                 showActionDialog();
                 break;
@@ -135,21 +133,33 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         });
     }
 
-    private void bindView(OrderBean bean) {
+    private void bindView(final OrderBean bean) {
         tvGoodsName.setText(bean.getCommodity().getTitle());
         tvGoodsName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
         tvGoodsName.getPaint().setAntiAlias(true);//抗锯齿
         tvOrderId.setText(String.valueOf(bean.getOrderId()));
-        tvOrderPackage.setText(bean.getPlanId());
-        tvOrderDate.setText(bean.getRendezvousTime());
+        tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
+        tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
-        tvOrderPrice.setText(String.valueOf(bean.getTotalPrice()));
+        tvOrderPrice.setText("¥"+String.valueOf(bean.getTotalPrice()));
 
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 
         tvOrderContactName.setText(bean.getContact().getGivenName()+" "+bean.getContact().getSurname());
-        tvOrderContactTel.setText(bean.getContact().getTel().getDialCode()+"-"+bean.getContact().getTel().getNumber());
+        tvOrderContactTel.setText(bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
         tvOrderMessage.setText(bean.getComment());
+
+        userInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderDetailActivity.this, CommonUserInfoActivity.class);
+                intent.putExtra("ListType", 3);
+                intent.putParcelableArrayListExtra("passengerList",bean.getTravellers());
+                startActivity(intent);
+            }
+        });
+
+
 
         CountDownTimer countDownTimer = new CountDownTimer(1000000, 1000) {
             @Override

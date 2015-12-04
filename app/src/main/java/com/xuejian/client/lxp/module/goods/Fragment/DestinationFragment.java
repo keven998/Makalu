@@ -43,7 +43,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     LinearLayout menu;
     VerticalTextView showMenu;
     String[] code = new String[]{"RCOM", "AS", "EU", "AF", "NA", "OC", "SA"};
-    String[] zhName = new String[]{"推荐", "亚洲", "欧洲", "非洲", "南美洲", "大洋洲", "南美洲"};
+    String[] zhName = new String[]{"推荐", "亚洲", "欧洲", "非洲", "北美洲", "大洋洲", "南美洲"};
 
     @Nullable
     @Override

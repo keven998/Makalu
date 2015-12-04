@@ -54,7 +54,9 @@ public class TravellerBean implements Parcelable {
 
     public TravellerBean() {
     }
-
+    public TravellerBean(TravellerEntity entity) {
+        traveller = entity;
+    }
     protected TravellerBean(Parcel in) {
         this.key = in.readString();
         this.traveller = in.readParcelable(TravellerEntity.class.getClassLoader());

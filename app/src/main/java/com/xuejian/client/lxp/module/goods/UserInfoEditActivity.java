@@ -222,7 +222,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         }
 
         long userId = AccountManager.getInstance().getLoginAccount(mContext).getUserId();
-        TravelApi.createTraveller(userId, bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", 0, idProof, tel, "", new HttpCallBack<String>() {
+        TravelApi.createTraveller(userId, bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", "", idProof, tel, "", new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson<TravellerBean> traveller = CommonJson.fromJson(result,TravellerBean.class);

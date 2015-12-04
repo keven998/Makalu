@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_version">2.0.4</string>
+    <string name="app_version">2.1.0</string>
 
     <string name="app_name">旅行派</string>
     <string name="action_settings">Settings</string>
@@ -54,7 +54,7 @@
     <string name="package_type">套餐类型:</string>
     <string name="consumption_time">使用日期:</string>
     <string name="reserve_count">预定数量:</string>
-    <string name="order_price">订购金额</string>
+    <string name="order_price">订购金额:</string>
     <string name="cancel_order">取消订单</string>
     <string name="pay_it_now">立即支付</string>
     <string name="submit_order">提交订单</string>

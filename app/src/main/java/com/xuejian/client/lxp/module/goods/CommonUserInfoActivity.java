@@ -15,6 +15,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.TravellerBean;
+import com.xuejian.client.lxp.bean.TravellerEntity;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
@@ -78,7 +79,9 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
 //        }
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
         initView(type, multiple);
-        getData();
+        if (type==EDIT_INFO||type==SHOW_LIST){
+            getData();
+        }
 
     }
 
@@ -157,6 +160,16 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         } else if (type == SHOW_LIST) {
             tv_confirm.setVisibility(View.GONE);
             title.setText(R.string.user_info);
+            ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
+            userInfoAdapter = new UserInfoAdapter();
+            memberList.setAdapter(userInfoAdapter);
+        }else if (type == 3) {
+            tv_confirm.setVisibility(View.GONE);
+            title.setText(R.string.user_info);
+            ArrayList<TravellerEntity>list = getIntent().getParcelableArrayListExtra("passengerList");
+            for (TravellerEntity entity : list) {
+                passengerList.add(new TravellerBean(entity));
+            }
             ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userInfoAdapter = new UserInfoAdapter();
             memberList.setAdapter(userInfoAdapter);

@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -56,6 +57,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     TextView tvStoreNum;
     String id;
     RecommendGoodsAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         id = getIntent().getStringExtra("id");
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
-        View footView = View.inflate(this,R.layout.footer_show_all,null);
+        View footView = View.inflate(this, R.layout.footer_show_all, null);
         TextView showMore = (TextView) footView.findViewById(R.id.tv_show_all);
         showMore.setText("查看全部玩乐");
         ImageView back = (ImageView) findViewById(R.id.iv_nav_back);
@@ -76,7 +78,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CityInfoActivity.this, GoodsList.class);
-                intent.putExtra("id",id);
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
@@ -89,20 +91,18 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
         listView.addHeaderView(headView);
         listView.addFooterView(footView);
-        adapter = new RecommendGoodsAdapter(this,3);
+        adapter = new RecommendGoodsAdapter(this, 3, CityInfoActivity.this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
                 intent.setClass(CityInfoActivity.this, ReactMainPage.class);
-                intent.putExtra("commodityId",id);
+                intent.putExtra("commodityId", id);
                 startActivity(intent);
             }
         });
         initData(id);
-
-
 
 
     }
@@ -112,7 +112,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
             @Override
             public void doSuccess(String result, String method) {
-                CommonJson<CityBean> bean = CommonJson.fromJson(result,CityBean.class);
+                CommonJson<CityBean> bean = CommonJson.fromJson(result, CityBean.class);
                 bindView(bean.result);
             }
 
@@ -168,7 +168,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     private void bindView(final CityBean bean) {
         tvCountryName.setText(bean.zhName);
         tvCountryNameEn.setText(bean.enName);
-        tvRecommendTime.setText(String.format("推荐游玩时间:%s",bean.travelMonth));
+        tvRecommendTime.setText(String.format("推荐游玩时间:%s", bean.travelMonth));
         tvStoreNum.setText(String.valueOf(bean.commodityCnt));
         System.out.println("size " + bean.images.size());
         tvCountryPicNum.setText(String.format("%d/%d", 1, bean.images.size()));
@@ -251,10 +251,13 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         private Context mContext;
         private ArrayList<SimpleCommodityBean> data;
         private int maxCount;
-        public RecommendGoodsAdapter(Context c,int maxCount) {
+        Activity activity;
+
+        public RecommendGoodsAdapter(Context c, int maxCount, Activity activity) {
             this.maxCount = maxCount;
             data = new ArrayList<>();
             mContext = c;
+            this.activity = activity;
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
@@ -277,9 +280,9 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
         @Override
         public int getCount() {
-            if (data.size()>maxCount){
+            if (data.size() > maxCount) {
                 return maxCount;
-            }else {
+            } else {
                 return data.size();
             }
         }
@@ -314,9 +317,18 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             viewHolder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
             viewHolder.tvGoodsRecommend.setText(bean.getRating() * 100 + "%");
 
-            if (bean.getImages().size()>0){
+//            ViewGroup.LayoutParams para;
+//            para = viewHolder.ivGoodsImg.getLayoutParams();
+//            int width = CommonUtils.getScreenWidth(activity);
+//            para.height = width * 2 / 5;
+//            para.width = width;
+//            System.out.println(" para.height " + para.height + "para.width" + para.width);
+//
+//            viewHolder.ivGoodsImg.setLayoutParams(para);
+
+            if (bean.getImages().size() > 0) {
                 ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
-            }else {
+            } else {
                 ImageLoader.getInstance().displayImage("", viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
             }
             ImageLoader.getInstance().displayImage("", viewHolder.ivAvatar, options);

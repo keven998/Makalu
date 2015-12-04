@@ -119,7 +119,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="产品名称产品名称产品名称产品名称"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -144,7 +143,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="374546u4568484587684"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -169,7 +167,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="套餐类型1，套餐类型2"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -194,7 +191,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="2015年11月13日"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -219,7 +215,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="3"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -244,7 +239,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="¥34363"
                         android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>

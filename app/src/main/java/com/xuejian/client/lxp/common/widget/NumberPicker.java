@@ -16,7 +16,7 @@ import com.xuejian.client.lxp.R;
  */
 public class NumberPicker extends FrameLayout {
     OnButtonClick listenr ;
-
+    int currentValue;
     public NumberPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
         View view = LayoutInflater.from(context).inflate(R.layout.layout_number_picker, this);
@@ -27,6 +27,7 @@ public class NumberPicker extends FrameLayout {
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.NumberPicker);
             num = array.getInteger(R.styleable.NumberPicker_default_num, 1);
+            currentValue = num;
             array.recycle();
         }
         number.setText(String.valueOf(num));
@@ -36,6 +37,7 @@ public class NumberPicker extends FrameLayout {
                 int current = Integer.parseInt(number.getText().toString());
                 if (current > 0) {
                     number.setText(String.valueOf(current - 1));
+                    if (currentValue>0)currentValue = current - 1;
                     if (listenr!=null){
                         listenr.OnValueChange(current - 1);
                     }
@@ -47,11 +49,16 @@ public class NumberPicker extends FrameLayout {
             public void onClick(View v) {
                 int current = Integer.parseInt(number.getText().toString());
                 number.setText(String.valueOf(current + 1));
+                currentValue = current + 1;
                 if (listenr!=null){
                     listenr.OnValueChange(current + 1);
                 }
             }
         });
+    }
+
+    public int getCurrentValue() {
+        return currentValue;
     }
 
     public void setListenr(OnButtonClick listenr) {

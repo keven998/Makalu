@@ -126,6 +126,22 @@ public class TravelApi extends BaseApi {
     // 修改旅客信息
     public final static String EDIT_TRAVELLER_INFO = "/users/%d/travellers/%s";
 
+    // 订单列表
+    public final static String ORDER_LIST = "/marketplace/orders";
+
+
+    public static void getOrderList(long userId,String status ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + ORDER_LIST);
+        request.putUrlParams("userId", String.valueOf(userId));
+        if (!TextUtils.isEmpty(status)){
+            request.putUrlParams("status",status);
+        }
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
 
     public static void getTravellers(long orderId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
@@ -162,7 +178,7 @@ public class TravelApi extends BaseApi {
 
 
     public static void createTraveller
-            (long userId, String surname, String givenName, String gender, long birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
+            (long userId, String surname, String givenName, String gender, String birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRAVELLER_INFO,userId));
@@ -206,23 +222,26 @@ public class TravelApi extends BaseApi {
 
 
     public static void createOrder
-            (long commodityId, String planId, String rendezvousTime, int quantity, String contactPhone, String contactEmail, String contactSurname, String contactGivenName, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
+            (long commodityId, String planId, long rendezvousTime, int quantity, long contactPhoneDialCode,long contactPhoneNumber, String contactEmail, String contactSurname, String contactGivenName, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CREATE_ORDER);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();
+        JSONObject telObject = new JSONObject();
         try {
+            telObject.put("dialCode",contactPhoneDialCode);
+            telObject.put("number",contactPhoneNumber);
             jsonObject.put("commodityId", commodityId);
             jsonObject.put("planId", planId);
             jsonObject.put("rendezvousTime", rendezvousTime);
             jsonObject.put("quantity", quantity);
-            jsonObject.put("contactPhone", contactPhone);
+            jsonObject.put("contactPhone", telObject);
             jsonObject.put("contactEmail", contactEmail);
             jsonObject.put("contactSurname", contactSurname);
             jsonObject.put("contactGivenName", contactGivenName);
-            jsonObject.put("contactComment", contactComment);
+            jsonObject.put("comment", contactComment);
             if (list != null && list.size() > 0) {
                 JSONArray array = new JSONArray();
                 for (TravellerBean bean : list) {

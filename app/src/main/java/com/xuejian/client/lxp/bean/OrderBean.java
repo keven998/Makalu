@@ -3,7 +3,7 @@ package com.xuejian.client.lxp.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by yibiao.qin on 2015/12/1.
@@ -34,14 +34,14 @@ public class OrderBean implements Parcelable {
     private String planId;
     private SimpleCommodityBean commodity;
     private ContactBean contact;
-    private String rendezvousTime;
+    private long rendezvousTime;
     private int totalPrice;
     private int discount;
     private int quantity;
     private String comment;
     private String status;
-    private List<TravellerEntity> travellers;
-    private List<String> commodityTimeRange;
+    private ArrayList<TravellerEntity> travellers;
+    // private List<String> commodityTimeRange;
     private long createTime;
     private long updateTime;
     private long expireTime;
@@ -91,7 +91,7 @@ public class OrderBean implements Parcelable {
         this.contact = contact;
     }
 
-    public void setRendezvousTime(String rendezvousTime) {
+    public void setRendezvousTime(long rendezvousTime) {
         this.rendezvousTime = rendezvousTime;
     }
 
@@ -115,13 +115,13 @@ public class OrderBean implements Parcelable {
         this.status = status;
     }
 
-    public void setTravellers(List<TravellerEntity > travellers) {
+    public void setTravellers(ArrayList<TravellerEntity > travellers) {
         this.travellers = travellers;
     }
 
-    public void setCommodityTimeRange(List<String > commodityTimeRange) {
-        this.commodityTimeRange = commodityTimeRange;
-    }
+//    public void setCommodityTimeRange(List<String > commodityTimeRange) {
+//        this.commodityTimeRange = commodityTimeRange;
+//    }
 
     public long getOrderId() {
         return orderId;
@@ -143,7 +143,7 @@ public class OrderBean implements Parcelable {
         return contact;
     }
 
-    public String getRendezvousTime() {
+    public long getRendezvousTime() {
         return rendezvousTime;
     }
 
@@ -167,13 +167,13 @@ public class OrderBean implements Parcelable {
         return status;
     }
 
-    public List<?> getTravellers() {
+    public ArrayList<TravellerEntity> getTravellers() {
         return travellers;
     }
 
-    public List<?> getCommodityTimeRange() {
-        return commodityTimeRange;
-    }
+//    public List<?> getCommodityTimeRange() {
+//        return commodityTimeRange;
+//    }
 
     @Override
     public int describeContents() {
@@ -187,14 +187,14 @@ public class OrderBean implements Parcelable {
         dest.writeString(this.planId);
         dest.writeParcelable(this.commodity, 0);
         dest.writeParcelable(this.contact, 0);
-        dest.writeString(this.rendezvousTime);
+        dest.writeLong(this.rendezvousTime);
         dest.writeInt(this.totalPrice);
         dest.writeInt(this.discount);
         dest.writeInt(this.quantity);
         dest.writeString(this.comment);
         dest.writeString(this.status);
         dest.writeTypedList(travellers);
-        dest.writeStringList(this.commodityTimeRange);
+   //     dest.writeStringList(this.commodityTimeRange);
         dest.writeLong(this.createTime);
         dest.writeLong(this.updateTime);
         dest.writeLong(this.expireTime);
@@ -209,14 +209,14 @@ public class OrderBean implements Parcelable {
         this.planId = in.readString();
         this.commodity = in.readParcelable(SimpleCommodityBean.class.getClassLoader());
         this.contact = in.readParcelable(ContactBean.class.getClassLoader());
-        this.rendezvousTime = in.readString();
+        this.rendezvousTime = in.readLong();
         this.totalPrice = in.readInt();
         this.discount = in.readInt();
         this.quantity = in.readInt();
         this.comment = in.readString();
         this.status = in.readString();
         this.travellers = in.createTypedArrayList(TravellerEntity.CREATOR);
-        this.commodityTimeRange = in.createStringArrayList();
+   //     this.commodityTimeRange = in.createStringArrayList();
         this.createTime = in.readLong();
         this.updateTime = in.readLong();
         this.expireTime = in.readLong();
