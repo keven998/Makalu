@@ -40,4 +40,8 @@
     <dimen name="spot_detail_picture_height">280dp</dimen>
     <dimen name="goods_main_viewpager_height">224dp</dimen>
     <dimen name="city_viewpager_height">157dp</dimen>
+    <dimen name="goods_frame_height">315dp</dimen>
+    <dimen name="goods_img_height">240dp</dimen>
+    <dimen name="goods_avatar_height">90dp</dimen>
+    <dimen name="goods_avatar_margin_bottom">30dp</dimen>
 </resources>

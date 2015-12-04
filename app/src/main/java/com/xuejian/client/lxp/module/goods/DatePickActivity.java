@@ -23,13 +23,14 @@ import java.util.Date;
 public class DatePickActivity extends PeachBaseActivity {
 
      PlanBean planData;
+    CalendarPickerView calendar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
         planData = getIntent().getParcelableExtra("planList");
         final TextView back = (TextView) findViewById(R.id.tv_title_back);
-        final CalendarPickerView calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
+        calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
@@ -41,28 +42,54 @@ public class DatePickActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 Date date = calendar.getSelectedDate();
-//                ArrayList<String> data = new ArrayList<String>();
-//                for (Date date : dates) {
-//                    data.add(date.toString());
-//                }
-                int price = SampleDecorator.getPrice(planData, date);
-                try {
-                    Intent intent = new Intent();
-                    String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                 //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                    PriceBean bean = new PriceBean();
-                    bean.setDate(s);
-                    bean.setPrice(price);
-                    intent.putExtra("date_price", bean);
-                    setResult(RESULT_OK, intent);
+                if (date!=null){
+                    int price = SampleDecorator.getPrice(planData, date);
+                    try {
+                        Intent intent = new Intent();
+                        String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                        //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                        PriceBean bean = new PriceBean();
+                        bean.setDate(s);
+                        bean.setPrice(price);
+                        intent.putExtra("date_price", bean);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    setResult(RESULT_CANCELED);
                     finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Date date = calendar.getSelectedDate();
+        if (date!=null){
+            int price = SampleDecorator.getPrice(planData, date);
+            try {
+                Intent intent = new Intent();
+                String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                PriceBean bean = new PriceBean();
+                bean.setDate(s);
+                bean.setPrice(price);
+                intent.putExtra("date_price", bean);
+                setResult(RESULT_OK, intent);
+                finish();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+
+        super.onBackPressed();
     }
 }

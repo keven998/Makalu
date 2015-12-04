@@ -29,4 +29,8 @@
     <dimen name="talent_loc_cell_height">180dp</dimen>
     <dimen name="goods_main_viewpager_height">192dp</dimen>
     <dimen name="city_viewpager_height">134dp</dimen>
+    <dimen name="goods_frame_height">152dp</dimen>
+    <dimen name="goods_img_height">120dp</dimen>
+    <dimen name="goods_avatar_height">45dp</dimen>
+    <dimen name="goods_avatar_margin_bottom">15dp</dimen>
 </resources>
