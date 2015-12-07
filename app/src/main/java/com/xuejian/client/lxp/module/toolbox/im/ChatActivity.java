@@ -313,6 +313,17 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private void initData() {
         messageList.clear();
         messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));
+
+
+//        MessageBean messag =new MessageBean();
+//        messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
+//        messag.setType(19);
+//        messag.setSenderId(210710);
+//        messag.setSendType(1);
+//        messag.setCreateTime(System.currentTimeMillis());
+//        messageList.add(messag);
+
+
         currentSize = messageList.size();
         adapter.refresh();
         int count = listView.getCount();
@@ -1243,10 +1254,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //            MessageBean messageBean =new MessageBean();
 //            messageBean.setMessage("{\"title\":\"title\",\"desc\":\"desc\",\"image\":\"http://7xirnn.com1.z0.glb.clouddn.com/2ed2cb7c-ac84-4720-9aa0-b5bb8dba6795!thumb?e=1439527658&token=jU6KkDZdGYODmrPVh5sbBIkJX65y-Cea991uWpWZ:QmwHGiZqUA-Cg0p4hgxNLY8f6F4=\",\"url\":\"http://m.creatby.com/manage/book/b10qbu/\"}");
 //            messageBean.setType(17);
-//            messageBean.setSenderId(100014);
+//            messageBean.setSenderId(210710);
 //            messageBean.setSendType(1);
 //            messageBean.setCreateTime(System.currentTimeMillis());
 //            messageList.add(messageBean);
+
+//            MessageBean messag =new MessageBean();
+//            messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
+//            messag.setType(19);
+//            messag.setSenderId(210710);
+//            messag.setSendType(1);
+//            messag.setCreateTime(System.currentTimeMillis());
+//            messageList.add(messag);
+
             adapter.refresh();
             int curSelection = listView.getFirstVisiblePosition();
             if (curSelection > listView.getCount() / 2) {

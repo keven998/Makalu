@@ -8,7 +8,9 @@ import com.facebook.react.bridge.ReactMethod;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xuejian.client.lxp.bean.PlanBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.module.goods.OrderCreateActivity;
+import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +41,19 @@ public class NativeActions extends ReactContextBaseJavaModule {
                 reactContext.startActivity(intent);
                 break;
             case "Order":
-                Gson gson = new Gson();
-                ArrayList<PlanBean> list = gson.fromJson(data, new TypeToken<List<PlanBean>>() {
-                }.getType());
-                intent.putExtra("planList", list);
-                intent.putExtra("commodityId",data1);
-                intent.setClass(reactContext, OrderCreateActivity.class);
-                reactContext.startActivity(intent);
+                if (AccountManager.getInstance().getLoginAccount(reactContext)==null){
+                    intent.putExtra("isFromGoods",true);
+                    intent.setClass(reactContext, LoginActivity.class);
+                    reactContext.startActivity(intent);
+                }else {
+                    Gson gson = new Gson();
+                    ArrayList<PlanBean> list = gson.fromJson(data, new TypeToken<List<PlanBean>>() {
+                    }.getType());
+                    intent.putExtra("planList", list);
+                    intent.putExtra("commodityId",data1);
+                    intent.setClass(reactContext, OrderCreateActivity.class);
+                    reactContext.startActivity(intent);
+                }
                 break;
             default:
                 break;

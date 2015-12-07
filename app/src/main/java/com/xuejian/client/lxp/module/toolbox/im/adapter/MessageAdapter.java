@@ -39,6 +39,8 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lv.Listener.HttpCallback;
 import com.lv.Listener.UploadListener;
 import com.lv.bean.MessageBean;
@@ -53,6 +55,8 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.ExtMessageBean;
 import com.xuejian.client.lxp.bean.H5MessageBean;
+import com.xuejian.client.lxp.bean.PlanBean;
+import com.xuejian.client.lxp.bean.TradeMessageBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -134,6 +138,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int HOTEL_MSG = 16;
     private static final int QA_MSG = 17;
     private static final int H5_MSG = 18;
+    private static final int TRADE_MSG = 19;
     private static final int TIP_MSG = 200;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
@@ -226,6 +231,8 @@ public class MessageAdapter extends BaseAdapter {
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
             case QA_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_QA : MESSAGE_TYPE_SENT_QA;
+            case TRADE_MSG:
+                return TRADE_MSG;
             default:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
@@ -277,6 +284,8 @@ public class MessageAdapter extends BaseAdapter {
             case QA_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_qa, null) : inflater.inflate(
                         R.layout.row_sent_qa, null);
+            case TRADE_MSG:
+                return inflater.inflate(R.layout.row_trade_message, null);
             default:
                 break;
         }
@@ -362,6 +371,13 @@ public class MessageAdapter extends BaseAdapter {
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                     break;
+                case TRADE_MSG:
+                    holder.tv_state_title = (TextView) convertView.findViewById(R.id.tv_state_title);
+                    holder.tv_trade_content = (TextView) convertView.findViewById(R.id.tv_trade_content);
+                    holder.tv_goods_name = (TextView) convertView.findViewById(R.id.tv_goods_name);
+                    holder.tv_order_id = (TextView) convertView.findViewById(R.id.tv_order_id);
+                    holder.ll_trade = (LinearLayout) convertView.findViewById(R.id.ll_trade);
+                    break;
                 default:
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                     holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
@@ -423,6 +439,11 @@ public class MessageAdapter extends BaseAdapter {
                 handleQaMessage(message, holder, position);
                 handleCommonMessage(position, convertView, message, holder);
                 break;
+            case TRADE_MSG:
+                handleGroupMessage(position, convertView, message, holder);
+                handleTradeMessage(message, holder, position);
+            //    handleCommonMessage(position, convertView, message, holder);
+                break;
             default:
                 handleGroupMessage(position, convertView, message, holder);
                 handleExtMessage(message, holder, position);
@@ -443,6 +464,22 @@ public class MessageAdapter extends BaseAdapter {
             }
         }
         return convertView;
+    }
+
+    private void handleTradeMessage(MessageBean message, ViewHolder holder, int position) {
+        Gson gson = new Gson();
+        TradeMessageBean bean = gson.fromJson(message.getMessage(), new TypeToken<TradeMessageBean>() {
+        }.getType());
+        holder.tv_order_id.setText(String.format("订单编号:%d", bean.getOrderId()));
+        holder.tv_goods_name.setText(String.format("商品名称:%s", bean.getCommodityName()));
+        holder.tv_state_title.setText(bean.getTitle());
+        holder.tv_trade_content.setText(bean.getText());
+        holder.ll_trade.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void handleQaMessage(MessageBean message, ViewHolder holder, int position) {
@@ -1981,6 +2018,11 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_file_name;
         TextView tv_file_size;
         TextView tv_file_download_state;
+        TextView tv_state_title;
+        TextView tv_trade_content;
+        TextView tv_goods_name;
+        TextView tv_order_id;
+        LinearLayout ll_trade;
     }
 
     /*

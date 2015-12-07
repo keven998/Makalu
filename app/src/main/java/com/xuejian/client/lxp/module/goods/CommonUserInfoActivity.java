@@ -79,9 +79,9 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
 //        }
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
         initView(type, multiple);
-        if (type==EDIT_INFO||type==SHOW_LIST){
+         if (type==EDIT_LIST||type==SHOW_LIST){
             getData();
-        }
+         }
 
     }
 

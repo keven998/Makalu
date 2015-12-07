@@ -3,7 +3,6 @@ package com.xuejian.client.lxp.module.goods.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +49,8 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
     public static final int AVAILABLE = 4;
     public static final int DRAWBACK = 5;
     OrderListAdapter adapter;
+    RecyclerView recyclerView;
+    TextView empty;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,21 +62,29 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = (View) inflater.inflate(
                 R.layout.fragment_order_list, container, false);
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerview);
-        TextView empty = (TextView) view.findViewById(R.id.empty_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        empty = (TextView) view.findViewById(R.id.empty_view);
         mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setOnRefreshListener(this);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.app_theme_color);
-        setupRecyclerView(rv);
-//        rv.setVisibility(View.GONE);
-//        empty.setVisibility(View.VISIBLE);
-//        empty.setText("您没有处理中的订单");
+        setupRecyclerView(recyclerView);
        switch (type){
            case ALL:
                getOrder("");
+               empty.setText("您近期没有出行订单");
                break;
            case NEED_PAY:
                getOrder("pending");
+               empty.setText("您没有待付款的订单");
+               break;
+           case PROCESS:
+               empty.setText("您没有处理中的订单");
+               break;
+           case AVAILABLE:
+               empty.setText("您没有可使用的订单");
+               break;
+           case DRAWBACK:
+               empty.setText("您没有退款单");
                break;
            default:
                break;
@@ -94,11 +103,16 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 adapter.getDataList().clear();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
+                empty.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                if (mSwipeRefreshWidget.isRefreshing())mSwipeRefreshWidget.setRefreshing(false);
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                if (mSwipeRefreshWidget.isRefreshing())mSwipeRefreshWidget.setRefreshing(false);
+                recyclerView.setVisibility(View.GONE);
+                empty.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -127,13 +141,19 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
 
     @Override
     public void onRefresh() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshWidget.setRefreshing(false);
-            }
-        }, 2000);
+        switch (type){
+            case ALL:
+                getOrder("");
+                break;
+            case NEED_PAY:
+                getOrder("pending");
+                break;
+            default:
+                if (mSwipeRefreshWidget.isRefreshing())mSwipeRefreshWidget.setRefreshing(false);
+                break;
+        }
+
+
     }
 
     static class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
@@ -256,7 +276,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
 
             holder.tvGoodsName.setText(bean.getCommodity().getTitle());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            holder.tvDate.setText(String.format("出行日期;%s",format.format(new Date(bean.getRendezvousTime()))));
+            holder.tvDate.setText(String.format("出行日期:%s",format.format(new Date(bean.getRendezvousTime()))));
             holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle()+" x"+bean.getQuantity());
             if (bean.getCommodity().getImages()!=null&&bean.getCommodity().getImages().size()>0){
                 ImageLoader.getInstance().displayImage(bean.getCommodity().getImages().get(0).url, holder.mImageView, UILUtils.getDefaultOption());

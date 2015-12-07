@@ -550,6 +550,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.OrderListActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.OrderDetailActivity"

@@ -18,7 +18,7 @@ public class MyReactPackage extends MainReactPackage {
         List<ViewManager> main = super.createViewManagers(reactContext);
         List<ViewManager> result = new ArrayList<>();
         result.addAll(main);
-        result.add(new ReactDotViewManager());
+    //    result.add(new ReactDotViewManager());
         return result;
     }
     @Override

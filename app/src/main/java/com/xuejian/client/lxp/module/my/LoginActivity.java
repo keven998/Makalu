@@ -53,7 +53,7 @@ public class LoginActivity extends PeachBaseActivity {
     private boolean isBackWeixinLoginPage = true;
     private boolean isWeixinClickLogin = false;
     CustomLoadingDialog dialog;
-    private boolean isFromSplash,isFromTalkShare;
+    private boolean isFromSplash,isFromTalkShare,isFromGoods;
 
     //type
     private int LOGIN = 1;
@@ -84,6 +84,7 @@ public class LoginActivity extends PeachBaseActivity {
         }
         isFromSplash = getIntent().getBooleanExtra("isFromSplash",false);
         isFromTalkShare = getIntent().getBooleanExtra("isFromTalkShare",false);
+        isFromGoods = getIntent().getBooleanExtra("isFromGoods",false);
         request_code = getIntent().getIntExtra("request_code", 0);
         if (request_code == REQUEST_CODE_REG) {
             Intent intent = new Intent(this, RegActivity.class);
@@ -187,7 +188,7 @@ public class LoginActivity extends PeachBaseActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                if (isFromTalkShare) {
+                if (isFromTalkShare||isFromGoods) {
                     finish();
                 } else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

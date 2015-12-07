@@ -318,11 +318,11 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             viewHolder.tvGoodsRecommend.setText(bean.getRating() * 100 + "%");
 
 //            ViewGroup.LayoutParams para;
-//            para = viewHolder.ivGoodsImg.getLayoutParams();
+ //           para = viewHolder.ivGoodsImg.getLayoutParams();
 //            int width = CommonUtils.getScreenWidth(activity);
 //            para.height = width * 2 / 5;
 //            para.width = width;
-//            System.out.println(" para.height " + para.height + "para.width" + para.width);
+ //           System.out.println(" para.height " + para.height + "para.width" + para.width);
 //
 //            viewHolder.ivGoodsImg.setLayoutParams(para);
 

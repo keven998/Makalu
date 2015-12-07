@@ -86,14 +86,13 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 bindView(bean);
                 break;
             case "orderDetail":
-                getData(getIntent().getLongExtra("orderId",-1));
+                getData(getIntent().getLongExtra("orderId", -1));
                 break;
             default:
                 break;
         }
 
         ivNavBack.setOnClickListener(this);
-        userInfo.setOnClickListener(this);
         tvPay.setOnClickListener(this);
     }
 
@@ -112,7 +111,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void getData(long orderId) {
-        if (orderId<=0)return;
+        if (orderId <= 0) return;
         TravelApi.getOrderDetail(orderId, new HttpCallBack<String>() {
 
             @Override
@@ -141,11 +140,11 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
         tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
-        tvOrderPrice.setText("¥"+String.valueOf(bean.getTotalPrice()));
+        tvOrderPrice.setText("¥" + String.valueOf(bean.getTotalPrice()));
 
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 
-        tvOrderContactName.setText(bean.getContact().getGivenName()+" "+bean.getContact().getSurname());
+        tvOrderContactName.setText(bean.getContact().getGivenName() + " " + bean.getContact().getSurname());
         tvOrderContactTel.setText(bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
         tvOrderMessage.setText(bean.getComment());
 
@@ -154,23 +153,28 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent = new Intent(OrderDetailActivity.this, CommonUserInfoActivity.class);
                 intent.putExtra("ListType", 3);
-                intent.putParcelableArrayListExtra("passengerList",bean.getTravellers());
+                intent.putParcelableArrayListExtra("passengerList", bean.getTravellers());
                 startActivity(intent);
             }
         });
+        long time = bean.getExpireTime() - System.currentTimeMillis();
 
+        if (time > 0) {
+            CountDownTimer countDownTimer = new CountDownTimer(time, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    tvPayFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
+                }
 
+                @Override
+                public void onFinish() {
 
-        CountDownTimer countDownTimer = new CountDownTimer(1000000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                tvPayFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
-            }
-            @Override
-            public void onFinish() {
+                }
+            }.start();
+        } else {
+            tvPayFeedback.setText("订单已过期");
+        }
 
-            }
-        }.start();
     }
 
 

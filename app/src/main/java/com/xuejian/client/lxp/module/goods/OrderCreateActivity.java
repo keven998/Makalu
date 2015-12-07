@@ -21,8 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
-import com.jakewharton.scalpel.ScalpelFrameLayout;
-import com.xuejian.client.lxp.BuildConfig;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
@@ -81,9 +79,9 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     TextView tvAddUser;
     @InjectView(R.id.tv_total_price)
     TextView tvTotalPrice;
-    public static int SELECTED_DATE = 101;
-    public static int SELECTED_USER = 102;
-    public static int EDIT_USER_LIST = 103;
+    public final static int SELECTED_DATE = 101;
+    public final static int SELECTED_USER = 102;
+    public final static int EDIT_USER_LIST = 103;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     CommonAdapter memberAdapter;
     ListView memberList;
@@ -91,18 +89,19 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     String commodityId;
     PlanBean currentPlanBean;
     PriceBean priceBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (BuildConfig.DEBUG) {
-            View view = getLayoutInflater().inflate(R.layout.activity_order, null);
-            ScalpelFrameLayout sView = new ScalpelFrameLayout(this);
-            //sView.setLayerInteractionEnabled(true);
-            sView.addView(view);
-            setContentView(sView);
-        } else {
+//        if (BuildConfig.DEBUG) {
+//            View view = getLayoutInflater().inflate(R.layout.activity_order, null);
+//            ScalpelFrameLayout sView = new ScalpelFrameLayout(this);
+//            //sView.setLayerInteractionEnabled(true);
+//            sView.addView(view);
+//            setContentView(sView);
+//        } else {
             setContentView(R.layout.activity_order);
-        }
+     //   }
         ButterKnife.inject(this);
         final ArrayList<PlanBean> data = getIntent().getParcelableArrayListExtra("planList");
         currentPlanBean = data.get(0);
@@ -123,7 +122,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             public void OnSelected(int pos) {
                 currentPlanBean = data.get(pos);
                 tvDate.setText("");
-                priceBean=null;
+                priceBean = null;
             }
         });
 
@@ -158,7 +157,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View widget) {
                 Intent aboutIntent = new Intent(OrderCreateActivity.this, PeachWebViewActivity.class);
                 aboutIntent.putExtra("url", H5Url.AGREEMENT);
-                aboutIntent.putExtra("title", "注册协议");
+                aboutIntent.putExtra("title", "旅行派条款");
                 startActivity(aboutIntent);
             }
         }, 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -172,8 +171,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void OnValueChange(int value) {
                 goodsNum = value;
-                if (priceBean!=null){
-                    tvTotalPrice.setText(String.format("¥%d",priceBean.getPrice()*value));
+                if (priceBean != null) {
+                    tvTotalPrice.setText(String.format("¥%d", priceBean.getPrice() * value));
                 }
             }
         });
@@ -208,6 +207,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             case R.id.tv_title_back:
                 notice();
                 break;
+            default:
+                break;
         }
     }
 
@@ -226,30 +227,35 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             dt2 = sdf.parse(sDt);
         } catch (ParseException e) {
             e.printStackTrace();
+            tvDate.setText("");
+            Toast.makeText(mContext, "请选择出行日期", Toast.LENGTH_SHORT).show();
+            return;
         }
         String tel = etTel.getText().toString();
         String[] tels = tel.split("-");
-        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum, Long.parseLong(tels[0]), Long.parseLong(tels[1]), "", etFirstName.getText().toString(), etLastName.getText().toString(), "", passengerList, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
-                Intent intent = new Intent(OrderCreateActivity.this, OrderDetailActivity.class);
-                intent.putExtra("type", "pendingOrder");
-                intent.putExtra("order", bean.result);
-                startActivity(intent);
-                finish();
-            }
+        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum,
+                Long.parseLong(tels[0]), Long.parseLong(tels[1]), "", etFirstName.getText().toString(),
+                etLastName.getText().toString(), "", passengerList, new HttpCallBack<String>() {
+                    @Override
+                    public void doSuccess(String result, String method) {
+                        CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
+                        Intent intent = new Intent(OrderCreateActivity.this, OrderDetailActivity.class);
+                        intent.putExtra("type", "pendingOrder");
+                        intent.putExtra("order", bean.result);
+                        startActivity(intent);
+                        finish();
+                    }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
 
-            }
+                    }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
 
-            }
-        });
+                    }
+                });
     }
 
 
@@ -417,7 +423,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             if (requestCode == SELECTED_DATE) {
                 PriceBean bean = data.getParcelableExtra("date_price");
                 tvDate.setText(bean.date);
-                tvTotalPrice.setText(String.format("¥%d",bean.getPrice()*selectNum.getCurrentValue()));
+                tvTotalPrice.setText(String.format("¥%d", bean.getPrice() * selectNum.getCurrentValue()));
                 priceBean = bean;
 
             } else if (requestCode == SELECTED_USER) {
