@@ -317,29 +317,31 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             final SimpleCommodityBean bean = (SimpleCommodityBean) getItem(section,position);
-            viewHolder.tvGoodsLoc.setText(bean.getLocality().getZhName());
-            viewHolder.tvGoodsName.setText(bean.getTitle());
-            viewHolder.tvShopName.setText(bean.getSeller().getName());
-            viewHolder.tvGoodsPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getMarketPrice() * 10) / 10))));
-            viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getPrice() * 10) / 10))));
-            if (bean.getImages().size()>0){
-                ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, options);
-            }else {
-                ImageLoader.getInstance().displayImage("", viewHolder.ivGoodsImg, options);
-            }
-            viewHolder.goodsTag.removeAllViews();
-            viewHolder.goodsTag.setmTagViewResId(R.layout.goods_tag);
-            viewHolder.goodsTag.setTags(mTags);
-            viewHolder.container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
-                    settingIntent.putExtra("commodityId", bean.getCommodityId());
-                    startActivity(settingIntent);
+            if (bean!=null){
+                viewHolder.tvGoodsName.setText(bean.getTitle());
+                viewHolder.tvShopName.setText(bean.getSeller().getName());
+                viewHolder.tvGoodsLoc.setText(bean.getLocality().getZhName());
+                viewHolder.tvGoodsPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getMarketPrice() * 10) / 10))));
+                viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
+                viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getPrice() * 10) / 10))));
+                if (bean.getImages().size()>0){
+                    ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, options);
+                }else {
+                    ImageLoader.getInstance().displayImage("", viewHolder.ivGoodsImg, options);
                 }
-            });
+                viewHolder.goodsTag.removeAllViews();
+                viewHolder.goodsTag.setmTagViewResId(R.layout.goods_tag);
+                viewHolder.goodsTag.setTags(mTags);
+                viewHolder.container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
+                        settingIntent.putExtra("commodityId", bean.getCommodityId());
+                        startActivity(settingIntent);
+                    }
+                });
+            }
             return convertView;
         }
 

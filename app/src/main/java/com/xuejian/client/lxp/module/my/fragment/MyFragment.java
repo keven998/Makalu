@@ -55,7 +55,6 @@ import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.AddContactActivity;
-import com.xuejian.client.lxp.module.toolbox.im.GroupsActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ContactAdapter;
 
 import java.util.ArrayList;
@@ -234,8 +233,8 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
                             getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                         } else if (Constant.GROUP_USERNAME.equals(username)) {
                             // 进入群聊列表页面
-                            startActivity(new Intent(getActivity(), GroupsActivity.class));
-                            getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                   //         startActivity(new Intent(getActivity(), GroupsActivity.class));
+                    //        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                         } else {
                             startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", contactList.get(position).getUserId()));
                             getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);

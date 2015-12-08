@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/timestamp"
+        style="@style/chat_text_date_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/rl_commodity"
+        android:padding="5dp"
+        android:background="#ffffcc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/margin_chat_activity"
+        android:layout_marginTop="@dimen/margin_chat_activity"
+        android:layout_marginLeft="10dp">
+
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/iv_goods_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/icon"
+            />
+
+
+
+        <TextView
+            android:text="商品名稱等級劃分是否是浪費和水立方收到非師範生"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/iv_goods_img"
+            android:textSize="15sp"
+            android:textColor="@color/color_text_ii"
+            android:id="@+id/tv_commodity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:text="¥700"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/iv_goods_img"
+            android:layout_below="@+id/tv_commodity_name"
+            android:textSize="15sp"
+            android:textColor="@color/price_color"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/tv_commodity_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+
+
+        <TextView
+            android:id="@+id/tv_send_commodity"
+            android:background="@drawable/grey_border"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tv_commodity_name"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:textSize="15sp"
+            android:textColor="@color/color_text_iii"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="发送宝贝链接" />
+    </RelativeLayout>
+
+</LinearLayout>

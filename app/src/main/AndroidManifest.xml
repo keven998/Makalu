@@ -381,11 +381,6 @@
             android:theme="@style/horizontal_slide"/>
         <!-- 收藏夹 -->
         <!-- 群组列表 -->
-        <activity
-            android:name=".module.toolbox.im.GroupsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 新建群组 -->
         <activity
             android:name=".module.toolbox.im.NewGroupActivity"
@@ -430,33 +425,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
         <!-- 下载文件 -->
-        <activity
-            android:name=".module.toolbox.im.ShowNormalFileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"/>
         <!-- 黑名单 -->
-        <activity
-            android:name=".module.toolbox.im.BlacklistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"/>
 
         <!-- 公开的群聊列表 -->
-        <activity
-            android:name=".module.toolbox.im.PublicGroupsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 语音通话页面 -->
         <activity
             android:name=".module.toolbox.im.VoiceCallActivity"
             android:screenOrientation="portrait"
             android:theme="@style/nornal_style"/>
         <!-- 群聊简单信息 -->
-        <activity
-            android:name=".module.toolbox.im.ShowVideoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
         <!-- choose video -->
         <activity
             android:name=".module.toolbox.im.ImageGridActivity"
@@ -474,14 +451,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity
-            android:name=".module.toolbox.NearbyActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"/>
-        <activity
-            android:name=".module.toolbox.ExpertFilterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Transparent"/>
         <activity
             android:name=".module.dest.ReadMoreActivity"
             android:screenOrientation="portrait"

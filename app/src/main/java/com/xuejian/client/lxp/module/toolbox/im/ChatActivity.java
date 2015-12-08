@@ -103,6 +103,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * 聊天页面
  */
@@ -186,6 +192,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     TextView titleView;
     private int currentSize;
     private String changedTitle = null;
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -217,13 +224,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private final MyHandler handler = new MyHandler(this);
 
     private boolean isRecord;
+
     public void update() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 HttpURLConnection conn = null;
                 File localObject = new File(getFilesDir(), "ReactNativeDevBundle.js");
-                if (( localObject).exists()) {
+                if ((localObject).exists()) {
 //                    boolean result = ( localObject).delete();
 //                    System.out.println("删除 " + result);
                 }
@@ -261,11 +269,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
         }).start();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-    //    update();
+        //    update();
         Intent intent = getIntent();
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
@@ -312,24 +321,42 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void initData() {
         messageList.clear();
-        messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));
+        compositeSubscription.add(
+                Observable.from(IMClient.getInstance().getMessages(toChatUsername, 0))
+                        .toList()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<List<MessageBean>>() {
+                            @Override
+                            public void call(List<MessageBean> messageBeans) {
+                                messageList.addAll(messageBeans);
+
+                                MessageBean messag = new MessageBean();
+                                messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
+                                messag.setType(19);
+                                messag.setSenderId(210710);
+                                messag.setSendType(1);
+                                messag.setCreateTime(System.currentTimeMillis());
+                                messageList.add(messag);
+
+                                MessageBean messag1 = new MessageBean();
+                                messag1.setMessage("{\"title\":\"dsfsfsdfsfd\",\"price\":\"266.000\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
+                                messag1.setType(20);
+                                messag1.setSenderId(210710);
+                                messag1.setSendType(1);
+                                messag1.setCreateTime(System.currentTimeMillis());
+                                messageList.add(messag1);
 
 
-//        MessageBean messag =new MessageBean();
-//        messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
-//        messag.setType(19);
-//        messag.setSenderId(210710);
-//        messag.setSendType(1);
-//        messag.setCreateTime(System.currentTimeMillis());
-//        messageList.add(messag);
-
-
-        currentSize = messageList.size();
-        adapter.refresh();
-        int count = listView.getCount();
-        if (count > 0) {
-            listView.setSelection(count - 1);
-        }
+                                currentSize = messageList.size();
+                                adapter.refresh();
+                                int count = listView.getCount();
+                                if (count > 0) {
+                                    listView.setSelection(count - 1);
+                                }
+                            }
+                        })
+        );
     }
 
     /**
@@ -563,10 +590,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         // 显示消息
         listView.setAdapter(adapter);
         listView.setOnScrollListener(new ListScrollListener());
-        int count = listView.getCount();
-        if (count > 0) {
-            listView.setSelection(count - 1);
-        }
+//        int count = listView.getCount();
+//        if (count > 0) {
+//            listView.setSelection(count - 1);
+//        }
         listView.setOnTouchListener(new OnTouchListener() {
 
             @Override
@@ -763,44 +790,44 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 mExtraPanel.setVisibility(View.GONE);
                 showKeyboard(mEditTextContent);
                 break;
-            case  R.id.btn_note:
+            case R.id.btn_note:
                 Intent intent = new Intent(mContext, SearchAllActivity.class);
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toChatUsername);
                 intent.putExtra("conversation", conversation);
                 intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", true);
-                intent.putExtra("type","travelNote");
+                intent.putExtra("type", "travelNote");
                 startActivity(intent);
                 break;
-            case  R.id.btn_viewspot:
+            case R.id.btn_viewspot:
                 Intent intent1 = new Intent(mContext, SearchAllActivity.class);
                 intent1.putExtra("chatType", chatType);
                 intent1.putExtra("toId", toChatUsername);
                 intent1.putExtra("conversation", conversation);
                 intent1.putExtra("userId", AccountManager.getCurrentUserId());
                 intent1.putExtra("isShare", true);
-                intent1.putExtra("type","vs");
+                intent1.putExtra("type", "vs");
                 startActivity(intent1);
                 break;
-            case  R.id.btn_food:
+            case R.id.btn_food:
                 Intent intent2 = new Intent(mContext, SearchAllActivity.class);
                 intent2.putExtra("chatType", chatType);
                 intent2.putExtra("toId", toChatUsername);
                 intent2.putExtra("conversation", conversation);
                 intent2.putExtra("userId", AccountManager.getCurrentUserId());
                 intent2.putExtra("isShare", true);
-                intent2.putExtra("type","restaurant");
+                intent2.putExtra("type", "restaurant");
                 startActivity(intent2);
                 break;
-            case  R.id.btn_shopping:
+            case R.id.btn_shopping:
                 Intent intent3 = new Intent(mContext, SearchAllActivity.class);
                 intent3.putExtra("chatType", chatType);
                 intent3.putExtra("toId", toChatUsername);
                 intent3.putExtra("conversation", conversation);
                 intent3.putExtra("userId", AccountManager.getCurrentUserId());
                 intent3.putExtra("isShare", true);
-                intent3.putExtra("type","shopping");
+                intent3.putExtra("type", "shopping");
                 startActivity(intent3);
                 break;
             default:
@@ -1240,13 +1267,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     public void onMsgArrive(MessageBean m, String groupId) {
         if ("single".equals(chatType) && !groupId.equals(String.valueOf(0))) {
-         //   if (isLongEnough())
-          //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            //   if (isLongEnough())
+            //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("single".equals(chatType) && !toChatUsername.equals(String.valueOf(m.getSenderId())))) {
-          //  if (isLongEnough())
-          //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            //  if (isLongEnough())
+            //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("group".equals(chatType) && !toChatUsername.equals(groupId))) {
-           // if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            // if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else {
             m.setSendType(1);
             messageList.add(m);
@@ -1468,6 +1495,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     @Override
     protected void onDestroy() {
+        if (this.compositeSubscription.hasSubscriptions()) this.compositeSubscription.clear();
         super.onDestroy();
         HandleImMessage.getInstance().unregisterMessageListener(this, conversation);
         CommonUtils.fixInputMethodManagerLeak(this);
@@ -1568,18 +1596,23 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             loadmorePB.setVisibility(View.GONE);
                             return;
                         }
-                        if (messageList.size() != 0) {
-                            // 刷新ui
-                            adapter.notifyDataSetChanged();
-                            if (messageList.size() > currentSize) {
-                                listView.setSelection(messageList.size() - currentSize - 1);
-                            }
-                            if (messageList.size() == currentSize) {
+                        try {
+                            if (messageList.size() != 0) {
+                                // 刷新ui
+                                adapter.notifyDataSetChanged();
+                                if (messageList.size() > currentSize) {
+                                    listView.setSelection(messageList.size() - currentSize - 1);
+                                }
+                                if (messageList.size() == currentSize) {
+                                    haveMoreData = false;
+                                }
+                            } else {
                                 haveMoreData = false;
                             }
-                        } else {
-                            haveMoreData = false;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+
                         loadmorePB.setVisibility(View.GONE);
                         isloading = false;
 

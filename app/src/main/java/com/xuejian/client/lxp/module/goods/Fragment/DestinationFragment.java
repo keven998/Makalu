@@ -99,6 +99,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                hideMenu();
                 Intent intent = new Intent(getActivity(), CountryListActivity.class);
                 intent.putExtra("id", adapter.getItem(position).id);
                 intent.putExtra("name", adapter.getItem(position).zhName);
@@ -108,10 +109,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         showMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMenu.setVisibility(View.GONE);
-                menu.setVisibility(View.VISIBLE);
-                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_right);
-                menu.startAnimation(animation);
+                showMenu();
             }
         });
         showMenu.setTextColor(getResources().getColor(R.color.base_color_white));
@@ -119,6 +117,20 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         showMenu.setText("推荐");
     }
 
+    private void showMenu(){
+        showMenu.setVisibility(View.GONE);
+        menu.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_right);
+        menu.startAnimation(animation);
+    }
+    private void hideMenu(){
+        if (menu.getVisibility() == View.VISIBLE) {
+            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_to_right);
+            menu.startAnimation(animation);
+        }
+        showMenu.setVisibility(View.VISIBLE);
+        menu.setVisibility(View.GONE);
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -144,12 +156,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_FLING || scrollState == SCROLL_STATE_TOUCH_SCROLL) {
-            if (menu.getVisibility() == View.VISIBLE) {
-                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_to_right);
-                menu.startAnimation(animation);
-            }
-            showMenu.setVisibility(View.VISIBLE);
-            menu.setVisibility(View.GONE);
+            hideMenu();
         }
     }
 

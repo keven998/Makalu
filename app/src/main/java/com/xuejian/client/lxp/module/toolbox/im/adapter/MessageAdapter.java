@@ -22,6 +22,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v4.util.LongSparseArray;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.ExtMessageBean;
 import com.xuejian.client.lxp.bean.H5MessageBean;
-import com.xuejian.client.lxp.bean.PlanBean;
+import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.bean.TradeMessageBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -73,8 +74,10 @@ import com.xuejian.client.lxp.common.widget.ItemListView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
+import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContextMenu;
@@ -139,6 +142,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int QA_MSG = 17;
     private static final int H5_MSG = 18;
     private static final int TRADE_MSG = 19;
+    private static final int COMMOMDITY_MSG = 20;
     private static final int TIP_MSG = 200;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
@@ -152,7 +156,7 @@ public class MessageAdapter extends BaseAdapter {
     private String chatType;
     private String conversation;
     private LongSparseArray<Timer> timers = new LongSparseArray<>();
-
+    Gson gson = new Gson();
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
         this.context = context;
@@ -233,13 +237,15 @@ public class MessageAdapter extends BaseAdapter {
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_QA : MESSAGE_TYPE_SENT_QA;
             case TRADE_MSG:
                 return TRADE_MSG;
+            case COMMOMDITY_MSG:
+                return COMMOMDITY_MSG;
             default:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
     }
 
     public int getViewTypeCount() {
-        return 19;
+        return 21;
     }
 
     private View createViewByMessage(MessageBean message, int position) {
@@ -286,6 +292,8 @@ public class MessageAdapter extends BaseAdapter {
                         R.layout.row_sent_qa, null);
             case TRADE_MSG:
                 return inflater.inflate(R.layout.row_trade_message, null);
+            case COMMOMDITY_MSG:
+                return inflater.inflate(R.layout.row_commodity_message, null);
             default:
                 break;
         }
@@ -378,6 +386,13 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv_order_id = (TextView) convertView.findViewById(R.id.tv_order_id);
                     holder.ll_trade = (LinearLayout) convertView.findViewById(R.id.ll_trade);
                     break;
+                case COMMOMDITY_MSG:
+                    holder.iv_goods_img = (ImageView) convertView.findViewById(R.id.iv_goods_img);
+                    holder.tv_commodity_name = (TextView) convertView.findViewById(R.id.tv_commodity_name);
+                    holder.tv_commodity_price = (TextView) convertView.findViewById(R.id.tv_commodity_price);
+                    holder.tv_send_commodity = (TextView) convertView.findViewById(R.id.tv_send_commodity);
+                    holder.rl_commodity = (RelativeLayout) convertView.findViewById(R.id.rl_commodity);
+                    break;
                 default:
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                     holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
@@ -440,9 +455,12 @@ public class MessageAdapter extends BaseAdapter {
                 handleCommonMessage(position, convertView, message, holder);
                 break;
             case TRADE_MSG:
-                handleGroupMessage(position, convertView, message, holder);
+             //   handleGroupMessage(position, convertView, message, holder);
                 handleTradeMessage(message, holder, position);
             //    handleCommonMessage(position, convertView, message, holder);
+                break;
+            case COMMOMDITY_MSG:
+                handleCommodityMessage(message, holder, position);
                 break;
             default:
                 handleGroupMessage(position, convertView, message, holder);
@@ -466,18 +484,43 @@ public class MessageAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private void handleCommodityMessage(MessageBean message, ViewHolder holder, int position) {
+        if (gson==null){
+            gson= new Gson();
+        }
+        final ShareCommodityBean bean = gson.fromJson(message.getMessage(), new TypeToken<ShareCommodityBean>() {
+        }.getType());
+        ImageLoader.getInstance().displayImage("http://7sbm17.com1.z0.glb.clouddn.com/lvxingpai-cover-20151009-1080-1920.png?imageView/1/w/720/h/1280/q/85/format/jpg/interlace/1", holder.iv_goods_img, UILUtils.getDefaultOption());
+        holder.tv_commodity_name.setText(String.format("商品名称:%s", bean.title));
+        holder.tv_commodity_price.setText(String.format("¥%s", String.valueOf(Math.round(bean.price * 10 / 10))));
+        holder.rl_commodity.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, ReactMainPage.class);
+                intent.putExtra("commodityId",bean.commodityId);
+                activity.startActivity(intent);
+            }
+        });
+    }
+
     private void handleTradeMessage(MessageBean message, ViewHolder holder, int position) {
-        Gson gson = new Gson();
+        if (gson==null){
+            gson= new Gson();
+        }
         TradeMessageBean bean = gson.fromJson(message.getMessage(), new TypeToken<TradeMessageBean>() {
         }.getType());
         holder.tv_order_id.setText(String.format("订单编号:%d", bean.getOrderId()));
         holder.tv_goods_name.setText(String.format("商品名称:%s", bean.getCommodityName()));
         holder.tv_state_title.setText(bean.getTitle());
         holder.tv_trade_content.setText(bean.getText());
+  //      holder.tv_trade_content.setText(Html.fromHtml("This is <font color='red'>simple</font>."),TextView.BufferType.SPANNABLE);
         holder.ll_trade.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(activity, OrderDetailActivity.class);
+                intent.putExtra("type","orderDetail");
+                intent.putExtra("orderId",1449480836556l);
+                activity.startActivity(intent);
             }
         });
     }
@@ -622,9 +665,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 文本消息
      *
-     * @param message
-     * @param holder
-     * @param position
      */
     private void handleTextMessage(MessageBean message, ViewHolder holder, final int position) {
      //   Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
@@ -667,9 +707,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 自定义消息
      *
-     * @param message
-     * @param holder
-     * @param position
      */
     private void handleExtMessage(MessageBean message, final ViewHolder holder, final int position) {
         final int extType = message.getType();
@@ -872,9 +909,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 语音通话记录
      *
-     * @param message
-     * @param holder
-     * @param position
      */
     private void handleVoiceCallMessage(MessageBean message, ViewHolder holder, final int position) {
 //        TextMessageBody txtBody = (TextMessageBody) message.getBody();
@@ -885,10 +919,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 图片消息
      *
-     * @param message
-     * @param holder
-     * @param position
-     * @param convertView
      */
     private void handleImageMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         holder.pb.setTag(position);
@@ -1046,10 +1076,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 视频消息
      *
-     * @param message
-     * @param holder
-     * @param position
-     * @param convertView
      */
     private void handleVideoMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
 //
@@ -1177,10 +1203,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 语音消息
      *
-     * @param message
-     * @param holder
-     * @param position
-     * @param convertView
      */
     private void handleVoiceMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         String filepath = (String) getVoiceFilepath(message, "path");
@@ -1855,8 +1877,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 更新ui上消息发送状态
      *
-     * @param message
-     * @param holder
      */
     private void updateSendedView(final MessageBean message, final ViewHolder holder) {
         activity.runOnUiThread(new Runnable() {
@@ -1945,10 +1965,6 @@ public class MessageAdapter extends BaseAdapter {
     /**
      * 展示视频缩略图
      *
-     * @param localThumb   本地缩略图路径
-     * @param iv
-     * @param thumbnailUrl 远程缩略图路径
-     * @param message
      */
     private void showVideoThumbView(String localThumb, ImageView iv, String thumbnailUrl, final MessageBean message) {
         // first check if the thumbnail image already loaded into cache
@@ -2018,11 +2034,18 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_file_name;
         TextView tv_file_size;
         TextView tv_file_download_state;
+
         TextView tv_state_title;
         TextView tv_trade_content;
         TextView tv_goods_name;
         TextView tv_order_id;
         LinearLayout ll_trade;
+
+        ImageView iv_goods_img;
+        TextView tv_commodity_name;
+        TextView tv_commodity_price;
+        TextView tv_send_commodity;
+        RelativeLayout rl_commodity;
     }
 
     /*

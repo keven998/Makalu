@@ -7,11 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CityBean;
@@ -57,7 +58,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     TextView tvStoreNum;
     String id;
     RecommendGoodsAdapter adapter;
-
+    FrameLayout fl_city_img;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         View footView = View.inflate(this, R.layout.footer_show_all, null);
         TextView showMore = (TextView) footView.findViewById(R.id.tv_show_all);
         showMore.setText("查看全部玩乐");
+        fl_city_img = (FrameLayout) headView.findViewById(R.id.fl_city_img);
         ImageView back = (ImageView) findViewById(R.id.iv_nav_back);
         tvStoreNum = (TextView) headView.findViewById(R.id.tv_store_num);
         tvRecommendTime = (TextView) headView.findViewById(R.id.tv_recommend_time);
@@ -82,6 +84,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
                 startActivity(intent);
             }
         });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,15 +96,6 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         listView.addFooterView(footView);
         adapter = new RecommendGoodsAdapter(this, 3, CityInfoActivity.this);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(CityInfoActivity.this, ReactMainPage.class);
-                intent.putExtra("commodityId", id);
-                startActivity(intent);
-            }
-        });
         initData(id);
 
 
@@ -151,6 +145,17 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
                 adapter.getDataList().clear();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
+                if (list.result.size()>0){
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent();
+                            intent.setClass(CityInfoActivity.this, ReactMainPage.class);
+                            intent.putExtra("commodityId", id);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -166,29 +171,30 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     }
 
     private void bindView(final CityBean bean) {
+
         tvCountryName.setText(bean.zhName);
         tvCountryNameEn.setText(bean.enName);
         tvRecommendTime.setText(String.format("推荐游玩时间:%s", bean.travelMonth));
         tvStoreNum.setText(String.valueOf(bean.commodityCnt));
         System.out.println("size " + bean.images.size());
-        tvCountryPicNum.setText(String.format("%d/%d", 1, bean.images.size()));
-        viewPager.setAdapter(new GoodsPageAdapter(this, bean.images));
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                tvCountryPicNum.setText(String.format("%d/%d", position + 1, bean.images.size()));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+    //    tvCountryPicNum.setText(String.format("%d/%d", 1, bean.images.size()));
+        viewPager.setAdapter(new GoodsPageAdapter(this, bean.images,bean.id,bean.zhName));
+//        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                tvCountryPicNum.setText(String.format("%d/%d", position + 1, bean.images.size()));
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
 
         findViewById(R.id.btn_note).setOnClickListener(new View.OnClickListener() {
@@ -211,10 +217,13 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
         private Context mContext;
         private ArrayList<ImageBean> mDatas;
-
-        public GoodsPageAdapter(Context context, ArrayList<ImageBean> datas) {
+        private String id;
+        private String zhName;
+        public GoodsPageAdapter(Context context, ArrayList<ImageBean> datas,String id,String zhName) {
             mDatas = datas;
             mContext = context;
+            this.id = id;
+            this.zhName = zhName;
         }
 
         @Override
@@ -237,6 +246,17 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             ImageBean ib = mDatas.get(position);
             ImageLoader.getInstance().displayImage(ib.url, imageView, UILUtils.getDefaultOption());
             container.addView(imageView, 0);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MobclickAgent.onEvent(CityInfoActivity.this, "card_item_city_pictures");
+                    Intent intent = new Intent(CityInfoActivity.this, CityPictureActivity.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("title", zhName);
+                    startActivityWithNoAnim(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+            });
             return imageView;
         }
 
