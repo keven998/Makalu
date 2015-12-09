@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,9 +49,9 @@ public class GoodsList extends PeachBaseActivity {
     @InjectView(R.id.tv_title_back)
     TextView tvTitleBack;
     @InjectView(R.id.type_spinner)
-    TextView typeSpinner;
+    CheckedTextView typeSpinner;
     @InjectView(R.id.sort_spinner)
-    TextView sortSpinner;
+    CheckedTextView sortSpinner;
     @InjectView(R.id.lv_poi_list)
     PullToRefreshListView goodsList;
     @InjectView(R.id.iv_toTop)
@@ -69,6 +70,9 @@ public class GoodsList extends PeachBaseActivity {
     private String[] sortValue = new String[]{"salesVolume","price","price"};
 
     private String currentType;
+    private static final int PAGE_SIZE = 15;
+    private static int COUNT =15 ;
+    private static int START ;
     String locId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,7 @@ public class GoodsList extends PeachBaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                getData(null, locId, currentType, null,START,COUNT,false);
             }
         });
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +121,7 @@ public class GoodsList extends PeachBaseActivity {
             }
         });
         getCategory(locId);
-        getData(0,null,locId,null,null);
+        getData(null,locId,null,null,0,15,true);
     }
 
     private void getCategory(String id) {
@@ -126,6 +131,7 @@ public class GoodsList extends PeachBaseActivity {
             public void doSuccess(String result, String method) {
                 CommonJson<CategoryBean> list = CommonJson.fromJson(result, GoodsList.CategoryBean.class);
                 initCategoryData(list.result);
+
             }
 
             @Override
@@ -154,16 +160,26 @@ public class GoodsList extends PeachBaseActivity {
         }
     }
 
-    public void getData(int page,String sellerId,String localityId,String category,String sortBy) {
+    public void getData(String sellerId,String localityId,String category,String sortBy, final int start,int count, final boolean fresh) {
 
-        TravelApi.getCommodityList(sellerId, localityId, category, sortBy, null, new HttpCallBack<String>() {
+        TravelApi.getCommodityList(sellerId, localityId, category, sortBy, null,String.valueOf(start) ,String.valueOf(count),new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
-                adapter.getDataList().clear();
+
+                if (fresh){
+                    adapter.getDataList().clear();
+                }
+                START = list.result.size();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
+                goodsList.onPullUpRefreshComplete();
+                 if (list.result.size()>= COUNT){
+                     goodsList.setHasMoreData(true);
+                 }else {
+                     goodsList.setHasMoreData(false);
+                 }
             }
 
             @Override
@@ -188,6 +204,7 @@ public class GoodsList extends PeachBaseActivity {
         typeSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                typeSpinner.setChecked(true);
                 WindowManager.LayoutParams wlmp = categoryDialog.getWindow().getAttributes();
                 wlmp.gravity = Gravity.TOP | Gravity.LEFT;
                 final ListView lv = categoryDialog.getListView();
@@ -199,7 +216,8 @@ public class GoodsList extends PeachBaseActivity {
                         //    lv.setSelection(headerPos.get(position));
                         currentType = bean.category.get(position);
                         typeSpinner.setText(currentType);
-                        getData(0, null, locId, currentType,null);
+                        getData(null, locId, currentType, null, 0, 15, true);
+                        typeSpinner.setChecked(false);
                         if (categoryDialog != null) categoryDialog.dismiss();
                     }
                 });
@@ -215,6 +233,7 @@ public class GoodsList extends PeachBaseActivity {
         sortSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sortSpinner.setChecked(true);
                 WindowManager.LayoutParams wlmp = sortDialog.getWindow().getAttributes();
                 wlmp.gravity = Gravity.TOP | Gravity.RIGHT;
                 final ListView lv = sortDialog.getListView();
@@ -225,8 +244,8 @@ public class GoodsList extends PeachBaseActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         //    lv.setSelection(headerPos.get(position));
                         sortSpinner.setText(SortList.get(position));
-                        getData(0, null, locId, currentType, sortValue[position]);
-
+                        getData(null, locId, currentType, sortValue[position], 0, 15, true);
+                        sortSpinner.setChecked(false);
                         if (sortDialog != null) sortDialog.dismiss();
                     }
                 });
@@ -292,9 +311,7 @@ public class GoodsList extends PeachBaseActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
             SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
-            if (bean.getImages().size() > 0) {
-                ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, holder.ivGoods, picOptions);
-            }
+            ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
             holder.tvGoodsName.setText(bean.getTitle());
             holder.tvGoodsCurrentPrice.setText("¥" + String.valueOf((double) Math.round(bean.getPrice() * 10 / 10)));
             holder.tvGoodsPrice.setText("¥" + String.valueOf((double) Math.round(bean.getMarketPrice() * 10 / 10)));

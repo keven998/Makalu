@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.utils.GsonTools;
@@ -141,8 +142,9 @@ public class MessageAdapter extends BaseAdapter {
     private static final int HOTEL_MSG = 16;
     private static final int QA_MSG = 17;
     private static final int H5_MSG = 18;
-    private static final int TRADE_MSG = 19;
-    private static final int COMMOMDITY_MSG = 20;
+    private static final int TRADE_MSG = 20;
+    private static final int COMMOMDITY_MSG = 201;
+    public static final int GOODS_MSG = 19;
     private static final int TIP_MSG = 200;
     private static final int TYPE_SEND = 0;
     private static final int TYPE_REV = 1;
@@ -157,6 +159,8 @@ public class MessageAdapter extends BaseAdapter {
     private String conversation;
     private LongSparseArray<Timer> timers = new LongSparseArray<>();
     Gson gson = new Gson();
+    private OnClickListener sendCommodityListener;
+
     public MessageAdapter(Context context, String friendId, String chatType, String conversation) {
         this.friendId = friendId;
         this.context = context;
@@ -232,6 +236,7 @@ public class MessageAdapter extends BaseAdapter {
             case SHOP_MSG:
             case HOTEL_MSG:
             case H5_MSG:
+            case GOODS_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
             case QA_MSG:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_QA : MESSAGE_TYPE_SENT_QA;
@@ -245,7 +250,7 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     public int getViewTypeCount() {
-        return 21;
+        return 1000;
     }
 
     private View createViewByMessage(MessageBean message, int position) {
@@ -285,6 +290,7 @@ public class MessageAdapter extends BaseAdapter {
             case SHOP_MSG:
             case HOTEL_MSG:
             case H5_MSG:
+            case GOODS_MSG:
                 return message.getSendType() == 1 ? inflater.inflate(R.layout.row_received_ext, null) : inflater.inflate(
                         R.layout.row_sent_ext, null);
             case QA_MSG:
@@ -359,6 +365,7 @@ public class MessageAdapter extends BaseAdapter {
                 case SHOP_MSG:
                 case HOTEL_MSG:
                 case H5_MSG:
+                case GOODS_MSG:
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                     holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
                     holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
@@ -455,12 +462,17 @@ public class MessageAdapter extends BaseAdapter {
                 handleCommonMessage(position, convertView, message, holder);
                 break;
             case TRADE_MSG:
-             //   handleGroupMessage(position, convertView, message, holder);
+                //   handleGroupMessage(position, convertView, message, holder);
                 handleTradeMessage(message, holder, position);
-            //    handleCommonMessage(position, convertView, message, holder);
+                //    handleCommonMessage(position, convertView, message, holder);
                 break;
             case COMMOMDITY_MSG:
                 handleCommodityMessage(message, holder, position);
+                break;
+            case GOODS_MSG:
+                handleGroupMessage(position, convertView, message, holder);
+                handleGoodsMessage(message, holder, position);
+                handleCommonMessage(position, convertView, message, holder);
                 break;
             default:
                 handleGroupMessage(position, convertView, message, holder);
@@ -485,27 +497,32 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     private void handleCommodityMessage(MessageBean message, ViewHolder holder, int position) {
-        if (gson==null){
-            gson= new Gson();
+        if (gson == null) {
+            gson = new Gson();
         }
         final ShareCommodityBean bean = gson.fromJson(message.getMessage(), new TypeToken<ShareCommodityBean>() {
         }.getType());
-        ImageLoader.getInstance().displayImage("http://7sbm17.com1.z0.glb.clouddn.com/lvxingpai-cover-20151009-1080-1920.png?imageView/1/w/720/h/1280/q/85/format/jpg/interlace/1", holder.iv_goods_img, UILUtils.getDefaultOption());
+        ImageLoader.getInstance().displayImage(bean.image.url, holder.iv_goods_img, UILUtils.getDefaultOption());
         holder.tv_commodity_name.setText(String.format("商品名称:%s", bean.title));
-        holder.tv_commodity_price.setText(String.format("¥%s", String.valueOf(Math.round(bean.price * 10 / 10))));
+        holder.tv_commodity_price.setText(String.format("¥%s", String.valueOf((double) Math.round(bean.price * 10 / 10))));
         holder.rl_commodity.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, ReactMainPage.class);
-                intent.putExtra("commodityId",bean.commodityId);
+                intent.putExtra("commodityId", bean.commodityId);
                 activity.startActivity(intent);
             }
         });
+        holder.tv_send_commodity.setOnClickListener(sendCommodityListener);
+    }
+
+    public void setSendCommodityListener(OnClickListener listener) {
+        sendCommodityListener = listener;
     }
 
     private void handleTradeMessage(MessageBean message, ViewHolder holder, int position) {
-        if (gson==null){
-            gson= new Gson();
+        if (gson == null) {
+            gson = new Gson();
         }
         TradeMessageBean bean = gson.fromJson(message.getMessage(), new TypeToken<TradeMessageBean>() {
         }.getType());
@@ -513,31 +530,31 @@ public class MessageAdapter extends BaseAdapter {
         holder.tv_goods_name.setText(String.format("商品名称:%s", bean.getCommodityName()));
         holder.tv_state_title.setText(bean.getTitle());
         holder.tv_trade_content.setText(bean.getText());
-  //      holder.tv_trade_content.setText(Html.fromHtml("This is <font color='red'>simple</font>."),TextView.BufferType.SPANNABLE);
+        //      holder.tv_trade_content.setText(Html.fromHtml("This is <font color='red'>simple</font>."),TextView.BufferType.SPANNABLE);
         holder.ll_trade.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, OrderDetailActivity.class);
-                intent.putExtra("type","orderDetail");
-                intent.putExtra("orderId",1449480836556l);
+                intent.putExtra("type", "orderDetail");
+                intent.putExtra("orderId", 1449480836556l);
                 activity.startActivity(intent);
             }
         });
     }
 
     private void handleQaMessage(MessageBean message, ViewHolder holder, int position) {
-        ArrayList<H5MessageBean> list =new ArrayList<>();
+        ArrayList<H5MessageBean> list = new ArrayList<>();
         try {
-            CommonJson4List<H5MessageBean> result = CommonJson4List.fromJson(message.getMessage(),H5MessageBean.class);
+            CommonJson4List<H5MessageBean> result = CommonJson4List.fromJson(message.getMessage(), H5MessageBean.class);
             list.addAll(result.result);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 //        ArrayList<H5MessageBean> list =new ArrayList<>();
 //        for (int i = 0;i<7;i++){
 //                list.add(new H5MessageBean(i+"韩国签证有效期内可以往返几次啊？"));
 //        }
-        ItemListAdapter adapter =new ItemListAdapter(activity,1,list);
+        ItemListAdapter adapter = new ItemListAdapter(activity, 1, list);
         holder.itemListView.setAdapter(adapter);
 
     }
@@ -664,10 +681,9 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 文本消息
-     *
      */
     private void handleTextMessage(MessageBean message, ViewHolder holder, final int position) {
-     //   Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
+        //   Spannable span = SmileUtils.getSmiledText(context, message.getMessage());
         // 设置内容
         holder.tv.setText(SmileUtils.getSmiledText(context, message.getMessage()));
         // 设置长按事件监听
@@ -705,8 +721,84 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     /**
-     * 自定义消息
+     * 商品消息
      *
+     * @param message
+     * @param holder
+     * @param position
+     */
+    private void handleGoodsMessage(MessageBean message, final ViewHolder holder, final int position) {
+        final String conent = message.getMessage();
+        ShareCommodityBean bean = null;
+        try {
+            bean = GsonTools.parseJsonToBean(conent, ShareCommodityBean.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (bean == null) return;
+        final ShareCommodityBean finalBean = bean;
+        holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        holder.tv_attr.setVisibility(View.GONE);
+        holder.tv_name.setSingleLine(false);
+        holder.tv_name.setMaxLines(2);
+        holder.tv_name.setText(bean.title);
+        holder.tv_desc.setText(String.format("¥%s", String.valueOf((double) Math.round(bean.price * 10 / 10))));
+        holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.price_color));
+        //    holder.tv_attr.setText(bean.timeCost);
+        ImageLoader.getInstance().displayImage(bean.image.url, holder.iv_image, UILUtils.getRadiusOption(3));
+        //     holder.tv_type.setText("计划");
+        holder.rl_content.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, ReactMainPage.class);
+                intent.putExtra("commodityId", finalBean.commodityId);
+                activity.startActivity(intent);
+            }
+        });
+        if (message.getSendType() == TYPE_REV) {
+            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_highlight, 0, 0, 0);
+        } else {
+            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_default, 0, 0, 0);
+        }
+
+        holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                activity.startActivityForResult(
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
+                                -1), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                return true;
+            }
+        });
+
+        if (message.getSendType() == TYPE_SEND) {
+            switch (message.getStatus()) {
+                case 0: // 发送成功
+                    holder.pb.setVisibility(View.GONE);
+                    holder.staus_iv.setVisibility(View.GONE);
+                    break;
+                case 2: // 发送失败
+                    holder.pb.setVisibility(View.GONE);
+                    holder.staus_iv.setVisibility(View.VISIBLE);
+                    holder.staus_iv.setClickable(true);
+                    break;
+                case 1: // 发送中
+                    holder.pb.setVisibility(View.VISIBLE);
+                    holder.staus_iv.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
+                // 发送消息
+                //       sendMsgInBackground(message, holder);
+            }
+        }
+
+
+    }
+
+
+    /**
+     * 自定义消息
      */
     private void handleExtMessage(MessageBean message, final ViewHolder holder, final int position) {
         final int extType = message.getType();
@@ -739,7 +831,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         if (extType == PLAN_MSG) {
             holder.tv_attr.setVisibility(View.VISIBLE);
-            holder.tv_name.setText(String.format("计划 | %s",bean.name));
+            holder.tv_name.setText(String.format("计划 | %s", bean.name));
             holder.tv_desc.setText(bean.desc);
             holder.tv_attr.setText(bean.timeCost);
             ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
@@ -754,7 +846,7 @@ public class MessageAdapter extends BaseAdapter {
                 }
             });
         } else if (extType == CITY_MSG) {
-            holder.tv_name.setText(String.format("城市 | %s",bean.name));
+            holder.tv_name.setText(String.format("城市 | %s", bean.name));
             holder.tv_attr.setVisibility(View.GONE);
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("城市");
@@ -768,7 +860,7 @@ public class MessageAdapter extends BaseAdapter {
                 }
             });
         } else if (extType == TRAVEL_MSG) {
-            holder.tv_name.setText(String.format("游记 | %s",bean.name));
+            holder.tv_name.setText(String.format("游记 | %s", bean.name));
             holder.tv_attr.setVisibility(View.GONE);
             holder.tv_desc.setText(bean.desc);
             holder.tv_type.setText("游记");
@@ -789,7 +881,7 @@ public class MessageAdapter extends BaseAdapter {
                 holder.tv_attr.setVisibility(View.VISIBLE);
                 holder.tv_attr.setText(bean.timeCost);
             }
-            holder.tv_name.setText(String.format("景点 | %s",bean.name));
+            holder.tv_name.setText(String.format("景点 | %s", bean.name));
             holder.tv_desc.setText(bean.desc);
 
             holder.tv_type.setText("景点");
@@ -804,19 +896,19 @@ public class MessageAdapter extends BaseAdapter {
             holder.tv_attr.setVisibility(View.VISIBLE);
             switch (extType) {
                 case FOOD_MSG:
-                    holder.tv_name.setText(String.format("美食 | %s",bean.name));
+                    holder.tv_name.setText(String.format("美食 | %s", bean.name));
                     holder.tv_type.setText("美食");
                     holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
                 case HOTEL_MSG:
-                    holder.tv_name.setText(String.format("酒店 | %s",bean.name));
+                    holder.tv_name.setText(String.format("酒店 | %s", bean.name));
                     holder.tv_type.setText("酒店");
                     holder.tv_attr.setText(bean.rating + " " + bean.price);
                     break;
 
                 case SHOP_MSG:
-                    holder.tv_name.setText(String.format("购物 | %s",bean.name));
+                    holder.tv_name.setText(String.format("购物 | %s", bean.name));
                     holder.tv_type.setText("购物");
                     holder.tv_attr.setText(bean.rating + " ");
                     break;
@@ -908,7 +1000,6 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 语音通话记录
-     *
      */
     private void handleVoiceCallMessage(MessageBean message, ViewHolder holder, final int position) {
 //        TextMessageBody txtBody = (TextMessageBody) message.getBody();
@@ -918,7 +1009,6 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 图片消息
-     *
      */
     private void handleImageMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         holder.pb.setTag(position);
@@ -988,7 +1078,7 @@ public class MessageAdapter extends BaseAdapter {
 
                 // set a timer
                 //    if (message.getStatus()==1) sendPictureMessage(message, holder);
-                if (timers.indexOfKey(message.getLocalId())>=0) {
+                if (timers.indexOfKey(message.getLocalId()) >= 0) {
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "already exist time Task");
                     }
@@ -1075,7 +1165,6 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 视频消息
-     *
      */
     private void handleVideoMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
 //
@@ -1202,7 +1291,6 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 语音消息
-     *
      */
     private void handleVoiceMessage(final MessageBean message, final ViewHolder holder, final int position, View convertView) {
         String filepath = (String) getVoiceFilepath(message, "path");
@@ -1348,11 +1436,10 @@ public class MessageAdapter extends BaseAdapter {
                             public void run() {
                                 holder.pb.setVisibility(View.INVISIBLE);
                                 updateStatus(message, 2);
-                                if (errorCode ==403){
-                                    if (("single").equals(chatType)){
+                                if (errorCode == 403) {
+                                    if (("single").equals(chatType)) {
                                         ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
-                                    }
-                                    else if (("group").equals(chatType)){
+                                    } else if (("group").equals(chatType)) {
                                         ToastUtil.getInstance(activity).showToast("你还不是群成员");
                                     }
                                 }
@@ -1558,7 +1645,7 @@ public class MessageAdapter extends BaseAdapter {
         if (bitmap != null) {
             holder.tv.setBackgroundDrawable(new BitmapDrawable(bitmap));
         } else
-            new LoadImageTask().execute(path, null, remote, chatType, null, activity, message, holder.tv,friendId);
+            new LoadImageTask().execute(path, null, remote, chatType, null, activity, message, holder.tv, friendId);
 
 
         holder.tv.setOnClickListener(new MapClickListener(lat, lng, desc));
@@ -1651,10 +1738,9 @@ public class MessageAdapter extends BaseAdapter {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (("single").equals(chatType)){
+                            if (("single").equals(chatType)) {
                                 ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
-                            }
-                           else if (("group").equals(chatType)){
+                            } else if (("group").equals(chatType)) {
                                 ToastUtil.getInstance(activity).showToast("你还不是群成员");
                             }
                         }
@@ -1825,17 +1911,17 @@ public class MessageAdapter extends BaseAdapter {
                             holder.tv.setVisibility(View.GONE);
                             holder.staus_iv.setVisibility(View.VISIBLE);
                             holder.staus_iv.setClickable(true);
-                            if (errorCode == 403){
-                                if (("single").equals(chatType)){
+                            if (errorCode == 403) {
+                                if (("single").equals(chatType)) {
                                     ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
-                                }
-                                else if (("group").equals(chatType)){
+                                } else if (("group").equals(chatType)) {
                                     ToastUtil.getInstance(activity).showToast("你还不是群成员");
                                 }
                             }
 //                            Toast.makeText(activity,
 //                                    activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
-                            else ToastUtil.getInstance(activity).showToast(activity.getResources().getString(R.string.request_network_failed));
+                            else
+                                ToastUtil.getInstance(activity).showToast(activity.getResources().getString(R.string.request_network_failed));
                         }
                     });
                 }
@@ -1876,7 +1962,6 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 更新ui上消息发送状态
-     *
      */
     private void updateSendedView(final MessageBean message, final ViewHolder holder) {
         activity.runOnUiThread(new Runnable() {
@@ -1938,7 +2023,7 @@ public class MessageAdapter extends BaseAdapter {
                     if (message.getSendType() == 1) {
                         pos = pics.indexOf(remoteDir);
                     } else {
-                        pos = pics.indexOf("file://"+localFullSizePath);
+                        pos = pics.indexOf("file://" + localFullSizePath);
                     }
                     IntentUtils.intentToPicGallery2(activity, pics, pos);
 //                    Intent intent = new Intent(activity, ShowBigImage.class);
@@ -1956,7 +2041,7 @@ public class MessageAdapter extends BaseAdapter {
             });
             return true;
         } else {
-            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message, null,friendId);
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, chatType, iv, activity, message, null, friendId);
             return true;
         }
 
@@ -1964,7 +2049,6 @@ public class MessageAdapter extends BaseAdapter {
 
     /**
      * 展示视频缩略图
-     *
      */
     private void showVideoThumbView(String localThumb, ImageView iv, String thumbnailUrl, final MessageBean message) {
         // first check if the thumbnail image already loaded into cache
@@ -2093,9 +2177,11 @@ public class MessageAdapter extends BaseAdapter {
         if (sec >= 60) return 280;
         return 210 / 60 * sec + (70);
     }
-    class ItemListAdapter extends ArrayAdapter<H5MessageBean>{
+
+    class ItemListAdapter extends ArrayAdapter<H5MessageBean> {
 
         public ArrayList<H5MessageBean> list;
+
         public ItemListAdapter(Context context, int resource, List<H5MessageBean> objects) {
             super(context, resource, objects);
             list = (ArrayList<H5MessageBean>) objects;
@@ -2119,13 +2205,14 @@ public class MessageAdapter extends BaseAdapter {
                     Intent intent = new Intent();
                     intent.setClass(activity, PeachWebViewActivity.class);
                     intent.putExtra("url", bean.url);
-        //            intent.putExtra("title", h5MessageBean.title);
+                    //            intent.putExtra("title", h5MessageBean.title);
                     activity.startActivity(intent);
                 }
             });
             return convertView;
         }
-        class ItemHolder{
+
+        class ItemHolder {
             TextView tv_content;
         }
     }

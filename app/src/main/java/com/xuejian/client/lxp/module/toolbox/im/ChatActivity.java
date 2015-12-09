@@ -67,7 +67,9 @@ import android.widget.Toast;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
+import com.alibaba.fastjson.JSON;
 import com.lv.Audio.MediaRecordFunc;
+import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -76,6 +78,7 @@ import com.lv.utils.TimeUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
+import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -193,7 +196,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private int currentSize;
     private String changedTitle = null;
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
-
+    private boolean fromTrade;
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -279,6 +282,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
+        fromTrade = intent.getBooleanExtra("fromTrade",false);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(10001);
         if (!TextUtils.isEmpty(toChatUsername)) {
@@ -333,20 +337,52 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
                                 MessageBean messag = new MessageBean();
                                 messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
-                                messag.setType(19);
+                                messag.setType(20);
                                 messag.setSenderId(210710);
                                 messag.setSendType(1);
                                 messag.setCreateTime(System.currentTimeMillis());
                                 messageList.add(messag);
 
-                                MessageBean messag1 = new MessageBean();
-                                messag1.setMessage("{\"title\":\"dsfsfsdfsfd\",\"price\":\"266.000\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
-                                messag1.setType(20);
-                                messag1.setSenderId(210710);
-                                messag1.setSendType(1);
-                                messag1.setCreateTime(System.currentTimeMillis());
-                                messageList.add(messag1);
+//                                ShareCommodityBean shareCommodityBean = new ShareCommodityBean();
+//                                shareCommodityBean.title = "马来西亚十日游";
+//                                shareCommodityBean.image=new ImageBean();
+//                                shareCommodityBean.image.url = "http://images.taozilvxing.com/402d30e898b5466b9f2b58be7316aecc?imageView2/2/w/200";
+//                                shareCommodityBean.price = 2342.01;
 
+                                if (fromTrade){
+                                    ShareCommodityBean shareCommodityBean = getIntent().getParcelableExtra("shareCommodityBean");
+                                    final MessageBean messag1 = new MessageBean();
+                                    messag1.setMessage(JSON.toJSONString(shareCommodityBean));
+                                    messag1.setType(201);
+                                    messag1.setSenderId(Long.parseLong(toChatUsername));
+                                    messag1.setSendType(1);
+                                    messag1.setCreateTime(System.currentTimeMillis());
+                                    messageList.add(messag1);
+                                    adapter.setSendCommodityListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            MessageBean m = IMClient.getInstance().sendCommodityMessage(AccountManager.getCurrentUserId(), toChatUsername, chatType, messag1.getMessage(), MessageAdapter.GOODS_MSG, new HttpCallback() {
+                                                @Override
+                                                public void onSuccess() {
+
+                                                }
+
+                                                @Override
+                                                public void onSuccess(String result) {
+
+                                                }
+
+                                                @Override
+                                                public void onFailed(int code) {
+
+                                                }
+                                            });
+                                            messageList.add(m);
+                                            adapter.notifyDataSetChanged();
+                                            listView.setSelection(listView.getCount() - 1);
+                                        }
+                                    });
+                                }
 
                                 currentSize = messageList.size();
                                 adapter.refresh();
@@ -358,6 +394,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         })
         );
     }
+
+
 
     /**
      * initView

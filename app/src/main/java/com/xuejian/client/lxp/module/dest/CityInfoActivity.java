@@ -94,7 +94,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
         listView.addHeaderView(headView);
         listView.addFooterView(footView);
-        adapter = new RecommendGoodsAdapter(this, 3, CityInfoActivity.this);
+        adapter = new RecommendGoodsAdapter(this, CityInfoActivity.this);
         listView.setAdapter(adapter);
         initData(id);
 
@@ -137,7 +137,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             }
         });
 
-        TravelApi.getCommodityList(null, id, null, null, null, new HttpCallBack<String>() {
+        TravelApi.getCommodityList(null, id, null, null, null, "0","3",new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
@@ -270,11 +270,9 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         private DisplayImageOptions options;
         private Context mContext;
         private ArrayList<SimpleCommodityBean> data;
-        private int maxCount;
         Activity activity;
 
-        public RecommendGoodsAdapter(Context c, int maxCount, Activity activity) {
-            this.maxCount = maxCount;
+        public RecommendGoodsAdapter(Context c, Activity activity) {
             data = new ArrayList<>();
             mContext = c;
             this.activity = activity;
@@ -300,11 +298,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
         @Override
         public int getCount() {
-            if (data.size() > maxCount) {
-                return maxCount;
-            } else {
-                return data.size();
-            }
+            return data.size();
         }
 
         @Override
@@ -346,11 +340,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 //
 //            viewHolder.ivGoodsImg.setLayoutParams(para);
 
-            if (bean.getImages().size() > 0) {
-                ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
-            } else {
-                ImageLoader.getInstance().displayImage("", viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
-            }
+            ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
             ImageLoader.getInstance().displayImage("", viewHolder.ivAvatar, options);
             return convertView;
         }

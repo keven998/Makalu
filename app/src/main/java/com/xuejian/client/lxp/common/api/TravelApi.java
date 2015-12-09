@@ -266,10 +266,14 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
-    public static void getCommodityList(String sellerId, String localityId, String category, String sortBy, String sort, HttpCallBack callback) {
+    public static void getCommodityList(String sellerId, String localityId, String category, String sortBy, String sort,String start ,String count,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + COMMODITY_LIST);
+        if (!TextUtils.isEmpty(start)&&!TextUtils.isEmpty(count)) {
+            request.putUrlParams("start", start);
+            request.putUrlParams("count", count);
+        }
         if (!TextUtils.isEmpty(sellerId)) request.putUrlParams("seller", sellerId);
         if (!TextUtils.isEmpty(localityId)) request.putUrlParams("locality", localityId);
         if (!TextUtils.isEmpty(category)) request.putUrlParams("category", category);

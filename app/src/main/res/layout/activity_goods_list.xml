@@ -54,19 +54,20 @@
             android:orientation="horizontal"
             android:padding="11dp">
 
-            <TextView
+            <CheckedTextView
                 android:id="@+id/type_spinner"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/base_color_white"
+                android:drawableRight="@drawable/checked_spinner"
                 android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="全部类型"
                 android:textColor="@color/color_text_ii" />
 
-            <TextView
+            <CheckedTextView
                 android:id="@+id/sort_spinner"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -75,6 +76,7 @@
                 android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
+                android:drawableRight="@drawable/checked_spinner"
                 android:text="推荐排序"
                 android:textColor="@color/color_text_ii" />
         </LinearLayout>

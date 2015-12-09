@@ -478,6 +478,19 @@ public class IMClient {
         HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
     }
 
+    public MessageBean sendCommodityMessage(String UserId, String friendId, String chatType, String contentJson, int type, HttpCallback listen) {
+        if (TextUtils.isEmpty(contentJson)) return null;
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, type, contentJson);
+        MessageBean messageBean = imessage2Bean(message);
+        long localId = db.saveMsg(friendId, messageBean, chatType);
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
+        m.setLocalId((int) localId);
+        //return m;
+        //if ("0".equals(conversation)) conversation = null;
+        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId), friendId, type, m.getMessage());
+        HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
+        return messageBean;
+    }
 
     public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
         db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status, message, Type);

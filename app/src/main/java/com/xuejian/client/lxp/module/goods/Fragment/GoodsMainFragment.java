@@ -325,11 +325,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
                 viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getPrice() * 10) / 10))));
-                if (bean.getImages().size()>0){
-                    ImageLoader.getInstance().displayImage(bean.getImages().get(0).url, viewHolder.ivGoodsImg, options);
-                }else {
-                    ImageLoader.getInstance().displayImage("", viewHolder.ivGoodsImg, options);
-                }
+                ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, options);
                 viewHolder.goodsTag.removeAllViews();
                 viewHolder.goodsTag.setmTagViewResId(R.layout.goods_tag);
                 viewHolder.goodsTag.setTags(mTags);
