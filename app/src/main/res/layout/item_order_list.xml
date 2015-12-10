@@ -144,7 +144,8 @@
         android:id="@+id/rl_process"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <TextView
             android:id="@+id/tv_process_state"

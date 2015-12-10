@@ -11,7 +11,7 @@ public class ShareCommodityBean implements Parcelable {
     public long commodityId;
     public String title;
     public double price;
-    public ImageBean image;
+    public CoverBean image;
 
     @Override
     public int describeContents() {

@@ -77,8 +77,7 @@
                 android:layout_toRightOf="@id/rl_image"
                 android:singleLine="true"
                 android:textColor="@color/color_text_ii"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_attr"

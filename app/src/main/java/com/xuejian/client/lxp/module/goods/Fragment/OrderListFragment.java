@@ -31,6 +31,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
+import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,21 +71,24 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         setupRecyclerView(recyclerView);
        switch (type){
            case ALL:
-               getOrder("");
                empty.setText("您近期没有出行订单");
+               getOrder("");
                break;
            case NEED_PAY:
-               getOrder("pending");
                empty.setText("您没有待付款的订单");
+               getOrder("pending");
                break;
            case PROCESS:
                empty.setText("您没有处理中的订单");
+               getOrder("paid");
                break;
            case AVAILABLE:
                empty.setText("您没有可使用的订单");
+               getOrder("committed");
                break;
            case DRAWBACK:
-               empty.setText("您没有退款单");
+               empty.setText("您没有退款中订单");
+               getOrder("refundApplied");
                break;
            default:
                break;
@@ -103,7 +107,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 adapter.getDataList().clear();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
-                empty.setVisibility(View.GONE);
+                if (list.result.size()>0)empty.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 if (mSwipeRefreshWidget.isRefreshing())mSwipeRefreshWidget.setRefreshing(false);
             }
@@ -147,6 +151,15 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 break;
             case NEED_PAY:
                 getOrder("pending");
+                break;
+            case PROCESS:
+                getOrder("paid");
+                break;
+            case AVAILABLE:
+                getOrder("committed");
+                break;
+            case DRAWBACK:
+                getOrder("refundApplied");
                 break;
             default:
                 if (mSwipeRefreshWidget.isRefreshing())mSwipeRefreshWidget.setRefreshing(false);
@@ -242,47 +255,78 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final OrderBean bean = (OrderBean) getItem(position);
 
+            holder.rlDrawBack.setVisibility(View.GONE);
+            holder.rlAvailable.setVisibility(View.GONE);
+            holder.rlProcess.setVisibility(View.GONE);
+            holder.rlNeedPay.setVisibility(View.GONE);
             switch (bean.getStatus()) {
                 case "paid":
                     holder.rlProcess.setVisibility(View.VISIBLE);
+                    holder.tvProcessState.setText("待卖家确认");
                     break;
                 case "committed":
                     holder.rlAvailable.setVisibility(View.VISIBLE);
                     break;
                 case "refundApplied":
                     holder.rlDrawBack.setVisibility(View.VISIBLE);
+                    holder.tvDrawBackState.setText("已申请退款");
                     break;
                 case "pending":
                     holder.rlNeedPay.setVisibility(View.VISIBLE);
-
                     SpannableString priceStr = new SpannableString("¥"+String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10)));
                     priceStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     priceStr.setSpan(new AbsoluteSizeSpan(13, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     SpannableStringBuilder spb = new SpannableStringBuilder();
                     spb.append("待付款:").append(priceStr);
                     holder.tvNeedPayState.setText(spb);
+                    holder.tvNeedPayPay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, PaymentActivity.class);
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    break;
+                case "finished":
+                    holder.rlProcess.setVisibility(View.VISIBLE);
+                    holder.tvDrawBackState.setText("已完成");
+                    break;
+                case "canceled":
+                    holder.rlProcess.setVisibility(View.VISIBLE);
+                    holder.tvProcessState.setText("订单已取消");
+                    break;
+                case "expired":
+                    holder.rlProcess.setVisibility(View.VISIBLE);
+                    holder.tvDrawBackState.setText("已过期");
+                    break;
+                case "refunded":
                     break;
                 default:
-                    holder.rlNeedPay.setVisibility(View.VISIBLE);
-                    holder.rlNeedPay.setVisibility(View.VISIBLE);
-                    SpannableString str = new SpannableString("¥35353");
-                    str.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    str.setSpan(new AbsoluteSizeSpan(13, true), 0, str.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    SpannableStringBuilder spb1 = new SpannableStringBuilder();
-                    spb1.append("待付款:").append(str);
-                    holder.tvNeedPayState.setText(spb1);
+//                    holder.rlNeedPay.setVisibility(View.VISIBLE);
+//                    holder.rlNeedPay.setVisibility(View.VISIBLE);
+//                    SpannableString str = new SpannableString("¥35353");
+//                    str.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    str.setSpan(new AbsoluteSizeSpan(13, true), 0, str.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//                    SpannableStringBuilder spb1 = new SpannableStringBuilder();
+//                    spb1.append("待付款:").append(str);
+//                    holder.tvNeedPayState.setText(spb1);
                     break;
             }
-
             holder.tvGoodsName.setText(bean.getCommodity().getTitle());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             holder.tvDate.setText(String.format("出行日期:%s",format.format(new Date(bean.getRendezvousTime()))));
-            holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle()+" x"+bean.getQuantity());
-            if (bean.getCommodity().getImages()!=null&&bean.getCommodity().getImages().size()>0){
-                ImageLoader.getInstance().displayImage(bean.getCommodity().getImages().get(0).url, holder.mImageView, UILUtils.getDefaultOption());
+            holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle() + " x" + bean.getQuantity());
+            if (bean.getCommodity().getCover()!=null){
+                ImageLoader.getInstance().displayImage(bean.getCommodity().getCover().getUrl(), holder.mImageView, UILUtils.getDefaultOption());
             }else {
                 ImageLoader.getInstance().displayImage("", holder.mImageView, UILUtils.getDefaultOption());
             }
+            Intent talkIntent = new Intent(mContext, ChatActivity.class);
+            talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId()+"");
+            talkIntent.putExtra("chatType", "single");
+            talkIntent.putExtra("shareCommodityBean",bean.getCommodity().creteShareBean());
+            talkIntent.putExtra("fromTrade", true);
+            final Intent intent = talkIntent;
             holder.mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -291,14 +335,31 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                     }
                 }
             });
-
-            holder.tvNeedPayPay.setOnClickListener(new View.OnClickListener() {
+            holder.tvAvailableTalk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, PaymentActivity.class);
                     mContext.startActivity(intent);
                 }
             });
+            holder.tvNeedPayTalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(intent);
+                }
+            });
+            holder.tvDrawBackTalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(intent);
+                }
+            });
+            holder.tvProcessTalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(intent);
+                }
+            });
+
         }
 
         @Override
@@ -309,6 +370,5 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
-
     }
 }

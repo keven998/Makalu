@@ -44,16 +44,19 @@ public class DatePickActivity extends PeachBaseActivity {
 
                 Date date = calendar.getSelectedDate();
                 if (date!=null){
-                    int price = SampleDecorator.getPrice(planData, date);
                     try {
+                        PriceBean bean = SampleDecorator.getPrice(planData, date);
                         Intent intent = new Intent();
-                        String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                        //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                        PriceBean bean = new PriceBean();
-                        bean.setDate(s);
-                        bean.setPrice(price);
-                        intent.putExtra("date_price", bean);
-                        setResult(RESULT_OK, intent);
+                        if (bean!=null){
+                            String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                            //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                            //   PriceBean bean = new PriceBean();
+                            bean.setDate(s);
+                            intent.putExtra("date_price", bean);
+                            setResult(RESULT_OK, intent);
+                        }else {
+                            setResult(RESULT_CANCELED, intent);
+                        }
                         finish();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -71,16 +74,19 @@ public class DatePickActivity extends PeachBaseActivity {
     public void onBackPressed() {
         Date date = calendar.getSelectedDate();
         if (date!=null){
-            int price = SampleDecorator.getPrice(planData, date);
             try {
+                PriceBean bean = SampleDecorator.getPrice(planData, date);
                 Intent intent = new Intent();
-                String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                PriceBean bean = new PriceBean();
-                bean.setDate(s);
-                bean.setPrice(price);
-                intent.putExtra("date_price", bean);
-                setResult(RESULT_OK, intent);
+                if (bean!=null){
+                    String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    //   String s = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                    //   PriceBean bean = new PriceBean();
+                    bean.setDate(s);
+                    intent.putExtra("date_price", bean);
+                    setResult(RESULT_OK, intent);
+                }else {
+                    setResult(RESULT_CANCELED, intent);
+                }
                 finish();
             } catch (Exception e) {
                 e.printStackTrace();

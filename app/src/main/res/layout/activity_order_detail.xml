@@ -31,8 +31,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="62dp"
+        android:background="@color/app_backgroud"
+        android:paddingBottom="62dp"
         android:layout_marginTop="@dimen/title_bar_height"
+        android:clipToPadding="false"
         android:orientation="vertical">
 
         <LinearLayout
@@ -58,7 +60,6 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
-        android:text="待支付"
         android:textColor="@color/price_color"
         android:textSize="16sp" />
     <TextView
@@ -266,11 +267,11 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/iv_goods"
-                    android:text="韩国特卖旗舰店"
                     android:textColor="@color/color_text_ii"
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tv_talk"
                     android:layout_marginRight="10dp"
                     android:textSize="15sp"
                     android:textColor="@color/color_text_ii"
@@ -306,7 +307,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/userinfo"
-                    android:text="2人"
                     android:textColor="@color/color_text_iii"
                     android:textSize="16sp" />
 
@@ -366,7 +366,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="20dp"
-                        android:text="Zhao Xiaoqin"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -398,7 +397,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="20dp"
-                        android:text="131657447889"
                         android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -443,13 +441,43 @@
         </LinearLayout>
     </ScrollView>
     <LinearLayout
+        android:id="@+id/ll_trade_action0"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:weightSum="1">
 
+        <TextView
+            android:id="@+id/tv_action0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/price_color"
+            android:gravity="center"
+            android:textColor="@color/base_color_white"
+            android:textSize="19sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_trade_action1"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
+        <TextView
+            android:id="@+id/tv_cancel_action"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/base_color_white"
+            android:gravity="center"
+            android:text="取消订单"
+            android:textColor="@color/color_text_ii"
+            android:textSize="19sp" />
         <TextView
             android:id="@+id/tv_pay"
             android:layout_width="0dp"

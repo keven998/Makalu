@@ -502,7 +502,11 @@ public class MessageAdapter extends BaseAdapter {
         }
         final ShareCommodityBean bean = gson.fromJson(message.getMessage(), new TypeToken<ShareCommodityBean>() {
         }.getType());
-        ImageLoader.getInstance().displayImage(bean.image.url, holder.iv_goods_img, UILUtils.getDefaultOption());
+        if (bean.image!=null){
+            ImageLoader.getInstance().displayImage(bean.image.getUrl(), holder.iv_goods_img, UILUtils.getDefaultOption());
+        }else {
+            ImageLoader.getInstance().displayImage("", holder.iv_goods_img, UILUtils.getDefaultOption());
+        }
         holder.tv_commodity_name.setText(String.format("商品名称:%s", bean.title));
         holder.tv_commodity_price.setText(String.format("¥%s", String.valueOf((double) Math.round(bean.price * 10 / 10))));
         holder.rl_commodity.setOnClickListener(new OnClickListener() {
@@ -745,7 +749,11 @@ public class MessageAdapter extends BaseAdapter {
         holder.tv_desc.setText(String.format("¥%s", String.valueOf((double) Math.round(bean.price * 10 / 10))));
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.price_color));
         //    holder.tv_attr.setText(bean.timeCost);
-        ImageLoader.getInstance().displayImage(bean.image.url, holder.iv_image, UILUtils.getRadiusOption(3));
+        if (bean.image!=null){
+            ImageLoader.getInstance().displayImage(bean.image.getUrl(), holder.iv_image, UILUtils.getRadiusOption(3));
+        }else {
+            ImageLoader.getInstance().displayImage("", holder.iv_image, UILUtils.getRadiusOption(3));
+        }
         //     holder.tv_type.setText("计划");
         holder.rl_content.setOnClickListener(new OnClickListener() {
             @Override

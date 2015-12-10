@@ -30,7 +30,7 @@ public class OrderBean implements Parcelable {
      */
 
     private long orderId;
-    private int consumerId;
+    private long consumerId;
     private String planId;
     private SimpleCommodityBean commodity;
     private ContactBean contact;
@@ -127,7 +127,7 @@ public class OrderBean implements Parcelable {
         return orderId;
     }
 
-    public int getConsumerId() {
+    public long getConsumerId() {
         return consumerId;
     }
 
@@ -183,7 +183,7 @@ public class OrderBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.orderId);
-        dest.writeInt(this.consumerId);
+        dest.writeLong(this.consumerId);
         dest.writeString(this.planId);
         dest.writeParcelable(this.commodity, 0);
         dest.writeParcelable(this.contact, 0);
@@ -205,7 +205,7 @@ public class OrderBean implements Parcelable {
 
     protected OrderBean(Parcel in) {
         this.orderId = in.readLong();
-        this.consumerId = in.readInt();
+        this.consumerId = in.readLong();
         this.planId = in.readString();
         this.commodity = in.readParcelable(SimpleCommodityBean.class.getClassLoader());
         this.contact = in.readParcelable(ContactBean.class.getClassLoader());

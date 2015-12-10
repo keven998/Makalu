@@ -35,6 +35,14 @@ public class SimpleCommodityBean implements Parcelable {
     private List<ImageBean> images;
     private List<PlanBean> plans;
 
+    public ShareCommodityBean creteShareBean(){
+        ShareCommodityBean bean = new ShareCommodityBean();
+        bean.title = this.title;
+        bean.commodityId = this.commodityId;
+        bean.price = this.price;
+        bean.image = cover;
+        return bean;
+    }
 
     public List<PlanBean> getPlans() {
         return plans;

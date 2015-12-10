@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by yibiao.qin on 2015/12/1.
  */
 public class CoverBean implements Parcelable {
-    private String url;
+    public String url;
 
     public void setUrl(String url) {
         this.url = url;

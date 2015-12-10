@@ -93,15 +93,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (BuildConfig.DEBUG) {
-//            View view = getLayoutInflater().inflate(R.layout.activity_order, null);
-//            ScalpelFrameLayout sView = new ScalpelFrameLayout(this);
-//            //sView.setLayerInteractionEnabled(true);
-//            sView.addView(view);
-//            setContentView(sView);
-//        } else {
-            setContentView(R.layout.activity_order);
-     //   }
+        setContentView(R.layout.activity_order);
         ButterKnife.inject(this);
         final ArrayList<PlanBean> data = getIntent().getParcelableArrayListExtra("planList");
         currentPlanBean = data.get(0);
@@ -121,8 +113,22 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void OnSelected(int pos) {
                 currentPlanBean = data.get(pos);
-                tvDate.setText("");
-                priceBean = null;
+
+                if (!TextUtils.isEmpty(tvDate.getText().toString())){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    try {
+                        Date date = sdf.parse(tvDate.getText().toString());
+                        priceBean = SampleDecorator.getPrice(currentPlanBean,date);
+                        tvTotalPrice.setText(String.format("¥%d", priceBean.getPrice() * goodsNum));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        tvDate.setText("");
+                        priceBean=null;
+                    }
+
+
+                }
             }
         });
 
@@ -232,16 +238,36 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             return;
         }
         String tel = etTel.getText().toString();
-        String[] tels = tel.split("-");
-        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum,
-                Long.parseLong(tels[0]), Long.parseLong(tels[1]), "", etFirstName.getText().toString(),
-                etLastName.getText().toString(), "", passengerList, new HttpCallBack<String>() {
+        long dia = 86;
+        long telNumber = 0;
+        if (tel.contains("-")){
+            String[] tels = tel.split("-");
+            if (TextUtils.isDigitsOnly(tels[0])&&TextUtils.isDigitsOnly(tels[1])){
+                dia = Long.parseLong(tels[0]);
+                telNumber = Long.parseLong(tels[1]);
+            }else {
+                Toast.makeText(mContext,"请输入正确的电话号码",Toast.LENGTH_LONG).show();
+                return;
+            }
+        }else {
+            if (TextUtils.isDigitsOnly(tel)){
+                telNumber = Long.parseLong(tel);
+            }else {
+                Toast.makeText(mContext,"请输入正确的电话号码",Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum,dia
+               , telNumber, "", etFirstName.getText().toString(),
+                etLastName.getText().toString(), etMessage.getText().toString(), passengerList, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
                         CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
                         Intent intent = new Intent(OrderCreateActivity.this, OrderDetailActivity.class);
                         intent.putExtra("type", "pendingOrder");
                         intent.putExtra("order", bean.result);
+                        intent.putExtra("orderId", bean.result.getOrderId());
                         startActivity(intent);
                         finish();
                     }
@@ -264,16 +290,20 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             Toast.makeText(mContext, "请选择出行日期", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if (TextUtils.isEmpty(etFirstName.getText().toString())) {
+        if (passengerList==null||passengerList.size()==0) {
             Toast.makeText(mContext, "请填写旅客信息", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (TextUtils.isEmpty(etFirstName.getText().toString())) {
+            Toast.makeText(mContext, "请填写联系人信息", Toast.LENGTH_SHORT).show();
             return true;
         }
         if (TextUtils.isEmpty(etLastName.getText().toString())) {
-            Toast.makeText(mContext, "请填写旅客信息", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "请填写联系人信息", Toast.LENGTH_SHORT).show();
             return true;
         }
         if (TextUtils.isEmpty(etTel.getText().toString())) {
-            Toast.makeText(mContext, "请填写旅客信息", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "请填写联系人信息", Toast.LENGTH_SHORT).show();
             return true;
         }
         if (!ctvAgreement.isChecked()) {

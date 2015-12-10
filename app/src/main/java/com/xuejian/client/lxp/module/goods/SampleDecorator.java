@@ -7,8 +7,10 @@ import android.text.style.AbsoluteSizeSpan;
 import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarCellView;
 import com.xuejian.client.lxp.bean.PlanBean;
+import com.xuejian.client.lxp.bean.PriceBean;
 import com.xuejian.client.lxp.bean.PricingEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,10 +31,10 @@ public class SampleDecorator implements CalendarCellDecorator {
             return;
         }
 
-        int price = getPrice(bean, date);
-        if (price>0){
+        PriceBean price = getPrice(bean, date);
+        if (price!=null&&price.getPrice()>0){
             String dateString = Integer.toString(date.getDate());
-            String priceString = "\n¥"+price;
+            String priceString = "\n¥"+price.getPrice();
             SpannableString string = new SpannableString(dateString + priceString);
             string.setSpan(new AbsoluteSizeSpan(13, true), 0, dateString.length(),
                     Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -45,14 +47,18 @@ public class SampleDecorator implements CalendarCellDecorator {
         }
 
     }
-    public static int getPrice(PlanBean bean, Date date){
+    public static PriceBean getPrice(PlanBean bean, Date date){
             for (PricingEntity entity : bean.getPricing()) {
                 Date date1 = new Date(entity.getTimeRange().get(0));
                 Date date2 = new Date(entity.getTimeRange().get(1));
                 if (date.equals(date1)||date.equals(date2)||(date.after(date1)&&date.before(date2))){
-                    return entity.getPrice();
+                    String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    PriceBean price = new PriceBean();
+                    price.setDate(s);
+                    price.setPrice(entity.getPrice());
+                    return price;
                 }
             }
-            return -1;
+            return null;
     }
 }

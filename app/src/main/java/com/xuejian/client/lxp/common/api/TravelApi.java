@@ -129,6 +129,26 @@ public class TravelApi extends BaseApi {
     // 订单列表
     public final static String ORDER_LIST = "/marketplace/orders";
 
+    // 修改订单状态
+    public final static String EDIT_ORDER_STATUS = "/marketplace/orders/%d/actions";
+
+
+    public static void editOrderStatus(long orderId, String action, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST );
+        request.setUrl(SystemConfig.DEV_URL + String.format(EDIT_ORDER_STATUS,orderId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("action", action);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
 
     public static void getOrderList(long userId,String status ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
