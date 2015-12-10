@@ -450,7 +450,7 @@ public class LoginActivity extends PeachBaseActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_REG && resultCode == RESULT_OK) {
-            User user = (User) data.getSerializableExtra("user");
+            User user = data.getParcelableExtra("user");
             loginNameEt.setText(user.getTel());
             try {
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
@@ -459,7 +459,7 @@ public class LoginActivity extends PeachBaseActivity {
             }
             imLogin(user, REGISTER);
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
-            User user = (User) data.getSerializableExtra("user");
+            User user =  data.getParcelableExtra("user");
             try {
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
             }catch (Exception e){

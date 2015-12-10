@@ -202,6 +202,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
             public final TextView tvGoodsName;
             public final TextView tvPackageName;
             public final TextView tvDate;
+            public final RelativeLayout rlItem;
             public ViewHolder(View view) {
                 super(view);
 
@@ -227,6 +228,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 tvGoodsName = (TextView) view.findViewById(R.id.tv_goods_name);
                 tvDate = (TextView) view.findViewById(R.id.tv_goods_time);
                 tvPackageName = (TextView) view.findViewById(R.id.tv_goods_package);
+                rlItem = (RelativeLayout) view.findViewById(R.id.rl_item);
             }
         }
 
@@ -327,7 +329,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
             talkIntent.putExtra("shareCommodityBean",bean.getCommodity().creteShareBean());
             talkIntent.putExtra("fromTrade", true);
             final Intent intent = talkIntent;
-            holder.mImageView.setOnClickListener(new View.OnClickListener() {
+            holder.rlItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {

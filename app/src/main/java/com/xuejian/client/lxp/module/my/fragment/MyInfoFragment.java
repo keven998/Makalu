@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
+import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
@@ -56,6 +58,8 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RelativeLayout rlMyContact;
     @InjectView(R.id.rl_my_common_user)
     RelativeLayout rlMyCommonUser;
+    @InjectView(R.id.user_info_pannel)
+    LinearLayout linearLayout;
     User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rlMyCommonUser.setOnClickListener(this);
         rlMyContact.setOnClickListener(this);
         rlMyPlan.setOnClickListener(this);
+        linearLayout.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
         return view;
@@ -165,6 +170,10 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 userIntent.setClass(getActivity(), CommonUserInfoActivity.class);
                 userIntent.putExtra("ListType",2);
                 startActivity(userIntent);
+                break;
+            case R.id.user_info_pannel:
+                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

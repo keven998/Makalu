@@ -257,6 +257,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
             holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(conversation, (this.getContext()), isGroup)),
                     BufferType.SPANNABLE);
         } else {
+            holder.message.setCompoundDrawables(null, null, null, null);
             holder.message.setText("");
             holder.time.setText("");
         }

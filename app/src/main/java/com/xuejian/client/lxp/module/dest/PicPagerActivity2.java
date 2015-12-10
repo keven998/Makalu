@@ -100,8 +100,11 @@ public class PicPagerActivity2 extends PeachBaseActivity {
                                 File file = ImageLoader.getInstance().getDiskCache().get(imageUri);
                                 String path = Config.DownLoadImage_path+System.currentTimeMillis()+".png";
                                 File toFile = new File(path);
-                                copyfile(file,toFile,true);
-                                Toast.makeText(mContext, "图片已保存在 " + path, Toast.LENGTH_LONG).show();
+                                if (copyfile(file,toFile,true)){
+                                    Toast.makeText(mContext, "图片已保存在 " + path, Toast.LENGTH_LONG).show();
+                                }else {
+                                    Toast.makeText(mContext, "图片保存失败！" , Toast.LENGTH_LONG).show();
+                                }
                             }catch (Exception e){
                                 e.printStackTrace();
                                 Toast.makeText(mContext, "图片保存失败！" , Toast.LENGTH_LONG).show();
@@ -143,17 +146,17 @@ public class PicPagerActivity2 extends PeachBaseActivity {
         }
 
     }
-    public  void copyfile(File fromFile, File toFile,Boolean rewrite ){
+    public  boolean copyfile(File fromFile, File toFile,Boolean rewrite ){
 
         if(!fromFile.exists()){
-            return;
+            return false;
         }
 
         if(!fromFile.isFile()){
-            return;
+            return false;
         }
         if(!fromFile.canRead()){
-            return;
+            return false;
         }
         if(!toFile.getParentFile().exists()){
             toFile.getParentFile().mkdirs();
@@ -180,11 +183,13 @@ public class PicPagerActivity2 extends PeachBaseActivity {
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return false;
         }
-
+        return true;
     }
 
 }

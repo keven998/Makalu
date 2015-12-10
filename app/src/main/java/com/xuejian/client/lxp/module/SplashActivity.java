@@ -222,7 +222,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REGESTER_REQUEST && resultCode == RESULT_OK) {
-            User user = (User) data.getSerializableExtra("user");
+            User user = data.getParcelableExtra("user");
             try {
                 DialogManager.getInstance().showLoadingDialog(this, "正在登录");
             } catch (Exception e) {

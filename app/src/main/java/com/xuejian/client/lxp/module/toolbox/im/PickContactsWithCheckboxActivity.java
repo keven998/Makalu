@@ -96,7 +96,8 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private int request;
     private String groupId;
     private Handler handler;
-
+    private boolean fromSingle;
+    private User single;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,15 +108,16 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
         // String groupName = getIntent().getStringExtra("groupName");
         request = getIntent().getIntExtra("request", 0);
         groupId = getIntent().getStringExtra("groupId");
-        if (groupId != null) {// 创建群组
-            //     isCreatingNewGroup = true;
-            //  } else {
-            // 获取此群组的成员列表
-            //_group=UserDBManager.getInstance().getContactByUserId(Long.parseLong(groupId));
+        fromSingle = getIntent().getBooleanExtra("fromSingle", false);
+        single= getIntent().getParcelableExtra("single");
+        if (groupId != null) {
             exitingMembers = UserDBManager.getInstance().getGroupMember(Long.parseLong(groupId));
         }
         if (exitingMembers == null)
             exitingMembers = new ArrayList<User>();
+        if (fromSingle){
+            exitingMembers.add(single);
+        }
         // 获取好友列表
         alluserList = UserDBManager.getInstance().getContactListWithoutGroup();
 
@@ -213,6 +215,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             return;
         }
         if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
+            if (fromSingle){
+                toBeAddContacts.add(single);
+            }
             if (toBeAddContacts.size() == 1) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -445,7 +450,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                 public void doFailure(Exception error, String msg, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(PickContactsWithCheckboxActivity.this).showToast("吖~好像请求失败了");
-
                 }
 
                 @Override

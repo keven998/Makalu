@@ -63,6 +63,7 @@ public class CityPictureActivity extends PeachBaseActivity {
     private String id;
     private boolean isUserPics;
     private boolean isTalentAlbum;
+    private boolean showChatImage;
     private ArrayList<ImageBean> userPics = new ArrayList<ImageBean>();
     private File tempImage;
     private ArrayList<String> pic_ids = new ArrayList<String>();
@@ -98,7 +99,7 @@ public class CityPictureActivity extends PeachBaseActivity {
         ButterKnife.inject(this);
         isUserPics = getIntent().getBooleanExtra("isUserPics", false);
         isTalentAlbum = getIntent().getBooleanExtra("isTalentAlbum", false);
-
+        showChatImage = getIntent().getBooleanExtra("showChatImage", false);
         final TextView ltv = (TextView) findViewById(R.id.tv_title_bar_left);
         ltv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +128,9 @@ public class CityPictureActivity extends PeachBaseActivity {
 
                 }
             });
+        }else if (showChatImage){
+            titleView.setText("聊天图集");
+            editPics.setVisibility(View.GONE);
         } else {
             titleView.setText(getIntent().getStringExtra("title") + "图集");
         }
@@ -201,6 +205,11 @@ public class CityPictureActivity extends PeachBaseActivity {
 
                 }
             });
+        }else if (showChatImage){
+            ArrayList<ImageBean> list = getIntent().getParcelableArrayListExtra("chatPics");
+            userPics.addAll(list);
+            picAdapter = new PicAdapter(userPics);
+            mCityPicGv.setAdapter(picAdapter);
         } else {
             TravelApi.getCityGalley(id, new HttpCallBack<String>() {
                 @Override

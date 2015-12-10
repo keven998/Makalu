@@ -618,7 +618,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == LoginActivity.REQUEST_CODE_REG) {
-                User user = (User) data.getSerializableExtra("user");
+                User user = data.getParcelableExtra("user");
                 try {
                     DialogManager.getInstance().showLoadingDialog(MyProfileActivity.this, "正在登录");
                 } catch (Exception e) {

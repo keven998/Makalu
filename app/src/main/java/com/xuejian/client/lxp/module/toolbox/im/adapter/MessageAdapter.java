@@ -2024,9 +2024,6 @@ public class MessageAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     ArrayList<String> pics = IMClient.getInstance().getPics(friendId);
-                    for (String pic : pics) {
-                        System.out.println(pic);
-                    }
                     int pos = 0;
                     if (message.getSendType() == 1) {
                         pos = pics.indexOf(remoteDir);
