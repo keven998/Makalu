@@ -141,7 +141,9 @@ public class CityPictureActivity extends PeachBaseActivity {
                 if ((!isUserPics && !isTalentAlbum) || !isUserPics) {
                     isCity = true;
                 }
-
+                if (showChatImage){
+                    isCity = true;
+                }
                 Intent intent = new Intent(CityPictureActivity.this, UserAlbumInfoActivity.class);
                 intent.putExtra("currentIndex", position);
                 intent.putParcelableArrayListExtra("myPictures", userPics);

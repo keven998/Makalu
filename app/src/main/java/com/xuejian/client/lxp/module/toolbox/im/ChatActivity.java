@@ -69,7 +69,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
 import com.alibaba.fastjson.JSON;
 import com.lv.Audio.MediaRecordFunc;
-import com.lv.Listener.HttpCallback;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
@@ -195,7 +194,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     TextView titleView;
     private int currentSize;
     private String changedTitle = null;
-    private CompositeSubscription compositeSubscription = new CompositeSubscription();
+    public CompositeSubscription compositeSubscription = new CompositeSubscription();
     private boolean fromTrade;
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -307,8 +306,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
-                UserDBManager.getInstance().saveContact(userInfo.result);
+                final CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        UserDBManager.getInstance().saveContact(userInfo.result);
+                    }
+                }).start();
+
             }
 
             @Override
@@ -361,29 +366,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                                     adapter.setSendCommodityListener(new OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            MessageBean m = IMClient.getInstance().sendCommodityMessage(AccountManager.getCurrentUserId(), toChatUsername, chatType, messag1.getMessage(), MessageAdapter.GOODS_MSG, new HttpCallback() {
-                                                @Override
-                                                public void onSuccess() {
-
-                                                }
-
-                                                @Override
-                                                public void onSuccess(String result) {
-
-                                                }
-
-                                                @Override
-                                                public void onFailed(int code) {
-
-                                                }
-                                            });
+                                            messageList.remove(messag1);
+                                            adapter.notifyDataSetChanged();
+                                            MessageBean m = IMClient.getInstance().createCommodityMessage(AccountManager.getCurrentUserId(), toChatUsername, chatType, messag1.getMessage(), MessageAdapter.GOODS_MSG);
                                             messageList.add(m);
                                             adapter.notifyDataSetChanged();
                                             listView.setSelection(listView.getCount() - 1);
                                         }
                                     });
                                 }
-
                                 currentSize = messageList.size();
                                 adapter.refresh();
                                 int count = listView.getCount();

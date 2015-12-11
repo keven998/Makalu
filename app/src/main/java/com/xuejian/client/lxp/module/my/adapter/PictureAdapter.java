@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -22,7 +21,6 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ImageBean;
-import com.xuejian.client.lxp.common.utils.LocalImageHelper;
 import com.xuejian.client.lxp.common.widget.MatrixImageView;
 
 import java.util.ArrayList;
@@ -147,13 +145,11 @@ public class PictureAdapter extends ViewPager implements MatrixImageView.OnMovin
             //因为直接加到viewGroup下会导致返回的view为viewGroup
             View imageLayout = inflate(getContext(), R.layout.item_album_pager, null);
             viewGroup.addView(imageLayout);
-            Log.e("111111111","efjsdlkfjsdkajfalsjfsalkfj");
             assert imageLayout != null;
             MatrixImageView imageView = (MatrixImageView) imageLayout.findViewById(R.id.image);
             imageView.setOnMovingListener(PictureAdapter.this);
             imageView.setOnSingleTapListener(onSingleTapListener);
             ImageBean path=paths.get(position);
-            Log.e("path",path.full+"------------------------------------");
             ImageLoader.getInstance().displayImage(path.full, new ImageViewAware(imageView), localOptions, loadingListenerr);
             return imageLayout;
         }

@@ -17,7 +17,7 @@ public class BaseApi {
     public static void setDefaultParams(PTRequest request) {
         User user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
         if (user != null) {
-            request.setHeader("UserId", user.getUserId() + "");
+            request.setHeader("UserId", String.valueOf(user.getUserId()));
         }
         if (!TextUtils.isEmpty(PeachApplication.ChannelId)){
             request.setHeader("ChannelId", PeachApplication.ChannelId);

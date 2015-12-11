@@ -68,6 +68,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler, AMapLocationListener {
     //    public final static int CODE_IM_LOGIN = 101;
@@ -98,7 +105,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     LocationManagerProxy mLocationManagerProxy;
     private SparseBooleanArray infoStatus = new SparseBooleanArray();
     private MediaPlayer mMediaPlayer;
-
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -219,11 +226,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             public void doSuccess(Object result, String method) {
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
-                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
+                    AccountManager.getInstance().setLoginAccountInfo(Info.result);
                     MyInfoFragment myFragment = (MyInfoFragment) getSupportFragmentManager().findFragmentByTag("My");
-                     if (myFragment != null && Info.result != null) {
-                     myFragment.initHeadTitleView(Info.result);
-                     }
+                    if (myFragment != null && Info.result != null) {
+                        myFragment.initHeadTitleView(Info.result);
+                    }
 
                 }
             }
@@ -787,17 +794,47 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
     public void updateUnreadMsgCount() {
-        int unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
-        if (unreadMsgCountTotal > 0) {
-            unreadMsg.setVisibility(View.VISIBLE);
-            if (unreadMsgCountTotal < 100) {
-                unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
-            } else {
-                unreadMsg.setText("...");
-            }
-        } else {
-            unreadMsg.setVisibility(View.GONE);
-        }
+
+        Observable<Integer> UnReadCount = Observable.just(IMClient.getInstance().getUnReadCount()).subscribeOn(Schedulers.io());
+        Observable<Integer> UnAccept = Observable.just(IMClient.getInstance().getUnAcceptMsg()).subscribeOn(Schedulers.io());
+        compositeSubscription.add(
+                Observable.zip(UnReadCount, UnAccept, new Func2<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer call(Integer integer, Integer integer2) {
+                        return integer + integer2;
+                    }
+                })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Integer>() {
+                            @Override
+                            public void call(Integer integer) {
+                                if (integer > 0) {
+                                    unreadMsg.setVisibility(View.VISIBLE);
+                                    if (integer < 100) {
+                                        unreadMsg.setText(String.valueOf(integer));
+                                    } else {
+                                        unreadMsg.setText("...");
+                                    }
+                                } else {
+                                    unreadMsg.setVisibility(View.GONE);
+                                }
+                            }
+                        })
+        );
+
+
+//        int unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
+//        if (unreadMsgCountTotal > 0) {
+//            unreadMsg.setVisibility(View.VISIBLE);
+//            if (unreadMsgCountTotal < 100) {
+//                unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
+//            } else {
+//                unreadMsg.setText("...");
+//            }
+//        } else {
+//            unreadMsg.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -821,6 +858,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (this.compositeSubscription.hasSubscriptions()) this.compositeSubscription.clear();
         if (connectionReceiver != null) {
             unregisterReceiver(connectionReceiver);
             connectionReceiver = null;

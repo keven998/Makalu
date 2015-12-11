@@ -143,6 +143,49 @@ public class GoodsMainFragment extends PeachBaseFragment {
     }
 
     private void resizeData(List<RecommendCommodityBean> result) {
+//        ArrayList<ArrayList<SimpleCommodityBean>> data = new ArrayList<>();
+//        final ArrayList<String> sectionName = new ArrayList<>();
+//
+//        Observable.from(result)
+//                .flatMap(new Func1<RecommendCommodityBean, Observable<Object>>() {
+//                    @Override
+//                    public Observable<Object> call(final RecommendCommodityBean recommendCommodityBean) {
+//
+//                        return Observable.create(new Observable.OnSubscribe<Object>() {
+//                            @Override
+//                            public void call(Subscriber<? super Object> subscriber) {
+//                                subscriber.onNext(recommendCommodityBean.getTopicType());
+//                                subscriber.onNext(recommendCommodityBean.getCommodities());
+//                                subscriber.onCompleted();
+//                            }
+//                        });
+//                    }
+//                })
+//                .filter(new Func1<Object, Boolean>() {
+//                    @Override
+//                    public Boolean call(Object o) {
+//                        if (o instanceof String) {
+//                            sectionName.add(o.toString());
+//                            return false;
+//                        }else {
+//                            return true;
+//                        }
+//                    }
+//                })
+//                .map(new Func1<Object, ArrayList<SimpleCommodityBean>>() {
+//                    @Override
+//                    public ArrayList<SimpleCommodityBean> call(Object o) {
+//                        return (ArrayList<SimpleCommodityBean>)o;
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<ArrayList<SimpleCommodityBean>>() {
+//                    @Override
+//                    public void call(ArrayList<SimpleCommodityBean> simpleCommodityBeans) {
+//
+//                    }
+//                });
         ArrayList<ArrayList<SimpleCommodityBean>> data = new ArrayList<>();
         ArrayList<String> sectionName = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
@@ -316,8 +359,8 @@ public class GoodsMainFragment extends PeachBaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            final SimpleCommodityBean bean = (SimpleCommodityBean) getItem(section,position);
-            if (bean!=null){
+            final SimpleCommodityBean bean = (SimpleCommodityBean) getItem(section, position);
+            if (bean != null) {
                 viewHolder.tvGoodsName.setText(bean.getTitle());
                 viewHolder.tvShopName.setText(bean.getSeller().getName());
                 viewHolder.tvGoodsLoc.setText(bean.getLocality().getZhName());
@@ -398,6 +441,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
             TagListView goodsTag;
             @InjectView(R.id.fl_container)
             FrameLayout container;
+
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);
             }

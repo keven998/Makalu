@@ -793,6 +793,7 @@ public class MessageAdapter extends BaseAdapter {
                 case 1: // 发送中
                     holder.pb.setVisibility(View.VISIBLE);
                     holder.staus_iv.setVisibility(View.GONE);
+                    sendCommodityMsgInBackground(message, holder);
                     break;
                 default:
                     break;
@@ -1761,6 +1762,43 @@ public class MessageAdapter extends BaseAdapter {
             }
         }, chatType);
     }
+
+
+    public void sendCommodityMsgInBackground(final MessageBean message, final ViewHolder holder) {
+        holder.staus_iv.setVisibility(View.GONE);
+        holder.pb.setVisibility(View.VISIBLE);
+        IMClient.getInstance().sendCommodityMessage(conversation,friendId,chatType ,message, new HttpCallback() {
+            @Override
+            public void onSuccess() {
+                message.setStatus(0);
+                updateSendedView(message, holder);
+            }
+
+            @Override
+            public void onFailed(int code) {
+                message.setStatus(2);
+                holder.staus_iv.setClickable(true);
+                updateSendedView(message, holder);
+                if (code == 403) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (("single").equals(chatType)) {
+                                ToastUtil.getInstance(activity).showToast("你发送的消息已被对方屏蔽");
+                            } else if (("group").equals(chatType)) {
+                                ToastUtil.getInstance(activity).showToast("你还不是群成员");
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onSuccess(String result) {
+            }
+        });
+    }
+
 
     private void loadFailedImage(final MessageBean message, final ViewHolder holder) {
         if (holder.pb != null)

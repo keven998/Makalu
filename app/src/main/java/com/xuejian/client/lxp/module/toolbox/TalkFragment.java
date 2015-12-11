@@ -26,6 +26,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.MoreDialog;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -42,6 +43,14 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 
 public class TalkFragment extends PeachBaseFragment {
@@ -62,6 +71,7 @@ public class TalkFragment extends PeachBaseFragment {
     private List<ConversationBean> conversations = new ArrayList<>();
     private List<ConversationBean> tempConversations = new ArrayList<>();
     private ConversationBean curconversation;
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +86,12 @@ public class TalkFragment extends PeachBaseFragment {
         if (((MainActivity) getActivity()).isConflict) {
             outState.putBoolean("isConflict", true);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (this.compositeSubscription.hasSubscriptions()) this.compositeSubscription.clear();
+        super.onDestroy();
     }
 
     @Override
@@ -157,7 +173,8 @@ public class TalkFragment extends PeachBaseFragment {
         if (AccountManager.getInstance().getLoginAccount(getActivity()) == null) {
             return;
         }
-        loadConversation();
+        DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+     //   loadConversation();
     }
 
     private void showActionDialog() {
@@ -237,47 +254,126 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     public void loadConversation() {
-        List<ConversationBean> del = new ArrayList<>();
+ //       List<ConversationBean> del = new ArrayList<>();
         conversations.clear();
-        tempConversations.clear();
-        try {
-            tempConversations.addAll(IMClient.getInstance().getConversationList());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        conversations.add(0, new ConversationBean(10, 0, "single"));
-        conversations.add(1, new ConversationBean(11, 0, "single"));
-        for (ConversationBean bean : tempConversations) {
-            if (bean.getFriendId() == 10000) {
-                conversations.set(1, bean);
-                del.add(bean);
-            }
-            if (bean.getFriendId() == 10001) {
-                conversations.set(0, bean);
-                del.add(bean);
-            }
-        }
-        tempConversations.removeAll(del);
-        sortConversationByLastChatTime(tempConversations);
-        if (conversations.get(0).getFriendId() == 10) {
-            conversations.set(0, new ConversationBean(10001, 0, "single"));
-        }
-        if (conversations.get(1).getFriendId() == 11) {
-            conversations.set(1, new ConversationBean(10000, 0, "single"));
-        }
-        conversations.addAll(tempConversations);
-        refresh();
+//        tempConversations.clear();
+//        try {
+//            tempConversations.addAll(IMClient.getInstance().getConversationList());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        conversations.add(0, new ConversationBean(10, 0, "single"));
+//        conversations.add(1, new ConversationBean(11, 0, "single"));
+//        for (ConversationBean bean : tempConversations) {
+//            if (bean.getFriendId() == 10000) {
+//                conversations.set(1, bean);
+//                del.add(bean);
+//            }
+//            if (bean.getFriendId() == 10001) {
+//                conversations.set(0, bean);
+//                del.add(bean);
+//            }
+//        }
+//        tempConversations.removeAll(del);
+//        sortConversationByLastChatTime(tempConversations);
+//        if (conversations.get(0).getFriendId() == 10) {
+//            conversations.set(0, new ConversationBean(10001, 0, "single"));
+//        }
+//        if (conversations.get(1).getFriendId() == 11) {
+//            conversations.set(1, new ConversationBean(10000, 0, "single"));
+//        }
+//        conversations.addAll(tempConversations);
+//        refresh();
+
+        final ConversationBean[] temp = new ConversationBean[2];
+        compositeSubscription.add(
+                Observable.create(new Observable.OnSubscribe<List<ConversationBean>>() {
+                    @Override
+                    public void call(Subscriber<? super List<ConversationBean>> subscriber) {
+                        subscriber.onNext(IMClient.getInstance().getConversationList());
+                        subscriber.onCompleted();
+                    }
+                })
+                        .subscribeOn(Schedulers.io())
+                        .doOnSubscribe(new Action0() {
+                            @Override
+                            public void call() {
+                                System.out.println("doOnSubscribe " + Thread.currentThread().getName());
+                     //           DialogManager.getInstance().showLoadingDialog(getActivity());
+                            }
+                        })
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .observeOn(Schedulers.io())
+                        .flatMap(new Func1<List<ConversationBean>, Observable<ConversationBean>>() {
+                            @Override
+                            public Observable<ConversationBean> call(List<ConversationBean> conversationBeans) {
+                                System.out.println("flatMap "+Thread.currentThread().getName()+" "+conversationBeans.size());
+                                return Observable.from(conversationBeans);
+                            }
+                        })
+                        .filter(new Func1<ConversationBean, Boolean>() {
+                            @Override
+                            public Boolean call(ConversationBean conversationBean) {
+                                System.out.println("filter "+Thread.currentThread().getName()+" "+conversationBean.getFriendId());
+                                if (conversationBean.getFriendId() == 10001) {
+                                    temp[0] = conversationBean;
+                                    return false;
+                                } else if (conversationBean.getFriendId() == 10000) {
+                                    temp[1] = conversationBean;
+                                    return false;
+                                } else return true;
+                            }
+                        })
+                        .toList()
+                        .map(new Func1<List<ConversationBean>, List<ConversationBean>>() {
+                            @Override
+                            public List<ConversationBean> call(List<ConversationBean> conversationBeans) {
+                                sortConversationByLastChatTime(conversationBeans);
+                                if (temp[0] != null) {
+                                    conversationBeans.add(0, temp[0]);
+                                } else {
+                                    conversationBeans.add(0, new ConversationBean(10001, 0, "single"));
+                                }
+                                if (temp[1] != null) {
+                                    conversationBeans.add(1, temp[1]);
+                                } else {
+                                    conversationBeans.add(1, new ConversationBean(10000, 0, "single"));
+                                }
+                                System.out.println("map "+Thread.currentThread().getName()+" "+conversationBeans.size());
+                                return conversationBeans;
+                            }
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<List<ConversationBean>>() {
+                            @Override
+                            public void call(List<ConversationBean> conversationBeans) {
+                                System.out.println("subscribe " + Thread.currentThread().getName() + " " + conversationBeans.size());
+                                conversations.addAll(conversationBeans);
+                                refresh();
+                                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                            }
+                        }));
     }
 
     public void updateUnreadAddressLable() {
-        int count = getUnreadAddressCountTotal();
+        compositeSubscription.add(Observable.just(getUnreadAddressCountTotal())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        if (integer > 0) {
+                            unreadAddressNumber.setText(String.valueOf(integer));
+                            unreadAddressNumber.setVisibility(View.VISIBLE);
+                        } else {
+                            unreadAddressNumber.setVisibility(View.GONE);
+                        }
+                    }
+                }));
+
+        //     int count = getUnreadAddressCountTotal();
         //  int count=IMClient.getInstance().getUnReadCount();
-        if (count > 0) {
-            unreadAddressNumber.setText(String.valueOf(count));
-            unreadAddressNumber.setVisibility(View.VISIBLE);
-        } else {
-            unreadAddressNumber.setVisibility(View.GONE);
-        }
+
     }
 
     /**

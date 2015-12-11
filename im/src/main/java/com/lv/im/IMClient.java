@@ -478,18 +478,25 @@ public class IMClient {
         HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
     }
 
-    public MessageBean sendCommodityMessage(String UserId, String friendId, String chatType, String contentJson, int type, HttpCallback listen) {
+    public MessageBean createCommodityMessage(String UserId, String friendId, String chatType, String contentJson, int type) {
         if (TextUtils.isEmpty(contentJson)) return null;
         SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, type, contentJson);
         MessageBean messageBean = imessage2Bean(message);
         long localId = db.saveMsg(friendId, messageBean, chatType);
-        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, 0, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, type, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
         m.setLocalId((int) localId);
-        //return m;
-        //if ("0".equals(conversation)) conversation = null;
-        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId), friendId, type, m.getMessage());
-        HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
-        return messageBean;
+//        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId), friendId, type, m.getMessage());
+//        HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
+        return m;
+    }
+    public void sendCommodityMessage(String conversation, String friendId, String chatType, MessageBean message, HttpCallback listen) {
+
+        if ("0".equals(conversation)) conversation = null;
+        SendMessageBean imessage = new SendMessageBean((int) message.getSenderId(), friendId, message.getType(), message.getMessage());
+        if (Config.isDebug) {
+            System.out.println("message.getSenderId()  ====" + message.getSenderId());
+        }
+        HttpUtils.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
     }
 
     public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
