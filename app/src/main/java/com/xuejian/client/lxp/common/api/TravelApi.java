@@ -198,7 +198,7 @@ public class TravelApi extends BaseApi {
 
 
     public static void createTraveller
-            (long userId, String surname, String givenName, String gender, String birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
+            (long userId, String surname, String givenName, String gender, long birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRAVELLER_INFO,userId));

@@ -502,7 +502,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.dest.CityInfoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.route"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="lvxingpai"/>
+                <data android:host="*"/>
+                <data android:pathPrefix="/test/haha"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.umeng.socialize.view.ShareActivity"
             android:screenOrientation="portrait" />
@@ -514,7 +523,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.CommonUserInfoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.route"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="lvxingpai"/>
+                <data android:host="oo"/>
+                <data android:path="/test/hehe"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".module.goods.UserInfoEditActivity"
             android:screenOrientation="portrait" />

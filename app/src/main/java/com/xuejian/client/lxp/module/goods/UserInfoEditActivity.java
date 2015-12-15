@@ -65,6 +65,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     Spinner spinner;
     String idType ="passport";
     String type = "";
+    final String[] idTypeArray = new String[]{"passport", "chineseID"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +76,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         tvConfirm.setOnClickListener(this);
         ivSelectBirthday.setOnClickListener(this);
         String[] mItems = new String[]{"护照", "身份证"};
-        final String[] idTypeArray = new String[]{"passport", "chineseID"};
+
         StringSpinnerAdapter mTypeListAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(mItems));
         spinner.setAdapter(mTypeListAdapter);
         spinner.setSelection(0, true);
@@ -98,8 +99,14 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     private void bindView(TravellerBean bean) {
         etLastName.setText(bean.getTraveller().getSurname());
         etFirstName.setText(bean.getTraveller().getGivenName());
-        etTel.setText(bean.getTraveller().getTel().getDialCode()+"-"+bean.getTraveller().getTel().getNumber());
-        etId.setText(bean.getTraveller().getIdentities().get(0).getNumber()+"");
+        etTel.setText(String.valueOf(bean.getTraveller().getTel().getNumber()));
+        etId.setText(String.valueOf(bean.getTraveller().getIdentities().get(0).getNumber()));
+        String type = bean.getTraveller().getIdentities().get(0).getIdType();
+        if(idTypeArray[0].equals(type)){
+            spinner.setSelection(0);
+        }else if (idTypeArray[1].equals(type)){
+            spinner.setSelection(1);
+        }
     }
 
     @Override
@@ -123,6 +130,10 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
                 }
                 if (TextUtils.isEmpty(etTel.getText().toString())) {
                     Toast.makeText(mContext, "请填写完整旅客信息", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!TextUtils.isDigitsOnly(etTel.getText().toString())) {
+                    Toast.makeText(mContext, "请填写正确的电话号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(etId.getText().toString())) {
@@ -222,7 +233,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         }
 
         long userId = AccountManager.getInstance().getLoginAccount(mContext).getUserId();
-        TravelApi.createTraveller(userId, bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", "", idProof, tel, "", new HttpCallBack<String>() {
+        TravelApi.createTraveller(userId, bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", 0, idProof, tel, "", new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson<TravellerBean> traveller = CommonJson.fromJson(result,TravellerBean.class);

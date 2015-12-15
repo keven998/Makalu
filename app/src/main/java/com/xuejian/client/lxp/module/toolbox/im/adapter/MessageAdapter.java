@@ -17,6 +17,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -502,9 +503,9 @@ public class MessageAdapter extends BaseAdapter {
         }
         final ShareCommodityBean bean = gson.fromJson(message.getMessage(), new TypeToken<ShareCommodityBean>() {
         }.getType());
-        if (bean.image!=null){
+        if (bean.image != null) {
             ImageLoader.getInstance().displayImage(bean.image.getUrl(), holder.iv_goods_img, UILUtils.getDefaultOption());
-        }else {
+        } else {
             ImageLoader.getInstance().displayImage("", holder.iv_goods_img, UILUtils.getDefaultOption());
         }
         holder.tv_commodity_name.setText(String.format("商品名称:%s", bean.title));
@@ -538,6 +539,14 @@ public class MessageAdapter extends BaseAdapter {
         holder.ll_trade.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                Intent in = new Intent();
+//                in.setAction("android.intent.action.route");
+//                in.addCategory(Intent.CATEGORY_DEFAULT);
+//                in.setData(Uri.parse("lvxingpai://oo/test/haha?id=10001"));
+//                if (CommonUtils.checkIntent(activity,in))activity.startActivity(in);
+
+
                 Intent intent = new Intent(activity, OrderDetailActivity.class);
                 intent.putExtra("type", "orderDetail");
                 intent.putExtra("orderId", 1449480836556l);
@@ -749,9 +758,9 @@ public class MessageAdapter extends BaseAdapter {
         holder.tv_desc.setText(String.format("¥%s", String.valueOf((double) Math.round(bean.price * 10 / 10))));
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.price_color));
         //    holder.tv_attr.setText(bean.timeCost);
-        if (bean.image!=null){
+        if (bean.image != null) {
             ImageLoader.getInstance().displayImage(bean.image.getUrl(), holder.iv_image, UILUtils.getRadiusOption(3));
-        }else {
+        } else {
             ImageLoader.getInstance().displayImage("", holder.iv_image, UILUtils.getRadiusOption(3));
         }
         //     holder.tv_type.setText("计划");
@@ -1767,7 +1776,7 @@ public class MessageAdapter extends BaseAdapter {
     public void sendCommodityMsgInBackground(final MessageBean message, final ViewHolder holder) {
         holder.staus_iv.setVisibility(View.GONE);
         holder.pb.setVisibility(View.VISIBLE);
-        IMClient.getInstance().sendCommodityMessage(conversation,friendId,chatType ,message, new HttpCallback() {
+        IMClient.getInstance().sendCommodityMessage(conversation, friendId, chatType, message, new HttpCallback() {
             @Override
             public void onSuccess() {
                 message.setStatus(0);

@@ -46,10 +46,66 @@ public class MessageReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         switch (bundle.getInt("action")) {
             case PushConsts.GET_MSG_DATA:
+
+//                Observable.just(bundle.getByteArray("payload"))
+//                        .filter(new Func1<byte[], Boolean>() {
+//                            @Override
+//                            public Boolean call(byte[] bytes) {
+//                                return bytes != null;
+//                            }
+//                        })
+//                        .map(new Func1<byte[], String>() {
+//                            @Override
+//                            public String call(byte[] bytes) {
+//                                return new String(bytes);
+//                            }
+//                        })
+//                        .filter(new Func1<String, Boolean>() {
+//                            @Override
+//                            public Boolean call(String s) {
+//                                JsonValidator jsonValidator = new JsonValidator();
+//                                return jsonValidator.validate(s);
+//                            }
+//                        })
+//                        .groupBy(new Func1<String, String>() {
+//                            @Override
+//                            public String call(String s) {
+//                                try {
+//                                    return new JSONObject(s).get("routingKey").toString();
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                    return null;
+//                                }
+//                            }
+//                        })
+//                        .subscribe(new Action1<GroupedObservable<String, String>>() {
+//                            @Override
+//                            public void call(GroupedObservable<String, String> stringStringGroupedObservable) {
+//                                if ("IM".equals(stringStringGroupedObservable.getKey())) {
+//                                    stringStringGroupedObservable
+//                                            .filter(new Func1<String, Boolean>() {
+//                                                @Override
+//                                                public Boolean call(String s) {
+//                                                    return AccountManager.getInstance().getLoginAccount(context) != null;
+//                                                }
+//                                            })
+//                                            .subscribe(new Action1<String>() {
+//                                                @Override
+//                                                public void call(String s) {
+//                                                    //listener.OnMessage(context, s);
+//                                                }
+//                                            });
+//                                } else {
+//
+//                                }
+//                            }
+//                        });
+
+
                 byte[] payload = bundle.getByteArray("payload");
                 if (payload != null) {
                     String data = new String(payload);

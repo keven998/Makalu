@@ -264,6 +264,14 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvGoodsName.setText(bean.getCommodity().getTitle());
         tvGoodsName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
         tvGoodsName.getPaint().setAntiAlias(true);//抗锯齿
+        tvGoodsName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderDetailActivity.this,ReactMainPage.class);
+                intent.putExtra("commodityId",bean.getCommodity().getCommodityId());
+                startActivity(intent);
+            }
+        });
         tvOrderId.setText(String.valueOf(bean.getOrderId()));
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
         tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));

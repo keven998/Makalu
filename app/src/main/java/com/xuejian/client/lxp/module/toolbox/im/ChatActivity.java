@@ -35,7 +35,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -196,6 +195,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private String changedTitle = null;
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
     private boolean fromTrade;
+    ChatMenuFragment fragment;
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -307,6 +307,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 final CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
+                if (fragment!=null){
+                    if (userInfo.result==null){
+                        fragment.setInfo(toChatUsername,"");
+                    }else {
+                        fragment.setInfo(userInfo.result.getNickName(),userInfo.result.getAvatar());
+                    }
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -571,10 +578,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else titleView.setText(user.getNickName());
         // 判断单聊还是群聊
         if ("single".equals(chatType)) { // 单聊
-            final Fragment fragment = new ChatMenuFragment();
+            fragment = new ChatMenuFragment();
             Bundle args = new Bundle();
             args.putString("userId", toChatUsername);
             args.putString("conversation", conversation);
+            if (user!=null){
+               args.putParcelable("user",user);
+            }
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -594,7 +604,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             });
         } else {
             // 群聊
-            final Fragment fragment = new GroupDetailFragment();
+            final GroupDetailFragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId", toChatUsername);
             args.putString("conversation", conversation);

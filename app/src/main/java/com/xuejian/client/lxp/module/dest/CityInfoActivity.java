@@ -63,6 +63,14 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_info);
+//        Uri uri = getIntent().getData();
+//        System.out.println(uri.getHost());
+//        System.out.println(uri.getPath());
+//        System.out.println(uri.getScheme());
+//        System.out.println(uri.getQueryParameter("id"));
+//        System.out.println(uri.getLastPathSegment());
+//        System.out.println(uri.getPathSegments().toString());
+
         id = getIntent().getStringExtra("id");
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);

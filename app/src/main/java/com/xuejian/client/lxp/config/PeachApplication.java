@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.xuejian.client.lxp.common.utils.CrashHandler;
 
 import java.io.File;
@@ -20,7 +21,7 @@ import java.io.File;
 
 public class PeachApplication extends BaseApplication {
 
-    public static String ChannelId ;
+    public static String ChannelId;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -34,10 +35,10 @@ public class PeachApplication extends BaseApplication {
         initPeachConfig();
         initChannelId();
         initImageLoader();
-      //  LeakCanary.install(this);
-       if (!com.xuejian.client.lxp.BuildConfig.DEBUG){
+        LeakCanary.install(this);
+        if (!com.xuejian.client.lxp.BuildConfig.DEBUG) {
             CrashHandler.getInstance().init(this);
-         }
+        }
 
     }
 
@@ -63,12 +64,12 @@ public class PeachApplication extends BaseApplication {
         }
     }
 
-    public void initChannelId(){
+    public void initChannelId() {
         try {
             ApplicationInfo appInfo = this.getPackageManager()
                     .getApplicationInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
-           ChannelId = appInfo.metaData.getString("UMENG_CHANNEL");
+            ChannelId = appInfo.metaData.getString("UMENG_CHANNEL");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

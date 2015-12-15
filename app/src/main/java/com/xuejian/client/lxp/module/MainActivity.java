@@ -105,7 +105,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     LocationManagerProxy mLocationManagerProxy;
     private SparseBooleanArray infoStatus = new SparseBooleanArray();
     private MediaPlayer mMediaPlayer;
-    private CompositeSubscription compositeSubscription = new CompositeSubscription();
+    public CompositeSubscription compositeSubscription = new CompositeSubscription();
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {

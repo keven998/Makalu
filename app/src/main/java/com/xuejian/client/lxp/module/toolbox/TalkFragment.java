@@ -255,7 +255,7 @@ public class TalkFragment extends PeachBaseFragment {
 
     public void loadConversation() {
  //       List<ConversationBean> del = new ArrayList<>();
-        conversations.clear();
+ //       conversations.clear();
 //        tempConversations.clear();
 //        try {
 //            tempConversations.addAll(IMClient.getInstance().getConversationList());
@@ -329,24 +329,27 @@ public class TalkFragment extends PeachBaseFragment {
                             @Override
                             public List<ConversationBean> call(List<ConversationBean> conversationBeans) {
                                 sortConversationByLastChatTime(conversationBeans);
+                                List<ConversationBean> tempList = new ArrayList<ConversationBean>();
                                 if (temp[0] != null) {
-                                    conversationBeans.add(0, temp[0]);
+                                    tempList.add(0, temp[0]);
                                 } else {
-                                    conversationBeans.add(0, new ConversationBean(10001, 0, "single"));
+                                    tempList.add(0, new ConversationBean(10001, 0, "single"));
                                 }
                                 if (temp[1] != null) {
-                                    conversationBeans.add(1, temp[1]);
+                                    tempList.add(1, temp[1]);
                                 } else {
-                                    conversationBeans.add(1, new ConversationBean(10000, 0, "single"));
+                                    tempList.add(1, new ConversationBean(10000, 0, "single"));
                                 }
-                                System.out.println("map "+Thread.currentThread().getName()+" "+conversationBeans.size());
-                                return conversationBeans;
+                                tempList.addAll(conversationBeans);
+                                System.out.println("map "+Thread.currentThread().getName()+" "+tempList.size());
+                                return tempList;
                             }
                         })
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<List<ConversationBean>>() {
                             @Override
                             public void call(List<ConversationBean> conversationBeans) {
+                                conversations.clear();
                                 System.out.println("subscribe " + Thread.currentThread().getName() + " " + conversationBeans.size());
                                 conversations.addAll(conversationBeans);
                                 refresh();

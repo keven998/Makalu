@@ -43,15 +43,24 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
 
     int type;
 
-    private HashMap<String,String> idType = new HashMap<>();
+    private HashMap<String, String> idType = new HashMap<>();
+    ListView memberList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_user);
+
+//        Uri uri = getIntent().getData();
+//        System.out.println(uri.getHost());
+//        System.out.println(uri.getPath());
+//        System.out.println(uri.getScheme());
+//        System.out.println(uri.getQueryParameter("id"));
+
         type = getIntent().getIntExtra("ListType", -1);
         boolean multiple = getIntent().getBooleanExtra("multiple", true);
-        idType.put("chineseID","身份证");
-        idType.put("passport","护照");
+        idType.put("chineseID", "身份证");
+        idType.put("passport", "护照");
+        memberList = (ListView) findViewById(R.id.lv_userInfo);
         tvBack = (TextView) findViewById(R.id.tv_title_back);
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,9 +88,9 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
 //        }
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
         initView(type, multiple);
-         if (type==EDIT_LIST||type==SHOW_LIST){
+        if (type == EDIT_LIST || type == SHOW_LIST) {
             getData();
-         }
+        }
 
     }
 
@@ -94,11 +103,11 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 passengerList.addAll(list.result);
                 if (passengerList.size() > 0) {
                     passenger = passengerList.get(0);
-                    if (type==EDIT_LIST){
-                        userAdapter.notifyDataSetChanged();
-                    }else if (type==SHOW_LIST){
-                        userInfoAdapter.notifyDataSetChanged();
-                    }
+                }
+                if (type == EDIT_LIST) {
+                    userAdapter.notifyDataSetChanged();
+                } else if (type == SHOW_LIST) {
+                    userInfoAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -119,13 +128,15 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         TextView title = (TextView) findViewById(R.id.title);
         if (type == EDIT_LIST) {
             title.setText(R.string.common_user_info);
-            ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
+       //     ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userAdapter = new UserAdapter(mContext, multiple);
-            memberList.setAdapter(userAdapter);
+
             View footView = View.inflate(this, R.layout.footer_add_member_grey_line, null);
             if (multiple) {
                 memberList.addFooterView(footView);
             }
+            memberList.setAdapter(userAdapter);
+
             TextView addMember = (TextView) footView.findViewById(R.id.add_member);
             addMember.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -146,7 +157,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                     } else {
                         Intent intent = new Intent();
                         if (passenger == null) {
-                      //      intent.putExtra("passenger", passenger);
+                            //      intent.putExtra("passenger", passenger);
                             setResult(RESULT_CANCELED, intent);
                         } else {
                             intent.putExtra("passenger", passenger);
@@ -160,17 +171,17 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         } else if (type == SHOW_LIST) {
             tv_confirm.setVisibility(View.GONE);
             title.setText(R.string.user_info);
-            ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
+      //      ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userInfoAdapter = new UserInfoAdapter();
             memberList.setAdapter(userInfoAdapter);
-        }else if (type == 3) {
+        } else if (type == 3) {
             tv_confirm.setVisibility(View.GONE);
             title.setText(R.string.user_info);
-            ArrayList<TravellerEntity>list = getIntent().getParcelableArrayListExtra("passengerList");
+            ArrayList<TravellerEntity> list = getIntent().getParcelableArrayListExtra("passengerList");
             for (TravellerEntity entity : list) {
                 passengerList.add(new TravellerBean(entity));
             }
-            ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
+    //        ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userInfoAdapter = new UserInfoAdapter();
             memberList.setAdapter(userInfoAdapter);
         }
@@ -243,7 +254,10 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 viewHolder1.edit.setVisibility(View.INVISIBLE);
             }
             viewHolder1.username.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
-            viewHolder1.id.setText(String.format("护照 %s", bean.getTraveller().getIdentities().get(0).getNumber()));
+            if (bean.getTraveller().getIdentities().size() > 0) {
+                viewHolder1.id.setText(idType.get(bean.getTraveller().getIdentities().get(0).getIdType()) + " " + bean.getTraveller().getIdentities().get(0).getNumber());
+            }
+
             viewHolder1.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -304,10 +318,10 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             }
             TravellerBean bean = (TravellerBean) getItem(position);
             viewHolder1.title.setText(String.format("旅客%d:", position + 1));
-            viewHolder1.username.setText(bean.getTraveller().getSurname()+bean.getTraveller().getGivenName());
+            viewHolder1.username.setText(bean.getTraveller().getSurname() + bean.getTraveller().getGivenName());
             viewHolder1.tel.setText(bean.getTraveller().getTel().getDialCode() + "-" + bean.getTraveller().getTel().getNumber());
-            if (bean.getTraveller().getIdentities().size()>0){
-                viewHolder1.id.setText(idType.get(bean.getTraveller().getIdentities().get(0).getIdType())+" "+bean.getTraveller().getIdentities().get(0).getNumber());
+            if (bean.getTraveller().getIdentities().size() > 0) {
+                viewHolder1.id.setText(idType.get(bean.getTraveller().getIdentities().get(0).getIdType()) + " " + bean.getTraveller().getIdentities().get(0).getNumber());
             }
             return convertView;
         }

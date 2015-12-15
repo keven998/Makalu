@@ -85,12 +85,24 @@ public class IMClient {
         countFrequency = new CountFrequency();
     }
 
+//    public static IMClient getInstance() {
+//        if (client == null) {
+//            client = new IMClient();
+//        }
+//        return client;
+//    }
+
     public static IMClient getInstance() {
         if (client == null) {
-            client = new IMClient();
+            synchronized (IMClient.class) {
+                if (client == null) {
+                    client = new IMClient();
+                }
+            }
         }
         return client;
     }
+
 
     public void initDB(String userId, int version, int currentVersion) {
         MessageDB.initDB(userId);

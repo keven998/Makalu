@@ -2,17 +2,25 @@ package com.xuejian.client.lxp.module.toolbox.im;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -20,6 +28,7 @@ import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
+import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +48,45 @@ public class ChatMenuFragment extends Fragment {
     private ChatActivity mActivity;
     private String conversation;
     private static final int NEW_CHAT_REQUEST_CODE = 101;
+    private TextView tvNickname;
+    private ImageView ivAvatar;
+    DisplayImageOptions picOptions;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        picOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                .showImageOnLoading(R.drawable.messages_bg_useravatar)
+                .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.size_avatar)))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_chat_menu, container, false);
+        View view =  inflater.inflate(R.layout.fragment_chat_menu, container, false);
+        tvNickname = (TextView) view.findViewById(R.id.tv_nickname);
+        ivAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
+        view.findViewById(R.id.ll_user_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isDigitsOnly(userId)){
+                    Intent intent = new Intent(getActivity(), HisMainPageActivity.class);
+                    intent.putExtra("userId", Long.parseLong(userId));
+                    startActivity(intent);
+                }
+            }
+        });
+        User user = getArguments().getParcelable("user");
+       if (user!=null){
+           tvNickname.setText(user.getNickName());
+           ImageLoader.getInstance().displayImage(user.getAvatar(),ivAvatar,picOptions);
+       }
+
+        return view;
     }
 
 
@@ -206,6 +250,10 @@ public class ChatMenuFragment extends Fragment {
         }
     }
 
+    public void setInfo(String nickname,String avatar){
+        tvNickname.setText(nickname);
+        ImageLoader.getInstance().displayImage(avatar,ivAvatar, picOptions);
+    }
     /**
      * 清空群聊天记录
      */
