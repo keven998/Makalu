@@ -9,7 +9,7 @@ import android.os.Parcelable;
 public class PriceBean implements Parcelable {
 
     public String date;
-    public int price;
+    public double price;
 
     @Override
     public int describeContents() {
@@ -19,7 +19,7 @@ public class PriceBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.date);
-        dest.writeInt(this.price);
+        dest.writeDouble(this.price);
     }
 
     public PriceBean() {
@@ -27,7 +27,7 @@ public class PriceBean implements Parcelable {
 
     protected PriceBean(Parcel in) {
         this.date = in.readString();
-        this.price = in.readInt();
+        this.price = in.readDouble();
     }
 
     public static final Parcelable.Creator<PriceBean> CREATOR = new Parcelable.Creator<PriceBean>() {
@@ -48,11 +48,11 @@ public class PriceBean implements Parcelable {
         this.date = date;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

@@ -546,7 +546,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.pay.PaymentActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <data android:scheme="wx86048e56adaf7486"/>
+            </activity>
         <activity
             android:name=".module.goods.DrawbackActivity"
             android:screenOrientation="portrait" />
@@ -578,6 +580,10 @@
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"/>
         <receiver android:name="com.xuejian.client.lxp.common.receiver.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />

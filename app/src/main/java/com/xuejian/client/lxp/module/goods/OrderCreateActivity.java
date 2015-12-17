@@ -119,7 +119,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     try {
                         Date date = sdf.parse(tvDate.getText().toString());
                         priceBean = SampleDecorator.getPrice(currentPlanBean,date);
-                        tvTotalPrice.setText(String.format("¥%d", priceBean.getPrice() * goodsNum));
+                        tvTotalPrice.setText(String.format("¥%s", String.valueOf((double) Math.round(priceBean.getPrice() * goodsNum * 10 / 10))));
 
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -178,7 +178,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             public void OnValueChange(int value) {
                 goodsNum = value;
                 if (priceBean != null) {
-                    tvTotalPrice.setText(String.format("¥%d", priceBean.getPrice() * value));
+                    tvTotalPrice.setText(String.format("¥%s",String.valueOf((double) Math.round(priceBean.getPrice() * value * 10 / 10))));
                 }
             }
         });
@@ -389,7 +389,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 });
                 PlanBean bean = (PlanBean) getItem(position);
                 viewHolder1.packageName.setText(bean.getTitle());
-                viewHolder1.packagePrice.setText(String.format("¥%d起", bean.getPrice()));
+                viewHolder1.packagePrice.setText(String.format("¥%s起",String.valueOf((double) Math.round(bean.getPrice() * 10 / 10))));
                 if (position == lastId) {
                     viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_selected);
                     //  viewHolder1.content.setPadding(10,0,0,0);
@@ -453,7 +453,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             if (requestCode == SELECTED_DATE) {
                 PriceBean bean = data.getParcelableExtra("date_price");
                 tvDate.setText(bean.date);
-                tvTotalPrice.setText(String.format("¥%d", bean.getPrice() * selectNum.getCurrentValue()));
+                tvTotalPrice.setText(String.format("¥%s",String.valueOf((double) Math.round(bean.getPrice() * selectNum.getCurrentValue()  * 10 / 10))));
                 priceBean = bean;
 
             } else if (requestCode == SELECTED_USER) {

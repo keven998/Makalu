@@ -132,8 +132,28 @@ public class TravelApi extends BaseApi {
     // 修改订单状态
     public final static String EDIT_ORDER_STATUS = "/marketplace/orders/%d/actions";
 
+    // 支付订单
+    public final static String PAY_ORDER = "/marketplace/orders/%d/payments";
 
-    public static void editOrderStatus(long orderId, String action, HttpCallBack callback) {
+
+    public static void getPrePayInfo(long orderId,String vendor,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+       request.setUrl(SystemConfig.DEV_URL + String.format(PAY_ORDER, orderId));
+   //     request.setUrl("http://182.92.168.171:11219" + String.format(PAY_ORDER, orderId));
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("tradeType", "APP");
+            jsonObject.put("vendor",vendor);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+    public static void editOrderStatus(long orderId, String action,String memo, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST );
         request.setUrl(SystemConfig.DEV_URL + String.format(EDIT_ORDER_STATUS,orderId));
@@ -142,6 +162,7 @@ public class TravelApi extends BaseApi {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("action", action);
+            jsonObject.put("memo",memo);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -246,6 +267,8 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CREATE_ORDER);
+    //    request.setUrl("http://182.92.168.171:11219"+ CREATE_ORDER);
+
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         JSONObject jsonObject = new JSONObject();

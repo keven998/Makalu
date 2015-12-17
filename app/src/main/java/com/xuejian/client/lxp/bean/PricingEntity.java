@@ -10,7 +10,7 @@ import java.util.List;
  * Created by yibiao.qin on 2015/12/3.
  */
 public class PricingEntity implements Parcelable {
-    private int price;
+    private double price;
     private List<Long> timeRange;
 
     public void setPrice(int price) {
@@ -21,7 +21,7 @@ public class PricingEntity implements Parcelable {
         this.timeRange = timeRange;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -36,7 +36,7 @@ public class PricingEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.price);
+        dest.writeDouble(this.price);
         dest.writeList(this.timeRange);
     }
 
@@ -44,7 +44,7 @@ public class PricingEntity implements Parcelable {
     }
 
     protected PricingEntity(Parcel in) {
-        this.price = in.readInt();
+        this.price = in.readDouble();
         this.timeRange = new ArrayList<Long>();
         in.readList(this.timeRange, List.class.getClassLoader());
     }

@@ -1,20 +1,28 @@
 package com.xuejian.client.lxp.module.pay;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckedTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aizou.core.http.HttpCallBack;
+import com.alipay.sdk.app.PayTask;
+import com.tencent.mm.sdk.modelpay.PayReq;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.module.goods.OrderListActivity;
+import com.xuejian.client.lxp.bean.WeixinRespBean;
+import com.xuejian.client.lxp.common.alipay.PayResult;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.ShareUtils;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,55 +34,176 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
     @InjectView(R.id.tv_title_back)
     TextView tvTitleBack;
-    @InjectView(R.id.ctv_alipay)
-    CheckedTextView ctvAlipay;
-    @InjectView(R.id.ctv_weixin)
-    CheckedTextView ctvWeixin;
-    @InjectView(R.id.tv_price)
-    TextView tvPrice;
-    @InjectView(R.id.tv_pay)
-    TextView tvPay;
+
+    private static final int ALI_PAY = 1001;
+    private static final int ALI_PAY_CHECK = 1002;
+
+    final IWXAPI msgApi = WXAPIFactory.createWXAPI(this, null);
+
+    private final String Tag = "PaymentActivity";
+
+    private final PayHandler handler = new PayHandler(this);
+
+    private static class PayHandler extends Handler {
+        private final WeakReference<PaymentActivity> mActivity;
+
+        public PayHandler(PaymentActivity activity) {
+            mActivity = new WeakReference<PaymentActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case ALI_PAY: {
+                    PayResult payResult = new PayResult((String) msg.obj);
+
+                    // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
+                    String resultInfo = payResult.getResult();
+
+                    String resultStatus = payResult.getResultStatus();
+
+                    // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        Toast.makeText(mActivity.get(), "支付成功",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        // 判断resultStatus 为非“9000”则代表可能支付失败
+                        // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
+                        if (TextUtils.equals(resultStatus, "8000")) {
+                            Toast.makeText(mActivity.get(), "支付结果确认中",
+                                    Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
+                            Toast.makeText(mActivity.get(), "支付失败",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                    break;
+                }
+                case ALI_PAY_CHECK: {
+                    Toast.makeText(mActivity.get(), "检查结果为：" + msg.obj,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         ButterKnife.inject(this);
-        ctvWeixin.setOnClickListener(this);
-        ctvAlipay.setOnClickListener(this);
         tvTitleBack.setOnClickListener(this);
-        tvPay.setOnClickListener(this);
+        DialogManager.getInstance().showLoadingDialog(this);
+//        SpannableString priceStr = new SpannableString("¥35353");
+//        priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        priceStr.setSpan(new AbsoluteSizeSpan(15, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        SpannableStringBuilder spb = new SpannableStringBuilder();
+//        spb.append("总价:").append(priceStr);
+//        tvPrice.setText(spb);
 
-        SpannableString priceStr = new SpannableString("¥35353");
-        priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        priceStr.setSpan(new AbsoluteSizeSpan(15, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder spb = new SpannableStringBuilder();
-        spb.append("总价:").append(priceStr);
-        tvPrice.setText(spb);
+        String type = getIntent().getStringExtra("type");
+        long orderId = getIntent().getLongExtra("orderId", 0);
+
+        switch (type) {
+            case "weixinpay":
+                getPrePayInfo(orderId, "wechat");
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    private void getPrePayInfo(long orderId, String vendor) {
+        TravelApi.getPrePayInfo(orderId, vendor, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                System.out.println(result);
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<WeixinRespBean> bean = CommonJson.fromJson(result, WeixinRespBean.class);
+                if (bean.code == 0) {
+                    startWeixinPay(bean.result);
+                } else {
+                    Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ctv_alipay:
-                ctvAlipay.setChecked(true);
-                if (ctvWeixin.isChecked()) {
-                    ctvWeixin.setChecked(false);
-                }
-                break;
-            case R.id.ctv_weixin:
-                ctvWeixin.setChecked(true);
-                if (ctvAlipay.isChecked()) {
-                    ctvAlipay.setChecked(false);
-                }
-                break;
             case R.id.tv_title_back:
                 finish();
                 break;
-            case R.id.tv_pay:
-                Intent tv_pay = new Intent(PaymentActivity.this,OrderListActivity.class);
-                startActivity(tv_pay);
+            default:
                 break;
         }
+    }
+
+    public void startAliPay(final String payInfo) {
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                // 构造PayTask 对象
+                PayTask alipay = new PayTask(PaymentActivity.this);
+                // 调用支付接口，获取支付结果
+                String result = alipay.pay(payInfo);
+
+                Message msg = new Message();
+                msg.what = ALI_PAY;
+                msg.obj = result;
+                handler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+
+    public void startWeixinPay(final WeixinRespBean payInfo) {
+
+        if ("SUCCESS".equals(payInfo.getResult())) {
+            PayReq payReq = new PayReq();
+            payReq.appId = ShareUtils.PlatfromSetting.WX_APPID;
+            payReq.partnerId = payInfo.getMch_id();
+            payReq.prepayId = payInfo.getPrepay_id();
+            payReq.packageValue = "Sign=WXPay";
+            payReq.nonceStr = payInfo.getNonce_str();
+            payReq.timeStamp = payInfo.getTimeStamp();
+            payReq.sign = payInfo.getSign();
+            msgApi.registerApp(ShareUtils.PlatfromSetting.WX_APPID);
+            msgApi.sendReq(payReq);
+        } else {
+            Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
+        }
+//        PayReq payReq = new PayReq();
+//            payReq.appId = ShareUtils.PlatfromSetting.WX_APPID;
+//            payReq.partnerId = "1278401701";
+//            payReq.prepayId = "wx201512161630147fb297eaf80597523823";
+//            payReq.packageValue = "Sign=WXPay";
+//            payReq.nonceStr = "89082c23-de24-4b4e-8c5a-5f713892";
+//            payReq.timeStamp = "1450254622";
+//            payReq.sign = "00A752DC9D26DAF84BB90E13BA0DC482";
+//            msgApi.registerApp(ShareUtils.PlatfromSetting.WX_APPID);
+//            msgApi.sendReq(payReq);
     }
 }

@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,11 +23,11 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
-import com.xuejian.client.lxp.common.dialog.XDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
+import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
@@ -49,9 +46,9 @@ public class GoodsList extends PeachBaseActivity {
     @InjectView(R.id.tv_title_back)
     TextView tvTitleBack;
     @InjectView(R.id.type_spinner)
-    CheckedTextView typeSpinner;
+    NiceSpinner typeSpinner;
     @InjectView(R.id.sort_spinner)
-    CheckedTextView sortSpinner;
+    NiceSpinner sortSpinner;
     @InjectView(R.id.lv_poi_list)
     PullToRefreshListView goodsList;
     @InjectView(R.id.iv_toTop)
@@ -66,8 +63,9 @@ public class GoodsList extends PeachBaseActivity {
     };
     private final List<Tag> mTags = new ArrayList<Tag>();
 
-    private String[] sortType = new String[]{"价格","销量","好评率"};
-    private String[] sortValue = new String[]{"salesVolume","price","price"};
+    private String[] sortType = new String[]{"推荐排序","销量最高","价格最低","价格最高"};
+    private String[] sortValue = new String[]{"","salesVolume","price","price"};
+    private String[] sort = new String[]{"","desc","asc","desc"};
 
     private String currentType;
     private static final int PAGE_SIZE = 15;
@@ -80,7 +78,6 @@ public class GoodsList extends PeachBaseActivity {
         setContentView(R.layout.activity_goods_list);
         ButterKnife.inject(this);
         locId = getIntent().getStringExtra("id");
-
         goodsList.setPullLoadEnabled(false);
         goodsList.setPullRefreshEnabled(false);
         goodsList.setScrollLoadEnabled(true);
@@ -103,7 +100,7 @@ public class GoodsList extends PeachBaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getData(null, locId, currentType, null,START,COUNT,false);
+                getData(null, locId, currentType, null,null,START,COUNT,false);
             }
         });
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +118,7 @@ public class GoodsList extends PeachBaseActivity {
             }
         });
         getCategory(locId);
-        getData(null,locId,null,null,0,15,true);
+        getData(null,locId,null,null,null,0,15,true);
     }
 
     private void getCategory(String id) {
@@ -160,9 +157,9 @@ public class GoodsList extends PeachBaseActivity {
         }
     }
 
-    public void getData(String sellerId,String localityId,String category,String sortBy, final int start,int count, final boolean fresh) {
+    public void getData(String sellerId,String localityId,String category,String sortBy,String sort, final int start,int count, final boolean fresh) {
 
-        TravelApi.getCommodityList(sellerId, localityId, category, sortBy, null,String.valueOf(start) ,String.valueOf(count),new HttpCallBack<String>() {
+        TravelApi.getCommodityList(sellerId, localityId, category, sortBy, sort,String.valueOf(start) ,String.valueOf(count),new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
@@ -195,62 +192,85 @@ public class GoodsList extends PeachBaseActivity {
     }
 
     private void initCategoryData(final CategoryBean bean) {
-        ArrayList<String> tempList = new ArrayList<>();
-        tempList.addAll(Arrays.asList(sortType));
-        final ArrayList<String> SortList = tempList;
 
-        final XDialog categoryDialog = new XDialog(GoodsList.this, R.layout.dialog_type_spinner, R.style.LocSelectDialog);
-        final CategoryAdapter adapter = new CategoryAdapter(bean.category, GoodsList.this);
-        typeSpinner.setOnClickListener(new View.OnClickListener() {
+        typeSpinner.attachDataSource(bean.category);
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                typeSpinner.setChecked(true);
-                WindowManager.LayoutParams wlmp = categoryDialog.getWindow().getAttributes();
-                wlmp.gravity = Gravity.TOP | Gravity.LEFT;
-                final ListView lv = categoryDialog.getListView();
-                lv.setAdapter(adapter);
-                categoryDialog.show();
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //    lv.setSelection(headerPos.get(position));
-                        currentType = bean.category.get(position);
-                        typeSpinner.setText(currentType);
-                        getData(null, locId, currentType, null, 0, 15, true);
-                        typeSpinner.setChecked(false);
-                        if (categoryDialog != null) categoryDialog.dismiss();
-                    }
-                });
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentType = bean.category.get(position);
+                getData(null, locId, currentType, null,null, 0, 15, true);
+                typeSpinner.dismissDropDown();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+//        final XDialog categoryDialog = new XDialog(GoodsList.this, R.layout.dialog_type_spinner, R.style.TypeSelectDialog);
+//        final CategoryAdapter adapter = new CategoryAdapter(bean.category, GoodsList.this);
+//        typeSpinner.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                typeSpinner.setChecked(true);
+//                WindowManager.LayoutParams wlmp = categoryDialog.getWindow().getAttributes();
+//                wlmp.gravity = Gravity.TOP ;
+//                wlmp.windowAnimations = android.R.anim.slide_in_left;
+//                final ListView lv = categoryDialog.getListView();
+//                lv.setAdapter(adapter);
+//                categoryDialog.show();
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        //    lv.setSelection(headerPos.get(position));
+//                        currentType = bean.category.get(position);
+//                        typeSpinner.setText(currentType);
+//                        getData(null, locId, currentType, null, 0, 15, true);
+//                        typeSpinner.setChecked(false);
+//                        if (categoryDialog != null) categoryDialog.dismiss();
+//                    }
+//                });
+//            }
+//        });
 
 
 
-
-
-        final XDialog sortDialog = new XDialog(GoodsList.this, R.layout.dialog_sort_spinner, R.style.LocSelectDialog);
-        final CategoryAdapter sortAdapter = new CategoryAdapter(SortList, GoodsList.this);
-        sortSpinner.setOnClickListener(new View.OnClickListener() {
+        sortSpinner.attachDataSource(Arrays.asList(sortType));
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                sortSpinner.setChecked(true);
-                WindowManager.LayoutParams wlmp = sortDialog.getWindow().getAttributes();
-                wlmp.gravity = Gravity.TOP | Gravity.RIGHT;
-                final ListView lv = sortDialog.getListView();
-                lv.setAdapter(sortAdapter);
-                sortDialog.show();
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //    lv.setSelection(headerPos.get(position));
-                        sortSpinner.setText(SortList.get(position));
-                        getData(null, locId, currentType, sortValue[position], 0, 15, true);
-                        sortSpinner.setChecked(false);
-                        if (sortDialog != null) sortDialog.dismiss();
-                    }
-                });
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                getData(null, locId, currentType, sortValue[position],sort[position], 0, 15, true);
+                sortSpinner.dismissDropDown();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+//        final XDialog sortDialog = new XDialog(GoodsList.this, R.layout.dialog_sort_spinner, R.style.LocSelectDialog);
+//        final CategoryAdapter sortAdapter = new CategoryAdapter(SortList, GoodsList.this);
+//        sortSpinner.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sortSpinner.setChecked(true);
+//                WindowManager.LayoutParams wlmp = sortDialog.getWindow().getAttributes();
+//                wlmp.gravity = Gravity.TOP | Gravity.RIGHT;
+//                final ListView lv = sortDialog.getListView();
+//                lv.setAdapter(sortAdapter);
+//                sortDialog.show();
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        //    lv.setSelection(headerPos.get(position));
+//                        sortSpinner.setText(SortList.get(position));
+//                        getData(null, locId, currentType, sortValue[position], 0, 15, true);
+//                        sortSpinner.setChecked(false);
+//                        if (sortDialog != null) sortDialog.dismiss();
+//                    }
+//                });
+//            }
+//        });
     }
 
     public int getNextColor(int currentcolor) {
@@ -396,7 +416,7 @@ public class GoodsList extends PeachBaseActivity {
             TextView days_title = (TextView) convertView.findViewById(R.id.days_title);
             if (typeSpinner.getText().toString().equals(getItem(position).toString()))
                 days_title.setTextColor(getResources().getColor(R.color.app_theme_color));
-            else days_title.setTextColor(getResources().getColor(R.color.base_color_white));
+            else days_title.setTextColor(getResources().getColor(R.color.color_text_ii));
             days_title.setText(getItem(position).toString());
             //selected=(ImageView) convertView.findViewById(R.id.map_days_selected);
             //if(position==(whichDay-1)){selected.setVisibility(View.VISIBLE);}else{selected.setVisibility(View.GONE);}

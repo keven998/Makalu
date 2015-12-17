@@ -27,6 +27,7 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
+import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.text.SimpleDateFormat;
@@ -89,6 +90,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     @InjectView(R.id.tv_talk)
     TextView tvTalk;
     long orderId;
+    OrderBean currentOrder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,6 +157,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     }
 
     private void bindView(final OrderBean bean) {
+        currentOrder = bean;
         final Intent intent = new Intent();
         switch (bean.getStatus()) {
             case "paid":
@@ -164,7 +167,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this,DrawbackActivity.class);
+                        intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -185,7 +188,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvState.setText("已申请退款");
                 break;
             case "pending":
-                tvState.setText(String.format("待付款¥%d",bean.getTotalPrice()));
+                tvState.setText(String.format("待付款¥%s", String.valueOf((double)Math.round(bean.getTotalPrice()*10/10))));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
                     CountDownTimer countDownTimer = new CountDownTimer(time, 1000) {
@@ -267,8 +270,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvGoodsName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderDetailActivity.this,ReactMainPage.class);
-                intent.putExtra("commodityId",bean.getCommodity().getCommodityId());
+                Intent intent = new Intent(OrderDetailActivity.this, ReactMainPage.class);
+                intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                 startActivity(intent);
             }
         });
@@ -276,7 +279,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
         tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
-        tvOrderPrice.setText("¥" + String.valueOf(bean.getTotalPrice()));
+        tvOrderPrice.setText("¥" + String.valueOf((double)Math.round(bean.getTotalPrice()*10/10)));
 
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 
@@ -338,12 +341,12 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
 
     }
 
-    public void cancelOrder(){
-        TravelApi.editOrderStatus(orderId, "cancel", new HttpCallBack<String>() {
+    public void cancelOrder() {
+        TravelApi.editOrderStatus(orderId, "cancel", "", new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
-                Toast.makeText(OrderDetailActivity.this,"订单已取消",Toast.LENGTH_LONG).show();
+                Toast.makeText(OrderDetailActivity.this, "订单已取消", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(OrderDetailActivity.this, OrderListActivity.class);
                 startActivity(intent);
                 finish();
@@ -360,6 +363,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             }
         });
     }
+
     private void showPayActionDialog() {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
@@ -370,7 +374,11 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Intent tv_pay = new Intent(OrderDetailActivity.this, OrderListActivity.class);
+                Intent tv_pay = new Intent(OrderDetailActivity.this, PaymentActivity.class);
+                if (currentOrder!=null){
+                    tv_pay.putExtra("orderId",currentOrder.getOrderId());
+                }
+                tv_pay.putExtra("type","alipay");
                 startActivity(tv_pay);
             }
         });
@@ -378,9 +386,12 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Intent tv_pay = new Intent(OrderDetailActivity.this, OrderListActivity.class);
+                Intent tv_pay = new Intent(OrderDetailActivity.this, PaymentActivity.class);
+                if (currentOrder!=null){
+                    tv_pay.putExtra("orderId",currentOrder.getOrderId());
+                }
+                tv_pay.putExtra("type","weixinpay");
                 startActivity(tv_pay);
-
             }
         });
         contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {

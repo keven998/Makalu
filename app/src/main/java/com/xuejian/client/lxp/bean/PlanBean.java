@@ -23,8 +23,8 @@ public class PlanBean implements Parcelable {
     private String planId;
     private String title;
     private String desc;
-    private int marketPrice;
-    private int price;
+    private double marketPrice;
+    private double price;
     /**
      * price : 23
      * timeRange : [1449100800000,1450396800000]
@@ -45,11 +45,11 @@ public class PlanBean implements Parcelable {
         this.desc = desc;
     }
 
-    public void setMarketPrice(int marketPrice) {
+    public void setMarketPrice(double marketPrice) {
         this.marketPrice = marketPrice;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -73,11 +73,11 @@ public class PlanBean implements Parcelable {
         return desc;
     }
 
-    public int getMarketPrice() {
+    public double getMarketPrice() {
         return marketPrice;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -100,8 +100,8 @@ public class PlanBean implements Parcelable {
         dest.writeString(this.planId);
         dest.writeString(this.title);
         dest.writeString(this.desc);
-        dest.writeInt(this.marketPrice);
-        dest.writeInt(this.price);
+        dest.writeDouble(this.marketPrice);
+        dest.writeDouble(this.price);
         dest.writeTypedList(pricing);
         dest.writeStringList(this.stockInfo);
     }
@@ -113,8 +113,8 @@ public class PlanBean implements Parcelable {
         this.planId = in.readString();
         this.title = in.readString();
         this.desc = in.readString();
-        this.marketPrice = in.readInt();
-        this.price = in.readInt();
+        this.marketPrice = in.readDouble();
+        this.price = in.readDouble();
         this.pricing = in.createTypedArrayList(PricingEntity.CREATOR);
         this.stockInfo = in.createStringArrayList();
     }

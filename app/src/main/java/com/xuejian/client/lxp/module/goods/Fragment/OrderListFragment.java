@@ -317,7 +317,9 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
             holder.tvGoodsName.setText(bean.getCommodity().getTitle());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             holder.tvDate.setText(String.format("出行日期:%s",format.format(new Date(bean.getRendezvousTime()))));
-            holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle() + " x" + bean.getQuantity());
+            if (bean.getCommodity().getPlans().size()>0){
+                holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle() + " x" + bean.getQuantity());
+            }
             if (bean.getCommodity().getCover()!=null){
                 ImageLoader.getInstance().displayImage(bean.getCommodity().getCover().getUrl(), holder.mImageView, UILUtils.getDefaultOption());
             }else {

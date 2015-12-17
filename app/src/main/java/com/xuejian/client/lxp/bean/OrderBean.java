@@ -35,7 +35,7 @@ public class OrderBean implements Parcelable {
     private SimpleCommodityBean commodity;
     private ContactBean contact;
     private long rendezvousTime;
-    private int totalPrice;
+    private double totalPrice;
     private int discount;
     private int quantity;
     private String comment;
@@ -95,7 +95,7 @@ public class OrderBean implements Parcelable {
         this.rendezvousTime = rendezvousTime;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -147,7 +147,7 @@ public class OrderBean implements Parcelable {
         return rendezvousTime;
     }
 
-    public int getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
@@ -188,7 +188,7 @@ public class OrderBean implements Parcelable {
         dest.writeParcelable(this.commodity, 0);
         dest.writeParcelable(this.contact, 0);
         dest.writeLong(this.rendezvousTime);
-        dest.writeInt(this.totalPrice);
+        dest.writeDouble(this.totalPrice);
         dest.writeInt(this.discount);
         dest.writeInt(this.quantity);
         dest.writeString(this.comment);
@@ -210,7 +210,7 @@ public class OrderBean implements Parcelable {
         this.commodity = in.readParcelable(SimpleCommodityBean.class.getClassLoader());
         this.contact = in.readParcelable(ContactBean.class.getClassLoader());
         this.rendezvousTime = in.readLong();
-        this.totalPrice = in.readInt();
+        this.totalPrice = in.readDouble();
         this.discount = in.readInt();
         this.quantity = in.readInt();
         this.comment = in.readString();
