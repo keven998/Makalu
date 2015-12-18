@@ -29,6 +29,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -275,7 +276,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                     break;
                 case "pending":
                     holder.rlNeedPay.setVisibility(View.VISIBLE);
-                    SpannableString priceStr = new SpannableString("¥"+String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10)));
+                    SpannableString priceStr = new SpannableString("¥"+ CommonUtils.getPriceString(bean.getTotalPrice()));
                     priceStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     priceStr.setSpan(new AbsoluteSizeSpan(13, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     SpannableStringBuilder spb = new SpannableStringBuilder();

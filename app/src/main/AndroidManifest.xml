@@ -569,16 +569,20 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".module.pay.ChoosePayWayActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".module.pay.PayDetailAcitivity"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:screenOrientation="behind" >
+        </activity>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" >
         </activity>
         <activity
             android:name=".wxapi.WXPayEntryActivity"

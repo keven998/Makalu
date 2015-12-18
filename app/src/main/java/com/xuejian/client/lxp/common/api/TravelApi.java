@@ -140,11 +140,9 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
        request.setUrl(SystemConfig.DEV_URL + String.format(PAY_ORDER, orderId));
-   //     request.setUrl("http://182.92.168.171:11219" + String.format(PAY_ORDER, orderId));
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("tradeType", "APP");
-            jsonObject.put("vendor",vendor);
+            jsonObject.put("provider",vendor);
         } catch (JSONException e) {
             e.printStackTrace();
         }

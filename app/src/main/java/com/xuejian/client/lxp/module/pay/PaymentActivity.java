@@ -13,9 +13,10 @@ import com.alipay.sdk.app.PayTask;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.xuejian.client.lxp.BuildConfig;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.WeixinRespBean;
+import com.xuejian.client.lxp.bean.PrePayRespBean;
 import com.xuejian.client.lxp.common.alipay.PayResult;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -58,10 +59,8 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                     PayResult payResult = new PayResult((String) msg.obj);
 
                     // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
-                    String resultInfo = payResult.getResult();
-
                     String resultStatus = payResult.getResultStatus();
-
+                    System.out.println("resultInfo " + payResult.toString());
                     // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                     if (TextUtils.equals(resultStatus, "9000")) {
                         Toast.makeText(mActivity.get(), "支付成功",
@@ -75,9 +74,8 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
                         } else {
                             // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-                            Toast.makeText(mActivity.get(), "支付失败",
+                            Toast.makeText(mActivity.get(), "支付失败 " + resultStatus,
                                     Toast.LENGTH_SHORT).show();
-
                         }
                     }
                     break;
@@ -114,23 +112,37 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
             case "weixinpay":
                 getPrePayInfo(orderId, "wechat");
                 break;
+            case "alipay":
+                getPrePayInfo(orderId, "alipay");
+                break;
             default:
                 break;
         }
 
     }
 
-    private void getPrePayInfo(long orderId, String vendor) {
+    private void getPrePayInfo(long orderId, final String vendor) {
         TravelApi.getPrePayInfo(orderId, vendor, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
-                System.out.println(result);
+                if (BuildConfig.DEBUG){
+                    System.out.println(result);
+                }
                 DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<WeixinRespBean> bean = CommonJson.fromJson(result, WeixinRespBean.class);
-                if (bean.code == 0) {
-                    startWeixinPay(bean.result);
-                } else {
+                CommonJson<PrePayRespBean> bean = CommonJson.fromJson(result, PrePayRespBean.class);
+                if (bean.code==0){
+                    switch (vendor){
+                        case "wechat":
+                            startWeixinPay(bean.result);
+                            break;
+                        case "alipay":
+                            startAliPay(bean.result);
+                            break;
+                        default:
+                            break;
+                    }
+                }else {
                     Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
                 }
             }
@@ -138,6 +150,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -158,7 +171,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         }
     }
 
-    public void startAliPay(final String payInfo) {
+    public void startAliPay(final PrePayRespBean payInfo) {
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -166,7 +179,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                 // 构造PayTask 对象
                 PayTask alipay = new PayTask(PaymentActivity.this);
                 // 调用支付接口，获取支付结果
-                String result = alipay.pay(payInfo);
+                String result = alipay.pay(payInfo.getRequestString());
 
                 Message msg = new Message();
                 msg.what = ALI_PAY;
@@ -179,22 +192,18 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         payThread.start();
     }
 
-    public void startWeixinPay(final WeixinRespBean payInfo) {
+    public void startWeixinPay(final PrePayRespBean payInfo) {
 
-        if ("SUCCESS".equals(payInfo.getResult())) {
-            PayReq payReq = new PayReq();
-            payReq.appId = ShareUtils.PlatfromSetting.WX_APPID;
-            payReq.partnerId = payInfo.getMch_id();
-            payReq.prepayId = payInfo.getPrepay_id();
-            payReq.packageValue = "Sign=WXPay";
-            payReq.nonceStr = payInfo.getNonce_str();
-            payReq.timeStamp = payInfo.getTimeStamp();
-            payReq.sign = payInfo.getSign();
-            msgApi.registerApp(ShareUtils.PlatfromSetting.WX_APPID);
-            msgApi.sendReq(payReq);
-        } else {
-            Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
-        }
+        PayReq payReq = new PayReq();
+        payReq.appId = payInfo.getAppid();
+        payReq.partnerId = payInfo.getPartnerid();
+        payReq.prepayId = payInfo.getPrepayid();
+        payReq.packageValue = payInfo.getPackageX();
+        payReq.nonceStr = payInfo.getNoncestr();
+        payReq.timeStamp = payInfo.getTimestamp();
+        payReq.sign = payInfo.getSign();
+        msgApi.registerApp(ShareUtils.PlatfromSetting.WX_APPID);
+        msgApi.sendReq(payReq);
 //        PayReq payReq = new PayReq();
 //            payReq.appId = ShareUtils.PlatfromSetting.WX_APPID;
 //            payReq.partnerId = "1278401701";

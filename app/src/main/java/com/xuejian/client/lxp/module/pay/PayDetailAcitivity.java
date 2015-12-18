@@ -1,9 +1,7 @@
 package com.xuejian.client.lxp.module.pay;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -29,10 +26,6 @@ import com.xuejian.client.lxp.common.weixinpay.Util;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,14 +88,16 @@ public class PayDetailAcitivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.pay_detail_activity);
         payType = getIntent().getIntExtra("payType",-1);
-        initPay(payType);
-        confirm_topay = (Button)findViewById(R.id.confirm_topay);
-        confirm_topay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startToPay(payType,"0.01");
-            }
-        });
+    //    initPay(payType);
+//        confirm_topay = (Button)findViewById(R.id.confirm_topay);
+//        confirm_topay.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startToPay(payType,"0.01");
+//            }
+//        });
+
+        startAlipay("0.1");
         super.onCreate(savedInstanceState);
     }
 
@@ -123,17 +118,17 @@ public class PayDetailAcitivity extends Activity{
             case 1:
                 startAlipay(fees);
                 break;
-            case 2:
-                startWeixinpay(fees);
-                break;
-            default:
-                Toast.makeText(PayDetailAcitivity.this,"请选择支付方式！",Toast.LENGTH_SHORT).show();
+//            case 2:
+//                startWeixinpay(fees);
+//                break;
+//            default:
+//                Toast.makeText(PayDetailAcitivity.this,"请选择支付方式！",Toast.LENGTH_SHORT).show();
         }
     }
 
     private void startAlipay(String fees){
             // 订单
-            String orderInfo = PayUtils.getOrderInfo("1", "我是测试数据", "0.02");
+            String orderInfo = PayUtils.getOrderInfo("测试的商品", "我是测试数据", "0.02");
 
             // 对订单做RSA 签名
             String sign = PayUtils.sign(orderInfo);
@@ -147,6 +142,8 @@ public class PayDetailAcitivity extends Activity{
             // 完整的符合支付宝参数规范的订单信息
             final String payInfo = orderInfo + "&sign=\"" + sign + "\"&"
                     + PayUtils.getSignType();
+
+             Log.e("test",payInfo);
 
             Runnable payRunnable = new Runnable() {
 

@@ -56,7 +56,10 @@
         android:id="@+id/lv_city_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@null"
-        android:dividerHeight="0px"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/color_line"
+        android:dividerHeight="1px"
+        android:fadingEdge="none"
+        android:scrollbars="none"
         />
 </LinearLayout>

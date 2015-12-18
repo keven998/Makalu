@@ -31,7 +31,6 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="宝佳德家庭式酒店"
                 android:gravity="center_vertical"
                 android:background="@color/base_color_white"
                 android:textColor="@color/color_text_ii"

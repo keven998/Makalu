@@ -64,37 +64,6 @@
         </LinearLayout>
     </FrameLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/app_backgroud"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/tv_recommend_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="40dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textColor="@color/color_text_ii"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_marginLeft="5dp"
-            android:id="@+id/tv_store_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:drawableLeft="@drawable/icon_store"
-            android:drawablePadding="4dp"
-            android:layout_centerVertical="true"
-            android:textColor="@color/color_text_ii"
-            android:textSize="15sp" />
-    </RelativeLayout>
-
     <LinearLayout
         android:id="@+id/ll_btn_container"
         android:layout_width="match_parent"
@@ -349,7 +318,18 @@
             android:text="@string/city_detail_goods"
             android:textColor="@color/color_text_ii"
             android:textSize="15sp" />
-
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/tv_store_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:drawableLeft="@drawable/icon_store"
+            android:drawablePadding="4dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
     </RelativeLayout>
 
     <View

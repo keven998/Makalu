@@ -34,7 +34,7 @@ public class NativeActions extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startActivity(String name, String data,String id) {
+    public void startActivity(String name, String data,String id,String data1) {
         Intent intent = new Intent();
         Gson gson = new Gson();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -53,6 +53,7 @@ public class NativeActions extends ReactContextBaseJavaModule {
                     }.getType());
                     intent.putExtra("planList", list);
                     intent.putExtra("commodityId",id);
+                    intent.putExtra("name",data1);
                     intent.setClass(reactContext, OrderCreateActivity.class);
                     reactContext.startActivity(intent);
                 }

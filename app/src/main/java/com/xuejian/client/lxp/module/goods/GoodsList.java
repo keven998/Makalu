@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
@@ -53,6 +56,12 @@ public class GoodsList extends PeachBaseActivity {
     PullToRefreshListView goodsList;
     @InjectView(R.id.iv_toTop)
     ImageView toTop;
+    @InjectView(R.id.tv_list_title)
+    TextView tvTitle;
+    @InjectView(R.id.ll_spinner)
+    LinearLayout ll_spinner;
+    @InjectView(R.id.iv_banner)
+    ImageView iv_banner;
     GoodsListAdapter adapter;
     private int[] lebelColors = new int[]{
             R.drawable.all_light_green_label,
@@ -78,6 +87,8 @@ public class GoodsList extends PeachBaseActivity {
         setContentView(R.layout.activity_goods_list);
         ButterKnife.inject(this);
         locId = getIntent().getStringExtra("id");
+        String title = getIntent().getStringExtra("title");
+        if (!TextUtils.isEmpty(title))tvTitle.setText(title);
         goodsList.setPullLoadEnabled(false);
         goodsList.setPullRefreshEnabled(false);
         goodsList.setScrollLoadEnabled(true);
@@ -333,8 +344,8 @@ public class GoodsList extends PeachBaseActivity {
             SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
             ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
             holder.tvGoodsName.setText(bean.getTitle());
-            holder.tvGoodsCurrentPrice.setText("¥" + String.valueOf((double) Math.round(bean.getPrice() * 10 / 10)));
-            holder.tvGoodsPrice.setText("¥" + String.valueOf((double) Math.round(bean.getMarketPrice() * 10 / 10)));
+            holder.tvGoodsCurrentPrice.setText("¥" + CommonUtils.getPriceString(bean.getPrice()));
+            holder.tvGoodsPrice.setText("¥" +CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
             holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));

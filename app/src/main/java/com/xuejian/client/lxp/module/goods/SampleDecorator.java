@@ -9,6 +9,7 @@ import com.squareup.timessquare.CalendarCellView;
 import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.PriceBean;
 import com.xuejian.client.lxp.bean.PricingEntity;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,7 +35,7 @@ public class SampleDecorator implements CalendarCellDecorator {
         PriceBean price = getPrice(bean, date);
         if (price!=null&&price.getPrice()>0){
             String dateString = Integer.toString(date.getDate());
-            String priceString = "\n¥"+String.valueOf((double) Math.round(price.getPrice() * 10 / 10));
+            String priceString = "\n¥"+ CommonUtils.getPriceString(price.getPrice());
             SpannableString string = new SpannableString(dateString + priceString);
             string.setSpan(new AbsoluteSizeSpan(13, true), 0, dateString.length(),
                     Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -32,6 +33,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.StartCity;
 import com.xuejian.client.lxp.common.httpclient.Header;
 
@@ -57,12 +59,27 @@ import java.util.Map;
 
 public class CommonUtils {
 
+    public static int getToolbarHeight(Context context) {
+        final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
+                new int[]{R.attr.actionBarSize});
+        int toolbarHeight = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        return toolbarHeight;
+    }
+
+    public static String  getPriceString(double price){
+        return String.valueOf((double) Math.round(price * 10 / 10));
+    }
+
+
     /**
      * 检测网络是否可用
      *
      * @param context
      * @return
      */
+
     public static boolean isNetWorkConnected(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

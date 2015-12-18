@@ -509,7 +509,7 @@ public class MessageAdapter extends BaseAdapter {
             ImageLoader.getInstance().displayImage("", holder.iv_goods_img, UILUtils.getDefaultOption());
         }
         holder.tv_commodity_name.setText(String.format("商品名称:%s", bean.title));
-        holder.tv_commodity_price.setText(String.format("¥%s", String.valueOf((double) Math.round(bean.price * 10 / 10))));
+        holder.tv_commodity_price.setText(String.format("¥%s",CommonUtils.getPriceString(bean.price)));
         holder.rl_commodity.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

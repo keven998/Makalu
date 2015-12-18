@@ -31,6 +31,7 @@ import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.NumberPicker;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
@@ -98,6 +99,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         final ArrayList<PlanBean> data = getIntent().getParcelableArrayListExtra("planList");
         currentPlanBean = data.get(0);
         commodityId = getIntent().getStringExtra("commodityId");
+        String name = getIntent().getStringExtra("name");
+        tvGoodsName.setText(name);
         tv_address_book.setOnClickListener(this);
         tvSubmitOrder.setOnClickListener(this);
         ctvAgreement.setOnClickListener(this);
@@ -119,7 +122,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     try {
                         Date date = sdf.parse(tvDate.getText().toString());
                         priceBean = SampleDecorator.getPrice(currentPlanBean,date);
-                        tvTotalPrice.setText(String.format("¥%s", String.valueOf((double) Math.round(priceBean.getPrice() * goodsNum * 10 / 10))));
+                        tvTotalPrice.setText(String.format("¥%s", CommonUtils.getPriceString(priceBean.getPrice() * goodsNum)));
 
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -178,7 +181,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             public void OnValueChange(int value) {
                 goodsNum = value;
                 if (priceBean != null) {
-                    tvTotalPrice.setText(String.format("¥%s",String.valueOf((double) Math.round(priceBean.getPrice() * value * 10 / 10))));
+                    tvTotalPrice.setText(String.format("¥%s",CommonUtils.getPriceString(priceBean.getPrice()*value)));
                 }
             }
         });
@@ -389,7 +392,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 });
                 PlanBean bean = (PlanBean) getItem(position);
                 viewHolder1.packageName.setText(bean.getTitle());
-                viewHolder1.packagePrice.setText(String.format("¥%s起",String.valueOf((double) Math.round(bean.getPrice() * 10 / 10))));
+                viewHolder1.packagePrice.setText(String.format("¥%s起", CommonUtils.getPriceString(bean.getPrice())));
                 if (position == lastId) {
                     viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_selected);
                     //  viewHolder1.content.setPadding(10,0,0,0);
@@ -453,7 +456,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             if (requestCode == SELECTED_DATE) {
                 PriceBean bean = data.getParcelableExtra("date_price");
                 tvDate.setText(bean.date);
-                tvTotalPrice.setText(String.format("¥%s",String.valueOf((double) Math.round(bean.getPrice() * selectNum.getCurrentValue()  * 10 / 10))));
+                tvTotalPrice.setText(String.format("¥%s",CommonUtils.getPriceString(bean.getPrice()*selectNum.getCurrentValue())));
                 priceBean = bean;
 
             } else if (requestCode == SELECTED_USER) {

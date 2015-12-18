@@ -17,12 +17,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.utils.LocalDisplay;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -33,7 +31,9 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 
@@ -54,11 +54,11 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     TextView tvCountryName;
     TextView tvCountryNameEn;
     TextView tvCountryPicNum;
-    TextView tvRecommendTime;
     TextView tvStoreNum;
     String id;
     RecommendGoodsAdapter adapter;
     FrameLayout fl_city_img;
+    TextView showMore;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,23 +75,15 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
         View footView = View.inflate(this, R.layout.footer_show_all, null);
-        TextView showMore = (TextView) footView.findViewById(R.id.tv_show_all);
+        showMore = (TextView) footView.findViewById(R.id.tv_show_all);
         showMore.setText("查看全部玩乐");
         fl_city_img = (FrameLayout) headView.findViewById(R.id.fl_city_img);
         ImageView back = (ImageView) findViewById(R.id.iv_nav_back);
         tvStoreNum = (TextView) headView.findViewById(R.id.tv_store_num);
-        tvRecommendTime = (TextView) headView.findViewById(R.id.tv_recommend_time);
         tvCountryPicNum = (TextView) headView.findViewById(R.id.tv_country_pic_num);
         tvCountryName = (TextView) headView.findViewById(R.id.tv_city_name);
         tvCountryNameEn = (TextView) headView.findViewById(R.id.tv_city_name_en);
-        showMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CityInfoActivity.this, GoodsList.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
-            }
-        });
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,29 +172,19 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
     private void bindView(final CityBean bean) {
 
+        showMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CityInfoActivity.this, GoodsList.class);
+                intent.putExtra("id", id);
+                intent.putExtra("title",String.format("%s玩乐",bean.zhName));
+                startActivity(intent);
+            }
+        });
         tvCountryName.setText(bean.zhName);
         tvCountryNameEn.setText(bean.enName);
-        tvRecommendTime.setText(String.format("推荐游玩时间:%s", bean.travelMonth));
         tvStoreNum.setText(String.valueOf(bean.commodityCnt));
-        System.out.println("size " + bean.images.size());
-    //    tvCountryPicNum.setText(String.format("%d/%d", 1, bean.images.size()));
         viewPager.setAdapter(new GoodsPageAdapter(this, bean.images,bean.id,bean.zhName));
-//        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                tvCountryPicNum.setText(String.format("%d/%d", position + 1, bean.images.size()));
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
 
 
         findViewById(R.id.btn_note).setOnClickListener(new View.OnClickListener() {
@@ -275,7 +257,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     }
 
     class RecommendGoodsAdapter extends BaseAdapter {
-        private DisplayImageOptions options;
+        private DisplayImageOptions picOptions;
         private Context mContext;
         private ArrayList<SimpleCommodityBean> data;
         Activity activity;
@@ -284,14 +266,13 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             data = new ArrayList<>();
             mContext = c;
             this.activity = activity;
-            options = new DisplayImageOptions.Builder()
+            picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
-                    .showImageOnLoading(R.drawable.ic_home_more_avatar_unknown_round)
-                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
-                    .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(60)))
+                    .showImageOnFail(R.drawable.ic_default_picture)
+                    .showImageOnLoading(R.drawable.ic_default_picture)
+                    .showImageForEmptyUri(R.drawable.ic_default_picture)
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
@@ -321,35 +302,27 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
+            ViewHolder holder;
             if (convertView == null) {
-                convertView = View.inflate(mContext, R.layout.item_city_info_goods, null);
-                viewHolder = new ViewHolder(convertView);
-                convertView.setTag(viewHolder);
+                convertView = View.inflate(mContext, R.layout.item_goods_list, null);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
             } else {
-                viewHolder = (ViewHolder) convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
             SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
-
-            viewHolder.tvShopName.setText(bean.getTitle());
-            viewHolder.tvGoodsCurrentPrice.setText("¥" + String.valueOf((double) Math.round(bean.getPrice() * 10 / 10)));
-            viewHolder.tvGoodsPrice.setText("¥" + String.valueOf((double) Math.round(bean.getMarketPrice() * 10 / 10)));
-            viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            viewHolder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
-            viewHolder.tvGoodsRecommend.setText(bean.getRating() * 100 + "%");
-
-//            ViewGroup.LayoutParams para;
- //           para = viewHolder.ivGoodsImg.getLayoutParams();
-//            int width = CommonUtils.getScreenWidth(activity);
-//            para.height = width * 2 / 5;
-//            para.width = width;
- //           System.out.println(" para.height " + para.height + "para.width" + para.width);
-//
-//            viewHolder.ivGoodsImg.setLayoutParams(para);
-
-            ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, UILUtils.getDefaultOption());
-            ImageLoader.getInstance().displayImage("", viewHolder.ivAvatar, options);
+            ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
+            holder.tvGoodsName.setText(bean.getTitle());
+            holder.tvGoodsCurrentPrice.setText("¥" + CommonUtils.getPriceString(bean.getPrice()));
+            holder.tvGoodsPrice.setText("¥" +CommonUtils.getPriceString(bean.getMarketPrice()));
+            holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvGoodsPrice.getPaint().setAntiAlias(true);
+            holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
+            holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
+            holder.tvStoreName.setText(bean.getSeller().getName());
+            holder.tvGoodsService.removeAllViews();
+            holder.tvGoodsService.setmTagViewResId(R.layout.goods_tag);
+            holder.tvGoodsService.addTags(mTags);
             return convertView;
         }
 
@@ -361,20 +334,24 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
          * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
          */
         class ViewHolder {
-            @InjectView(R.id.iv_goods_img)
-            ImageView ivGoodsImg;
-            @InjectView(R.id.tv_shop_name)
-            TextView tvShopName;
+            @InjectView(R.id.iv_poi_img)
+            ImageView ivGoods;
+            @InjectView(R.id.tv_goods_name)
+            TextView tvGoodsName;
+            @InjectView(R.id.tv_goods_detail)
+            TextView tvGoodsDetail;
+            @InjectView(R.id.tv_goods_service)
+            TagListView tvGoodsService;
+            @InjectView(R.id.tv_goods_comment)
+            TextView tvGoodsComment;
             @InjectView(R.id.tv_goods_sales)
             TextView tvGoodsSales;
-            @InjectView(R.id.tv_goods_recommend)
-            TextView tvGoodsRecommend;
             @InjectView(R.id.tv_goods_current_price)
             TextView tvGoodsCurrentPrice;
             @InjectView(R.id.tv_goods_price)
             TextView tvGoodsPrice;
-            @InjectView(R.id.iv_avatar)
-            ImageView ivAvatar;
+            @InjectView(R.id.tv_store_name)
+            TextView tvStoreName;
 
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);
