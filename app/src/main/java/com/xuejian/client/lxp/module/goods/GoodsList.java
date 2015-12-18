@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,9 +87,12 @@ public class GoodsList extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_list);
         ButterKnife.inject(this);
+        final Handler handler = new Handler();
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
         if (!TextUtils.isEmpty(title))tvTitle.setText(title);
+
+
         goodsList.setPullLoadEnabled(false);
         goodsList.setPullRefreshEnabled(false);
         goodsList.setScrollLoadEnabled(true);
@@ -111,7 +115,13 @@ public class GoodsList extends PeachBaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getData(null, locId, currentType, null,null,START,COUNT,false);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getData(null, locId, currentType, null, null, adapter.getCount(), COUNT, false);
+                    }
+                },1000);
+
             }
         });
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +178,7 @@ public class GoodsList extends PeachBaseActivity {
         }
     }
 
+
     public void getData(String sellerId,String localityId,String category,String sortBy,String sort, final int start,int count, final boolean fresh) {
 
         TravelApi.getCommodityList(sellerId, localityId, category, sortBy, sort,String.valueOf(start) ,String.valueOf(count),new HttpCallBack<String>() {
@@ -201,6 +212,7 @@ public class GoodsList extends PeachBaseActivity {
             }
         });
     }
+
 
     private void initCategoryData(final CategoryBean bean) {
 
@@ -284,6 +296,7 @@ public class GoodsList extends PeachBaseActivity {
 //        });
     }
 
+
     public int getNextColor(int currentcolor) {
         Random random = new Random();
         int nextValue = random.nextInt(4);
@@ -292,6 +305,7 @@ public class GoodsList extends PeachBaseActivity {
         }
         return (nextValue + currentcolor) % 5;
     }
+
 
     private class GoodsListAdapter extends BaseAdapter {
         private Context mContext;

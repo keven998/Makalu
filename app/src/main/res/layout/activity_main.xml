@@ -19,7 +19,7 @@
             android:layout_height="50dp"
             android:layout_gravity="bottom"
             android:gravity="center_vertical"
-            android:background="@color/base_color_white"
+            android:background="@color/tab_bar_color"
             android:layout_alignParentBottom="true"
             />
 

@@ -168,7 +168,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:text="@string/add_user_info"
-                    android:textColor="@color/color_text_ii" />
+                    android:textColor="@color/app_theme_color" />
                 <TextView
                     android:id="@+id/tv_edit_user"
                     android:layout_width="wrap_content"
@@ -220,7 +220,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:text="@string/select__contact"
-                    android:textColor="@color/color_text_ii" />
+                    android:textColor="@color/app_theme_color" />
             </RelativeLayout>
 
             <View
@@ -482,14 +482,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/base_color_white">
+        android:background="@color/tab_bar_color">
 
         <TextView
             android:id="@+id/tv_title_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:drawableLeft="@drawable/icon_arrow_left_white"
             android:paddingLeft="10dp"
             android:paddingRight="30dp" />
 
@@ -502,29 +502,9 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/order_input"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="18sp" />
 
-        <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="14dp"
-            android:scaleType="center"
-            android:src="@drawable/icon_share" />
-
-        <ImageView
-            android:id="@+id/iv_location"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="35dp"
-            android:paddingLeft="32dp"
-            android:paddingRight="20dp"
-            android:scaleType="center"
-            android:src="@drawable/icon_collection" />
 
         <TextView
             android:id="@+id/tv_copy_guide"

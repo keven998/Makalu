@@ -32,13 +32,10 @@ import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.common.widget.TagView.Tag;
-import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -55,7 +52,6 @@ public class GoodsMainFragment extends PeachBaseFragment {
     ArrayList<String> picList = new ArrayList<>();
     DisplayImageOptions options;
     ArrayList<ArrayList<String>> data = new ArrayList<>();
-    private final List<Tag> mTags = new ArrayList<Tag>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +76,6 @@ public class GoodsMainFragment extends PeachBaseFragment {
         dotView = (DotView) headView.findViewById(R.id.dot_view);
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
         listView.addHeaderView(headView);
-        initData();
         getData();
         getListData();
 
@@ -369,9 +364,6 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
                 viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getPrice() * 10) / 10))));
                 ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, options);
-                viewHolder.goodsTag.removeAllViews();
-                viewHolder.goodsTag.setmTagViewResId(R.layout.goods_tag);
-                viewHolder.goodsTag.setTags(mTags);
                 viewHolder.container.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -388,6 +380,9 @@ public class GoodsMainFragment extends PeachBaseFragment {
         public View getHeaderView(int section, View convertView, ViewGroup parent) {
             convertView = View.inflate(mContex, R.layout.item_goods_section, null);
             TextView tv = (TextView) convertView.findViewById(R.id.tv_goods_section);
+//            switch (sectionName.get(section)){
+//                case ""
+//            }
             tv.setText(sectionName.get(section));
             return convertView;
         }
@@ -437,34 +432,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
             TextView tvGoodsCurrentPrice;
             @InjectView(R.id.tv_shop_name)
             TextView tvShopName;
-            @InjectView(R.id.goods_tag)
-            TagListView goodsTag;
             @InjectView(R.id.fl_container)
             FrameLayout container;
 
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);
             }
-        }
-    }
-
-    private void initData() {
-        for (int i = 0; i < 3; i++) {
-            data.add(new ArrayList<String>());
-            for (int j = 0; j < 2; j++) {
-                data.get(i).add(String.valueOf(j));
-            }
-        }
-
-        int lastColor = new Random().nextInt(4);
-        for (int i = 0; i < 3; i++) {
-            Tag tag = new Tag();
-            tag.setTitle("服务" + i);
-            tag.setId(i);
-            //  tag.setBackgroundResId();
-            tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
-            tag.setTextColor(R.color.app_theme_color);
-            mTags.add(tag);
         }
     }
 }

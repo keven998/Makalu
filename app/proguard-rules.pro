@@ -17,20 +17,29 @@
 #}
 
 #AutoScrollViewPager
+
+-keep class com.alipay.android.app.IAlixPay{*;}
+-keep class com.alipay.android.app.IAlixPay$Stub{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
+-keep class com.alipay.sdk.app.PayTask{ public *;}
+-keep class com.alipay.sdk.app.AuthTask{ public *;}
+
+
 -keep class cn.trinea.android.** { *; }
 -keepclassmembers class cn.trinea.android.** { *; }
 -dontwarn cn.trinea.android.**
 
 
--dontwarn com.igexin.**
--keep class com.igexin.**{*;}
--dontwarn rx.internal.**
--dontwarn com.squareup.**
--dontwarn com.lv.**
--dontwarn com.amap.api.**
--dontwarn com.alibaba.fastjson.**
--dontwarn butterknife.internal.**
--dontwarn okio.**
+#-dontwarn class com.igexin.**
+#-dontwarn class com.igexin.**{*;}
+#-dontwarn class rx.internal.**
+#-keep class com.squareup.**
+#-dontwarn class com.lv.**
+#-keep class com.amap.api.**
+#-dontwarn class com.alibaba.fastjson.**
+#-dontwarn class butterknife.internal.**
+#-dontwarn class okio.**
 -keep class org.lucasr.twowayview.** { *; }
 -keep class com.baidu.** { *; }
 -keep class vi.com.gdi.bgl.android.**{*;}
@@ -58,8 +67,8 @@
 #-keep class com.google.gson.stream.** { *; }
 
 # Application classes that will be serialized/deserialized over Gson
--keep class com.aizou.lxp.bean.** { *; }
--keep class com.aizou.lxp.common.gson.** { *; }
+-keep class com.xuejian.client.lxp.bean.** { *; }
+-keep class com.xuejian.client.lxp.common.gson.** { *; }
 
 
 
@@ -165,7 +174,7 @@
 -keep class im.yixin.sdk.api.YXMessage {*;}
 -keep class im.yixin.sdk.api.** implements im.yixin.sdk.api.YXMessage$YXMessageData{*;}
 
--keep public class com.aizou.lvxingpai.R$*{
+-keep public class com.xuejian.client.lxp.R$*{
     public static final int *;
 }
 

@@ -464,7 +464,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 if (bean != null) {
                     etFirstName.setText(bean.getTraveller().getGivenName());
                     etLastName.setText(bean.getTraveller().getSurname());
-                    etTel.setText(bean.getTraveller().getTel().getDialCode() + "-" + bean.getTraveller().getTel().getNumber());
+                    etTel.setText(String.valueOf(bean.getTraveller().getTel().getNumber()));
                 }
             } else if (requestCode == EDIT_USER_LIST) {
                 ArrayList<TravellerBean> list = data.getParcelableArrayListExtra("passenger");

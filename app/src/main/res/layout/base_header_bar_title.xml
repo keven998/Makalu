@@ -8,7 +8,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_bar_height"
-    android:background="@color/white">
+    android:background="@color/tab_bar_color">
 
     <RelativeLayout
         android:id="@+id/ly_title_bar_left"
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:drawableLeft="@drawable/icon_arrow_left_white"
             android:duplicateParentState="true"
             android:gravity="center_vertical"
             android:minWidth="60dp"
@@ -46,7 +46,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="18sp" />
     </RelativeLayout>
 
@@ -70,7 +70,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="8dp"
             android:singleLine="true"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="15sp" />
 
     </RelativeLayout>

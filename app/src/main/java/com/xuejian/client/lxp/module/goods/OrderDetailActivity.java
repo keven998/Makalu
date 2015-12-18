@@ -354,7 +354,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                Toast.makeText(OrderDetailActivity.this, "取消失败", Toast.LENGTH_LONG).show();
             }
 
             @Override

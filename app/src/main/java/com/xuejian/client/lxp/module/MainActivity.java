@@ -86,16 +86,16 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, DestinationFragment.class, GoodsMainFragment.class, MyInfoFragment.class};
+    private Class fragmentArray[] = {GoodsMainFragment.class, DestinationFragment.class, TalkFragment.class, MyInfoFragment.class};
     //TalentLocFragement
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
+    private int mImageViewArray[] = { R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home,R.drawable.checker_tab_home_user};
     // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
-    private String[] tabTitle = {"消息", "目的地", "搜索", "我的"};
+    private String[] tabTitle = {"首页", "目的地", "消息", "我的"};
     private TextView unreadMsg;
     private TextView regNotice;
     //Tab选项Tag
-    private String mTagArray[] = {"Talk", "Travel", "Soso", "My"};
+    private String mTagArray[] = {"Soso", "Travel",  "Talk", "My"};
 
     private boolean FromBounce, ring, vib;
     private Vibrator vibrator;
@@ -355,7 +355,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
-                if (s.equals(mTagArray[0])) {
+                if (s.equals(mTagArray[2])) {
                     if (AccountManager.getInstance().getLoginAccount(MainActivity.this) == null) {
                         mTabHost.setCurrentTab(1);
                         Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -375,12 +375,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             mTabHost.setCurrentTab(0);
         } else {
-            mTabHost.setCurrentTab(1);
+            mTabHost.setCurrentTab(0);
         }
     }
 
     public void setTabForLogout() {
-        mTabHost.setCurrentTab(1);
+        mTabHost.setCurrentTab(0);
     }
 
     /**
@@ -389,7 +389,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private View getTabItemView(int index) {
         View view = layoutInflater.inflate(R.layout.tab_item_view, null);
         //  view.setBackgroundResource(colors[index]);
-        if (index == 0) {
+        if (index == 2) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
 //        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false) && index == 3) {
@@ -397,10 +397,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //            regNotice.setTextColor(Color.RED);
 //            regNotice.setVisibility(View.VISIBLE);
 //        }
-
-        if (index == 3) {
-            view.findViewById(R.id.line_inter).setVisibility(View.GONE);
-        }
         // Drawable myImage = (Drawable)getResources().getDrawable(mImageViewArray[index], );
         // myImage.setBounds(1, 1, 100, 100);
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);

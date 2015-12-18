@@ -5,7 +5,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/white">
+        android:background="@color/tab_bar_color">
 
         <ImageView
             android:id="@+id/iv_nav_back"
@@ -14,7 +14,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="30dp"
             android:scaleType="center"
-            android:src="@drawable/selector_ic_nav_back" />
+            android:src="@drawable/icon_arrow_left_white" />
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -24,7 +24,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/order_detail"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="18sp" />
 
     </RelativeLayout>
