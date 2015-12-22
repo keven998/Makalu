@@ -7,6 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,7 +37,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
-import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 
@@ -313,16 +316,23 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
             ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
             holder.tvGoodsName.setText(bean.getTitle());
-            holder.tvGoodsCurrentPrice.setText("¥" + CommonUtils.getPriceString(bean.getPrice()));
+
+            SpannableString string = new SpannableString("起");
+            string.setSpan(new AbsoluteSizeSpan(12, true), 0, 1,
+                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            SpannableStringBuilder spb = new SpannableStringBuilder();
+            spb.append("¥" + CommonUtils.getPriceString(bean.getPrice())).append(string);
+            holder.tvGoodsCurrentPrice.setText(spb);
+
             holder.tvGoodsPrice.setText("¥" +CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
             holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
             holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
             holder.tvStoreName.setText(bean.getSeller().getName());
-            holder.tvGoodsService.removeAllViews();
-            holder.tvGoodsService.setmTagViewResId(R.layout.goods_tag);
-            holder.tvGoodsService.addTags(mTags);
+//            holder.tvGoodsService.removeAllViews();
+//            holder.tvGoodsService.setmTagViewResId(R.layout.goods_tag);
+//            holder.tvGoodsService.addTags(mTags);
             return convertView;
         }
 
@@ -338,8 +348,8 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             ImageView ivGoods;
             @InjectView(R.id.tv_goods_name)
             TextView tvGoodsName;
-            @InjectView(R.id.tv_goods_service)
-            TagListView tvGoodsService;
+//            @InjectView(R.id.tv_goods_service)
+//            TagListView tvGoodsService;
             @InjectView(R.id.tv_goods_comment)
             TextView tvGoodsComment;
             @InjectView(R.id.tv_goods_sales)

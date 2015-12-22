@@ -6,19 +6,25 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
-import com.aizou.core.widget.prv.PullToRefreshBase;
-import com.aizou.core.widget.prv.PullToRefreshListView;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -29,15 +35,11 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.widget.TagView.Tag;
-import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,9 +56,9 @@ public class GoodsList extends PeachBaseActivity {
     @InjectView(R.id.sort_spinner)
     NiceSpinner sortSpinner;
     @InjectView(R.id.lv_poi_list)
-    PullToRefreshListView goodsList;
+    XRecyclerView goodsList;
     @InjectView(R.id.iv_toTop)
-    ImageView toTop;
+    FloatingActionButton toTop;
     @InjectView(R.id.tv_list_title)
     TextView tvTitle;
     @InjectView(R.id.ll_spinner)
@@ -64,24 +66,25 @@ public class GoodsList extends PeachBaseActivity {
     @InjectView(R.id.iv_banner)
     ImageView iv_banner;
     GoodsListAdapter adapter;
-    private int[] lebelColors = new int[]{
-            R.drawable.all_light_green_label,
-            R.drawable.all_light_red_label,
-            R.drawable.all_light_perple_label,
-            R.drawable.all_light_blue_label,
-            R.drawable.all_light_yellow_label
-    };
-    private final List<Tag> mTags = new ArrayList<Tag>();
+//    private int[] lebelColors = new int[]{
+//            R.drawable.all_light_green_label,
+//            R.drawable.all_light_red_label,
+//            R.drawable.all_light_perple_label,
+//            R.drawable.all_light_blue_label,
+//            R.drawable.all_light_yellow_label
+//    };
+    //   private final List<Tag> mTags = new ArrayList<Tag>();
 
-    private String[] sortType = new String[]{"推荐排序","销量最高","价格最低","价格最高"};
-    private String[] sortValue = new String[]{"","salesVolume","price","price"};
-    private String[] sort = new String[]{"","desc","asc","desc"};
+    private String[] sortType = new String[]{"推荐排序", "销量最高", "价格最低", "价格最高"};
+    private String[] sortValue = new String[]{"", "salesVolume", "price", "price"};
+    private String[] sort = new String[]{"", "desc", "asc", "desc"};
 
     private String currentType;
     private static final int PAGE_SIZE = 15;
-    private static int COUNT =15 ;
-    private static int START ;
+    private static int COUNT = 15;
+    private static int START;
     String locId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,54 +93,57 @@ public class GoodsList extends PeachBaseActivity {
         final Handler handler = new Handler();
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
-        if (!TextUtils.isEmpty(title))tvTitle.setText(title);
-        goodsList.setPullLoadEnabled(false);
-        goodsList.setPullRefreshEnabled(false);
-        goodsList.setScrollLoadEnabled(true);
-        goodsList.setHasMoreData(false);
+        if (!TextUtils.isEmpty(title)) tvTitle.setText(title);
+
+
         adapter = new GoodsListAdapter(mContext);
-        goodsList.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        goodsList.setPullRefreshEnabled(false);
+        goodsList.setLoadingMoreEnabled(true);
+
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View view, int position, long id) {
                 Intent intent = new Intent();
                 intent.setClass(GoodsList.this, ReactMainPage.class);
-                intent.putExtra("commodityId",id);
+                intent.putExtra("commodityId", id);
                 startActivity(intent);
             }
         });
 
-        goodsList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        goodsList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onRefresh() {
+
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onLoadMore() {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getData(null, locId, currentType, null, null, adapter.getCount(), COUNT, false);
+                        getData(null, locId, currentType, null, null, adapter.getItemCount(), COUNT, false);
                     }
-                },1000);
-
+                }, 1000);
             }
         });
+
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        initData();
-        goodsList.getRefreshableView().setAdapter(adapter);
+        goodsList.setLayoutManager(new LinearLayoutManager(this));
+        goodsList.setAdapter(adapter);
         toTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goodsList.getRefreshableView().setSelection(0);
+                goodsList.scrollToPosition(0);
             }
         });
         getCategory(locId);
-        getData(null,locId,null,null,null,0,15,true);
+        getData(null, locId, null, null, null, 0, 15, true);
+
     }
 
     private void getCategory(String id) {
@@ -162,41 +168,42 @@ public class GoodsList extends PeachBaseActivity {
         });
     }
 
-    private void initData() {
-        int lastColor = new Random().nextInt(4);
-        for (int i = 0; i < 3; i++) {
-            Tag tag = new Tag();
-            tag.setTitle("服务" + i);
-            tag.setId(i);
-            tag.setBackgroundResId(lebelColors[lastColor]);
-            //   tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
-            tag.setTextColor(R.color.white);
-            mTags.add(tag);
-            lastColor = getNextColor(lastColor);
-        }
-    }
+//    private void initData() {
+//        int lastColor = new Random().nextInt(4);
+//        for (int i = 0; i < 3; i++) {
+//            Tag tag = new Tag();
+//            tag.setTitle("服务" + i);
+//            tag.setId(i);
+//            tag.setBackgroundResId(lebelColors[lastColor]);
+//            //   tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+//            tag.setTextColor(R.color.white);
+//            mTags.add(tag);
+//            lastColor = getNextColor(lastColor);
+//        }
+//    }
 
 
-    public void getData(String sellerId,String localityId,String category,String sortBy,String sort, final int start,int count, final boolean fresh) {
+    public void getData(String sellerId, String localityId, String category, String sortBy, String sort, final int start, int count, final boolean fresh) {
 
-        TravelApi.getCommodityList(sellerId, localityId, category, sortBy, sort,String.valueOf(start) ,String.valueOf(count),new HttpCallBack<String>() {
+        TravelApi.getCommodityList(sellerId, localityId, category, sortBy, sort, String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
 
-                if (fresh){
+                if (fresh) {
                     adapter.getDataList().clear();
                 }
                 START = list.result.size();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
-                goodsList.onPullUpRefreshComplete();
-                 if (list.result.size()>= COUNT){
-                     goodsList.setHasMoreData(true);
-                 }else {
-                     goodsList.setHasMoreData(false);
-                 }
+                goodsList.loadMoreComplete();
+                if (list.result.size() >= COUNT) {
+                    // goodsList.setHasMoreData(true);
+                } else {
+                    goodsList.noMoreLoading();
+                    goodsList.setLoadingMoreEnabled(false);
+                }
             }
 
             @Override
@@ -219,7 +226,7 @@ public class GoodsList extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentType = bean.category.get(position);
-                getData(null, locId, currentType, null,null, 0, 15, true);
+                getData(null, locId, currentType, null, null, 0, 15, true);
                 typeSpinner.dismissDropDown();
             }
 
@@ -255,12 +262,11 @@ public class GoodsList extends PeachBaseActivity {
 //        });
 
 
-
         sortSpinner.attachDataSource(Arrays.asList(sortType));
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getData(null, locId, currentType, sortValue[position],sort[position], 0, 15, true);
+                getData(null, locId, currentType, sortValue[position], sort[position], 0, 15, true);
                 sortSpinner.dismissDropDown();
             }
 
@@ -295,22 +301,20 @@ public class GoodsList extends PeachBaseActivity {
     }
 
 
-    public int getNextColor(int currentcolor) {
-        Random random = new Random();
-        int nextValue = random.nextInt(4);
-        if (nextValue == 0) {
-            nextValue++;
-        }
-        return (nextValue + currentcolor) % 5;
-    }
+//    public int getNextColor(int currentcolor) {
+//        Random random = new Random();
+//        int nextValue = random.nextInt(4);
+//        if (nextValue == 0) {
+//            nextValue++;
+//        }
+//        return (nextValue + currentcolor) % 5;
+//    }
 
-
-    private class GoodsListAdapter extends BaseAdapter {
+    private class GoodsListAdapter extends RecyclerView.Adapter<ViewHolder> {
         private Context mContext;
         private ArrayList<SimpleCommodityBean> mDataList;
-
         private DisplayImageOptions picOptions;
-
+        OnItemClickListener listener;
         public GoodsListAdapter(Context context) {
             mContext = context;
             mDataList = new ArrayList<SimpleCommodityBean>();
@@ -324,79 +328,89 @@ public class GoodsList extends PeachBaseActivity {
                     .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
+
         public ArrayList<SimpleCommodityBean> getDataList() {
             return mDataList;
         }
 
-        @Override
-        public int getCount() {
-            return mDataList.size();
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            this.listener = listener;
         }
-
-        @Override
         public Object getItem(int position) {
             return mDataList.get(position);
         }
 
         @Override
-        public long getItemId(int position) {
-            return mDataList.get(position).getCommodityId();
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_goods_list, parent, false);
+            return new ViewHolder(view);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = View.inflate(mContext, R.layout.item_goods_list, null);
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
+        public void onBindViewHolder(ViewHolder holder, final int position) {
+            final SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
             ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
             holder.tvGoodsName.setText(bean.getTitle());
-            holder.tvGoodsCurrentPrice.setText("¥" + CommonUtils.getPriceString(bean.getPrice()));
-            holder.tvGoodsPrice.setText("¥" +CommonUtils.getPriceString(bean.getMarketPrice()));
+
+            SpannableString string = new SpannableString("起");
+            string.setSpan(new AbsoluteSizeSpan(12, true), 0, 1,
+                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            SpannableStringBuilder spb = new SpannableStringBuilder();
+            spb.append("¥" + CommonUtils.getPriceString(bean.getPrice())).append(string);
+            holder.tvGoodsCurrentPrice.setText(spb);
+
+            holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
             holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
             holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
             holder.tvStoreName.setText(bean.getSeller().getName());
-            holder.tvGoodsService.removeAllViews();
-            holder.tvGoodsService.setmTagViewResId(R.layout.goods_tag);
-            holder.tvGoodsService.addTags(mTags);
-            return convertView;
+            holder.llContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener!=null){
+                        listener.onItemClick(v,position,bean.getCommodityId());
+                    }
+                }
+            });
         }
 
-        /**
-         * This class contains all butterknife-injected Views & Layouts from layout file 'item_goods_list.xml'
-         * for easy to all layout elements.
-         *
-         * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
-         */
+//        @Override
+//        public long getItemId(int position) {
+//            return mDataList.get(position).getCommodityId();
+//        }
+
+        @Override
+        public int getItemCount() {
+            return mDataList.size();
+        }
+
     }
+    interface OnItemClickListener {
+        void onItemClick(View view, int position, long id);
 
-    static class ViewHolder {
-        @InjectView(R.id.iv_poi_img)
-        ImageView ivGoods;
-        @InjectView(R.id.tv_goods_name)
-        TextView tvGoodsName;
-        @InjectView(R.id.tv_goods_service)
-        TagListView tvGoodsService;
-        @InjectView(R.id.tv_goods_comment)
-        TextView tvGoodsComment;
-        @InjectView(R.id.tv_goods_sales)
-        TextView tvGoodsSales;
-        @InjectView(R.id.tv_goods_current_price)
-        TextView tvGoodsCurrentPrice;
-        @InjectView(R.id.tv_goods_price)
-        TextView tvGoodsPrice;
-        @InjectView(R.id.tv_store_name)
-        TextView tvStoreName;
+    }
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public final ImageView ivGoods;
+        public final TextView tvGoodsName;
+        public final TextView tvGoodsComment;
+        public final TextView tvGoodsSales;
+        public final TextView tvGoodsCurrentPrice;
+        public final TextView tvGoodsPrice;
+        public final TextView tvStoreName;
+        public final LinearLayout llContainer;
 
-        ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            tvStoreName = (TextView) itemView.findViewById(R.id.tv_store_name);
+            tvGoodsPrice = (TextView) itemView.findViewById(R.id.tv_goods_price);
+            tvGoodsCurrentPrice = (TextView) itemView.findViewById(R.id.tv_goods_current_price);
+            tvGoodsSales = (TextView) itemView.findViewById(R.id.tv_goods_sales);
+            tvGoodsComment = (TextView) itemView.findViewById(R.id.tv_goods_comment);
+            tvGoodsName = (TextView) itemView.findViewById(R.id.tv_goods_name);
+            ivGoods = (ImageView) itemView.findViewById(R.id.iv_poi_img);
+            llContainer = (LinearLayout) itemView.findViewById(R.id.ll_container);
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
-import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
-import com.marshalchen.ultimaterecyclerview.uiUtils.BasicGridLayoutManager;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -31,27 +29,25 @@ public class StoreDetailActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
-        findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        UltimateRecyclerView ultimateRecyclerView = (UltimateRecyclerView) findViewById(R.id.ul_recyclerView);
-        ultimateRecyclerView.setHasFixedSize(false);
+//        findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+        final XRecyclerView recyclerView = (XRecyclerView) findViewById(R.id.ul_recyclerView);
         Adapter adapter= new Adapter(this);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             adapter.getList().add("a");
         }
-        ultimateRecyclerView.setLayoutManager(new BasicGridLayoutManager(this,2,adapter));
-        ultimateRecyclerView.setAdapter(adapter);
-
-        View view = getLayoutInflater().inflate(R.layout.head_store_detail,ultimateRecyclerView,false);
-        ultimateRecyclerView.setNormalHeader(view);
-
+        recyclerView.setPullRefreshEnabled(false);
+        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        View view = getLayoutInflater().inflate(R.layout.head_store_detail,null);
+        recyclerView.addHeaderView(view);
+        recyclerView.setAdapter(adapter);
     }
 
-    public class Adapter extends UltimateViewAdapter<Adapter.ViewHolder> {
+    public class Adapter extends  RecyclerView.Adapter<Adapter.ViewHolder> {
 
         private ArrayList<String> list;
         private Context mContext;
@@ -66,7 +62,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
             return list;
         }
 
-        public class ViewHolder extends UltimateRecyclerviewViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             public final TextView tvCurrentPrice;
             public final TextView tvPrice;
             public final TextView tvSales;
@@ -83,40 +79,22 @@ public class StoreDetailActivity extends PeachBaseActivity {
             }
         }
 
-        @Override
-        public ViewHolder getViewHolder(View view) {
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_goods_grid, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public int getAdapterItemCount() {
-            return list.size();
-        }
-
-        @Override
-        public long generateHeaderId(int position) {
-            return 0;
-        }
-
         public Object getItem(int pos) {
             return list.get(pos);
         }
 
 
         @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_goods_grid, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
 
-            if (VIEW_TYPES.HEADER == getItemViewType(position)) {
-                onBindHeaderViewHolder(holder, position);
-            } else if (VIEW_TYPES.NORMAL == getItemViewType(position)) {
-                Object o = getItem(hasHeaderView() ? position - 1 : position);
+                Object o = getItem(position);
                 ViewGroup.LayoutParams layoutParams = holder.mImageView.getLayoutParams();
                 int w1 = w/2-20;
                 int h1 = w1* 2 / 3;
@@ -130,18 +108,11 @@ public class StoreDetailActivity extends PeachBaseActivity {
                 holder.tvPrice.getPaint().setAntiAlias(true);
                 holder.tvCurrentPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(155.34 * 10) / 10))));
                 holder.tvGoodsName.setText("港澳台7日游");
-            }
         }
 
         @Override
-        public ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-            return null;
+        public int getItemCount() {
+            return list.size();
         }
-
-        @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        }
-
     }
 }

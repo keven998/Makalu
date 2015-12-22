@@ -30,7 +30,7 @@ public class ScrollingFabBehavior extends CoordinatorLayout.Behavior<FloatingAct
         if (dependency instanceof AppBarLayout) {
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
             int fabBottomMargin = lp.bottomMargin;
-            int distanceToScroll = fab.getHeight() + fabBottomMargin;
+            int distanceToScroll = fab.getHeight() + fabBottomMargin+20;
             float ratio = (float)dependency.getY()/(float)toolbarHeight;
             fab.setTranslationY(-distanceToScroll * ratio);
         }

@@ -37,68 +37,73 @@
         f:orientation="horizontal"
         f:verticalSpace="4dp" />
 
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_line"/>
+        android:background="@color/color_line" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="3">
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:drawableLeft="@drawable/icon_authorized"
+                android:drawablePadding="5dp"
                 android:text="认证商家"
-                android:layout_gravity="center"
-                android:textSize="14sp"
                 android:textColor="@color/color_text_ii"
-                android:drawablePadding="5dp"
-                />
+                android:textSize="14sp" />
         </FrameLayout>
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:drawableLeft="@drawable/icon_true"
-                android:text="如实描述"
-                android:layout_gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/color_text_ii"
                 android:drawablePadding="5dp"
-                />
+                android:text="如实描述"
+                android:textColor="@color/color_text_ii"
+                android:textSize="14sp" />
         </FrameLayout>
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/icon_allday"
-                android:text="24小时内响应"
                 android:layout_gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/color_text_ii"
+                android:drawableLeft="@drawable/icon_allday"
                 android:drawablePadding="5dp"
-                />
+                android:text="24小时内响应"
+                android:textColor="@color/color_text_ii"
+                android:textSize="14sp" />
         </FrameLayout>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/app_backgroud"/>
+        android:background="@color/app_backgroud" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        >
+        android:layout_height="50dp">
 
         <ImageView
             android:layout_width="35dp"
@@ -113,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:textSize="17sp"
-            android:text="在售商品" />
+            android:text="在售商品"
+            android:textSize="17sp" />
     </LinearLayout>
 </LinearLayout>
