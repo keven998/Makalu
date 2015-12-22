@@ -95,6 +95,7 @@
     </ScrollView>
 
     <TextView
+        android:id="@+id/tv_submit"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_gravity="bottom"

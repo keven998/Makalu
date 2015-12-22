@@ -129,6 +129,7 @@ dependencies {
     compile 'com.squareup:android-times-square:1.6.4@aar'
     //compile 'com.jakewharton.scalpel:scalpel:1.1.2'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.3.18'
+    compile 'com.jcodecraeer:xrecyclerview:1.2.6'
     compile files('libs/umeng-analytics-v5.6.3.jar')
     compile files('libs/rxjava-math-1.0.0.jar')
 }

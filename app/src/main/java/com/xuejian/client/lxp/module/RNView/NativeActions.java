@@ -11,6 +11,7 @@ import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.module.goods.OrderCreateActivity;
+import com.xuejian.client.lxp.module.goods.StoreDetailActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
@@ -40,7 +41,7 @@ public class NativeActions extends ReactContextBaseJavaModule {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (name) {
             case "Store":
-                intent.setClass(reactContext, TestActivity.class);
+                intent.setClass(reactContext, StoreDetailActivity.class);
                 reactContext.startActivity(intent);
                 break;
             case "Order":

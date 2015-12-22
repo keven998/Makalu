@@ -97,4 +97,5 @@
         <attr name="arrowTint" format="color" />
         <attr name="hideArrow" format="boolean" />
     </declare-styleable>
+
 </resources>

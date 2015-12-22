@@ -164,7 +164,7 @@ public class IMClient {
         if (Config.isDebug) {
             Log.i(Config.TAG, "ACK  频率" + frequency);
         }
-        if (frequency == 0) frequency = 60 * 1000;
+        if (frequency == 0) frequency = 60 * 2 * 1000;
         if (isRunning) return;
         isRunning = true;
         timer = new Timer();

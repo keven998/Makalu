@@ -553,6 +553,9 @@
             android:name=".module.goods.DrawbackActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".module.goods.StoreDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true" >

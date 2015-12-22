@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.pay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
+import com.xuejian.client.lxp.module.goods.OrderListActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -56,6 +58,8 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case ALI_PAY: {
+                    Intent intent = new Intent(mActivity.get(), OrderListActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     PayResult payResult = new PayResult((String) msg.obj);
 
                     // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
@@ -78,6 +82,11 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
+                    if (mActivity.get()!=null){
+                        mActivity.get().startActivity(intent);
+                        mActivity.get().finish();
+                    }
+
                     break;
                 }
                 case ALI_PAY_CHECK: {
@@ -204,6 +213,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         payReq.sign = payInfo.getSign();
         msgApi.registerApp(ShareUtils.PlatfromSetting.WX_APPID);
         msgApi.sendReq(payReq);
+        finish();
 //        PayReq payReq = new PayReq();
 //            payReq.appId = ShareUtils.PlatfromSetting.WX_APPID;
 //            payReq.partnerId = "1278401701";

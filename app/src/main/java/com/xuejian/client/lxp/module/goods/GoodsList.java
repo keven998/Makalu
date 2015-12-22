@@ -91,8 +91,6 @@ public class GoodsList extends PeachBaseActivity {
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
         if (!TextUtils.isEmpty(title))tvTitle.setText(title);
-
-
         goodsList.setPullLoadEnabled(false);
         goodsList.setPullRefreshEnabled(false);
         goodsList.setScrollLoadEnabled(true);
@@ -384,8 +382,6 @@ public class GoodsList extends PeachBaseActivity {
         ImageView ivGoods;
         @InjectView(R.id.tv_goods_name)
         TextView tvGoodsName;
-        @InjectView(R.id.tv_goods_detail)
-        TextView tvGoodsDetail;
         @InjectView(R.id.tv_goods_service)
         TagListView tvGoodsService;
         @InjectView(R.id.tv_goods_comment)

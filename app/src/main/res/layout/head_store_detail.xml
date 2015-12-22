@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:f="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="5dp"
+        android:drawableLeft="@drawable/icon_shop"
+        android:drawablePadding="7dp"
+        android:text="店名"
+        android:textColor="@color/color_text_ii"
+        android:textSize="17sp" />
+
+    <com.xuejian.client.lxp.common.widget.TagView.TagListView
+        android:id="@+id/tag_lang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="5dp"
+        f:horizontalSpace="6dp"
+        f:orientation="horizontal"
+        f:verticalSpace="4dp" />
+
+    <com.xuejian.client.lxp.common.widget.TagView.TagListView
+        android:id="@+id/tag_goods_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="5dp"
+        f:horizontalSpace="6dp"
+        f:orientation="horizontal"
+        f:verticalSpace="4dp" />
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3">
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/icon_authorized"
+                android:text="认证商家"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/color_text_ii"
+                android:drawablePadding="5dp"
+                />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/icon_true"
+                android:text="如实描述"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/color_text_ii"
+                android:drawablePadding="5dp"
+                />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/icon_allday"
+                android:text="24小时内响应"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/color_text_ii"
+                android:drawablePadding="5dp"
+                />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/app_backgroud"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_store" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:textSize="17sp"
+            android:text="在售商品" />
+    </LinearLayout>
+</LinearLayout>

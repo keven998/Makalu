@@ -280,7 +280,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ImageView imageView = new ImageView(mContext);
+            final ImageView imageView = new ImageView(mContext);
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
             imageView.setLayoutParams(layoutParams);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -292,6 +292,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 ImageLoader.getInstance().displayImage("", imageView, UILUtils.getDefaultOption());
             }
             container.addView(imageView, 0);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             return imageView;
         }
 

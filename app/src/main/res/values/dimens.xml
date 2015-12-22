@@ -34,4 +34,8 @@
     <dimen name="three_grid_unit">24dp</dimen>
 
     <dimen name="one_and_a_half_grid_unit">12dp</dimen>
+    <dimen name="goods_main_page_frame_size">185dp</dimen>
+    <dimen name="goods_main_page_img_size">150dp</dimen>
+    <dimen name="goods_main_page_price_size">70dp</dimen>
+    <dimen name="goods_main_page_price_text_size">35dp</dimen>
 </resources>

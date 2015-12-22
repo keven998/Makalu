@@ -8,12 +8,12 @@
     <FrameLayout
         android:id="@+id/fl_container"
         android:layout_width="match_parent"
-        android:layout_height="165dp">
+        android:layout_height="@dimen/goods_main_page_frame_size">
 
         <ImageView
             android:id="@+id/iv_goods_img"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/goods_main_page_img_size"
             android:scaleType="centerCrop" />
 
         <!--<ImageView-->
@@ -34,25 +34,25 @@
             android:textSize="15sp" />
 
         <FrameLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/goods_main_page_price_size"
+            android:layout_height="@dimen/goods_main_page_price_size"
             android:layout_gravity="bottom|right"
             android:layout_marginRight="10dp">
 
             <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="@dimen/goods_main_page_price_size"
+                android:layout_height="@dimen/goods_main_page_price_size"
                 android:src="@drawable/icon_price" />
 
             <LinearLayout
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="@dimen/goods_main_page_price_size"
+                android:layout_height="@dimen/goods_main_page_price_size"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_goods_price"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="@dimen/goods_main_page_price_text_size"
                     android:layout_gravity="center_horizontal|top"
                     android:gravity="center_horizontal|bottom"
                     android:textSize="13sp" />
@@ -60,7 +60,7 @@
                 <TextView
                     android:id="@+id/tv_goods_current_price"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="@dimen/goods_main_page_price_text_size"
                     android:layout_gravity="center_horizontal|bottom"
                     android:gravity="center_horizontal|top"
                     android:textColor="@color/base_color_white"
@@ -77,7 +77,7 @@
             android:layout_gravity="bottom|left"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="7dp"
-            android:layout_marginRight="75dp"
+            android:layout_marginRight="@dimen/goods_main_page_price_size"
             android:drawablePadding="2dp"
             android:singleLine="true"
             android:ellipsize="end"

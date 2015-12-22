@@ -338,8 +338,6 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             ImageView ivGoods;
             @InjectView(R.id.tv_goods_name)
             TextView tvGoodsName;
-            @InjectView(R.id.tv_goods_detail)
-            TextView tvGoodsDetail;
             @InjectView(R.id.tv_goods_service)
             TagListView tvGoodsService;
             @InjectView(R.id.tv_goods_comment)

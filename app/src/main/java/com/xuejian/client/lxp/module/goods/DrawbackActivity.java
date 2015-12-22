@@ -4,13 +4,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.common.api.TravelApi;
 
 import java.util.ArrayList;
 
@@ -24,9 +28,36 @@ public class DrawbackActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawback);
+        final long orderId = getIntent().getLongExtra("orderId",-1);
         ListView reasonList = (ListView) findViewById(R.id.lv_reason);
+        reasonList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         reasonList.setAdapter(new UserAdapter(mContext, true));
         setListViewHeightBasedOnChildren(reasonList);
+        findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refundOrder(orderId);
+            }
+        });
+    }
+
+    private void refundOrder(long orderId) {
+        TravelApi.editOrderStatus(orderId, "refund", null, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                Toast.makeText(DrawbackActivity.this,"退款申请已提交",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     public class UserAdapter extends BaseAdapter {

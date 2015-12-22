@@ -122,8 +122,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 showPayActionDialog();
                 break;
             case R.id.iv_nav_back:
-                Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
-                startActivity(tv_title_back);
+//                Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
+//                startActivity(tv_title_back);
                 finish();
                 break;
             case R.id.tv_cancel_action:
@@ -168,6 +168,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void onClick(View v) {
                         intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
+                        intent.putExtra("orderId",bean.getOrderId());
                         startActivity(intent);
                     }
                 });
@@ -180,6 +181,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void onClick(View v) {
                         intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
+                        intent.putExtra("orderId",bean.getOrderId());
                         startActivity(intent);
                     }
                 });

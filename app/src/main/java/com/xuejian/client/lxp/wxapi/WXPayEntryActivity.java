@@ -2,10 +2,10 @@ package com.xuejian.client.lxp.wxapi;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
@@ -14,6 +14,7 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
+import com.xuejian.client.lxp.module.goods.OrderListActivity;
 
 public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 	
@@ -45,12 +46,16 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 	@Override
 	public void onResp(BaseResp resp) {
 		Log.d(TAG, "onPayFinish, errCode = " + resp.errCode);
-
 		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("交易结果");
-			builder.setMessage(resp.errStr +";code=" + String.valueOf(resp.errCode));
-			builder.show();
+			Intent intent = new Intent(WXPayEntryActivity.this, OrderListActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			if (resp.errCode==0){
+				Toast.makeText(WXPayEntryActivity.this,"支付成功",Toast.LENGTH_SHORT).show();
+			}else {
+				Toast.makeText(WXPayEntryActivity.this,"支付失败",Toast.LENGTH_SHORT).show();
+			}
+			startActivity(intent);
+			finish();
 		}
 	}
 }
