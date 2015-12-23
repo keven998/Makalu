@@ -42,6 +42,7 @@ public class NativeActions extends ReactContextBaseJavaModule {
         switch (name) {
             case "Store":
                 intent.setClass(reactContext, StoreDetailActivity.class);
+                intent.putExtra("sellerId",id);
                 reactContext.startActivity(intent);
                 break;
             case "Order":

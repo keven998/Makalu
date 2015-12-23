@@ -65,7 +65,6 @@ public class DatePickActivity extends PeachBaseActivity {
                     setResult(RESULT_CANCELED);
                     finish();
                 }
-
             }
         });
     }

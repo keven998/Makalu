@@ -53,7 +53,7 @@ public class ShareUtils {
         TextView wxcircleTv = (TextView) contentView
                 .findViewById(R.id.tv_wxcircle);
         TextView wechatTv = (TextView) contentView.findViewById(R.id.tv_wechat);
-        TextView qzoneTv = (TextView) contentView.findViewById(R.id.tv_qzone);
+        TextView lxpTv = (TextView) contentView.findViewById(R.id.tv_lxp);
         TextView doubanTv = (TextView) contentView.findViewById(R.id.tv_douban);
         TextView sinaTv = (TextView) contentView.findViewById(R.id.tv_sina);
         TextView qqTv = (TextView) contentView.findViewById(R.id.tv_qq);
@@ -66,6 +66,13 @@ public class ShareUtils {
 //                IMUtils.onClickImShare(act);
 //            }
 //        });
+        lxpTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                IMUtils.onClickImShare(act);
+            }
+        });
         wxcircleTv.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -86,16 +93,16 @@ public class ShareUtils {
 
             }
         });
-        qzoneTv.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                //   shareRoute(SHARE_MEDIA.QZONE, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.QZONE, act, strategy);
-
-            }
-        });
+//        qzoneTv.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                //   shareRoute(SHARE_MEDIA.QZONE, act, strategy);
+//                goodsShareRoute(SHARE_MEDIA.QZONE, act, strategy);
+//
+//            }
+//        });
         doubanTv.setOnClickListener(new View.OnClickListener() {
 
             @Override

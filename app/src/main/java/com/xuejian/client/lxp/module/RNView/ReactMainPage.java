@@ -1,11 +1,11 @@
 package com.xuejian.client.lxp.module.RNView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -18,8 +18,11 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 
 import org.json.JSONException;
@@ -38,7 +41,7 @@ import java.io.OutputStream;
 public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareBackBtnHandler {
     private ReactRootView mReactRootView;
     private ReactInstanceManager mReactInstanceManager;
-
+    public SimpleCommodityBean bean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,13 +87,6 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                 finish();
             }
         });
-        ImageView iv = (ImageView) findViewById(R.id.iv_location);
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null);
-            }
-        });
     }
 
     @Override
@@ -113,16 +109,24 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 
             @Override
             public void doSuccess(String result, String method) {
+
                 try {
                     JSONObject jsonObject = new JSONObject(result);
 //                    WritableMap event = Arguments.createMap();
 //                    event.putString("result", jsonObject.getJSONObject("result").toString());
 //                    sendEvent(mReactInstanceManager.getCurrentReactContext(), "test", event);
 
+                    CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result,SimpleCommodityBean.class);
+                    bean = commodity.result;
                     Bundle bundle = new Bundle();
                     bundle.putString("result", jsonObject.getJSONObject("result").toString());
                     mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
-
+                    ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null);
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -194,6 +198,12 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
             return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IMUtils.onShareResult(mContext, bean.creteShareBean(), requestCode, resultCode, data, null);
     }
 
     private static void copyFile(InputStream paramInputStream, OutputStream paramOutputStream)

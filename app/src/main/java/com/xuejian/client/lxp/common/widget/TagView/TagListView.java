@@ -27,7 +27,7 @@ public class TagListView extends TagParentFlowLayout implements OnClickListener 
         this.mTagViewResId = mTagViewResId;
     }
 
-    private int mTagViewResId;
+     private int mTagViewResId;
     private final List<Tag> mTags = new ArrayList<Tag>();
 
     /**

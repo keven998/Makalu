@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -89,8 +90,11 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     LinearLayout llTradeAction1;
     @InjectView(R.id.tv_talk)
     TextView tvTalk;
+    @InjectView(R.id.ll_message)
+    LinearLayout llMessage;
     long orderId;
     OrderBean currentOrder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +172,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void onClick(View v) {
                         intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
-                        intent.putExtra("orderId",bean.getOrderId());
+                        intent.putExtra("orderId", bean.getOrderId());
                         startActivity(intent);
                     }
                 });
@@ -181,7 +185,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void onClick(View v) {
                         intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
-                        intent.putExtra("orderId",bean.getOrderId());
+                        intent.putExtra("orderId", bean.getOrderId());
                         startActivity(intent);
                     }
                 });
@@ -190,7 +194,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvState.setText("已申请退款");
                 break;
             case "pending":
-                tvState.setText(String.format("待付款¥%s", String.valueOf((double)Math.round(bean.getTotalPrice()*10/10))));
+                tvState.setText(String.format("待付款¥%s", String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10))));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
                     CountDownTimer countDownTimer = new CountDownTimer(time, 1000) {
@@ -281,13 +285,18 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
         tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
-        tvOrderPrice.setText("¥" + String.valueOf((double)Math.round(bean.getTotalPrice()*10/10)));
+        tvOrderPrice.setText("¥" + String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10)));
 
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 
         tvOrderContactName.setText(bean.getContact().getGivenName() + " " + bean.getContact().getSurname());
         tvOrderContactTel.setText(bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
-        tvOrderMessage.setText(bean.getComment());
+        if (TextUtils.isEmpty(bean.getComment())){
+            llMessage.setVisibility(View.GONE);
+        }else {
+            tvOrderMessage.setText(bean.getComment());
+        }
+
 
         userInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -377,10 +386,10 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View view) {
                 dialog.dismiss();
                 Intent tv_pay = new Intent(OrderDetailActivity.this, PaymentActivity.class);
-                if (currentOrder!=null){
-                    tv_pay.putExtra("orderId",currentOrder.getOrderId());
+                if (currentOrder != null) {
+                    tv_pay.putExtra("orderId", currentOrder.getOrderId());
                 }
-                tv_pay.putExtra("type","alipay");
+                tv_pay.putExtra("type", "alipay");
                 startActivity(tv_pay);
             }
         });
@@ -389,10 +398,10 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View view) {
                 dialog.dismiss();
                 Intent tv_pay = new Intent(OrderDetailActivity.this, PaymentActivity.class);
-                if (currentOrder!=null){
-                    tv_pay.putExtra("orderId",currentOrder.getOrderId());
+                if (currentOrder != null) {
+                    tv_pay.putExtra("orderId", currentOrder.getOrderId());
                 }
-                tv_pay.putExtra("type","weixinpay");
+                tv_pay.putExtra("type", "weixinpay");
                 startActivity(tv_pay);
             }
         });

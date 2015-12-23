@@ -6,36 +6,66 @@
     android:background="@color/base_color_white"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_shop" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:text="店名"
+            android:textColor="@color/color_text_ii"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="5dp"
-        android:drawableLeft="@drawable/icon_shop"
-        android:drawablePadding="7dp"
-        android:text="店名"
+        android:text="城市名"
         android:textColor="@color/color_text_ii"
-        android:textSize="17sp" />
+        android:textSize="14sp" />
 
     <com.xuejian.client.lxp.common.widget.TagView.TagListView
         android:id="@+id/tag_lang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="5dp"
         f:horizontalSpace="6dp"
         f:orientation="horizontal"
         f:verticalSpace="4dp" />
 
-    <com.xuejian.client.lxp.common.widget.TagView.TagListView
-        android:id="@+id/tag_goods_service"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="5dp"
-        f:horizontalSpace="6dp"
-        f:orientation="horizontal"
-        f:verticalSpace="4dp" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="40dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_service" />
+
+        <LinearLayout
+            android:id="@+id/ll_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -111,7 +141,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="12dp"
             android:scaleType="centerInside"
-            android:src="@drawable/icon_store" />
+            android:src="@drawable/icon_goods_round" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -121,4 +151,11 @@
             android:text="在售商品"
             android:textSize="17sp" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@color/app_theme_color" />
 </LinearLayout>

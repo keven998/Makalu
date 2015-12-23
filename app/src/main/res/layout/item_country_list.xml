@@ -26,7 +26,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:drawablePadding="2dp"
-            android:text="23"
             android:textColor="@color/base_color_white"
             android:drawableTop="@drawable/icon_store_white"
             android:textSize="10sp" />

@@ -33,7 +33,7 @@ public class ShareCommodityBean implements Parcelable {
         this.commodityId = in.readLong();
         this.title = in.readString();
         this.price = in.readDouble();
-        this.image = in.readParcelable(ImageBean.class.getClassLoader());
+        this.image = in.readParcelable(CoverBean.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<ShareCommodityBean> CREATOR = new Parcelable.Creator<ShareCommodityBean>() {

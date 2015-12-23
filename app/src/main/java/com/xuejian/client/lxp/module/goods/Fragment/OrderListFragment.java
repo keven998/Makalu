@@ -71,7 +71,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+     //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
         View view = (View) inflater.inflate(
                 R.layout.fragment_order_list, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
@@ -126,15 +126,17 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+                if (mSwipeRefreshWidget.isRefreshing()){
+                    mSwipeRefreshWidget.setRefreshing(false);
+                }
                 recyclerView.setVisibility(View.GONE);
                 empty.setVisibility(View.VISIBLE);
-                DialogManager.getInstance().dissMissModelessLoadingDialog();
+             //   DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-
+             //   DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
         });
     }
@@ -282,6 +284,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                     break;
                 case "committed":
                     holder.rlAvailable.setVisibility(View.VISIBLE);
+                    holder.tvAvailableState.setText("可使用");
                     break;
                 case "refundApplied":
                     holder.rlDrawBack.setVisibility(View.VISIBLE);

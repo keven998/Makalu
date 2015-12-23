@@ -84,14 +84,14 @@
             <FrameLayout
                 android:id="@+id/btn_info"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_info" />
 
                 <TextView
@@ -102,21 +102,21 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_info"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/btn_travel_notice"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_travel_notice" />
 
                 <TextView
@@ -127,21 +127,21 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_notice"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/btn_traffic"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_traffic" />
 
                 <TextView
@@ -152,21 +152,21 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_traffic"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/btn_viewspot"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_viewspot" />
 
                 <TextView
@@ -177,7 +177,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_viewspot"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
@@ -187,20 +187,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:weightSum="4">
 
             <FrameLayout
                 android:id="@+id/btn_plan"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_plan" />
 
                 <TextView
@@ -211,21 +211,21 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_plan"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/btn_note"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_note" />
 
                 <TextView
@@ -236,21 +236,21 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_note"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/btn_food"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_food" />
 
                 <TextView
@@ -261,21 +261,21 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_food"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/btn_shopping"
                 android:layout_width="0dp"
-                android:layout_height="74dp"
+                android:layout_height="66dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="onClick">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="46dp"
                     android:src="@drawable/icon_shopping" />
 
                 <TextView
@@ -286,7 +286,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_shopping"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
             </FrameLayout>
 
@@ -302,12 +302,7 @@
         android:background="@color/base_color_white"
         android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/iv_goods"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/icon_local_goods" />
+
 
         <TextView
             android:layout_width="wrap_content"

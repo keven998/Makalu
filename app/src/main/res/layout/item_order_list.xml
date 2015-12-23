@@ -184,7 +184,6 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:text="可使用"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
 
@@ -195,7 +194,6 @@
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/tv_available_state"
             android:gravity="center_vertical"
-            android:text="(卖家留言)"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
 

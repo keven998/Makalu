@@ -1,87 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_bar_height"
-            android:background="@color/tab_bar_color"
-            app:layout_scrollFlags="scroll|enterAlways">
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/tab_bar_color"
+        app:layout_scrollFlags="scroll|enterAlways">
 
-            <TextView
-                android:id="@+id/tv_title_back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:drawableLeft="@drawable/icon_arrow_left_white"
-                android:paddingLeft="10dp"
-                android:paddingRight="30dp" />
+        <TextView
+            android:id="@+id/tv_title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/icon_arrow_left_white"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp" />
 
-            <TextView
-                android:id="@+id/strategy_title"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="店铺详情"
-                android:textColor="@color/base_color_white"
-                android:textSize="18sp" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="店铺详情"
+            android:textColor="@color/base_color_white"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
-        <!--<android.support.design.widget.TabLayout-->
-            <!--android:id="@+id/tabs"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:tabMode="scrollable"-->
-            <!--android:scrollbars="none"-->
-            <!--android:background="@color/base_color_white"/>-->
-
-    </android.support.design.widget.AppBarLayout>
-
-
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/ul_recyclerView"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_marginBottom="62dp"
+        android:layout_marginTop="@dimen/title_bar_height">
 
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/ll_trade_action0"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="62dp"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--android:background="@color/base_color_white"-->
-        <!--android:orientation="horizontal">-->
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/ul_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_action0"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:drawableLeft="@drawable/icon_store_talk"-->
-            <!--android:drawablePadding="10dp"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:text="联系商家"-->
-            <!--android:textColor="@color/color_text_ii"-->
-            <!--android:textSize="19sp" />-->
-    <!--</RelativeLayout>-->
+    </android.support.design.widget.CoordinatorLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:background="@drawable/icon_totop"
-        app:layout_behavior="com.xuejian.client.lxp.common.widget.behavior.ScrollingFabBehavior" />
+    <RelativeLayout
+        android:id="@+id/ll_trade_action0"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="bottom"
+        android:background="@color/base_color_white"
+        android:orientation="horizontal">
 
-</android.support.design.widget.CoordinatorLayout>
+        <TextView
+            android:id="@+id/tv_action0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/icon_store_talk"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="联系商家"
+            android:textColor="@color/color_text_ii"
+            android:textSize="19sp" />
+    </RelativeLayout>
+</merge>

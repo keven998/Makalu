@@ -99,7 +99,6 @@ public class GoodsList extends PeachBaseActivity {
         adapter = new GoodsListAdapter(mContext);
         goodsList.setPullRefreshEnabled(false);
         goodsList.setLoadingMoreEnabled(true);
-
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, long id) {
@@ -138,7 +137,7 @@ public class GoodsList extends PeachBaseActivity {
         toTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goodsList.scrollToPosition(0);
+                goodsList.smoothScrollToPosition(0);
             }
         });
         getCategory(locId);

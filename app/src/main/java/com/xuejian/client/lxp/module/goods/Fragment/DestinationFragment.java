@@ -24,11 +24,13 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CountryBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.VerticalTextView;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView;
+import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.goods.CountryListActivity;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     LinearLayout menu;
     VerticalTextView showMenu;
     String[] code = new String[]{"RCOM", "AS", "EU", "AF", "NA", "OC", "SA"};
-    String[] zhName = new String[]{"推荐", "亚洲", "欧洲", "非洲", "北美洲", "大洋洲", "南美洲"};
+    String[] zhName = new String[]{"热门", "亚洲", "欧洲", "非洲", "北美洲", "大洋洲", "南美洲"};
 
     @Nullable
     @Override
@@ -87,6 +89,19 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 
 
     private void initView(View view) {
+        view.findViewById(R.id.ll_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchAllActivity.class);
+//                intent.putExtra("chatType", chatType);
+//                intent.putExtra("toId", toChatUsername);
+//                intent.putExtra("conversation", conversation);
+                intent.putExtra("userId", AccountManager.getCurrentUserId());
+                intent.putExtra("isShare", false);
+                intent.putExtra("type", "vs");
+                startActivity(intent);
+            }
+        });
         showMenu = (VerticalTextView) view.findViewById(R.id.iv_show);
         menu = (LinearLayout) view.findViewById(R.id.ll_round_menu);
         circleLayout = (CircleLayout) view.findViewById(R.id.circle_layout);
@@ -114,7 +129,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         });
         showMenu.setTextColor(getResources().getColor(R.color.base_color_white));
         showMenu.setTextSize(12);
-        showMenu.setText("推荐");
+        showMenu.setText("热门");
     }
 
     private void showMenu(){
