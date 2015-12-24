@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|left"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="@dimen/goods_loc_margin"
             android:layout_marginLeft="7dp"
             android:drawableLeft="@drawable/search_total_place"
             android:textColor="@color/base_color_white"

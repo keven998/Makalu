@@ -73,4 +73,6 @@
     <string name="add_user_info">添加旅客信息</string>
     <string name="select__contact">选择旅客为联系人</string>
     <string name="goods_detail">商品详情</string>
+    <string name="choise_country">选择国家/地区</string>
+    <string name="add">添加</string>
 </resources>

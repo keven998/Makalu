@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.goods;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -10,38 +11,39 @@ import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
-import com.xuejian.client.lxp.common.api.TravelApi;
-import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
-import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.bean.PlanBean;
+import com.xuejian.client.lxp.bean.TravellerBean;
+import com.xuejian.client.lxp.bean.TravellerEntity;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by yibiao.qin on 2015/11/13.
+ * Created by yibiao.qin on 2015/12/23.
  */
-public class OrderDetailActivity extends PeachBaseActivity implements View.OnClickListener {
-
+public class OrderConfirmActivity extends PeachBaseActivity{
     @InjectView(R.id.iv_nav_back)
     ImageView ivNavBack;
     @InjectView(R.id.tv_title_bar_title)
@@ -80,98 +82,42 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     TextView tvOrderMessage;
     @InjectView(R.id.tv_pay)
     TextView tvPay;
-    @InjectView(R.id.tv_cancel_action)
-    TextView tvCancel;
     @InjectView(R.id.ll_trade_action0)
     LinearLayout llTradeAction0;
-    @InjectView(R.id.tv_action0)
-    TextView tvAction0;
-    @InjectView(R.id.ll_trade_action1)
-    LinearLayout llTradeAction1;
     @InjectView(R.id.tv_talk)
     TextView tvTalk;
     @InjectView(R.id.ll_message)
     LinearLayout llMessage;
     long orderId;
-    OrderBean currentOrder;
-
+    private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_detail);
+        setContentView(R.layout.activity_order_confirm);
         ButterKnife.inject(this);
-        orderId = getIntent().getLongExtra("orderId", -1);
-        String type = getIntent().getStringExtra("type");
-        switch (type) {
-            case "pendingOrder":
-                OrderBean bean = getIntent().getParcelableExtra("order");
-                bindView(bean);
-                break;
-            case "orderDetail":
-                getData(orderId);
-                break;
-            default:
-                break;
-        }
-
-        ivNavBack.setOnClickListener(this);
-        tvPay.setOnClickListener(this);
-        tvCancel.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_pay:
-                showPayActionDialog();
-                break;
-            case R.id.iv_nav_back:
-//                Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
-//                startActivity(tv_title_back);
-                finish();
-                break;
-            case R.id.tv_cancel_action:
-                cancelOrderDialog();
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void getData(long orderId) {
-        if (orderId <= 0) return;
-        TravelApi.getOrderDetail(orderId, new HttpCallBack<String>() {
-
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
-                bindView(bean.result);
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
+        OrderBean bean = getIntent().getParcelableExtra("order");
+        bindView(bean);
     }
 
     private void bindView(final OrderBean bean) {
-        currentOrder = bean;
+        CommonAdapter memberAdapter = new CommonAdapter(mContext, R.layout.item_member_info, false, null);
+        ListView memberList = (ListView) findViewById(R.id.lv_members);
+        for (TravellerEntity entity : bean.getTravellers()) {
+            passengerList.add(new TravellerBean(entity));
+        }
+        memberList.setAdapter(memberAdapter);
+        CommonUtils.setListViewHeightBasedOnChildren(memberList);
+
         final Intent intent = new Intent();
         switch (bean.getStatus()) {
             case "paid":
                 tvState.setText("已支付");
                 llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("申请退款");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
+                tvPay.setText("申请退款");
+                tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
+                        intent.setClass(OrderConfirmActivity.this, DrawbackActivity.class);
                         intent.putExtra("orderId", bean.getOrderId());
                         startActivity(intent);
                     }
@@ -180,11 +126,11 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             case "committed":
                 tvState.setText("可使用");
                 llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("申请退款");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
+                tvPay.setText("申请退款");
+                tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
+                        intent.setClass(OrderConfirmActivity.this, DrawbackActivity.class);
                         intent.putExtra("orderId", bean.getOrderId());
                         startActivity(intent);
                     }
@@ -211,16 +157,15 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 } else {
                     tvFeedback.setText("订单已超过支付期限,请重新下单");
                 }
-                llTradeAction1.setVisibility(View.VISIBLE);
                 break;
             case "finished":
                 tvState.setText("交易已结束");
                 llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
+                tvPay.setText("再次预定");
+                tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -229,11 +174,11 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             case "canceled":
                 tvState.setText("已取消");
                 llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
+                tvPay.setText("再次预定");
+                tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -242,11 +187,11 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             case "expired":
                 tvState.setText("已过期");
                 llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
+                tvPay.setText("再次预定");
+                tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -255,11 +200,11 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             case "refunded":
                 tvState.setText("已退款");
                 llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
+                tvPay.setText("再次预定");
+                tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -276,7 +221,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvGoodsName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderDetailActivity.this, ReactMainPage.class);
+                Intent intent = new Intent(OrderConfirmActivity.this, ReactMainPage.class);
                 intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                 startActivity(intent);
             }
@@ -297,16 +242,6 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             tvOrderMessage.setText(bean.getComment());
         }
 
-
-        userInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OrderDetailActivity.this, CommonUserInfoActivity.class);
-                intent.putExtra("ListType", 3);
-                intent.putParcelableArrayListExtra("passengerList", bean.getTravellers());
-                startActivity(intent);
-            }
-        });
         tvTalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,64 +253,16 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 startActivity(talkIntent);
             }
         });
-
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
-        startActivity(tv_title_back);
-        finish();
-    }
-
-    private void cancelOrderDialog() {
-        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
-        dialog.setTitle("提示");
-        dialog.setMessage("确定取消订单吗？");
-        dialog.setPositiveButton("确定", new View.OnClickListener() {
+        tvPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
-                cancelOrder();
-
+                showPayActionDialog(bean);
             }
         });
-        dialog.setNegativeButton("不取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
 
     }
 
-    public void cancelOrder() {
-        TravelApi.editOrderStatus(orderId, "cancel", "", new HttpCallBack<String>() {
-
-            @Override
-            public void doSuccess(String result, String method) {
-                Toast.makeText(OrderDetailActivity.this, "订单已取消", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(OrderDetailActivity.this, OrderListActivity.class);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                Toast.makeText(OrderDetailActivity.this, "取消失败", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
-
-    private void showPayActionDialog() {
+    private void showPayActionDialog(final OrderBean currentOrder) {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
@@ -385,7 +272,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Intent tv_pay = new Intent(OrderDetailActivity.this, PaymentActivity.class);
+                Intent tv_pay = new Intent(OrderConfirmActivity.this, PaymentActivity.class);
                 if (currentOrder != null) {
                     tv_pay.putExtra("orderId", currentOrder.getOrderId());
                 }
@@ -397,7 +284,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Intent tv_pay = new Intent(OrderDetailActivity.this, PaymentActivity.class);
+                Intent tv_pay = new Intent(OrderConfirmActivity.this, PaymentActivity.class);
                 if (currentOrder != null) {
                     tv_pay.putExtra("orderId", currentOrder.getOrderId());
                 }
@@ -422,5 +309,98 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
+    public class CommonAdapter extends BaseAdapter {
+
+        private Context mContext;
+        private int ResId;
+        private int lastId;
+        private ArrayList<PlanBean> packageList;
+
+        public CommonAdapter(Context c, int ResId, boolean selected, ArrayList<PlanBean> list) {
+            packageList = list;
+            mContext = c;
+            this.ResId = ResId;
+
+        }
+
+        @Override
+        public int getCount() {
+            if (ResId == R.layout.item_package_info) {
+                return packageList.size();
+            } else if (ResId == R.layout.item_member_info) {
+                return passengerList.size();
+            }
+            return 0;
+        }
+
+
+        @Override
+        public Object getItem(int position) {
+            if (ResId == R.layout.item_package_info) {
+                return packageList.get(position);
+            } else if (ResId == R.layout.item_member_info) {
+                return passengerList.get(position);
+            }
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            ViewHolder1 viewHolder1;
+            if (ResId == R.layout.item_package_info) {
+                if (convertView == null) {
+                    convertView = View.inflate(mContext, ResId, null);
+                    viewHolder1 = new ViewHolder1();
+                    viewHolder1.packageName = (TextView) convertView.findViewById(R.id.tv_package);
+                    viewHolder1.packagePrice = (TextView) convertView.findViewById(R.id.tv_package_price);
+                    viewHolder1.bg = (LinearLayout) convertView.findViewById(R.id.ll_bg);
+                    convertView.setTag(viewHolder1);
+                } else {
+                    viewHolder1 = (ViewHolder1) convertView.getTag();
+                }
+                PlanBean bean = (PlanBean) getItem(position);
+                viewHolder1.packageName.setText(bean.getTitle());
+                viewHolder1.packagePrice.setText(String.format("¥%s起", CommonUtils.getPriceString(bean.getPrice())));
+                if (position == lastId) {
+                    viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_selected);
+                    //  viewHolder1.content.setPadding(10,0,0,0);
+                } else {
+                    viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_default);
+                    //  viewHolder1.content.setPadding(10,0,0,0);
+                }
+            } else if (ResId == R.layout.item_member_info) {
+                TravellerBean bean = (TravellerBean) getItem(position);
+                if (convertView == null) {
+                    convertView = View.inflate(mContext, ResId, null);
+
+                    holder = new ViewHolder();
+                    holder.content = (TextView) convertView.findViewById(R.id.tv_member);
+                    convertView.setTag(holder);
+
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                holder.content.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
+            }
+            return convertView;
+        }
+
+        class ViewHolder {
+            private TextView content;
+        }
+
+        class ViewHolder1 {
+            private TextView packageName;
+            private TextView packagePrice;
+            private LinearLayout bg;
+        }
+    }
+
 
 }

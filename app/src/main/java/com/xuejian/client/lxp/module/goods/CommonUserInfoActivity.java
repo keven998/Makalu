@@ -31,6 +31,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
     private int EDIT_INFO = 103;
     TextView tvBack;
     TextView tv_confirm;
+    TextView tv_add;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     private ArrayList<TravellerBean> selectedPassengerList = new ArrayList<>();
     private TravellerBean passenger;
@@ -68,25 +69,8 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 finish();
             }
         });
-//        for (int i = 0; i < 3; i++) {
-//            TravellerBean bean = new TravellerBean();
-//            TravellerEntity traveller =new TravellerEntity();
-//            IdentityBean identityBean = new IdentityBean();
-//            identityBean.setNumber("53452454253");
-//            identityBean.setIdType("chineseID");
-//            traveller.setGivenName("Xiaoqin");
-//            traveller.setSurname("Zhao");
-//            TelBean tel = new TelBean();
-//            tel.setDialCode(86);
-//            tel.setNumber(1384656365564l);
-//            traveller.setTel(tel);
-//            ArrayList<IdentityBean> identityBeanArrayList = new ArrayList<>();
-//            identityBeanArrayList.add(identityBean);
-//            traveller.setIdentities(identityBeanArrayList);
-//            bean.setTraveller(traveller);
-//            passengerList.add(bean);
-//        }
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
+        tv_add = (TextView) findViewById(R.id.tv_add);
         initView(type, multiple);
         if (type == EDIT_LIST || type == SHOW_LIST) {
             getData();
@@ -170,6 +154,15 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             });
         } else if (type == SHOW_LIST) {
             tv_confirm.setVisibility(View.GONE);
+            tv_add.setVisibility(View.VISIBLE);
+            tv_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CommonUserInfoActivity.this, UserInfoEditActivity.class);
+                    intent.putExtra("type", "create");
+                    startActivityForResult(intent, EDIT_INFO);
+                }
+            });
             title.setText(R.string.user_info);
       //      ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userInfoAdapter = new UserInfoAdapter();
@@ -340,8 +333,13 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == EDIT_INFO) {
                 TravellerBean bean = data.getParcelableExtra("passenger");
-                passengerList.add(bean);
-                userAdapter.notifyDataSetChanged();
+                if (bean!=null)passengerList.add(bean);
+                if (type==SHOW_LIST){
+                    userInfoAdapter.notifyDataSetChanged();
+                }else {
+                    userAdapter.notifyDataSetChanged();
+                }
+
             }
         }
     }

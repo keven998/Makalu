@@ -1,0 +1,1400 @@
+[
+    {
+        "header": "aodili", 
+        "countryName": "奥地利", 
+        "countryCode": "AT", 
+        "dialCode": "43"
+    }, 
+    {
+        "header": "aodaliya", 
+        "countryName": "澳大利亚", 
+        "countryCode": "AU", 
+        "dialCode": "61"
+    }, 
+    {
+        "header": "antiguahebabuda", 
+        "countryName": "安提瓜和巴布达", 
+        "countryCode": "AG", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "anguila", 
+        "countryName": "安圭拉", 
+        "countryCode": "AI", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "angela", 
+        "countryName": "安哥拉", 
+        "countryCode": "AO", 
+        "dialCode": "244"
+    }, 
+    {
+        "header": "andaoer", 
+        "countryName": "安道尔", 
+        "countryCode": "AD", 
+        "dialCode": "376"
+    }, 
+    {
+        "header": "aishaniya", 
+        "countryName": "爱沙尼亚", 
+        "countryCode": "EE", 
+        "dialCode": "372"
+    }, 
+    {
+        "header": "aisaiebiya", 
+        "countryName": "埃塞俄比亚", 
+        "countryCode": "ET", 
+        "dialCode": "251"
+    }, 
+    {
+        "header": "aiji", 
+        "countryName": "埃及", 
+        "countryCode": "EG", 
+        "dialCode": "20"
+    }, 
+    {
+        "header": "aierlan", 
+        "countryName": "爱尔兰", 
+        "countryCode": "IE", 
+        "dialCode": "353"
+    }, 
+    {
+        "header": "asaibaijiang", 
+        "countryName": "阿塞拜疆", 
+        "countryCode": "AZ", 
+        "dialCode": "994"
+    }, 
+    {
+        "header": "aman", 
+        "countryName": "阿曼", 
+        "countryCode": "OM", 
+        "dialCode": "968"
+    }, 
+    {
+        "header": "aluba", 
+        "countryName": "阿鲁巴", 
+        "countryCode": "AW", 
+        "dialCode": "297"
+    }, 
+    {
+        "header": "alianqiu", 
+        "countryName": "阿联酋", 
+        "countryCode": "AE", 
+        "dialCode": "971"
+    }, 
+    {
+        "header": "agenting", 
+        "countryName": "阿根廷", 
+        "countryCode": "AR", 
+        "dialCode": "54"
+    }, 
+    {
+        "header": "afuhan", 
+        "countryName": "阿富汗", 
+        "countryCode": "AF", 
+        "dialCode": "93"
+    }, 
+    {
+        "header": "aerjiliya", 
+        "countryName": "阿尔及利亚", 
+        "countryCode": "DZ", 
+        "dialCode": "213"
+    }, 
+    {
+        "header": "aerbaniya", 
+        "countryName": "阿尔巴尼亚", 
+        "countryCode": "AL", 
+        "dialCode": "355"
+    }, 
+    {
+        "header": "bulongdi", 
+        "countryName": "布隆迪", 
+        "countryCode": "BI", 
+        "dialCode": "257"
+    }, 
+    {
+        "header": "bujinafasuo", 
+        "countryName": "布基纳法索", 
+        "countryCode": "BF", 
+        "dialCode": "226"
+    }, 
+    {
+        "header": "budan", 
+        "countryName": "不丹", 
+        "countryCode": "BT", 
+        "dialCode": "975"
+    }, 
+    {
+        "header": "bolizi", 
+        "countryName": "伯利兹", 
+        "countryCode": "BZ", 
+        "dialCode": "501"
+    }, 
+    {
+        "header": "boliweiya", 
+        "countryName": "玻利维亚", 
+        "countryCode": "BO", 
+        "dialCode": "591"
+    }, 
+    {
+        "header": "bolan", 
+        "countryName": "波兰", 
+        "countryCode": "PL", 
+        "dialCode": "48"
+    }, 
+    {
+        "header": "bohei", 
+        "countryName": "波黑", 
+        "countryCode": "BA", 
+        "dialCode": "387"
+    }, 
+    {
+        "header": "boduolige", 
+        "countryName": "波多黎各", 
+        "countryCode": "PR", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "bociwana", 
+        "countryName": "博茨瓦纳", 
+        "countryCode": "BW", 
+        "dialCode": "267"
+    }, 
+    {
+        "header": "bingdao", 
+        "countryName": "冰岛", 
+        "countryCode": "IS", 
+        "dialCode": "354"
+    }, 
+    {
+        "header": "bilishi", 
+        "countryName": "比利时", 
+        "countryCode": "BE", 
+        "dialCode": "32"
+    }, 
+    {
+        "header": "beining", 
+        "countryName": "贝宁", 
+        "countryCode": "BJ", 
+        "dialCode": "229"
+    }, 
+    {
+        "header": "beimaliyanaqundao", 
+        "countryName": "北马里亚纳群岛", 
+        "countryCode": "MP", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "baojialiya", 
+        "countryName": "保加利亚", 
+        "countryCode": "BG", 
+        "dialCode": "359"
+    }, 
+    {
+        "header": "baimuda", 
+        "countryName": "百慕大", 
+        "countryCode": "BM", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "baieluosi", 
+        "countryName": "白俄罗斯", 
+        "countryCode": "BY", 
+        "dialCode": "375"
+    }, 
+    {
+        "header": "baxi", 
+        "countryName": "巴西", 
+        "countryCode": "BR", 
+        "dialCode": "55"
+    }, 
+    {
+        "header": "banama", 
+        "countryName": "巴拿马", 
+        "countryCode": "PA", 
+        "dialCode": "507"
+    }, 
+    {
+        "header": "balin", 
+        "countryName": "巴林", 
+        "countryCode": "BH", 
+        "dialCode": "973"
+    }, 
+    {
+        "header": "balesitan", 
+        "countryName": "巴勒斯坦", 
+        "countryCode": "PS", 
+        "dialCode": "970"
+    }, 
+    {
+        "header": "balagui", 
+        "countryName": "巴拉圭", 
+        "countryCode": "PY", 
+        "dialCode": "595"
+    }, 
+    {
+        "header": "bajisitan", 
+        "countryName": "巴基斯坦", 
+        "countryCode": "PK", 
+        "dialCode": "92"
+    }, 
+    {
+        "header": "bahama", 
+        "countryName": "巴哈马", 
+        "countryCode": "BS", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "babuyaxinjineiya", 
+        "countryName": "巴布亚新几内亚", 
+        "countryCode": "PG", 
+        "dialCode": "675"
+    }, 
+    {
+        "header": "babaduosi", 
+        "countryName": "巴巴多斯", 
+        "countryCode": "BB", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "chaoxian", 
+        "countryName": "朝鲜", 
+        "countryCode": "KP", 
+        "dialCode": "850"
+    }, 
+    {
+        "header": "chidaojineiya", 
+        "countryName": "赤道几内亚", 
+        "countryCode": "GQ", 
+        "dialCode": "240"
+    }, 
+    {
+        "header": "duominike", 
+        "countryName": "多米尼克", 
+        "countryCode": "DM", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "duominijiagongheguo", 
+        "countryName": "多米尼加共和国", 
+        "countryCode": "DO", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "duoge", 
+        "countryName": "多哥", 
+        "countryCode": "TG", 
+        "dialCode": "228"
+    }, 
+    {
+        "header": "dongdizuo", 
+        "countryName": "东帝汶", 
+        "countryCode": "TL", 
+        "dialCode": "670"
+    }, 
+    {
+        "header": "deguo", 
+        "countryName": "德国", 
+        "countryCode": "DE", 
+        "dialCode": "49"
+    }, 
+    {
+        "header": "danmai", 
+        "countryName": "丹麦", 
+        "countryCode": "DK", 
+        "dialCode": "45"
+    }, 
+    {
+        "header": "eluosi", 
+        "countryName": "俄罗斯", 
+        "countryCode": "RU", 
+        "dialCode": "7"
+    }, 
+    {
+        "header": "eliteliya", 
+        "countryName": "厄立特里亚", 
+        "countryCode": "ER", 
+        "dialCode": "291"
+    }, 
+    {
+        "header": "eguaduoer", 
+        "countryName": "厄瓜多尔", 
+        "countryCode": "EC", 
+        "dialCode": "593"
+    }, 
+    {
+        "header": "fukelanqundaounknownmaerweinasiqundaounknown", 
+        "countryName": "福克兰群岛（马尔维纳斯群岛）", 
+        "countryCode": "FK", 
+        "dialCode": "500"
+    }, 
+    {
+        "header": "fodejiao", 
+        "countryName": "佛得角", 
+        "countryCode": "CV", 
+        "dialCode": "238"
+    }, 
+    {
+        "header": "fenlan", 
+        "countryName": "芬兰", 
+        "countryCode": "FI", 
+        "dialCode": "358"
+    }, 
+    {
+        "header": "feilvbin", 
+        "countryName": "菲律宾", 
+        "countryCode": "PH", 
+        "dialCode": "63"
+    }, 
+    {
+        "header": "fashushengmading", 
+        "countryName": "法属圣马丁", 
+        "countryCode": "MF", 
+        "dialCode": "590"
+    }, 
+    {
+        "header": "fashuguiyana", 
+        "countryName": "法属圭亚那", 
+        "countryCode": "GF", 
+        "dialCode": "594"
+    }, 
+    {
+        "header": "fashubolinixiya", 
+        "countryName": "法属波利尼西亚", 
+        "countryCode": "PF", 
+        "dialCode": "689"
+    }, 
+    {
+        "header": "faluoqundao", 
+        "countryName": "法罗群岛", 
+        "countryCode": "FO", 
+        "dialCode": "298"
+    }, 
+    {
+        "header": "faguo", 
+        "countryName": "法国", 
+        "countryCode": "FR", 
+        "dialCode": "33"
+    }, 
+    {
+        "header": "fandigang", 
+        "countryName": "梵蒂冈", 
+        "countryCode": "VA", 
+        "dialCode": "379"
+    }, 
+    {
+        "header": "feiji", 
+        "countryName": "斐济", 
+        "countryCode": "FJ", 
+        "dialCode": "679"
+    },
+    {
+        "header": "guiyana", 
+        "countryName": "圭亚那", 
+        "countryCode": "GY", 
+        "dialCode": "592"
+    }, 
+    {
+        "header": "guandao", 
+        "countryName": "关岛", 
+        "countryCode": "GU", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "guadeluopu", 
+        "countryName": "瓜德罗普", 
+        "countryCode": "GP", 
+        "dialCode": "590"
+    }, 
+    {
+        "header": "guba", 
+        "countryName": "古巴", 
+        "countryCode": "CU", 
+        "dialCode": "53"
+    }, 
+    {
+        "header": "gesidalijia", 
+        "countryName": "哥斯达黎加", 
+        "countryCode": "CR", 
+        "dialCode": "506"
+    }, 
+    {
+        "header": "gelunbiya", 
+        "countryName": "哥伦比亚", 
+        "countryCode": "CO", 
+        "dialCode": "57"
+    }, 
+    {
+        "header": "gelujiya", 
+        "countryName": "格鲁吉亚", 
+        "countryCode": "GE", 
+        "dialCode": "995"
+    }, 
+    {
+        "header": "gelinglan", 
+        "countryName": "格陵兰", 
+        "countryCode": "GL", 
+        "dialCode": "299"
+    }, 
+    {
+        "header": "gelinnada", 
+        "countryName": "格林纳达", 
+        "countryCode": "GD", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "gangguominzhugongheguo", 
+        "countryName": "刚果民主共和国", 
+        "countryCode": "CD", 
+        "dialCode": "243"
+    }, 
+    {
+        "header": "gangguo", 
+        "countryName": "刚果", 
+        "countryCode": "CG", 
+        "dialCode": "242"
+    }, 
+    {
+        "header": "gangbiya", 
+        "countryName": "冈比亚", 
+        "countryCode": "GM", 
+        "dialCode": "220"
+    }, 
+    {
+        "header": "hongdulasi", 
+        "countryName": "洪都拉斯", 
+        "countryCode": "HN", 
+        "dialCode": "504"
+    }, 
+    {
+        "header": "heishan", 
+        "countryName": "黑山", 
+        "countryCode": "ME", 
+        "dialCode": "382"
+    }, 
+    {
+        "header": "heshushengmading", 
+        "countryName": "荷属圣马丁", 
+        "countryCode": "SX", 
+        "dialCode": "599"
+    }, 
+    {
+        "header": "helan", 
+        "countryName": "荷兰", 
+        "countryCode": "NL", 
+        "dialCode": "31"
+    }, 
+    {
+        "header": "hanguo", 
+        "countryName": "韩国", 
+        "countryCode": "KR", 
+        "dialCode": "82"
+    }, 
+    {
+        "header": "haidi", 
+        "countryName": "海地", 
+        "countryCode": "HT", 
+        "dialCode": "509"
+    }, 
+    {
+        "header": "hasakesitan", 
+        "countryName": "哈萨克斯坦", 
+        "countryCode": "KZ", 
+        "dialCode": "7"
+    }, 
+    {
+        "header": "jinbabuwei", 
+        "countryName": "津巴布韦", 
+        "countryCode": "ZW", 
+        "dialCode": "263"
+    }, 
+    {
+        "header": "jieke", 
+        "countryName": "捷克", 
+        "countryCode": "CZ", 
+        "dialCode": "420"
+    }, 
+    {
+        "header": "jianpuzhai", 
+        "countryName": "柬埔寨", 
+        "countryCode": "KH", 
+        "dialCode": "855"
+    }, 
+    {
+        "header": "jiapeng", 
+        "countryName": "加蓬", 
+        "countryCode": "GA", 
+        "dialCode": "241"
+    }, 
+    {
+        "header": "jianada", 
+        "countryName": "加拿大", 
+        "countryCode": "CA", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "jiana", 
+        "countryName": "加纳", 
+        "countryCode": "GH", 
+        "dialCode": "233"
+    }, 
+    {
+        "header": "jineiyabishao", 
+        "countryName": "几内亚比绍", 
+        "countryCode": "GW", 
+        "dialCode": "245"
+    }, 
+    {
+        "header": "jineiya", 
+        "countryName": "几内亚", 
+        "countryCode": "GN", 
+        "dialCode": "224"
+    }, 
+    {
+        "header": "jilibasi", 
+        "countryName": "基里巴斯", 
+        "countryCode": "KI", 
+        "dialCode": "686"
+    }, 
+    {
+        "header": "jierjisisitan", 
+        "countryName": "吉尔吉斯斯坦", 
+        "countryCode": "KG", 
+        "dialCode": "996"
+    }, 
+    {
+        "header": "jibuti", 
+        "countryName": "吉布提", 
+        "countryCode": "DJ", 
+        "dialCode": "253"
+    }, 
+    {
+        "header": "kataer", 
+        "countryName": "卡塔尔", 
+        "countryCode": "QA", 
+        "dialCode": "974"
+    }, 
+    {
+        "header": "kulasuo", 
+        "countryName": "库拉索", 
+        "countryCode": "CW", 
+        "dialCode": "599"
+    }, 
+    {
+        "header": "kukequndao", 
+        "countryName": "库克群岛", 
+        "countryCode": "CK", 
+        "dialCode": "682"
+    }, 
+    {
+        "header": "kenniya", 
+        "countryName": "肯尼亚", 
+        "countryCode": "KE", 
+        "dialCode": "254"
+    }, 
+    {
+        "header": "keweite", 
+        "countryName": "科威特", 
+        "countryCode": "KW", 
+        "dialCode": "965"
+    }, 
+    {
+        "header": "ketediwa", 
+        "countryName": "科特迪瓦", 
+        "countryCode": "CI", 
+        "dialCode": "225"
+    }, 
+    {
+        "header": "kesuowo", 
+        "countryName": "科索沃", 
+        "countryCode": "XK", 
+        "dialCode": "381"
+    }, 
+    {
+        "header": "kemoluo", 
+        "countryName": "科摩罗", 
+        "countryCode": "KM", 
+        "dialCode": "269"
+    }, 
+    {
+        "header": "keluodiya", 
+        "countryName": "克罗地亚", 
+        "countryCode": "HR", 
+        "dialCode": "385"
+    }, 
+    {
+        "header": "kaimanqundao", 
+        "countryName": "开曼群岛", 
+        "countryCode": "KY", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "kamailong", 
+        "countryName": "喀麦隆", 
+        "countryCode": "CM", 
+        "dialCode": "237"
+    }, 
+    {
+        "header": "luomaniya", 
+        "countryName": "罗马尼亚", 
+        "countryCode": "RO", 
+        "dialCode": "40"
+    }, 
+    {
+        "header": "luwangda", 
+        "countryName": "卢旺达", 
+        "countryCode": "RW", 
+        "dialCode": "250"
+    }, 
+    {
+        "header": "lusenbao", 
+        "countryName": "卢森堡", 
+        "countryCode": "LU", 
+        "dialCode": "352"
+    }, 
+    {
+        "header": "liuniwang", 
+        "countryName": "留尼汪", 
+        "countryCode": "RE", 
+        "dialCode": "262"
+    }, 
+    {
+        "header": "liezhidunshideng", 
+        "countryName": "列支敦士登", 
+        "countryCode": "LI", 
+        "dialCode": "423"
+    }, 
+    {
+        "header": "litaowan", 
+        "countryName": "立陶宛", 
+        "countryCode": "LT", 
+        "dialCode": "370"
+    }, 
+    {
+        "header": "libiya", 
+        "countryName": "利比亚", 
+        "countryCode": "LY", 
+        "dialCode": "218"
+    }, 
+    {
+        "header": "libiliya", 
+        "countryName": "利比里亚", 
+        "countryCode": "LR", 
+        "dialCode": "231"
+    }, 
+    {
+        "header": "libanen", 
+        "countryName": "黎巴嫩", 
+        "countryCode": "LB", 
+        "dialCode": "961"
+    }, 
+    {
+        "header": "laowo", 
+        "countryName": "老挝", 
+        "countryCode": "LA", 
+        "dialCode": "856"
+    }, 
+    {
+        "header": "laisuotuo", 
+        "countryName": "莱索托", 
+        "countryCode": "LS", 
+        "dialCode": "266"
+    }, 
+    {
+        "header": "latuoweiya", 
+        "countryName": "拉脱维亚", 
+        "countryCode": "LV", 
+        "dialCode": "371"
+    }, 
+    {
+        "header": "moxige", 
+        "countryName": "墨西哥", 
+        "countryCode": "MX", 
+        "dialCode": "52"
+    }, 
+    {
+        "header": "mosangbike", 
+        "countryName": "莫桑比克", 
+        "countryCode": "MZ", 
+        "dialCode": "258"
+    }, 
+    {
+        "header": "monage", 
+        "countryName": "摩纳哥", 
+        "countryCode": "MC", 
+        "dialCode": "377"
+    }, 
+    {
+        "header": "moluoge", 
+        "countryName": "摩洛哥", 
+        "countryCode": "MA", 
+        "dialCode": "212"
+    }, 
+    {
+        "header": "moerduowa", 
+        "countryName": "摩尔多瓦", 
+        "countryCode": "MD", 
+        "dialCode": "373"
+    }, 
+    {
+        "header": "miandian", 
+        "countryName": "缅甸", 
+        "countryCode": "MM", 
+        "dialCode": "95"
+    }, 
+    {
+        "header": "mikeluonixiyalianbang", 
+        "countryName": "密克罗尼西亚联邦", 
+        "countryCode": "FM", 
+        "dialCode": "691"
+    }, 
+    {
+        "header": "mengsailatedao", 
+        "countryName": "蒙塞拉特岛", 
+        "countryCode": "MS", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "mengjialaguo", 
+        "countryName": "孟加拉国", 
+        "countryCode": "BD", 
+        "dialCode": "880"
+    }, 
+    {
+        "header": "menggu", 
+        "countryName": "蒙古", 
+        "countryCode": "MN", 
+        "dialCode": "976"
+    }, 
+    {
+        "header": "meishuweierjingqundao", 
+        "countryName": "美属维尔京群岛", 
+        "countryCode": "VI", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "meishusamoya", 
+        "countryName": "美属萨摩亚", 
+        "countryCode": "AS", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "meiguo", 
+        "countryName": "美国", 
+        "countryCode": "US", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "maolitaniya", 
+        "countryName": "毛里塔尼亚", 
+        "countryCode": "MR", 
+        "dialCode": "222"
+    }, 
+    {
+        "header": "maoliqiusi", 
+        "countryName": "毛里求斯", 
+        "countryCode": "MU", 
+        "dialCode": "230"
+    }, 
+    {
+        "header": "mayuete", 
+        "countryName": "马约特", 
+        "countryCode": "YT", 
+        "dialCode": "262"
+    }, 
+    {
+        "header": "matinike", 
+        "countryName": "马提尼克", 
+        "countryCode": "MQ", 
+        "dialCode": "596"
+    }, 
+    {
+        "header": "mashaoerqundao", 
+        "countryName": "马绍尔群岛", 
+        "countryCode": "MH", 
+        "dialCode": "692"
+    }, 
+    {
+        "header": "maqidun", 
+        "countryName": "马其顿", 
+        "countryCode": "MK", 
+        "dialCode": "389"
+    }, 
+    {
+        "header": "mali", 
+        "countryName": "马里", 
+        "countryCode": "ML", 
+        "dialCode": "223"
+    }, 
+    {
+        "header": "malaixiya", 
+        "countryName": "马来西亚", 
+        "countryCode": "MY", 
+        "dialCode": "60"
+    }, 
+    {
+        "header": "malawei", 
+        "countryName": "马拉维", 
+        "countryCode": "MW", 
+        "dialCode": "265"
+    }, 
+    {
+        "header": "maerta", 
+        "countryName": "马耳他", 
+        "countryCode": "MT", 
+        "dialCode": "356"
+    }, 
+    {
+        "header": "maerdaifu", 
+        "countryName": "马尔代夫", 
+        "countryCode": "MV", 
+        "dialCode": "960"
+    }, 
+    {
+        "header": "madajiasijia", 
+        "countryName": "马达加斯加", 
+        "countryCode": "MG", 
+        "dialCode": "261"
+    }, 
+    {
+        "header": "milu", 
+        "countryName": "秘鲁", 
+        "countryCode": "PE", 
+        "dialCode": "51"
+    }, 
+    {
+        "header": "nuowei", 
+        "countryName": "挪威", 
+        "countryCode": "NO", 
+        "dialCode": "47"
+    }, 
+    {
+        "header": "niuai", 
+        "countryName": "纽埃", 
+        "countryCode": "NU", 
+        "dialCode": "683"
+    }, 
+    {
+        "header": "niriliya", 
+        "countryName": "尼日利亚", 
+        "countryCode": "NG", 
+        "dialCode": "234"
+    }, 
+    {
+        "header": "nirier", 
+        "countryName": "尼日尔", 
+        "countryCode": "NE", 
+        "dialCode": "227"
+    }, 
+    {
+        "header": "nijialagua", 
+        "countryName": "尼加拉瓜", 
+        "countryCode": "NI", 
+        "dialCode": "505"
+    }, 
+    {
+        "header": "niboer", 
+        "countryName": "尼泊尔", 
+        "countryCode": "NP", 
+        "dialCode": "977"
+    }, 
+    {
+        "header": "nansudan", 
+        "countryName": "南苏丹", 
+        "countryCode": "SS", 
+        "dialCode": "211"
+    }, 
+    {
+        "header": "nanfei", 
+        "countryName": "南非", 
+        "countryCode": "ZA", 
+        "dialCode": "27"
+    }, 
+    {
+        "header": "naolu", 
+        "countryName": "瑙鲁", 
+        "countryCode": "NR", 
+        "dialCode": "674"
+    }, 
+    {
+        "header": "namibiya", 
+        "countryName": "纳米比亚", 
+        "countryCode": "NA", 
+        "dialCode": "264"
+    }, 
+    {
+        "header": "putaoya", 
+        "countryName": "葡萄牙", 
+        "countryCode": "PT", 
+        "dialCode": "351"
+    }, 
+    {
+        "header": "pitekaienqundao", 
+        "countryName": "皮特凯恩群岛", 
+        "countryCode": "PN", 
+        "dialCode": "870"
+    }, 
+    {
+        "header": "palao", 
+        "countryName": "帕劳", 
+        "countryCode": "PW", 
+        "dialCode": "680"
+    }, 
+    {
+        "header": "ruishi", 
+        "countryName": "瑞士", 
+        "countryCode": "CH", 
+        "dialCode": "41"
+    }, 
+    {
+        "header": "ruidian", 
+        "countryName": "瑞典", 
+        "countryCode": "SE", 
+        "dialCode": "46"
+    }, 
+    {
+        "header": "riben", 
+        "countryName": "日本", 
+        "countryCode": "JP", 
+        "dialCode": "81"
+    }, 
+    {
+        "header": "suomali", 
+        "countryName": "索马里", 
+        "countryCode": "SO", 
+        "dialCode": "252"
+    }, 
+    {
+        "header": "suoluomenqundao", 
+        "countryName": "所罗门群岛", 
+        "countryCode": "SB", 
+        "dialCode": "677"
+    }, 
+    {
+        "header": "sulinan", 
+        "countryName": "苏里南", 
+        "countryCode": "SR", 
+        "dialCode": "597"
+    }, 
+    {
+        "header": "sudan", 
+        "countryName": "苏丹", 
+        "countryCode": "SD", 
+        "dialCode": "249"
+    }, 
+    {
+        "header": "siweishilan", 
+        "countryName": "斯威士兰", 
+        "countryCode": "SZ", 
+        "dialCode": "268"
+    }, 
+    {
+        "header": "siluowenniya", 
+        "countryName": "斯洛文尼亚", 
+        "countryCode": "SI", 
+        "dialCode": "386"
+    }, 
+    {
+        "header": "siluofake", 
+        "countryName": "斯洛伐克", 
+        "countryCode": "SK", 
+        "dialCode": "421"
+    }, 
+    {
+        "header": "sililanka", 
+        "countryName": "斯里兰卡", 
+        "countryCode": "LK", 
+        "dialCode": "94"
+    }, 
+    {
+        "header": "shengyousitexiesi", 
+        "countryName": "圣尤斯特歇斯", 
+        "countryCode": "BQ", 
+        "dialCode": "599"
+    }, 
+    {
+        "header": "shengwensentehegelinnadingsi", 
+        "countryName": "圣文森特和格林纳丁斯", 
+        "countryCode": "VC", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "shengpiaierhemikelongqundao", 
+        "countryName": "圣皮埃尔和密克隆群岛", 
+        "countryCode": "PM", 
+        "dialCode": "508"
+    }, 
+    {
+        "header": "shengmalinuo", 
+        "countryName": "圣马力诺", 
+        "countryCode": "SM", 
+        "dialCode": "378"
+    }, 
+    {
+        "header": "shengluxiya", 
+        "countryName": "圣卢西亚", 
+        "countryCode": "LC", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "shengjiciheniweisi", 
+        "countryName": "圣基茨和尼维斯", 
+        "countryCode": "KN", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "shengduomeihepulinxibi", 
+        "countryName": "圣多美和普林西比", 
+        "countryCode": "ST", 
+        "dialCode": "239"
+    }, 
+    {
+        "header": "shengbatailemidao", 
+        "countryName": "圣巴泰勒米岛", 
+        "countryCode": "BL", 
+        "dialCode": "590"
+    }, 
+    {
+        "header": "shatealabo", 
+        "countryName": "沙特阿拉伯", 
+        "countryCode": "SA", 
+        "dialCode": "966"
+    }, 
+    {
+        "header": "saisheer", 
+        "countryName": "塞舌尔", 
+        "countryCode": "SC", 
+        "dialCode": "248"
+    }, 
+    {
+        "header": "saipulusi", 
+        "countryName": "塞浦路斯", 
+        "countryCode": "CY", 
+        "dialCode": "357"
+    }, 
+    {
+        "header": "saineijiaer", 
+        "countryName": "塞内加尔", 
+        "countryCode": "SN", 
+        "dialCode": "221"
+    }, 
+    {
+        "header": "sailaliang", 
+        "countryName": "塞拉利昂", 
+        "countryCode": "SL", 
+        "dialCode": "232"
+    }, 
+    {
+        "header": "saierweiya", 
+        "countryName": "塞尔维亚", 
+        "countryCode": "RS", 
+        "dialCode": "381"
+    }, 
+    {
+        "header": "samoya", 
+        "countryName": "萨摩亚", 
+        "countryCode": "WS", 
+        "dialCode": "685"
+    }, 
+    {
+        "header": "saerwaduo", 
+        "countryName": "萨尔瓦多", 
+        "countryCode": "SV", 
+        "dialCode": "503"
+    }, 
+    {
+        "header": "tuokelao", 
+        "countryName": "托克劳", 
+        "countryCode": "TK", 
+        "dialCode": "690"
+    }, 
+    {
+        "header": "tuwalu", 
+        "countryName": "图瓦卢", 
+        "countryCode": "TV", 
+        "dialCode": "688"
+    }, 
+    {
+        "header": "tunisi", 
+        "countryName": "突尼斯", 
+        "countryCode": "TN", 
+        "dialCode": "216"
+    }, 
+    {
+        "header": "tukumansitan", 
+        "countryName": "土库曼斯坦", 
+        "countryCode": "TM", 
+        "dialCode": "993"
+    }, 
+    {
+        "header": "tuerqi", 
+        "countryName": "土耳其", 
+        "countryCode": "TR", 
+        "dialCode": "90"
+    }, 
+    {
+        "header": "telisitan-dakuniyaqundao", 
+        "countryName": "特里斯坦-达库尼亚群岛", 
+        "countryCode": "SH", 
+        "dialCode": "290"
+    }, 
+    {
+        "header": "telinidaheduobage", 
+        "countryName": "特立尼达和多巴哥", 
+        "countryCode": "TT", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "tekesihekaikesiqundao", 
+        "countryName": "特克斯和凯科斯群岛", 
+        "countryCode": "TC", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "tangjia", 
+        "countryName": "汤加", 
+        "countryCode": "TO", 
+        "dialCode": "676"
+    }, 
+    {
+        "header": "tansangniya", 
+        "countryName": "坦桑尼亚", 
+        "countryCode": "TZ", 
+        "dialCode": "255"
+    }, 
+    {
+        "header": "taiguo", 
+        "countryName": "泰国", 
+        "countryCode": "TH", 
+        "dialCode": "66"
+    }, 
+    {
+        "header": "tajikesitan", 
+        "countryName": "塔吉克斯坦", 
+        "countryCode": "TJ", 
+        "dialCode": "992"
+    }, 
+    {
+        "header": "wuzibiekesitan", 
+        "countryName": "乌兹别克斯坦", 
+        "countryCode": "UZ", 
+        "dialCode": "998"
+    }, 
+    {
+        "header": "wulagui", 
+        "countryName": "乌拉圭", 
+        "countryCode": "UY", 
+        "dialCode": "598"
+    }, 
+    {
+        "header": "wukelan", 
+        "countryName": "乌克兰", 
+        "countryCode": "UA", 
+        "dialCode": "380"
+    }, 
+    {
+        "header": "wuganda", 
+        "countryName": "乌干达", 
+        "countryCode": "UG", 
+        "dialCode": "256"
+    }, 
+    {
+        "header": "wenlai", 
+        "countryName": "文莱", 
+        "countryCode": "BN", 
+        "dialCode": "673"
+    }, 
+    {
+        "header": "weineiruila", 
+        "countryName": "委内瑞拉", 
+        "countryCode": "VE", 
+        "dialCode": "58"
+    }, 
+    {
+        "header": "weidimala", 
+        "countryName": "危地马拉", 
+        "countryCode": "GT", 
+        "dialCode": "502"
+    }, 
+    {
+        "header": "wanuatu", 
+        "countryName": "瓦努阿图", 
+        "countryCode": "VU", 
+        "dialCode": "678"
+    }, 
+    {
+        "header": "walisiqundaohefutunaqundao", 
+        "countryName": "瓦利斯群岛和富图纳群岛", 
+        "countryCode": "WF", 
+        "dialCode": "681"
+    }, 
+    {
+        "header": "xuliya", 
+        "countryName": "叙利亚", 
+        "countryCode": "SY", 
+        "dialCode": "963"
+    }, 
+    {
+        "header": "xiongyali", 
+        "countryName": "匈牙利", 
+        "countryCode": "HU", 
+        "dialCode": "36"
+    }, 
+    {
+        "header": "xinxilan", 
+        "countryName": "新西兰", 
+        "countryCode": "NZ", 
+        "dialCode": "64"
+    }, 
+    {
+        "header": "xinkaliduoniya", 
+        "countryName": "新喀里多尼亚", 
+        "countryCode": "NC", 
+        "dialCode": "687"
+    }, 
+    {
+        "header": "xinjiapo", 
+        "countryName": "新加坡", 
+        "countryCode": "SG", 
+        "dialCode": "65"
+    }, 
+    {
+        "header": "xisahala", 
+        "countryName": "西撒哈拉", 
+        "countryCode": "EH", 
+        "dialCode": "212"
+    }, 
+    {
+        "header": "xila", 
+        "countryName": "希腊", 
+        "countryCode": "GR", 
+        "dialCode": "30"
+    }, 
+    {
+        "header": "xibanya", 
+        "countryName": "西班牙", 
+        "countryCode": "ES", 
+        "dialCode": "34"
+    }, 
+    {
+        "header": "yuenan", 
+        "countryName": "越南", 
+        "countryCode": "VN", 
+        "dialCode": "84"
+    }, 
+    {
+        "header": "yuedan", 
+        "countryName": "约旦", 
+        "countryCode": "JO", 
+        "dialCode": "962"
+    }, 
+    {
+        "header": "yingshuyinduyanglingdi", 
+        "countryName": "英属印度洋领地", 
+        "countryCode": "IO", 
+        "dialCode": "246"
+    }, 
+    {
+        "header": "yingshuweierjingqundao", 
+        "countryName": "英属维尔京群岛", 
+        "countryCode": "VG", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "yingguo", 
+        "countryName": "英国", 
+        "countryCode": "UK", 
+        "dialCode": "44"
+    }, 
+    {
+        "header": "yindunixiya", 
+        "countryName": "印度尼西亚", 
+        "countryCode": "ID", 
+        "dialCode": "62"
+    }, 
+    {
+        "header": "yindu", 
+        "countryName": "印度", 
+        "countryCode": "IN", 
+        "dialCode": "91"
+    }, 
+    {
+        "header": "yiselie", 
+        "countryName": "以色列", 
+        "countryCode": "IL", 
+        "dialCode": "972"
+    }, 
+    {
+        "header": "yilang", 
+        "countryName": "伊朗", 
+        "countryCode": "IR", 
+        "dialCode": "98"
+    }, 
+    {
+        "header": "yilake", 
+        "countryName": "伊拉克", 
+        "countryCode": "IQ", 
+        "dialCode": "964"
+    }, 
+    {
+        "header": "yidali", 
+        "countryName": "意大利", 
+        "countryCode": "IT", 
+        "dialCode": "39"
+    }, 
+    {
+        "header": "yemen", 
+        "countryName": "也门", 
+        "countryCode": "YE", 
+        "dialCode": "967"
+    }, 
+    {
+        "header": "yameiniya", 
+        "countryName": "亚美尼亚", 
+        "countryCode": "AM", 
+        "dialCode": "374"
+    }, 
+    {
+        "header": "yamaijia", 
+        "countryName": "牙买加", 
+        "countryCode": "JM", 
+        "dialCode": "1"
+    }, 
+    {
+        "header": "zhongguo", 
+        "countryName": "中国", 
+        "countryCode": "CN", 
+        "dialCode": "86"
+    }, 
+    {
+        "header": "zhongfeigongheguo", 
+        "countryName": "中非共和国", 
+        "countryCode": "CF", 
+        "dialCode": "236"
+    }, 
+    {
+        "header": "zhili", 
+        "countryName": "智利", 
+        "countryCode": "CL", 
+        "dialCode": "56"
+    }, 
+    {
+        "header": "zhibuluotuo", 
+        "countryName": "直布罗陀", 
+        "countryCode": "GI", 
+        "dialCode": "350"
+    }, 
+    {
+        "header": "zhade", 
+        "countryName": "乍得", 
+        "countryCode": "TD", 
+        "dialCode": "235"
+    }, 
+    {
+        "header": "zanbiya", 
+        "countryName": "赞比亚", 
+        "countryCode": "ZM", 
+        "dialCode": "260"
+    }
+]

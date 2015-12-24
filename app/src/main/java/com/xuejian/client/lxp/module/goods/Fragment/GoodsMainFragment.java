@@ -32,6 +32,7 @@ import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
@@ -365,10 +366,10 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 viewHolder.tvGoodsName.setText(bean.getTitle());
                 viewHolder.tvShopName.setText(bean.getSeller().getName());
                 viewHolder.tvGoodsLoc.setText(bean.getLocality().getZhName());
-                viewHolder.tvGoodsPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getMarketPrice() * 10) / 10))));
+                viewHolder.tvGoodsPrice.setText(String.format("¥%s", CommonUtils.getPriceString(bean.getMarketPrice())));
                 viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
-                viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", String.valueOf((float) (Math.round(bean.getPrice() * 10) / 10))));
+                viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", CommonUtils.getPriceString(bean.getPrice())));
                 ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, options);
                 viewHolder.container.setOnClickListener(new View.OnClickListener() {
                     @Override

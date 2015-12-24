@@ -71,6 +71,8 @@
         android:layout_gravity="center_vertical"
         android:background="@color/base_color_white"
         android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -91,7 +93,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_info" />
 
                 <TextView
@@ -102,7 +104,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_info"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 
@@ -116,7 +118,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_travel_notice" />
 
                 <TextView
@@ -127,7 +129,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_notice"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 
@@ -141,7 +143,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_traffic" />
 
                 <TextView
@@ -152,7 +154,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_traffic"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 
@@ -166,7 +168,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_viewspot" />
 
                 <TextView
@@ -177,7 +179,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_viewspot"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 
@@ -200,7 +202,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_plan" />
 
                 <TextView
@@ -211,7 +213,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_plan"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 
@@ -225,7 +227,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_note" />
 
                 <TextView
@@ -236,7 +238,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_note"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 
@@ -250,7 +252,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_food" />
 
                 <TextView
@@ -261,7 +263,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_food"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 
@@ -275,7 +277,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/icon_shopping" />
 
                 <TextView
@@ -286,7 +288,7 @@
                     android:padding="5dp"
                     android:text="@string/city_detail_shopping"
                     android:textColor="@color/color_text_ii"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </FrameLayout>
 

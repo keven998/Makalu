@@ -264,6 +264,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="5dp"
                             android:src="@drawable/icon_needed" />
+
                     </LinearLayout>
 
                     <EditText
@@ -363,6 +364,18 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="5dp"
                             android:src="@drawable/icon_needed" />
+                        <TextView
+                            android:id="@+id/tv_dialCode"
+                            android:text="+86"
+                            android:layout_marginLeft="27dp"
+                            android:gravity="center"
+                            android:background="@drawable/bg_common"
+                            android:textColor="@color/color_text_ii"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp" />
                     </LinearLayout>
 
                     <EditText
@@ -370,10 +383,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="80dp"
+                        android:layout_marginLeft="125dp"
                         android:layout_marginRight="10dp"
                         android:inputType="phone"
-                        android:hint="+86"
+                        android:hint="电话号码"
                         android:textColorHint="@color/color_text_v"
                         android:textColor="@color/color_text_ii"
                         android:paddingLeft="10dp"

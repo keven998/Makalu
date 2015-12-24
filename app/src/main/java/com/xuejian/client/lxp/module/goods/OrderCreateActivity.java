@@ -80,9 +80,12 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     TextView tvAddUser;
     @InjectView(R.id.tv_total_price)
     TextView tvTotalPrice;
+    @InjectView(R.id.tv_dialCode)
+    TextView tvDialCode;
     public final static int SELECTED_DATE = 101;
     public final static int SELECTED_USER = 102;
     public final static int EDIT_USER_LIST = 103;
+    public final static int SELECTED_CODE = 104;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     CommonAdapter memberAdapter;
     ListView memberList;
@@ -90,7 +93,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     String commodityId;
     PlanBean currentPlanBean;
     PriceBean priceBean;
-
+    int currenrDialCode = 86;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +110,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         tvAddUser.setOnClickListener(this);
         tvEditUser.setOnClickListener(this);
         tvTitleBack.setOnClickListener(this);
-
+        tvDialCode.setOnClickListener(this);
         ListView packageList = (ListView) findViewById(R.id.lv_choose);
         CommonAdapter commonAdapter = new CommonAdapter(mContext, R.layout.item_package_info, true, data);
         packageList.setAdapter(commonAdapter);
@@ -216,6 +219,10 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             case R.id.tv_title_back:
                 notice();
                 break;
+            case R.id.tv_dialCode:
+                Intent tv_dialCode = new Intent(OrderCreateActivity.this, CountryPickActivity.class);
+                startActivityForResult(tv_dialCode, SELECTED_CODE);
+                break;
             default:
                 break;
         }
@@ -241,33 +248,21 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             return;
         }
         String tel = etTel.getText().toString();
-        long dia = 86;
         long telNumber = 0;
-        if (tel.contains("-")){
-            String[] tels = tel.split("-");
-            if (TextUtils.isDigitsOnly(tels[0])&&TextUtils.isDigitsOnly(tels[1])){
-                dia = Long.parseLong(tels[0]);
-                telNumber = Long.parseLong(tels[1]);
-            }else {
-                Toast.makeText(mContext,"请输入正确的电话号码",Toast.LENGTH_LONG).show();
-                return;
-            }
-        }else {
             if (TextUtils.isDigitsOnly(tel)){
                 telNumber = Long.parseLong(tel);
             }else {
                 Toast.makeText(mContext,"请输入正确的电话号码",Toast.LENGTH_LONG).show();
                 return;
             }
-        }
 
-        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum,dia
+        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum,currenrDialCode
                , telNumber, "", etFirstName.getText().toString(),
                 etLastName.getText().toString(), etMessage.getText().toString(), passengerList, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
                         CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
-                        Intent intent = new Intent(OrderCreateActivity.this, OrderDetailActivity.class);
+                        Intent intent = new Intent(OrderCreateActivity.this, OrderConfirmActivity.class);
                         intent.putExtra("type", "pendingOrder");
                         intent.putExtra("order", bean.result);
                         intent.putExtra("orderId", bean.result.getOrderId());
@@ -465,6 +460,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     etFirstName.setText(bean.getTraveller().getGivenName());
                     etLastName.setText(bean.getTraveller().getSurname());
                     etTel.setText(String.valueOf(bean.getTraveller().getTel().getNumber()));
+                    currenrDialCode = bean.getTraveller().getTel().getDialCode();
+                    tvDialCode.setText("+"+currenrDialCode);
                 }
             } else if (requestCode == EDIT_USER_LIST) {
                 ArrayList<TravellerBean> list = data.getParcelableArrayListExtra("passenger");
@@ -479,6 +476,9 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     tvEditUser.setVisibility(View.GONE);
                     tvAddUser.setVisibility(View.VISIBLE);
                 }
+            }else if (requestCode == SELECTED_CODE) {
+                currenrDialCode = data.getIntExtra("dialCode",0);
+                tvDialCode.setText("+"+currenrDialCode);
             }
         }
     }

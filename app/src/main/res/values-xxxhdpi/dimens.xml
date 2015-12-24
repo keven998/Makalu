@@ -37,5 +37,6 @@
     <dimen name="goods_main_page_img_size">208dp</dimen>
     <dimen name="goods_main_page_price_size">99dp</dimen>
     <dimen name="goods_main_page_price_text_size">49.5dp</dimen>
+    <dimen name="goods_loc_margin">62dp</dimen>
 
 </resources>

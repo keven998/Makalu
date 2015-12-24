@@ -556,6 +556,12 @@
             android:name=".module.goods.StoreDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".module.goods.OrderConfirmActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.goods.CountryPickActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true" >

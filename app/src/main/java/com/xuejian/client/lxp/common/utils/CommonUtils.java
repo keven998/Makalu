@@ -29,11 +29,15 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.CountryCodeBean;
 import com.xuejian.client.lxp.bean.StartCity;
 import com.xuejian.client.lxp.common.httpclient.Header;
 
@@ -59,6 +63,24 @@ import java.util.Map;
 
 public class CommonUtils {
 
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0, len = listAdapter.getCount(); i < len; i++) { //listAdapter.getCount()返回数据项的数目
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0); //计算子项View 的宽高
+            totalHeight += listItem.getMeasuredHeight(); //统计所有子项的总高度
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
+
     public static int getToolbarHeight(Context context) {
         final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
@@ -69,7 +91,7 @@ public class CommonUtils {
     }
 
     public static String  getPriceString(double price){
-        return String.valueOf((double) Math.round(price * 10 / 10));
+        return String.valueOf((double) Math.round(price * 100 / 100));
     }
 
 
@@ -224,6 +246,16 @@ public class CommonUtils {
         return gson.fromJson(json, listType);
     }
 
+    public static ArrayList<CountryCodeBean> parserCountryCodeJson(Context context) {
+        String json = getFromAssets(context, "countryCode.json");
+        if (json == null) {
+            return new ArrayList<>();
+        }
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<CountryCodeBean>>() {
+        }.getType();
+        return gson.fromJson(json, listType);
+    }
     public static String getFromAssets(Context context, String fileName) {
         String result = "";
         try {
@@ -235,6 +267,7 @@ public class CommonUtils {
             // 将文件中的数据读到byte数组中
             in.read(buffer);
             result =  getString(buffer, "utf-8");
+            in.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -29,7 +29,21 @@
             android:singleLine="true"
             android:textColor="@color/base_color_white"
             android:textSize="18sp" />
-
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical|right"
+            android:paddingLeft="11dp"
+            android:paddingRight="11dp"
+            android:singleLine="true"
+            android:text="@string/add"
+            android:visibility="gone"
+            android:textColor="@color/app_theme_color"
+            android:textSize="14sp" />
         <TextView
             android:id="@+id/tv_confirm"
             android:layout_width="wrap_content"
