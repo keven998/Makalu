@@ -3,19 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/base_color_white"
+    android:padding="5dp"
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@id/ll_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <CheckedTextView
+            android:layout_gravity="center_vertical"
             android:id="@+id/ctv_username"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_height="match_parent"
             android:background="@color/base_color_white"
             android:drawableLeft="@drawable/checker_for_checkbox"
             android:drawablePadding="10dp"
@@ -27,15 +29,47 @@
             android:textColor="@color/color_text_ii"
             android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/tv_id"
+        <LinearLayout
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="47dp"
-            android:textSize="15sp"
-            android:textColor="@color/color_text_ii"
-              />
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_text_ii"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_id"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_text_ii"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_tel"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_text_ii"
+                android:textSize="15sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView

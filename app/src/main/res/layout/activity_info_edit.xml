@@ -252,11 +252,25 @@
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/color_line" />
+
+        <TextView
+            android:id="@+id/tv_dialCode"
+            android:gravity="center"
+            android:text="+86"
+            android:textColor="@color/color_text_ii"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="52dp" />
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/color_line" />
         <EditText
             android:id="@+id/et_tel"
             android:layout_width="0dp"
             android:layout_height="52dp"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:inputType="phone"
             android:background="@color/base_color_white"
             android:textColor="@color/color_text_ii"

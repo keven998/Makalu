@@ -272,7 +272,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-
+                        Toast.makeText(mContext,"订单创建失败",Toast.LENGTH_LONG).show();
                     }
 
                     @Override

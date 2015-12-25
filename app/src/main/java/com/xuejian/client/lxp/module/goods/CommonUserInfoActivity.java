@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import java.util.HashMap;
 public class CommonUserInfoActivity extends PeachBaseActivity {
 
     private int EDIT_INFO = 103;
+    private int EDIT_USER = 106;
     TextView tvBack;
     TextView tv_confirm;
     TextView tv_add;
@@ -84,6 +86,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<TravellerBean> list = CommonJson4List.fromJson(result, TravellerBean.class);
+                passengerList.clear();
                 passengerList.addAll(list.result);
                 if (passengerList.size() > 0) {
                     passenger = passengerList.get(0);
@@ -112,9 +115,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         TextView title = (TextView) findViewById(R.id.title);
         if (type == EDIT_LIST) {
             title.setText(R.string.common_user_info);
-       //     ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userAdapter = new UserAdapter(mContext, multiple);
-
             View footView = View.inflate(this, R.layout.footer_add_member_grey_line, null);
             if (multiple) {
                 memberList.addFooterView(footView);
@@ -153,6 +154,8 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 }
             });
         } else if (type == SHOW_LIST) {
+            memberList.setDividerHeight(0);
+            memberList.setDivider(null);
             tv_confirm.setVisibility(View.GONE);
             tv_add.setVisibility(View.VISIBLE);
             tv_add.setOnClickListener(new View.OnClickListener() {
@@ -164,17 +167,17 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 }
             });
             title.setText(R.string.user_info);
-      //      ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userInfoAdapter = new UserInfoAdapter();
             memberList.setAdapter(userInfoAdapter);
         } else if (type == 3) {
+            memberList.setDividerHeight(0);
+            memberList.setDivider(null);
             tv_confirm.setVisibility(View.GONE);
             title.setText(R.string.user_info);
             ArrayList<TravellerEntity> list = getIntent().getParcelableArrayListExtra("passengerList");
             for (TravellerEntity entity : list) {
                 passengerList.add(new TravellerBean(entity));
             }
-    //        ListView memberList = (ListView) findViewById(R.id.lv_userInfo);
             userInfoAdapter = new UserInfoAdapter();
             memberList.setAdapter(userInfoAdapter);
         }
@@ -215,7 +218,10 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 viewHolder1 = new ViewHolder1();
                 viewHolder1.username = (CheckedTextView) convertView.findViewById(R.id.ctv_username);
                 viewHolder1.id = (TextView) convertView.findViewById(R.id.tv_id);
+                viewHolder1.tel = (TextView) convertView.findViewById(R.id.tv_tel);
+                viewHolder1.name = (TextView) convertView.findViewById(R.id.tv_name);
                 viewHolder1.edit = (ImageView) convertView.findViewById(R.id.iv_edit);
+                viewHolder1.llContainer = (LinearLayout) convertView.findViewById(R.id.ll_container);
                 convertView.setTag(viewHolder1);
 
             } else {
@@ -224,7 +230,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             final TravellerBean bean = (TravellerBean) getItem(position);
 
 
-            viewHolder1.username.setOnClickListener(new View.OnClickListener() {
+            viewHolder1.llContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (multiple) {
@@ -246,7 +252,8 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             } else {
                 viewHolder1.edit.setVisibility(View.INVISIBLE);
             }
-            viewHolder1.username.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
+            viewHolder1.name.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
+            viewHolder1.tel.setText(bean.getTraveller().getTel().getDialCode()+"-"+bean.getTraveller().getTel().getNumber());
             if (bean.getTraveller().getIdentities().size() > 0) {
                 viewHolder1.id.setText(idType.get(bean.getTraveller().getIdentities().get(0).getIdType()) + " " + bean.getTraveller().getIdentities().get(0).getNumber());
             }
@@ -258,7 +265,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                     intent.putExtra("type", "edit");
                     intent.putExtra("passenger", bean);
                     intent.setClass(CommonUserInfoActivity.this, UserInfoEditActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,EDIT_USER);
                 }
             });
             if (!multiple) {
@@ -271,7 +278,10 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         class ViewHolder1 {
             private CheckedTextView username;
             private TextView id;
+            private TextView name;
+            private TextView tel;
             private ImageView edit;
+            private LinearLayout llContainer;
         }
     }
 
@@ -340,6 +350,16 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                     userAdapter.notifyDataSetChanged();
                 }
 
+            }else if (requestCode == EDIT_USER){
+                TravellerBean bean = data.getParcelableExtra("passenger");
+                if (bean!=null){
+                    for (int i = 0; i < passengerList.size(); i++) {
+                        if (passengerList.get(i).getKey().equals(bean.getKey())){
+                            passengerList.set(i,bean);
+                        }
+                    }
+                }
+                getData();
             }
         }
     }

@@ -89,12 +89,19 @@ public class OrderConfirmActivity extends PeachBaseActivity{
     @InjectView(R.id.ll_message)
     LinearLayout llMessage;
     long orderId;
+    CountDownTimer countDownTimer;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
         ButterKnife.inject(this);
+        ivNavBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         OrderBean bean = getIntent().getParcelableExtra("order");
         bindView(bean);
     }
@@ -143,7 +150,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 tvState.setText(String.format("待付款¥%s", String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10))));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
-                    CountDownTimer countDownTimer = new CountDownTimer(time, 1000) {
+                    countDownTimer = new CountDownTimer(time, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
                             tvFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
@@ -152,11 +159,25 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                         @Override
                         public void onFinish() {
                             tvFeedback.setText("订单已超过支付期限,请重新下单");
+                            tvPay.setText("再次预定");
                         }
                     }.start();
                 } else {
                     tvFeedback.setText("订单已超过支付期限,请重新下单");
+                    tvPay.setText("再次预定");
                 }
+                tvPay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (tvPay.getText().toString().equals("立即支付")){
+                            showPayActionDialog(bean);
+                        }else if (tvPay.getText().toString().equals("再次预定")){
+                            intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
+                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                            startActivity(intent);
+                        }
+                    }
+                });
                 break;
             case "finished":
                 tvState.setText("交易已结束");
@@ -278,6 +299,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 }
                 tv_pay.putExtra("type", "alipay");
                 startActivity(tv_pay);
+                finish();
             }
         });
         weixinpay.setOnClickListener(new View.OnClickListener() {
@@ -290,6 +312,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 }
                 tv_pay.putExtra("type", "weixinpay");
                 startActivity(tv_pay);
+                finish();
             }
         });
         contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
@@ -401,6 +424,13 @@ public class OrderConfirmActivity extends PeachBaseActivity{
             private LinearLayout bg;
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer!=null){
+            countDownTimer.cancel();
+            countDownTimer=null;
+        }
+    }
 
 }

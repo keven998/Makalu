@@ -47,32 +47,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/color_line" />
-            <RelativeLayout
+            <LinearLayout
     android:layout_width="match_parent"
     android:background="@color/base_color_white"
-    android:layout_height="52dp">
+    android:layout_height="wrap_content"
+                android:weightSum="5">
     <TextView
         android:id="@+id/tv_pay_state"
-        android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
         android:background="@color/base_color_white"
         android:gravity="center_vertical"
-        android:paddingBottom="10dp"
+        android:paddingBottom="12dp"
         android:paddingLeft="10dp"
-        android:paddingTop="10dp"
+        android:paddingTop="12dp"
         android:textColor="@color/price_color"
         android:textSize="16sp" />
     <TextView
         android:id="@+id/tv_pay_feedback"
-        android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:paddingBottom="10dp"
+        android:paddingLeft="12dp"
+        android:paddingTop="12dp"
+        android:layout_height="wrap_content"
         android:background="@color/base_color_white"
-        android:layout_alignParentRight="true"
         android:gravity="center_vertical"
         android:layout_marginRight="10dp"
         android:textColor="@color/color_text_ii"
         android:textSize="16sp" />
-</RelativeLayout>
+</LinearLayout>
 
 
             <TextView
@@ -281,7 +286,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="旺旺"/>
+                    android:text="联系商家"/>
             </RelativeLayout>
 
             <RelativeLayout

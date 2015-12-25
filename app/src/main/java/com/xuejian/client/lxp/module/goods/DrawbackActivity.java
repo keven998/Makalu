@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class DrawbackActivity extends PeachBaseActivity {
 
-    String [] reasons = new String[]{"我想重新下单","我的旅行计划有所改变","我不想体验这个项目了","就不告诉你","其他"};
+    String [] reasons = new String[]{"我想重新下单","我的旅行计划有所改变","我不想体验这个项目了","其他"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

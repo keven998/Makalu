@@ -52,9 +52,9 @@
     <string name="goods_name">产品名称:</string>
     <string name="order_id">订单编号:</string>
     <string name="package_type">套餐类型:</string>
-    <string name="consumption_time">使用日期:</string>
-    <string name="reserve_count">预定数量:</string>
-    <string name="order_price">订购金额:</string>
+    <string name="consumption_time">出行日期:</string>
+    <string name="reserve_count">购买数量:</string>
+    <string name="order_price">订单金额:</string>
     <string name="cancel_order">取消订单</string>
     <string name="pay_it_now">立即支付</string>
     <string name="submit_order">提交订单</string>

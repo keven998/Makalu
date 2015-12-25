@@ -94,7 +94,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     LinearLayout llMessage;
     long orderId;
     OrderBean currentOrder;
-
+    CountDownTimer countDownTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,16 +115,20 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         }
 
         ivNavBack.setOnClickListener(this);
-        tvPay.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_pay:
-                showPayActionDialog();
-                break;
+//            case R.id.tv_pay:
+//                if (tvPay.getText().toString().equals("立即支付")){
+//                    showPayActionDialog();
+//                }else if (tvPay.getText().toString().equals("再次预定")){
+//
+//                }
+//
+//                break;
             case R.id.iv_nav_back:
 //                Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
 //                startActivity(tv_title_back);
@@ -165,7 +169,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         final Intent intent = new Intent();
         switch (bean.getStatus()) {
             case "paid":
-                tvState.setText("已支付");
+                tvState.setText("等待卖家确认");
                 llTradeAction0.setVisibility(View.VISIBLE);
                 tvAction0.setText("申请退款");
                 tvAction0.setOnClickListener(new View.OnClickListener() {
@@ -191,13 +195,13 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 });
                 break;
             case "refundApplied":
-                tvState.setText("已申请退款");
+                tvState.setText("退款申请中");
                 break;
             case "pending":
-                tvState.setText(String.format("待付款¥%s", String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10))));
+                tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice())));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
-                    CountDownTimer countDownTimer = new CountDownTimer(time, 1000) {
+                    countDownTimer = new CountDownTimer(time, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
                             tvFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
@@ -206,15 +210,29 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                         @Override
                         public void onFinish() {
                             tvFeedback.setText("订单已超过支付期限,请重新下单");
+                            tvPay.setText("再次预定");
                         }
                     }.start();
                 } else {
                     tvFeedback.setText("订单已超过支付期限,请重新下单");
+                    tvPay.setText("再次预定");
                 }
+                tvPay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (tvPay.getText().toString().equals("立即支付")){
+                            showPayActionDialog();
+                        }else if (tvPay.getText().toString().equals("再次预定")){
+                            intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                            startActivity(intent);
+                        }
+                    }
+                });
                 llTradeAction1.setVisibility(View.VISIBLE);
                 break;
             case "finished":
-                tvState.setText("交易已结束");
+                tvState.setText("已完成");
                 llTradeAction0.setVisibility(View.VISIBLE);
                 tvAction0.setText("再次预定");
                 tvAction0.setOnClickListener(new View.OnClickListener() {
@@ -423,4 +441,12 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer!=null){
+            countDownTimer.cancel();
+            countDownTimer=null;
+        }
+    }
 }

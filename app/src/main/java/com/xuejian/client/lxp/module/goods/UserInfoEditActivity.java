@@ -63,9 +63,13 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     EditText etId;
     @InjectView(R.id.type_spinner)
     Spinner spinner;
+    @InjectView(R.id.tv_dialCode)
+    TextView tvDialCode;
     String idType ="passport";
     String type = "";
-    final String[] idTypeArray = new String[]{"passport", "chineseID"};
+    final String[] idTypeArray = new String[]{"passport", "chineseID","",""};
+    private static final int SELECTED_CODE = 105;
+    int currenrDialCode = 86;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +79,14 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         tvTitleBack.setOnClickListener(this);
         tvConfirm.setOnClickListener(this);
         ivSelectBirthday.setOnClickListener(this);
-        String[] mItems = new String[]{"护照", "身份证"};
-
+        String[] mItems = new String[]{"护照", "身份证","港澳通行证","台湾通行证"};
+        tvDialCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent tv_dialCode = new Intent(mContext, CountryPickActivity.class);
+                startActivityForResult(tv_dialCode, SELECTED_CODE);
+            }
+        });
         StringSpinnerAdapter mTypeListAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(mItems));
         spinner.setAdapter(mTypeListAdapter);
         spinner.setSelection(0, true);
@@ -93,6 +103,17 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         if ("edit".equals(type)){
             TravellerBean bean1 = getIntent().getParcelableExtra("passenger");
             bindView(bean1);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK ){
+            if (requestCode == SELECTED_CODE){
+                currenrDialCode = data.getIntExtra("dialCode",0);
+                tvDialCode.setText("+"+currenrDialCode);
+            }
         }
     }
 
@@ -151,7 +172,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
                         traveller.setGivenName(etFirstName.getText().toString());
                         traveller.setSurname(etLastName.getText().toString());
                         TelBean tel = new TelBean();
-                        tel.setDialCode(86);
+                        tel.setDialCode(currenrDialCode);
                         tel.setNumber(Long.parseLong(etTel.getText().toString()));
                         traveller.setTel(tel);
                         ArrayList<IdentityBean> identityBeanArrayList = new ArrayList<>();
@@ -169,7 +190,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
                         traveller1.setGivenName(etFirstName.getText().toString());
                         traveller1.setSurname(etLastName.getText().toString());
                         TelBean tel1 = new TelBean();
-                        tel1.setDialCode(86);
+                        tel1.setDialCode(currenrDialCode);
                         tel1.setNumber(Long.parseLong(etTel.getText().toString()));
                         traveller1.setTel(tel1);
                         ArrayList<IdentityBean> identityBeanArrayList1 = new ArrayList<>();

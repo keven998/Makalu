@@ -70,6 +70,6 @@
         android:id="@+id/lv_userInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="0px" />
+        android:divider="@color/color_line"
+        android:dividerHeight="1px" />
 </LinearLayout>
