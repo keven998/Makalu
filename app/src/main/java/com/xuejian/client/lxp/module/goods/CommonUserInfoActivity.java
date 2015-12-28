@@ -48,6 +48,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
 
     private HashMap<String, String> idType = new HashMap<>();
     ListView memberList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +113,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
 
 
     private void initView(int type, final boolean multiple) {
+        selectedPassengerList.clear();
         TextView title = (TextView) findViewById(R.id.title);
         if (type == EDIT_LIST) {
             title.setText(R.string.common_user_info);
@@ -121,7 +123,15 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 memberList.addFooterView(footView);
             }
             memberList.setAdapter(userAdapter);
+            ArrayList<TravellerBean> list = getIntent().getParcelableArrayListExtra("selected");
+            if (list != null) {
+                selectedPassengerList.addAll(list);
+                System.out.println("passenger size = " + list.size());
 
+                for (TravellerBean bean : list) {
+                    System.out.println("key  = " + bean.getKey());
+                }
+            }
             TextView addMember = (TextView) footView.findViewById(R.id.add_member);
             addMember.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -186,7 +196,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
     public class UserAdapter extends BaseAdapter {
 
         private Context mContext;
-        private int lastId;
+        private int lastId = -1;
         private boolean multiple;
 
         public UserAdapter(Context c, boolean multiple) {
@@ -229,6 +239,15 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             }
             final TravellerBean bean = (TravellerBean) getItem(position);
 
+            if (multiple) {
+                viewHolder1.username.setChecked(false);
+                for (TravellerBean travellerBean : selectedPassengerList) {
+                    if (bean.getKey().equals(travellerBean.getKey())) {
+                        viewHolder1.username.setChecked(true);
+                        break;
+                    }
+                }
+            }
 
             viewHolder1.llContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -236,9 +255,11 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                     if (multiple) {
                         viewHolder1.username.setChecked(!viewHolder1.username.isChecked());
                         if (viewHolder1.username.isChecked()) {
-                            selectedPassengerList.add(bean);
+                            // selectedPassengerList.add(bean);
+                            add(bean);
                         } else {
-                            selectedPassengerList.remove(bean);
+                            remove(bean);
+                            //  selectedPassengerList.remove(bean);
                         }
                     } else {
                         lastId = position;
@@ -253,7 +274,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                 viewHolder1.edit.setVisibility(View.INVISIBLE);
             }
             viewHolder1.name.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
-            viewHolder1.tel.setText(bean.getTraveller().getTel().getDialCode()+"-"+bean.getTraveller().getTel().getNumber());
+            viewHolder1.tel.setText(bean.getTraveller().getTel().getDialCode() + "-" + bean.getTraveller().getTel().getNumber());
             if (bean.getTraveller().getIdentities().size() > 0) {
                 viewHolder1.id.setText(idType.get(bean.getTraveller().getIdentities().get(0).getIdType()) + " " + bean.getTraveller().getIdentities().get(0).getNumber());
             }
@@ -265,7 +286,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
                     intent.putExtra("type", "edit");
                     intent.putExtra("passenger", bean);
                     intent.setClass(CommonUserInfoActivity.this, UserInfoEditActivity.class);
-                    startActivityForResult(intent,EDIT_USER);
+                    startActivityForResult(intent, EDIT_USER);
                 }
             });
             if (!multiple) {
@@ -273,6 +294,29 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             }
 
             return convertView;
+        }
+
+        public void remove(TravellerBean bean) {
+            ArrayList<TravellerBean> del = new ArrayList<>();
+            for (TravellerBean travellerBean : selectedPassengerList) {
+                if (travellerBean.getKey().equals(bean.getKey())) {
+                    del.add(travellerBean);
+                    break;
+                }
+            }
+            selectedPassengerList.removeAll(del);
+            del = null;
+        }
+
+        public void add(TravellerBean bean) {
+            boolean flag = false;
+            for (TravellerBean travellerBean : selectedPassengerList) {
+                if (travellerBean.getKey().equals(bean.getKey())) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) selectedPassengerList.add(bean);
         }
 
         class ViewHolder1 {
@@ -284,6 +328,7 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             private LinearLayout llContainer;
         }
     }
+
 
     public class UserInfoAdapter extends BaseAdapter {
 
@@ -343,19 +388,19 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == EDIT_INFO) {
                 TravellerBean bean = data.getParcelableExtra("passenger");
-                if (bean!=null)passengerList.add(bean);
-                if (type==SHOW_LIST){
+                if (bean != null) passengerList.add(bean);
+                if (type == SHOW_LIST) {
                     userInfoAdapter.notifyDataSetChanged();
-                }else {
+                } else {
                     userAdapter.notifyDataSetChanged();
                 }
 
-            }else if (requestCode == EDIT_USER){
+            } else if (requestCode == EDIT_USER) {
                 TravellerBean bean = data.getParcelableExtra("passenger");
-                if (bean!=null){
+                if (bean != null) {
                     for (int i = 0; i < passengerList.size(); i++) {
-                        if (passengerList.get(i).getKey().equals(bean.getKey())){
-                            passengerList.set(i,bean);
+                        if (passengerList.get(i).getKey().equals(bean.getKey())) {
+                            passengerList.set(i, bean);
                         }
                     }
                 }

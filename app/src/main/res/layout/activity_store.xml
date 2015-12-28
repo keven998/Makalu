@@ -63,7 +63,7 @@
             android:drawableLeft="@drawable/icon_store_talk"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:text="联系商家"
+            android:text="@string/talk_to_seller"
             android:textColor="@color/color_text_ii"
             android:textSize="19sp" />
     </RelativeLayout>

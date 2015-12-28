@@ -755,7 +755,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.tv_name.setSingleLine(false);
         holder.tv_name.setMaxLines(2);
         holder.tv_name.setText(bean.title);
-        holder.tv_desc.setText(String.format("¥%s", String.valueOf((double) Math.round(bean.price * 10 / 10))));
+        holder.tv_desc.setText(String.format("¥%s起", CommonUtils.getPriceString(bean.price)));
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.price_color));
         //    holder.tv_attr.setText(bean.timeCost);
         if (bean.image != null) {
@@ -763,6 +763,7 @@ public class MessageAdapter extends BaseAdapter {
         } else {
             ImageLoader.getInstance().displayImage("", holder.iv_image, UILUtils.getRadiusOption(3));
         }
+
         //     holder.tv_type.setText("计划");
         holder.rl_content.setOnClickListener(new OnClickListener() {
             @Override

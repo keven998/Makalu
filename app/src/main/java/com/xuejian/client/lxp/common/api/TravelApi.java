@@ -151,7 +151,7 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
     }
 
-    public static void editOrderStatus(long orderId, String action,String memo, HttpCallBack callback) {
+    public static void editOrderStatus(long orderId, String action,JSONObject data, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST );
         request.setUrl(SystemConfig.DEV_URL + String.format(EDIT_ORDER_STATUS,orderId));
@@ -160,7 +160,7 @@ public class TravelApi extends BaseApi {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("action", action);
-            jsonObject.put("memo",memo);
+            jsonObject.put("data",data);
         } catch (JSONException e) {
             e.printStackTrace();
         }

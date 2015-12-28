@@ -50,6 +50,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,7 +92,10 @@ public class CommonUtils {
     }
 
     public static String  getPriceString(double price){
-        return String.valueOf((double) Math.round(price * 100 / 100));
+        BigDecimal bd = new BigDecimal(price);
+        BigDecimal  bd2 = bd.setScale(2,BigDecimal.ROUND_HALF_UP);
+        return bd2.toString();
+      //  return String.valueOf((double) Math.round(price * 100 / 100));
     }
 
 

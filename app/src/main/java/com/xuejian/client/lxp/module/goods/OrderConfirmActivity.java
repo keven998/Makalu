@@ -256,7 +256,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 
         tvOrderContactName.setText(bean.getContact().getGivenName() + " " + bean.getContact().getSurname());
-        tvOrderContactTel.setText(bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
+        tvOrderContactTel.setText("+"+bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
         if (TextUtils.isEmpty(bean.getComment())){
             llMessage.setVisibility(View.GONE);
         }else {

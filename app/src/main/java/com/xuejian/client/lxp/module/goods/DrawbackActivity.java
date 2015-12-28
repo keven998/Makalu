@@ -4,9 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -14,7 +15,12 @@ import android.widget.Toast;
 import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.db.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,24 +30,44 @@ import java.util.ArrayList;
 public class DrawbackActivity extends PeachBaseActivity {
 
     String [] reasons = new String[]{"我想重新下单","我的旅行计划有所改变","我不想体验这个项目了","其他"};
+    String currentReason = reasons[0];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawback);
         final long orderId = getIntent().getLongExtra("orderId",-1);
+        final double price = getIntent().getDoubleExtra("amount",0.00);
+        final EditText editText = (EditText) findViewById(R.id.et_memo);
         ListView reasonList = (ListView) findViewById(R.id.lv_reason);
-        reasonList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        //reasonList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         reasonList.setAdapter(new UserAdapter(mContext, true));
         setListViewHeightBasedOnChildren(reasonList);
         findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refundOrder(orderId);
+                refundOrder(orderId,editText.getText().toString(),price);
+            }
+        });
+        reasonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                currentReason = reasons[position];
             }
         });
     }
 
-    private void refundOrder(long orderId) {
+    private void refundOrder(long orderId,String memo,double price) {
+        JSONObject object = new JSONObject();
+        User user = AccountManager.getInstance().getLoginAccount(this);
+        try {
+            object.put("userId",user.getUserId());
+            object.put("memo",memo);
+            object.put("reason",currentReason);
+            object.put("amount",price);
+            object.put("type","apply");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         TravelApi.editOrderStatus(orderId, "refund", null, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

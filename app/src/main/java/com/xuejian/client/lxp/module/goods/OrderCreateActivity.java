@@ -214,6 +214,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             case R.id.tv_edit_user:
                 Intent tv_edit_user = new Intent(OrderCreateActivity.this, CommonUserInfoActivity.class);
                 tv_edit_user.putExtra("ListType", 1);
+                tv_edit_user.putExtra("selected",passengerList);
                 startActivityForResult(tv_edit_user, EDIT_USER_LIST);
                 break;
             case R.id.tv_title_back:
@@ -255,10 +256,11 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 Toast.makeText(mContext,"请输入正确的电话号码",Toast.LENGTH_LONG).show();
                 return;
             }
-
+            OrderBean orderBean = new OrderBean();
+            orderBean.setComment(etMessage.getText().toString());
         TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum,currenrDialCode
-               , telNumber, "", etFirstName.getText().toString(),
-                etLastName.getText().toString(), etMessage.getText().toString(), passengerList, new HttpCallBack<String>() {
+               , telNumber, "",etLastName.getText().toString(), etFirstName.getText().toString(),
+                 etMessage.getText().toString(), passengerList, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
                         CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);

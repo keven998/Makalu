@@ -88,7 +88,7 @@
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/icon_authorized"
                 android:drawablePadding="5dp"
-                android:text="认证商家"
+                android:text="认证卖家"
                 android:textColor="@color/color_text_ii"
                 android:textSize="14sp" />
         </FrameLayout>

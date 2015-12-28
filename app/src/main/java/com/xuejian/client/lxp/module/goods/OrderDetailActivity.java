@@ -23,13 +23,18 @@ import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -189,6 +194,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void onClick(View v) {
                         intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
+                        intent.putExtra("amount",bean.getTotalPrice());
                         intent.putExtra("orderId", bean.getOrderId());
                         startActivity(intent);
                     }
@@ -307,8 +313,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
 
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 
-        tvOrderContactName.setText(bean.getContact().getGivenName() + " " + bean.getContact().getSurname());
-        tvOrderContactTel.setText(bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
+        tvOrderContactName.setText(bean.getContact().getSurname()+ " " + bean.getContact().getGivenName());
+        tvOrderContactTel.setText("+"+bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
         if (TextUtils.isEmpty(bean.getComment())){
             llMessage.setVisibility(View.GONE);
         }else {
@@ -371,7 +377,16 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void cancelOrder() {
-        TravelApi.editOrderStatus(orderId, "cancel", "", new HttpCallBack<String>() {
+        JSONObject object = new JSONObject();
+        User user = AccountManager.getInstance().getLoginAccount(this);
+        try {
+            object.put("userId",user.getUserId());
+            object.put("memo","");
+            object.put("reason","");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        TravelApi.editOrderStatus(orderId, "cancel", object, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
