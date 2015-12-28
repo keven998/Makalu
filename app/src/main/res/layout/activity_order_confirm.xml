@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/order_detail"
+            android:text="@string/order_confirm"
             android:textColor="@color/base_color_white"
             android:textSize="18sp" />
 
@@ -132,6 +132,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal">
@@ -253,6 +254,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="10dp"

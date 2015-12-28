@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -21,13 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
 import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.TravellerBean;
-import com.xuejian.client.lxp.bean.TravellerEntity;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
@@ -91,6 +96,8 @@ public class OrderConfirmActivity extends PeachBaseActivity{
     long orderId;
     CountDownTimer countDownTimer;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
+    ArrayList<TravellerBean> list;
+    Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,15 +110,16 @@ public class OrderConfirmActivity extends PeachBaseActivity{
             }
         });
         OrderBean bean = getIntent().getParcelableExtra("order");
+        list = getIntent().getParcelableArrayListExtra("passengerList");
+        for (TravellerBean travellerBean : list) {
+            passengerList.add(new TravellerBean(travellerBean.getTraveller()));
+        }
         bindView(bean);
     }
 
     private void bindView(final OrderBean bean) {
         CommonAdapter memberAdapter = new CommonAdapter(mContext, R.layout.item_member_info, false, null);
         ListView memberList = (ListView) findViewById(R.id.lv_members);
-        for (TravellerEntity entity : bean.getTravellers()) {
-            passengerList.add(new TravellerBean(entity));
-        }
         memberList.setAdapter(memberAdapter);
         CommonUtils.setListViewHeightBasedOnChildren(memberList);
 
@@ -147,35 +155,41 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 tvState.setText("已申请退款");
                 break;
             case "pending":
-                tvState.setText(String.format("待付款¥%s", String.valueOf((double) Math.round(bean.getTotalPrice() * 10 / 10))));
-                long time = bean.getExpireTime() - System.currentTimeMillis();
-                if (time > 0) {
-                    countDownTimer = new CountDownTimer(time, 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            tvFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            tvFeedback.setText("订单已超过支付期限,请重新下单");
-                            tvPay.setText("再次预定");
-                        }
-                    }.start();
-                } else {
-                    tvFeedback.setText("订单已超过支付期限,请重新下单");
-                    tvPay.setText("再次预定");
-                }
+                tvState.setText(String.format("待付款 ¥%s",CommonUtils.getPriceString(bean.getTotalPrice())));
+//                long time = bean.getExpireTime() - System.currentTimeMillis();
+//                if (time > 0) {
+//                    countDownTimer = new CountDownTimer(time, 1000) {
+//                        @Override
+//                        public void onTick(long millisUntilFinished) {
+//                            tvFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
+//                        }
+//
+//                        @Override
+//                        public void onFinish() {
+//                            tvFeedback.setText("订单已超过支付期限,请重新下单");
+//                            tvPay.setText("再次预定");
+//                        }
+//                    }.start();
+//                } else {
+//                    tvFeedback.setText("订单已超过支付期限,请重新下单");
+//                    tvPay.setText("再次预定");
+//                }
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (tvPay.getText().toString().equals("立即支付")){
-                            showPayActionDialog(bean);
-                        }else if (tvPay.getText().toString().equals("再次预定")){
-                            intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
-                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                            startActivity(intent);
-                        }
+                 //       if (tvPay.getText().toString().equals("立即支付")){
+                            DialogManager.getInstance().showLoadingDialog(mContext, "订单创建中");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                createOrder(bean);
+                            }
+                        },1000);
+//                        }else if (tvPay.getText().toString().equals("再次预定")){
+//                            intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
+//                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+//                            startActivity(intent);
+//                        }
                     }
                 });
                 break;
@@ -235,7 +249,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 break;
         }
 
-        tvOrderStoreName.setText(bean.getCommodity().getSeller().getName());
+//        tvOrderStoreName.setText(bean.getCommodity().getSeller().getName());
         tvGoodsName.setText(bean.getCommodity().getTitle());
         tvGoodsName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
         tvGoodsName.getPaint().setAntiAlias(true);//抗锯齿
@@ -247,15 +261,15 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 startActivity(intent);
             }
         });
-        tvOrderId.setText(String.valueOf(bean.getOrderId()));
+   //     tvOrderId.setText(String.valueOf(bean.getOrderId()));
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
         tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
         tvOrderPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
 
-        tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
+        tvOrderTravellerCount.setText(String.valueOf(list.size()));
 
-        tvOrderContactName.setText(bean.getContact().getGivenName() + " " + bean.getContact().getSurname());
+        tvOrderContactName.setText(bean.getContact().getSurname()  + " " + bean.getContact().getGivenName());
         tvOrderContactTel.setText("+"+bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
         if (TextUtils.isEmpty(bean.getComment())){
             llMessage.setVisibility(View.GONE);
@@ -274,15 +288,46 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 startActivity(talkIntent);
             }
         });
-        tvPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPayActionDialog(bean);
-            }
-        });
+//        tvPay.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showPayActionDialog(bean);
+//            }
+//        });
 
     }
 
+    public void createOrder(final OrderBean bean){
+
+        TravelApi.createOrder(bean.getCommodity().getCommodityId(), bean.getPlanId(), bean.getRendezvousTime(), bean.getQuantity(), bean.getContact().getTel().getDialCode()
+                , bean.getContact().getTel().getNumber(), "", bean.getContact().getSurname(), bean.getContact().getGivenName(),
+                bean.getComment(), list, new HttpCallBack<String>() {
+                    @Override
+                    public void doSuccess(String result, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
+                        showPayActionDialog(bean.result);
+
+//                        Intent intent = new Intent(OrderConfirmActivity.this, OrderConfirmActivity.class);
+//                        intent.putExtra("type", "pendingOrder");
+//                        intent.putExtra("order", bean.result);
+//                        intent.putExtra("orderId", bean.result.getOrderId());
+//                        startActivity(intent);
+//                        finish();
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        DialogManager.getInstance().dissMissLoadingDialog();
+                        Toast.makeText(mContext, "订单创建失败", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+    }
     private void showPayActionDialog(final OrderBean currentOrder) {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();

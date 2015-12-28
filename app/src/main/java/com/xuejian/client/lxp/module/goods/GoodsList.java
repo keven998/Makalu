@@ -225,6 +225,9 @@ public class GoodsList extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentType = bean.category.get(position);
+                if (currentType.equals("全部")){
+                    currentType="";
+                }
                 getData(null, locId, currentType, null, null, 0, 15, true);
                 typeSpinner.dismissDropDown();
             }

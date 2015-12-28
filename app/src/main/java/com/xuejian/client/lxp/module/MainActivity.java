@@ -256,6 +256,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (intent.getBooleanExtra("reLogin", false)) {
             initClient();
         }
+        if (intent.getBooleanExtra("back", false)){
+            mTabHost.setCurrentTab(0);
+        }
     }
 
     private void initData() {

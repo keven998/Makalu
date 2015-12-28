@@ -16,11 +16,11 @@
             android:layout_height="@dimen/goods_main_page_img_size"
             android:scaleType="centerCrop" />
 
-        <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="130dp"-->
-            <!--android:scaleType="centerCrop"-->
-            <!--android:src="@drawable/expert_country_list_bg" />-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/goods_main_page_img_size"
+            android:scaleType="centerCrop"
+            android:src="@drawable/expert_country_list_bg" />
 
         <TextView
             android:id="@+id/tv_goods_loc"

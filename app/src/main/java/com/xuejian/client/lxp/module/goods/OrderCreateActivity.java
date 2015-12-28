@@ -20,17 +20,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.ContactBean;
 import com.xuejian.client.lxp.bean.OrderBean;
 import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.PriceBean;
+import com.xuejian.client.lxp.bean.SimpleCommodityBean;
+import com.xuejian.client.lxp.bean.TelBean;
 import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.api.H5Url;
-import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
-import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.NumberPicker;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
@@ -82,6 +82,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     TextView tvTotalPrice;
     @InjectView(R.id.tv_dialCode)
     TextView tvDialCode;
+    @InjectView(R.id.tv_unit_price)
+    TextView tvUnitPrice;
     public final static int SELECTED_DATE = 101;
     public final static int SELECTED_USER = 102;
     public final static int EDIT_USER_LIST = 103;
@@ -94,6 +96,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     PlanBean currentPlanBean;
     PriceBean priceBean;
     int currenrDialCode = 86;
+    String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +105,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         final ArrayList<PlanBean> data = getIntent().getParcelableArrayListExtra("planList");
         currentPlanBean = data.get(0);
         commodityId = getIntent().getStringExtra("commodityId");
-        String name = getIntent().getStringExtra("name");
+        name = getIntent().getStringExtra("name");
         tvGoodsName.setText(name);
         tv_address_book.setOnClickListener(this);
         tvSubmitOrder.setOnClickListener(this);
@@ -120,20 +123,19 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             public void OnSelected(int pos) {
                 currentPlanBean = data.get(pos);
 
-                if (!TextUtils.isEmpty(tvDate.getText().toString())){
+                if (!TextUtils.isEmpty(tvDate.getText().toString())) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     try {
                         Date date = sdf.parse(tvDate.getText().toString());
-                        priceBean = SampleDecorator.getPrice(currentPlanBean,date);
+                        priceBean = SampleDecorator.getPrice(currentPlanBean, date);
                         tvTotalPrice.setText(String.format("¥%s", CommonUtils.getPriceString(priceBean.getPrice() * goodsNum)));
+                        tvUnitPrice.setText(String.format("¥%s", CommonUtils.getPriceString(priceBean.getPrice())));
 
                     } catch (ParseException e) {
                         e.printStackTrace();
                         tvDate.setText("");
-                        priceBean=null;
+                        priceBean = null;
                     }
-
-
                 }
             }
         });
@@ -184,7 +186,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             public void OnValueChange(int value) {
                 goodsNum = value;
                 if (priceBean != null) {
-                    tvTotalPrice.setText(String.format("¥%s",CommonUtils.getPriceString(priceBean.getPrice()*value)));
+                    tvTotalPrice.setText(String.format("¥%s", CommonUtils.getPriceString(priceBean.getPrice() * value)));
+                    tvUnitPrice.setText(String.format("¥%s", CommonUtils.getPriceString(priceBean.getPrice())));
                 }
             }
         });
@@ -214,7 +217,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             case R.id.tv_edit_user:
                 Intent tv_edit_user = new Intent(OrderCreateActivity.this, CommonUserInfoActivity.class);
                 tv_edit_user.putExtra("ListType", 1);
-                tv_edit_user.putExtra("selected",passengerList);
+                tv_edit_user.putExtra("selected", passengerList);
                 startActivityForResult(tv_edit_user, EDIT_USER_LIST);
                 break;
             case R.id.tv_title_back:
@@ -250,38 +253,72 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         }
         String tel = etTel.getText().toString();
         long telNumber = 0;
-            if (TextUtils.isDigitsOnly(tel)){
-                telNumber = Long.parseLong(tel);
-            }else {
-                Toast.makeText(mContext,"请输入正确的电话号码",Toast.LENGTH_LONG).show();
-                return;
-            }
-            OrderBean orderBean = new OrderBean();
-            orderBean.setComment(etMessage.getText().toString());
-        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum,currenrDialCode
-               , telNumber, "",etLastName.getText().toString(), etFirstName.getText().toString(),
-                 etMessage.getText().toString(), passengerList, new HttpCallBack<String>() {
-                    @Override
-                    public void doSuccess(String result, String method) {
-                        CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
-                        Intent intent = new Intent(OrderCreateActivity.this, OrderConfirmActivity.class);
-                        intent.putExtra("type", "pendingOrder");
-                        intent.putExtra("order", bean.result);
-                        intent.putExtra("orderId", bean.result.getOrderId());
-                        startActivity(intent);
-                        finish();
-                    }
+        if (TextUtils.isDigitsOnly(tel)) {
+            telNumber = Long.parseLong(tel);
+        } else {
+            Toast.makeText(mContext, "请输入正确的电话号码", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-                        Toast.makeText(mContext,"订单创建失败",Toast.LENGTH_LONG).show();
-                    }
+        OrderBean orderBean = new OrderBean();
+        orderBean.setComment(etMessage.getText().toString());
+        orderBean.setPlanId(currentPlanBean.getPlanId());
+        SimpleCommodityBean simpleCommodityBean = new SimpleCommodityBean();
+        simpleCommodityBean.setCommodityId(Long.parseLong(commodityId));
+        ArrayList<PlanBean> planBeans = new ArrayList<>();
+        planBeans.add(currentPlanBean);
+        simpleCommodityBean.setPlans(planBeans);
+        simpleCommodityBean.setTitle(name);
+        orderBean.setCommodity(simpleCommodityBean);
+        orderBean.setRendezvousTime(dt2.getTime());
+        orderBean.setQuantity(goodsNum);
+        orderBean.setTotalPrice(priceBean.price * goodsNum);
+//        ArrayList<TravellerEntity> list = new ArrayList<>();
+//        for (TravellerBean bean : passengerList) {
+//            list.add(bean.getTraveller());
+//        }
+//        orderBean.setTravellers(list);
+        ContactBean contactBean = new ContactBean();
+        TelBean telBean = new TelBean();
+        telBean.setDialCode(currenrDialCode);
+        telBean.setNumber(telNumber);
+        contactBean.setTel(telBean);
+        contactBean.setGivenName(etFirstName.getText().toString());
+        contactBean.setSurname(etLastName.getText().toString());
+        orderBean.setContact(contactBean);
+        orderBean.setStatus("pending");
 
-                    @Override
-                    public void doFailure(Exception error, String msg, String method, int code) {
+        Intent intent = new Intent(OrderCreateActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("type", "pendingOrder");
+        intent.putExtra("order", orderBean);
+        intent.putExtra("passengerList",passengerList);
+        startActivity(intent);
 
-                    }
-                });
+
+//        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum, currenrDialCode
+//                , telNumber, "", etLastName.getText().toString(), etFirstName.getText().toString(),
+//                etMessage.getText().toString(), passengerList, new HttpCallBack<String>() {
+//                    @Override
+//                    public void doSuccess(String result, String method) {
+//                        CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
+//                        Intent intent = new Intent(OrderCreateActivity.this, OrderConfirmActivity.class);
+//                        intent.putExtra("type", "pendingOrder");
+//                        intent.putExtra("order", bean.result);
+//                        intent.putExtra("orderId", bean.result.getOrderId());
+//                        startActivity(intent);
+//                        finish();
+//                    }
+//
+//                    @Override
+//                    public void doFailure(Exception error, String msg, String method) {
+//                        Toast.makeText(mContext, "订单创建失败", Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void doFailure(Exception error, String msg, String method, int code) {
+//
+//                    }
+//                });
     }
 
 
@@ -290,7 +327,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             Toast.makeText(mContext, "请选择出行日期", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if (passengerList==null||passengerList.size()==0) {
+        if (passengerList == null || passengerList.size() == 0) {
             Toast.makeText(mContext, "请填写旅客信息", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -453,7 +490,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             if (requestCode == SELECTED_DATE) {
                 PriceBean bean = data.getParcelableExtra("date_price");
                 tvDate.setText(bean.date);
-                tvTotalPrice.setText(String.format("¥%s",CommonUtils.getPriceString(bean.getPrice()*selectNum.getCurrentValue())));
+                tvTotalPrice.setText(String.format("¥%s", CommonUtils.getPriceString(bean.getPrice() * selectNum.getCurrentValue())));
+                tvUnitPrice.setText(String.format("¥%s", CommonUtils.getPriceString(bean.getPrice())));
                 priceBean = bean;
 
             } else if (requestCode == SELECTED_USER) {
@@ -463,7 +501,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     etLastName.setText(bean.getTraveller().getSurname());
                     etTel.setText(String.valueOf(bean.getTraveller().getTel().getNumber()));
                     currenrDialCode = bean.getTraveller().getTel().getDialCode();
-                    tvDialCode.setText("+"+currenrDialCode);
+                    tvDialCode.setText("+" + currenrDialCode);
                 }
             } else if (requestCode == EDIT_USER_LIST) {
                 ArrayList<TravellerBean> list = data.getParcelableArrayListExtra("passenger");
@@ -478,9 +516,9 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     tvEditUser.setVisibility(View.GONE);
                     tvAddUser.setVisibility(View.VISIBLE);
                 }
-            }else if (requestCode == SELECTED_CODE) {
-                currenrDialCode = data.getIntExtra("dialCode",0);
-                tvDialCode.setText("+"+currenrDialCode);
+            } else if (requestCode == SELECTED_CODE) {
+                currenrDialCode = data.getIntExtra("dialCode", 0);
+                tvDialCode.setText("+" + currenrDialCode);
             }
         }
     }

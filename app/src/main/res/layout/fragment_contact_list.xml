@@ -13,6 +13,7 @@
         android:descendantFocusability="afterDescendants"
         android:divider="@color/color_line"
         android:dividerHeight="1px"
+        android:scrollbars="none"
         android:focusable="true"
         android:listSelector="@android:color/transparent" />
 

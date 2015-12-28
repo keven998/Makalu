@@ -23,6 +23,8 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
+import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
 
 import java.lang.ref.WeakReference;
@@ -37,7 +39,14 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
     @InjectView(R.id.tv_title_back)
     TextView tvTitleBack;
-
+    @InjectView(R.id.tv_title)
+    TextView tvTitle;
+    @InjectView(R.id.tv_pay_state)
+    TextView tvState;
+    @InjectView(R.id.tv_main)
+    TextView tvMain;
+    @InjectView(R.id.tv_order_detail)
+    TextView tvOrderDetail;
     private static final int ALI_PAY = 1001;
     private static final int ALI_PAY_CHECK = 1002;
 
@@ -67,8 +76,14 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                     System.out.println("resultInfo " + payResult.toString());
                     // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                     if (TextUtils.equals(resultStatus, "9000")) {
-                        Toast.makeText(mActivity.get(), "支付成功",
-                                Toast.LENGTH_SHORT).show();
+
+                        if (mActivity.get()!=null){
+                            Toast.makeText(mActivity.get(), "支付成功",
+                                    Toast.LENGTH_SHORT).show();
+                            mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
+                            mActivity.get().tvMain.setVisibility(View.VISIBLE);
+                            mActivity.get().tvState.setText("订单已支付\n请等待卖家确认");
+                        }
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
@@ -103,10 +118,12 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.activity_pay_state);
         ButterKnife.inject(this);
         tvTitleBack.setOnClickListener(this);
         DialogManager.getInstance().showLoadingDialog(this);
+        tvOrderDetail.setVisibility(View.GONE);
+        tvMain.setVisibility(View.GONE);
 //        SpannableString priceStr = new SpannableString("¥35353");
 //        priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        priceStr.setSpan(new AbsoluteSizeSpan(15, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -114,8 +131,9 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 //        spb.append("总价:").append(priceStr);
 //        tvPrice.setText(spb);
 
+
         String type = getIntent().getStringExtra("type");
-        long orderId = getIntent().getLongExtra("orderId", 0);
+        final long orderId = getIntent().getLongExtra("orderId", 0);
 
         switch (type) {
             case "weixinpay":
@@ -127,6 +145,23 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
             default:
                 break;
         }
+        tvMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PaymentActivity.this, MainActivity.class);
+                intent.putExtra("back",true);
+                startActivity(intent);
+            }
+        });
+        tvOrderDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PaymentActivity.this, OrderDetailActivity.class);
+                intent.putExtra("orderDetail",true);
+                intent.putExtra("orderId",orderId);
+                startActivity(intent);
+            }
+        });
 
     }
 

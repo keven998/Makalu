@@ -131,10 +131,6 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/color_line"/>
     </FrameLayout>
 
     <com.xuejian.client.lxp.common.widget.NumberProgressBar

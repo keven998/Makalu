@@ -45,8 +45,8 @@
     <dimen name="goods_img_height">160dp</dimen>
     <dimen name="goods_avatar_height">60dp</dimen>
     <dimen name="goods_avatar_margin_bottom">20dp</dimen>
-    <dimen name="goods_main_page_frame_size">185dp</dimen>
-    <dimen name="goods_main_page_img_size">150dp</dimen>
+    <dimen name="goods_main_page_frame_size">225dp</dimen>
+    <dimen name="goods_main_page_img_size">190dp</dimen>
     <dimen name="goods_main_page_price_size">70dp</dimen>
     <dimen name="goods_main_page_price_text_size">35dp</dimen>
     <dimen name="goods_loc_margin">40dp</dimen>

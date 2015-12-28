@@ -33,10 +33,10 @@
     <dimen name="goods_img_height">230dp</dimen>
     <dimen name="goods_avatar_height">86dp</dimen>
     <dimen name="goods_avatar_margin_bottom">29dp</dimen>
-    <dimen name="goods_main_page_frame_size">257dp</dimen>
-    <dimen name="goods_main_page_img_size">208dp</dimen>
-    <dimen name="goods_main_page_price_size">99dp</dimen>
-    <dimen name="goods_main_page_price_text_size">49.5dp</dimen>
+    <dimen name="goods_main_page_frame_size">296dp</dimen>
+    <dimen name="goods_main_page_img_size">251dp</dimen>
+    <dimen name="goods_main_page_price_size">94dp</dimen>
+    <dimen name="goods_main_page_price_text_size">47dp</dimen>
     <dimen name="goods_loc_margin">62dp</dimen>
 
 </resources>
