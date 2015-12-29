@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -30,6 +31,7 @@ import com.xuejian.client.lxp.bean.ColumnBean;
 import com.xuejian.client.lxp.bean.RecommendCommodityBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
@@ -50,7 +52,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
     HorizontalScrollView hsPic;
     AutoScrollViewPager viewPager;
     LinearLayout llPics;
-    ArrayList<String> picList = new ArrayList<>();
+    ArrayList<ColumnBean.ColumnsEntity> picList = new ArrayList<>();
     DisplayImageOptions options;
     ArrayList<ArrayList<String>> data = new ArrayList<>();
 
@@ -83,6 +85,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
         return v;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+    }
+
     private void initScrollView() {
         hsPic.removeAllViews();
         llPics = new LinearLayout(getActivity());
@@ -91,12 +99,23 @@ public class GoodsMainFragment extends PeachBaseFragment {
         for (int i = 0; i < picList.size(); i++) {
             View view = View.inflate(getActivity(), R.layout.goods_main_pic_cell, null);
             ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
-            final String uri = picList.get(i);
-            final int index = i;
-            ImageLoader.getInstance().displayImage(picList.get(i), my_pics_cell, options);
+            if (picList.get(i).getImages().size()>0){
+                ImageLoader.getInstance().displayImage(picList.get(i).getImages().get(0).url, my_pics_cell, options);
+            }else {
+                ImageLoader.getInstance().displayImage("", my_pics_cell, options);
+            }
+            final String url = picList.get(i).getLink();
             my_pics_cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (url.startsWith("lvxingpai")){
+                        System.out.println(url);
+                        Intent in = new Intent();
+                        in.setAction("android.intent.action.route");
+                        in.addCategory(Intent.CATEGORY_DEFAULT);
+                        in.setData(Uri.parse(url));
+                        if (CommonUtils.checkIntent(getActivity(), in)) startActivity(in);
+                    }
                 }
             });
             llPics.addView(view);
@@ -124,16 +143,17 @@ public class GoodsMainFragment extends PeachBaseFragment {
 //                        .subscribe();
 
                 resizeData(list.result);
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
         });
     }
@@ -186,6 +206,15 @@ public class GoodsMainFragment extends PeachBaseFragment {
         ArrayList<String> sectionName = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
             sectionName.add(i, result.get(i).getTopicType());
+//
+//            ArrayList<SimpleCommodityBean>delList = new ArrayList<>();
+//            ArrayList<SimpleCommodityBean>addList = result.get(i).getCommodities();
+//            for (SimpleCommodityBean bean : addList) {
+//                if (bean==null){
+//                    delList.add(bean);
+//                }
+//            }
+//            addList.removeAll(delList);
             data.add(i, result.get(i).getCommodities());
         }
         bindListView(data, sectionName);
@@ -243,12 +272,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                     }
                 });
             } else if ("special".equals(columnBean.getColumnType())) {
-                ArrayList<ColumnBean.ColumnsEntity> list = result.get(1).getColumns();
-                for (ColumnBean.ColumnsEntity entity : list) {
-                    if (entity.getImages().size() > 0) {
-                        picList.add(entity.getImages().get(0).url);
-                    }
-                }
+                picList.addAll(result.get(1).getColumns());
                 initScrollView();
             }
         }

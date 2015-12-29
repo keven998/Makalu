@@ -49,8 +49,10 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
 			Intent intent = new Intent(WXPayEntryActivity.this, OrderListActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			if (resp.errCode==0){
+			if (resp.errCode == 0){
 				Toast.makeText(WXPayEntryActivity.this,"支付成功",Toast.LENGTH_SHORT).show();
+			}else if (resp.errCode == -2){
+				Toast.makeText(WXPayEntryActivity.this, "支付取消 " , Toast.LENGTH_SHORT).show();
 			}else {
 				Toast.makeText(WXPayEntryActivity.this,"支付失败",Toast.LENGTH_SHORT).show();
 			}

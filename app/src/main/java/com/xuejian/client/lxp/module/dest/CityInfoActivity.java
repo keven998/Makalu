@@ -104,6 +104,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
 
     }
 
+
     private void initData(String id) {
         TravelApi.getCityInfo(id, new HttpCallBack<String>() {
 

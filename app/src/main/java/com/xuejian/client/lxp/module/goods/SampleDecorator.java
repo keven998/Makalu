@@ -17,6 +17,7 @@ import java.util.Date;
 
 public class SampleDecorator implements CalendarCellDecorator {
     PlanBean bean;
+    private static long TIME = 60*1000;
     public SampleDecorator( PlanBean bean){
         this.bean = bean;
     }
@@ -52,13 +53,32 @@ public class SampleDecorator implements CalendarCellDecorator {
             for (PricingEntity entity : bean.getPricing()) {
                 Date date1 = new Date(entity.getTimeRange().get(0));
                 Date date2 = new Date(entity.getTimeRange().get(1));
-                if (date.equals(date1)||date.equals(date2)||(date.after(date1)&&date.before(date2))){
-                    String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                    PriceBean price = new PriceBean();
-                    price.setDate(s);
-                    price.setPrice(entity.getPrice());
-                    return price;
+                long time1 = entity.getTimeRange().get(0);
+                long time2 = entity.getTimeRange().get(1);
+                if (time2>=time1){
+                    if (date.getTime()>=time1&&date.getTime()<=time2){
+                        String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                        PriceBean price = new PriceBean();
+                        price.setDate(s);
+                        price.setPrice(entity.getPrice());
+                        return price;
+                    }
+                }else if (time2<time1){
+                    if (date.getTime()<=time1&&date.getTime()>=time2){
+                        String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                        PriceBean price = new PriceBean();
+                        price.setDate(s);
+                        price.setPrice(entity.getPrice());
+                        return price;
+                    }
                 }
+//                if (date.equals(date1)||date.equals(date2)||(date.after(date1)&&date.before(date2))){
+//                    String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+//                    PriceBean price = new PriceBean();
+//                    price.setDate(s);
+//                    price.setPrice(entity.getPrice());
+//                    return price;
+//                }
             }
             return null;
     }

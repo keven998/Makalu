@@ -1,11 +1,14 @@
 package com.xuejian.client.lxp.module.RNView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -42,12 +45,27 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     private ReactRootView mReactRootView;
     private ReactInstanceManager mReactInstanceManager;
     public SimpleCommodityBean bean;
+    public LinearLayout llEmptyView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long commodityId = getIntent().getLongExtra("commodityId",-1);
+        long commodityId = getIntent().getLongExtra("commodityId", -1);
         showLoading();
         prepareJSBundle();
+
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            if (TextUtils.isDigitsOnly(uri.getLastPathSegment())){
+                commodityId = Long.parseLong(uri.getLastPathSegment());
+            }
+//            System.out.println(uri.getHost());
+//            System.out.println(uri.getPath());
+//            System.out.println(uri.getScheme());
+//            System.out.println(uri.getQueryParameter("id"));
+//            System.out.println(uri.getLastPathSegment());
+//            System.out.println(uri.getPathSegments().toString());
+        }
+        llEmptyView = (LinearLayout) findViewById(R.id.empty_view);
         mReactRootView = new ReactRootView(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
@@ -104,7 +122,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     }
 
     public void getData(long commodityId) {
-        if (commodityId<=0)return;
+        if (commodityId <= 0) return;
         TravelApi.getCommodity(commodityId, new HttpCallBack<String>() {
 
             @Override
@@ -116,7 +134,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 //                    event.putString("result", jsonObject.getJSONObject("result").toString());
 //                    sendEvent(mReactInstanceManager.getCurrentReactContext(), "test", event);
 
-                    CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result,SimpleCommodityBean.class);
+                    CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result, SimpleCommodityBean.class);
                     bean = commodity.result;
                     Bundle bundle = new Bundle();
                     bundle.putString("result", jsonObject.getJSONObject("result").toString());

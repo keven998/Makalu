@@ -91,7 +91,10 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                             Toast.makeText(mActivity.get(), "支付结果确认中",
                                     Toast.LENGTH_SHORT).show();
 
-                        } else {
+                        }else if (TextUtils.equals(resultStatus, "6001")){
+                            Toast.makeText(mActivity.get(), "支付取消 " ,
+                                    Toast.LENGTH_SHORT).show();
+                        }else {
                             // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
                             Toast.makeText(mActivity.get(), "支付失败 " + resultStatus,
                                     Toast.LENGTH_SHORT).show();

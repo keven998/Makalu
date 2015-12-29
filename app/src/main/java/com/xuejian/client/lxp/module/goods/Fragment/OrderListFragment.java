@@ -80,32 +80,68 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         mSwipeRefreshWidget.setOnRefreshListener(this);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.app_theme_color);
         setupRecyclerView(recyclerView);
-        mSwipeRefreshWidget.setRefreshing(true);
+     //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+        System.out.println("onCreateView");
         switch (type) {
             case ALL:
                 empty.setText("您近期没有出行订单");
-                getOrder("");
+          //      getOrder("");
                 break;
             case NEED_PAY:
                 empty.setText("您没有待付款的订单");
-                getOrder("pending");
+          //      getOrder("pending");
                 break;
             case PROCESS:
                 empty.setText("您没有处理中的订单");
-                getOrder("paid");
+         //       getOrder("paid");
                 break;
             case AVAILABLE:
                 empty.setText("您没有可使用的订单");
-                getOrder("committed");
+         //       getOrder("committed");
                 break;
             case DRAWBACK:
                 empty.setText("您没有退款中订单");
-                getOrder("refundApplied");
+           //     getOrder("refundApplied");
                 break;
             default:
                 break;
         }
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        System.out.println("onActivityCreated");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("onResume");
+      //  DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+        mSwipeRefreshWidget.setRefreshing(true);
+        switch (type) {
+            case ALL:
+                getOrder("");
+                break;
+            case NEED_PAY:
+                getOrder("pending");
+                break;
+            case PROCESS:
+                getOrder("paid");
+                break;
+            case AVAILABLE:
+                getOrder("committed");
+                break;
+            case DRAWBACK:
+                getOrder("refundApplied");
+                break;
+            default:
+                if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
+                break;
+        }
     }
 
     public void getOrder(String status) {
@@ -121,7 +157,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 if (list.result.size() > 0) empty.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
-                DialogManager.getInstance().dissMissModelessLoadingDialog();
+              DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
@@ -131,12 +167,12 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 }
                 recyclerView.setVisibility(View.GONE);
                 empty.setVisibility(View.VISIBLE);
-             //   DialogManager.getInstance().dissMissModelessLoadingDialog();
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-             //   DialogManager.getInstance().dissMissModelessLoadingDialog();
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
         });
     }
@@ -160,6 +196,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
 
     @Override
     public void onRefresh() {
+        System.out.println("onRefresh");
         switch (type) {
             case ALL:
                 getOrder("");
