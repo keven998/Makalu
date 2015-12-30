@@ -90,7 +90,7 @@
                 android:layout_marginLeft="15dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="申请成为达人"
+                android:text="申请成为商家"
                 android:textColor="@color/color_text_ii"
                 android:textSize="15sp" />
 

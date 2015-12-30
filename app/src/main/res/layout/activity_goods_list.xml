@@ -28,7 +28,7 @@
             android:padding="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="产品展示"
+            android:text="商品列表"
             android:textColor="@color/base_color_white"
             android:textSize="17sp" />
 

@@ -86,7 +86,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         tvDrawback.setOnClickListener(this);
         rlMyCollection.setOnClickListener(this);
         rlMyCommonUser.setOnClickListener(this);
-        rlMyContact.setOnClickListener(this);
+      //  rlMyContact.setOnClickListener(this);
         rlMyPlan.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());

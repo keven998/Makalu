@@ -45,13 +45,19 @@ public class DrawbackActivity extends PeachBaseActivity {
         findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refundOrder(orderId,editText.getText().toString(),price);
+                refundOrder(orderId, editText.getText().toString(), price);
             }
         });
         reasonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 currentReason = reasons[position];
+            }
+        });
+        findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

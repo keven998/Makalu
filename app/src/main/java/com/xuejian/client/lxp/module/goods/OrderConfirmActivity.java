@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -24,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -33,6 +33,7 @@ import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
@@ -41,6 +42,7 @@ import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -98,6 +100,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     ArrayList<TravellerBean> list;
     Handler handler = new Handler();
+    private HashMap<String, String> idType = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,11 +117,13 @@ public class OrderConfirmActivity extends PeachBaseActivity{
         for (TravellerBean travellerBean : list) {
             passengerList.add(new TravellerBean(travellerBean.getTraveller()));
         }
+        idType.put("chineseID", "身份证");
+        idType.put("passport", "护照");
         bindView(bean);
     }
 
     private void bindView(final OrderBean bean) {
-        CommonAdapter memberAdapter = new CommonAdapter(mContext, R.layout.item_member_info, false, null);
+        CommonAdapter memberAdapter = new CommonAdapter(mContext,R.layout.item_order_users, false, null);
         ListView memberList = (ListView) findViewById(R.id.lv_members);
         memberList.setAdapter(memberAdapter);
         CommonUtils.setListViewHeightBasedOnChildren(memberList);
@@ -174,6 +179,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
 //                    tvFeedback.setText("订单已超过支付期限,请重新下单");
 //                    tvPay.setText("再次预定");
 //                }
+                tvPay.setText("确认订单");
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -251,23 +257,23 @@ public class OrderConfirmActivity extends PeachBaseActivity{
 
 //        tvOrderStoreName.setText(bean.getCommodity().getSeller().getName());
         tvGoodsName.setText(bean.getCommodity().getTitle());
-        tvGoodsName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
-        tvGoodsName.getPaint().setAntiAlias(true);//抗锯齿
-        tvGoodsName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OrderConfirmActivity.this, ReactMainPage.class);
-                intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                startActivity(intent);
-            }
-        });
+//        tvGoodsName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+//        tvGoodsName.getPaint().setAntiAlias(true);//抗锯齿
+//        tvGoodsName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(OrderConfirmActivity.this, ReactMainPage.class);
+//                intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+//                startActivity(intent);
+//            }
+//        });
    //     tvOrderId.setText(String.valueOf(bean.getOrderId()));
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
         tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
         tvOrderPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
 
-        tvOrderTravellerCount.setText(String.valueOf(list.size()));
+       // tvOrderTravellerCount.setText(String.valueOf(list.size()));
 
         tvOrderContactName.setText(bean.getContact().getSurname()  + " " + bean.getContact().getGivenName());
         tvOrderContactTel.setText("+"+bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
@@ -306,6 +312,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                     public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
+                        setResult(RESULT_OK);
                         showPayActionDialog(bean.result);
 
 //                        Intent intent = new Intent(OrderConfirmActivity.this, OrderConfirmActivity.class);
@@ -328,9 +335,17 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                     }
                 });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        
+    }
+
     private void showPayActionDialog(final OrderBean currentOrder) {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        dialog.setCanceledOnTouchOutside(false);
         View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
         CheckedTextView alipay = (CheckedTextView) contentView.findViewById(R.id.ctv_alipay);
         CheckedTextView weixinpay = (CheckedTextView) contentView.findViewById(R.id.ctv_weixin);
@@ -351,6 +366,10 @@ public class OrderConfirmActivity extends PeachBaseActivity{
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                if (!WeixinApi.getInstance().isWXinstalled(OrderConfirmActivity.this)){
+                    ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
+                    return;
+                }
                 Intent tv_pay = new Intent(OrderConfirmActivity.this, PaymentActivity.class);
                 if (currentOrder != null) {
                     tv_pay.putExtra("orderId", currentOrder.getOrderId());
@@ -395,7 +414,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
         public int getCount() {
             if (ResId == R.layout.item_package_info) {
                 return packageList.size();
-            } else if (ResId == R.layout.item_member_info) {
+            } else if (ResId == R.layout.item_order_users) {
                 return passengerList.size();
             }
             return 0;
@@ -406,7 +425,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
         public Object getItem(int position) {
             if (ResId == R.layout.item_package_info) {
                 return packageList.get(position);
-            } else if (ResId == R.layout.item_member_info) {
+            } else if (ResId == R.layout.item_order_users) {
                 return passengerList.get(position);
             }
             return null;
@@ -442,25 +461,36 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                     viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_default);
                     //  viewHolder1.content.setPadding(10,0,0,0);
                 }
-            } else if (ResId == R.layout.item_member_info) {
+            } else if (ResId == R.layout.item_order_users) {
                 TravellerBean bean = (TravellerBean) getItem(position);
                 if (convertView == null) {
                     convertView = View.inflate(mContext, ResId, null);
 
                     holder = new ViewHolder();
-                    holder.content = (TextView) convertView.findViewById(R.id.tv_member);
+                    holder.username = (TextView) convertView.findViewById(R.id.tv_name);
+                    holder.id = (TextView) convertView.findViewById(R.id.tv_id);
+                    holder.tel = (TextView) convertView.findViewById(R.id.tv_tel);
+                    holder.title = (TextView) convertView.findViewById(R.id.tv_num);
                     convertView.setTag(holder);
 
                 } else {
                     holder = (ViewHolder) convertView.getTag();
                 }
-                holder.content.setText(bean.getTraveller().getSurname() + " " + bean.getTraveller().getGivenName());
+                holder.title.setText(String.format("旅客%d:", position + 1));
+                holder.username.setText(bean.getTraveller().getSurname() + bean.getTraveller().getGivenName());
+                holder.tel.setText(bean.getTraveller().getTel().getDialCode() + "-" + bean.getTraveller().getTel().getNumber());
+                if (bean.getTraveller().getIdentities().size() > 0) {
+                    holder.id.setText(idType.get(bean.getTraveller().getIdentities().get(0).getIdType()) + " " + bean.getTraveller().getIdentities().get(0).getNumber());
+                }
             }
             return convertView;
         }
 
         class ViewHolder {
-            private TextView content;
+            private TextView username;
+            private TextView tel;
+            private TextView id;
+            private TextView title;
         }
 
         class ViewHolder1 {

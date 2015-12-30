@@ -51,7 +51,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         super.onCreate(savedInstanceState);
         long commodityId = getIntent().getLongExtra("commodityId", -1);
         showLoading();
-        prepareJSBundle();
+     //   prepareJSBundle();
 
         Uri uri = getIntent().getData();
         if (uri != null) {
@@ -192,12 +192,12 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onResume(this);
         }
-        File[] files = getFilesDir().listFiles();
-        for (File file : files) {
-            System.out.println(file.getName());
-            System.out.println(file.getTotalSpace());
-            System.out.println(file.getPath());
-        }
+//        File[] files = getFilesDir().listFiles();
+//        for (File file : files) {
+//            System.out.println(file.getName());
+//            System.out.println(file.getTotalSpace());
+//            System.out.println(file.getPath());
+//        }
     }
 
     @Override

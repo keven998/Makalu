@@ -88,6 +88,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     public final static int SELECTED_USER = 102;
     public final static int EDIT_USER_LIST = 103;
     public final static int SELECTED_CODE = 104;
+    public final static int SUBMIT_ORDER_CODE = 105;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     CommonAdapter memberAdapter;
     ListView memberList;
@@ -292,7 +293,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         intent.putExtra("type", "pendingOrder");
         intent.putExtra("order", orderBean);
         intent.putExtra("passengerList",passengerList);
-        startActivity(intent);
+        startActivityForResult(intent,SUBMIT_ORDER_CODE);
 
 
 //        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum, currenrDialCode
@@ -519,6 +520,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             } else if (requestCode == SELECTED_CODE) {
                 currenrDialCode = data.getIntExtra("dialCode", 0);
                 tvDialCode.setText("+" + currenrDialCode);
+            }else if (requestCode == SUBMIT_ORDER_CODE){
+                finish();
             }
         }
     }

@@ -63,7 +63,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -122,6 +127,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (getIntent().getBooleanExtra("conflict", false)) {
             showConflictDialog(MainActivity.this);
         }
+        prepareJSBundle();
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -793,7 +799,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
     public void updateUnreadMsgCount() {
-
         Observable<Integer> UnReadCount = Observable.just(IMClient.getInstance().getUnReadCount()).subscribeOn(Schedulers.io());
         Observable<Integer> UnAccept = Observable.just(IMClient.getInstance().getUnAcceptMsg()).subscribeOn(Schedulers.io());
         compositeSubscription.add(
@@ -915,5 +920,35 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             mLocationManagerProxy.destroy();
         }
     }
+    private static void copyFile(InputStream paramInputStream, OutputStream paramOutputStream)
+            throws IOException {
+        byte[] arrayOfByte = new byte[1024];
+        for (; ; ) {
+            int i = paramInputStream.read(arrayOfByte);
+            if (i == -1) {
+                break;
+            }
+            paramOutputStream.write(arrayOfByte, 0, i);
+        }
+    }
 
+    private void prepareJSBundle() {
+        Object localObject = new File(getFilesDir(), "ReactNativeDevBundle.js");
+        if (((File) localObject).exists()) {
+            return;
+        }
+        try {
+            localObject = new FileOutputStream((File) localObject);
+            InputStream localInputStream = getAssets().open("ReactNativeDevBundle.js");
+            copyFile(localInputStream, (OutputStream) localObject);
+            ((OutputStream) localObject).close();
+            localInputStream.close();
+            return;
+        } catch (FileNotFoundException localFileNotFoundException) {
+            localFileNotFoundException.printStackTrace();
+            return;
+        } catch (IOException localIOException) {
+            localIOException.printStackTrace();
+        }
+    }
 }

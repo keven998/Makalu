@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -27,6 +28,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
@@ -430,6 +432,10 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                if (!WeixinApi.getInstance().isWXinstalled(OrderDetailActivity.this)){
+                    ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
+                    return;
+                }
                 Intent tv_pay = new Intent(OrderDetailActivity.this, PaymentActivity.class);
                 if (currentOrder != null) {
                     tv_pay.putExtra("orderId", currentOrder.getOrderId());

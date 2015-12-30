@@ -45,7 +45,7 @@ public class OrderListActivity extends PeachBaseActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new OrderListFragment(), "全部",OrderListFragment.ALL);
         adapter.addFragment(new OrderListFragment(), "待付款",OrderListFragment.NEED_PAY);
-        adapter.addFragment(new OrderListFragment(), "待卖家确认",OrderListFragment.PROCESS);
+        adapter.addFragment(new OrderListFragment(), "处理中",OrderListFragment.PROCESS);
         adapter.addFragment(new OrderListFragment(), "可使用",OrderListFragment.AVAILABLE);
         adapter.addFragment(new OrderListFragment(), "退款",OrderListFragment.DRAWBACK);
         viewPager.setAdapter(adapter);

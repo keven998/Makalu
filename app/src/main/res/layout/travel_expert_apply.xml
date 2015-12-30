@@ -29,7 +29,7 @@
             android:layout_marginBottom="0dp"
             android:gravity="center"
             android:singleLine="true"
-            android:text="达人·申请"
+            android:text="商家·申请"
             android:textColor="@color/base_color_white"
             android:textSize="18sp" />
 
@@ -81,7 +81,7 @@
         android:background="@color/white"
         android:textSize="@dimen/text_size_16"
         android:singleLine="true"
-        android:numeric="integer"
+        android:inputType="phone"
         />
     <View
         android:layout_width="match_parent"

@@ -561,7 +561,7 @@ public class IMClient {
                 LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
             }
             LazyQueue.getInstance().TempDequeue();
-            ack(60 * 1000);
+            ack(60 * 2 * 1000);
         });
     }
 

@@ -64,7 +64,7 @@
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:weightSum="5.5">
+                android:weightSum="5">
 
                 <TextView
                     android:id="@+id/tv_all_order"
@@ -89,13 +89,13 @@
                 <TextView
                     android:id="@+id/tv_process"
                     android:drawableTop="@drawable/icon_process"
-                    android:text="待卖家确认"
+                    android:text="处理中"
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:textColor="@color/color_text_ii"
                     android:textSize="13sp"
                     android:layout_height="70dp"
-                    android:layout_weight="1.5" />
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/tv_available"
                     android:drawableTop="@drawable/icon_available"
@@ -195,6 +195,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"/>
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/rl_my_contact"
                 android:layout_marginTop="10dp"
                 android:background="@color/base_color_white"
@@ -234,6 +235,7 @@
                 android:layout_marginRight="15dp"/>
             <RelativeLayout
                 android:id="@+id/rl_my_common_user"
+                android:layout_marginTop="10dp"
                 android:background="@color/base_color_white"
                 android:layout_width="match_parent"
                 android:layout_height="62dp">

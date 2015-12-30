@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
@@ -37,6 +38,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
+import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
@@ -438,6 +440,10 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
+                    if (!WeixinApi.getInstance().isWXinstalled(act)){
+                        ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
+                        return;
+                    }
                     Intent tv_pay = new Intent(act, PaymentActivity.class);
                     tv_pay.putExtra("orderId", orderId);
                     tv_pay.putExtra("type", "weixinpay");

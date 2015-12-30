@@ -606,7 +606,7 @@ public class MessageAdapter extends BaseAdapter {
                 User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                 if (user != null) {
                     holder.tv_userId.setText(user.getNickName());
-                    ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
+                    if (holder.head_iv!=null)ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
                 }
             }
         } else {

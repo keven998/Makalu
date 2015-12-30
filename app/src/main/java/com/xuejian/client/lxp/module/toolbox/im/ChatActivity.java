@@ -196,6 +196,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
     private boolean fromTrade;
     ChatMenuFragment fragment;
+    MessageBean tempTradeBean;
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -369,11 +370,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                                     messag1.setSenderId(Long.parseLong(toChatUsername));
                                     messag1.setSendType(1);
                                     messag1.setCreateTime(System.currentTimeMillis());
+                                    tempTradeBean = messag1;
                                     messageList.add(messag1);
                                     adapter.setSendCommodityListener(new OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             messageList.remove(messag1);
+                                            tempTradeBean = null;
                                             adapter.notifyDataSetChanged();
                                             MessageBean m = IMClient.getInstance().createCommodityMessage(AccountManager.getCurrentUserId(), toChatUsername, chatType, messag1.getMessage(), MessageAdapter.GOODS_MSG);
                                             messageList.add(m);
@@ -1616,6 +1619,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         super.onStop();
     }
 
+    private static long mSendTime;
+
+    public static boolean isLongEnough() {
+        long currentTime = System.currentTimeMillis();
+        long time = currentTime - mSendTime;
+        mSendTime = currentTime;
+        return !(0 < time && time < 1000);
+    }
+
     /**
      * listview滑动监听listener
      */
@@ -1625,12 +1637,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             switch (scrollState) {
                 case OnScrollListener.SCROLL_STATE_IDLE:
-                    if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
+                    if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData&&isLongEnough()) {
                         loadmorePB.setVisibility(View.VISIBLE);
                         try {
                             currentSize = messageList.size();
+                            int pos = -1;
+                            if (tempTradeBean!=null){
+                                pos = currentSize - messageList.indexOf(tempTradeBean)-1;
+                            }
                             messageList.clear();
                             messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, ++PAGE));
+                            if (tempTradeBean!=null&&pos!=-1){
+                                messageList.add(messageList.size()- pos,tempTradeBean);
+                            }
                         } catch (Exception e1) {
                             loadmorePB.setVisibility(View.GONE);
                             return;
@@ -1714,7 +1733,5 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
         return 0;
     }
-
-    private static long mSendTime;
 
 }
