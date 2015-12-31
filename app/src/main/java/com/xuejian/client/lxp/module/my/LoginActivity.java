@@ -32,7 +32,6 @@ import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
-import com.xuejian.client.lxp.module.SplashActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -79,9 +78,7 @@ public class LoginActivity extends PeachBaseActivity {
                 startActivityForResult(intent, REQUEST_CODE_REG);
             }
         });
-        if (SplashActivity.instance!=null){
-            SplashActivity.instance.finish();
-        }
+        setResult(RESULT_OK);
         isFromSplash = getIntent().getBooleanExtra("isFromSplash",false);
         isFromTalkShare = getIntent().getBooleanExtra("isFromTalkShare",false);
         isFromGoods = getIntent().getBooleanExtra("isFromGoods",false);
@@ -197,7 +194,7 @@ public class LoginActivity extends PeachBaseActivity {
                     startActivity(intent);
                     finish();
                     if (isFromSplash) {
-                        SplashActivity.instance.finish();
+                       setResult(RESULT_OK);
                     }
                 }
                 // setResult(RESULT_OK);

@@ -3,8 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/base_color_white"
-    android:padding="10dp">
+    >
     <TextView
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
         android:id="@+id/tv_show_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

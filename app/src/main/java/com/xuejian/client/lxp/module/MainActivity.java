@@ -20,7 +20,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckedTextView;
-import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -55,7 +54,6 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.goods.Fragment.DestinationFragment;
 import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
-import com.xuejian.client.lxp.module.my.fragment.MyFragment;
 import com.xuejian.client.lxp.module.my.fragment.MyInfoFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
@@ -96,15 +94,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = { R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home,R.drawable.checker_tab_home_user};
     // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
-    private String[] tabTitle = {"首页", "目的地", "消息", "我的"};
+    private static String[] tabTitle = {"首页", "目的地", "消息", "我的"};
     private TextView unreadMsg;
-    private TextView regNotice;
     //Tab选项Tag
-    private String mTagArray[] = {"Soso", "Travel",  "Talk", "My"};
+    private static String mTagArray[] = {"Soso", "Travel",  "Talk", "My"};
 
     private boolean FromBounce, ring, vib;
     private Vibrator vibrator;
-    PopupWindow mPop;
     SuperToast superToast;
     private boolean isPause;
     LocationManagerProxy mLocationManagerProxy;
@@ -124,9 +120,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();
-        if (getIntent().getBooleanExtra("conflict", false)) {
-            showConflictDialog(MainActivity.this);
-        }
         prepareJSBundle();
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
@@ -256,9 +249,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getBooleanExtra("conflict", false)) {
-            showConflictDialog(MainActivity.this);
-        }
         if (intent.getBooleanExtra("reLogin", false)) {
             initClient();
         }
@@ -418,11 +408,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         return view;
     }
 
-    public void setNoticeInvisiable() {
-        if (regNotice != null) {
-            regNotice.setVisibility(View.GONE);
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -442,7 +427,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         } else unreadMsg.setVisibility(View.GONE);
         try {
             if (!IMClient.isPushTurnOn(mContext)) {
-                System.out.println("push Off");
                 IMClient.initPushService(mContext);
             }
         } catch (Exception e) {
@@ -458,46 +442,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
     protected PeachMessageDialog conflictDialog;
 
-    /**
-     * 显示帐号在别处登录dialog
-     */
-    public void showConflictDialog(Context context) {
-        AccountManager.getInstance().logout(context);
-        int i = mTabHost.getCurrentTab();
-        if (i == 2) {
-            MyFragment my = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
-            my.onResume();
-        }
-        if (isFinishing())
-            return;
-        try {
-            if (conflictDialog == null) {
-                conflictDialog = new PeachMessageDialog(context);
-                conflictDialog.setTitle("下线通知");
-                //conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
-                conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
-                conflictDialog.setPositiveButton("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        conflictDialog.dismiss();
-                        conflictDialog = null;
-                        mTabHost.setCurrentTab(1);
-                        if (isAccountAbout) {
-                            finish();
-                        }
-                    }
-                });
-                conflictDialog.show();
-                conflictDialog.isCancle(false);
-            }
-            conflictDialog.show();
-            isConflict = true;
-        } catch (Exception e) {
-
-        }
-
-
-    }
 
 
     @Override
@@ -753,14 +697,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         });
     }
 
-    /**
-     * 保存提示新消息
-     */
-    private void notifyNewInviteMessage() {
-
-        // 刷新bottom bar消息未读数
-        updateUnreadAddressLable();
-    }
 
     /**
      * 网络状态广播
@@ -937,12 +873,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (((File) localObject).exists()) {
             return;
         }
+        InputStream localInputStream=null;
         try {
             localObject = new FileOutputStream((File) localObject);
-            InputStream localInputStream = getAssets().open("ReactNativeDevBundle.js");
+            localInputStream = getAssets().open("ReactNativeDevBundle.js");
             copyFile(localInputStream, (OutputStream) localObject);
             ((OutputStream) localObject).close();
-            localInputStream.close();
+            if (localInputStream!=null)localInputStream.close();
             return;
         } catch (FileNotFoundException localFileNotFoundException) {
             localFileNotFoundException.printStackTrace();

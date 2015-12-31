@@ -315,8 +315,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
 
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 
-        tvOrderContactName.setText(bean.getContact().getSurname()+ " " + bean.getContact().getGivenName());
-        tvOrderContactTel.setText("+"+bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
+        tvOrderContactName.setText(bean.getContact().getSurname() + " " + bean.getContact().getGivenName());
+        tvOrderContactTel.setText("+" + bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
         if (TextUtils.isEmpty(bean.getComment())){
             llMessage.setVisibility(View.GONE);
         }else {
@@ -333,17 +333,19 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 startActivity(intent);
             }
         });
-        tvTalk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent talkIntent = new Intent(mContext, ChatActivity.class);
-                talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
-                talkIntent.putExtra("chatType", "single");
-                talkIntent.putExtra("shareCommodityBean", bean.getCommodity().creteShareBean());
-                talkIntent.putExtra("fromTrade", true);
-                startActivity(talkIntent);
-            }
-        });
+        if (bean.getCommodity().getSeller()!=null){
+            tvTalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                    talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
+                    talkIntent.putExtra("chatType", "single");
+                    talkIntent.putExtra("shareCommodityBean", bean.getCommodity().creteShareBean());
+                    talkIntent.putExtra("fromTrade", true);
+                    startActivity(talkIntent);
+                }
+            });
+        }
 
     }
 

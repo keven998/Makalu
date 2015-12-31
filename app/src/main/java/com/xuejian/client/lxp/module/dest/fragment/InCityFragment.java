@@ -44,7 +44,7 @@ import com.xuejian.client.lxp.common.utils.HanziToPinyin;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
 import com.xuejian.client.lxp.common.widget.ExpandListView;
-import com.xuejian.client.lxp.module.dest.CityDetailActivity;
+import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.SelectCityActivity;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
 
@@ -440,7 +440,7 @@ public class InCityFragment extends PeachBaseFragment{
             cityListFl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
+                    Intent intent = new Intent(getActivity(), CityInfoActivity.class);
                     intent.putExtra("id", itemData.locList.get(position).id);
                     intent.putExtra("isFromStrategy", false);
                     startActivity(intent);

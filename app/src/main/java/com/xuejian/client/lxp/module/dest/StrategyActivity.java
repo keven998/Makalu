@@ -740,7 +740,7 @@ public class StrategyActivity extends PeachBaseActivity {
                     drawerLayout.closeDrawer(GravityCompat.END);
                     new Handler() {
                         public void handleMessage(Message msg) {
-                            Intent intent = new Intent(mContext, CityDetailActivity.class);
+                            Intent intent = new Intent(mContext, CityInfoActivity.class);
                             intent.putExtra("id", destinations.get(position).id);
                             intent.putExtra("isFromStrategy", true);
                             startActivity(intent);

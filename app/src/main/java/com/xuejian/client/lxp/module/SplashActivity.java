@@ -18,6 +18,7 @@ import com.lv.im.IMClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -44,8 +45,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
     Handler handler;
     int REGESTER_REQUEST = 5;
     int LOGIN_REQUEST = 6;
-    private Long NEWUSER = 1l;
-    public static SplashActivity instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         initView();
         MobclickAgent.updateOnlineConfig(this);
         initData();
-        instance = this;
     }
 
     protected void initData() {
@@ -69,8 +67,10 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             IMClient.getInstance().setCurrentUserId(String.valueOf(user.getUserId()));
         }
         final DisplayImageOptions picOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+       //         .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .bitmapConfig(Bitmap.Config.RGB_565)
                 .showImageOnFail(R.drawable.bg_splash)
                 .showImageForEmptyUri(R.drawable.bg_splash)
                 .showImageOnLoading(R.drawable.bg_splash)
@@ -87,9 +87,9 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                     imLogin(user);
                     //用户自动登录
                     //先从用户名密码Token表中取得用户信息然后自动登录
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     boolean hasLoad = SharePrefUtil.getBoolean(SplashActivity.this, "hasLoad_" + UpdateUtil.getVerName(SplashActivity.this), false);
                     if (showSplash && !hasLoad) {
@@ -221,18 +221,19 @@ public class SplashActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REGESTER_REQUEST && resultCode == RESULT_OK) {
-            User user = data.getParcelableExtra("user");
-            try {
-                DialogManager.getInstance().showLoadingDialog(this, "正在登录");
-            } catch (Exception e) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-            }
+        if (resultCode == RESULT_OK){
+            if (requestCode == REGESTER_REQUEST){
+                User user = data.getParcelableExtra("user");
+                try {
+                    DialogManager.getInstance().showLoadingDialog(this, "正在登录");
+                } catch (Exception e) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                }
 
-            imLogin(user);
-        } else {
-            // finish();
-            // overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                imLogin(user);
+            }else if (requestCode ==LOGIN_REQUEST){
+                finish();
+            }
         }
     }
 

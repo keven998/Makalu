@@ -78,6 +78,7 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
+import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
@@ -171,7 +172,7 @@ public class MessageAdapter extends BaseAdapter {
         activity = (Activity) context;
         picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
-                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                 .showImageOnLoading(R.drawable.messages_bg_useravatar)
@@ -873,7 +874,7 @@ public class MessageAdapter extends BaseAdapter {
             holder.rl_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, CityDetailActivity.class);
+                    Intent intent = new Intent(context, CityInfoActivity.class);
                     intent.putExtra("id", finalBean.id);
                     activity.startActivity(intent);
                 }

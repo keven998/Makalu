@@ -103,7 +103,7 @@ public class TravelApi extends BaseApi {
     public final static String MAIN_PAGE = "/columns";
 
     // 首页推荐
-    public final static String RECOMMEND = "/recommend";
+    public final static String RECOMMEND = "/marketplace/commodities/recommendations";
 
     // 商品列表
     public final static String COMMODITY_LIST = "/marketplace/commodities";
@@ -261,7 +261,7 @@ public class TravelApi extends BaseApi {
 
 
     public static void createOrder
-            (long commodityId, String planId, long rendezvousTime, int quantity, long contactPhoneDialCode,long contactPhoneNumber, String contactEmail, String contactSurname, String contactGivenName, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
+            (long commodityId, String planId, long rendezvousTime, int quantity, JSONObject contactObject, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CREATE_ORDER);
@@ -272,16 +272,17 @@ public class TravelApi extends BaseApi {
         JSONObject jsonObject = new JSONObject();
         JSONObject telObject = new JSONObject();
         try {
-            telObject.put("dialCode",contactPhoneDialCode);
-            telObject.put("number",contactPhoneNumber);
+       //     telObject.put("dialCode",contactPhoneDialCode);
+       //     telObject.put("number",contactPhoneNumber);
             jsonObject.put("commodityId", commodityId);
             jsonObject.put("planId", planId);
             jsonObject.put("rendezvousTime", rendezvousTime);
             jsonObject.put("quantity", quantity);
-            jsonObject.put("contactPhone", telObject);
-            jsonObject.put("contactEmail", contactEmail);
-            jsonObject.put("contactSurname", contactSurname);
-            jsonObject.put("contactGivenName", contactGivenName);
+            jsonObject.put("contact", contactObject);
+     //       jsonObject.put("contactPhone", telObject);
+    //        jsonObject.put("contactEmail", contactEmail);
+   //         jsonObject.put("contactSurname", contactSurname);
+   //         jsonObject.put("contactGivenName", contactGivenName);
             jsonObject.put("comment", contactComment);
             if (list != null && list.size() > 0) {
                 JSONArray array = new JSONArray();
@@ -372,7 +373,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + CITY_LIST + "/" + cityId + "/details");
-        request.putUrlParams("countryId", field);
+        if (TextUtils.isEmpty(field))request.putUrlParams("field", field);
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
     }

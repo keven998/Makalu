@@ -9,10 +9,12 @@ import android.support.v4.BuildConfig;
 import com.aizou.core.base.BaseApplication;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.xuejian.client.lxp.common.utils.CrashHandler;
 
 import java.io.File;
@@ -35,9 +37,7 @@ public class PeachApplication extends BaseApplication {
         initPeachConfig();
         initChannelId();
         initImageLoader();
-//        if (com.xuejian.client.lxp.BuildConfig.DEBUG){
-//            LeakCanary.install(this);
-//        }
+        LeakCanary.install(this);
         if (!com.xuejian.client.lxp.BuildConfig.DEBUG) {
             CrashHandler.getInstance().init(this);
         }
@@ -48,10 +48,13 @@ public class PeachApplication extends BaseApplication {
         File cacheDir = StorageUtils.getOwnCacheDirectory(this, SystemConfig.NET_IMAGE_CACHE_DIR);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
                 getApplicationContext())
-                .threadPriority(Thread.NORM_PRIORITY - 2).threadPoolSize(3)
-                .memoryCacheSizePercentage(13)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .threadPoolSize(2)
+                .memoryCacheSizePercentage(10)
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
                 .diskCache(new UnlimitedDiskCache(cacheDir))
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .memoryCacheSize(2 * 1024 * 1024)
                 .diskCacheSize(40 * 1024 * 1024)
                 .tasksProcessingOrder(QueueProcessingType.FIFO)
                 .build();

@@ -322,7 +322,7 @@ public class GoodsList extends PeachBaseActivity {
             mDataList = new ArrayList<SimpleCommodityBean>();
             picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
-                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                     .resetViewBeforeLoading(true)
                     .showImageOnFail(R.drawable.ic_default_picture)
                     .showImageOnLoading(R.drawable.ic_default_picture)
@@ -367,7 +367,9 @@ public class GoodsList extends PeachBaseActivity {
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
             holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
             holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
-            holder.tvStoreName.setText(bean.getSeller().getName());
+            if (bean.getSeller()!=null){
+                holder.tvStoreName.setText(bean.getSeller().getName());
+            }
             holder.llContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

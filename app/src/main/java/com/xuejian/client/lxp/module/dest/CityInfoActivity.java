@@ -30,6 +30,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CityBean;
 import com.xuejian.client.lxp.bean.ImageBean;
+import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -49,7 +50,7 @@ import butterknife.InjectView;
 /**
  * Created by yibiao.qin on 2015/11/4.
  */
-public class CityInfoActivity extends PeachBaseActivity implements View.OnClickListener {
+public class CityInfoActivity extends PeachBaseActivity  {
 
     ListView listView;
     AutoScrollViewPager viewPager;
@@ -62,6 +63,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
     RecommendGoodsAdapter adapter;
     FrameLayout fl_city_img;
     TextView showMore;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +143,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             }
         });
 
-        TravelApi.getCommodityList(null, id, null, null, null, "0","3",new HttpCallBack<String>() {
+        TravelApi.getCommodityList(null, id, null, null, null, "0", "3", new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
@@ -149,7 +151,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
                 adapter.getDataList().clear();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
-                if (list.result.size()>0){
+                if (list.result.size() > 0) {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -181,16 +183,54 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             public void onClick(View v) {
                 Intent intent = new Intent(CityInfoActivity.this, GoodsList.class);
                 intent.putExtra("id", id);
-                intent.putExtra("title",String.format("%s玩乐",bean.zhName));
+                intent.putExtra("title", String.format("%s玩乐", bean.zhName));
                 startActivity(intent);
             }
         });
         tvCountryName.setText(bean.zhName);
         tvCountryNameEn.setText(bean.enName);
         tvStoreNum.setText(String.valueOf(bean.commodityCnt));
-        viewPager.setAdapter(new GoodsPageAdapter(this, bean.images,bean.id,bean.zhName));
+        viewPager.setAdapter(new GoodsPageAdapter(this, bean.images, bean.id, bean.zhName));
 
 
+        final ArrayList<LocBean> locList = new ArrayList<LocBean>();
+        final LocBean locBean = new LocBean();
+        locBean.id = bean.id;
+        locBean.zhName = bean.zhName;
+        findViewById(R.id.btn_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        findViewById(R.id.btn_travel_notice).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        findViewById(R.id.btn_traffic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        findViewById(R.id.btn_viewspot).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, SpotListActivity.class);
+                locList.add(locBean);
+                intent.putParcelableArrayListExtra("locList", locList);
+                intent.putExtra("type", TravelApi.PeachType.SPOT);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.btn_plan).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         findViewById(R.id.btn_note).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,10 +240,32 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    public void onClick(View v) {
+        findViewById(R.id.btn_food).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PoiListActivity.class);
+                locList.clear();
+                locList.add(locBean);
+                intent.putParcelableArrayListExtra("locList", locList);
+                intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
+             //   intent.putExtra("value", locBean.diningTitles);
+                intent.putExtra("isFromCityDetail", true);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.btn_shopping).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PoiListActivity.class);
+                locList.clear();
+                locList.add(locBean);
+                intent.putParcelableArrayListExtra("locList", locList);
+                intent.putExtra("type", TravelApi.PeachType.SHOPPING);
+             //   intent.putExtra("value", locBean.shoppingTitles);
+                intent.putExtra("isFromCityDetail", true);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -213,7 +275,8 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
         private ArrayList<ImageBean> mDatas;
         private String id;
         private String zhName;
-        public GoodsPageAdapter(Context context, ArrayList<ImageBean> datas,String id,String zhName) {
+
+        public GoodsPageAdapter(Context context, ArrayList<ImageBean> datas, String id, String zhName) {
             mDatas = datas;
             mContext = context;
             this.id = id;
@@ -272,7 +335,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             this.activity = activity;
             picOptions = new DisplayImageOptions.Builder()
                     .cacheInMemory(true)
-                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                     .resetViewBeforeLoading(true)
                     .showImageOnFail(R.drawable.ic_default_picture)
                     .showImageOnLoading(R.drawable.ic_default_picture)
@@ -325,12 +388,14 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             spb.append("¥" + CommonUtils.getPriceString(bean.getPrice())).append(string);
             holder.tvGoodsCurrentPrice.setText(spb);
 
-            holder.tvGoodsPrice.setText("¥" +CommonUtils.getPriceString(bean.getMarketPrice()));
+            holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
             holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
             holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
-            holder.tvStoreName.setText(bean.getSeller().getName());
+            if (bean.getSeller() != null) {
+                holder.tvStoreName.setText(bean.getSeller().getName());
+            }
 //            holder.tvGoodsService.removeAllViews();
 //            holder.tvGoodsService.setmTagViewResId(R.layout.goods_tag);
 //            holder.tvGoodsService.addTags(mTags);
@@ -349,7 +414,7 @@ public class CityInfoActivity extends PeachBaseActivity implements View.OnClickL
             ImageView ivGoods;
             @InjectView(R.id.tv_goods_name)
             TextView tvGoodsName;
-//            @InjectView(R.id.tv_goods_service)
+            //            @InjectView(R.id.tv_goods_service)
 //            TagListView tvGoodsService;
             @InjectView(R.id.tv_goods_comment)
             TextView tvGoodsComment;

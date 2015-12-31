@@ -137,7 +137,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 getOrder("committed");
                 break;
             case DRAWBACK:
-                getOrder("refundApplied");
+                getOrder("refundApplied,refunded");
                 break;
             default:
                 if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);

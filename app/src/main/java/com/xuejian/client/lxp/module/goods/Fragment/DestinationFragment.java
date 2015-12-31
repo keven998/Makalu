@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.goods.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -195,8 +197,10 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                     .showImageOnFail(R.drawable.expert_country_list_bg)
                     .showImageForEmptyUri(R.drawable.expert_country_list_bg)
                     .showImageOnLoading(R.drawable.expert_country_list_bg)
-                    .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .cacheOnDisc(true)
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                    .bitmapConfig(Bitmap.Config.RGB_565)
+             //       .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+                    .cacheOnDisk(true)
                     .build();
         }
 

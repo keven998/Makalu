@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
@@ -60,14 +60,15 @@ public class GoodsMainFragment extends PeachBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         options = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+           //     .cacheInMemory(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
                 .showImageOnFail(R.drawable.ic_default_picture)
                 .showImageOnLoading(R.drawable.ic_default_picture)
                 .showImageForEmptyUri(R.drawable.ic_default_picture)
-                        //   .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(10)))
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+                .cacheOnDisk(true)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .build();
     }
 
     @Override
@@ -284,10 +285,11 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
         private Context mContext;
         private ArrayList<ColumnBean.ColumnsEntity> mDatas;
-
+        private SparseArray<View> mViews;
         public GoodsPageAdapter(Context context, ArrayList<ColumnBean.ColumnsEntity> datas) {
             mDatas = datas;
             mContext = context;
+            mViews = new SparseArray<View>(datas.size());
         }
 
         @Override
@@ -304,26 +306,37 @@ public class GoodsMainFragment extends PeachBaseFragment {
             return view == object;
         }
 
+        private View getViews(int position){
+            return mViews.get(position);
+        }
+
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            final ImageView imageView = new ImageView(mContext);
-            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
-            imageView.setLayoutParams(layoutParams);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
 
-            if (mDatas.get(position).getImages().size() > 0) {
-                ImageLoader.getInstance().displayImage(mDatas.get(position).getImages().get(0).url, imageView, UILUtils.getDefaultOption());
-            } else {
-                ImageLoader.getInstance().displayImage("", imageView, UILUtils.getDefaultOption());
-            }
-            container.addView(imageView, 0);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            ImageView imageView = (ImageView) getViews(position);
+            if (imageView == null){
+                imageView = new ImageView(mContext);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
+                imageView.setLayoutParams(layoutParams);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
 
+                if (mDatas.get(position).getImages().size() > 0) {
+                    ImageLoader.getInstance().displayImage(mDatas.get(position).getImages().get(0).url, imageView, options);
+                } else {
+                    ImageLoader.getInstance().displayImage("", imageView, options);
                 }
-            });
+
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                mViews.put(position, imageView);
+            }
+
+            container.addView(imageView, 0);
             return imageView;
         }
 

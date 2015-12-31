@@ -18,7 +18,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -92,10 +91,12 @@ public class CountryListActivity extends PeachBaseActivity {
     class CountryAdapter extends BaseAdapter {
         private DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
-                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .cacheOnDisk(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
-                .displayer(new RoundedBitmapDisplayer(10))
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+        //        .displayer(new RoundedBitmapDisplayer(10))
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .build();
         private Context mContext;
         private ArrayList<CountryBean> data;
 

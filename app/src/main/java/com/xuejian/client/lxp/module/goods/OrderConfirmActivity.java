@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.alibaba.fastjson.JSON;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
@@ -39,6 +40,9 @@ import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +54,7 @@ import butterknife.InjectView;
 /**
  * Created by yibiao.qin on 2015/12/23.
  */
-public class OrderConfirmActivity extends PeachBaseActivity{
+public class OrderConfirmActivity extends PeachBaseActivity {
     @InjectView(R.id.iv_nav_back)
     ImageView ivNavBack;
     @InjectView(R.id.tv_title_bar_title)
@@ -101,6 +105,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
     ArrayList<TravellerBean> list;
     Handler handler = new Handler();
     private HashMap<String, String> idType = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +128,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
     }
 
     private void bindView(final OrderBean bean) {
-        CommonAdapter memberAdapter = new CommonAdapter(mContext,R.layout.item_order_users, false, null);
+        CommonAdapter memberAdapter = new CommonAdapter(mContext, R.layout.item_order_users, false, null);
         ListView memberList = (ListView) findViewById(R.id.lv_members);
         memberList.setAdapter(memberAdapter);
         CommonUtils.setListViewHeightBasedOnChildren(memberList);
@@ -160,7 +165,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 tvState.setText("已申请退款");
                 break;
             case "pending":
-                tvState.setText(String.format("待付款 ¥%s",CommonUtils.getPriceString(bean.getTotalPrice())));
+                tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice())));
 //                long time = bean.getExpireTime() - System.currentTimeMillis();
 //                if (time > 0) {
 //                    countDownTimer = new CountDownTimer(time, 1000) {
@@ -183,14 +188,14 @@ public class OrderConfirmActivity extends PeachBaseActivity{
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                 //       if (tvPay.getText().toString().equals("立即支付")){
-                            DialogManager.getInstance().showLoadingDialog(mContext, "订单创建中");
+                        //       if (tvPay.getText().toString().equals("立即支付")){
+                        DialogManager.getInstance().showLoadingDialog(mContext, "订单创建中");
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 createOrder(bean);
                             }
-                        },1000);
+                        }, 1000);
 //                        }else if (tvPay.getText().toString().equals("再次预定")){
 //                            intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
 //                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
@@ -267,33 +272,35 @@ public class OrderConfirmActivity extends PeachBaseActivity{
 //                startActivity(intent);
 //            }
 //        });
-   //     tvOrderId.setText(String.valueOf(bean.getOrderId()));
+        //     tvOrderId.setText(String.valueOf(bean.getOrderId()));
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
         tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
         tvOrderPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
 
-       // tvOrderTravellerCount.setText(String.valueOf(list.size()));
+        // tvOrderTravellerCount.setText(String.valueOf(list.size()));
 
-        tvOrderContactName.setText(bean.getContact().getSurname()  + " " + bean.getContact().getGivenName());
-        tvOrderContactTel.setText("+"+bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
-        if (TextUtils.isEmpty(bean.getComment())){
+        tvOrderContactName.setText(bean.getContact().getSurname() + " " + bean.getContact().getGivenName());
+        tvOrderContactTel.setText("+" + bean.getContact().getTel().getDialCode() + "-" + bean.getContact().getTel().getNumber());
+        if (TextUtils.isEmpty(bean.getComment())) {
             llMessage.setVisibility(View.GONE);
-        }else {
+        } else {
             tvOrderMessage.setText(bean.getComment());
         }
+        if (bean.getCommodity().getSeller() != null) {
+            tvTalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                    talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
+                    talkIntent.putExtra("chatType", "single");
+                    talkIntent.putExtra("shareCommodityBean", bean.getCommodity().creteShareBean());
+                    talkIntent.putExtra("fromTrade", true);
+                    startActivity(talkIntent);
+                }
+            });
+        }
 
-        tvTalk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent talkIntent = new Intent(mContext, ChatActivity.class);
-                talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
-                talkIntent.putExtra("chatType", "single");
-                talkIntent.putExtra("shareCommodityBean", bean.getCommodity().creteShareBean());
-                talkIntent.putExtra("fromTrade", true);
-                startActivity(talkIntent);
-            }
-        });
 //        tvPay.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -303,10 +310,14 @@ public class OrderConfirmActivity extends PeachBaseActivity{
 
     }
 
-    public void createOrder(final OrderBean bean){
-
-        TravelApi.createOrder(bean.getCommodity().getCommodityId(), bean.getPlanId(), bean.getRendezvousTime(), bean.getQuantity(), bean.getContact().getTel().getDialCode()
-                , bean.getContact().getTel().getNumber(), "", bean.getContact().getSurname(), bean.getContact().getGivenName(),
+    public void createOrder(final OrderBean bean) {
+        JSONObject object = null;
+        try {
+            object = new JSONObject(JSON.toJSON(bean.getContact()).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        TravelApi.createOrder(bean.getCommodity().getCommodityId(), bean.getPlanId(), bean.getRendezvousTime(), bean.getQuantity(), object,
                 bean.getComment(), list, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
@@ -339,7 +350,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        
+
     }
 
     private void showPayActionDialog(final OrderBean currentOrder) {
@@ -366,7 +377,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                if (!WeixinApi.getInstance().isWXinstalled(OrderConfirmActivity.this)){
+                if (!WeixinApi.getInstance().isWXinstalled(OrderConfirmActivity.this)) {
                     ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
                     return;
                 }
@@ -396,6 +407,7 @@ public class OrderConfirmActivity extends PeachBaseActivity{
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
+
     public class CommonAdapter extends BaseAdapter {
 
         private Context mContext;
@@ -499,12 +511,13 @@ public class OrderConfirmActivity extends PeachBaseActivity{
             private LinearLayout bg;
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (countDownTimer!=null){
+        if (countDownTimer != null) {
             countDownTimer.cancel();
-            countDownTimer=null;
+            countDownTimer = null;
         }
     }
 

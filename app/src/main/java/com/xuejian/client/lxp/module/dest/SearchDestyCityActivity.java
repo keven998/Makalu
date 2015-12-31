@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -136,7 +135,7 @@ public class SearchDestyCityActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final  LocBean locBean =cityListAdapter.getDataList().get(position);
-                Intent intent = new Intent(SearchDestyCityActivity.this, CityDetailActivity.class);
+                Intent intent = new Intent(SearchDestyCityActivity.this, CityInfoActivity.class);
                 intent.putExtra("id", locBean.id);
                 intent.putExtra("isFromStrategy", false);
                 startActivity(intent);

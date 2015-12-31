@@ -33,7 +33,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.common.widget.DynamicBox;
 import com.xuejian.client.lxp.common.widget.FlowLayout;
-import com.xuejian.client.lxp.module.dest.CityDetailActivity;
+import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.SelectCityActivity;
 import com.xuejian.client.lxp.module.my.MyFootPrinterActivity;
 
@@ -92,7 +92,7 @@ public class OutCityFragment extends PeachBaseFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 LocBean theCity = outCountryAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), CityDetailActivity.class);
+                Intent intent = new Intent(getActivity(), CityInfoActivity.class);
                 intent.putExtra("id",theCity.id);
                 intent.putExtra("isFromStrategy", false);
                 startActivity(intent);

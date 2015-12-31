@@ -51,10 +51,6 @@ public class PoiListActivity extends PeachBaseActivity {
     StringSpinnerAdapter mLocSpinnerAdapter;
     @InjectView(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
-    //    @InjectView(R.id.et_search)
-//    EditText mEtSearch;
-//    @InjectView(R.id.btn_search)
-//    Button mBtnSearch;
     @InjectView(R.id.tv_search)
     TextView tv_search;
     @InjectView(R.id.tv_title_bar_title)
@@ -423,11 +419,7 @@ public class PoiListActivity extends PeachBaseActivity {
             headerView.setVisibility(View.GONE);
         } else {
             headerView.setVisibility(View.VISIBLE);
-//                if(isFromCityDetail) {
-//                    mTvCityPoiDesc.setText(value);
-//                }else{
             mTvCityPoiDesc.setText(result.desc);
-            //         }
         }
         findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -435,11 +427,9 @@ public class PoiListActivity extends PeachBaseActivity {
                 Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                 if (type.equals(TravelApi.PeachType.RESTAURANTS)) {
                     intent.putExtra("url", result.detailUrl);
-//                    intent.putExtra("title", String.format("%s吃什么", curLoc.zhName));
                     intent.putExtra("title", "美食攻略");
                 } else if (type.equals(TravelApi.PeachType.SHOPPING)) {
                     intent.putExtra("url", result.detailUrl);
-//                    intent.putExtra("title", String.format("%s买什么", curLoc.zhName));
                     intent.putExtra("title", "购物攻略");
                 }
                 startActivity(intent);
@@ -462,14 +452,14 @@ public class PoiListActivity extends PeachBaseActivity {
                         bindView(poiListResult.result);
                     }
                     if (curPage == 0) {
-//                    mPoiListLv.onPullDownRefreshComplete();
                         mPoiListLv.onPullUpRefreshComplete();
                     } else {
                         mPoiListLv.onPullUpRefreshComplete();
                     }
                     DialogManager.getInstance().dissMissModelessLoadingDialog();
                 }catch (Exception ex){
-
+                    ex.printStackTrace();
+                    DialogManager.getInstance().dissMissModelessLoadingDialog();
                 }
 
             }
@@ -488,7 +478,6 @@ public class PoiListActivity extends PeachBaseActivity {
             }
         });
 
-//        mEtSearch.clearFocus();
     }
 
     private void bindView(List<PoiDetailBean> result) {
@@ -506,7 +495,6 @@ public class PoiListActivity extends PeachBaseActivity {
         if (result == null
                 || result.size() < BaseApi.PAGE_SIZE) {
             mPoiListLv.setHasMoreData(false);
-            // ptrLv.setScrollLoadEnabled(false);
         } else {
             mPoiListLv.setHasMoreData(true);
         }
@@ -556,5 +544,9 @@ public class PoiListActivity extends PeachBaseActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DialogManager.getInstance().dissMissModelessLoadingDialog();
+    }
 }
