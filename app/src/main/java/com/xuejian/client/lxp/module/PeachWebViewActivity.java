@@ -16,21 +16,21 @@ import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/13.
  */
 public class PeachWebViewActivity extends BaseWebViewActivity implements View.OnClickListener {
 
-    @InjectView(R.id.web_view_go_back)
+    @Bind(R.id.web_view_go_back)
     ImageView go_back;
-    @InjectView(R.id.web_view_go_forward)
+    @Bind(R.id.web_view_go_forward)
     ImageView go_forward;
-    @InjectView(R.id.web_view_refresh)
+    @Bind(R.id.web_view_refresh)
     ImageView refresh;
-    @InjectView(R.id.web_view_share)
+    @Bind(R.id.web_view_share)
     ImageView share;
     String title;
     StrategyBean strategy;
@@ -39,7 +39,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_with_titlebar);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 //        titleHeaderBar.enableBackKey(true);
         if (getIntent().getBooleanExtra("enable_bottom_bar", false)) {
             findViewById(R.id.bottom_bar).setVisibility(View.VISIBLE);

@@ -613,6 +613,11 @@
             </intent-filter>
         </receiver>
 
+        <!-- ###################Glide Module###################### -->
+        <meta-data
+            android:name="com.xuejian.client.lxp.config.MyGlideModule"
+            android:value="GlideModule" />
+
         <!-- ###################注册SDK使用的Activity###################### -->
 
         <meta-data

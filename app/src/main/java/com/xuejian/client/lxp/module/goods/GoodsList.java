@@ -41,29 +41,29 @@ import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/10/17.
  */
 public class GoodsList extends PeachBaseActivity {
 
-    @InjectView(R.id.tv_title_back)
+    @Bind(R.id.tv_title_back)
     TextView tvTitleBack;
-    @InjectView(R.id.type_spinner)
+    @Bind(R.id.type_spinner)
     NiceSpinner typeSpinner;
-    @InjectView(R.id.sort_spinner)
+    @Bind(R.id.sort_spinner)
     NiceSpinner sortSpinner;
-    @InjectView(R.id.lv_poi_list)
+    @Bind(R.id.lv_poi_list)
     XRecyclerView goodsList;
-    @InjectView(R.id.iv_toTop)
+    @Bind(R.id.iv_toTop)
     FloatingActionButton toTop;
-    @InjectView(R.id.tv_list_title)
+    @Bind(R.id.tv_list_title)
     TextView tvTitle;
-    @InjectView(R.id.ll_spinner)
+    @Bind(R.id.ll_spinner)
     LinearLayout ll_spinner;
-    @InjectView(R.id.iv_banner)
+    @Bind(R.id.iv_banner)
     ImageView iv_banner;
     GoodsListAdapter adapter;
 //    private int[] lebelColors = new int[]{
@@ -89,7 +89,7 @@ public class GoodsList extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_list);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         final Handler handler = new Handler();
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
@@ -125,7 +125,6 @@ public class GoodsList extends PeachBaseActivity {
                 }, 1000);
             }
         });
-
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,13 +218,15 @@ public class GoodsList extends PeachBaseActivity {
 
 
     private void initCategoryData(final CategoryBean bean) {
-
+        if (bean.category.size()>0){
+            bean.category.add(0,"全部类型");
+        }
         typeSpinner.attachDataSource(bean.category);
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentType = bean.category.get(position);
-                if (currentType.equals("全部")){
+                if (currentType.equals("全部类型")){
                     currentType="";
                 }
                 getData(null, locId, currentType, null, null, 0, 15, true);

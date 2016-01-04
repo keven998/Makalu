@@ -103,7 +103,6 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my, null);
-        ButterKnife.inject(this, rootView);
         options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
                 .showImageOnFail(R.drawable.messages_bg_useravatar)
@@ -495,7 +494,7 @@ public class MyFragment extends PeachBaseFragment implements View.OnClickListene
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

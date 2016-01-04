@@ -22,16 +22,16 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/13.
  */
 public class SetPwdActivity extends PeachBaseActivity implements View.OnClickListener {
-    @InjectView(R.id.et_pwd)
+    @Bind(R.id.et_pwd)
     EditText pwdEt;
-    @InjectView(R.id.btn_ok)
+    @Bind(R.id.btn_ok)
     Button okBtn;
     String mToken;
     String mPhone;
@@ -42,7 +42,7 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_pwd);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         okBtn.setOnClickListener(this);
         mToken = getIntent().getStringExtra("token");
         mPhone = getIntent().getStringExtra("phone");

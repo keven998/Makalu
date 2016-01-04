@@ -37,33 +37,33 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/11/10.
  */
 public class UserInfoEditActivity extends PeachBaseActivity implements View.OnClickListener {
 
-    @InjectView(R.id.tv_title_back)
+    @Bind(R.id.tv_title_back)
     TextView tvTitleBack;
-    @InjectView(R.id.tv_confirm)
+    @Bind(R.id.tv_confirm)
     TextView tvConfirm;
-    @InjectView(R.id.et_last_name)
+    @Bind(R.id.et_last_name)
     EditText etLastName;
-    @InjectView(R.id.et_first_name)
+    @Bind(R.id.et_first_name)
     EditText etFirstName;
-    @InjectView(R.id.tv_birthday)
+    @Bind(R.id.tv_birthday)
     TextView tvBirthday;
-    @InjectView(R.id.iv_select_birthday)
+    @Bind(R.id.iv_select_birthday)
     ImageView ivSelectBirthday;
-    @InjectView(R.id.et_tel)
+    @Bind(R.id.et_tel)
     EditText etTel;
-    @InjectView(R.id.et_id)
+    @Bind(R.id.et_id)
     EditText etId;
-    @InjectView(R.id.type_spinner)
+    @Bind(R.id.type_spinner)
     Spinner spinner;
-    @InjectView(R.id.tv_dialCode)
+    @Bind(R.id.tv_dialCode)
     TextView tvDialCode;
     String idType ="passport";
     String type = "";
@@ -74,7 +74,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_edit);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         type = getIntent().getStringExtra("type");
         tvTitleBack.setOnClickListener(this);
         tvConfirm.setOnClickListener(this);

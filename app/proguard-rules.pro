@@ -30,6 +30,12 @@
 -keepclassmembers class cn.trinea.android.** { *; }
 -dontwarn cn.trinea.android.**
 
+#gilde
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+    **[] $VALUES;
+    public *;
+}
 
 #-dontwarn class com.igexin.**
 #-dontwarn class com.igexin.**{*;}

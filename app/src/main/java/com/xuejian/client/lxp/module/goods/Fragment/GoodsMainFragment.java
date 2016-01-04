@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
@@ -23,6 +24,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
 import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.section.BaseSectionAdapter;
+import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -40,8 +42,8 @@ import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/10/23.
@@ -101,7 +103,13 @@ public class GoodsMainFragment extends PeachBaseFragment {
             View view = View.inflate(getActivity(), R.layout.goods_main_pic_cell, null);
             ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
             if (picList.get(i).getImages().size()>0){
-                ImageLoader.getInstance().displayImage(picList.get(i).getImages().get(0).url, my_pics_cell, options);
+                Glide.with(this)
+                        .load(picList.get(i).getImages().get(0).url)
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(my_pics_cell);
+             //   ImageLoader.getInstance().displayImage(picList.get(i).getImages().get(0).url, my_pics_cell, options);
             }else {
                 ImageLoader.getInstance().displayImage("", my_pics_cell, options);
             }
@@ -222,7 +230,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
     }
 
     private void bindListView(ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName) {
-        listView.setAdapter(new RecommendGoodsAdapter(getActivity(), data, sectionName));
+        listView.setAdapter(new RecommendGoodsAdapter(getActivity(), data, sectionName,this));
     }
 
 
@@ -322,7 +330,13 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 imageView.setBackgroundColor(getResources().getColor(R.color.color_gray_light));
 
                 if (mDatas.get(position).getImages().size() > 0) {
-                    ImageLoader.getInstance().displayImage(mDatas.get(position).getImages().get(0).url, imageView, options);
+                    Glide.with(mContext)
+                            .load(mDatas.get(position).getImages().get(0).url)
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(imageView);
+           //         ImageLoader.getInstance().displayImage(mDatas.get(position).getImages().get(0).url, imageView, options);
                 } else {
                     ImageLoader.getInstance().displayImage("", imageView, options);
                 }
@@ -352,11 +366,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
         private Context mContex;
         private ArrayList<ArrayList<SimpleCommodityBean>> data;
         private ArrayList<String> sectionName;
-
-        public RecommendGoodsAdapter(Context c, ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName) {
+        private Fragment mFragment;
+        public RecommendGoodsAdapter(Context c, ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName,Fragment fragment) {
             mContex = c;
             this.data = data;
             this.sectionName = sectionName;
+            mFragment = fragment;
         }
 
         @Override
@@ -408,7 +423,13 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 viewHolder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 viewHolder.tvGoodsPrice.getPaint().setAntiAlias(true);
                 viewHolder.tvGoodsCurrentPrice.setText(String.format("¥%s", CommonUtils.getPriceString(bean.getPrice())));
-                ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, options);
+                Glide.with(mFragment)
+                        .load(bean.getCover().getUrl())
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(viewHolder.ivGoodsImg);
+              //  ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, options);
                 viewHolder.container.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -465,23 +486,23 @@ public class GoodsMainFragment extends PeachBaseFragment {
          * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
          */
         class ViewHolder {
-            @InjectView(R.id.iv_goods_img)
+            @Bind(R.id.iv_goods_img)
             ImageView ivGoodsImg;
-            @InjectView(R.id.tv_goods_name)
+            @Bind(R.id.tv_goods_name)
             TextView tvGoodsName;
-            @InjectView(R.id.tv_goods_loc)
+            @Bind(R.id.tv_goods_loc)
             TextView tvGoodsLoc;
-            @InjectView(R.id.tv_goods_price)
+            @Bind(R.id.tv_goods_price)
             TextView tvGoodsPrice;
-            @InjectView(R.id.tv_goods_current_price)
+            @Bind(R.id.tv_goods_current_price)
             TextView tvGoodsCurrentPrice;
-            @InjectView(R.id.tv_shop_name)
+            @Bind(R.id.tv_shop_name)
             TextView tvShopName;
-            @InjectView(R.id.fl_container)
+            @Bind(R.id.fl_container)
             FrameLayout container;
 
             ViewHolder(View view) {
-                ButterKnife.inject(this, view);
+                ButterKnife.bind(this, view);
             }
         }
     }

@@ -24,16 +24,16 @@ import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/11.
  */
 public class MoreTravelNoteActivity extends PeachBaseActivity {
-    @InjectView(R.id.title_bar)
+    @Bind(R.id.title_bar)
     TitleHeaderBar mTitleBar;
-    @InjectView(R.id.more_travel_note_lv)
+    @Bind(R.id.more_travel_note_lv)
     PullToRefreshListView mMoreTravelNoteLv;
     ListViewDataAdapter mTravelNoteAdapter;
     int mPage = 0;
@@ -46,7 +46,7 @@ public class MoreTravelNoteActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_travelnote);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         isExpert = getIntent().getBooleanExtra("isExpert", false);
         if (isExpert) {
             locId = getIntent().getStringExtra("id");

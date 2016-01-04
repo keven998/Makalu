@@ -54,8 +54,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/22.
@@ -421,13 +421,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     public static class CommentViewHolder extends ViewHolderBase<CommentBean> {
-        @InjectView(R.id.tv_commenter_property)
+        @Bind(R.id.tv_commenter_property)
         TextView mTvCommentProperty;
-        @InjectView(R.id.tv_comment_content)
+        @Bind(R.id.tv_comment_content)
         TextView mTvComment;
-        @InjectView(R.id.iv_commenter_avatar)
+        @Bind(R.id.iv_commenter_avatar)
         ImageView mCommeterAvatar;
-        @InjectView(R.id.rb_comment_rating)
+        @Bind(R.id.rb_comment_rating)
         RatingBar starbar;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         private DisplayImageOptions options;
@@ -448,7 +448,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View view = View.inflate(mContext, R.layout.row_poi_comment, null);
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
             return view;
         }
 

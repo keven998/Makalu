@@ -27,16 +27,16 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/13.
  */
 public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnClickListener {
-    @InjectView(R.id.et_sms)
+    @Bind(R.id.et_sms)
     EditText smsEt;
-    @InjectView(R.id.btn_time_down)
+    @Bind(R.id.btn_time_down)
     Button downTimeBtn;
     private CountDownTimer countDownTimer;
     private String tel, pwd, actionCode;
@@ -47,7 +47,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         findViewById(R.id.btn_next).setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
         initData();

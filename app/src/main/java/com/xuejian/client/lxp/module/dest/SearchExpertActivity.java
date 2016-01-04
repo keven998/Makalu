@@ -45,25 +45,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/9/2.
  */
 public class SearchExpertActivity extends PeachBaseActivity {
 
-    @InjectView(R.id.search_city_cancel)
+    @Bind(R.id.search_city_cancel)
     ImageView searchCityCancel;
-    @InjectView(R.id.search_city_text)
+    @Bind(R.id.search_city_text)
     EditText searchCityText;
-    @InjectView(R.id.search_city_button)
+    @Bind(R.id.search_city_button)
     TextView searchCityButton;
-    @InjectView(R.id.search_city_bar)
+    @Bind(R.id.search_city_bar)
     LinearLayout searchCityBar;
-    @InjectView(R.id.expert_list)
+    @Bind(R.id.expert_list)
     PullToRefreshListView expertList;
-    @InjectView(R.id.iv_clean)
+    @Bind(R.id.iv_clean)
     ImageView iv_clean;
     ExpertAdapter adapter;
     private int[] lebelColors =new int[]{
@@ -77,7 +77,7 @@ public class SearchExpertActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.expert_search);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         initList();
         searchCityCancel.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -66,7 +66,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 //            System.out.println(uri.getPathSegments().toString());
         }
         llEmptyView = (LinearLayout) findViewById(R.id.empty_view);
-        mReactRootView = new ReactRootView(this);
+     //   mReactRootView = new ReactRootView(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
                 .setBundleAssetName("ReactNativeDevBundle.js")
@@ -157,7 +157,10 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-
+                if (code==404){
+                    llEmptyView.setVisibility(View.VISIBLE);
+                    mReactRootView.setVisibility(View.GONE);
+                }
             }
         });
     }

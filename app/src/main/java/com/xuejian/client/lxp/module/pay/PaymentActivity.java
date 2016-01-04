@@ -29,23 +29,23 @@ import com.xuejian.client.lxp.module.goods.OrderListActivity;
 
 import java.lang.ref.WeakReference;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/11/18.
  */
 public class PaymentActivity extends PeachBaseActivity implements View.OnClickListener {
 
-    @InjectView(R.id.tv_title_back)
+    @Bind(R.id.tv_title_back)
     TextView tvTitleBack;
-    @InjectView(R.id.tv_title)
+    @Bind(R.id.tv_title)
     TextView tvTitle;
-    @InjectView(R.id.tv_pay_state)
+    @Bind(R.id.tv_pay_state)
     TextView tvState;
-    @InjectView(R.id.tv_main)
+    @Bind(R.id.tv_main)
     TextView tvMain;
-    @InjectView(R.id.tv_order_detail)
+    @Bind(R.id.tv_order_detail)
     TextView tvOrderDetail;
     private static final int ALI_PAY = 1001;
     private static final int ALI_PAY_CHECK = 1002;
@@ -122,7 +122,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_state);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         tvTitleBack.setOnClickListener(this);
         DialogManager.getInstance().showLoadingDialog(this);
         tvOrderDetail.setVisibility(View.GONE);

@@ -44,8 +44,8 @@ import com.xuejian.client.lxp.module.goods.GoodsList;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/11/4.
@@ -410,25 +410,25 @@ public class CityInfoActivity extends PeachBaseActivity  {
          * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
          */
         class ViewHolder {
-            @InjectView(R.id.iv_poi_img)
+            @Bind(R.id.iv_poi_img)
             ImageView ivGoods;
-            @InjectView(R.id.tv_goods_name)
+            @Bind(R.id.tv_goods_name)
             TextView tvGoodsName;
             //            @InjectView(R.id.tv_goods_service)
 //            TagListView tvGoodsService;
-            @InjectView(R.id.tv_goods_comment)
+            @Bind(R.id.tv_goods_comment)
             TextView tvGoodsComment;
-            @InjectView(R.id.tv_goods_sales)
+            @Bind(R.id.tv_goods_sales)
             TextView tvGoodsSales;
-            @InjectView(R.id.tv_goods_current_price)
+            @Bind(R.id.tv_goods_current_price)
             TextView tvGoodsCurrentPrice;
-            @InjectView(R.id.tv_goods_price)
+            @Bind(R.id.tv_goods_price)
             TextView tvGoodsPrice;
-            @InjectView(R.id.tv_store_name)
+            @Bind(R.id.tv_store_name)
             TextView tvStoreName;
 
             ViewHolder(View view) {
-                ButterKnife.inject(this, view);
+                ButterKnife.bind(this, view);
             }
         }
     }

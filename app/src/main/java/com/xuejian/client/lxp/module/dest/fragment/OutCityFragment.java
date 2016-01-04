@@ -41,15 +41,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by xuyongchen on 15/9/24.
  */
 @SuppressLint("ValidFragment")
 public class OutCityFragment extends PeachBaseFragment {
-    @InjectView(R.id.lv_out_country)
+    @Bind(R.id.lv_out_country)
     ListView mLvOutCountry;
     ListView mCountryMame;
     ListViewDataAdapter<LocBean> outCountryAdapter;
@@ -67,7 +67,7 @@ public class OutCityFragment extends PeachBaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_out_city, container, false);
         mCountryMame = (ListView)rootView.findViewById(R.id.lv_country_name);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         box = new DynamicBox(getActivity(), mLvOutCountry);
         outCountryAdapter = new ListViewDataAdapter<LocBean>(new ViewHolderCreator<LocBean>() {
             @Override
@@ -275,7 +275,7 @@ public class OutCityFragment extends PeachBaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
     }

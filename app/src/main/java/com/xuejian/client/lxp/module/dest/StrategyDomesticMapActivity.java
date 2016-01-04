@@ -56,37 +56,37 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/9/17.
  */
 public class StrategyDomesticMapActivity extends PeachBaseActivity implements AMap.OnMarkerClickListener,
         AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener, AMapLocationListener {
-    @InjectView(R.id.map_title_back)
+    @Bind(R.id.map_title_back)
     ImageView mapTitleBack;
-    @InjectView(R.id.tv_title)
+    @Bind(R.id.tv_title)
     TextView tvTitle;
-    @InjectView(R.id.tv_subtitle)
+    @Bind(R.id.tv_subtitle)
     TextView tvSubtitle;
-    @InjectView(R.id.map_more)
+    @Bind(R.id.map_more)
     ImageView mapMore;
-    @InjectView(R.id.map_title_bar)
+    @Bind(R.id.map_title_bar)
     RelativeLayout mapTitleBar;
-    @InjectView(R.id.map_days_name_list)
+    @Bind(R.id.map_days_name_list)
     HorizontalScrollView mapDaysNameList;
-    @InjectView(R.id.strategy_map_locations)
+    @Bind(R.id.strategy_map_locations)
     RelativeLayout strategyMapLocations;
-    @InjectView(R.id.drawer_layout)
+    @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @InjectView(R.id.iv_plan_index)
+    @Bind(R.id.iv_plan_index)
     ImageView plan_index;
-    @InjectView(R.id.tv_plan_index_title)
+    @Bind(R.id.tv_plan_index_title)
     TextView tvPlanIndexTitle;
-    @InjectView(R.id.plan_index)
+    @Bind(R.id.plan_index)
     ListView planIndex;
-    @InjectView(R.id.iv_my_location)
+    @Bind(R.id.iv_my_location)
     ImageView myLocation;
     private ArrayList<StrategyBean> allBeans;
     private MarkerOptions markerOption;
@@ -110,7 +110,7 @@ public class StrategyDomesticMapActivity extends PeachBaseActivity implements AM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.domestic_map);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         if (SharePrefUtil.getBoolean(mContext, "isAbroad", false))
             MapsInitializer.replaceURL(OSM_URL, "OSM");
         allBeans = getIntent().getParcelableArrayListExtra("strategy");

@@ -34,16 +34,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/2.
  */
 public class IMShareActivity extends PeachBaseActivity {
-    @InjectView(R.id.title_bar)
+    @Bind(R.id.title_bar)
     TitleHeaderBar mTitleBar;
-    @InjectView(R.id.create_new_talk)
+    @Bind(R.id.create_new_talk)
     TextView mCreateNewTalk;
     private ListView mImShareLv;
     private ListViewDataAdapter mImShareAdapter;
@@ -61,7 +61,7 @@ public class IMShareActivity extends PeachBaseActivity {
         mImShareLv = (ListView) findViewById(R.id.im_share_lv);
         View headerView = View.inflate(mContext, R.layout.header_im_share, null);
         mImShareLv.addHeaderView(headerView);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mTitleBar.getTitleTextView().setText("选择");
         mTitleBar.enableBackKey(true);
         mCreateNewTalk.setOnClickListener(new View.OnClickListener() {
@@ -166,9 +166,9 @@ public class IMShareActivity extends PeachBaseActivity {
 
     public class ShareChatViewHolder extends ViewHolderBase<ConversationBean> {
 
-        @InjectView(R.id.avatar)
+        @Bind(R.id.avatar)
         ImageView mAvatar;
-        @InjectView(R.id.name)
+        @Bind(R.id.name)
         TextView mName;
         View contentView;
         DisplayImageOptions options;
@@ -192,7 +192,7 @@ public class IMShareActivity extends PeachBaseActivity {
         @Override
         public View createView(LayoutInflater layoutInflater) {
             contentView = layoutInflater.inflate(R.layout.row_im_share, mImShareLv, false);
-            ButterKnife.inject(this, contentView);
+            ButterKnife.bind(this, contentView);
             return contentView;
         }
 

@@ -33,19 +33,19 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
-    @InjectView(R.id.et_account)
+    @Bind(R.id.et_account)
     AutoCompleteTextView loginNameEt;
-    @InjectView(R.id.et_password)
+    @Bind(R.id.et_password)
     EditText pwdEt;
 
-    @InjectView(R.id.btn_login)
+    @Bind(R.id.btn_login)
     Button loginBtn;
     private int request_code;
     private boolean autoLogin = false;
@@ -110,7 +110,7 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_login);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         String phoneNum = SharePrefUtil.getPhoneNum(this,"lastPhone");
         if (phoneNum!=null){
             String [] arr={""};

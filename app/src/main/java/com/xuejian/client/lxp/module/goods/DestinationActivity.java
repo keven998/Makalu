@@ -25,8 +25,8 @@ import com.xuejian.client.lxp.bean.LocBean;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/10/19.
@@ -34,17 +34,17 @@ import butterknife.InjectView;
 public class DestinationActivity extends PeachBaseActivity {
     ListViewDataAdapter<CountryBean> mDestinationNameAdapter;
     ListViewDataAdapter<LocBean> mDestinationAdapter;
-    @InjectView(R.id.et_search)
+    @Bind(R.id.et_search)
     EditText etSearch;
-    @InjectView(R.id.iv_clean)
+    @Bind(R.id.iv_clean)
     ImageView ivClean;
-    @InjectView(R.id.btn_search)
+    @Bind(R.id.btn_search)
     TextView btnSearch;
-    @InjectView(R.id.search_bar)
+    @Bind(R.id.search_bar)
     LinearLayout searchBar;
-    @InjectView(R.id.lv_country_name)
+    @Bind(R.id.lv_country_name)
     ListView lvDestinationName;
-    @InjectView(R.id.lv_out_country)
+    @Bind(R.id.lv_out_country)
     GridView gvDestination;
     private int mCurrentIndex = 0;
 
@@ -52,7 +52,7 @@ public class DestinationActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destination);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mDestinationNameAdapter = new ListViewDataAdapter<CountryBean>(new ViewHolderCreator<CountryBean>() {
             @Override
             public ViewHolderBase<CountryBean> createViewHolder() {

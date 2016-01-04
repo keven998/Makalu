@@ -50,15 +50,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/9/10.
  */
 public class StrategyFragment extends PeachBaseFragment implements AbsListView.OnScrollListener {
     String userId;
-    @InjectView(R.id.id_stickynavlayout_innerscrollview)
+    @Bind(R.id.id_stickynavlayout_innerscrollview)
     ListView myFragmentList;
     MyPlaneAdapter myPlaneAdapter;
     private int currentIndex = 0;
@@ -93,7 +93,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.strategy_fragment_layout, container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         planList = new ArrayList<>();
         myPlaneAdapter = new MyPlaneAdapter(getActivity(), planList);
         myFragmentList.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -137,7 +137,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     private void getStrategyListData(String userId) {

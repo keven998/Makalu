@@ -12,14 +12,14 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class ContactActivity extends PeachBaseActivity {
-    @InjectView(R.id.title_bar)
+    @Bind(R.id.title_bar)
     TitleHeaderBar titleBar;
-    @InjectView(R.id.content_frame)
+    @Bind(R.id.content_frame)
     FrameLayout contentFrame;
     private Fragment contactListFragment;
 
@@ -27,7 +27,7 @@ public class ContactActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         titleBar.getTitleTextView().setText("联系人");
         titleBar.enableBackKey(true);
 

@@ -10,14 +10,14 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by rjm on 2015/3/26.
  */
 public class FootprintActivity extends PeachBaseActivity {
-    @InjectView(R.id.footprint_map)
+    @Bind(R.id.footprint_map)
     MapView footprintMap;
     private AMap aMap;
 
@@ -25,7 +25,7 @@ public class FootprintActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_footprint);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         footprintMap.onCreate(savedInstanceState);
         init();
     }

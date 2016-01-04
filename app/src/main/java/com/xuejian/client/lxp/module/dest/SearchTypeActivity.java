@@ -34,19 +34,19 @@ import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/9.
  */
 public class SearchTypeActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_SEARCH_LOC = 100;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView titleTv;
-    @InjectView(R.id.tv_city_filter)
+    @Bind(R.id.tv_city_filter)
     TextView cityFilterTv;
-    @InjectView(R.id.search_type_lv)
+    @Bind(R.id.search_type_lv)
     PullToRefreshListView mSearchTypeLv;
     int curPage = 0;
     String type;
@@ -83,7 +83,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_search_type);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mSearchTypeLv.setPullLoadEnabled(false);
         mSearchTypeLv.setPullRefreshEnabled(false);
         mSearchTypeLv.setScrollLoadEnabled(true);

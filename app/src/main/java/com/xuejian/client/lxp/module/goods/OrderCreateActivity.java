@@ -40,49 +40,49 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/11/9.
  */
 public class OrderCreateActivity extends PeachBaseActivity implements View.OnClickListener {
 
-    @InjectView(R.id.tv_goods_name)
+    @Bind(R.id.tv_goods_name)
     TextView tvGoodsName;
-    @InjectView(R.id.tv_date)
+    @Bind(R.id.tv_date)
     TextView tvDate;
-    @InjectView(R.id.tv_select_date)
+    @Bind(R.id.tv_select_date)
     TextView tvSelectDate;
-    @InjectView(R.id.select_num)
+    @Bind(R.id.select_num)
     NumberPicker selectNum;
-    @InjectView(R.id.et_first_name)
+    @Bind(R.id.et_first_name)
     EditText etFirstName;
-    @InjectView(R.id.et_tel)
+    @Bind(R.id.et_tel)
     EditText etTel;
-    @InjectView(R.id.et_last_name)
+    @Bind(R.id.et_last_name)
     EditText etLastName;
-    @InjectView(R.id.et_message)
+    @Bind(R.id.et_message)
     EditText etMessage;
-    @InjectView(R.id.ctv_1)
+    @Bind(R.id.ctv_1)
     CheckedTextView ctvAgreement;
-    @InjectView(R.id.tv_title_back)
+    @Bind(R.id.tv_title_back)
     TextView tvTitleBack;
-    @InjectView(R.id.strategy_title)
+    @Bind(R.id.strategy_title)
     TextView tvTitle;
-    @InjectView(R.id.tv_address_book)
+    @Bind(R.id.tv_address_book)
     TextView tv_address_book;
-    @InjectView(R.id.tv_submit_order)
+    @Bind(R.id.tv_submit_order)
     TextView tvSubmitOrder;
-    @InjectView(R.id.tv_edit_user)
+    @Bind(R.id.tv_edit_user)
     TextView tvEditUser;
-    @InjectView(R.id.tv_add_user)
+    @Bind(R.id.tv_add_user)
     TextView tvAddUser;
-    @InjectView(R.id.tv_total_price)
+    @Bind(R.id.tv_total_price)
     TextView tvTotalPrice;
-    @InjectView(R.id.tv_dialCode)
+    @Bind(R.id.tv_dialCode)
     TextView tvDialCode;
-    @InjectView(R.id.tv_unit_price)
+    @Bind(R.id.tv_unit_price)
     TextView tvUnitPrice;
     public final static int SELECTED_DATE = 101;
     public final static int SELECTED_USER = 102;
@@ -102,7 +102,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         final ArrayList<PlanBean> data = getIntent().getParcelableArrayListExtra("planList");
         currentPlanBean = data.get(0);
         commodityId = getIntent().getStringExtra("commodityId");

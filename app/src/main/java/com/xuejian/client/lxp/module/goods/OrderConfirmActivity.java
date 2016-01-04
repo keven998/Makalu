@@ -48,56 +48,56 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/12/23.
  */
 public class OrderConfirmActivity extends PeachBaseActivity {
-    @InjectView(R.id.iv_nav_back)
+    @Bind(R.id.iv_nav_back)
     ImageView ivNavBack;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView tvTitleBarTitle;
-    @InjectView(R.id.tv_pay_state)
+    @Bind(R.id.tv_pay_state)
     TextView tvState;
-    @InjectView(R.id.tv_pay_feedback)
+    @Bind(R.id.tv_pay_feedback)
     TextView tvFeedback;
-    @InjectView(R.id.tv_goods_name)
+    @Bind(R.id.tv_goods_name)
     TextView tvGoodsName;
-    @InjectView(R.id.tv_order_id)
+    @Bind(R.id.tv_order_id)
     TextView tvOrderId;
-    @InjectView(R.id.tv_order_package)
+    @Bind(R.id.tv_order_package)
     TextView tvOrderPackage;
-    @InjectView(R.id.tv_order_date)
+    @Bind(R.id.tv_order_date)
     TextView tvOrderDate;
-    @InjectView(R.id.tv_order_num)
+    @Bind(R.id.tv_order_num)
     TextView tvOrderNum;
-    @InjectView(R.id.tv_order_price)
+    @Bind(R.id.tv_order_price)
     TextView tvOrderPrice;
-    @InjectView(R.id.iv_goods)
+    @Bind(R.id.iv_goods)
     ImageView ivGoods;
-    @InjectView(R.id.tv_order_store_name)
+    @Bind(R.id.tv_order_store_name)
     TextView tvOrderStoreName;
-    @InjectView(R.id.userinfo)
+    @Bind(R.id.userinfo)
     TextView userinfo;
-    @InjectView(R.id.tv_order_traveller_count)
+    @Bind(R.id.tv_order_traveller_count)
     TextView tvOrderTravellerCount;
-    @InjectView(R.id.user_info)
+    @Bind(R.id.user_info)
     RelativeLayout userInfo;
-    @InjectView(R.id.tv_order_contact_name)
+    @Bind(R.id.tv_order_contact_name)
     TextView tvOrderContactName;
-    @InjectView(R.id.tv_order_contact_tel)
+    @Bind(R.id.tv_order_contact_tel)
     TextView tvOrderContactTel;
-    @InjectView(R.id.tv_order_message)
+    @Bind(R.id.tv_order_message)
     TextView tvOrderMessage;
-    @InjectView(R.id.tv_pay)
+    @Bind(R.id.tv_pay)
     TextView tvPay;
-    @InjectView(R.id.ll_trade_action0)
+    @Bind(R.id.ll_trade_action0)
     LinearLayout llTradeAction0;
-    @InjectView(R.id.tv_talk)
+    @Bind(R.id.tv_talk)
     TextView tvTalk;
-    @InjectView(R.id.ll_message)
+    @Bind(R.id.ll_message)
     LinearLayout llMessage;
     long orderId;
     CountDownTimer countDownTimer;
@@ -110,7 +110,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         ivNavBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

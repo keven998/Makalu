@@ -44,15 +44,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/3.
  */
 @SuppressLint("ValidFragment")
 public class OutCountryFragment extends PeachBaseFragment implements OnDestActionListener {
-    @InjectView(R.id.lv_out_country)
+    @Bind(R.id.lv_out_country)
     GridView mLvOutCountry;
     ListView mCountryMame;
     ListViewDataAdapter<LocBean> outCountryAdapter;
@@ -70,7 +70,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_out_country, container, false);
         mCountryMame = (ListView)rootView.findViewById(R.id.lv_country_name);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         box = new DynamicBox(getActivity(), mLvOutCountry);
         outCountryAdapter = new ListViewDataAdapter<LocBean>(new ViewHolderCreator<LocBean>() {
             @Override
@@ -322,7 +322,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
     }

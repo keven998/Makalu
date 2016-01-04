@@ -18,7 +18,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="20dp"
             android:clickable="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"/>
+            android:drawableLeft="@drawable/icon_arrow_left_white"/>
 
         <TextView
             android:id="@+id/tv_title_bar_title"

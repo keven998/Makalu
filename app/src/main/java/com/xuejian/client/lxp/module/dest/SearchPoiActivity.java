@@ -22,16 +22,16 @@ import com.xuejian.client.lxp.module.dest.adapter.PoiAdapter;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/27.
  */
 public class SearchPoiActivity extends PeachBaseActivity {
-    @InjectView(R.id.ly_header_bar_title_wrap)
+    @Bind(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar titleHeaderBar;
-    @InjectView(R.id.lv_poi_list)
+    @Bind(R.id.lv_poi_list)
     PullToRefreshListView mLvPoiList;
     private String mType;
     private ArrayList<PoiDetailBean> hasAddList;
@@ -53,7 +53,7 @@ public class SearchPoiActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_search_poi);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mLvPoiList.setPullLoadEnabled(false);
         mLvPoiList.setPullRefreshEnabled(false);
         mLvPoiList.setScrollLoadEnabled(true);

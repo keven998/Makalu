@@ -25,8 +25,8 @@ import com.xuejian.client.lxp.module.dest.adapter.StringSpinnerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/24.
@@ -36,13 +36,13 @@ public class SpotListActivity extends PeachBaseActivity {
 //    Spinner mLocSpinner;
     PoiAdapter mPoiAdapter;
     StringSpinnerAdapter mLocSpinnerAdapter;
-    @InjectView(R.id.tv_title_bar_left)
+    @Bind(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
     //    @InjectView(R.id.et_search)
 //    EditText mEtSearch;
-    @InjectView(R.id.tv_search)
+    @Bind(R.id.tv_search)
     TextView tv_search;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView mTitle;
     private PullToRefreshListView mPoiListLv;
     //    private View headerView;
@@ -199,7 +199,7 @@ public class SpotListActivity extends PeachBaseActivity {
         listView.setPullRefreshEnabled(false);
         listView.setScrollLoadEnabled(true);
         mPoiListLv.setHasMoreData(false);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override

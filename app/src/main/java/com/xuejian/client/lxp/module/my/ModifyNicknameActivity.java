@@ -24,20 +24,20 @@ import com.xuejian.client.lxp.common.utils.InputCheckUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class ModifyNicknameActivity extends PeachBaseActivity {
-    @InjectView(R.id.et_modify_content)
+    @Bind(R.id.et_modify_content)
     EditText nickEt;
-    @InjectView(R.id.tv_confirm)
+    @Bind(R.id.tv_confirm)
     TextView tv_confirm;
-    @InjectView(R.id.tv_cancel)
+    @Bind(R.id.tv_cancel)
     TextView tv_cancel;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView tv_title_bar_title;
     private boolean isEditMemo;
     private User user;
@@ -49,7 +49,7 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_content_editor);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         isEditMemo = getIntent().getBooleanExtra("isEditMemo", false);
         if (isEditMemo) {
             userId = getIntent().getStringExtra("userId");

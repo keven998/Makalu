@@ -54,8 +54,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by xuyongchen on 15/8/27.
@@ -66,44 +66,44 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
     public final static int CODE_PICS = 104;
     private ArrayList<String> all_pics = new ArrayList<String>();
 
-    @InjectView(R.id.profile_fragment_view)
+    @Bind(R.id.profile_fragment_view)
     CustomFrameLayout profileFragmentView;
-    @InjectView(R.id.my_profile_edit)
+    @Bind(R.id.my_profile_edit)
     TextView myProfileEdit;
-    @InjectView(R.id.iv_avatar)
+    @Bind(R.id.iv_avatar)
     RoundImageBoarderView avatarIv;
     //@InjectView(R.id.iv_constellation)
     //TextView constellationIv;
 
-    @InjectView(R.id.tv_pictures_count)
+    @Bind(R.id.tv_pictures_count)
     TextView tvPictureCount;
 
-    @InjectView(R.id.user_info_p)
+    @Bind(R.id.user_info_p)
     LinearLayout userInfoP;
 
-    @InjectView(R.id.tv_plans_count)
+    @Bind(R.id.tv_plans_count)
     TextView tvPlansCount;
-    @InjectView(R.id.tv_tracks_count)
+    @Bind(R.id.tv_tracks_count)
     TextView tvTracksCount;
 
-    @InjectView(R.id.iv_user_name)
+    @Bind(R.id.iv_user_name)
     TextView ivUserName;//姓名
 
-    @InjectView(R.id.iv_age)
+    @Bind(R.id.iv_age)
     TextView ivAge;//年龄
 
     //  @InjectView(R.id.iv_gender)
     //  ImageView ivGender;//性别
 
-    @InjectView(R.id.iv_city)
+    @Bind(R.id.iv_city)
     TextView ivCity;
 
-    @InjectView(R.id.iv_about_me)
+    @Bind(R.id.iv_about_me)
     TextView ivAboutMe;
 
-    @InjectView(R.id.title_bar_profile)
+    @Bind(R.id.title_bar_profile)
     RelativeLayout title_bar;
-    @InjectView(R.id.goToMyAlbums)
+    @Bind(R.id.goToMyAlbums)
     FrameLayout goToMyAlbums;
 
     private TextView notice;
@@ -123,7 +123,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_profile_activity);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         myProfileEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

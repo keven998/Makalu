@@ -21,16 +21,16 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class ModifySignActivity extends PeachBaseActivity {
-    @InjectView(R.id.et_sign)
+    @Bind(R.id.et_sign)
     EditText signEt;
-    @InjectView(R.id.title_bar)
+    @Bind(R.id.title_bar)
     TitleHeaderBar titleHeaderBar;
     private User user;
 
@@ -39,7 +39,7 @@ public class ModifySignActivity extends PeachBaseActivity {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_sign);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         titleHeaderBar.getTitleTextView().setText("设置签名");
         titleHeaderBar.enableBackKey(true);
         titleHeaderBar.getRightTextView().setText("保存");

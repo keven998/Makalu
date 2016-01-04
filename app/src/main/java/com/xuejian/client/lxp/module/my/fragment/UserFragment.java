@@ -35,32 +35,32 @@ import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactlistFragment;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/9/10.
  */
 public class UserFragment extends PeachBaseFragment {
-    @InjectView(R.id.user_avatar)
+    @Bind(R.id.user_avatar)
     RoundImageBoarderView userAvatar;
-    @InjectView(R.id.nameAndId)
+    @Bind(R.id.nameAndId)
     TextView nameAndId;
-    @InjectView(R.id.other_infos)
+    @Bind(R.id.other_infos)
     TextView otherInfos;
-    @InjectView(R.id.user_info_pannel)
+    @Bind(R.id.user_info_pannel)
     LinearLayout userInfoPannel;
-    @InjectView(R.id.id_stickynavlayout_topview)
+    @Bind(R.id.id_stickynavlayout_topview)
     RelativeLayout mTopview;
-    @InjectView(R.id.id_stickynavlayout_indicator)
+    @Bind(R.id.id_stickynavlayout_indicator)
     SimpleViewPagerIndicator mIndicator;
-    @InjectView(R.id.id_stickynavlayout_viewpager)
+    @Bind(R.id.id_stickynavlayout_viewpager)
     CustemViewPager mViewpager;
-    @InjectView(R.id.setting_btn)
+    @Bind(R.id.setting_btn)
     TextView tv_setting;
-    @InjectView(R.id.my_panpan_frame)
+    @Bind(R.id.my_panpan_frame)
     RelativeLayout rl_myInfo;
-    @InjectView(R.id.add_plan_icon)
+    @Bind(R.id.add_plan_icon)
     ImageView iv_createPlan;
     private String[] mTitles = new String[]{"旅行计划", "联系人"};
     private FragmentPagerAdapter mAdapter;
@@ -74,7 +74,7 @@ public class UserFragment extends PeachBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.my_fragment, container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
@@ -245,6 +245,6 @@ public class UserFragment extends PeachBaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 }

@@ -49,21 +49,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/3.
  */
 @SuppressLint("ValidFragment")
 public class InDestFragment extends PeachBaseFragment implements OnDestActionListener {
-    @InjectView(R.id.lv_in_city)
+    @Bind(R.id.lv_in_city)
     ListView mLvInCity;
-    @InjectView(R.id.sb_index)
+    @Bind(R.id.sb_index)
     SideBar mSbIndex;
-    @InjectView(R.id.dialog)
+    @Bind(R.id.dialog)
     TextView mDialog;
-    @InjectView(R.id.in_out_search_tv)
+    @Bind(R.id.in_out_search_tv)
     EditText in_out_search;
 
     DynamicBox box;
@@ -80,7 +80,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_in_dest, container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         box = new DynamicBox(getActivity(), mLvInCity);
         int maxMemory = (int)(Runtime.getRuntime().maxMemory()/1024);
         int cacheSize = maxMemory/8;
@@ -532,7 +532,7 @@ public class InDestFragment extends PeachBaseFragment implements OnDestActionLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
     }

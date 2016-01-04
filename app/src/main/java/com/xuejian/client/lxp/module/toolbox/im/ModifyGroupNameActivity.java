@@ -18,13 +18,13 @@ import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class ModifyGroupNameActivity extends PeachBaseActivity implements View.OnClickListener {
-    @InjectView(R.id.et_groupname)
+    @Bind(R.id.et_groupname)
     EditText groupNameEt;
-    @InjectView(R.id.title_bar)
+    @Bind(R.id.title_bar)
     TitleHeaderBar titleHeaderBar;
 
     private User group;
@@ -34,7 +34,7 @@ public class ModifyGroupNameActivity extends PeachBaseActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_groupname);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         titleHeaderBar.getTitleTextView().setText("设置群名称");
         titleHeaderBar.enableBackKey(true);
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {

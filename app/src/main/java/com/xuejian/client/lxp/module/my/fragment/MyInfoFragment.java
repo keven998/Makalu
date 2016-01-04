@@ -26,39 +26,39 @@ import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/11/21.
  */
 public class MyInfoFragment extends PeachBaseFragment implements View.OnClickListener{
     DisplayImageOptions options;
-    @InjectView(R.id.setting_btn)
+    @Bind(R.id.setting_btn)
     ImageView settingBtn;
-    @InjectView(R.id.user_avatar)
+    @Bind(R.id.user_avatar)
     RoundImageBoarderView userAvatar;
-    @InjectView(R.id.tv_nickname)
+    @Bind(R.id.tv_nickname)
     TextView tvNickname;
-    @InjectView(R.id.tv_all_order)
+    @Bind(R.id.tv_all_order)
     TextView tvAllOrder;
-    @InjectView(R.id.tv_need_pay)
+    @Bind(R.id.tv_need_pay)
     TextView tvNeedPay;
-    @InjectView(R.id.tv_process)
+    @Bind(R.id.tv_process)
     TextView tvProcess;
-    @InjectView(R.id.tv_available)
+    @Bind(R.id.tv_available)
     TextView tvAvailable;
-    @InjectView(R.id.tv_drawback)
+    @Bind(R.id.tv_drawback)
     TextView tvDrawback;
-    @InjectView(R.id.rl_my_collection)
+    @Bind(R.id.rl_my_collection)
     RelativeLayout rlMyCollection;
-    @InjectView(R.id.rl_my_plan)
+    @Bind(R.id.rl_my_plan)
     RelativeLayout rlMyPlan;
-    @InjectView(R.id.rl_my_contact)
+    @Bind(R.id.rl_my_contact)
     RelativeLayout rlMyContact;
-    @InjectView(R.id.rl_my_common_user)
+    @Bind(R.id.rl_my_common_user)
     RelativeLayout rlMyCommonUser;
-    @InjectView(R.id.user_info_pannel)
+    @Bind(R.id.user_info_pannel)
     LinearLayout linearLayout;
     User user;
     @Override
@@ -76,7 +76,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_info, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         settingBtn.setOnClickListener(this);
         tvAllOrder.setOnClickListener(this);
@@ -116,7 +116,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

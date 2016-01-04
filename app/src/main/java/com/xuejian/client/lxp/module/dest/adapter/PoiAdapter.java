@@ -24,8 +24,8 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/27.
@@ -299,43 +299,43 @@ public class PoiAdapter extends BaseAdapter {
 
     class SpotViewHolder {
 
-        @InjectView(R.id.tv_poi_title)
+        @Bind(R.id.tv_poi_title)
         TextView mTvSpotName;
-        @InjectView(R.id.btn_send)
+        @Bind(R.id.btn_send)
         CheckedTextView mBtnAdd;
-        @InjectView(R.id.iv_poi_img)
+        @Bind(R.id.iv_poi_img)
         ImageView mSpotImageIv;
         //        @InjectView(R.id.spot_address_tv)
 //        TextView mSpotAddressTv;
-        @InjectView(R.id.tv_poi_time)
+        @Bind(R.id.tv_poi_time)
         TextView mSpotCosttimeTv;
         /*@InjectView(R.id.spot_rating)
         RatingBar mSpotRating;*/
-        @InjectView(R.id.tv_poi_level)
+        @Bind(R.id.tv_poi_level)
         TextView mSpotRankTv;
 
         public SpotViewHolder(View view) {
 //            view = View.inflate(mContext, R.layout.row_spot_list, null);
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
 
     }
 
     class PoiViewHolder {
 
-        @InjectView(R.id.tv_poi_title)
+        @Bind(R.id.tv_poi_title)
         TextView mTvPoiName;
-        @InjectView(R.id.btn_send)
+        @Bind(R.id.btn_send)
         CheckedTextView mBtnAdd;
-        @InjectView(R.id.iv_poi_img)
+        @Bind(R.id.iv_poi_img)
         ImageView mPoiImageIv;
         //        @InjectView(R.id.poi_address_tv)
 //        TextView mPoiAddressTv;
-        @InjectView(R.id.tv_poi_time)
+        @Bind(R.id.tv_poi_time)
         TextView mPoiPriceTv;
         //        @InjectView(R.id.poi_rating)
 //        RatingBar mPoiRating;
-        @InjectView(R.id.tv_poi_level)
+        @Bind(R.id.tv_poi_level)
         TextView mPoiRankTv;
 //        @InjectView(R.id.poi_comment_username)
 //        TextView mPoiCommentUsername;
@@ -344,7 +344,7 @@ public class PoiAdapter extends BaseAdapter {
 
         public PoiViewHolder(View view) {
 //            view = View.inflate(mContext, R.layout.row_poi_list, null);
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
 
     }

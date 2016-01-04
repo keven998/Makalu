@@ -26,8 +26,8 @@ import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class SearchResultAdapter extends BaseSectionAdapter {
@@ -285,20 +285,20 @@ public class SearchResultAdapter extends BaseSectionAdapter {
      * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
      */
     static class ViewHolder {
-        @InjectView(R.id.iv_poi_img)
+        @Bind(R.id.iv_poi_img)
         ImageView ivPoiImg;
-        @InjectView(R.id.btn_send)
+        @Bind(R.id.btn_send)
         CheckedTextView btnSend;
-        @InjectView(R.id.tv_poi_title)
+        @Bind(R.id.tv_poi_title)
         TextView tvPoiTitle;
-        @InjectView(R.id.tv_poi_time)
+        @Bind(R.id.tv_poi_time)
         TagListView tvPoiTime;
-        @InjectView(R.id.rb_poi)
+        @Bind(R.id.rb_poi)
         RatingBar ratingBar;
-        @InjectView(R.id.address_tv)
+        @Bind(R.id.address_tv)
         TextView address_tv;
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

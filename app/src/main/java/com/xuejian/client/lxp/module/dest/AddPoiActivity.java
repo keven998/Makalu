@@ -40,31 +40,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/27.
  */
 public class AddPoiActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_SEARCH_POI = 101;
-    @InjectView(R.id.lv_poi_list)
+    @Bind(R.id.lv_poi_list)
     PullToRefreshListView mLvPoiList;
-    @InjectView(R.id.loc_spinner)
+    @Bind(R.id.loc_spinner)
     Spinner loc_spinner;
-    @InjectView(R.id.type_spinner)
+    @Bind(R.id.type_spinner)
     Spinner type_spinner;
-    @InjectView(R.id.tv_back)
+    @Bind(R.id.tv_back)
     TextView tv_back;
-    @InjectView(R.id.iv_location)
+    @Bind(R.id.iv_location)
     ImageView iv_map;
-    @InjectView(R.id.iv_search)
+    @Bind(R.id.iv_search)
     ImageView iv_search;
-    @InjectView(R.id.add_poi_bottom_panel)
+    @Bind(R.id.add_poi_bottom_panel)
     FrameLayout bottomFrame;
-    @InjectView(R.id.add_poi_scroll_panel)
+    @Bind(R.id.add_poi_scroll_panel)
     HorizontalScrollView hsView;
-    @InjectView(R.id.poi_add_ll)
+    @Bind(R.id.poi_add_ll)
     LinearLayout hsViewLL;
     private String mType;
     private List<LocBean> locList;
@@ -108,7 +108,7 @@ public class AddPoiActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_add_poi);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mLvPoiList.setPullLoadEnabled(false);
         mLvPoiList.setPullRefreshEnabled(false);
         mLvPoiList.setScrollLoadEnabled(true);

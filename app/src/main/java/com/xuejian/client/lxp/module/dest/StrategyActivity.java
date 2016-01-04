@@ -52,28 +52,28 @@ import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/24.
  */
 public class StrategyActivity extends PeachBaseActivity {
     public final static int EDIT_LOC_REQUEST_CODE = 110;
-    @InjectView(R.id.strategy_title)
+    @Bind(R.id.strategy_title)
     TextView topTitle;
-    @InjectView(R.id.iv_more)
+    @Bind(R.id.iv_more)
     ImageView mIvMore;
-    @InjectView(R.id.tv_copy_guide)
+    @Bind(R.id.tv_copy_guide)
     TextView mTvCopyGuide;
-    @InjectView(R.id.strategy_drawer_layout)
+    @Bind(R.id.strategy_drawer_layout)
     DrawerLayout drawerLayout;
     private IndicatorViewPager indicatorViewPager;
-    @InjectView(R.id.strategy_viewpager)
+    @Bind(R.id.strategy_viewpager)
     FixedViewPager mStrategyViewpager;
-    @InjectView(R.id.strategy_indicator)
+    @Bind(R.id.strategy_indicator)
     FixedIndicatorView mStrategyIndicator;
-    @InjectView(R.id.iv_location)
+    @Bind(R.id.iv_location)
     ImageView Iv_location;
     private String id;
     private StrategyBean strategy;
@@ -152,7 +152,7 @@ public class StrategyActivity extends PeachBaseActivity {
             }
         });
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mStrategyViewpager.setCanScroll(false);
         mStrategyViewpager.setOffscreenPageLimit(3);
         // 默认是1,，自动预加载左右两边的界面。设置viewpager预加载数为0。只加载加载当前界面。

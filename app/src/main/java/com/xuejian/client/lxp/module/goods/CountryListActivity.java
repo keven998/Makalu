@@ -28,17 +28,17 @@ import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/11/2.
  */
 public class CountryListActivity extends PeachBaseActivity {
 
-    @InjectView(R.id.ly_header_bar_title_wrap)
+    @Bind(R.id.ly_header_bar_title_wrap)
     TitleHeaderBar titleBar;
-    @InjectView(R.id.gv_country)
+    @Bind(R.id.gv_country)
     GridView gvCountry;
     CountryAdapter adapter;
 
@@ -46,7 +46,7 @@ public class CountryListActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_list);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         String name = getIntent().getStringExtra("name");
         String id = getIntent().getStringExtra("id");
         titleBar.enableBackKey(true);
@@ -150,15 +150,15 @@ public class CountryListActivity extends PeachBaseActivity {
          * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
          */
         class ViewHolder {
-            @InjectView(R.id.iv_country_img)
+            @Bind(R.id.iv_country_img)
             ImageView ivCountry;
-            @InjectView(R.id.tv_store_num)
+            @Bind(R.id.tv_store_num)
             TextView tvStoreNum;
-            @InjectView(R.id.tv_city_name)
+            @Bind(R.id.tv_city_name)
             TextView tvCityName;
 
             ViewHolder(View view) {
-                ButterKnife.inject(this, view);
+                ButterKnife.bind(this, view);
             }
         }
     }

@@ -45,6 +45,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
 
 /**
  * 联系人列表页
@@ -57,6 +65,7 @@ public class ContactlistFragment extends Fragment {
     private TextView indexDialogTv;
     private boolean hidden;
     private boolean isAddFriend;
+    CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,9 +100,9 @@ public class ContactlistFragment extends Fragment {
         // 获取设置contactlist
         getContactList();
         // 设置adapter
-        adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+//        adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
+//        listView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
         indexBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
             public void onTouchingLetterChanged(String s) {
@@ -121,8 +130,8 @@ public class ContactlistFragment extends Fragment {
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     } else if (Constant.GROUP_USERNAME.equals(username)) {
                         // 进入群聊列表页面
-             //           startActivity(new Intent(getActivity(), GroupsActivity.class));
-            //            getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                        //           startActivity(new Intent(getActivity(), GroupsActivity.class));
+                        //            getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     } else {
                         startActivity(new Intent(getActivity(), HisMainPageActivity.class).putExtra("userId", adapter.getItem(position).getUserId()));
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
@@ -172,9 +181,9 @@ public class ContactlistFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("page_friends_lists");
-        boolean needfresh= SharedPreferencesUtil.getBooleanValue(getActivity(), "contactNeedRefresh", false);
+        boolean needfresh = SharedPreferencesUtil.getBooleanValue(getActivity(), "contactNeedRefresh", false);
         if (!hidden || needfresh) {
-            SharedPreferencesUtil.saveValue(getActivity(),"contactNeedRefresh",false);
+            SharedPreferencesUtil.saveValue(getActivity(), "contactNeedRefresh", false);
             refresh();
         }
 
@@ -189,6 +198,7 @@ public class ContactlistFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        if (this.compositeSubscription.hasSubscriptions()) this.compositeSubscription.clear();
         super.onDestroy();
     }
 
@@ -214,37 +224,113 @@ public class ContactlistFragment extends Fragment {
         if (users == null) {
             return;
         }
-        contactList.clear();
-        contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
-        List<User> del = new ArrayList<>();
-        for (User user : contactList) {
-            if (user.getUserId() == 10000 || user.getUserId() == 10001) del.add(user);
-        }
-        contactList.removeAll(del);
-        // 排序
-        Collections.sort(contactList, new Comparator<User>() {
+      //  DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+        compositeSubscription.add(
+                Observable.create(new Observable.OnSubscribe<List<User>>() {
+                    @Override
+                    public void call(Subscriber<? super List<User>> subscriber) {
+                        try {
+                            subscriber.onNext(UserDBManager.getInstance().getContactListWithoutGroup());
+                        }catch (Exception e){
+                            subscriber.onError(e);
+                        }
 
-            @Override
-            public int compare(User lhs, User rhs) {
-                return lhs.getHeader().compareTo(rhs.getHeader());
-            }
-        });
-//		// 加入"申请与通知"和"群聊"
-        // 把"申请与通知"添加到首位
-        User friendRequest = new User();
-        friendRequest.setUserId(3);
-        friendRequest.setNickName("item_friends_request");
-        friendRequest.setType(1);
-        UserDBManager.getInstance().saveContact(friendRequest);
-        contactList.add(0, friendRequest);
-        if (isAddFriend) {
-            User newFriends = new User();
-            newFriends.setUserId(2);
-            newFriends.setNickName("item_new_friends");
-            newFriends.setType(1);
-            UserDBManager.getInstance().saveContact(newFriends);
-            contactList.add(1, newFriends);
-        }
+                        subscriber.onCompleted();
+                    }
+                })
+                        .flatMap(new Func1<List<User>, Observable<User>>() {
+                            @Override
+                            public Observable<User> call(List<User> conversationBeans) {
+                                return Observable.from(conversationBeans);
+                            }
+                        })
+                        .filter(new Func1<User, Boolean>() {
+                            @Override
+                            public Boolean call(User user) {
+                                return !(user.getUserId() == 10001 || user.getUserId() == 10002 || user.getUserId() == 10003);
+                            }
+                        })
+                        .toList()
+                        .map(new Func1<List<User>, List<User>>() {
+                            @Override
+                            public List<User> call(List<User> contacts) {
+
+                                Collections.sort(contacts, new Comparator<User>() {
+
+                                    @Override
+                                    public int compare(User lhs, User rhs) {
+                                        return lhs.getHeader().compareTo(rhs.getHeader());
+                                    }
+                                });
+                                return contacts;
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<List<User>>() {
+                            @Override
+                            public void call(List<User> contacts) {
+                                contactList.clear();
+                                contactList.addAll(contacts);
+                                User friendRequest = new User();
+                                friendRequest.setUserId(3);
+                                friendRequest.setNickName("item_friends_request");
+                                friendRequest.setType(1);
+                                UserDBManager.getInstance().saveContact(friendRequest);
+                                contactList.add(0, friendRequest);
+                                if (isAddFriend) {
+                                    User newFriends = new User();
+                                    newFriends.setUserId(2);
+                                    newFriends.setNickName("item_new_friends");
+                                    newFriends.setType(1);
+                                    UserDBManager.getInstance().saveContact(newFriends);
+                                    contactList.add(1, newFriends);
+                                }
+                                adapter = new ContactAdapter(getActivity(), R.layout.row_contact, contactList);
+                                listView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                                //   DialogManager.getInstance().dissMissModelessLoadingDialog();
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+
+                            }
+                        }));
+
+
+//        contactList.clear();
+//        contactList.addAll(UserDBManager.getInstance().getContactListWithoutGroup());
+//        List<User> del = new ArrayList<>();
+//        for (User user : contactList) {
+//            if (user.getUserId() == 10000 || user.getUserId() == 10001|| user.getUserId() == 10002|| user.getUserId() == 10003) del.add(user);
+//        }
+//        contactList.removeAll(del);
+//        // 排序
+//        Collections.sort(contactList, new Comparator<User>() {
+//
+//            @Override
+//            public int compare(User lhs, User rhs) {
+//                return lhs.getHeader().compareTo(rhs.getHeader());
+//            }
+//        });
+////		// 加入"申请与通知"和"群聊"
+//        // 把"申请与通知"添加到首位
+//        User friendRequest = new User();
+//        friendRequest.setUserId(3);
+//        friendRequest.setNickName("item_friends_request");
+//        friendRequest.setType(1);
+//        UserDBManager.getInstance().saveContact(friendRequest);
+//        contactList.add(0, friendRequest);
+//        if (isAddFriend) {
+//            User newFriends = new User();
+//            newFriends.setUserId(2);
+//            newFriends.setNickName("item_new_friends");
+//            newFriends.setType(1);
+//            UserDBManager.getInstance().saveContact(newFriends);
+//            contactList.add(1, newFriends);
+//        }
 
     }
+
 }

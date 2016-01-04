@@ -333,7 +333,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      */
     private void initView() {
         //实例化布局对象
-        layoutInflater = LayoutInflater.from(this);
+        layoutInflater = getLayoutInflater();
 
         //实例化TabHost对象，得到TabHost
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);

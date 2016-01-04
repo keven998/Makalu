@@ -5,8 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -52,8 +54,8 @@ import java.util.List;
 /**
  * Created by yibiao.qin on 2015/11/11.
  */
-public class OrderListFragment extends PeachBaseFragment implements SwipeRefreshLayout.OnRefreshListener {
-    SwipeRefreshLayout mSwipeRefreshWidget;
+public class OrderListFragment extends PeachBaseFragment {
+   // SwipeRefreshLayout mSwipeRefreshWidget;
     private int type;
     public static final int ALL = 1;
     public static final int NEED_PAY = 2;
@@ -61,13 +63,15 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
     public static final int AVAILABLE = 4;
     public static final int DRAWBACK = 5;
     OrderListAdapter adapter;
-    RecyclerView recyclerView;
+    XRecyclerView recyclerView;
     TextView empty;
+    Handler handler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         type = getArguments().getInt("type");
+        if (handler == null)handler = new Handler();
     }
 
     @Nullable
@@ -76,12 +80,14 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
      //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
         View view = (View) inflater.inflate(
                 R.layout.fragment_order_list, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
         empty = (TextView) view.findViewById(R.id.empty_view);
-        mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_widget);
-        mSwipeRefreshWidget.setOnRefreshListener(this);
-        mSwipeRefreshWidget.setColorSchemeResources(R.color.app_theme_color);
+//        mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_widget);
+//        mSwipeRefreshWidget.setOnRefreshListener(this);
+//        mSwipeRefreshWidget.setColorSchemeResources(R.color.app_theme_color);
         setupRecyclerView(recyclerView);
+        recyclerView.setRefreshProgressStyle(ProgressStyle.SysProgress);
+        recyclerView.setLoadingMoreEnabled(false);
      //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
         System.out.println("onCreateView");
         switch (type) {
@@ -108,6 +114,41 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
             default:
                 break;
         }
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (type) {
+                            case ALL:
+                                getOrder("");
+                                break;
+                            case NEED_PAY:
+                                getOrder("pending");
+                                break;
+                            case PROCESS:
+                                getOrder("paid");
+                                break;
+                            case AVAILABLE:
+                                getOrder("committed");
+                                break;
+                            case DRAWBACK:
+                                getOrder("refundApplied");
+                                break;
+                            default:
+                                //   if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+                                break;
+                        }
+                    }
+                },1000);
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
         return view;
     }
 
@@ -120,9 +161,8 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("onResume");
       //  DialogManager.getInstance().showModelessLoadingDialog(getActivity());
-        mSwipeRefreshWidget.setRefreshing(true);
+     //   mSwipeRefreshWidget.setRefreshing(true);
         switch (type) {
             case ALL:
                 getOrder("");
@@ -140,7 +180,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 getOrder("refundApplied,refunded");
                 break;
             default:
-                if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+           //     if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 break;
         }
@@ -158,15 +198,17 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
                 adapter.notifyDataSetChanged();
                 if (list.result.size() > 0) empty.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+        //        if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+                recyclerView.refreshComplete();
               DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                if (mSwipeRefreshWidget.isRefreshing()){
-                    mSwipeRefreshWidget.setRefreshing(false);
-                }
+//                if (mSwipeRefreshWidget.isRefreshing()){
+//                    mSwipeRefreshWidget.setRefreshing(false);
+//                }
+                recyclerView.refreshComplete();
                 recyclerView.setVisibility(View.GONE);
                 empty.setVisibility(View.VISIBLE);
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
@@ -182,7 +224,7 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         adapter = new OrderListAdapter(getActivity(), type);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
@@ -196,32 +238,32 @@ public class OrderListFragment extends PeachBaseFragment implements SwipeRefresh
         });
     }
 
-    @Override
-    public void onRefresh() {
-        System.out.println("onRefresh");
-        switch (type) {
-            case ALL:
-                getOrder("");
-                break;
-            case NEED_PAY:
-                getOrder("pending");
-                break;
-            case PROCESS:
-                getOrder("paid");
-                break;
-            case AVAILABLE:
-                getOrder("committed");
-                break;
-            case DRAWBACK:
-                getOrder("refundApplied");
-                break;
-            default:
-                if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
-                break;
-        }
-
-
-    }
+//    @Override
+//    public void onRefresh() {
+//        System.out.println("onRefresh");
+//        switch (type) {
+//            case ALL:
+//                getOrder("");
+//                break;
+//            case NEED_PAY:
+//                getOrder("pending");
+//                break;
+//            case PROCESS:
+//                getOrder("paid");
+//                break;
+//            case AVAILABLE:
+//                getOrder("committed");
+//                break;
+//            case DRAWBACK:
+//                getOrder("refundApplied");
+//                break;
+//            default:
+//                if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+//                break;
+//        }
+//
+//
+//    }
 
     static class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
         public interface OnItemClickListener {

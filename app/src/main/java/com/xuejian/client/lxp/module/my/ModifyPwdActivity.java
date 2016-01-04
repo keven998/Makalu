@@ -19,24 +19,24 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClickListener {
-    @InjectView(R.id.et_old_pwd)
+    @Bind(R.id.et_old_pwd)
     EditText oldPwdEt;
-    @InjectView(R.id.et_new_password)
+    @Bind(R.id.et_new_password)
     EditText newPwdEt;
-    @InjectView(R.id.et_re_password)
+    @Bind(R.id.et_re_password)
     EditText rePwdEt;
-    @InjectView(R.id.tv_confirm)
+    @Bind(R.id.tv_confirm)
     TextView tv_confirm;
-    @InjectView(R.id.tv_cancel)
+    @Bind(R.id.tv_cancel)
     TextView tv_cancel;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView tv_title_bar_title;
     private User user;
 
@@ -45,7 +45,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_pwd);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         user = AccountManager.getInstance().getLoginAccount(this);
         tv_confirm.setOnClickListener(this);
         tv_cancel.setOnClickListener(this);

@@ -48,16 +48,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/19.
  */
 public class CityPictureActivity extends PeachBaseActivity {
-    @InjectView(R.id.gv_city_pic)
+    @Bind(R.id.gv_city_pic)
     GridView mCityPicGv;
-    @InjectView(R.id.tv_title_bar_edit)
+    @Bind(R.id.tv_title_bar_edit)
     ImageView editPics;
     private PicAdapter picAdapter;
     private String id;
@@ -96,7 +96,7 @@ public class CityPictureActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_city_picture);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         isUserPics = getIntent().getBooleanExtra("isUserPics", false);
         isTalentAlbum = getIntent().getBooleanExtra("isTalentAlbum", false);
         showChatImage = getIntent().getBooleanExtra("showChatImage", false);

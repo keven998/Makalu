@@ -71,8 +71,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by lxp_dqm07 on 2015/5/18.
@@ -91,76 +91,76 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     View handleView;
     private boolean isFromExperts;
     private boolean block;
-    @InjectView(R.id.iv_avatar)
+    @Bind(R.id.iv_avatar)
     RoundImageBoarderView iv_avatar;
-    @InjectView(R.id.expert_info)
+    @Bind(R.id.expert_info)
     LinearLayout userInfoP;
 
-    @InjectView(R.id.tv_expert_name)
+    @Bind(R.id.tv_expert_name)
     TextView tv_expert_name;
-    @InjectView(R.id.expert_tag)
+    @Bind(R.id.expert_tag)
     TagListView expert_tag;
-    @InjectView(R.id.tv_expert_age)
+    @Bind(R.id.tv_expert_age)
     TextView tv_expert_age;
-    @InjectView(R.id.iv_expert_sex)
+    @Bind(R.id.iv_expert_sex)
     ImageView iv_expert_sex;
-    @InjectView(R.id.tv_expert_con)
+    @Bind(R.id.tv_expert_con)
     ImageView tv_expert_con;
-    @InjectView(R.id.tv_expert_location)
+    @Bind(R.id.tv_expert_location)
     TextView tv_expert_location;
-    @InjectView(R.id.tv_photo_num)
+    @Bind(R.id.tv_photo_num)
     TextView tv_photo_num;
-    @InjectView(R.id.tv_expert_sign)
+    @Bind(R.id.tv_expert_sign)
     TextView tv_expert_sign;
-    @InjectView(R.id.tv_plan_count)
+    @Bind(R.id.tv_plan_count)
     TextView tv_plan_count;
-    @InjectView(R.id.tv_track_count)
+    @Bind(R.id.tv_track_count)
     TextView tv_track_count;
 
 
-    @InjectView(R.id.fl_tracks_entry)
+    @Bind(R.id.fl_tracks_entry)
     LinearLayout flTracksEntry;
 
-    @InjectView(R.id.fl_plans_entry)
+    @Bind(R.id.fl_plans_entry)
     LinearLayout flPlansEntry;
 
-    @InjectView(R.id.travel_notice)
+    @Bind(R.id.travel_notice)
     LinearLayout travel_notice;
-    @InjectView(R.id.expert_fragment_view)
+    @Bind(R.id.expert_fragment_view)
     CustomFrameLayout  expert_fragment;
-    @InjectView(R.id.expert_title_bar)
+    @Bind(R.id.expert_title_bar)
     RelativeLayout title_bar;
-    @InjectView(R.id.expert_scroll)
+    @Bind(R.id.expert_scroll)
     ScrollView expertScroll;
 
-    @InjectView(R.id.goToAlbum)
+    @Bind(R.id.goToAlbum)
     FrameLayout goToAlbum;
 
-    @InjectView(R.id.expert_lebel_body)
+    @Bind(R.id.expert_lebel_body)
     FrameLayout expert_lebel_body;
 
-    @InjectView(R.id.expert_lebel_bodyLine)
+    @Bind(R.id.expert_lebel_bodyLine)
     View expert_lebel_bodyLine;
 
-    @InjectView(R.id.expert_lebel_line)
+    @Bind(R.id.expert_lebel_line)
     View expert_lebel_line;
 
-    @InjectView(R.id.expert_label_info)
+    @Bind(R.id.expert_label_info)
     LinearLayout expert_label_info;
 
-    @InjectView(R.id.panpan_lebel_line)
+    @Bind(R.id.panpan_lebel_line)
     View panpan_lebel_line;
 
-    @InjectView(R.id.panpan_lebel)
+    @Bind(R.id.panpan_lebel)
     TextView panpan_lebel;
 
-    @InjectView(R.id.tv_comment)
+    @Bind(R.id.tv_comment)
     TextView tv_comment;
 
-    @InjectView(R.id.tv_note_count)
+    @Bind(R.id.tv_note_count)
     TextView tv_note_count;
 
-    @InjectView(R.id.tv_title)
+    @Bind(R.id.tv_title)
     TextView tv_title;
     private final List<Tag> mTags = new ArrayList<Tag>();
     private ImageView[] pictures;
@@ -177,7 +177,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hismainpage);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         pictures = new ImageView[]{
                 (ImageView)findViewById(R.id.expter_image0),
                 (ImageView)findViewById(R.id.expter_image1),

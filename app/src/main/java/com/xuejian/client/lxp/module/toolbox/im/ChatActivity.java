@@ -308,11 +308,11 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
                 final CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
-                if (fragment!=null){
-                    if (userInfo.result==null){
-                        fragment.setInfo(toChatUsername,"");
-                    }else {
-                        fragment.setInfo(userInfo.result.getNickName(),userInfo.result.getAvatar());
+                if (fragment != null) {
+                    if (userInfo.result == null) {
+                        fragment.setInfo(toChatUsername, "");
+                    } else {
+                        fragment.setInfo(userInfo.result.getNickName(), userInfo.result.getAvatar());
                     }
                 }
                 new Thread(new Runnable() {
@@ -627,6 +627,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     }
                 }
             });
+        }
+        if ("10002".equals(toChatUsername)){
+            findViewById(R.id.iv_nav_menu).setVisibility(View.GONE);
         }
         adapter = new MessageAdapter(this, toChatUsername, chatType, conversation);
         // 显示消息
