@@ -134,7 +134,7 @@ public class OrderListFragment extends PeachBaseFragment {
                                 getOrder("committed");
                                 break;
                             case DRAWBACK:
-                                getOrder("refundApplied");
+                                getOrder("refundApplied,refunded");
                                 break;
                             default:
                                 //   if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
@@ -369,7 +369,7 @@ public class OrderListFragment extends PeachBaseFragment {
                     break;
                 case "refundApplied":
                     holder.rlDrawBack.setVisibility(View.VISIBLE);
-                    holder.tvDrawBackState.setText("已申请退款");
+                    holder.tvDrawBackState.setText("退款申请中");
                     break;
                 case "pending":
                     holder.rlNeedPay.setVisibility(View.VISIBLE);
@@ -399,6 +399,8 @@ public class OrderListFragment extends PeachBaseFragment {
                     holder.tvDrawBackState.setText("已过期");
                     break;
                 case "refunded":
+                    holder.rlDrawBack.setVisibility(View.VISIBLE);
+                    holder.tvDrawBackState.setText("已退款");
                     break;
                 default:
 //                    holder.rlNeedPay.setVisibility(View.VISIBLE);

@@ -101,6 +101,25 @@ public class StoreDetailActivity extends PeachBaseActivity {
 
     private void getData(String sellerId ,int start, int count) {
         if (sellerId==null)return;
+
+        TravelApi.getSellerInfo(Long.parseLong(sellerId), new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+
         TravelApi.getCommodityList(sellerId, null, null, null, null, String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
 
             @Override

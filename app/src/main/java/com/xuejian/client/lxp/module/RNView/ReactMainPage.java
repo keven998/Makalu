@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -46,6 +47,8 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     private ReactInstanceManager mReactInstanceManager;
     public SimpleCommodityBean bean;
     public LinearLayout llEmptyView;
+    RelativeLayout rlError;
+    TextView tvRetry;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +68,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 //            System.out.println(uri.getLastPathSegment());
 //            System.out.println(uri.getPathSegments().toString());
         }
-        llEmptyView = (LinearLayout) findViewById(R.id.empty_view);
+
      //   mReactRootView = new ReactRootView(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
@@ -79,6 +82,17 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                 .build();
         setContentView(R.layout.activity_rnview);
         mReactRootView = (ReactRootView) findViewById(R.id.root_view);
+        llEmptyView = (LinearLayout) findViewById(R.id.empty_view);
+        rlError = (RelativeLayout)findViewById(R.id.rl_error);
+        final long finalCommodityId = commodityId;
+        findViewById(R.id.tv_retry).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mReactRootView.setVisibility(View.VISIBLE);
+                rlError.setVisibility(View.GONE);
+                getData(finalCommodityId);
+            }
+        });
         getData(commodityId);
 
 //        Bundle bundle = new Bundle();
@@ -128,26 +142,28 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
             @Override
             public void doSuccess(String result, String method) {
 
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
 //                    WritableMap event = Arguments.createMap();
 //                    event.putString("result", jsonObject.getJSONObject("result").toString());
 //                    sendEvent(mReactInstanceManager.getCurrentReactContext(), "test", event);
 
-                    CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result, SimpleCommodityBean.class);
-                    bean = commodity.result;
-                    Bundle bundle = new Bundle();
-                    bundle.putString("result", jsonObject.getJSONObject("result").toString());
-                    mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
-                    ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null);
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                        CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result, SimpleCommodityBean.class);
+                        bean = commodity.result;
+                        Bundle bundle = new Bundle();
+                        bundle.putString("result", jsonObject.getJSONObject("result").toString());
+                        mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
+                        ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        llEmptyView.setVisibility(View.VISIBLE);
+                        mReactRootView.setVisibility(View.GONE);
+                    }
             }
 
             @Override
@@ -160,6 +176,9 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                 if (code==404){
                     llEmptyView.setVisibility(View.VISIBLE);
                     mReactRootView.setVisibility(View.GONE);
+                }else if (code==-1){
+                    mReactRootView.setVisibility(View.GONE);
+                    rlError.setVisibility(View.VISIBLE);
                 }
             }
         });

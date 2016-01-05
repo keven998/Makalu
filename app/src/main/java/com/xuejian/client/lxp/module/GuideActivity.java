@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.aizou.core.utils.SharePrefUtil;
@@ -32,18 +31,6 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
     private ViewPagerAdapter vpAdapter;
     private List<View> views;
     private String type;
-//    private DotView dotView;
-
-    // 底部小店图片
-    private ImageView[] dots;
-
-    // 记录当前选中位置
-    private int currentIndex;
-
-    //引导页第二页小图动画index
-    private int guide2IvIndex;
-    //引导页第三页小图动画index
-    private int guide3IvIndex;
     private static final int START_LOGIN=0x232;
     private Handler handler = new Handler(){
         @Override
@@ -165,6 +152,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
         SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
         Intent mainActivity = new Intent(GuideActivity.this, LoginActivity.class);
         startActivityWithNoAnim(mainActivity);
+        finish();
     }
 
 //    // 当新的页面被选中时调用

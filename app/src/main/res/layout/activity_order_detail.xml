@@ -439,6 +439,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />
+                <ListView
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/lv_activity"
+                    android:dividerHeight="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="50dp"

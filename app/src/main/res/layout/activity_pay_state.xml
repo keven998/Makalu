@@ -39,12 +39,19 @@
             android:background="@color/app_theme_color" />
 
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_pay_state"
+        android:src="@drawable/icon_paid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"/>
     <TextView
         android:id="@+id/tv_pay_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top|center_horizontal"
-        android:paddingTop="80dp"
+        android:paddingTop="20dp"
         android:textColor="@color/color_text_ii"
         android:layout_gravity="center"/>
     <LinearLayout

@@ -624,7 +624,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             handleView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (userId != 10000 && isMyFriend) {
+                    if (!(userId == 10000||userId == 10001||userId == 10002||userId == 10003) && isMyFriend) {
                         showActionDialog(1);
                     } else if (block) {
                         showActionDialog(3);

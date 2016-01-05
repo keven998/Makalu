@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.goods;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -9,12 +10,16 @@ import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +29,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
+import com.xuejian.client.lxp.bean.TradeActivityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
@@ -39,7 +45,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -99,6 +107,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     TextView tvTalk;
     @Bind(R.id.ll_message)
     LinearLayout llMessage;
+    @Bind(R.id.lv_activity)
+    ListView listView;
     long orderId;
     OrderBean currentOrder;
     CountDownTimer countDownTimer;
@@ -346,7 +356,85 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 }
             });
         }
+        ActivityAdapter activityAdapter = new ActivityAdapter(mContext);
+        listView.setAdapter(activityAdapter);
+        activityAdapter.getData().addAll(bean.activities);
+        CommonUtils.setListViewHeightBasedOnChildren(listView);
+    }
 
+    public class ActivityAdapter extends BaseAdapter{
+
+        private ArrayList<TradeActivityBean> data;
+        private Context mContext;
+        private HashMap<String,String> stateMap;
+        public ActivityAdapter(Context context ){
+            this.mContext = context;
+            this.data = new ArrayList<>();
+            stateMap = new HashMap<>();
+            stateMap.put("create","买家提交订单");
+            stateMap.put("cancel","买家取消订单");
+            stateMap.put("pay","买家付款");
+            stateMap.put("refundApply","买家申请退款");
+            stateMap.put("refundApprove","卖家同意退款");
+            stateMap.put("refundDeny","卖家拒绝退款申请");
+            stateMap.put("commit","卖家确认订单");
+            stateMap.put("finish","订单完成");
+
+        }
+
+        public ArrayList<TradeActivityBean> getData() {
+            return data;
+        }
+
+        private String getState(TradeActivityBean bean){
+
+            if (bean.action.equals("expire")){
+                if (bean.prevStatus.equals("paid")){
+                    return "卖家未确认订单,系统自动退款";
+                }else if (bean.prevStatus.equals("pending")){
+                    return "买家未支付,订单过期";
+                }else return "";
+            }else {
+                return stateMap.get(bean.action);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return data.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if (convertView == null){
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_activities,null);
+                viewHolder = new ViewHolder();
+                viewHolder.timestamp = (TextView) convertView.findViewById(R.id.tv_timestamp);
+                viewHolder.activity = (TextView) convertView.findViewById(R.id.tv_activity);
+                convertView.setTag(viewHolder);
+            }else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            TradeActivityBean bean = (TradeActivityBean) getItem(position);
+            viewHolder.timestamp.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(bean.timestamp)));
+            viewHolder.activity.setText(getState(bean));
+            return convertView;
+        }
+        class ViewHolder{
+            private TextView timestamp;
+            private TextView activity;
+        }
     }
 
 
@@ -428,6 +516,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 }
                 tv_pay.putExtra("type", "alipay");
                 startActivity(tv_pay);
+                finish();
             }
         });
         weixinpay.setOnClickListener(new View.OnClickListener() {
@@ -444,6 +533,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 }
                 tv_pay.putExtra("type", "weixinpay");
                 startActivity(tv_pay);
+                finish();
             }
         });
         contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {

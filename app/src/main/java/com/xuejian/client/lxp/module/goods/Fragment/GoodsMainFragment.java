@@ -18,6 +18,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -57,6 +58,8 @@ public class GoodsMainFragment extends PeachBaseFragment {
     ArrayList<ColumnBean.ColumnsEntity> picList = new ArrayList<>();
     DisplayImageOptions options;
     ArrayList<ArrayList<String>> data = new ArrayList<>();
+    RelativeLayout rlError;
+    TextView tvRetry;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,10 +84,18 @@ public class GoodsMainFragment extends PeachBaseFragment {
         hsPic = (HorizontalScrollView) headView.findViewById(R.id.hs_pic);
         dotView = (DotView) headView.findViewById(R.id.dot_view);
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
+        rlError = (RelativeLayout) v.findViewById(R.id.rl_error);
+        tvRetry = (TextView) v.findViewById(R.id.tv_retry);
         listView.addHeaderView(headView);
         getData();
         getListData();
-
+        tvRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlError.setVisibility(View.GONE);
+                retry();
+            }
+        });
         return v;
     }
 
@@ -158,6 +169,8 @@ public class GoodsMainFragment extends PeachBaseFragment {
             @Override
             public void doFailure(Exception error, String msg, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
+                rlError.setVisibility(View.VISIBLE);
+
             }
 
             @Override
@@ -167,6 +180,10 @@ public class GoodsMainFragment extends PeachBaseFragment {
         });
     }
 
+    private void retry(){
+        getData();
+        getListData();
+    }
     private void resizeData(List<RecommendCommodityBean> result) {
 //        ArrayList<ArrayList<SimpleCommodityBean>> data = new ArrayList<>();
 //        final ArrayList<String> sectionName = new ArrayList<>();
@@ -215,16 +232,20 @@ public class GoodsMainFragment extends PeachBaseFragment {
         ArrayList<String> sectionName = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
             sectionName.add(i, result.get(i).getTopicType());
-//
-//            ArrayList<SimpleCommodityBean>delList = new ArrayList<>();
-//            ArrayList<SimpleCommodityBean>addList = result.get(i).getCommodities();
-//            for (SimpleCommodityBean bean : addList) {
-//                if (bean==null){
-//                    delList.add(bean);
-//                }
-//            }
-//            addList.removeAll(delList);
-            data.add(i, result.get(i).getCommodities());
+
+            ArrayList<SimpleCommodityBean>delList = new ArrayList<>();
+            ArrayList<SimpleCommodityBean>addList = result.get(i).getCommodities();
+            for (SimpleCommodityBean bean : addList) {
+                if (bean==null){
+                    delList.add(bean);
+                }
+            }
+           // addList.removeAll(Collections.singleton(null));
+            addList.removeAll(delList);
+            data.add(i, addList);
+            delList = null;
+            addList = null;
+            //  data.add(i, result.get(i).getCommodities());
         }
         bindListView(data, sectionName);
     }

@@ -105,7 +105,8 @@ public class OrderConfirmActivity extends PeachBaseActivity {
     ArrayList<TravellerBean> list;
     Handler handler = new Handler();
     private HashMap<String, String> idType = new HashMap<>();
-
+    private OrderBean currentBean;
+    private boolean orderCreated;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,7 +163,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 });
                 break;
             case "refundApplied":
-                tvState.setText("已申请退款");
+                tvState.setText("退款申请中");
                 break;
             case "pending":
                 tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice())));
@@ -189,13 +190,18 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                     @Override
                     public void onClick(View v) {
                         //       if (tvPay.getText().toString().equals("立即支付")){
-                        DialogManager.getInstance().showLoadingDialog(mContext, "订单创建中");
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                createOrder(bean);
-                            }
-                        }, 1000);
+                        if (orderCreated){
+                            showPayActionDialog(currentBean);
+                        }else {
+                            DialogManager.getInstance().showLoadingDialog(mContext, "订单创建中");
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    createOrder(bean);
+                                }
+                            }, 1000);
+                        }
+
 //                        }else if (tvPay.getText().toString().equals("再次预定")){
 //                            intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
 //                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
@@ -323,9 +329,10 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                     public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<OrderBean> bean = CommonJson.fromJson(result, OrderBean.class);
+                        currentBean = bean.result;
                         setResult(RESULT_OK);
                         showPayActionDialog(bean.result);
-
+                        orderCreated = true ;
 //                        Intent intent = new Intent(OrderConfirmActivity.this, OrderConfirmActivity.class);
 //                        intent.putExtra("type", "pendingOrder");
 //                        intent.putExtra("order", bean.result);

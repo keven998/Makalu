@@ -135,6 +135,17 @@ public class TravelApi extends BaseApi {
     // 支付订单
     public final static String PAY_ORDER = "/marketplace/orders/%d/payments";
 
+    // 商户信息
+    public final static String SELLER_INFO = "/marketplace/sellers/";
+
+
+    public static void getSellerInfo(long orderId,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + SELLER_INFO + String.valueOf(orderId));
+        setDefaultParams(request);
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
 
     public static void getPrePayInfo(long orderId,String vendor,HttpCallBack callback) {
         PTRequest request = new PTRequest();

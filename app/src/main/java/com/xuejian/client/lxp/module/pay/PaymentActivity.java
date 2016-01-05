@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
     TextView tvMain;
     @Bind(R.id.tv_order_detail)
     TextView tvOrderDetail;
+    @Bind(R.id.iv_pay_state)
+    ImageView ivPayState;
     private static final int ALI_PAY = 1001;
     private static final int ALI_PAY_CHECK = 1002;
 
@@ -82,15 +85,22 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                                     Toast.LENGTH_SHORT).show();
                             mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
                             mActivity.get().tvMain.setVisibility(View.VISIBLE);
+                            mActivity.get().ivPayState.setVisibility(View.VISIBLE);
                             mActivity.get().tvState.setText("订单已支付\n请等待卖家确认");
+                            mActivity.get().tvTitle.setText("支付成功");
                         }
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
                         if (TextUtils.equals(resultStatus, "8000")) {
-                            Toast.makeText(mActivity.get(), "支付结果确认中",
-                                    Toast.LENGTH_SHORT).show();
-
+                            if (mActivity.get()!=null){
+                                Toast.makeText(mActivity.get(), "支付结果确认中",
+                                        Toast.LENGTH_SHORT).show();
+                                mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
+                                mActivity.get().tvMain.setVisibility(View.VISIBLE);
+                                mActivity.get().ivPayState.setVisibility(View.VISIBLE);
+                                mActivity.get().tvState.setText("支付结果确认中");
+                            }
                         }else if (TextUtils.equals(resultStatus, "6001")){
                             Toast.makeText(mActivity.get(), "支付取消 " ,
                                     Toast.LENGTH_SHORT).show();
@@ -100,11 +110,10 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
-                    if (mActivity.get()!=null){
-                        mActivity.get().startActivity(intent);
-                        mActivity.get().finish();
-                    }
-
+//                    if (mActivity.get()!=null){
+//                        mActivity.get().startActivity(intent);
+//                        mActivity.get().finish();
+//                    }
                     break;
                 }
                 case ALI_PAY_CHECK: {
@@ -127,6 +136,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         DialogManager.getInstance().showLoadingDialog(this);
         tvOrderDetail.setVisibility(View.GONE);
         tvMain.setVisibility(View.GONE);
+        ivPayState.setVisibility(View.GONE);
 //        SpannableString priceStr = new SpannableString("¥35353");
 //        priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        priceStr.setSpan(new AbsoluteSizeSpan(15, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -154,6 +164,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                 Intent intent = new Intent(PaymentActivity.this, MainActivity.class);
                 intent.putExtra("back",true);
                 startActivity(intent);
+                finish();
             }
         });
         tvOrderDetail.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +174,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                 intent.putExtra("orderDetail",true);
                 intent.putExtra("orderId",orderId);
                 startActivity(intent);
+                finish();
             }
         });
 

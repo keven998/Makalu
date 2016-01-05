@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.goods.OrderCreateActivity;
 import com.xuejian.client.lxp.module.goods.StoreDetailActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
@@ -69,6 +70,12 @@ public class NativeActions extends ReactContextBaseJavaModule {
                 intent.putExtra("fromTrade",true);
            //     intent.putExtra("commodityId",id);
                 intent.setClass(reactContext, ChatActivity.class);
+                reactContext.startActivity(intent);
+                break;
+            case "WebView":
+                intent.putExtra("url",data);
+                intent.putExtra("title","查看全部");
+                intent.setClass(reactContext, PeachWebViewActivity.class);
                 reactContext.startActivity(intent);
                 break;
             default:

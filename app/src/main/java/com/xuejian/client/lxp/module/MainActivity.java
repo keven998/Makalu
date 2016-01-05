@@ -289,11 +289,25 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     String drawableUrl = ImageDownloader.Scheme.DRAWABLE.wrap("R.drawable.lvxingwenwen");
                     wenwen.setAvatarSmall("drawable://R.drawable.lvxingwenwen");
                     UserDBManager.getInstance().saveContact(wenwen);
+
                     User paipai = new User();
                     paipai.setNickName("派派");
                     paipai.setUserId(10000l);
                     paipai.setType(1);
                     UserDBManager.getInstance().saveContact(paipai);
+
+                    User trade = new User();
+                    trade.setNickName("交易消息");
+                    trade.setUserId(10002l);
+                    trade.setType(1);
+                    UserDBManager.getInstance().saveContact(trade);
+
+                    User activity = new User();
+                    activity.setNickName("活动消息");
+                    activity.setUserId(10003l);
+                    activity.setType(1);
+                    UserDBManager.getInstance().saveContact(activity);
+
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);
                     AccountManager.getInstance().setContactList(userlist);

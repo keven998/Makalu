@@ -37,7 +37,7 @@ public class PeachApplication extends BaseApplication {
         initPeachConfig();
         initChannelId();
         initImageLoader();
-        LeakCanary.install(this);
+         LeakCanary.install(this);
         if (!com.xuejian.client.lxp.BuildConfig.DEBUG) {
             CrashHandler.getInstance().init(this);
         }

@@ -79,25 +79,26 @@
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/base_color_white"
         android:layout_marginTop="@dimen/title_bar_height"
+        android:background="@color/base_color_white"
         android:orientation="vertical"
         android:visibility="gone">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_meng"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="100dp"
-            />
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="您查看的商品已经下架啦！"
-    android:layout_gravity="center_horizontal"
-    android:textSize="15dp"
-    android:textColor="@color/color_text_iii"
-    android:layout_marginTop="20dp"/>
-    </LinearLayout>
+            android:src="@drawable/icon_meng" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="您查看的商品已经下架啦！"
+            android:textColor="@color/color_text_iii"
+            android:textSize="15dp" />
+    </LinearLayout>
+    <include layout="@layout/error_page"/>
 </merge>

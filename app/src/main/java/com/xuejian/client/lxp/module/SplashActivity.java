@@ -96,6 +96,10 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                         Intent mainIntent = new Intent(SplashActivity.this, GuideActivity.class);
                         startActivity(mainIntent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        sp_log.setVisibility(View.VISIBLE);
+                        sp_reg.setVisibility(View.VISIBLE);
+                        sp_bounce.setVisibility(View.VISIBLE);
+                        finish();
                     } else {
                         findViewById(R.id.bar_lyt).setVisibility(View.VISIBLE);
                         sp_log.setVisibility(View.VISIBLE);

@@ -237,6 +237,11 @@ public class ChatMenuFragment extends Fragment {
                 startActivityForResult(intent, NEW_CHAT_REQUEST_CODE);
             }
         });
+
+        if ("10002".equals(userId)||"10003".equals(userId)){
+            getView().findViewById(R.id.create_group).setVisibility(View.GONE);
+            getView().findViewById(R.id.ll_user_info).setVisibility(View.GONE);
+        }
     }
 
     public void startAlbum(ArrayList<ImageBean> imageBeans) {

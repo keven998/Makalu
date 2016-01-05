@@ -45,7 +45,7 @@ public class OrderBean implements Parcelable {
     private long createTime;
     private long updateTime;
     private long expireTime;
-
+    public ArrayList<TradeActivityBean> activities;
 
     public long getUpdateTime() {
         return updateTime;
@@ -198,6 +198,7 @@ public class OrderBean implements Parcelable {
         dest.writeLong(this.createTime);
         dest.writeLong(this.updateTime);
         dest.writeLong(this.expireTime);
+        dest.writeTypedList(activities);
     }
 
     public OrderBean() {
@@ -220,6 +221,7 @@ public class OrderBean implements Parcelable {
         this.createTime = in.readLong();
         this.updateTime = in.readLong();
         this.expireTime = in.readLong();
+        this.activities = in.createTypedArrayList(TradeActivityBean.CREATOR);
     }
 
     public static final Parcelable.Creator<OrderBean> CREATOR = new Parcelable.Creator<OrderBean>() {
