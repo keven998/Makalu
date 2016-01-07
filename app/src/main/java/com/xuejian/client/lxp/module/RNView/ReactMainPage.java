@@ -112,8 +112,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 //            }
 //        },5000);
 
-        TextView back = (TextView) findViewById(R.id.tv_title_back);
-        back.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -159,6 +158,13 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                                 ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null);
                             }
                         });
+                        ReactMainPage.this.findViewById(R.id.iv_collection).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                         llEmptyView.setVisibility(View.VISIBLE);

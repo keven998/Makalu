@@ -37,7 +37,7 @@ public class PeachApplication extends BaseApplication {
         initPeachConfig();
         initChannelId();
         initImageLoader();
-         LeakCanary.install(this);
+        LeakCanary.install(this);
         if (!com.xuejian.client.lxp.BuildConfig.DEBUG) {
             CrashHandler.getInstance().init(this);
         }
@@ -53,8 +53,8 @@ public class PeachApplication extends BaseApplication {
                 .memoryCacheSizePercentage(10)
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
                 .diskCache(new UnlimitedDiskCache(cacheDir))
-                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-                .memoryCacheSize(2 * 1024 * 1024)
+                .memoryCache(new LruMemoryCache(1 * 1024 * 1024))
+                .memoryCacheSize(1 * 1024 * 1024)
                 .diskCacheSize(40 * 1024 * 1024)
                 .tasksProcessingOrder(QueueProcessingType.FIFO)
                 .build();

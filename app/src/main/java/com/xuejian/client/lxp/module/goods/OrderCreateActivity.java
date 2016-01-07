@@ -98,6 +98,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     PriceBean priceBean;
     int currenrDialCode = 86;
     String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,6 +193,18 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        passengerList = null;
+        memberAdapter = null;
+        memberList = null;
+        commodityId = null;
+        currentPlanBean = null;
+        priceBean = null;
+        name = null;
     }
 
     @Override
@@ -292,8 +305,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         Intent intent = new Intent(OrderCreateActivity.this, OrderConfirmActivity.class);
         intent.putExtra("type", "pendingOrder");
         intent.putExtra("order", orderBean);
-        intent.putExtra("passengerList",passengerList);
-        startActivityForResult(intent,SUBMIT_ORDER_CODE);
+        intent.putExtra("passengerList", passengerList);
+        startActivityForResult(intent, SUBMIT_ORDER_CODE);
 
 
 //        TravelApi.createOrder(Long.parseLong(commodityId), currentPlanBean.getPlanId(), dt2.getTime(), goodsNum, currenrDialCode
@@ -520,7 +533,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             } else if (requestCode == SELECTED_CODE) {
                 currenrDialCode = data.getIntExtra("dialCode", 0);
                 tvDialCode.setText("+" + currenrDialCode);
-            }else if (requestCode == SUBMIT_ORDER_CODE){
+            } else if (requestCode == SUBMIT_ORDER_CODE) {
                 finish();
             }
         }

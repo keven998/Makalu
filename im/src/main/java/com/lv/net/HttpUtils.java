@@ -143,6 +143,7 @@ public class HttpUtils {
                     if (resultArray.length()>0){
                         IMClient.lastSuccessFetch = object.getLong("timestamp");
                     }
+                    object = null;
                     for (int j = 0; j < resultArray.length(); j++) {
                         Message msg = JSON.parseObject(resultArray.getJSONObject(j).toString(), Message.class);
                         list.add(msg);
@@ -153,12 +154,17 @@ public class HttpUtils {
                         }
                         listener.OnMsgArrive(list);
                     }else {
-                        listener.OnMsgArrive(new ArrayList<Message>());
+                        ArrayList<Message> messageList1 = new ArrayList<Message>();
+                        listener.OnMsgArrive(messageList1);
+                        messageList1=null;
                     }
+                    list =null;
                 } else {
-                    listener.OnMsgArrive(new ArrayList<Message>());
+                    ArrayList<Message> messageList = new ArrayList<Message>();
+                    listener.OnMsgArrive(messageList);
                     IMClient.getInstance().setBLOCK(false);
                     LazyQueue.getInstance().TempDequeue();
+                    messageList=null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

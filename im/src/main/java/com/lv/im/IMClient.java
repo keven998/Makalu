@@ -262,13 +262,14 @@ public class IMClient {
     }
 
     public int getUnReadCount() {
-        count = 0;
-        if (convercationList != null) {
-            for (ConversationBean c : convercationList) {
-                count += c.getIsRead();
-            }
-        }
-        return count;
+//        count = 0;
+//        if (convercationList != null) {
+//            for (ConversationBean c : convercationList) {
+//                count += c.getIsRead();
+//            }
+//        }
+        return db.getUnReadCount();
+     //   return count;
     }
 
     public void deleteConversation(String friend) {

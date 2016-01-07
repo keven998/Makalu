@@ -93,8 +93,8 @@ public class GoodsList extends PeachBaseActivity {
         final Handler handler = new Handler();
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
+        boolean collection = getIntent().getBooleanExtra("collection",false);
         if (!TextUtils.isEmpty(title)) tvTitle.setText(title);
-
 
         adapter = new GoodsListAdapter(mContext);
         goodsList.setPullRefreshEnabled(false);
@@ -108,7 +108,9 @@ public class GoodsList extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
-
+        if (collection){
+            ll_spinner.setVisibility(View.GONE);
+        }
         goodsList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
@@ -139,8 +141,13 @@ public class GoodsList extends PeachBaseActivity {
                 goodsList.smoothScrollToPosition(0);
             }
         });
-        getCategory(locId);
-        getData(null, locId, null, null, null, 0, 15, true);
+        if (collection){
+
+        }else {
+            getCategory(locId);
+            getData(null, locId, null, null, null, 0, 15, true);
+        }
+
 
     }
 
@@ -220,8 +227,9 @@ public class GoodsList extends PeachBaseActivity {
     private void initCategoryData(final CategoryBean bean) {
         if (bean.category.size()>0){
             bean.category.add(0,"全部类型");
+            typeSpinner.attachDataSource(bean.category);
         }
-        typeSpinner.attachDataSource(bean.category);
+
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

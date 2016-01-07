@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +45,6 @@ import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.api.UserApi;
-import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.LocationUtils;
 import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
@@ -92,12 +92,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private Class fragmentArray[] = {GoodsMainFragment.class, DestinationFragment.class, TalkFragment.class, MyInfoFragment.class};
     //TalentLocFragement
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = { R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home,R.drawable.checker_tab_home_user};
+    private int mImageViewArray[] = {R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
     // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
     private static String[] tabTitle = {"首页", "目的地", "消息", "我的"};
     private TextView unreadMsg;
     //Tab选项Tag
-    private static String mTagArray[] = {"Soso", "Travel",  "Talk", "My"};
+    private static String mTagArray[] = {"Soso", "Travel", "Talk", "My"};
 
     private boolean FromBounce, ring, vib;
     private Vibrator vibrator;
@@ -107,6 +107,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private SparseBooleanArray infoStatus = new SparseBooleanArray();
     private MediaPlayer mMediaPlayer;
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
@@ -135,6 +136,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             initClient();
         }
         initLocation();
+
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        int heapSize = manager.getLargeMemoryClass();
+        System.out.println("heapSize " + heapSize);
+        int heapgrowthlimit = manager.getMemoryClass();
+        System.out.println("heapgrowthlimit " + heapgrowthlimit);
     }
 
     private void initLocation() {
@@ -244,6 +251,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             }
         });
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                IMClient.getInstance().getConversationList();
+//            }
+//        }).start();
+
     }
 
     @Override
@@ -252,7 +266,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (intent.getBooleanExtra("reLogin", false)) {
             initClient();
         }
-        if (intent.getBooleanExtra("back", false)){
+        if (intent.getBooleanExtra("back", false)) {
             mTabHost.setCurrentTab(0);
         }
     }
@@ -436,8 +450,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //                talkFragment.loadConversation();
 //                talkFragment.updateUnreadAddressLable();
 //            }
-//            updateUnreadMsgCount();
-
+            updateUnreadMsgCount();
         } else unreadMsg.setVisibility(View.GONE);
         try {
             if (!IMClient.isPushTurnOn(mContext)) {
@@ -453,8 +466,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         outState.putBoolean("isConflict", isConflict);
         super.onSaveInstanceState(outState);
     }
-
-    protected PeachMessageDialog conflictDialog;
 
 
 
@@ -870,6 +881,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             mLocationManagerProxy.destroy();
         }
     }
+
     private static void copyFile(InputStream paramInputStream, OutputStream paramOutputStream)
             throws IOException {
         byte[] arrayOfByte = new byte[1024];
@@ -887,13 +899,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (((File) localObject).exists()) {
             return;
         }
-        InputStream localInputStream=null;
+        InputStream localInputStream = null;
         try {
             localObject = new FileOutputStream((File) localObject);
             localInputStream = getAssets().open("ReactNativeDevBundle.js");
             copyFile(localInputStream, (OutputStream) localObject);
             ((OutputStream) localObject).close();
-            if (localInputStream!=null)localInputStream.close();
+            if (localInputStream != null) localInputStream.close();
             return;
         } catch (FileNotFoundException localFileNotFoundException) {
             localFileNotFoundException.printStackTrace();

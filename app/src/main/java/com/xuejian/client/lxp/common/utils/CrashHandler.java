@@ -20,8 +20,6 @@ import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by yibiao.qin on 2015/8/31.
@@ -31,7 +29,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static CrashHandler INSTANCE = new CrashHandler();
     private Context mContext;
     private Thread.UncaughtExceptionHandler mDefaultHandler;
-    private Map<String, String> infos = new HashMap<String, String>();
 
     // 用于格式化日期,作为日志文件名的一部分
     private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -51,7 +48,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         Log.e("LXP", "crash !\n " + ex.getMessage());
-       // saveCrashInfo2File(ex);
+        saveCrashInfo2File(ex);
         restartApplication();
 
 
@@ -123,13 +120,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         System.exit(0);
     }
     private String saveCrashInfo2File(Throwable ex) {
-        StringBuffer sb = new StringBuffer();
-        for (Map.Entry<String, String> entry : infos.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            sb.append(key + "=" + value + "\n");
-        }
-
+        StringBuilder sb = new StringBuilder();
+        sb.append(ex.getMessage());
         Writer writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
         ex.printStackTrace(printWriter);
@@ -156,7 +148,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 fos.write(sb.toString().getBytes());
                 fos.close();
             }
-            copyDBToSDcrad(time,timestamp);
+          //  copyDBToSDcrad(time,timestamp);
             return fileName;
         } catch (Exception e) {
             Log.e(TAG, "an error occured while writing file...", e);
@@ -164,6 +156,39 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         return null;
     }
+
+
+//    private String saveCrashInfoToFile(Throwable ex) {
+//        Writer info = new StringWriter();
+//        PrintWriter printWriter = new PrintWriter(info);
+//        ex.printStackTrace(printWriter);
+//
+//        Throwable cause = ex.getCause();
+//        while (cause != null) {
+//            cause.printStackTrace(printWriter);
+//            cause = cause.getCause();
+//        }
+//
+//        String result = info.toString();
+//        printWriter.close();
+//        mDeviceCrashInfo.put(STACK_TRACE, result);
+//        String fileName = "";
+//        try {
+//            long timestamp = System.currentTimeMillis();
+//            fileName = "crash-" + timestamp + ".log";
+//            FileOutputStream trace = mContext.openFileOutput(fileName,
+//                    Context.MODE_PRIVATE);
+//            mDeviceCrashInfo.store(trace, "");
+//            trace.flush();
+//            trace.close();
+//            return fileName;
+//        } catch (Exception e) {
+//            Log.e(TAG, "an error occured while writing report file..."
+//                    + fileName, e);
+//        }
+//        return null;
+//    }
+
     private void copyDBToSDcrad(String time,long timestamp)
     {
         String path = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/crash/";
