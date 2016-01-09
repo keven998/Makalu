@@ -7,6 +7,10 @@ import android.support.multidex.MultiDex;
 import android.support.v4.BuildConfig;
 
 import com.aizou.core.base.BaseApplication;
+import com.aizou.core.http.OkHttpClientManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.integration.okhttp.OkHttpUrlLoader;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -18,7 +22,7 @@ import com.squareup.leakcanary.LeakCanary;
 import com.xuejian.client.lxp.common.utils.CrashHandler;
 
 import java.io.File;
-
+import java.io.InputStream;
 
 
 public class PeachApplication extends BaseApplication {
@@ -41,7 +45,7 @@ public class PeachApplication extends BaseApplication {
         if (!com.xuejian.client.lxp.BuildConfig.DEBUG) {
             CrashHandler.getInstance().init(this);
         }
-
+        Glide.get(this).register(GlideUrl.class, InputStream.class,new OkHttpUrlLoader.Factory(OkHttpClientManager.getInstance().getmOkHttpClient()));
     }
 
     private void initImageLoader() {

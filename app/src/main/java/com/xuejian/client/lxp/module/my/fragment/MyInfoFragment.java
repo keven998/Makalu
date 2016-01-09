@@ -20,6 +20,7 @@ import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
+import com.xuejian.client.lxp.module.goods.GoodsList;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
 import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
@@ -151,6 +152,11 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 startActivity(tv_drawback);
                 break;
             case R.id.rl_my_collection:
+                Intent collectionIntent = new Intent();
+                collectionIntent.setClass(getActivity(), GoodsList.class);
+                collectionIntent.putExtra("collection", true);
+                collectionIntent.putExtra("title","我的收藏");
+                startActivity(collectionIntent);
                 break;
             case R.id.rl_my_plan:
                 Intent planIntent = new Intent();

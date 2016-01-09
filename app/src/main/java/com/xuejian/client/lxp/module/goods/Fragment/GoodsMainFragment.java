@@ -2,7 +2,6 @@ package com.xuejian.client.lxp.module.goods.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,8 +26,6 @@ import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ColumnBean;
@@ -38,6 +35,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
@@ -64,16 +62,16 @@ public class GoodsMainFragment extends PeachBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        options = new DisplayImageOptions.Builder()
-           //     .cacheInMemory(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.ic_default_picture)
-                .showImageOnLoading(R.drawable.ic_default_picture)
-                .showImageForEmptyUri(R.drawable.ic_default_picture)
-                .cacheOnDisk(true)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .build();
+//        options = new DisplayImageOptions.Builder()
+//           //     .cacheInMemory(true)
+//                .bitmapConfig(Bitmap.Config.RGB_565)
+//                .resetViewBeforeLoading(true)
+//                .showImageOnFail(R.drawable.ic_default_picture)
+//                .showImageOnLoading(R.drawable.ic_default_picture)
+//                .showImageForEmptyUri(R.drawable.ic_default_picture)
+//                .cacheOnDisk(true)
+//                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+//                .build();
     }
 
     @Override
@@ -112,29 +110,41 @@ public class GoodsMainFragment extends PeachBaseFragment {
         llPics.removeAllViews();
         for (int i = 0; i < picList.size(); i++) {
             View view = View.inflate(getActivity(), R.layout.goods_main_pic_cell, null);
-            ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
-            if (picList.get(i).getImages().size()>0){
+            final ImageView my_pics_cell = (ImageView) view.findViewById(R.id.my_pics_cell);
+            final int index = i;
+            if (picList.get(index).getImages().size() > 0) {
                 Glide.with(this)
-                        .load(picList.get(i).getImages().get(0).url)
+                        .load(picList.get(index).getImages().get(0).url)
                         .placeholder(R.drawable.ic_default_picture)
                         .error(R.drawable.ic_default_picture)
                         .centerCrop()
                         .into(my_pics_cell);
-             //   ImageLoader.getInstance().displayImage(picList.get(i).getImages().get(0).url, my_pics_cell, options);
-            }else {
-                ImageLoader.getInstance().displayImage("", my_pics_cell, options);
+                //   ImageLoader.getInstance().displayImage(picList.get(i).getImages().get(0).url, my_pics_cell, options);
+            } else {
+                Glide.with(this)
+                        .load("")
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(my_pics_cell);
+                //     ImageLoader.getInstance().displayImage("", my_pics_cell, options);
             }
-            final String url = picList.get(i).getLink();
+            final String url = picList.get(index).getLink();
             my_pics_cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (url.startsWith("lvxingpai")){
+                    if (url.startsWith("lvxingpai")) {
                         System.out.println(url);
                         Intent in = new Intent();
                         in.setAction("android.intent.action.route");
                         in.addCategory(Intent.CATEGORY_DEFAULT);
                         in.setData(Uri.parse(url));
                         if (CommonUtils.checkIntent(getActivity(), in)) startActivity(in);
+                    } else if (url.startsWith("http://")) {
+                        System.out.println(url);
+                        Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
+                        intent.putExtra("url", url);
+                        startActivity(intent);
                     }
                 }
             });
@@ -180,10 +190,11 @@ public class GoodsMainFragment extends PeachBaseFragment {
         });
     }
 
-    private void retry(){
+    private void retry() {
         getData();
         getListData();
     }
+
     private void resizeData(List<RecommendCommodityBean> result) {
 //        ArrayList<ArrayList<SimpleCommodityBean>> data = new ArrayList<>();
 //        final ArrayList<String> sectionName = new ArrayList<>();
@@ -233,14 +244,14 @@ public class GoodsMainFragment extends PeachBaseFragment {
         for (int i = 0; i < result.size(); i++) {
             sectionName.add(i, result.get(i).getTopicType());
 
-            ArrayList<SimpleCommodityBean>delList = new ArrayList<>();
-            ArrayList<SimpleCommodityBean>addList = result.get(i).getCommodities();
+            ArrayList<SimpleCommodityBean> delList = new ArrayList<>();
+            ArrayList<SimpleCommodityBean> addList = result.get(i).getCommodities();
             for (SimpleCommodityBean bean : addList) {
-                if (bean==null){
+                if (bean == null) {
                     delList.add(bean);
                 }
             }
-           // addList.removeAll(Collections.singleton(null));
+            // addList.removeAll(Collections.singleton(null));
             addList.removeAll(delList);
             data.add(i, addList);
             delList = null;
@@ -251,7 +262,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
     }
 
     private void bindListView(ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName) {
-        listView.setAdapter(new RecommendGoodsAdapter(getActivity(), data, sectionName,this));
+        listView.setAdapter(new RecommendGoodsAdapter(getActivity(), data, sectionName, this));
     }
 
 
@@ -315,6 +326,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
         private Context mContext;
         private ArrayList<ColumnBean.ColumnsEntity> mDatas;
         private SparseArray<View> mViews;
+
         public GoodsPageAdapter(Context context, ArrayList<ColumnBean.ColumnsEntity> datas) {
             mDatas = datas;
             mContext = context;
@@ -335,7 +347,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
             return view == object;
         }
 
-        private View getViews(int position){
+        private View getViews(int position) {
             return mViews.get(position);
         }
 
@@ -343,7 +355,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
         public Object instantiateItem(ViewGroup container, int position) {
 
             ImageView imageView = (ImageView) getViews(position);
-            if (imageView == null){
+            if (imageView == null) {
                 imageView = new ImageView(mContext);
                 ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spot_detail_picture_height));
                 imageView.setLayoutParams(layoutParams);
@@ -357,15 +369,34 @@ public class GoodsMainFragment extends PeachBaseFragment {
                             .error(R.drawable.ic_default_picture)
                             .centerCrop()
                             .into(imageView);
-           //         ImageLoader.getInstance().displayImage(mDatas.get(position).getImages().get(0).url, imageView, options);
+                    //         ImageLoader.getInstance().displayImage(mDatas.get(position).getImages().get(0).url, imageView, options);
                 } else {
-                    ImageLoader.getInstance().displayImage("", imageView, options);
+                    Glide.with(mContext)
+                            .load("")
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(imageView);
+                    //    ImageLoader.getInstance().displayImage("", imageView, options);
                 }
 
+                final String url = mDatas.get(position).getLink();
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if (url.startsWith("lvxingpai")) {
+                            System.out.println(url);
+                            Intent in = new Intent();
+                            in.setAction("android.intent.action.route");
+                            in.addCategory(Intent.CATEGORY_DEFAULT);
+                            in.setData(Uri.parse(url));
+                            if (CommonUtils.checkIntent(getActivity(), in)) startActivity(in);
+                        } else if (url.startsWith("http://")) {
+                            System.out.println(url);
+                            Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
+                            intent.putExtra("url", url);
+                            startActivity(intent);
+                        }
                     }
                 });
                 mViews.put(position, imageView);
@@ -388,7 +419,8 @@ public class GoodsMainFragment extends PeachBaseFragment {
         private ArrayList<ArrayList<SimpleCommodityBean>> data;
         private ArrayList<String> sectionName;
         private Fragment mFragment;
-        public RecommendGoodsAdapter(Context c, ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName,Fragment fragment) {
+
+        public RecommendGoodsAdapter(Context c, ArrayList<ArrayList<SimpleCommodityBean>> data, ArrayList<String> sectionName, Fragment fragment) {
             mContex = c;
             this.data = data;
             this.sectionName = sectionName;
@@ -450,7 +482,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                         .error(R.drawable.ic_default_picture)
                         .centerCrop()
                         .into(viewHolder.ivGoodsImg);
-              //  ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, options);
+                //  ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), viewHolder.ivGoodsImg, options);
                 viewHolder.container.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

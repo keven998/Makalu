@@ -128,8 +128,6 @@ public class RoundImageBoarderView extends ImageView{
                     / 2 - radius, null);
         }catch(Exception ex){
             ex.printStackTrace();
-        }catch(Error e){
-
         }
 
     }

@@ -1,10 +1,9 @@
 package com.xuejian.client.lxp.module.goods.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
@@ -111,7 +110,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         listView = (ListView) view.findViewById(R.id.talent_loc_list);
         listView.setOnScrollListener(this);
         ArrayList<CountryBean> data = new ArrayList<>();
-        adapter = new TalentLocAdapter(getActivity(), data);
+        adapter = new TalentLocAdapter(this, data);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -186,22 +185,22 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     private class TalentLocAdapter extends BaseAdapter {
         private DisplayImageOptions poptions;
         private ArrayList<CountryBean> list;
-        private Context mCxt;
+        private Fragment mCxt;
         private ImageLoader mImgLoader;
 
-        public TalentLocAdapter(Context context, ArrayList<CountryBean> list) {
+        public TalentLocAdapter(Fragment context, ArrayList<CountryBean> list) {
             mCxt = context;
             this.list = list;
             mImgLoader = ImageLoader.getInstance();
-            poptions = new DisplayImageOptions.Builder()
-                    .showImageOnFail(R.drawable.expert_country_list_bg)
-                    .showImageForEmptyUri(R.drawable.expert_country_list_bg)
-                    .showImageOnLoading(R.drawable.expert_country_list_bg)
-                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                    .bitmapConfig(Bitmap.Config.RGB_565)
-             //       .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .cacheOnDisk(true)
-                    .build();
+//            poptions = new DisplayImageOptions.Builder()
+//                    .showImageOnFail(R.drawable.expert_country_list_bg)
+//                    .showImageForEmptyUri(R.drawable.expert_country_list_bg)
+//                    .showImageOnLoading(R.drawable.expert_country_list_bg)
+//                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+//                    .bitmapConfig(Bitmap.Config.RGB_565)
+//             //       .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+//                    .cacheOnDisk(true)
+//                    .build();
         }
 
         public ArrayList<CountryBean> getList() {
@@ -228,7 +227,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
             ViewHolder holder;
             final CountryBean bean = (CountryBean) getItem(position);
             if (convertView == null) {
-                convertView = View.inflate(mCxt, R.layout.cell_destinaiton, null);
+                convertView = View.inflate(mCxt.getActivity(), R.layout.cell_destinaiton, null);
                 holder = new ViewHolder();
                 holder.bgImage = (ImageView) convertView.findViewById(R.id.iv_country_img);
                 holder.zhName = (TextView) convertView.findViewById(R.id.tv_country_zh_name);
@@ -239,9 +238,21 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                 holder = (ViewHolder) convertView.getTag();
             }
             if (bean.images.size() > 0) {
-                mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
+                Glide.with(mCxt)
+                        .load(bean.images.get(0).url)
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.bgImage);
+               // mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
             } else {
-                mImgLoader.displayImage("", holder.bgImage, poptions);
+                Glide.with(mCxt)
+                        .load("")
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.bgImage);
+             //   mImgLoader.displayImage("", holder.bgImage, poptions);
             }
             holder.enName.setText(bean.enName);
             holder.zhName.setText(bean.zhName);

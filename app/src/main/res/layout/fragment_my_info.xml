@@ -42,6 +42,13 @@
                         imagecontrol:border_outside_color="#FFFFFFFE"
                         imagecontrol:border_thickness="2dp" />
 
+                    <!--<ImageView-->
+                        <!--android:id="@+id/user_avatar"-->
+                        <!--android:layout_width="85dp"-->
+                        <!--android:layout_height="85dp"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:scaleType="centerCrop"-->
+                        <!--/>-->
                     <TextView
                         android:id="@+id/tv_nickname"
                         android:layout_marginTop="7dp"
