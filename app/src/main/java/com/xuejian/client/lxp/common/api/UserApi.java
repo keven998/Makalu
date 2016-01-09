@@ -101,7 +101,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNIN);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("authCode", code);
@@ -110,6 +110,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -120,7 +121,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SEND_VALIDATION);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -134,6 +135,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -144,7 +146,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CHECK_VALIDATION);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -158,6 +160,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -167,7 +170,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNUP);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -177,6 +180,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //    return HttpManager.request(request, callback);
     }
@@ -186,7 +190,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -198,6 +202,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -207,7 +212,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, "_"));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", tel);
@@ -216,7 +221,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        LogUtil.d(jsonObject.toString());
+     //   LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -226,7 +232,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("oldPassword", oldPwd);
@@ -235,6 +241,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         // return HttpManager.request(request, callback);
     }
@@ -244,7 +251,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNIN);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("loginName", loginName);
@@ -252,8 +259,10 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+       // LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-        LogUtil.d(jsonObject.toString());
+
         // return null;
         //   return HttpManager.request(request, callback);
     }
@@ -263,7 +272,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("action", type);
@@ -276,6 +285,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -285,7 +295,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + USERINFO + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);
     }
@@ -295,7 +305,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_TRAVEL_NOTE,userId));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);
     }
@@ -304,7 +314,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, userId));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
     }
@@ -346,7 +356,7 @@ public class UserApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + USERINFO + user.getUserId());
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
 //        request.setHeader(PTHeader.HEADER_CHARSET, "utf-8");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             if (!TextUtils.isEmpty(avatar)) {
@@ -377,6 +387,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //    return HttpManager.request(request, callback);
     }
@@ -392,7 +403,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
     }
@@ -424,7 +435,7 @@ public class UserApi extends BaseApi {
         // request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contact-requests");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request, uid);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("contactId", Long.parseLong(uid));
@@ -433,6 +444,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -449,7 +461,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contact-requests/" + requestId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("action", 1);
@@ -458,6 +470,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         // return HttpManager.request(request, callback);
     }
@@ -474,7 +487,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()) + "/" + uid);
 //        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -497,7 +510,7 @@ public class UserApi extends BaseApi {
         //    }
         //    request.setUrl(SystemConfig.DEV_URL + CONTACTS);
         //    request.putUrlParams("Keyword", key);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -513,7 +526,7 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        setDefaultParams(request);
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -533,7 +546,7 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        setDefaultParams(request);
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -555,7 +568,7 @@ public class UserApi extends BaseApi {
         request.putUrlParams("field", field);
         request.putUrlParams("page", page + "");
         request.putUrlParams("pageSize", pageSize + "");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
     }
@@ -574,7 +587,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEARCH_EXPERT_FOOTPRINT);
         request.putUrlParams("abroad", String.valueOf(abroad));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -592,7 +605,7 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -611,7 +624,7 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/" + picId);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //return HttpManager.request(request, callback);
     }
@@ -634,7 +647,7 @@ public class UserApi extends BaseApi {
         }catch (Exception ex){
 
         }
-        setDefaultParams(request);
+        setDefaultParams(request,jsonObject.toString());
         OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
     }
     /**
@@ -652,7 +665,7 @@ public class UserApi extends BaseApi {
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(pageSize));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
 //        JSONObject jsonObject = new JSONObject();
 //        try {
 //            JSONArray jsonArray = new JSONArray();
@@ -688,7 +701,7 @@ public class UserApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + String.format(SEARCH_BY_ADDRESSBOOK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
       //  request.setHeader("Content-Encoding", "gzip");
-        setDefaultParams(request);
+
         JSONObject rootObject = new JSONObject();
         try {
 
@@ -708,6 +721,7 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        setDefaultParams(request, rootObject.toString());
         OkHttpClientManager.getInstance().request(request, rootObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -718,7 +732,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contacts/" + userId + "/memo");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("memo", memo);
@@ -726,6 +740,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -736,7 +751,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + String.format(MUTE_CONVERSATION, userId) + conversation);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("mute", value);
@@ -744,6 +759,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -755,7 +771,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", Long.parseLong(AccountManager.getCurrentUserId()));
@@ -764,6 +780,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -773,7 +790,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id) + "/" + AccountManager.getCurrentUserId());
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);
     }
@@ -785,7 +802,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", Long.parseLong(userId));
@@ -793,6 +810,7 @@ public class UserApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -802,7 +820,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()) + "/" + userId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         //    return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
@@ -812,7 +830,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_SEARCH, keyword));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         //    return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request, "", callback);
     }

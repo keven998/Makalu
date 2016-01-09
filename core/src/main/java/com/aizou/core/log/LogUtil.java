@@ -2,6 +2,7 @@ package com.aizou.core.log;
 
 import android.util.Log;
 
+import com.aizou.core.BuildConfig;
 import com.aizou.core.constant.LibConfig;
 
 public class LogUtil {
@@ -72,7 +73,9 @@ public class LogUtil {
 	//默认TAG和制定内容的方法
 	public static void d(String msg) {
 		if (LibConfig.LOG) {
-			Log.d(sApplicationTag, getContent(getCurrentStackTraceElement())+">"+msg);
+			if (BuildConfig.DEBUG){
+				Log.d(sApplicationTag, getContent(getCurrentStackTraceElement())+">"+msg);
+			}
 		}
 	}
 	//下面的定义和上面方法相同，可以定义不同等级的Debugger

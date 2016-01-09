@@ -52,7 +52,7 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("width", LocalDisplay.SCREEN_WIDTH_PIXELS + "");
         request.putUrlParams("height", LocalDisplay.SCREEN_HEIGHT_PIXELS + "");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
    //     return HttpManager.request(request, callback);
     }
@@ -61,7 +61,7 @@ public class OtherApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + OPERATE);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
      //   return HttpManager.request(request, callback);
     }
@@ -99,9 +99,9 @@ public class OtherApi extends BaseApi {
 //        } catch (UnsupportedEncodingException e) {
 //            e.printStackTrace();
 //        }
-//        LogUtil.d(jsonObject.toString());
+ //    LogUtil.d(jsonObject.toString());
 
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
      //   return HttpManager.request(request, callback);
     }
@@ -138,7 +138,7 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(pageSize));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
      //   return HttpManager.request(request, callback);
     }
@@ -160,7 +160,7 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("pageSize", String.valueOf(pageSize));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
      //   return HttpManager.request(request, callback);
     }
@@ -180,7 +180,7 @@ public class OtherApi extends BaseApi {
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
        // return HttpManager.request(request, callback);
     }
@@ -196,7 +196,7 @@ public class OtherApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.BASE_URL + FAV + "/" + id);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callBack);
       //  return HttpManager.request(request, callBack);
     }
@@ -212,7 +212,7 @@ public class OtherApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + FAV);
-        setDefaultParams(request);
+
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         JSONObject jsonObject = new JSONObject();
         try {
@@ -223,6 +223,7 @@ public class OtherApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callBack);
       //  return HttpManager.request(request, callBack);
     }
@@ -238,7 +239,7 @@ public class OtherApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.BASE_URL + FEEDBACK);
-        setDefaultParams(request);
+
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         JSONObject jsonObject = new JSONObject();
         try {
@@ -248,6 +249,7 @@ public class OtherApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callBack);
      //   return HttpManager.request(request, callBack);
     }
@@ -262,7 +264,7 @@ public class OtherApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + UPDATE);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callBack);
       //  return HttpManager.request(request, callBack);
     }

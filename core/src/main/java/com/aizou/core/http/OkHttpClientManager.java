@@ -50,7 +50,7 @@ public class OkHttpClientManager {
         mOkHttpClient = new OkHttpClient();
         mDelivery = new Handler(Looper.getMainLooper());
         mGson = new Gson();
-        mOkHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
+        mOkHttpClient.setConnectTimeout(5, TimeUnit.SECONDS);
     }
 
     public static OkHttpClientManager getInstance() {
@@ -62,6 +62,10 @@ public class OkHttpClientManager {
             }
         }
         return mInstance;
+    }
+
+    public OkHttpClient getmOkHttpClient() {
+        return mOkHttpClient;
     }
 
     public void request(PTRequest request, String postBody, final HttpCallBack callBack) {
@@ -644,14 +648,14 @@ public class OkHttpClientManager {
             public void onResponse(final Response response) {
                 try {
                     final String string = response.body().string();
-                    Log.d(TAG, "返回结果： code "+response.code()+"  "+ string);
+                    Log.d(TAG, "返回结果： code " + response.code() + "  " + string);
                     if (response.isSuccessful()) {
 
                         if (callback.mType == String.class) {
-                            sendSuccessResultCallback(string, response.code(),response.headers().toMultimap() ,callback);
+                            sendSuccessResultCallback(string, response.code(), response.headers().toMultimap(), callback);
                         } else {
                             Object o = mGson.fromJson(string, callback.mType);
-                            sendSuccessResultCallback(o, response.code(), response.headers().toMultimap() ,callback);
+                            sendSuccessResultCallback(o, response.code(), response.headers().toMultimap(), callback);
                         }
                     } else {
                         sendFailedStringCallback(response.request(), null, response.code(), callback);
@@ -672,8 +676,9 @@ public class OkHttpClientManager {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
-                if (callback != null)
+                if (callback != null){
                     callback.onError(request, e, code);
+                }
             }
         });
     }
