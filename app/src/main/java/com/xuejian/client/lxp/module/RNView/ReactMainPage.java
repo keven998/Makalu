@@ -152,6 +152,8 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                         Bundle bundle = new Bundle();
                         bundle.putString("result", jsonObject.getJSONObject("result").toString());
                         mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
+                        ReactMainPage.this.findViewById(R.id.iv_more).setVisibility(View.VISIBLE);
+                        ReactMainPage.this.findViewById(R.id.iv_collection).setVisibility(View.VISIBLE);
                         ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

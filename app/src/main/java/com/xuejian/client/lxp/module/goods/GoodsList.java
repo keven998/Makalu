@@ -1,8 +1,8 @@
 package com.xuejian.client.lxp.module.goods;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,10 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
@@ -78,7 +77,8 @@ public class GoodsList extends PeachBaseActivity {
     private String[] sortType = new String[]{"推荐排序", "销量最高", "价格最低", "价格最高"};
     private String[] sortValue = new String[]{"", "salesVolume", "price", "price"};
     private String[] sort = new String[]{"", "desc", "asc", "desc"};
-
+    private String currentSortValue;
+    private String currentsort;
     private String currentType;
     private static final int PAGE_SIZE = 15;
     private static int COUNT = 15;
@@ -96,7 +96,7 @@ public class GoodsList extends PeachBaseActivity {
         boolean collection = getIntent().getBooleanExtra("collection",false);
         if (!TextUtils.isEmpty(title)) tvTitle.setText(title);
 
-        adapter = new GoodsListAdapter(mContext);
+        adapter = new GoodsListAdapter(this);
         goodsList.setPullRefreshEnabled(false);
         goodsList.setLoadingMoreEnabled(true);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -122,7 +122,7 @@ public class GoodsList extends PeachBaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getData(null, locId, currentType, null, null, adapter.getItemCount(), COUNT, false);
+                        getData(null, locId, currentType, currentSortValue, currentsort, adapter.getItemCount(), COUNT, false);
                     }
                 }, 1000);
             }
@@ -277,6 +277,8 @@ public class GoodsList extends PeachBaseActivity {
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentSortValue = sortValue[position];
+                currentsort = sort[position];
                 getData(null, locId, currentType, sortValue[position], sort[position], 0, 15, true);
                 sortSpinner.dismissDropDown();
             }
@@ -322,21 +324,21 @@ public class GoodsList extends PeachBaseActivity {
 //    }
 
     private class GoodsListAdapter extends RecyclerView.Adapter<ViewHolder> {
-        private Context mContext;
+        private Activity mContext;
         private ArrayList<SimpleCommodityBean> mDataList;
         private DisplayImageOptions picOptions;
         OnItemClickListener listener;
-        public GoodsListAdapter(Context context) {
+        public GoodsListAdapter(Activity context) {
             mContext = context;
             mDataList = new ArrayList<SimpleCommodityBean>();
-            picOptions = new DisplayImageOptions.Builder()
-                    .cacheInMemory(true)
-                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
-                    .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.ic_default_picture)
-                    .showImageOnLoading(R.drawable.ic_default_picture)
-                    .showImageForEmptyUri(R.drawable.ic_default_picture)
-                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+//            picOptions = new DisplayImageOptions.Builder()
+//                    .cacheInMemory(true)
+//                    .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
+//                    .resetViewBeforeLoading(true)
+//                    .showImageOnFail(R.drawable.ic_default_picture)
+//                    .showImageOnLoading(R.drawable.ic_default_picture)
+//                    .showImageForEmptyUri(R.drawable.ic_default_picture)
+//                    .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         }
 
 
@@ -361,7 +363,14 @@ public class GoodsList extends PeachBaseActivity {
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
             final SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
-            ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
+            Glide.with(mContext)
+                    .load(bean.getCover().getUrl())
+                    .placeholder(R.drawable.ic_default_picture)
+                    .error(R.drawable.ic_default_picture)
+                    .centerCrop()
+                    .into(holder.ivGoods);
+
+          //  ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
             holder.tvGoodsName.setText(bean.getTitle());
 
             SpannableString string = new SpannableString("起");
@@ -374,7 +383,7 @@ public class GoodsList extends PeachBaseActivity {
             holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
+            holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume())+"已售");
             holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
             if (bean.getSeller()!=null){
                 holder.tvStoreName.setText(bean.getSeller().getName());

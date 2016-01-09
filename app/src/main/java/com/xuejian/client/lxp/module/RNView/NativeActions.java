@@ -1,6 +1,7 @@
 package com.xuejian.client.lxp.module.RNView;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -77,6 +78,12 @@ public class NativeActions extends ReactContextBaseJavaModule {
                 intent.putExtra("title","查看全部");
                 intent.setClass(reactContext, PeachWebViewActivity.class);
                 reactContext.startActivity(intent);
+                break;
+            case "Detail":
+                if (TextUtils.isDigitsOnly(id)){
+                    intent.putExtra("commodityId",Long.parseLong(id));
+                    intent.setClass(reactContext, ReactMainPage.class);
+                }
                 break;
             default:
                 break;

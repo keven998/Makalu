@@ -38,7 +38,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="14dp"
             android:scaleType="center"
-            android:src="@drawable/icon_share" />
+            android:src="@drawable/icon_share"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/iv_collection"
@@ -49,23 +50,9 @@
             android:paddingLeft="32dp"
             android:paddingRight="20dp"
             android:scaleType="center"
-            android:src="@drawable/icon_collection" />
+            android:src="@drawable/icon_collection"
+            android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/tv_copy_guide"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:drawableLeft="@drawable/icon_copy"
-            android:gravity="center_vertical|right"
-            android:paddingLeft="11dp"
-            android:paddingRight="11dp"
-            android:singleLine="true"
-            android:textColor="@color/selector_white_text_color"
-            android:textSize="14sp"
-            android:visibility="gone" />
 
     </RelativeLayout>
 

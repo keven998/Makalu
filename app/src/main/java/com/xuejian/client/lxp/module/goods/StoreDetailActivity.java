@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -45,6 +46,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
     };
     Adapter adapter;
     XRecyclerView recyclerView;
+    RelativeLayout rlTalk;
     private static final int PAGE_SIZE = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
                 finish();
             }
         });
+        rlTalk = (RelativeLayout) findViewById(R.id.ll_trade_action0);
         recyclerView = (XRecyclerView) findViewById(R.id.ul_recyclerView);
         adapter = new Adapter(this);
         recyclerView.setPullRefreshEnabled(false);
@@ -236,7 +239,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
                 ImageLoader.getInstance().displayImage("", holder.mImageView);
             }
             holder.mImageView.setLayoutParams(layoutParams);
-            holder.tvSales.setText(String.format("销量:%d件", bean.getSalesVolume()));
+            holder.tvSales.setText( bean.getSalesVolume()+"已售");
             holder.tvPrice.setText(String.format("¥%s", CommonUtils.getPriceString(bean.getMarketPrice())));
             holder.tvPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvPrice.getPaint().setAntiAlias(true);

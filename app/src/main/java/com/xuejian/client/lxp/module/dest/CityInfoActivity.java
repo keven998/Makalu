@@ -10,6 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
     RecommendGoodsAdapter adapter;
     FrameLayout fl_city_img;
     TextView showMore;
-
+    TextView title;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
 //        System.out.println(uri.getPathSegments().toString());
 
         id = getIntent().getStringExtra("id");
+        title = (TextView) findViewById(R.id.tv_title_bar_title);
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
         View footView = View.inflate(this, R.layout.footer_show_all, null);
@@ -187,6 +189,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
                 startActivity(intent);
             }
         });
+        if (!TextUtils.isEmpty(bean.zhName))title.setText(bean.zhName);
         tvCountryName.setText(bean.zhName);
         tvCountryNameEn.setText(bean.enName);
         tvStoreNum.setText(String.valueOf(bean.commodityCnt));
@@ -391,7 +394,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
             holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            holder.tvGoodsSales.setText("销量:" + String.valueOf(bean.getSalesVolume()));
+            holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume())+"已售");
             holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
             if (bean.getSeller() != null) {
                 holder.tvStoreName.setText(bean.getSeller().getName());

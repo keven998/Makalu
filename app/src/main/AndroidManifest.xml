@@ -490,7 +490,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.RNView.ReactMainPage"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.route" />
                 <category android:name="android.intent.category.DEFAULT" />
