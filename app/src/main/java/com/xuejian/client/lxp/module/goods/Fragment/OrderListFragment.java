@@ -89,7 +89,6 @@ public class OrderListFragment extends PeachBaseFragment {
         recyclerView.setRefreshProgressStyle(ProgressStyle.SysProgress);
         recyclerView.setLoadingMoreEnabled(false);
      //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
-        System.out.println("onCreateView");
         switch (type) {
             case ALL:
                 empty.setText("您近期没有出行订单");
@@ -152,11 +151,6 @@ public class OrderListFragment extends PeachBaseFragment {
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        System.out.println("onActivityCreated");
-    }
 
     @Override
     public void onResume() {

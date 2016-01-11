@@ -207,15 +207,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_my_guide"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_trip_plan_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_plan_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -232,15 +232,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_note"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_note_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_note_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -257,15 +257,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_viewspot"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_viewspot_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_viewspot_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -282,15 +282,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_food"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_food_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_food_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -315,15 +315,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_location"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_save_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_mylocation_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -340,15 +340,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_picture"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_pics_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_image_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -365,15 +365,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_take_picture"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_camera_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_camera_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -390,15 +390,15 @@
                             <FrameLayout
                                 android:id="@+id/btn_shopping"
                                 android:layout_width="0dp"
-                                android:layout_height="94dp"
+                                android:layout_height="@dimen/chat_panel_icon_height"
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:onClick="onClick">
 
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="72dp"
-                                    android:src="@drawable/chat_shopping_select" />
+                                    android:layout_height="@dimen/chat_panel_img_height"
+                                    android:src="@drawable/chat_shopping_entry_default" />
 
                                 <TextView
                                     android:layout_width="match_parent"

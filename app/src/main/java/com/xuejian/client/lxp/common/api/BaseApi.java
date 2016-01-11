@@ -48,7 +48,7 @@ public class BaseApi {
             request.setHeader("UserId", String.valueOf(user.getUserId()));
             request.setHeader("X-Lvxingpai-Id", String.valueOf(user.getUserId()));
             try {
-                SecurityUtil.getAuthBody("",request,body,date, String.valueOf(user.getUserId()));
+                SecurityUtil.getAuthBody(user.getSecretKey(),request,body,date, String.valueOf(user.getUserId()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -74,7 +74,7 @@ public class DrawbackActivity extends PeachBaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        TravelApi.editOrderStatus(orderId, "refund", object, new HttpCallBack<String>() {
+        TravelApi.editOrderStatus(orderId, "refundApply", object, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 Toast.makeText(DrawbackActivity.this,"退款申请已提交",Toast.LENGTH_LONG).show();

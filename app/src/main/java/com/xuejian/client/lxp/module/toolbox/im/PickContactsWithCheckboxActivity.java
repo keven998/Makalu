@@ -344,8 +344,6 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
 
                         @Override
                         public void doFailure(Exception error, String msg, String method) {
-                            error.printStackTrace();
-                            System.out.println("error " + msg + " method " + method);
                         }
 
                         @Override
@@ -488,7 +486,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     .resetViewBeforeLoading(true)
                     .showImageOnFail(R.drawable.messages_bg_useravatar)
                     .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.ic_home_avatar_unknown)
+                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20)))

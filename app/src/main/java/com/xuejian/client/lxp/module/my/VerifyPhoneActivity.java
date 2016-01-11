@@ -209,7 +209,6 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        System.out.println(code);
                         if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("发送短信过于频繁！");

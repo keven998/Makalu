@@ -1,6 +1,5 @@
 package com.xuejian.client.lxp.module;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -136,12 +135,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             initClient();
         }
         initLocation();
-
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        int heapSize = manager.getLargeMemoryClass();
-        System.out.println("heapSize " + heapSize);
-        int heapgrowthlimit = manager.getMemoryClass();
-        System.out.println("heapgrowthlimit " + heapgrowthlimit);
     }
 
     private void initLocation() {
@@ -873,7 +866,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             //获取位置信息
             Double geoLat = aMapLocation.getLatitude();
             Double geoLng = aMapLocation.getLongitude();
-            System.out.println("geoLat " + geoLat + " geoLat " + geoLng);
             LocationUtils utils = new LocationUtils();
             boolean isAbroad = utils.pointInPolygon(new LocationUtils.Point(geoLat, geoLng));
             SharePrefUtil.saveBoolean(mContext, "isAbroad", isAbroad);

@@ -400,7 +400,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 
                     @Override
                     public void onFailed(int code) {
-                        System.out.println(code);
                         IMClient.getInstance().addToConversation(String.valueOf(userId), "single");
                         Intent intent = new Intent(HisMainPageActivity.this, ChatActivity.class);
                         intent.putExtra("friend_id", String.valueOf(userId));

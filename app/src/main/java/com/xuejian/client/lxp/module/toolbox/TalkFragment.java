@@ -356,7 +356,6 @@ public class TalkFragment extends PeachBaseFragment {
                             @Override
                             public void call(List<ConversationBean> conversationBeans) {
                                 conversations.clear();
-                                System.out.println("subscribe " + Thread.currentThread().getName() + " " + conversationBeans.size());
                                 conversations.addAll(conversationBeans);
                                 refresh();
                                 DialogManager.getInstance().dissMissModelessLoadingDialog();

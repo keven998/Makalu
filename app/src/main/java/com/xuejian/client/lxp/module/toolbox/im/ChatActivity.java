@@ -1732,7 +1732,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
             AppOpsManager manager = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
             int result = manager.checkOp("27", uid, "com.xuejian.client.lxp");
-            System.out.println(uid + " " + result);
         }
         return 0;
     }

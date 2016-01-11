@@ -74,7 +74,6 @@ public class NewFriendsMsgActivity extends ChatBaseActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
      //   super.onCreateContextMenu(menu, v, menuInfo);
-        System.out.println("onCreateContextMenu");
     //   if(((AdapterView.AdapterContextMenuInfo)menuInfo).position > 0){
         getMenuInflater().inflate(R.menu.delete_request, menu);
     //    }

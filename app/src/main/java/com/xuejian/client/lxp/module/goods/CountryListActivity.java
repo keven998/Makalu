@@ -139,7 +139,7 @@ public class CountryListActivity extends PeachBaseActivity {
                 ImageLoader.getInstance().displayImage(bean.images.get(0).url, holder.ivCountry, options);
             }
             holder.tvCityName.setText(bean.zhName + "\n" + bean.enName);
-            holder.tvStoreNum.setText("0");
+            holder.tvStoreNum.setText(String.valueOf(bean.commoditiesCnt));
             return convertView;
         }
 

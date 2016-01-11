@@ -6,6 +6,7 @@ import android.util.Base64;
 
 import com.aizou.core.http.entity.PTRequest;
 import com.qiniu.android.utils.UrlSafeBase64;
+import com.xuejian.client.lxp.bean.SecretKeyBean;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -164,7 +165,9 @@ public class SecurityUtil {
         return sb.toString();
     }
 
-    public static String getAuthBody(String key,PTRequest request,String body,String date ,String userId) throws Exception{
+    public static String getAuthBody(SecretKeyBean key,PTRequest request,String body,String date ,String userId) throws Exception{
+
+        if (key!=null)System.out.println("key str = "+ key.getKey());
 
 
         String path = Uri.parse(request.readUrl()).getPath();
@@ -219,20 +222,9 @@ public class SecurityUtil {
 
         System.out.println("SignatureMessage str = " + signatureMessage);
 
-        System.out.println("Signature = " + encryptHMAC(signatureMessage.toString(),"123456"));
+        if (key!=null)System.out.println("Signature = " + encryptHMAC(signatureMessage.toString(), key.getKey()));
 
         return null;
     }
 
-    /**
-     * 测试方法
-     *
-     * @param args
-     */
-    public static void main(String[] args) throws Exception {
-        String key = SecurityUtil.init();
-        System.out.println("Mac密钥:\n" + key);
-        String word = "123";
-        System.out.println(encryptHMAC(word, key));
-    }
 }

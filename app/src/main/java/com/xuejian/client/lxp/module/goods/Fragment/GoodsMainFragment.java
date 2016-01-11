@@ -134,14 +134,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 @Override
                 public void onClick(View v) {
                     if (url.startsWith("lvxingpai")) {
-                        System.out.println(url);
                         Intent in = new Intent();
                         in.setAction("android.intent.action.route");
                         in.addCategory(Intent.CATEGORY_DEFAULT);
                         in.setData(Uri.parse(url));
                         if (CommonUtils.checkIntent(getActivity(), in)) startActivity(in);
                     } else if (url.startsWith("http://")) {
-                        System.out.println(url);
                         Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
                         intent.putExtra("url", url);
                         startActivity(intent);
@@ -385,14 +383,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
                     @Override
                     public void onClick(View v) {
                         if (url.startsWith("lvxingpai")) {
-                            System.out.println(url);
                             Intent in = new Intent();
                             in.setAction("android.intent.action.route");
                             in.addCategory(Intent.CATEGORY_DEFAULT);
                             in.setData(Uri.parse(url));
                             if (CommonUtils.checkIntent(getActivity(), in)) startActivity(in);
                         } else if (url.startsWith("http://")) {
-                            System.out.println(url);
                             Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
                             intent.putExtra("url", url);
                             startActivity(intent);
@@ -499,9 +495,28 @@ public class GoodsMainFragment extends PeachBaseFragment {
         public View getHeaderView(int section, View convertView, ViewGroup parent) {
             convertView = View.inflate(mContex, R.layout.item_goods_section, null);
             TextView tv = (TextView) convertView.findViewById(R.id.tv_goods_section);
-//            switch (sectionName.get(section)){
-//                case ""
-//            }
+            switch (sectionName.get(section)) {
+                case "特价折扣":
+                    tv.setTextColor(getResources().getColor(R.color.price_color));
+          //          tv.setCompoundDrawables(getResources().getDrawable(R.drawable.icon_goods_discount), null, null, null);
+                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_goods_discount,0,0,0);
+                    break;
+                case "小编推荐":
+                    tv.setTextColor(getResources().getColor(R.color.app_theme_color));
+           //         tv.setCompoundDrawables(getResources().getDrawable(R.drawable.icon_goods_recommend), null, null, null);
+                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_goods_recommend, 0, 0, 0);
+                    break;
+                case "热门玩乐":
+                    tv.setTextColor(getResources().getColor(R.color.price_color));
+           //         tv.setCompoundDrawables(getResources().getDrawable(R.drawable.icon_good_section_hot), null, null, null);
+                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_good_section_hot, 0, 0, 0);
+                    break;
+                default:
+                    tv.setTextColor(getResources().getColor(R.color.price_color));
+           //         tv.setCompoundDrawables(getResources().getDrawable(R.drawable.icon_good_section_hot), null, null, null);
+                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_good_section_hot, 0, 0, 0);
+                    break;
+            }
             tv.setText(sectionName.get(section));
             return convertView;
         }

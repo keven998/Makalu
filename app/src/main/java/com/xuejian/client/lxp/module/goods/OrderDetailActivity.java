@@ -377,6 +377,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             stateMap.put("refundApply","买家申请退款");
             stateMap.put("refundApprove","卖家同意退款");
             stateMap.put("refundDeny","卖家拒绝退款申请");
+            stateMap.put("refundAuto","系统自动退款");
             stateMap.put("commit","卖家确认订单");
             stateMap.put("finish","订单完成");
 
@@ -394,7 +395,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 }else if (bean.prevStatus.equals("pending")){
                     return "买家未支付,订单过期";
                 }else return "";
-            }else {
+            }
+            else {
                 return stateMap.get(bean.action);
             }
         }

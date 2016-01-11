@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.xuejian.client.lxp.bean.ExpertInfo;
+import com.xuejian.client.lxp.bean.SecretKeyBean;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,16 @@ public class User implements Parcelable {
     public boolean isBlocked;
     public ExpertInfo expertInfo;
     private ArrayList<String> tags;
+    private SecretKeyBean secretKey;
+
+    public SecretKeyBean getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(SecretKeyBean secretKey) {
+        this.secretKey = secretKey;
+    }
+
     public int getTrackCnt() {
         return trackCnt;
     }

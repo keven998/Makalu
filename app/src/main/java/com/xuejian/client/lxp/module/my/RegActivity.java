@@ -109,7 +109,6 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        System.out.println("error code "+code);
                         if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(RegActivity.this).showToast("发送短信过于频繁！");

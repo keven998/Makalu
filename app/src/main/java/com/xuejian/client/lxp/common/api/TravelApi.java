@@ -535,6 +535,8 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(CITY_GALLEY, id));
         request.putUrlParams("imgWidth", (int) (LocalDisplay.SCREEN_HEIGHT_PIXELS / 3 / 1.5) + "");
+        request.putUrlParams("page", String.valueOf(0));
+        request.putUrlParams("pageSize", String.valueOf(1000));
         setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);

@@ -322,7 +322,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:drawableLeft="@drawable/icon_store"
+            android:drawableLeft="@drawable/icon_shop"
             android:drawablePadding="4dp"
             android:layout_centerVertical="true"
             android:textColor="@color/color_text_ii"

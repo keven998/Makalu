@@ -80,7 +80,6 @@ public class CircleItem extends LinearLayout {
                     R.styleable.CircleItem);
 
             this.name = array.getString(R.styleable.CircleItem_item_name);
-            System.out.println(name);
         }
     }
 

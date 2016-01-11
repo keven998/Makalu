@@ -147,7 +147,6 @@ public class ChatMenuFragment extends Fragment {
 
                     @Override
                     public void onFailed(int code) {
-                        System.out.println(code);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

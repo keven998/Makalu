@@ -44,7 +44,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             @Override
             public void run() {
                 File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + SystemConfig.NET_IMAGE_CACHE_DIR);
-                System.out.println(file.getAbsolutePath());
                 if (file.exists()) {
                     long size = getFolderSize(file);
                     size = size / 1024 / 1024;

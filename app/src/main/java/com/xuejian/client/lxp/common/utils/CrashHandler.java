@@ -222,11 +222,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 inStream.close();
             }
         }
-        catch (Exception e)
-        {
-            System.out.println("复制单个文件操作出错");
+        catch (Exception e){
             e.printStackTrace();
-
         }
 
     }

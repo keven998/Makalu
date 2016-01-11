@@ -264,6 +264,14 @@ public class GoodsList extends PeachBaseActivity {
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
                 goodsList.loadMoreComplete();
+
+                if ( adapter.getDataList().size() >= PAGE_SIZE) {
+                    // goodsList.setHasMoreData(true);
+                    toTop.setVisibility(View.VISIBLE);
+                } else {
+                    toTop.setVisibility(View.GONE);
+                }
+
                 if (list.result.size() >= COUNT) {
                     // goodsList.setHasMoreData(true);
                 } else {

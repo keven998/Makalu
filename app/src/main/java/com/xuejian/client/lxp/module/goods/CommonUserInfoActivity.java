@@ -126,11 +126,6 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
             ArrayList<TravellerBean> list = getIntent().getParcelableArrayListExtra("selected");
             if (list != null) {
                 selectedPassengerList.addAll(list);
-                System.out.println("passenger size = " + list.size());
-
-                for (TravellerBean bean : list) {
-                    System.out.println("key  = " + bean.getKey());
-                }
             }
             TextView addMember = (TextView) footView.findViewById(R.id.add_member);
             addMember.setOnClickListener(new View.OnClickListener() {

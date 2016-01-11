@@ -15,7 +15,6 @@ import com.alipay.sdk.app.PayTask;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.xuejian.client.lxp.BuildConfig;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.PrePayRespBean;
@@ -76,7 +75,6 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
                     // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
                     String resultStatus = payResult.getResultStatus();
-                    System.out.println("resultInfo " + payResult.toString());
                     // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                     if (TextUtils.equals(resultStatus, "9000")) {
 
@@ -185,9 +183,6 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
             @Override
             public void doSuccess(String result, String method) {
-                if (BuildConfig.DEBUG){
-                    System.out.println(result);
-                }
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<PrePayRespBean> bean = CommonJson.fromJson(result, PrePayRespBean.class);
                 if (bean.code==0){
