@@ -34,6 +34,7 @@ public class SimpleCommodityBean implements Parcelable {
     private CoverBean cover;
     private List<ImageBean> images;
     private List<PlanBean> plans;
+    public String id;
 
     public ShareCommodityBean creteShareBean(){
         ShareCommodityBean bean = new ShareCommodityBean();
@@ -151,6 +152,7 @@ public class SimpleCommodityBean implements Parcelable {
         dest.writeParcelable(this.cover, 0);
         dest.writeTypedList(images);
         dest.writeTypedList(plans);
+        dest.writeString(this.id);
     }
 
     public SimpleCommodityBean() {
@@ -168,6 +170,7 @@ public class SimpleCommodityBean implements Parcelable {
         this.cover = in.readParcelable(CoverBean.class.getClassLoader());
         this.images = in.createTypedArrayList(ImageBean.CREATOR);
         this.plans = in.createTypedArrayList(PlanBean.CREATOR);
+        this.id = in.readString();
     }
 
     public static final Parcelable.Creator<SimpleCommodityBean> CREATOR = new Parcelable.Creator<SimpleCommodityBean>() {

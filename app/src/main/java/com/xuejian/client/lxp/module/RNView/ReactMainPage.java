@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
 import com.facebook.react.LifecycleState;
@@ -23,11 +24,14 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
+import com.xuejian.client.lxp.db.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +53,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     public LinearLayout llEmptyView;
     RelativeLayout rlError;
     TextView tvRetry;
+    long userId = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +74,10 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 //            System.out.println(uri.getPathSegments().toString());
         }
 
+        User user = AccountManager.getInstance().getLoginAccount(mContext);
+        if (user!=null){
+            userId = user.getUserId();
+        }
      //   mReactRootView = new ReactRootView(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
@@ -134,7 +143,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         }
     }
 
-    public void getData(long commodityId) {
+    public void getData(final long commodityId) {
         if (commodityId <= 0) return;
         TravelApi.getCommodity(commodityId, new HttpCallBack<String>() {
 
@@ -149,6 +158,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 
                         CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result, SimpleCommodityBean.class);
                         bean = commodity.result;
+                        final String id = bean.id;
                         Bundle bundle = new Bundle();
                         bundle.putString("result", jsonObject.getJSONObject("result").toString());
                         mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
@@ -163,6 +173,26 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                         ReactMainPage.this.findViewById(R.id.iv_collection).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                if (userId!=-1){
+                                    UserApi.addFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
+
+                                        @Override
+                                        public void doSuccess(String result, String method) {
+                                            Toast.makeText(mContext,"收藏成功",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method) {
+
+                                        }
+
+                                        @Override
+                                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                                        }
+                                    });
+                                }
 
                             }
                         });

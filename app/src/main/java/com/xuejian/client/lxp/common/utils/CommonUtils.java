@@ -91,11 +91,16 @@ public class CommonUtils {
         return toolbarHeight;
     }
 
-    public static String  getPriceString(double price){
-        BigDecimal bd = new BigDecimal(price);
-        BigDecimal  bd2 = bd.setScale(2,BigDecimal.ROUND_HALF_UP);
-        return bd2.toString();
-      //  return String.valueOf((double) Math.round(price * 100 / 100));
+    public static String getPriceString(double price) {
+        if (Math.round(price) - price == 0) {
+            return String.valueOf((long) price);
+        } else {
+            BigDecimal bd = new BigDecimal(price);
+            BigDecimal bd2 = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+            return bd2.toString();
+        }
+
+        //  return String.valueOf((double) Math.round(price * 100 / 100));
     }
 
 
@@ -147,6 +152,7 @@ public class CommonUtils {
         }
         return display.getWidth();
     }
+
     public static int getScreenHeight(Activity context) {
         Display display = context.getWindowManager().getDefaultDisplay();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -156,6 +162,7 @@ public class CommonUtils {
         }
         return display.getHeight();
     }
+
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
 
         float[] results = new float[1];
@@ -212,8 +219,8 @@ public class CommonUtils {
     }
 
     public static String getLastModifyForHeader(Map<String, List<String>> headers) {
-        if (headers==null)return "";
-        if (!headers.containsKey("Last-Modify"))return "";
+        if (headers == null) return "";
+        if (!headers.containsKey("Last-Modify")) return "";
         return headers.get("Last-Modify").get(0);
     }
 //    public static boolean isBackground(Context context) {
@@ -260,6 +267,7 @@ public class CommonUtils {
         }.getType();
         return gson.fromJson(json, listType);
     }
+
     public static String getFromAssets(Context context, String fileName) {
         String result = "";
         try {
@@ -270,15 +278,16 @@ public class CommonUtils {
             byte[] buffer = new byte[lenght];
             // 将文件中的数据读到byte数组中
             in.read(buffer);
-            result =  getString(buffer, "utf-8");
+            result = getString(buffer, "utf-8");
             in.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
+
     public static String getString(final byte[] data, final String charset) {
-         notNull(data, "Input");
+        notNull(data, "Input");
         return getString(data, 0, data.length, charset);
     }
 
@@ -295,6 +304,7 @@ public class CommonUtils {
             return new String(data, offset, length);
         }
     }
+
     public static <T extends CharSequence> T notEmpty(final T argument, final String name) {
         if (argument == null) {
             throw new IllegalArgumentException(name + " may not be null");
@@ -304,12 +314,14 @@ public class CommonUtils {
         }
         return argument;
     }
+
     public static <T> T notNull(final T argument, final String name) {
         if (argument == null) {
             throw new IllegalArgumentException(name + " may not be null");
         }
         return argument;
     }
+
     public static <E, T extends Collection<E>> T notEmpty(final T argument, final String name) {
         if (argument == null) {
             throw new IllegalArgumentException(name + " may not be null");
@@ -319,6 +331,7 @@ public class CommonUtils {
         }
         return argument;
     }
+
     public static void fixInputMethodManagerLeak(Context destContext) {
         if (destContext == null) {
             return;
@@ -451,6 +464,7 @@ public class CommonUtils {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
+
     public static String getSystemProperty() {
         String line = null;
         BufferedReader reader = null;
@@ -466,9 +480,10 @@ public class CommonUtils {
         }
         return "UNKNOWN";
     }
-    public static int checkOp(Context context, int op){
+
+    public static int checkOp(Context context, int op) {
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 19){
+        if (version >= 19) {
             Object object = context.getSystemService(Context.APP_OPS_SERVICE);
             Class c = object.getClass();
             try {
@@ -478,7 +493,7 @@ public class CommonUtils {
                 cArg[2] = String.class;
                 Method lMethod = c.getDeclaredMethod("checkOp", cArg);
                 return (Integer) lMethod.invoke(object, op, Binder.getCallingUid(), context.getPackageName());
-            } catch(NoSuchMethodException e) {
+            } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

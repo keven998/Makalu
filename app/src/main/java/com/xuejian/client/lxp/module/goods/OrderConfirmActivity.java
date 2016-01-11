@@ -33,6 +33,7 @@ import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
@@ -400,7 +401,8 @@ public class OrderConfirmActivity extends PeachBaseActivity {
         contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                notice(currentOrder.getOrderId());
+             //   dialog.dismiss();
             }
         });
         dialog.show();
@@ -413,6 +415,32 @@ public class OrderConfirmActivity extends PeachBaseActivity {
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    private void notice(final long orderId) {
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setMessage("确认取消支付？");
+        dialog.setPositiveButton("确认", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setClass(OrderConfirmActivity.this, OrderDetailActivity.class);
+                intent.putExtra("orderId", orderId);
+                intent.putExtra("type","orderDetail");
+                startActivity(intent);
+                finish();
+            }
+        });
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 
     public class CommonAdapter extends BaseAdapter {

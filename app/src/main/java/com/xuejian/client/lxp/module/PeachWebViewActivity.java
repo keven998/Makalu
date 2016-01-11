@@ -158,7 +158,6 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            System.out.println("url " + url);
             if (url.startsWith("lvxingpai")) {
                 Intent intent = new Intent();
                 intent.setAction("android.intent.action.route");

@@ -22,6 +22,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
@@ -29,12 +30,17 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.FavBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.api.UserApi;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 
 import java.util.ArrayList;
@@ -93,7 +99,7 @@ public class GoodsList extends PeachBaseActivity {
         final Handler handler = new Handler();
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
-        boolean collection = getIntent().getBooleanExtra("collection",false);
+        boolean collection = getIntent().getBooleanExtra("collection", false);
         if (!TextUtils.isEmpty(title)) tvTitle.setText(title);
 
         adapter = new GoodsListAdapter(this);
@@ -108,8 +114,10 @@ public class GoodsList extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
-        if (collection){
+        if (collection) {
+            goodsList.setLoadingMoreEnabled(false);
             ll_spinner.setVisibility(View.GONE);
+            toTop.setVisibility(View.GONE);
         }
         goodsList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -141,14 +149,67 @@ public class GoodsList extends PeachBaseActivity {
                 goodsList.smoothScrollToPosition(0);
             }
         });
-        if (collection){
-
-        }else {
+        if (collection) {
+            final User user = AccountManager.getInstance().getLoginAccount(mContext);
+            if (user != null) {
+                getCollectionList(user.getUserId());
+                adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
+                    @Override
+                    public void onItemLongClick(View view, int position, String id) {
+                        notice(user.getUserId(), id);
+                    }
+                });
+            }
+        } else {
             getCategory(locId);
             getData(null, locId, null, null, null, 0, 15, true);
         }
 
 
+    }
+
+    public void deleteFav(final long userId, String id) {
+        UserApi.delFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                Toast.makeText(mContext, "收藏已取消", Toast.LENGTH_SHORT).show();
+                getCollectionList(userId);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                Toast.makeText(mContext, "收藏取消失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void getCollectionList(Long userId) {
+        UserApi.getFav(String.valueOf(userId), "", "commodity", new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<FavBean> list = CommonJson.fromJson(result, FavBean.class);
+                adapter.getDataList().clear();
+                adapter.getDataList().addAll(list.result.commodities);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     private void getCategory(String id) {
@@ -225,8 +286,8 @@ public class GoodsList extends PeachBaseActivity {
 
 
     private void initCategoryData(final CategoryBean bean) {
-        if (bean.category.size()>0){
-            bean.category.add(0,"全部类型");
+        if (bean.category.size() > 0) {
+            bean.category.add(0, "全部类型");
             typeSpinner.attachDataSource(bean.category);
         }
 
@@ -234,8 +295,8 @@ public class GoodsList extends PeachBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentType = bean.category.get(position);
-                if (currentType.equals("全部类型")){
-                    currentType="";
+                if (currentType.equals("全部类型")) {
+                    currentType = "";
                 }
                 getData(null, locId, currentType, null, null, 0, 15, true);
                 typeSpinner.dismissDropDown();
@@ -327,7 +388,9 @@ public class GoodsList extends PeachBaseActivity {
         private Activity mContext;
         private ArrayList<SimpleCommodityBean> mDataList;
         private DisplayImageOptions picOptions;
-        OnItemClickListener listener;
+        private OnItemClickListener listener;
+        private OnItemLongClickListener longClickListener;
+
         public GoodsListAdapter(Activity context) {
             mContext = context;
             mDataList = new ArrayList<SimpleCommodityBean>();
@@ -349,6 +412,11 @@ public class GoodsList extends PeachBaseActivity {
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
+
+        public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+            this.longClickListener = listener;
+        }
+
         public Object getItem(int position) {
             return mDataList.get(position);
         }
@@ -370,7 +438,7 @@ public class GoodsList extends PeachBaseActivity {
                     .centerCrop()
                     .into(holder.ivGoods);
 
-          //  ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
+            //  ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
             holder.tvGoodsName.setText(bean.getTitle());
 
             SpannableString string = new SpannableString("起");
@@ -383,17 +451,26 @@ public class GoodsList extends PeachBaseActivity {
             holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume())+"已售");
+            holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume()) + "已售");
             holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
-            if (bean.getSeller()!=null){
+            if (bean.getSeller() != null) {
                 holder.tvStoreName.setText(bean.getSeller().getName());
             }
             holder.llContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener!=null){
-                        listener.onItemClick(v,position,bean.getCommodityId());
+                    if (listener != null) {
+                        listener.onItemClick(v, position, bean.getCommodityId());
                     }
+                }
+            });
+            holder.llContainer.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (longClickListener != null) {
+                        longClickListener.onItemLongClick(v, position, bean.id);
+                    }
+                    return true;
                 }
             });
         }
@@ -408,11 +485,39 @@ public class GoodsList extends PeachBaseActivity {
             return mDataList.size();
         }
 
-    }
-    interface OnItemClickListener {
-        void onItemClick(View view, int position, long id);
 
     }
+
+    interface OnItemClickListener {
+        void onItemClick(View view, int position, long id);
+    }
+
+    interface OnItemLongClickListener {
+        void onItemLongClick(View view, int position, String id);
+    }
+
+    private void notice(final long userId, final String id) {
+        final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+        dialog.setTitle("提示");
+        dialog.setMessage("确认取消收藏？");
+        dialog.setPositiveButton("确认", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteFav(userId, id);
+                dialog.dismiss();
+
+            }
+        });
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView ivGoods;
         public final TextView tvGoodsName;

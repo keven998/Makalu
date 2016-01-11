@@ -95,6 +95,46 @@ public class UserApi extends BaseApi {
     public final static String EXPERT_SEARCH = "/users/experts?zone=%s";
     public final static String EXPERT_TRAVEL_NOTE = "/users/%s/travelnotes";
 
+    //用户收藏
+    public final static String USER_FAV = "/users/%s/favorites";
+
+    public static void addFav(String userId,String id,String type, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(USER_FAV,userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("itemId", id);
+            jsonObject.put("itemType", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+        //   return HttpManager.request(request, callback);
+    }
+    public static void getFav(String userId,String id,String type, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(USER_FAV, userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        request.putUrlParams("itemType", type);
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //   return HttpManager.request(request, callback);
+    }
+    public static void delFav(String userId,String id,String type, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.DELETE);
+        request.setUrl(SystemConfig.DEV_URL + String.format(USER_FAV, userId) + "/" +type+ "/"+id);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //   return HttpManager.request(request, callback);
+    }
 
     public static void authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
