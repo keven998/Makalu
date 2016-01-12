@@ -214,7 +214,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         } else if (user != null) {
             textView.setText(String.format("%s的计划", user.getNickName()));
         } else {
-            textView.setText(String.format("旅行计划"));
+            textView.setText("旅行计划");
         }
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override

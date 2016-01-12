@@ -291,7 +291,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 GoodsPageAdapter adapter = new GoodsPageAdapter(getActivity(), result.get(0).getColumns());
                 viewPager.setAdapter(adapter);
                 viewPager.startAutoScroll();
-                viewPager.setInterval(2000);
+                viewPager.setInterval(4000);
                 viewPager.setAutoScrollDurationFactor(2.0);
                 viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
                 dotView.setNum(adapter.getCount());

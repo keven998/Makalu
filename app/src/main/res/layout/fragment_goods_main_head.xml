@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:background="#48ffffff"/>
+            android:background="#48ffffff" />
 
         <com.aizou.core.widget.DotView xmlns:cube_dotview="http://schemas.android.com/apk/res-auto"
             android:id="@+id/dot_view"
@@ -31,14 +31,19 @@
             cube_dotview:dot_unselected_color="0xffe2e2e2" />
 
     </FrameLayout>
-<HorizontalScrollView
-    android:id="@+id/hs_pic"
-    android:layout_width="match_parent"
-    android:layout_height="110dp"
-    android:scrollbars="none"
-    android:padding="5dp"/>
+
+    <HorizontalScrollView
+        android:id="@+id/hs_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="15dp"
+        android:scrollbars="none" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_line"/>
+        android:background="@color/color_line" />
 </LinearLayout>

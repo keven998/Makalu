@@ -14,7 +14,7 @@
             android:layout_marginBottom="46dp"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@color/color_line"
-            android:dividerHeight="1px"
+            android:dividerHeight="12dp"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent" />
     </LinearLayout>
