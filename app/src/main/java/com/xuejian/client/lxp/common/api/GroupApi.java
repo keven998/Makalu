@@ -78,7 +78,7 @@ public class GroupApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId);
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
       //  return HttpManager.request(request, callback);
@@ -88,7 +88,7 @@ public class GroupApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members");
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
       //  return HttpManager.request(request, callback);
@@ -114,7 +114,7 @@ public class GroupApi extends BaseApi{
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + "/chatgroups/" + groupId + "/members/" + userId);
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+     //   request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         setDefaultParams(request);
         OkHttpClientManager.getInstance().request(request, "", callback);
        // return HttpManager.request(request, callback);

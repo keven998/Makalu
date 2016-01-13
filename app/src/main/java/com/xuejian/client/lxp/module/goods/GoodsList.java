@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
@@ -42,7 +41,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
-
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -263,7 +262,7 @@ public class GoodsList extends PeachBaseActivity {
                 START = list.result.size();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
-                goodsList.loadMoreComplete();
+               // goodsList.refreshComplete();
 
                 if ( adapter.getDataList().size() >= PAGE_SIZE) {
                     // goodsList.setHasMoreData(true);
@@ -273,10 +272,11 @@ public class GoodsList extends PeachBaseActivity {
                 }
 
                 if (list.result.size() >= COUNT) {
-                    // goodsList.setHasMoreData(true);
+
                 } else {
-                    goodsList.noMoreLoading();
-                    goodsList.setLoadingMoreEnabled(false);
+                    goodsList.loadMoreComplete();
+//                    goodsList.noMoreLoading();
+//                    goodsList.setLoadingMoreEnabled(false);
                 }
             }
 
@@ -298,7 +298,6 @@ public class GoodsList extends PeachBaseActivity {
             bean.category.add(0, "全部类型");
             typeSpinner.attachDataSource(bean.category);
         }
-
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -306,8 +305,10 @@ public class GoodsList extends PeachBaseActivity {
                 if (currentType.equals("全部类型")) {
                     currentType = "";
                 }
+                goodsList.setLoadingMoreEnabled(true);
                 getData(null, locId, currentType, null, null, 0, 15, true);
                 typeSpinner.dismissDropDown();
+
             }
 
             @Override

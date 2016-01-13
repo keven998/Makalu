@@ -1,18 +1,20 @@
-package com.xuejian.client.lxp.common.security;
+package com.lv.utils;
+
+/**
+ * Created by yibiao.qin on 2016/1/13.
+ */
 
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
 
-import com.aizou.core.http.entity.PTRequest;
-import com.xuejian.client.lxp.bean.SecretKeyBean;
+import com.lv.bean.SecretKeyBean;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Set;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
@@ -130,8 +132,6 @@ public class SecurityUtil {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-
         return new String(new org.apache.commons.codec.binary.Base64().encode(bytes));
         // return byteArrayToHexString(bytes);
     }
@@ -169,46 +169,49 @@ public class SecurityUtil {
         return sb.toString();
     }
 
-    public static String getAuthBody(SecretKeyBean key,PTRequest request,String body,String date ,String userId) throws Exception{
+    public static String getAuthBody(SecretKeyBean key,String url,String body,String date ,String userId) throws Exception{
 
         if (key!=null)System.out.println("key str = "+ key.getKey());
 
 
-        String path = Uri.parse(request.readUrl()).getPath();
+        Uri uri =  Uri.parse(url);
+        String path =uri.getPath();
         System.out.println("path str = "+ path);
 
         StringBuilder header =  new StringBuilder();
-        header.append("date=").append(URLEncoder.encode(date,"UTF-8"))
+        //List<Header> headerList = request.getPTHeader().overwirdeHeaders;
+//        for (int i = 0; i < request.getPTHeader().overwirdeHeaders.size(); i++) {
+//            header.append(request.getPTHeader().overwirdeHeaders.get(i).getName().toLowerCase())
+//                    .append("=")
+//                    .append(URLEncoder.encode(request.getPTHeader().overwirdeHeaders.get(i).getValue().toLowerCase(),"UTF-8"));
+//            if (i<request.getPTHeader().overwirdeHeaders.size()-1){
+//                header.append("&");
+//            }
+//        }
+        header.append("date=").append(URLEncoder.encode(date, "UTF-8"))
                 .append("&")
                 .append("X-Lvxingpai-Id=".toLowerCase()).append(URLEncoder.encode(userId, "UTF-8"));
 
         System.out.println("header str = " + header.toString());
 
         StringBuilder query =  new StringBuilder();
+        Set<String> stringSet = uri.getQueryParameterNames();
 
-        ArrayList<String> strings= new ArrayList<>();
-        HashMap<String,String> map = new HashMap<>();
-        for (int i = 0; i < request.getUrlParams().size(); i++) {
-            strings.add(request.getUrlParams().get(i).getName());
-            map.put(request.getUrlParams().get(i).getName(), URLEncoder.encode(request.getUrlParams().get(i).getValue()));
-        }
-        Object[] names = strings.toArray();
+        Object[] names = stringSet.toArray();
         Arrays.sort(names);
         for (int i = 0; i < names.length; i++) {
-            query.append(names[i])
+            query.append(names[i].toString())
                     .append("=")
-                    .append(map.get(names[i].toString()));
-            if (i<request.getUrlParams().size()-1){
+                    .append(URLEncoder.encode(uri.getQueryParameter(names[i].toString())));
+            if (i<names.length-1){
                 query.append("&");
             }
         }
-
 
         System.out.println("query str = " + query.toString());
         String body_str = new String(new org.apache.commons.codec.binary.Base64().encode(body.getBytes("UTF-8")));
 
         System.out.println("body str = "+ body_str);
-
 
         StringBuilder signatureMessage = new StringBuilder();
         signatureMessage.append("URI=" + path);

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.igexin.sdk.PushManager;
 import com.lv.Listener.FetchListener;
 import com.lv.Listener.HttpCallback;
@@ -15,12 +16,14 @@ import com.lv.bean.InventMessage;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.bean.SendMessageBean;
+import com.lv.bean.User;
 import com.lv.data.MessageDB;
 import com.lv.net.HttpUtils;
 import com.lv.net.UploadUtils;
 import com.lv.utils.Config;
 import com.lv.utils.CryptUtils;
 import com.lv.utils.PictureUtil;
+import com.lv.utils.SharePrefUtil;
 import com.lv.utils.TimeUtils;
 
 import org.json.JSONArray;
@@ -54,8 +57,8 @@ public class IMClient {
     private volatile boolean isRunning;
     public int p;
     public static long lastSuccessFetch;
-    private Context mContext;
-
+    private static Context mContext;
+    private static User user;
     public boolean isLogin() {
         return isLogin;
     }
@@ -83,6 +86,18 @@ public class IMClient {
         acklist = new JSONArray();
         conList = new ArrayList<>();
         countFrequency = new CountFrequency();
+    }
+
+    public static User getLoginAccount() {
+
+        if (user == null) {
+            String userJson = SharePrefUtil.getString(mContext, "login_user", "");
+            if (TextUtils.isEmpty(userJson)) {
+                return null;
+            }
+            user = JSON.parseObject(userJson,User.class);
+        }
+        return user;
     }
 
 //    public static IMClient getInstance() {
@@ -116,6 +131,7 @@ public class IMClient {
     }
 
     public static void initIM(Context context) {
+        mContext = context;
         PushManager.getInstance().initialize(context.getApplicationContext());
         if (Config.isDebug) {
             Log.i(Config.TAG, "start initialize");

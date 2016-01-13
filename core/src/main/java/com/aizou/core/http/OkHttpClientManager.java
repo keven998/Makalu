@@ -41,7 +41,7 @@ public class OkHttpClientManager {
     private OkHttpClient mOkHttpClient;
     private Handler mDelivery;
     private Gson mGson;
-
+    private AuthenticationFailed listener;
     private static final String TAG = "LXPHttp";
     public static final MediaType json
             = MediaType.parse("application/json; charset=utf-8");
@@ -64,6 +64,9 @@ public class OkHttpClientManager {
         return mInstance;
     }
 
+    public void setOnAuthenticationFailed(AuthenticationFailed listener){
+        this.listener = listener;
+    }
     public OkHttpClient getmOkHttpClient() {
         return mOkHttpClient;
     }
@@ -673,9 +676,14 @@ public class OkHttpClientManager {
     }
 
     private void sendFailedStringCallback(final Request request, final Exception e, final int code, final ResultCallback callback) {
+        System.out.println("code  "+code);
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
+                if (code==401&&listener!=null){
+                        System.out.println("listener "+code);
+                        listener.onFailed();
+                }
                 if (callback != null){
                     callback.onError(request, e, code);
                 }
