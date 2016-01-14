@@ -11,6 +11,9 @@ public class CityBean {
     public String enName;
     public ArrayList<ImageBean> images = new ArrayList<ImageBean>();
     public int imageCnt;
-    public int commodityCnt;
+    public String desc;
     public String travelMonth;
+    public String trafficInfoUrl;
+    public String playGuide;
+    public int commoditiesCnt;
 }

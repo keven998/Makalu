@@ -3,6 +3,8 @@ package com.xuejian.client.lxp.module.RNView;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.aizou.core.http.HttpCallBack;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -11,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.goods.OrderCreateActivity;
 import com.xuejian.client.lxp.module.goods.StoreDetailActivity;
@@ -75,18 +78,42 @@ public class NativeActions extends ReactContextBaseJavaModule {
                 break;
             case "WebView":
                 intent.putExtra("url",data);
-                intent.putExtra("title","查看全部");
+                intent.putExtra("title",id);
                 intent.setClass(reactContext, PeachWebViewActivity.class);
                 reactContext.startActivity(intent);
                 break;
             case "Detail":
+                System.out.println("id "+id);
                 if (TextUtils.isDigitsOnly(id)){
                     intent.putExtra("commodityId",Long.parseLong(id));
                     intent.setClass(reactContext, ReactMainPage.class);
+                    reactContext.startActivity(intent);
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    @ReactMethod
+    public void feedBack(long commodityid ,final Callback callBack) {
+        TravelApi.getCommodity(commodityid, -1, new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                callBack.invoke("finish");
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+
+
     }
 }

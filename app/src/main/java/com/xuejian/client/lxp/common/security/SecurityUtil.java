@@ -171,19 +171,11 @@ public class SecurityUtil {
 
     public static String getAuthBody(SecretKeyBean key,PTRequest request,String body,String date ,String userId) throws Exception{
 
-        if (key!=null)System.out.println("key str = "+ key.getKey());
-
-
         String path = Uri.parse(request.readUrl()).getPath();
-        System.out.println("path str = "+ path);
-
         StringBuilder header =  new StringBuilder();
         header.append("date=").append(URLEncoder.encode(date,"UTF-8"))
                 .append("&")
                 .append("X-Lvxingpai-Id=".toLowerCase()).append(URLEncoder.encode(userId, "UTF-8"));
-
-        System.out.println("header str = " + header.toString());
-
         StringBuilder query =  new StringBuilder();
 
         ArrayList<String> strings= new ArrayList<>();
@@ -202,13 +194,7 @@ public class SecurityUtil {
                 query.append("&");
             }
         }
-
-
-        System.out.println("query str = " + query.toString());
         String body_str = new String(new org.apache.commons.codec.binary.Base64().encode(body.getBytes("UTF-8")));
-
-        System.out.println("body str = "+ body_str);
-
 
         StringBuilder signatureMessage = new StringBuilder();
         signatureMessage.append("URI=" + path);
@@ -221,12 +207,16 @@ public class SecurityUtil {
         if (!TextUtils.isEmpty(body)){
             signatureMessage.append(",Body="+body_str);
         }
-
-        System.out.println("SignatureMessage str = " + signatureMessage);
-
         String signature = "";
         if (key!=null){
             signature = encryptHMAC(signatureMessage.toString(), key.getKey());
+
+            System.out.println("key str = "+ key.getKey());
+            System.out.println("path str = " + path);
+            System.out.println("header str = " + header.toString());
+            System.out.println("query str = " + query.toString());
+            System.out.println("body str = "+ body_str);
+            System.out.println("SignatureMessage str = " + signatureMessage);
             System.out.println("Signature = " + signature);
         }
 

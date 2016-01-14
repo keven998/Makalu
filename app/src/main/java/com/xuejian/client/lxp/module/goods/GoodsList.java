@@ -82,14 +82,15 @@ public class GoodsList extends PeachBaseActivity {
     private String[] sortType = new String[]{"推荐排序", "销量最高", "价格最低", "价格最高"};
     private String[] sortValue = new String[]{"", "salesVolume", "price", "price"};
     private String[] sort = new String[]{"", "desc", "asc", "desc"};
-    private String currentSortValue;
-    private String currentsort;
-    private String currentType;
+    private String currentSortValue="";
+    private String currentsort="";
+    private String currentType="";
     private static final int PAGE_SIZE = 15;
     private static int COUNT = 15;
     private static int START;
     String locId;
-
+    LinearLayoutManager layoutManager;
+    boolean collection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +99,7 @@ public class GoodsList extends PeachBaseActivity {
         final Handler handler = new Handler();
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
-        boolean collection = getIntent().getBooleanExtra("collection", false);
+        collection = getIntent().getBooleanExtra("collection", false);
         if (!TextUtils.isEmpty(title)) tvTitle.setText(title);
 
         adapter = new GoodsListAdapter(this);
@@ -116,7 +117,7 @@ public class GoodsList extends PeachBaseActivity {
         if (collection) {
             goodsList.setLoadingMoreEnabled(false);
             ll_spinner.setVisibility(View.GONE);
-            toTop.setVisibility(View.GONE);
+         //   toTop.setVisibility(View.GONE);
         }
         goodsList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -140,14 +141,62 @@ public class GoodsList extends PeachBaseActivity {
                 finish();
             }
         });
-        goodsList.setLayoutManager(new LinearLayoutManager(this));
+        layoutManager = new LinearLayoutManager(this);
+        goodsList.setLayoutManager(layoutManager);
         goodsList.setAdapter(adapter);
         toTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goodsList.smoothScrollToPosition(0);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toTop.setVisibility(View.GONE);
+                    }
+                }, 1400);
+
             }
         });
+        if (collection) {
+//            final User user = AccountManager.getInstance().getLoginAccount(mContext);
+//            if (user != null) {
+//                getCollectionList(user.getUserId());
+//                adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
+//                    @Override
+//                    public void onItemLongClick(View view, int position, String id) {
+//                        notice(user.getUserId(), id);
+//                    }
+//                });
+//            }
+        } else {
+            getCategory(locId);
+            getData(null, locId, null, null, null, 0, 15, true);
+            goodsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    System.out.println("newState "+newState);
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (layoutManager.findLastVisibleItemPosition()>8){
+                        toTop.setVisibility(View.VISIBLE);
+                    }
+                    if (layoutManager.findFirstCompletelyVisibleItemPosition()==1){
+                        toTop.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (collection) {
             final User user = AccountManager.getInstance().getLoginAccount(mContext);
             if (user != null) {
@@ -159,12 +208,7 @@ public class GoodsList extends PeachBaseActivity {
                     }
                 });
             }
-        } else {
-            getCategory(locId);
-            getData(null, locId, null, null, null, 0, 15, true);
         }
-
-
     }
 
     public void deleteFav(final long userId, String id) {
@@ -266,17 +310,16 @@ public class GoodsList extends PeachBaseActivity {
 
                 if ( adapter.getDataList().size() >= PAGE_SIZE) {
                     // goodsList.setHasMoreData(true);
-                    toTop.setVisibility(View.VISIBLE);
+                  //  toTop.setVisibility(View.VISIBLE);
                 } else {
-                    toTop.setVisibility(View.GONE);
+                  //  toTop.setVisibility(View.GONE);
                 }
-
+                goodsList.loadMoreComplete();
                 if (list.result.size() >= COUNT) {
 
                 } else {
-                    goodsList.loadMoreComplete();
 //                    goodsList.noMoreLoading();
-//                    goodsList.setLoadingMoreEnabled(false);
+                   goodsList.setLoadingMoreEnabled(false);
                 }
             }
 
@@ -306,7 +349,7 @@ public class GoodsList extends PeachBaseActivity {
                     currentType = "";
                 }
                 goodsList.setLoadingMoreEnabled(true);
-                getData(null, locId, currentType, null, null, 0, 15, true);
+                getData(null, locId, currentType, currentSortValue, currentsort, 0, 15, true);
                 typeSpinner.dismissDropDown();
 
             }
@@ -349,6 +392,7 @@ public class GoodsList extends PeachBaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentSortValue = sortValue[position];
                 currentsort = sort[position];
+                goodsList.setLoadingMoreEnabled(true);
                 getData(null, locId, currentType, sortValue[position], sort[position], 0, 15, true);
                 sortSpinner.dismissDropDown();
             }

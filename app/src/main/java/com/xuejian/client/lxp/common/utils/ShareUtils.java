@@ -31,6 +31,7 @@ import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 
 public class ShareUtils {
@@ -45,7 +46,7 @@ public class ShareUtils {
 
     public static final String downloadUrl = "http://www.lvxingpai.com/app/download/";
 
-    public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy) {
+    public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy,final String url, final ShareCommodityBean shareCommodityBean) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View
                 .inflate(act, R.layout.view_share_bar, null);
@@ -79,7 +80,7 @@ public class ShareUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 //    shareRoute(SHARE_MEDIA.WEIXIN_CIRCLE, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.WEIXIN_CIRCLE, act, strategy);
+                goodsShareRoute(SHARE_MEDIA.WEIXIN_CIRCLE, act, strategy,url,shareCommodityBean);
 
             }
         });
@@ -89,7 +90,7 @@ public class ShareUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 //   shareRoute(SHARE_MEDIA.WEIXIN, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.WEIXIN, act, strategy);
+                goodsShareRoute(SHARE_MEDIA.WEIXIN, act, strategy,url,shareCommodityBean);
 
             }
         });
@@ -109,7 +110,7 @@ public class ShareUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 //   shareRoute(SHARE_MEDIA.DOUBAN, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.DOUBAN, act, strategy);
+                goodsShareRoute(SHARE_MEDIA.DOUBAN, act, strategy,url,shareCommodityBean);
             }
         });
         sinaTv.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +119,7 @@ public class ShareUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 // shareRoute(SHARE_MEDIA.SINA, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.SINA, act, strategy);
+                goodsShareRoute(SHARE_MEDIA.SINA, act, strategy,url,shareCommodityBean);
 
             }
         });
@@ -128,7 +129,7 @@ public class ShareUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 //   shareRoute(SHARE_MEDIA.QQ, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.QQ, act, strategy);
+                goodsShareRoute(SHARE_MEDIA.QQ, act, strategy,url,shareCommodityBean);
             }
         });
         cancleIv.setOnClickListener(new View.OnClickListener() {
@@ -164,11 +165,11 @@ public class ShareUtils {
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         circleMedia.setTitle("推荐\"旅行派\"给你。");
         if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("可以向达人寻求帮助的旅行应用");
+            circleMedia.setShareContent("汇聚全球特色旅游体验项目的应用");
         } else {
             circleMedia.setShareContent(content);
         }
-        circleMedia.setShareImage(new UMImage(act, R.drawable.ic_taozi_share));
+        circleMedia.setShareImage(new UMImage(act, R.drawable.icon_for_share));
         circleMedia.setTargetUrl(downloadUrl);
         mController.setShareMedia(circleMedia);
         mController.postShare(act, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
@@ -461,7 +462,7 @@ public class ShareUtils {
         return mController;
     }
 
-    public static UMSocialService goodsShareRoute(final SHARE_MEDIA platform, final Activity act, StrategyBean strategyBean) {
+    public static UMSocialService goodsShareRoute(final SHARE_MEDIA platform, final Activity act, StrategyBean strategyBean,String url,ShareCommodityBean shareCommodityBean) {
         // 首先在您的Activity中添加如下成员变量
         final UMSocialService mController = UMServiceFactory
                 .getUMSocialService("com.umeng.share");
@@ -471,14 +472,22 @@ public class ShareUtils {
 //                && strategyBean.images.size() > 0) {
 //            umImage = new UMImage(act, strategyBean.images.get(0).url);
 //        } else {
-        umImage = new UMImage(act, R.drawable.lvxingpaipai);
+        if (shareCommodityBean.image!=null&&shareCommodityBean.image.url!=null){
+            umImage = new UMImage(act, shareCommodityBean.image.url);
+        }else {
+            umImage = new UMImage(act,R.drawable.icon_for_share);
+        }
+
         //      }
         mController.getConfig().closeToast();
         mController.setShareMedia(umImage);
-        String shareUrl = "http://7af4ik.com1.z0.glb.clouddn.com/react/index.html";
-        String shareTitle = "Rn分享测试";
-        String shareContent = "来了，亲们快快来围观~ ";
+        String shareUrl = url;
+        String shareTitle = "旅行派特色体验";
+        String shareContent =String.format("%s元起|%s",CommonUtils.getPriceString(shareCommodityBean.price),shareCommodityBean.title) ;
 
+        if (SHARE_MEDIA.SINA == platform){
+            shareContent+=url;
+        }
         mController.setShareContent(shareContent);
 
         if (SHARE_MEDIA.WEIXIN_CIRCLE == platform) {
@@ -488,7 +497,7 @@ public class ShareUtils {
             wxHandler.addToSocialSDK();
             CircleShareContent circleMedia = new CircleShareContent();
             circleMedia.setShareContent(shareContent);
-            circleMedia.setTitle(shareContent);
+            circleMedia.setTitle(shareTitle);
             // 设置分享图片, 参数2为图片的url地址
             circleMedia.setShareImage(umImage);
             circleMedia.setTargetUrl(shareUrl);
@@ -522,7 +531,7 @@ public class ShareUtils {
             wxHandler.addToSocialSDK();
             WeiXinShareContent circleMedia = new WeiXinShareContent();
             circleMedia.setShareContent(shareContent);
-            circleMedia.setTitle(shareContent);
+            circleMedia.setTitle(shareTitle);
             circleMedia.setShareImage(umImage);
             circleMedia.setTargetUrl(shareUrl);
             mController.setShareMedia(circleMedia);
@@ -730,6 +739,7 @@ public class ShareUtils {
                             Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT)
                                     .show();
                         } else {
+                            System.out.println("eCode ="+eCode);
                             // String eMsg = "";
                             // if (eCode == -101) {
                             // eMsg = "没有授权";
@@ -775,6 +785,7 @@ public class ShareUtils {
                                             Toast.makeText(act, "分享成功.",
                                                     Toast.LENGTH_SHORT).show();
                                         } else {
+                                            System.out.println("eCode ="+eCode);
                                             // String eMsg = "";
                                             // if (eCode == -101) {
                                             // eMsg = "没有授权";

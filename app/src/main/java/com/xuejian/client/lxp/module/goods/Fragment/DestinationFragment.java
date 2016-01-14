@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.bean.CityBean;
 import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -31,6 +32,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.VerticalTextView;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView;
+import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.goods.CountryListActivity;
 
@@ -59,33 +61,64 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 
 
     private void getData(String code) {
-        TravelApi.getCountryList(code, new HttpCallBack<String>() {
+        if ("RCOM".equals(code)){
+            TravelApi.getRecommendCity(new HttpCallBack<String>() {
 
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson4List<CountryBean> list = CommonJson4List.fromJson(result, CountryBean.class);
-                adapter.getList().clear();
-                adapter.getList().addAll(list.result);
-                adapter.notifyDataSetChanged();
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson4List<CityBean> list = CommonJson4List.fromJson(result, CityBean.class);
+                    adapter.getList().clear();
+                    adapter.getList().addAll(list.result);
+                    adapter.notifyDataSetChanged();
 
-                if (menu.getVisibility() == View.VISIBLE) {
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_to_right);
-                    menu.startAnimation(animation);
-                    showMenu.setVisibility(View.VISIBLE);
-                    menu.setVisibility(View.GONE);
+                    if (menu.getVisibility() == View.VISIBLE) {
+                        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_to_right);
+                        menu.startAnimation(animation);
+                        showMenu.setVisibility(View.VISIBLE);
+                        menu.setVisibility(View.GONE);
+                    }
                 }
-            }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
 
-            }
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
 
-            }
-        });
+                }
+            });
+        }else {
+            TravelApi.getCountryList(code, new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson4List<CountryBean> list = CommonJson4List.fromJson(result, CountryBean.class);
+                    adapter.getList().clear();
+                    adapter.getList().addAll(list.result);
+                    adapter.notifyDataSetChanged();
+
+                    if (menu.getVisibility() == View.VISIBLE) {
+                        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_to_right);
+                        menu.startAnimation(animation);
+                        showMenu.setVisibility(View.VISIBLE);
+                        menu.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
+
     }
 
 
@@ -99,7 +132,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 //                intent.putExtra("conversation", conversation);
                 intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", false);
-                intent.putExtra("type", "vs");
+                intent.putExtra("type", "loc");
                 startActivity(intent);
             }
         });
@@ -109,17 +142,26 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         circleLayout.setOnRotationFinishedListener(this);
         listView = (ListView) view.findViewById(R.id.talent_loc_list);
         listView.setOnScrollListener(this);
-        ArrayList<CountryBean> data = new ArrayList<>();
+        ArrayList<Object> data = new ArrayList<>();
         adapter = new TalentLocAdapter(this, data);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 hideMenu();
-                Intent intent = new Intent(getActivity(), CountryListActivity.class);
-                intent.putExtra("id", adapter.getItem(position).id);
-                intent.putExtra("name", adapter.getItem(position).zhName);
-                startActivity(intent);
+
+                if (adapter.getItem(position) instanceof CountryBean){
+                    Intent intent = new Intent(getActivity(), CountryListActivity.class);
+                    intent.putExtra("id", ((CountryBean)adapter.getItem(position)).id);
+                    intent.putExtra("name", ((CountryBean)adapter.getItem(position)).zhName);
+                    startActivity(intent);
+                }else if (adapter.getItem(position) instanceof CityBean){
+                    Intent intent = new Intent(getActivity(), CityInfoActivity.class);
+                    intent.putExtra("id", ((CityBean)adapter.getItem(position)).id);
+                //    intent.putExtra("name", ((CountryBean)adapter.getItem(position)).zhName);
+                    startActivity(intent);
+                }
+
             }
         });
         showMenu.setOnClickListener(new View.OnClickListener() {
@@ -184,11 +226,11 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 
     private class TalentLocAdapter extends BaseAdapter {
         private DisplayImageOptions poptions;
-        private ArrayList<CountryBean> list;
+        private ArrayList<Object> list;
         private Fragment mCxt;
         private ImageLoader mImgLoader;
 
-        public TalentLocAdapter(Fragment context, ArrayList<CountryBean> list) {
+        public TalentLocAdapter(Fragment context, ArrayList<Object> list) {
             mCxt = context;
             this.list = list;
             mImgLoader = ImageLoader.getInstance();
@@ -203,12 +245,12 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
 //                    .build();
         }
 
-        public ArrayList<CountryBean> getList() {
+        public ArrayList<Object> getList() {
             return list;
         }
 
         @Override
-        public CountryBean getItem(int position) {
+        public Object getItem(int position) {
             return list.get(position);
         }
 
@@ -225,39 +267,82 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
-            final CountryBean bean = (CountryBean) getItem(position);
-            if (convertView == null) {
-                convertView = View.inflate(mCxt.getActivity(), R.layout.cell_destinaiton, null);
-                holder = new ViewHolder();
-                holder.bgImage = (ImageView) convertView.findViewById(R.id.iv_country_img);
-                holder.zhName = (TextView) convertView.findViewById(R.id.tv_country_zh_name);
-                holder.enName = (TextView) convertView.findViewById(R.id.tv_country_en_name);
-                holder.storeCount = (TextView) convertView.findViewById(R.id.tv_store_num);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
+            if (getItem(position) instanceof CountryBean){
+                final CountryBean bean = (CountryBean) getItem(position);
+                if (convertView == null) {
+                    convertView = View.inflate(mCxt.getActivity(), R.layout.cell_destinaiton, null);
+                    holder = new ViewHolder();
+                    holder.bgImage = (ImageView) convertView.findViewById(R.id.iv_country_img);
+                    holder.zhName = (TextView) convertView.findViewById(R.id.tv_country_zh_name);
+                    holder.enName = (TextView) convertView.findViewById(R.id.tv_country_en_name);
+                    holder.storeCount = (TextView) convertView.findViewById(R.id.tv_store_num);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                if (bean.images.size() > 0) {
+                    Glide.with(mCxt)
+                            .load(bean.images.get(0).url)
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.bgImage);
+                    // mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
+                } else {
+                    Glide.with(mCxt)
+                            .load("")
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.bgImage);
+                    //   mImgLoader.displayImage("", holder.bgImage, poptions);
+                }
+                holder.enName.setText(bean.enName);
+                holder.zhName.setText(bean.zhName);
+                holder.storeCount.setVisibility(View.GONE);
+           //     holder.storeCount.setText(String.valueOf(bean.commoditiesCnt));
+                return convertView;
+
+            }else {
+
+                final CityBean bean = (CityBean) getItem(position);
+                if (convertView == null) {
+                    convertView = View.inflate(mCxt.getActivity(), R.layout.cell_destinaiton, null);
+                    holder = new ViewHolder();
+                    holder.bgImage = (ImageView) convertView.findViewById(R.id.iv_country_img);
+                    holder.zhName = (TextView) convertView.findViewById(R.id.tv_country_zh_name);
+                    holder.enName = (TextView) convertView.findViewById(R.id.tv_country_en_name);
+                    holder.storeCount = (TextView) convertView.findViewById(R.id.tv_store_num);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                if (bean.images.size() > 0) {
+                    Glide.with(mCxt)
+                            .load(bean.images.get(0).url)
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.bgImage);
+                    // mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
+                } else {
+                    Glide.with(mCxt)
+                            .load("")
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.bgImage);
+                    //   mImgLoader.displayImage("", holder.bgImage, poptions);
+                }
+                holder.enName.setText(bean.enName);
+                holder.zhName.setText(bean.zhName);
+                holder.storeCount.setVisibility(View.VISIBLE);
+                holder.storeCount.setText(String.valueOf(bean.commoditiesCnt));
+                return convertView;
+
             }
-            if (bean.images.size() > 0) {
-                Glide.with(mCxt)
-                        .load(bean.images.get(0).url)
-                        .placeholder(R.drawable.ic_default_picture)
-                        .error(R.drawable.ic_default_picture)
-                        .centerCrop()
-                        .into(holder.bgImage);
-               // mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
-            } else {
-                Glide.with(mCxt)
-                        .load("")
-                        .placeholder(R.drawable.ic_default_picture)
-                        .error(R.drawable.ic_default_picture)
-                        .centerCrop()
-                        .into(holder.bgImage);
-             //   mImgLoader.displayImage("", holder.bgImage, poptions);
-            }
-            holder.enName.setText(bean.enName);
-            holder.zhName.setText(bean.zhName);
-            holder.storeCount.setText(String.valueOf(bean.commoditiesCnt));
-            return convertView;
+
+
         }
 
 

@@ -22,7 +22,8 @@ public class SimpleCommodityBean implements Parcelable {
      * images : [{"url":"http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc"}]
      * cover : {"url":"http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc"}
      */
-
+    public String shareUrl;
+    public long version;
     private long commodityId;
     private String title;
     private double marketPrice;
@@ -35,7 +36,7 @@ public class SimpleCommodityBean implements Parcelable {
     private List<ImageBean> images;
     private List<PlanBean> plans;
     public String id;
-
+    public boolean isFavorite;
     public ShareCommodityBean creteShareBean(){
         ShareCommodityBean bean = new ShareCommodityBean();
         bean.title = this.title;
@@ -134,6 +135,9 @@ public class SimpleCommodityBean implements Parcelable {
     }
 
 
+    public SimpleCommodityBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -141,6 +145,8 @@ public class SimpleCommodityBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.shareUrl);
+        dest.writeLong(this.version);
         dest.writeLong(this.commodityId);
         dest.writeString(this.title);
         dest.writeDouble(this.marketPrice);
@@ -148,17 +154,17 @@ public class SimpleCommodityBean implements Parcelable {
         dest.writeDouble(this.rating);
         dest.writeInt(this.salesVolume);
         dest.writeParcelable(this.seller, 0);
-        dest.writeParcelable(this.locality, flags);
+        dest.writeParcelable(this.locality, 0);
         dest.writeParcelable(this.cover, 0);
         dest.writeTypedList(images);
         dest.writeTypedList(plans);
         dest.writeString(this.id);
-    }
-
-    public SimpleCommodityBean() {
+        dest.writeByte(isFavorite ? (byte) 1 : (byte) 0);
     }
 
     protected SimpleCommodityBean(Parcel in) {
+        this.shareUrl = in.readString();
+        this.version = in.readLong();
         this.commodityId = in.readLong();
         this.title = in.readString();
         this.marketPrice = in.readDouble();
@@ -166,14 +172,15 @@ public class SimpleCommodityBean implements Parcelable {
         this.rating = in.readDouble();
         this.salesVolume = in.readInt();
         this.seller = in.readParcelable(SellerBean.class.getClassLoader());
-        this.locality = in.readParcelable(Object.class.getClassLoader());
+        this.locality = in.readParcelable(localityBean.class.getClassLoader());
         this.cover = in.readParcelable(CoverBean.class.getClassLoader());
         this.images = in.createTypedArrayList(ImageBean.CREATOR);
         this.plans = in.createTypedArrayList(PlanBean.CREATOR);
         this.id = in.readString();
+        this.isFavorite = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<SimpleCommodityBean> CREATOR = new Parcelable.Creator<SimpleCommodityBean>() {
+    public static final Creator<SimpleCommodityBean> CREATOR = new Creator<SimpleCommodityBean>() {
         public SimpleCommodityBean createFromParcel(Parcel source) {
             return new SimpleCommodityBean(source);
         }

@@ -298,7 +298,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     UserDBManager.getInstance().saveContact(wenwen);
 
                     User paipai = new User();
-                    paipai.setNickName("派派");
+                    paipai.setNickName("客服派派");
                     paipai.setUserId(10000l);
                     paipai.setType(1);
                     UserDBManager.getInstance().saveContact(paipai);

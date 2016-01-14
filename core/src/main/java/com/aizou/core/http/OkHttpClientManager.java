@@ -84,6 +84,7 @@ public class OkHttpClientManager {
             }
             i++;
         }
+        System.out.println("请求接口： " + url);
         Log.d(TAG, "请求接口： " + url);
         List<Header> headerList = request.getPTHeader().overwirdeHeaders;
         Map<String,String>headerMap =new HashMap<>();
@@ -651,6 +652,7 @@ public class OkHttpClientManager {
             public void onResponse(final Response response) {
                 try {
                     final String string = response.body().string();
+                    System.out.println("返回结果： code " + response.code() + "  " + string);
                     Log.d(TAG, "返回结果： code " + response.code() + "  " + string);
                     if (response.isSuccessful()) {
 

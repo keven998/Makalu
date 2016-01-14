@@ -120,6 +120,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@drawable/icon_totop"
+            android:visibility="gone"
             app:backgroundTint="@color/app_theme_color"
             app:layout_behavior="com.xuejian.client.lxp.common.widget.behavior.ScrollingFabBehavior" />
 

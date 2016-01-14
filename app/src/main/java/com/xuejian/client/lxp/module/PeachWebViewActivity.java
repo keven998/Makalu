@@ -16,7 +16,6 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
 
 import butterknife.Bind;
@@ -121,7 +120,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
                 break;
 
             case R.id.web_view_share:
-                ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, strategy);
+            //    ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, strategy,"");
                 break;
             default:
                 break;

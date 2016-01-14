@@ -65,11 +65,14 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     Spinner spinner;
     @Bind(R.id.tv_dialCode)
     TextView tvDialCode;
-    String idType ="passport";
+    @Bind(R.id.strategy_title)
+    TextView title;
+    String idType = "passport";
     String type = "";
-    final String[] idTypeArray = new String[]{"passport", "chineseID","",""};
+    final String[] idTypeArray = new String[]{"passport", "chineseID", "", ""};
     private static final int SELECTED_CODE = 105;
     int currenrDialCode = 86;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +82,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         tvTitleBack.setOnClickListener(this);
         tvConfirm.setOnClickListener(this);
         ivSelectBirthday.setOnClickListener(this);
-        String[] mItems = new String[]{"护照", "身份证","港澳通行证","台湾通行证"};
+        String[] mItems = new String[]{"护照", "身份证", "港澳通行证", "台湾通行证"};
         tvDialCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,19 +103,22 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        if ("edit".equals(type)){
+        if ("edit".equals(type)) {
+            title.setText(R.string.edit_user_info);
             TravellerBean bean1 = getIntent().getParcelableExtra("passenger");
             bindView(bean1);
+        }else {
+            title.setText("添加旅客信息");
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK ){
-            if (requestCode == SELECTED_CODE){
-                currenrDialCode = data.getIntExtra("dialCode",0);
-                tvDialCode.setText("+"+currenrDialCode);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECTED_CODE) {
+                currenrDialCode = data.getIntExtra("dialCode", 0);
+                tvDialCode.setText("+" + currenrDialCode);
             }
         }
     }
@@ -123,9 +129,9 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         etTel.setText(String.valueOf(bean.getTraveller().getTel().getNumber()));
         etId.setText(String.valueOf(bean.getTraveller().getIdentities().get(0).getNumber()));
         String type = bean.getTraveller().getIdentities().get(0).getIdType();
-        if(idTypeArray[0].equals(type)){
+        if (idTypeArray[0].equals(type)) {
             spinner.setSelection(0);
-        }else if (idTypeArray[1].equals(type)){
+        } else if (idTypeArray[1].equals(type)) {
             spinner.setSelection(1);
         }
     }
@@ -162,7 +168,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
                     return;
                 }
 
-                switch (type){
+                switch (type) {
                     case "create":
                         TravellerBean bean = new TravellerBean();
                         TravellerEntity traveller = new TravellerEntity();
@@ -207,7 +213,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         }
     }
 
-    public void editTraveller(final TravellerBean bean){
+    public void editTraveller(final TravellerBean bean) {
         JSONObject idProof = new JSONObject();
         JSONObject tel = new JSONObject();
         try {
@@ -219,10 +225,10 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
             e.printStackTrace();
         }
         long userId = AccountManager.getInstance().getLoginAccount(mContext).getUserId();
-        TravelApi.editTraveller(userId,bean.getKey(), bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", 0, idProof, tel, "", new HttpCallBack<String>() {
+        TravelApi.editTraveller(userId, bean.getKey(), bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", 0, idProof, tel, "", new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                CommonJson<TravellerBean> traveller = CommonJson.fromJson(result,TravellerBean.class);
+                CommonJson<TravellerBean> traveller = CommonJson.fromJson(result, TravellerBean.class);
                 Intent intent = new Intent();
                 intent.putExtra("passenger", traveller.result);
                 setResult(RESULT_OK, intent);
@@ -257,7 +263,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
         TravelApi.createTraveller(userId, bean.getTraveller().getSurname(), bean.getTraveller().getGivenName(), "", 0, idProof, tel, "", new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                CommonJson<TravellerBean> traveller = CommonJson.fromJson(result,TravellerBean.class);
+                CommonJson<TravellerBean> traveller = CommonJson.fromJson(result, TravellerBean.class);
                 Intent intent = new Intent();
                 intent.putExtra("passenger", traveller.result);
                 setResult(RESULT_OK, intent);

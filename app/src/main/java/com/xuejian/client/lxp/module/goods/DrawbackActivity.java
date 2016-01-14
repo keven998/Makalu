@@ -78,6 +78,7 @@ public class DrawbackActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
                 Toast.makeText(DrawbackActivity.this,"退款申请已提交",Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK);
                 finish();
             }
 

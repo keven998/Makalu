@@ -321,7 +321,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                         public void onTagClick(TagView tagView, Tag tag) {
                             if (mKeyTags != null && mKeyTags.size() > 0) {
                                 mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
-                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(tagView.getWindowToken(), 0);
                                 searchAll(mKeyTags.get(tag.getId()).getTitle());
                             }
@@ -453,6 +453,31 @@ public class SearchAllActivity extends PeachBaseActivity {
             });
         } else if ("shopping".equals(type)) {
             TravelApi.searchAll(keyword, "false", "false", "false", "false", "true", new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
+                    if (searchAllResult.code == 0) {
+                        //          if (searchAllResult.result.s)
+                        bindView(keyword, searchAllResult.result);
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    if (!isFinishing()) {
+                        ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }else if ("loc".equals(type)){
+            TravelApi.searchAll(keyword, "true", "false", "false", "false", "false", new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();

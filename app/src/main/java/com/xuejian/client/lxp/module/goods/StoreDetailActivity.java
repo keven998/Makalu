@@ -27,6 +27,7 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
+import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,17 @@ public class StoreDetailActivity extends PeachBaseActivity {
             }
         });
         getData(sellerId, 0, PAGE_SIZE);
+
+        rlTalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                talkIntent.putExtra("friend_id", sellerId);
+                talkIntent.putExtra("chatType", "single");
+                startActivity(talkIntent);
+            }
+        });
+
     }
 
     private void getData(String sellerId ,int start, int count) {

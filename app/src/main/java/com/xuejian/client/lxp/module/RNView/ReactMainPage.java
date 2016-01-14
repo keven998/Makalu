@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CheckedTextView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -52,15 +55,19 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     public SimpleCommodityBean bean;
     public LinearLayout llEmptyView;
     RelativeLayout rlError;
+    ImageView share;
+    CheckedTextView collection;
     TextView tvRetry;
     long userId = -1;
+    long commodityId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long commodityId = getIntent().getLongExtra("commodityId", -1);
+        commodityId = getIntent().getLongExtra("commodityId", -1);
         showLoading();
      //   prepareJSBundle();
-
+        final boolean snapshots = getIntent().getBooleanExtra("snapshots",false);
+        final long version = getIntent().getLongExtra("version", -1);
         Uri uri = getIntent().getData();
         if (uri != null) {
             if (TextUtils.isDigitsOnly(uri.getLastPathSegment())){
@@ -93,16 +100,22 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         mReactRootView = (ReactRootView) findViewById(R.id.root_view);
         llEmptyView = (LinearLayout) findViewById(R.id.empty_view);
         rlError = (RelativeLayout)findViewById(R.id.rl_error);
+        share = (ImageView) findViewById(R.id.iv_more);
+        collection = (CheckedTextView) findViewById(R.id.iv_collection);
+        TextView textView = (TextView) findViewById(R.id.strategy_title);
         final long finalCommodityId = commodityId;
         findViewById(R.id.tv_retry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mReactRootView.setVisibility(View.VISIBLE);
                 rlError.setVisibility(View.GONE);
-                getData(finalCommodityId);
+                getData(finalCommodityId, version, snapshots);
             }
         });
-        getData(commodityId);
+        if (snapshots){
+            textView.setText("交易快照");
+        }
+        getData(commodityId,version,snapshots);
 
 //        Bundle bundle = new Bundle();
 //        bundle.putString("haha", "hehe");
@@ -134,6 +147,16 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         super.onBackPressed();
     }
 
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        System.out.println("onNewIntent");
+//                WritableMap event = Arguments.createMap();
+//                event.putString("result", "refresh");
+//                sendEvent(mReactInstanceManager.getCurrentReactContext(), "test", event);
+//     //   getData(commodityId,-1,false);
+//    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -143,65 +166,53 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         }
     }
 
-    public void getData(final long commodityId) {
+    public void getData(final long commodityId,long version,final boolean snapshots) {
         if (commodityId <= 0) return;
-        TravelApi.getCommodity(commodityId, new HttpCallBack<String>() {
+        TravelApi.getCommodity(commodityId,version ,new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
 //                    WritableMap event = Arguments.createMap();
 //                    event.putString("result", jsonObject.getJSONObject("result").toString());
 //                    sendEvent(mReactInstanceManager.getCurrentReactContext(), "test", event);
 
-                        CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result, SimpleCommodityBean.class);
-                        bean = commodity.result;
-                        final String id = bean.id;
-                        Bundle bundle = new Bundle();
-                        bundle.putString("result", jsonObject.getJSONObject("result").toString());
-                        mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
-                        ReactMainPage.this.findViewById(R.id.iv_more).setVisibility(View.VISIBLE);
-                        ReactMainPage.this.findViewById(R.id.iv_collection).setVisibility(View.VISIBLE);
-                        ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null);
+                    CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result, SimpleCommodityBean.class);
+                    bean = commodity.result;
+                    final String id = bean.id;
+                    final String url = bean.shareUrl;
+                    final ShareCommodityBean shareCommodityBean = bean.creteShareBean();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", jsonObject.getJSONObject("result").toString());
+                    bundle.putString("snapshot",String.valueOf(snapshots));
+                    mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
+                    collection.setVisibility(View.VISIBLE);
+                    share.setVisibility(View.VISIBLE);
+                    collection.setChecked(bean.isFavorite);
+                    ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null,url,shareCommodityBean);
+                        }
+                    });
+                    ReactMainPage.this.findViewById(R.id.iv_collection).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (userId != -1) {
+                                changeCollection(collection.isChecked(),id);
                             }
-                        });
-                        ReactMainPage.this.findViewById(R.id.iv_collection).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
 
-                                if (userId!=-1){
-                                    UserApi.addFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
+                        }
+                    });
 
-                                        @Override
-                                        public void doSuccess(String result, String method) {
-                                            Toast.makeText(mContext,"收藏成功",Toast.LENGTH_SHORT).show();
-                                        }
-
-                                        @Override
-                                        public void doFailure(Exception error, String msg, String method) {
-
-                                        }
-
-                                        @Override
-                                        public void doFailure(Exception error, String msg, String method, int code) {
-
-                                        }
-                                    });
-                                }
-
-                            }
-                        });
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        llEmptyView.setVisibility(View.VISIBLE);
-                        mReactRootView.setVisibility(View.GONE);
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    llEmptyView.setVisibility(View.VISIBLE);
+                    mReactRootView.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -211,10 +222,10 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-                if (code==404){
+                if (code == 404) {
                     llEmptyView.setVisibility(View.VISIBLE);
                     mReactRootView.setVisibility(View.GONE);
-                }else if (code==-1){
+                } else if (code == -1) {
                     mReactRootView.setVisibility(View.GONE);
                     rlError.setVisibility(View.VISIBLE);
                 }
@@ -222,6 +233,48 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         });
     }
 
+    public void changeCollection(boolean isCollection,String id ){
+        if (isCollection){
+            UserApi.delFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    Toast.makeText(mContext, "收藏已取消", Toast.LENGTH_SHORT).show();
+                    collection.setChecked(false);
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }else {
+            UserApi.addFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    Toast.makeText(mContext, "收藏成功", Toast.LENGTH_SHORT).show();
+                    collection.setChecked(true);
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
+
+    }
     private void sendEvent(ReactContext reactContext,
                            String eventName,
                            @Nullable WritableMap params) {

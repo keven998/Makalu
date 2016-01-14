@@ -112,6 +112,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     long orderId;
     OrderBean currentOrder;
     CountDownTimer countDownTimer;
+    private static final int REFRESH = 107;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,13 +195,17 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     public void onClick(View v) {
                         intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
                         intent.putExtra("orderId", bean.getOrderId());
-                        startActivity(intent);
+                        startActivityForResult(intent, REFRESH);
                     }
                 });
                 break;
             case "committed":
                 tvState.setText("可使用");
-                llTradeAction0.setVisibility(View.VISIBLE);
+                if (checkState(bean.activities)){
+                    llTradeAction0.setVisibility(View.GONE);
+                }else {
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                }
                 tvAction0.setText("申请退款");
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -208,7 +213,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                         intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
                         intent.putExtra("amount",bean.getTotalPrice());
                         intent.putExtra("orderId", bean.getOrderId());
-                        startActivity(intent);
+                        startActivityForResult(intent,REFRESH);
                     }
                 });
                 break;
@@ -219,6 +224,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice())));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
+                    llTradeAction1.setVisibility(View.VISIBLE);
                     countDownTimer = new CountDownTimer(time, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -233,21 +239,32 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     }.start();
                 } else {
                     tvFeedback.setText("订单已超过支付期限,请重新下单");
-                    tvPay.setText("再次预定");
+                    llTradeAction1.setVisibility(View.GONE);
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("再次预定");
+                    tvAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                            startActivity(intent);
+                        }
+                    });
+                  //  tvPay.setText("再次预定");
                 }
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (tvPay.getText().toString().equals("立即支付")){
+                        if (tvPay.getText().toString().equals("立即支付")) {
                             showPayActionDialog();
-                        }else if (tvPay.getText().toString().equals("再次预定")){
+                        } else if (tvPay.getText().toString().equals("再次预定")) {
                             intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
                             intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                             startActivity(intent);
                         }
                     }
                 });
-                llTradeAction1.setVisibility(View.VISIBLE);
+
                 break;
             case "finished":
                 tvState.setText("已完成");
@@ -314,6 +331,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent = new Intent(OrderDetailActivity.this, ReactMainPage.class);
                 intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                intent.putExtra("snapshots",true);
+                intent.putExtra("version",bean.getCommodity().version);
                 startActivity(intent);
             }
         });
@@ -362,6 +381,15 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         CommonUtils.setListViewHeightBasedOnChildren(listView);
     }
 
+    public boolean checkState(ArrayList<TradeActivityBean> list){
+        for (TradeActivityBean activity : list) {
+            if ("refundDeny".equals(activity.action)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public class ActivityAdapter extends BaseAdapter{
 
         private ArrayList<TradeActivityBean> data;
@@ -372,7 +400,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             this.data = new ArrayList<>();
             stateMap = new HashMap<>();
             stateMap.put("create","买家提交订单");
-            stateMap.put("cancel","买家取消订单");
+           // stateMap.put("cancel","订单已取消");
             stateMap.put("pay","买家付款");
             stateMap.put("refundApply","买家申请退款");
             stateMap.put("refundApprove","卖家同意退款");
@@ -394,9 +422,14 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     return "卖家未确认订单,系统自动退款";
                 }else if (bean.prevStatus.equals("pending")){
                     return "买家未支付,订单过期";
-                }else return "";
-            }
-            else {
+                } else return "";
+            }else if (bean.action.equals("cancel")){
+                if (AccountManager.getCurrentUserId().equals(bean.data.userId)){
+                    return "买家取消订单";
+                }else {
+                    return "卖家取消订单";
+                }
+            } else {
                 return stateMap.get(bean.action);
             }
         }
@@ -554,6 +587,18 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         window.setAttributes(lp);
         window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode ==RESULT_OK){
+            if (requestCode == REFRESH){
+                llTradeAction0.setVisibility(View.GONE);
+                llTradeAction1.setVisibility(View.GONE);
+                getData(orderId);
+            }
+        }
     }
 
     @Override

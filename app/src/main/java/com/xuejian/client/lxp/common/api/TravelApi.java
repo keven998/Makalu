@@ -34,9 +34,9 @@ public class TravelApi extends BaseApi {
     //目的地推荐
     public final static String REC_DEST = "/recommend";
     //国内目的地列表  已修改
-    public final static String IN_DESTINATIONS = "/geo/localities/domestic";
+    public final static String IN_DESTINATIONS = "/guide/localities";
     //国外目的地列表  已修改
-    public final static String OUT_DESTINATIONS = "/geo/localities/abroad";
+    public final static String OUT_DESTINATIONS = "/guide/localities";
     //目的地详情  已修改
     public final static String CITY_DETAIL = "/geo/localities/";
     //目的地图集  已修改
@@ -137,6 +137,17 @@ public class TravelApi extends BaseApi {
 
     // 商户信息
     public final static String SELLER_INFO = "/marketplace/sellers/";
+
+    // 推荐城市
+    public final static String RECOMMEND_CIRY = "/geo/localities/recommendations";
+
+    public static void getRecommendCity(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + RECOMMEND_CIRY);
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
 
 
     public static void getSellerInfo(long orderId,HttpCallBack callback) {
@@ -264,10 +275,11 @@ public class TravelApi extends BaseApi {
     }
 
 
-    public static void getCommodity(long commodityId, HttpCallBack callback) {
+    public static void getCommodity(long commodityId,long version, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(COMMODITY_DETAIL, String.valueOf(commodityId)));
+        if (version>0)request.putUrlParams("version",String.valueOf(version));
         setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
@@ -387,7 +399,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + CITY_LIST + "/" + cityId + "/details");
-        if (TextUtils.isEmpty(field))request.putUrlParams("field", field);
+        if (!TextUtils.isEmpty(field))request.putUrlParams("field", field);
         setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
@@ -439,6 +451,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + IN_DESTINATIONS);
+        request.putUrlParams("abroad", "false");
         request.putUrlParams("groupBy", "true");
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
 
@@ -471,6 +484,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + OUT_DESTINATIONS);
+        request.putUrlParams("abroad", "true");
         request.putUrlParams("groupBy", "true");
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
 
@@ -548,6 +562,7 @@ public class TravelApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD);
         if (!TextUtils.isEmpty(type)) {
             if (type.equals("vs")) type = "viewspot";
+            if (type.equals("loc")) type = "locality";
             request.putUrlParams("scope", type);
         }
         setDefaultParams(request,"");

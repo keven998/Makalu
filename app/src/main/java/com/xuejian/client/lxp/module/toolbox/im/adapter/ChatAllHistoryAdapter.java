@@ -216,6 +216,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                     finalHolder.avatar.setImageResource(R.drawable.lvxingwenwen);
                 } else if (user.getUserId() == 10000) {
                     finalHolder.avatar.setImageResource(R.drawable.lvxingpaipai);
+                } else if (user.getUserId() == 10002) {
+                    finalHolder.avatar.setImageResource(R.drawable.icon_trade_message);
+                } else if (user.getUserId() == 10003) {
+                    finalHolder.avatar.setImageResource(R.drawable.icon_activity_message);
                 } else {
                     if (finalHolder.avatar.getTag() != null && (int) finalHolder.avatar.getTag() == conversation.getFriendId()) {
                         ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);

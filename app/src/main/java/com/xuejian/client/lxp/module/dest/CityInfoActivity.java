@@ -39,6 +39,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 
@@ -128,22 +129,22 @@ public class CityInfoActivity extends PeachBaseActivity  {
 
             }
         });
-        TravelApi.getCityDetail(id, "", new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
+//        TravelApi.getCityDetail(id, "", new HttpCallBack<String>() {
+//            @Override
+//            public void doSuccess(String result, String method) {
+//
+//            }
+//
+//            @Override
+//            public void doFailure(Exception error, String msg, String method) {
+//
+//            }
+//
+//            @Override
+//            public void doFailure(Exception error, String msg, String method, int code) {
+//
+//            }
+//        });
 
         TravelApi.getCommodityList(null, id, null, null, null, "0", "3", new HttpCallBack<String>() {
 
@@ -192,7 +193,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
         if (!TextUtils.isEmpty(bean.zhName))title.setText(bean.zhName);
         tvCountryName.setText(bean.zhName);
         tvCountryNameEn.setText(bean.enName);
-        tvStoreNum.setText(String.valueOf(bean.commodityCnt));
+        tvStoreNum.setText(String.valueOf(bean.commoditiesCnt));
         viewPager.setAdapter(new GoodsPageAdapter(this, bean.images, bean.id, bean.zhName));
 
 
@@ -203,19 +204,29 @@ public class CityInfoActivity extends PeachBaseActivity  {
         findViewById(R.id.btn_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(CityInfoActivity.this, ReadMoreActivity.class);
+                intent.putExtra("content",bean.desc);
+                intent.putExtra("title","城市简介");
+                startActivity(intent);
 
             }
         });
         findViewById(R.id.btn_travel_notice).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(CityInfoActivity.this, PeachWebViewActivity.class);
+                intent.putExtra("url",bean.playGuide);
+                intent.putExtra("title","城市指南");
+                startActivity(intent);
             }
         });
         findViewById(R.id.btn_traffic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(CityInfoActivity.this, PeachWebViewActivity.class);
+                intent.putExtra("url",bean.trafficInfoUrl);
+                intent.putExtra("title","交通信息");
+                startActivity(intent);
             }
         });
         findViewById(R.id.btn_viewspot).setOnClickListener(new View.OnClickListener() {
@@ -231,7 +242,10 @@ public class CityInfoActivity extends PeachBaseActivity  {
         findViewById(R.id.btn_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, StrategyActivity.class);
+                intent.putExtra("locId", bean.id);
+                intent.putExtra("recommend", true);
+                startActivity(intent);
             }
         });
         findViewById(R.id.btn_note).setOnClickListener(new View.OnClickListener() {

@@ -41,7 +41,7 @@
             android:src="@drawable/icon_share"
             android:visibility="gone"/>
 
-        <ImageView
+        <CheckedTextView
             android:id="@+id/iv_collection"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -50,7 +50,7 @@
             android:paddingLeft="32dp"
             android:paddingRight="20dp"
             android:scaleType="center"
-            android:src="@drawable/icon_collection"
+            android:drawableLeft="@drawable/btn_collection"
             android:visibility="gone"/>
 
 

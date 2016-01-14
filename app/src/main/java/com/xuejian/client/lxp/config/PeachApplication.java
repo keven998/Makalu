@@ -64,6 +64,7 @@ public class PeachApplication extends BaseApplication implements AuthenticationF
         Toast.makeText(this,"授权失败，请重新登录",Toast.LENGTH_LONG).show();
         AccountManager.getInstance().logout(this);
         Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClass(this, LoginActivity.class);
         startActivity(intent);
     }

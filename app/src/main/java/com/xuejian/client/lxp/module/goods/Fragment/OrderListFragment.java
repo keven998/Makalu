@@ -366,19 +366,26 @@ public class OrderListFragment extends PeachBaseFragment {
                     holder.tvDrawBackState.setText("退款申请中");
                     break;
                 case "pending":
-                    holder.rlNeedPay.setVisibility(View.VISIBLE);
-                    SpannableString priceStr = new SpannableString("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
-                    priceStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    priceStr.setSpan(new AbsoluteSizeSpan(13, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    SpannableStringBuilder spb = new SpannableStringBuilder();
-                    spb.append("待付款:").append(priceStr);
-                    holder.tvNeedPayState.setText(spb);
-                    holder.tvNeedPayPay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showPayActionDialog((Activity)mContext,bean.getOrderId());
-                        }
-                    });
+                    long time = bean.getExpireTime() - System.currentTimeMillis();
+                    if (time > 0) {
+                        holder.rlNeedPay.setVisibility(View.VISIBLE);
+                        SpannableString priceStr = new SpannableString("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
+                        priceStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        priceStr.setSpan(new AbsoluteSizeSpan(13, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                        SpannableStringBuilder spb = new SpannableStringBuilder();
+                        spb.append("待付款:").append(priceStr);
+                        holder.tvNeedPayState.setText(spb);
+                        holder.tvNeedPayPay.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showPayActionDialog((Activity)mContext,bean.getOrderId());
+                            }
+                        });
+                    }else {
+                        holder.rlProcess.setVisibility(View.VISIBLE);
+                        holder.tvDrawBackState.setText("订单已超过支付期限,请重新下单");
+                    }
+
                     break;
                 case "finished":
                     holder.rlProcess.setVisibility(View.VISIBLE);

@@ -126,6 +126,18 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra("wxSuccess",false)){
+            tvOrderDetail.setVisibility(View.VISIBLE);
+            tvMain.setVisibility(View.VISIBLE);
+            ivPayState.setVisibility(View.VISIBLE);
+            tvState.setText("订单已支付\n请等待卖家确认");
+            tvTitle.setText("支付成功");
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_state);
@@ -169,6 +181,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PaymentActivity.this, OrderDetailActivity.class);
+                intent.putExtra("type","orderDetail");
                 intent.putExtra("orderDetail",true);
                 intent.putExtra("orderId",orderId);
                 startActivity(intent);
@@ -258,7 +271,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         payReq.sign = payInfo.getSign();
         msgApi.registerApp(ShareUtils.PlatfromSetting.WX_APPID);
         msgApi.sendReq(payReq);
-        finish();
+   //     finish();
 //        PayReq payReq = new PayReq();
 //            payReq.appId = ShareUtils.PlatfromSetting.WX_APPID;
 //            payReq.partnerId = "1278401701";

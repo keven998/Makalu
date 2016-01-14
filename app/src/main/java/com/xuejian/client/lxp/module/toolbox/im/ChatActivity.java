@@ -630,7 +630,9 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         }
         if ("10002".equals(toChatUsername)){
             findViewById(R.id.iv_nav_menu).setVisibility(View.GONE);
+            findViewById(R.id.bar_bottom).setVisibility(View.GONE);
         }
+
         adapter = new MessageAdapter(this, toChatUsername, chatType, conversation);
         // 显示消息
         listView.setAdapter(adapter);
@@ -815,7 +817,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 break;
             case R.id.iv_emoticons_normal:
                 hideKeyboard();
-
+                setModeKeyboard(null);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1241,7 +1243,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         mExtraPanel.setVisibility(View.GONE);
         btnContainer.setVisibility(View.GONE);
         expressionContainer.setVisibility(View.GONE);
-        view.setVisibility(View.GONE);
+        if (view!=null)view.setVisibility(View.GONE);
         buttonSetModeVoice.setVisibility(View.VISIBLE);
         mEditTextContent.requestFocus();
         buttonPressToSpeak.setVisibility(View.GONE);
@@ -1253,7 +1255,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             btnMore.setVisibility(View.GONE);
             buttonSend.setVisibility(View.VISIBLE);
         }
-        showKeyboard(mEditTextContent);
+        if (view!=null)showKeyboard(mEditTextContent);
     }
 
     /**

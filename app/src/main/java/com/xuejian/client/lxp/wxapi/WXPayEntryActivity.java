@@ -15,6 +15,7 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
+import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
 public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 	
@@ -51,12 +52,18 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if (resp.errCode == 0){
 				Toast.makeText(WXPayEntryActivity.this,"支付成功",Toast.LENGTH_SHORT).show();
+				Intent intent1 = new Intent();
+                intent1.setClass(WXPayEntryActivity.this, PaymentActivity.class);
+                intent1.putExtra("wxSuccess", true);
+                startActivity(intent1);
 			}else if (resp.errCode == -2){
 				Toast.makeText(WXPayEntryActivity.this, "支付取消 " , Toast.LENGTH_SHORT).show();
+                startActivity(intent);
 			}else {
 				Toast.makeText(WXPayEntryActivity.this,"支付失败",Toast.LENGTH_SHORT).show();
+                startActivity(intent);
 			}
-			startActivity(intent);
+
 			finish();
 		}
 	}
