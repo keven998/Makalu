@@ -48,7 +48,6 @@ import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -450,7 +449,7 @@ public class OrderListFragment extends PeachBaseFragment {
             }
             holder.tvGoodsName.setText(bean.getCommodity().getTitle());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            holder.tvDate.setText(String.format("出行日期:%s", format.format(new Date(bean.getRendezvousTime()))));
+            holder.tvDate.setText(String.format("出行日期:%s", bean.getRendezvousTime()));
             if (bean.getCommodity().getPlans().size() > 0) {
                 holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle() + " x" + bean.getQuantity());
             }

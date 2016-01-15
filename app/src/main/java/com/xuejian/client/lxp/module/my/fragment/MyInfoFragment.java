@@ -96,9 +96,9 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     }
 
     public void initHeadTitleView(User user) {
-        if (user!=null){
+        if (AccountManager.getInstance().getLoginAccount(getActivity())!=null){
             tvNickname.setText(user.getNickName());
-            ImageLoader.getInstance().displayImage(user.getAvatar(), userAvatar, options);
+            ImageLoader.getInstance().displayImage(AccountManager.getInstance().getLoginAccount(getActivity()).getAvatar(), userAvatar, options);
         }
     }
 
@@ -163,7 +163,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 planIntent.setClass(getActivity(), StrategyListActivity.class);
                 planIntent.putExtra("isShare", false);
                 planIntent.putExtra("isOwner",true);
-                if (user!=null)planIntent.putExtra("userId",String.valueOf(user.getUserId()));
+                if (AccountManager.getInstance().getLoginAccount(getActivity())!=null)planIntent.putExtra("userId",String.valueOf(AccountManager.getInstance().getLoginAccount(getActivity()).getUserId()));
                 startActivity(planIntent);
                 break;
             case R.id.rl_my_contact:

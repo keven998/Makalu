@@ -44,9 +44,7 @@ import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -283,7 +281,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
 //        });
         //     tvOrderId.setText(String.valueOf(bean.getOrderId()));
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
-        tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
+        tvOrderDate.setText(bean.getRendezvousTime());
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
         tvOrderPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
 

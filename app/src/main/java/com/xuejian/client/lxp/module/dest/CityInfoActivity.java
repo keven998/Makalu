@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 /**
  * Created by yibiao.qin on 2015/11/4.
  */
-public class CityInfoActivity extends PeachBaseActivity  {
+public class CityInfoActivity extends PeachBaseActivity {
 
     ListView listView;
     AutoScrollViewPager viewPager;
@@ -66,6 +66,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
     FrameLayout fl_city_img;
     TextView showMore;
     TextView title;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,10 +152,11 @@ public class CityInfoActivity extends PeachBaseActivity  {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
-                adapter.getDataList().clear();
-                adapter.getDataList().addAll(list.result);
-                adapter.notifyDataSetChanged();
+
                 if (list.result.size() > 0) {
+                    adapter.getDataList().clear();
+                    adapter.getDataList().addAll(list.result);
+                    adapter.notifyDataSetChanged();
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -164,12 +166,19 @@ public class CityInfoActivity extends PeachBaseActivity  {
                             startActivity(intent);
                         }
                     });
+                } else {
+                    adapter.getDataList().clear();
+                    adapter.setEmpty(true);
+                    adapter.getDataList().add(0,new SimpleCommodityBean());
+                    adapter.notifyDataSetChanged();
+                    showMore.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+//                empty.setVisibility(View.VISIBLE);
+//                showMore.setVisibility(View.GONE);
             }
 
             @Override
@@ -190,7 +199,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
                 startActivity(intent);
             }
         });
-        if (!TextUtils.isEmpty(bean.zhName))title.setText(bean.zhName);
+        if (!TextUtils.isEmpty(bean.zhName)) title.setText(bean.zhName);
         tvCountryName.setText(bean.zhName);
         tvCountryNameEn.setText(bean.enName);
         tvStoreNum.setText(String.valueOf(bean.commoditiesCnt));
@@ -205,8 +214,8 @@ public class CityInfoActivity extends PeachBaseActivity  {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CityInfoActivity.this, ReadMoreActivity.class);
-                intent.putExtra("content",bean.desc);
-                intent.putExtra("title","城市简介");
+                intent.putExtra("content", bean.desc);
+                intent.putExtra("title", "城市简介");
                 startActivity(intent);
 
             }
@@ -215,8 +224,8 @@ public class CityInfoActivity extends PeachBaseActivity  {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CityInfoActivity.this, PeachWebViewActivity.class);
-                intent.putExtra("url",bean.playGuide);
-                intent.putExtra("title","城市指南");
+                intent.putExtra("url", bean.playGuide);
+                intent.putExtra("title", "城市指南");
                 startActivity(intent);
             }
         });
@@ -224,8 +233,8 @@ public class CityInfoActivity extends PeachBaseActivity  {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CityInfoActivity.this, PeachWebViewActivity.class);
-                intent.putExtra("url",bean.trafficInfoUrl);
-                intent.putExtra("title","交通信息");
+                intent.putExtra("url", bean.trafficInfoUrl);
+                intent.putExtra("title", "交通信息");
                 startActivity(intent);
             }
         });
@@ -265,7 +274,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
                 locList.add(locBean);
                 intent.putParcelableArrayListExtra("locList", locList);
                 intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
-             //   intent.putExtra("value", locBean.diningTitles);
+                //   intent.putExtra("value", locBean.diningTitles);
                 intent.putExtra("isFromCityDetail", true);
                 startActivity(intent);
             }
@@ -278,7 +287,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
                 locList.add(locBean);
                 intent.putParcelableArrayListExtra("locList", locList);
                 intent.putExtra("type", TravelApi.PeachType.SHOPPING);
-             //   intent.putExtra("value", locBean.shoppingTitles);
+                //   intent.putExtra("value", locBean.shoppingTitles);
                 intent.putExtra("isFromCityDetail", true);
                 startActivity(intent);
             }
@@ -345,6 +354,7 @@ public class CityInfoActivity extends PeachBaseActivity  {
         private Context mContext;
         private ArrayList<SimpleCommodityBean> data;
         Activity activity;
+        private boolean empty;
 
         public RecommendGoodsAdapter(Context c, Activity activity) {
             data = new ArrayList<>();
@@ -363,6 +373,10 @@ public class CityInfoActivity extends PeachBaseActivity  {
         @Override
         public boolean isEnabled(int position) {
             return true;
+        }
+
+        public void setEmpty(boolean empty) {
+            this.empty = empty;
         }
 
         public ArrayList<SimpleCommodityBean> getDataList() {
@@ -386,37 +400,43 @@ public class CityInfoActivity extends PeachBaseActivity  {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = View.inflate(mContext, R.layout.item_goods_list, null);
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
+            if (empty) {
+                convertView = View.inflate(mContext, R.layout.city_empty_view, null);
+                return convertView;
             } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
-            ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
-            holder.tvGoodsName.setText(bean.getTitle());
+                ViewHolder holder;
+                if (convertView == null) {
+                    convertView = View.inflate(mContext, R.layout.item_goods_list, null);
+                    holder = new ViewHolder(convertView);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
+                ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
+                holder.tvGoodsName.setText(bean.getTitle());
 
-            SpannableString string = new SpannableString("起");
-            string.setSpan(new AbsoluteSizeSpan(12, true), 0, 1,
-                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            SpannableStringBuilder spb = new SpannableStringBuilder();
-            spb.append("¥" + CommonUtils.getPriceString(bean.getPrice())).append(string);
-            holder.tvGoodsCurrentPrice.setText(spb);
+                SpannableString string = new SpannableString("起");
+                string.setSpan(new AbsoluteSizeSpan(12, true), 0, 1,
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder spb = new SpannableStringBuilder();
+                spb.append("¥" + CommonUtils.getPriceString(bean.getPrice())).append(string);
+                holder.tvGoodsCurrentPrice.setText(spb);
 
-            holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
-            holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvGoodsPrice.getPaint().setAntiAlias(true);
-            holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume())+"已售");
-            holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
-            if (bean.getSeller() != null) {
-                holder.tvStoreName.setText(bean.getSeller().getName());
-            }
+                holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
+                holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.tvGoodsPrice.getPaint().setAntiAlias(true);
+                holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume()) + "已售");
+                holder.tvGoodsComment.setText(String.valueOf((int) (bean.getRating() * 100)) + "%满意");
+                if (bean.getSeller() != null) {
+                    holder.tvStoreName.setText(bean.getSeller().getName());
+                }
 //            holder.tvGoodsService.removeAllViews();
 //            holder.tvGoodsService.setmTagViewResId(R.layout.goods_tag);
 //            holder.tvGoodsService.addTags(mTags);
-            return convertView;
+                return convertView;
+            }
+
         }
 
 

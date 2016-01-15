@@ -284,7 +284,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         simpleCommodityBean.setPlans(planBeans);
         simpleCommodityBean.setTitle(name);
         orderBean.setCommodity(simpleCommodityBean);
-        orderBean.setRendezvousTime(dt2.getTime());
+        orderBean.setRendezvousTime(new SimpleDateFormat("yyyy-MM-dd").format(dt2));
         orderBean.setQuantity(goodsNum);
         orderBean.setTotalPrice(priceBean.price * goodsNum);
 //        ArrayList<TravellerEntity> list = new ArrayList<>();

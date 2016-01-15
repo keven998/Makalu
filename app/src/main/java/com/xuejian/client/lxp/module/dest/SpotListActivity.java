@@ -228,11 +228,16 @@ public class SpotListActivity extends PeachBaseActivity {
         TravelApi.getPoiListByLoc(type, cityId, page, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                CommonJson4List<PoiDetailBean> poiListResult = CommonJson4List.fromJson(result, PoiDetailBean.class);
-                if (poiListResult.code == 0) {
-                    curPage = page;
-                    bindView(poiListResult.result);
+                try {
+                    CommonJson4List<PoiDetailBean> poiListResult = CommonJson4List.fromJson(result, PoiDetailBean.class);
+                    if (poiListResult.code == 0) {
+                        curPage = page;
+                        bindView(poiListResult.result);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
                 if (curPage == 0) {
                     mPoiListLv.onPullDownRefreshComplete();
                     mPoiListLv.onPullUpRefreshComplete();

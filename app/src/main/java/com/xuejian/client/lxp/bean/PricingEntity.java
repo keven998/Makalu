@@ -11,13 +11,13 @@ import java.util.List;
  */
 public class PricingEntity implements Parcelable {
     private double price;
-    private List<Long> timeRange;
+    private List<String> timeRange;
 
     public void setPrice(int price) {
         this.price = price;
     }
 
-    public void setTimeRange(List<Long> timeRange) {
+    public void setTimeRange(List<String> timeRange) {
         this.timeRange = timeRange;
     }
 
@@ -25,7 +25,7 @@ public class PricingEntity implements Parcelable {
         return price;
     }
 
-    public List<Long> getTimeRange() {
+    public List<String> getTimeRange() {
         return timeRange;
     }
 
@@ -45,7 +45,7 @@ public class PricingEntity implements Parcelable {
 
     protected PricingEntity(Parcel in) {
         this.price = in.readDouble();
-        this.timeRange = new ArrayList<Long>();
+        this.timeRange = new ArrayList<String>();
         in.readList(this.timeRange, List.class.getClassLoader());
     }
 

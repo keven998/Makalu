@@ -338,7 +338,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         });
         tvOrderId.setText(String.valueOf(bean.getOrderId()));
         tvOrderPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
-        tvOrderDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getRendezvousTime())));
+        tvOrderDate.setText(bean.getRendezvousTime());
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
         tvOrderPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
 

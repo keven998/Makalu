@@ -170,7 +170,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         //图片
         if (bean.images != null) {
             ViewPager vp = (ViewPager) findViewById(R.id.vp_poi);
-            vp.setAdapter(new POIImageVPAdapter(this, bean.images));
+
             final DotView dotview = (DotView) findViewById(R.id.dot_view);
             int pc = bean.images.size();
             if (pc > 1) {
@@ -192,6 +192,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
             } else {
                 dotview.setVisibility(View.GONE);
             }
+            if ( bean.images.size() == 0){
+                ImageBean imageBean = new ImageBean();
+                imageBean.url="";
+                bean.images.add(imageBean);
+                vp.setAdapter(new POIImageVPAdapter(this, bean.images));
+            }else {
+                vp.setAdapter(new POIImageVPAdapter(this, bean.images));
+            }
+
         }
 
         //评分、类型、排名

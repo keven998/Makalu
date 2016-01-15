@@ -510,7 +510,7 @@ public class MessageAdapter extends BaseAdapter {
             ImageLoader.getInstance().displayImage("", holder.iv_goods_img, UILUtils.getDefaultOption());
         }
         holder.tv_commodity_name.setText(String.format("商品名称:%s", bean.title));
-        holder.tv_commodity_price.setText(String.format("¥%s",CommonUtils.getPriceString(bean.price)));
+        holder.tv_commodity_price.setText(String.format("¥%s", CommonUtils.getPriceString(bean.price)));
         holder.rl_commodity.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -530,7 +530,7 @@ public class MessageAdapter extends BaseAdapter {
         if (gson == null) {
             gson = new Gson();
         }
-        TradeMessageBean bean = gson.fromJson(message.getMessage(), new TypeToken<TradeMessageBean>() {
+        final TradeMessageBean bean = gson.fromJson(message.getMessage(), new TypeToken<TradeMessageBean>() {
         }.getType());
         holder.tv_order_id.setText(String.format("订单编号:%d", bean.getOrderId()));
         holder.tv_goods_name.setText(String.format("商品名称:%s", bean.getCommodityName()));
@@ -550,7 +550,7 @@ public class MessageAdapter extends BaseAdapter {
 
                 Intent intent = new Intent(activity, OrderDetailActivity.class);
                 intent.putExtra("type", "orderDetail");
-                intent.putExtra("orderId", 1449480836556l);
+                intent.putExtra("orderId", bean.getOrderId());
                 activity.startActivity(intent);
             }
         });
@@ -607,7 +607,21 @@ public class MessageAdapter extends BaseAdapter {
                 User user = UserDBManager.getInstance().getContactByUserId(message.getSenderId());
                 if (user != null) {
                     holder.tv_userId.setText(user.getNickName());
-                    if (holder.head_iv!=null)ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
+                    if (user.getUserId() == 10000) {
+                        holder.head_iv.setImageResource(R.drawable.lvxingpaipai);
+                    } else if (user.getUserId() == 10001) {
+                        holder.head_iv.setImageResource(R.drawable.lvxingwenwen);
+                    }
+                    if (user.getUserId() == 10002) {
+                        holder.head_iv.setImageResource(R.drawable.icon_trade_message);
+                    }
+                    if (user.getUserId() == 10003) {
+                        holder.head_iv.setImageResource(R.drawable.icon_activity_message);
+                    } else {
+                        if (holder.head_iv != null)
+                            ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
+
+                    }
                 }
             }
         } else {

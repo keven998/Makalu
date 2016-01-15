@@ -39,8 +39,8 @@ public class ShareUtils {
         public final static String WX_APPID = "wx86048e56adaf7486";
         public final static String WX_APPSECRET = "d5408e689b82c0335a728cc8bd1b3c2e";
 
-        public final static String QQ_APPID = "1104433490";
-        public final static String QQ_APPKEY = "9OCrfdw4vb31gHOU";
+        public final static String QQ_APPID = "1104725962";
+        public final static String QQ_APPKEY = "vxQPBWbxs7otYkTf";
 
     }
 
@@ -660,7 +660,7 @@ public class ShareUtils {
 //设置分享title
             qqShareContent.setTitle(shareTitle);
 //设置分享图片
-            qqShareContent.setShareImage(new UMImage(act, R.drawable.icon));
+            qqShareContent.setShareImage(umImage);
 //设置点击分享内容的跳转链接
             qqShareContent.setTargetUrl(shareUrl);
             mController.setShareMedia(qqShareContent);
@@ -697,7 +697,7 @@ public class ShareUtils {
 //设置分享title
             qZoneShareContent.setTitle(shareTitle);
 //设置分享图片
-            qZoneShareContent.setShareImage(new UMImage(act, R.drawable.icon));
+            qZoneShareContent.setShareImage(umImage);
 //设置点击分享内容的跳转链接
             qZoneShareContent.setTargetUrl(shareUrl);
             mController.setShareMedia(qZoneShareContent);

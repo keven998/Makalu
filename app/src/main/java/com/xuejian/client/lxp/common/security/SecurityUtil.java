@@ -211,13 +211,13 @@ public class SecurityUtil {
         if (key!=null){
             signature = encryptHMAC(signatureMessage.toString(), key.getKey());
 
-            System.out.println("key str = "+ key.getKey());
-            System.out.println("path str = " + path);
-            System.out.println("header str = " + header.toString());
-            System.out.println("query str = " + query.toString());
-            System.out.println("body str = "+ body_str);
-            System.out.println("SignatureMessage str = " + signatureMessage);
-            System.out.println("Signature = " + signature);
+//            System.out.println("key str = "+ key.getKey());
+//            System.out.println("path str = " + path);
+//            System.out.println("header str = " + header.toString());
+//            System.out.println("query str = " + query.toString());
+//            System.out.println("body str = "+ body_str);
+//            System.out.println("SignatureMessage str = " + signatureMessage);
+//            System.out.println("Signature = " + signature);
         }
 
         return signature;

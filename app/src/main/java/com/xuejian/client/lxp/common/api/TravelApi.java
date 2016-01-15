@@ -290,7 +290,7 @@ public class TravelApi extends BaseApi {
 
 
     public static void createOrder
-            (long commodityId, String planId, long rendezvousTime, int quantity, JSONObject contactObject, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
+            (long commodityId, String planId, String rendezvousTime, int quantity, JSONObject contactObject, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CREATE_ORDER);

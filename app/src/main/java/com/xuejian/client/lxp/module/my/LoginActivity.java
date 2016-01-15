@@ -327,7 +327,7 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void signIn() {
         if (TextUtils.isEmpty(loginNameEt.getText()) || TextUtils.isEmpty(pwdEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("我要账号和密码");
+            ToastUtil.getInstance(mContext).showToast("请输入账号和密码");
             return;
         }
         if (!RegexUtils.isMobileNO(loginNameEt.getText().toString().trim())) {

@@ -12,8 +12,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import com.aizou.core.utils.SharePrefUtil;
@@ -75,12 +73,12 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
             if (i == 0) {
                 View view = View.inflate(this, R.layout.guide_ad, null);
                 //      ImageView earthIv = (ImageView) view.findViewById(R.id.iv_guide_earth);
-                Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
+      //          Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
                 //        earthIv.startAnimation(operatingAnim);
                 views.add(view);
             }else if (i == 1) {
                 View view = View.inflate(this, R.layout.guide_1, null);
-                Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
+        //        Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
                 views.add(view);
             } else if (i == 2) {
                 View view = View.inflate(this, R.layout.guide_2, null);

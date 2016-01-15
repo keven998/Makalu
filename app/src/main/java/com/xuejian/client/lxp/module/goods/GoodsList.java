@@ -175,7 +175,6 @@ public class GoodsList extends PeachBaseActivity {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    System.out.println("newState "+newState);
                 }
 
                 @Override

@@ -35,6 +35,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,17 +61,18 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
     TextView tvRetry;
     long userId = -1;
     long commodityId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         commodityId = getIntent().getLongExtra("commodityId", -1);
         showLoading();
-     //   prepareJSBundle();
-        final boolean snapshots = getIntent().getBooleanExtra("snapshots",false);
+        //   prepareJSBundle();
+        final boolean snapshots = getIntent().getBooleanExtra("snapshots", false);
         final long version = getIntent().getLongExtra("version", -1);
         Uri uri = getIntent().getData();
         if (uri != null) {
-            if (TextUtils.isDigitsOnly(uri.getLastPathSegment())){
+            if (TextUtils.isDigitsOnly(uri.getLastPathSegment())) {
                 commodityId = Long.parseLong(uri.getLastPathSegment());
             }
 //            System.out.println(uri.getHost());
@@ -82,10 +84,10 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         }
 
         User user = AccountManager.getInstance().getLoginAccount(mContext);
-        if (user!=null){
+        if (user != null) {
             userId = user.getUserId();
         }
-     //   mReactRootView = new ReactRootView(this);
+        //   mReactRootView = new ReactRootView(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
                 .setBundleAssetName("ReactNativeDevBundle.js")
@@ -99,7 +101,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         setContentView(R.layout.activity_rnview);
         mReactRootView = (ReactRootView) findViewById(R.id.root_view);
         llEmptyView = (LinearLayout) findViewById(R.id.empty_view);
-        rlError = (RelativeLayout)findViewById(R.id.rl_error);
+        rlError = (RelativeLayout) findViewById(R.id.rl_error);
         share = (ImageView) findViewById(R.id.iv_more);
         collection = (CheckedTextView) findViewById(R.id.iv_collection);
         TextView textView = (TextView) findViewById(R.id.strategy_title);
@@ -112,10 +114,10 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                 getData(finalCommodityId, version, snapshots);
             }
         });
-        if (snapshots){
+        if (snapshots) {
             textView.setText("交易快照");
         }
-        getData(commodityId,version,snapshots);
+        getData(commodityId, version, snapshots);
 
 //        Bundle bundle = new Bundle();
 //        bundle.putString("haha", "hehe");
@@ -166,9 +168,9 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         }
     }
 
-    public void getData(final long commodityId,long version,final boolean snapshots) {
+    public void getData(final long commodityId, long version, final boolean snapshots) {
         if (commodityId <= 0) return;
-        TravelApi.getCommodity(commodityId,version ,new HttpCallBack<String>() {
+        TravelApi.getCommodity(commodityId, version, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
@@ -186,7 +188,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                     final ShareCommodityBean shareCommodityBean = bean.creteShareBean();
                     Bundle bundle = new Bundle();
                     bundle.putString("result", jsonObject.getJSONObject("result").toString());
-                    bundle.putString("snapshot",String.valueOf(snapshots));
+                    bundle.putString("snapshot", String.valueOf(snapshots));
                     mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
                     collection.setVisibility(View.VISIBLE);
                     share.setVisibility(View.VISIBLE);
@@ -194,7 +196,14 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                     ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null,url,shareCommodityBean);
+                            if (AccountManager.getInstance().getLoginAccount(ReactMainPage.this) == null) {
+                                Intent intent = new Intent();
+                                intent.putExtra("isFromGoods", true);
+                                intent.setClass(ReactMainPage.this, LoginActivity.class);
+                                startActivity(intent);
+                            } else {
+                                ShareUtils.showSelectPlatformDialog(ReactMainPage.this, null, url, shareCommodityBean);
+                            }
                         }
                     });
                     ReactMainPage.this.findViewById(R.id.iv_collection).setOnClickListener(new View.OnClickListener() {
@@ -202,7 +211,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                         public void onClick(View v) {
 
                             if (userId != -1) {
-                                changeCollection(collection.isChecked(),id);
+                                changeCollection(collection.isChecked(), id);
                             }
 
                         }
@@ -233,8 +242,8 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         });
     }
 
-    public void changeCollection(boolean isCollection,String id ){
-        if (isCollection){
+    public void changeCollection(boolean isCollection, String id) {
+        if (isCollection) {
             UserApi.delFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
 
                 @Override
@@ -253,7 +262,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 
                 }
             });
-        }else {
+        } else {
             UserApi.addFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
 
                 @Override
@@ -275,6 +284,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
         }
 
     }
+
     private void sendEvent(ReactContext reactContext,
                            String eventName,
                            @Nullable WritableMap params) {

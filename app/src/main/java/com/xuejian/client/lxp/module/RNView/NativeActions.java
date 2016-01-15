@@ -91,7 +91,6 @@ public class NativeActions extends ReactContextBaseJavaModule {
                 reactContext.startActivity(intent);
                 break;
             case "Detail":
-                System.out.println("id "+id);
                 if (TextUtils.isDigitsOnly(id)){
                     intent.putExtra("commodityId",Long.parseLong(id));
                     intent.setClass(reactContext, ReactMainPage.class);
