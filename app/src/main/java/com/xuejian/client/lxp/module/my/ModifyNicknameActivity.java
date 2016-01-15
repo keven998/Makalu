@@ -125,6 +125,8 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                             CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                             if (modifyResult.code == 0) {
                                 user.setNickName(nickEt.getText().toString().trim());
+                                User user = AccountManager.getInstance().getLoginAccount(ModifyNicknameActivity.this);
+                                user.setNickName(nickEt.getText().toString().trim());
                                 AccountManager.getInstance().saveLoginAccount(mContext, user);
                                 Intent intent = new Intent();
                                 intent.putExtra("nickname", nickEt.getText().toString().trim());

@@ -46,6 +46,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
+import com.xuejian.client.lxp.bean.SecretKeyBean;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
@@ -573,6 +574,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 public void doSuccess(String result, String method) {
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
+                        User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                        SecretKeyBean secretKeyBean =user.getSecretKey();
+                        userResult.result.setSecretKey(secretKeyBean);
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
                         bindView(userResult.result, user.getUserId());
                     }
@@ -760,6 +764,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
                     user.setGender(gender);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                    user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     if (gender.equalsIgnoreCase("M")) {
                         //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
@@ -889,9 +895,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                     new UpProgressHandler() {
                                         public void progress(String key, double percent) {
                                             try {
-                                                progressDialog.setContent((int) (percent * 100) + "%");
+                                                if (progressDialog!=null)progressDialog.setContent((int) (percent * 100) + "%");
                                             } catch (Exception e) {
-
+                                                e.printStackTrace();
                                             }
 
                                         }
@@ -937,8 +943,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setAvatar(url);
                     try {
-                        AccountManager.getInstance().getLoginAccountInfo().setAvatar(url);
-                        AccountManager.getInstance().saveLoginAccount(mContext, user);
+//                       User user = AccountManager.getInstance().getLoginAccountInfo();
+//                        user.setAvatar(url);
+//                        AccountManager.getInstance().saveLoginAccount(mContext, user);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1126,6 +1133,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
                     user.setTravelStatus(sstatus);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                    user.setTravelStatus(sstatus);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     //status.setText(sstatus);
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -1169,6 +1178,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
                     user.setResidence(residence);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                    user.setResidence(residence);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     tv_resident.setText(residence);
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -1210,6 +1221,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
+                    user.setBirthday(birth);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
                     user.setBirthday(birth);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     tv_zodiac.setText(birth);

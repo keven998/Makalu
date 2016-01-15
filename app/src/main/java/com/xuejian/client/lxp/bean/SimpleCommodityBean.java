@@ -42,7 +42,7 @@ public class SimpleCommodityBean implements Parcelable {
         bean.title = this.title;
         bean.commodityId = this.commodityId;
         bean.price = this.price;
-        bean.image = cover;
+        bean.image = cover.url;
         return bean;
     }
 

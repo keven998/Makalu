@@ -472,8 +472,8 @@ public class ShareUtils {
 //                && strategyBean.images.size() > 0) {
 //            umImage = new UMImage(act, strategyBean.images.get(0).url);
 //        } else {
-        if (shareCommodityBean.image!=null&&shareCommodityBean.image.url!=null){
-            umImage = new UMImage(act, shareCommodityBean.image.url);
+        if (shareCommodityBean.image!=null){
+            umImage = new UMImage(act, shareCommodityBean.image);
         }else {
             umImage = new UMImage(act,R.drawable.icon_for_share);
         }

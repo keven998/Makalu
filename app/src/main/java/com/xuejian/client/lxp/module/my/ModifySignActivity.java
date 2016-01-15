@@ -68,6 +68,8 @@ public class ModifySignActivity extends PeachBaseActivity {
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (modifyResult.code == 0) {
                             user.setSignature(signEt.getText().toString().trim());
+                            User user = AccountManager.getInstance().getLoginAccount(ModifySignActivity.this);
+                            user.setSignature(signEt.getText().toString().trim());
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                             Intent intent = new Intent();
                             intent.putExtra("signature", signEt.getText().toString().trim());

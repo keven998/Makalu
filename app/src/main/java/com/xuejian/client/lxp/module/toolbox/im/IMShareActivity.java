@@ -178,8 +178,8 @@ public class IMShareActivity extends PeachBaseActivity {
             super();
             options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                     .cacheOnDisc(true)
                             // 设置下载的图片是否缓存在SD卡中
                     .displayer(new RoundedBitmapDisplayer(LocalDisplay.dp2px(6))) // 设置成圆角图片
@@ -225,11 +225,11 @@ public class IMShareActivity extends PeachBaseActivity {
                                 if (user != null) {
                                     Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.getAvatarSmall(), avatarSize);
                                     if (bitmap == null) {
-                                        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.messages_bg_useravatar);
+                                        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_home_more_avatar_unknown_round);
                                     }
                                     membersAvatars.add(bitmap);
                                 } else {
-                                    Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.messages_bg_useravatar);
+                                    Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_home_more_avatar_unknown_round);
                                     membersAvatars.add(bitmap);
                                 }
                             }
@@ -245,7 +245,7 @@ public class IMShareActivity extends PeachBaseActivity {
                         }
                     }).start();
                 } else {
-                    mAvatar.setImageResource(R.drawable.messages_bg_useravatar);
+                    mAvatar.setImageResource(R.drawable.ic_home_more_avatar_unknown_round);
                 }
                 if (imUser != null) {
                     mName.setText(imUser.getNickName() != null ? imUser.getNickName() : " ");

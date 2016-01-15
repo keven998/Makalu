@@ -40,10 +40,11 @@ public class BaseApi {
         if (!TextUtils.isEmpty(PeachApplication.ChannelId)) {
             request.setHeader("ChannelId", PeachApplication.ChannelId);
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String date = sdf.format(new Date());
         Log.e("LXP", date.replaceAll("\\+\\d{2}.+$", ""));
+       // System.out.println(date+" LXP"+ date.replaceAll("\\+\\d{2}.+$", ""));
         request.setHeader("Accept", "application/vnd.lvxingpai.v1+json");
         request.setHeader("Platform", "Android " + android.os.Build.VERSION.RELEASE);
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);

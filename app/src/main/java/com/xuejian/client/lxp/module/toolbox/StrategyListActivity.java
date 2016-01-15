@@ -599,6 +599,62 @@ public class StrategyListActivity extends PeachBaseActivity {
                 }
             });
         }
+
+        private void deleteItem(final StrategyBean itemData) {
+            MobclickAgent.onEvent(StrategyListActivity.this, "cell_item_plans_delete");
+            final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
+            dialog.setTitle("提示");
+            dialog.setTitleIcon(R.drawable.ic_dialog_tip);
+            dialog.setMessage(String.format("删除\"%s\"", itemData.title));
+            dialog.setPositiveButton("确认", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    closeAllItems();
+                    try {
+                        DialogManager.getInstance().showLoadingDialog(mContext);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    TravelApi.deleteStrategy(itemData.id, new HttpCallBack<String>() {
+                        @Override
+                        public void doSuccess(String result, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            CommonJson<ModifyResult> deleteResult = CommonJson.fromJson(result, ModifyResult.class);
+                            if (deleteResult.code == 0) {
+                                deleteThisItem(itemData);
+                                int cnt = AccountManager.getInstance().getLoginAccountInfo().getGuideCnt();
+                                AccountManager.getInstance().getLoginAccountInfo().setGuideCnt(cnt - 1);
+                            } else {
+                                if (!isFinishing())
+                                    ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_server_failed));
+                            }
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method) {
+                            DialogManager.getInstance().dissMissLoadingDialog();
+                            if (!isFinishing())
+                                ToastUtil.getInstance(StrategyListActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                        }
+
+                        @Override
+                        public void doFailure(Exception error, String msg, String method, int code) {
+
+                        }
+                    });
+                }
+            });
+            dialog.setNegativeButton("取消", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    closeAllItems();
+                }
+            });
+            dialog.show();
+
+        }
     }
 
 

@@ -505,7 +505,7 @@ public class GoodsList extends PeachBaseActivity {
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
             holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume()) + "已售");
-            holder.tvGoodsComment.setText(bean.getRating() * 100 + "%满意");
+            holder.tvGoodsComment.setText(String.valueOf((int)(bean.getRating()* 100)) + "%满意");
             if (bean.getSeller() != null) {
                 holder.tvStoreName.setText(bean.getSeller().getName());
             }

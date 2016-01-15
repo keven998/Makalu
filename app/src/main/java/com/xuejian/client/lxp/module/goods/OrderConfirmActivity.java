@@ -126,6 +126,8 @@ public class OrderConfirmActivity extends PeachBaseActivity {
         }
         idType.put("chineseID", "身份证");
         idType.put("passport", "护照");
+        idType.put("HMPermit", "港澳通行证");
+        idType.put("TWPermit", "台湾通行证");
         bindView(bean);
     }
 

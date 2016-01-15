@@ -69,7 +69,7 @@ public class UserInfoEditActivity extends PeachBaseActivity implements View.OnCl
     TextView title;
     String idType = "passport";
     String type = "";
-    final String[] idTypeArray = new String[]{"passport", "chineseID", "", ""};
+    final String[] idTypeArray = new String[]{"passport", "chineseID", "HMPermit", "TWPermit"};
     private static final int SELECTED_CODE = 105;
     int currenrDialCode = 86;
 

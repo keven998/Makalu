@@ -369,7 +369,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     Intent talkIntent = new Intent(mContext, ChatActivity.class);
                     talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
                     talkIntent.putExtra("chatType", "single");
-                    talkIntent.putExtra("shareCommodityBean", bean.getCommodity().creteShareBean());
+                    talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
                     talkIntent.putExtra("fromTrade", true);
                     startActivity(talkIntent);
                 }
@@ -406,7 +406,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             stateMap.put("refundApprove","卖家同意退款");
             stateMap.put("refundDeny","卖家拒绝退款申请");
             stateMap.put("refundAuto","系统自动退款");
-            stateMap.put("commit","卖家确认订单");
+            stateMap.put("commit","卖家已发货");
             stateMap.put("finish","订单完成");
 
         }

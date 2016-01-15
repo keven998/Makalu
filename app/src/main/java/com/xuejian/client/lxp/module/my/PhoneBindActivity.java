@@ -181,6 +181,8 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (bindResult.code == 0) {
                                             user.setTel(sendSuccessPhone);
+                                            User user = AccountManager.getInstance().getLoginAccount(PhoneBindActivity.this);
+                                            user.setTel(sendSuccessPhone);
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                                             Intent intent = new Intent();
                                             intent.putExtra("bindphone", sendSuccessPhone);

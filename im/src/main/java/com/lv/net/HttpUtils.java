@@ -53,7 +53,7 @@ public class HttpUtils {
     public static Response HttpRequest_Post(String url, String postBody) throws Exception {
         User user = IMClient.getLoginAccount();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String date = sdf.format(new Date()).replaceAll("\\+\\d{2}.+$", "");
 
@@ -79,7 +79,7 @@ public class HttpUtils {
         Response response = client.newCall(request).execute();
         if (response.code() == 401) {
             if (listener != null) {
-                listener.onFailed();
+                listener.onFailed("401 from hedy "+request.urlString());
             }
         }
         return response;
@@ -101,7 +101,7 @@ public class HttpUtils {
     public static Response HttpRequest_Get(String url) throws Exception {
         User user = IMClient.getLoginAccount();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String date = sdf.format(new Date()).replaceAll("\\+\\d{2}.+$", "");
 
@@ -124,7 +124,7 @@ public class HttpUtils {
         Response response = client.newCall(request).execute();
         if (response.code() == 401) {
             if (listener != null) {
-                listener.onFailed();
+                listener.onFailed("401 from hedy :"+request.urlString());
             }
         }
         return response;
@@ -134,7 +134,7 @@ public class HttpUtils {
 
         User user = IMClient.getLoginAccount();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String date = sdf.format(new Date()).replaceAll("\\+\\d{2}.+$", "");
 
@@ -158,7 +158,7 @@ public class HttpUtils {
         Response response = client.newCall(request).execute();
         if (response.code() == 401) {
             if (listener != null) {
-                listener.onFailed();
+                listener.onFailed("401 from hedy "+request.urlString());
             }
         }
         return response;

@@ -313,6 +313,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         fragment.setInfo(toChatUsername, "");
                     } else {
                         fragment.setInfo(userInfo.result.getNickName(), userInfo.result.getAvatar());
+                        titleView.setText(userInfo.result.getNickName());
                     }
                 }
                 new Thread(new Runnable() {
@@ -348,13 +349,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             public void call(List<MessageBean> messageBeans) {
                                 messageList.addAll(messageBeans);
 
-                                MessageBean messag = new MessageBean();
-                                messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
-                                messag.setType(20);
-                                messag.setSenderId(210710);
-                                messag.setSendType(1);
-                                messag.setCreateTime(System.currentTimeMillis());
-                                messageList.add(messag);
+//                                MessageBean messag = new MessageBean();
+//                                messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
+//                                messag.setType(20);
+//                                messag.setSenderId(210710);
+//                                messag.setSendType(1);
+//                                messag.setCreateTime(System.currentTimeMillis());
+//                                messageList.add(messag);
+
+
 
 //                                ShareCommodityBean shareCommodityBean = new ShareCommodityBean();
 //                                shareCommodityBean.title = "马来西亚十日游";

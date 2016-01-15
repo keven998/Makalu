@@ -54,8 +54,11 @@ public class PeachApplication extends BaseApplication implements AuthenticationF
         OkHttpClientManager.getInstance().setOnAuthenticationFailed(this);
         HttpUtils.setAuthenticationFailed(new com.lv.net.AuthenticationFailed() {
             @Override
-            public void onFailed() {
-                logout();
+            public void onFailed(String msg) {
+                System.out.println(msg);
+                if (AccountManager.getInstance().getLoginAccount(PeachApplication.this)!=null){
+                    logout();
+                }
             }
         });
     }
@@ -103,9 +106,12 @@ public class PeachApplication extends BaseApplication implements AuthenticationF
             e.printStackTrace();
         }
     }
-
     @Override
-    public void onFailed() {
-        logout();
+    public void onFailed(String msg) {
+        System.out.println(msg);
+        if (AccountManager.getInstance().getLoginAccount(this)!=null){
+            logout();
+        }
+
     }
 }

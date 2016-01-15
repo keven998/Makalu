@@ -507,10 +507,11 @@ public class CommonUtils {
     }
 
     public static String formatDuring(long mss) {
+        long day = mss /  86400000;
         long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
         long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
         long seconds = (mss % (1000 * 60)) / 1000;
-        return hours + " 小时 " + minutes + " 分 "
+        return String.valueOf(day)+"天"+hours + " 小时 " + minutes + " 分 "
                 + seconds + " 秒 ";
     }
 }

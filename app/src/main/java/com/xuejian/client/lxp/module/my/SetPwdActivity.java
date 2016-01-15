@@ -72,6 +72,8 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (bindResult.code == 0) {
                             user.setTel(mPhone);
+                            User user = AccountManager.getInstance().getLoginAccount(SetPwdActivity.this);
+                            user.setTel(mPhone);
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                             Intent intent = new Intent(mContext, AccountActvity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

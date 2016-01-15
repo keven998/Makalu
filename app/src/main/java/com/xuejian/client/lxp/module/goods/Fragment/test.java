@@ -12,7 +12,17 @@
 // */
 //public class test {
 //    public static void main(String [] args){
-//        test();
+//        //test();
+//        System.out.println(formatDuring(1453048136000l-System.currentTimeMillis()));
+//    }
+//
+//    public static String formatDuring(long mss) {
+//        long day = mss /  86400000;
+//        long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+//        long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
+//        long seconds = (mss % (1000 * 60)) / 1000;
+//        return String.valueOf(day)+day+"天"+hours + " 小时 " + minutes + " 分 "
+//                + seconds + " 秒 ";
 //    }
 //    public static void test(){
 //        String string = "AL, 阿尔巴尼亚, 355\n" +

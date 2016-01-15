@@ -66,7 +66,7 @@ public class OrderListFragment extends PeachBaseFragment {
     XRecyclerView recyclerView;
     TextView empty;
     Handler handler;
-
+    private static int COUNT = 5;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +87,7 @@ public class OrderListFragment extends PeachBaseFragment {
 //        mSwipeRefreshWidget.setColorSchemeResources(R.color.app_theme_color);
         setupRecyclerView(recyclerView);
         recyclerView.setRefreshProgressStyle(ProgressStyle.SysProgress);
-        recyclerView.setLoadingMoreEnabled(false);
+        recyclerView.setLoadingMoreEnabled(true);
      //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
         switch (type) {
             case ALL:
@@ -116,24 +116,25 @@ public class OrderListFragment extends PeachBaseFragment {
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+                recyclerView.setLoadingMoreEnabled(true);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         switch (type) {
                             case ALL:
-                                getOrder("");
+                                getOrder("",0,COUNT,true);
                                 break;
                             case NEED_PAY:
-                                getOrder("pending");
+                                getOrder("pending",0,COUNT,true);
                                 break;
                             case PROCESS:
-                                getOrder("paid");
+                                getOrder("paid",0,COUNT,true);
                                 break;
                             case AVAILABLE:
-                                getOrder("committed");
+                                getOrder("committed",0,COUNT,true);
                                 break;
                             case DRAWBACK:
-                                getOrder("refundApplied,refunded");
+                                getOrder("refundApplied,refunded",0,COUNT,true);
                                 break;
                             default:
                                 //   if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
@@ -145,7 +146,31 @@ public class OrderListFragment extends PeachBaseFragment {
 
             @Override
             public void onLoadMore() {
-
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (type) {
+                            case ALL:
+                                getOrder("", adapter.getItemCount(), COUNT,false);
+                                break;
+                            case NEED_PAY:
+                                getOrder("pending", adapter.getItemCount(), COUNT,false);
+                                break;
+                            case PROCESS:
+                                getOrder("paid", adapter.getItemCount(), COUNT,false);
+                                break;
+                            case AVAILABLE:
+                                getOrder("committed", adapter.getItemCount(), COUNT,false);
+                                break;
+                            case DRAWBACK:
+                                getOrder("refundApplied,refunded", adapter.getItemCount(), COUNT,false);
+                                break;
+                            default:
+                                //   if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+                                break;
+                        }
+                    }
+                }, 1000);
             }
         });
         return view;
@@ -157,21 +182,22 @@ public class OrderListFragment extends PeachBaseFragment {
         super.onResume();
       //  DialogManager.getInstance().showModelessLoadingDialog(getActivity());
      //   mSwipeRefreshWidget.setRefreshing(true);
+        recyclerView.setLoadingMoreEnabled(true);
         switch (type) {
             case ALL:
-                getOrder("");
+                getOrder("",0,COUNT,true);
                 break;
             case NEED_PAY:
-                getOrder("pending");
+                getOrder("pending",0,COUNT,true);
                 break;
             case PROCESS:
-                getOrder("paid");
+                getOrder("paid",0,COUNT,true);
                 break;
             case AVAILABLE:
-                getOrder("committed");
+                getOrder("committed",0,COUNT,true);
                 break;
             case DRAWBACK:
-                getOrder("refundApplied,refunded");
+                getOrder("refundApplied,refunded",0,COUNT,true);
                 break;
             default:
            //     if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
@@ -180,20 +206,28 @@ public class OrderListFragment extends PeachBaseFragment {
         }
     }
 
-    public void getOrder(String status) {
+    public void getOrder(String status,int start,int count, final boolean refresh) {
         long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
-        TravelApi.getOrderList(userId, status, new HttpCallBack<String>() {
+        TravelApi.getOrderList(userId, status,String.valueOf(start),String.valueOf(count), new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<OrderBean> list = CommonJson4List.fromJson(result, OrderBean.class);
-                adapter.getDataList().clear();
+                if (refresh)adapter.getDataList().clear();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
                 if (list.result.size() > 0) empty.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
         //        if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
                 recyclerView.refreshComplete();
+                recyclerView.loadMoreComplete();
+
+                if (list.result.size() >= COUNT) {
+
+                } else {
+//                    goodsList.noMoreLoading();
+                    recyclerView.setLoadingMoreEnabled(false);
+                }
               DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
@@ -428,7 +462,7 @@ public class OrderListFragment extends PeachBaseFragment {
             Intent talkIntent = new Intent(mContext, ChatActivity.class);
             talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
             talkIntent.putExtra("chatType", "single");
-            talkIntent.putExtra("shareCommodityBean", bean.getCommodity().creteShareBean());
+            talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
             talkIntent.putExtra("fromTrade", true);
             final Intent intent = talkIntent;
             holder.rlItem.setOnClickListener(new View.OnClickListener() {

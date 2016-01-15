@@ -51,7 +51,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 			Intent intent = new Intent(WXPayEntryActivity.this, OrderListActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if (resp.errCode == 0){
-				Toast.makeText(WXPayEntryActivity.this,"支付成功",Toast.LENGTH_SHORT).show();
+			//	Toast.makeText(WXPayEntryActivity.this,"支付成功",Toast.LENGTH_SHORT).show();
 				Intent intent1 = new Intent();
                 intent1.setClass(WXPayEntryActivity.this, PaymentActivity.class);
                 intent1.putExtra("wxSuccess", true);

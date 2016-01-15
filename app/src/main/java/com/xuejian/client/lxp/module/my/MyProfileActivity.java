@@ -28,6 +28,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.SecretKeyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -366,6 +367,9 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
                 public void doSuccess(String result, String method) {
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
+                        User user1 = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
+                        SecretKeyBean bean = user1.getSecretKey();
+                        userResult.result.setSecretKey(bean);
                         AccountManager.getInstance().saveLoginAccount(MyProfileActivity.this, userResult.result);
                         AccountManager.getInstance().setLoginAccountInfo(userResult.result);
                         UserDBManager.getInstance().saveContact(userResult.result);

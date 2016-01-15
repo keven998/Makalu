@@ -11,7 +11,7 @@ public class ShareCommodityBean implements Parcelable {
     public long commodityId;
     public String title;
     public double price;
-    public CoverBean image;
+    public String image;
 
     @Override
     public int describeContents() {
@@ -23,7 +23,7 @@ public class ShareCommodityBean implements Parcelable {
         dest.writeLong(this.commodityId);
         dest.writeString(this.title);
         dest.writeDouble(this.price);
-        dest.writeParcelable(this.image, 0);
+        dest.writeString(this.image);
     }
 
     public ShareCommodityBean() {
@@ -33,7 +33,7 @@ public class ShareCommodityBean implements Parcelable {
         this.commodityId = in.readLong();
         this.title = in.readString();
         this.price = in.readDouble();
-        this.image = in.readParcelable(CoverBean.class.getClassLoader());
+        this.image = in.readString();
     }
 
     public static final Parcelable.Creator<ShareCommodityBean> CREATOR = new Parcelable.Creator<ShareCommodityBean>() {

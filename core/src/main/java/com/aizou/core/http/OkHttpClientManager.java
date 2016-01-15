@@ -652,7 +652,7 @@ public class OkHttpClientManager {
             public void onResponse(final Response response) {
                 try {
                     final String string = response.body().string();
-                    System.out.println("返回结果： code " + response.code() + "  " + string);
+                    System.out.println("返回结果： code " + response.code() + "  " + string+response.request().urlString());
                     Log.d(TAG, "返回结果： code " + response.code() + "  " + string);
                     if (response.isSuccessful()) {
 
@@ -684,7 +684,7 @@ public class OkHttpClientManager {
             public void run() {
                 if (code==401&&listener!=null){
                         System.out.println("listener "+code);
-                        listener.onFailed();
+                        listener.onFailed("from lxp "+code+" :"+request.urlString());
                 }
                 if (callback != null){
                     callback.onError(request, e, code);

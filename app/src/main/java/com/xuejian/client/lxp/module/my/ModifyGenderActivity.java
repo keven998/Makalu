@@ -75,6 +75,8 @@ public class ModifyGenderActivity extends PeachBaseActivity {
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (modifyResult.code == 0) {
                             user.setGender(gender);
+                            User user = AccountManager.getInstance().getLoginAccount(ModifyGenderActivity.this);
+                            user.setGender(gender);
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                         } else {
                             if (modifyResult.err != null && !TextUtils.isEmpty(modifyResult.err.message))

@@ -138,6 +138,14 @@ public class OrderBean implements Parcelable {
     public SimpleCommodityBean getCommodity() {
         return commodity;
     }
+    public ShareCommodityBean creteShareBean(){
+        ShareCommodityBean bean = new ShareCommodityBean();
+        bean.title = this.commodity.getTitle();
+        bean.commodityId = this.commodity.getCommodityId();
+        bean.price = this.totalPrice;
+        bean.image = this.commodity.getCover().url;
+        return bean;
+    }
 
     public ContactBean getContact() {
         return contact;

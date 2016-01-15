@@ -505,7 +505,7 @@ public class MessageAdapter extends BaseAdapter {
         final ShareCommodityBean bean = gson.fromJson(message.getMessage(), new TypeToken<ShareCommodityBean>() {
         }.getType());
         if (bean.image != null) {
-            ImageLoader.getInstance().displayImage(bean.image.getUrl(), holder.iv_goods_img, UILUtils.getDefaultOption());
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_goods_img, UILUtils.getDefaultOption());
         } else {
             ImageLoader.getInstance().displayImage("", holder.iv_goods_img, UILUtils.getDefaultOption());
         }
@@ -760,7 +760,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.price_color));
         //    holder.tv_attr.setText(bean.timeCost);
         if (bean.image != null) {
-            ImageLoader.getInstance().displayImage(bean.image.getUrl(), holder.iv_image, UILUtils.getRadiusOption(3));
+            ImageLoader.getInstance().displayImage(bean.image, holder.iv_image, UILUtils.getRadiusOption(3));
         } else {
             ImageLoader.getInstance().displayImage("", holder.iv_image, UILUtils.getRadiusOption(3));
         }

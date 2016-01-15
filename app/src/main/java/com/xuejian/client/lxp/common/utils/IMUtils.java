@@ -484,7 +484,7 @@ public class IMUtils {
         attrTv.setVisibility(View.GONE);
         descTv.setTextColor(context.getResources().getColor(R.color.price_color));
         descTv.setText(String.format("¥%s",CommonUtils.getPriceString(dialogBean.price)));
-        ImageLoader.getInstance().displayImage(dialogBean.image.url, vsIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+        ImageLoader.getInstance().displayImage(dialogBean.image, vsIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
         dialog.setContentView(contentView);
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override

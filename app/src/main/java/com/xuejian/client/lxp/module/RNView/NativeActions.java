@@ -66,15 +66,23 @@ public class NativeActions extends ReactContextBaseJavaModule {
                 }
                 break;
             case "Chat":
-                ShareCommodityBean shareCommodityBean = gson.fromJson(data, new TypeToken<ShareCommodityBean>() {
-                }.getType());
-                intent.putExtra("friend_id", id);
-                intent.putExtra("chatType", "single");
-                intent.putExtra("shareCommodityBean",shareCommodityBean);
-                intent.putExtra("fromTrade",true);
-           //     intent.putExtra("commodityId",id);
-                intent.setClass(reactContext, ChatActivity.class);
-                reactContext.startActivity(intent);
+                if (AccountManager.getInstance().getLoginAccount(reactContext)==null){
+                    intent.putExtra("isFromGoods",true);
+                    intent.setClass(reactContext, LoginActivity.class);
+                    reactContext.startActivity(intent);
+                }else {
+                    ShareCommodityBean shareCommodityBean = gson.fromJson(data, new TypeToken<ShareCommodityBean>() {
+                    }.getType());
+                    intent.putExtra("friend_id", id);
+                    intent.putExtra("chatType", "single");
+                    intent.putExtra("shareCommodityBean",shareCommodityBean);
+                    intent.putExtra("fromTrade",true);
+                    //     intent.putExtra("commodityId",id);
+                    intent.setClass(reactContext, ChatActivity.class);
+                    reactContext.startActivity(intent);
+                }
+
+
                 break;
             case "WebView":
                 intent.putExtra("url",data);

@@ -20,13 +20,18 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.ServiceZonesEntity;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
+import com.xuejian.client.lxp.bean.StoreBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.module.RNView.ReactMainPage;
+import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import java.util.ArrayList;
@@ -48,6 +53,11 @@ public class StoreDetailActivity extends PeachBaseActivity {
     Adapter adapter;
     XRecyclerView recyclerView;
     RelativeLayout rlTalk;
+    LinearLayout service;
+    TagListView langTag;
+    LinearLayout qualification;
+    TextView tvStoreName;
+    TextView tvLocName;
     private static final int PAGE_SIZE = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +76,13 @@ public class StoreDetailActivity extends PeachBaseActivity {
         recyclerView.setPullRefreshEnabled(false);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         View view = getLayoutInflater().inflate(R.layout.head_store_detail, null);
-        TagListView langTag = (TagListView) view.findViewById(R.id.tag_lang);
-        langTag.setmTagViewResId(R.layout.expert_tag);
-        langTag.removeAllViews();
-        langTag.addTags(initTagData());
-        LinearLayout service = (LinearLayout) view.findViewById(R.id.ll_service);
-        for (int i = 0; i < 3; i++) {
-            TextView textView = (TextView) getLayoutInflater().inflate(R.layout.textview_service,null);
-            textView.setText("服务");
-            textView.setPadding(5,0,5,0);
-            service.addView(textView);
-        }
+
+        langTag = (TagListView) view.findViewById(R.id.tag_lang);
+        service = (LinearLayout) view.findViewById(R.id.ll_service);
+        qualification = (LinearLayout) view.findViewById(R.id.ll_qualification);
+        tvStoreName = (TextView) view.findViewById(R.id.tv_store_name);
+        tvLocName = (TextView) view.findViewById(R.id.tv_loc_name);
+
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.addHeaderView(view);
         recyclerView.setAdapter(adapter);
@@ -105,10 +111,18 @@ public class StoreDetailActivity extends PeachBaseActivity {
         rlTalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent talkIntent = new Intent(mContext, ChatActivity.class);
-                talkIntent.putExtra("friend_id", sellerId);
-                talkIntent.putExtra("chatType", "single");
-                startActivity(talkIntent);
+
+                if (AccountManager.getInstance().getLoginAccount(StoreDetailActivity.this)==null){
+                    Intent intent = new Intent();
+                    intent.putExtra("isFromGoods",true);
+                    intent.setClass(StoreDetailActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                    talkIntent.putExtra("friend_id", sellerId);
+                    talkIntent.putExtra("chatType", "single");
+                    startActivity(talkIntent);
+                }
             }
         });
 
@@ -121,6 +135,10 @@ public class StoreDetailActivity extends PeachBaseActivity {
 
             @Override
             public void doSuccess(String result, String method) {
+                CommonJson<StoreBean> commonJson = CommonJson.fromJson(result,StoreBean.class);
+                if (commonJson.code==0){
+                    bindView(commonJson.result);
+                }
 
             }
 
@@ -164,12 +182,39 @@ public class StoreDetailActivity extends PeachBaseActivity {
         });
     }
 
-    private  List<Tag> initTagData() {
+    private void bindView(StoreBean bean) {
+
+        for (String s : bean.getServices()) {
+            TextView textView = (TextView) getLayoutInflater().inflate(R.layout.textview_service,null);
+            textView.setText(s);
+            textView.setPadding(5,0,5,0);
+            service.addView(textView);
+        }
+
+        langTag.setmTagViewResId(R.layout.expert_tag);
+        langTag.removeAllViews();
+        langTag.addTags(initTagData(bean.getLang()));
+
+        tvStoreName.setText(bean.getName());
+        StringBuilder sb = new StringBuilder();
+        for (ServiceZonesEntity entity : bean.getServiceZones()) {
+            sb.append(entity.getZhName()).append("  ");
+        }
+        tvLocName.setText(sb);
+
+        if (bean.getQualifications().size()>0){
+            qualification.setVisibility(View.VISIBLE);
+        }else {
+            qualification.setVisibility(View.GONE);
+        }
+    }
+
+    private  List<Tag> initTagData(List<String> lang) {
         List<Tag> mTags = new ArrayList<Tag>();
         int lastColor = new Random().nextInt(4);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < lang.size(); i++) {
             Tag tag = new Tag();
-            tag.setTitle("语言" + i);
+            tag.setTitle(lang.get(i));
             tag.setId(i);
             tag.setBackgroundResId(lebelColors[lastColor]);
            //    tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);

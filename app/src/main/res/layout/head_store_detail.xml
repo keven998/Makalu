@@ -18,6 +18,7 @@
             android:src="@drawable/icon_shop" />
 
         <TextView
+            android:id="@+id/tv_store_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -28,10 +29,11 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_loc_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="7dp"
         android:text="城市名"
         android:textColor="@color/color_text_ii"
         android:textSize="14sp" />
@@ -47,15 +49,17 @@
         f:verticalSpace="4dp" />
 
     <LinearLayout
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="40dp"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/icon_service" />
 
         <LinearLayout
@@ -73,6 +77,7 @@
         android:background="@color/color_line" />
 
     <LinearLayout
+        android:id="@+id/ll_qualification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="3">

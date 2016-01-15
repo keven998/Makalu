@@ -64,6 +64,8 @@ public class CommonUserInfoActivity extends PeachBaseActivity {
         boolean multiple = getIntent().getBooleanExtra("multiple", true);
         idType.put("chineseID", "身份证");
         idType.put("passport", "护照");
+        idType.put("HMPermit", "港澳通行证");
+        idType.put("TWPermit", "台湾通行证");
         memberList = (ListView) findViewById(R.id.lv_userInfo);
         tvBack = (TextView) findViewById(R.id.tv_title_back);
         tvBack.setOnClickListener(new View.OnClickListener() {
