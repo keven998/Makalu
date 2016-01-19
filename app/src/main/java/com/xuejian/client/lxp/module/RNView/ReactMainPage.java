@@ -174,9 +174,8 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 
             @Override
             public void doSuccess(String result, String method) {
-
                 try {
-                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject jsonObject = new JSONObject( result.replaceAll("\\u2028",""));
 //                    WritableMap event = Arguments.createMap();
 //                    event.putString("result", jsonObject.getJSONObject("result").toString());
 //                    sendEvent(mReactInstanceManager.getCurrentReactContext(), "test", event);
@@ -190,8 +189,10 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                     bundle.putString("result", jsonObject.getJSONObject("result").toString());
                     bundle.putString("snapshot", String.valueOf(snapshots));
                     mReactRootView.startReactApplication(mReactInstanceManager, "GoodsDetail", bundle);
-                    collection.setVisibility(View.VISIBLE);
-                    share.setVisibility(View.VISIBLE);
+                    if (!snapshots){
+                        collection.setVisibility(View.VISIBLE);
+                        share.setVisibility(View.VISIBLE);
+                    }
                     collection.setChecked(bean.isFavorite);
                     ReactMainPage.this.findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -210,9 +211,17 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                         @Override
                         public void onClick(View v) {
 
-                            if (userId != -1) {
-                                changeCollection(collection.isChecked(), id);
+                            if (AccountManager.getInstance().getLoginAccount(ReactMainPage.this) == null) {
+                                Intent intent = new Intent();
+                                intent.putExtra("isFromGoods", true);
+                                intent.setClass(ReactMainPage.this, LoginActivity.class);
+                                startActivity(intent);
+                            } else {
+                                if (userId != -1) {
+                                    changeCollection(collection.isChecked(), id);
+                                }
                             }
+
 
                         }
                     });

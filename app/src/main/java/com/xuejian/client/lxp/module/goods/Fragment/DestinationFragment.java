@@ -336,8 +336,16 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                 }
                 holder.enName.setText(bean.enName);
                 holder.zhName.setText(bean.zhName);
-                holder.storeCount.setVisibility(View.VISIBLE);
-                holder.storeCount.setText(String.valueOf(bean.commoditiesCnt));
+                if (bean.commoditiesCnt==0){
+                    holder.storeCount.setVisibility(View.GONE);
+                }else {
+                    holder.storeCount.setVisibility(View.VISIBLE);
+                    holder.storeCount.setText(String.valueOf(bean.commoditiesCnt));
+                }
+
+//
+//                holder.storeCount.setVisibility(View.VISIBLE);
+//                holder.storeCount.setText(String.valueOf(bean.commoditiesCnt));
                 return convertView;
 
             }

@@ -41,7 +41,7 @@ public class HttpUtils {
     public static AuthenticationFailed listener;
 
     static {
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        client.setConnectTimeout(7, TimeUnit.SECONDS);
     }
 
     public static void setAuthenticationFailed(AuthenticationFailed listener){

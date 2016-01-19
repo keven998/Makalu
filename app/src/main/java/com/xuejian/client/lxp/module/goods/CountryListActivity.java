@@ -1,8 +1,7 @@
 package com.xuejian.client.lxp.module.goods;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,12 +11,11 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.bumptech.glide.Glide;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -89,18 +87,18 @@ public class CountryListActivity extends PeachBaseActivity {
     }
 
     class CountryAdapter extends BaseAdapter {
-        private DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .resetViewBeforeLoading(true)
-        //        .displayer(new RoundedBitmapDisplayer(10))
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .build();
-        private Context mContext;
+//        private DisplayImageOptions options = new DisplayImageOptions.Builder()
+//                .cacheInMemory(true)
+//                .cacheOnDisk(true)
+//                .bitmapConfig(Bitmap.Config.RGB_565)
+//                .resetViewBeforeLoading(true)
+//        //        .displayer(new RoundedBitmapDisplayer(10))
+//                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+//                .build();
+        private Activity  mContext;
         private ArrayList<CountryBean> data;
 
-        public CountryAdapter(Context context) {
+        public CountryAdapter(Activity  context) {
             mContext = context;
             data = new ArrayList<>();
         }
@@ -136,10 +134,31 @@ public class CountryListActivity extends PeachBaseActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
             if (bean.images.size() > 0) {
-                ImageLoader.getInstance().displayImage(bean.images.get(0).url, holder.ivCountry, options);
+                Glide.with(mContext)
+                        .load(bean.images.get(0).url)
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.ivCountry);
+              //  ImageLoader.getInstance().displayImage(bean.images.get(0).url, holder.ivCountry, options);
+            }else {
+                Glide.with(mContext)
+                        .load("")
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.ivCountry);
             }
             holder.tvCityName.setText(bean.zhName + "\n" + bean.enName);
-            holder.tvStoreNum.setText(String.valueOf(bean.commoditiesCnt));
+            if (bean.commoditiesCnt==0){
+                holder.tvStoreNum.setVisibility(View.GONE);
+                holder.flCity.setVisibility(View.GONE);
+            }else {
+                holder.flCity.setVisibility(View.VISIBLE);
+                holder.tvStoreNum.setVisibility(View.VISIBLE);
+                holder.tvStoreNum.setText(String.valueOf(bean.commoditiesCnt));
+            }
+
             return convertView;
         }
 
@@ -156,7 +175,8 @@ public class CountryListActivity extends PeachBaseActivity {
             TextView tvStoreNum;
             @Bind(R.id.tv_city_name)
             TextView tvCityName;
-
+            @Bind(R.id.fl_city_num)
+            LinearLayout flCity;
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }

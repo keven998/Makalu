@@ -172,7 +172,7 @@ public class TalkFragment extends PeachBaseFragment {
         if (AccountManager.getInstance().getLoginAccount(getActivity()) == null) {
             return;
         }
-        DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+  //      DialogManager.getInstance().showModelessLoadingDialog(getActivity());
      //   loadConversation();
     }
 

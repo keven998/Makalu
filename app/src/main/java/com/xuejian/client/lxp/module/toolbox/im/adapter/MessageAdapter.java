@@ -175,7 +175,7 @@ public class MessageAdapter extends BaseAdapter {
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
-                .showImageOnLoading(R.drawable.messages_bg_useravatar)
+                .showImageOnLoading(R.drawable.ic_home_more_avatar_unknown_round)
                 .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                 .displayer(new RoundedBitmapDisplayer(context.getResources().getDimensionPixelSize(R.dimen.size_avatar)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
@@ -611,17 +611,18 @@ public class MessageAdapter extends BaseAdapter {
                         holder.head_iv.setImageResource(R.drawable.lvxingpaipai);
                     } else if (user.getUserId() == 10001) {
                         holder.head_iv.setImageResource(R.drawable.lvxingwenwen);
-                    }
-                    if (user.getUserId() == 10002) {
+                    }else if (user.getUserId() == 10002) {
                         holder.head_iv.setImageResource(R.drawable.icon_trade_message);
-                    }
-                    if (user.getUserId() == 10003) {
+                    }else if (user.getUserId() == 10003) {
                         holder.head_iv.setImageResource(R.drawable.icon_activity_message);
                     } else {
                         if (holder.head_iv != null)
                             ImageLoader.getInstance().displayImage(user.getAvatarSmall(), holder.head_iv, picOptions);
 
                     }
+                }else {
+                    if (holder.head_iv != null)
+                        ImageLoader.getInstance().displayImage("", holder.head_iv, picOptions);
                 }
             }
         } else {

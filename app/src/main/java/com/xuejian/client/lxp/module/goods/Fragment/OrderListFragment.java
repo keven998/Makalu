@@ -461,8 +461,8 @@ public class OrderListFragment extends PeachBaseFragment {
             Intent talkIntent = new Intent(mContext, ChatActivity.class);
             talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
             talkIntent.putExtra("chatType", "single");
-            talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
-            talkIntent.putExtra("fromTrade", true);
+         //   talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
+         //   talkIntent.putExtra("fromTrade", true);
             final Intent intent = talkIntent;
             holder.rlItem.setOnClickListener(new View.OnClickListener() {
                 @Override

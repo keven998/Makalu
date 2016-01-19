@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.jakewharton.rxbinding.view.RxView;
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
 import com.nineoldandroids.animation.ValueAnimator;
@@ -70,9 +71,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.functions.Action1;
 
 /**
  * Created by lxp_dqm07 on 2015/5/18.
@@ -226,13 +229,20 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
 //        } else {
 //            handleView.setVisibility(View.GONE);
 //        }
-
-       findViewById(R.id.fl_send_message).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTalk();
-            }
-        });
+        RxView.clicks(findViewById(R.id.fl_send_message))
+                .throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startTalk();
+                    }
+                });
+//       findViewById(R.id.fl_send_message).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startTalk();
+//            }
+//        });
 
        tv_send_action = (TextView) findViewById(R.id.tv_send_action);
 
@@ -373,7 +383,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     }
 
     private void startTalk() {
-        if (me != null) {
+        if (AccountManager.getInstance().getLoginAccount(HisMainPageActivity.this) != null) {
             List<String> uids = new ArrayList<>();
             uids.add(String.valueOf(userId));
             try {
@@ -619,7 +629,13 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     public void updateView(final User bean) {
         handleView.setClickable(true);
         block = bean.isBlocked;
-        if (me != null) {
+        if (AccountManager.getInstance().getLoginAccount(this) != null) {
+            try {
+                UserDBManager.getInstance().saveContact(bean);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             handleView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -653,27 +669,6 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 expert_tag.removeAllViews();
             }
 
-//            if (userId != 10000 && isMyFriend) {
-//                handleView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        showActionDialog(1);
-//                    }
-//                });
-//            } else {
-//                // handleView.setVisibility(View.INVISIBLE);
-//                handleView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (bean.isBlocked) {
-//                            showActionDialog(3);
-//                        } else {
-//                            showActionDialog(2);
-//                        }
-//
-//                    }
-//                });
-//            }
         } else {
             handleView.setVisibility(View.GONE);
         }

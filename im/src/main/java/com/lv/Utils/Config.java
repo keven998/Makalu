@@ -6,8 +6,8 @@ import android.os.Environment;
  * Created by q on 2015/4/27.
  */
 public class Config {
-    public static final String HOST = "http://hedy-dev.lvxingpai.com";
-  //  public static final String HOST = "http://hedy.lvxingpai.com";
+ //   public static final String HOST = "http://hedy-dev.lvxingpai.com";
+    public static final String HOST = "http://hedy.lvxingpai.com";
     public static final String GET_GROUP = HOST+"/groups/";
     public static final String SEND_URL = HOST+"/chats";
     public static final String ACK_URL = HOST+"/users/";

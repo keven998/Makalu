@@ -24,4 +24,6 @@ public class H5Url {
 
     public static final String AGREEMENT ="http://api.lvxingpai.com/app/eula";
 
+    public static final String TRADE ="http://nluloh.epub360.com/v2/manage/book/pe3rs2/?from=groupmessage&isappinstalled=0#page/page_dbe3bdbbe4d89902";
+
 }

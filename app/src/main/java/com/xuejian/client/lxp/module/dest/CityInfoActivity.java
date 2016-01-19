@@ -33,6 +33,7 @@ import com.xuejian.client.lxp.bean.CityBean;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
+import com.xuejian.client.lxp.common.api.H5Url;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
@@ -402,6 +403,21 @@ public class CityInfoActivity extends PeachBaseActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (empty) {
                 convertView = View.inflate(mContext, R.layout.city_empty_view, null);
+                ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_trade);
+                ViewGroup.LayoutParams params = imageView.getLayoutParams();
+                int w = CommonUtils.getScreenWidth(activity);
+                params.width = w;
+                params.height =(w*388/828);
+                imageView.setLayoutParams(params);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(CityInfoActivity.this,PeachWebViewActivity.class);
+                        intent.putExtra("title","旅行派各国商户招募计划");
+                        intent.putExtra("url", H5Url.TRADE);
+                        startActivity(intent);
+                    }
+                });
                 return convertView;
             } else {
                 ViewHolder holder;

@@ -41,4 +41,5 @@
     <dimen name="goods_loc_margin">40dp</dimen>
     <dimen name="chat_panel_icon_height">80dp</dimen>
     <dimen name="chat_panel_img_height">57dp</dimen>
+    <dimen name="trade_image_height">200dp</dimen>
 </resources>

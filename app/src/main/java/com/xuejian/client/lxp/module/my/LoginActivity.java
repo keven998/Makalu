@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
-import com.aizou.core.utils.RegexUtils;
 import com.lv.im.IMClient;
 import com.lv.utils.SharePrefUtil;
 import com.xuejian.client.lxp.R;
@@ -330,10 +329,10 @@ public class LoginActivity extends PeachBaseActivity {
             ToastUtil.getInstance(mContext).showToast("请输入账号和密码");
             return;
         }
-        if (!RegexUtils.isMobileNO(loginNameEt.getText().toString().trim())) {
-            ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
-            return;
-        }
+//        if (!RegexUtils.isMobileNO(loginNameEt.getText().toString().trim())) {
+//            ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
+//            return;
+//        }
         try {
             DialogManager.getInstance().showLoadingDialog(this);
         } catch (Exception e) {

@@ -1,7 +1,6 @@
 package com.xuejian.client.lxp.module.goods;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -16,8 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
+import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ServiceZonesEntity;
@@ -58,6 +57,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
     LinearLayout qualification;
     TextView tvStoreName;
     TextView tvLocName;
+    TextView tvTitle;
     private static final int PAGE_SIZE = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
                 finish();
             }
         });
+        tvTitle = (TextView) findViewById(R.id.tv_title);
         rlTalk = (RelativeLayout) findViewById(R.id.ll_trade_action0);
         recyclerView = (XRecyclerView) findViewById(R.id.ul_recyclerView);
         adapter = new Adapter(this);
@@ -195,6 +196,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
         langTag.removeAllViews();
         langTag.addTags(initTagData(bean.getLang()));
 
+        tvTitle.setText(bean.getName());
         tvStoreName.setText(bean.getName());
         StringBuilder sb = new StringBuilder();
         for (ServiceZonesEntity entity : bean.getServiceZones()) {
@@ -238,10 +240,10 @@ public class StoreDetailActivity extends PeachBaseActivity {
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         private ArrayList<SimpleCommodityBean> list;
-        private Context mContext;
+        private Activity mContext;
         private int w;
         private OnItemClickListener listener;
-        public Adapter(Context context) {
+        public Adapter(Activity context) {
             this.mContext = context;
             list = new ArrayList<>();
             w = CommonUtils.getScreenWidth((Activity) mContext);
@@ -291,9 +293,22 @@ public class StoreDetailActivity extends PeachBaseActivity {
             layoutParams.width = w1;
             layoutParams.height = h1;
             if (bean.getCover()!=null){
-                ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.mImageView);
+
+                Glide.with(mContext)
+                        .load(bean.getCover().getUrl())
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.mImageView);
+           //     ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.mImageView);
             }else {
-                ImageLoader.getInstance().displayImage("", holder.mImageView);
+                Glide.with(mContext)
+                        .load(bean.getCover().getUrl())
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.mImageView);
+         //       ImageLoader.getInstance().displayImage("", holder.mImageView);
             }
             holder.mImageView.setLayoutParams(layoutParams);
             holder.tvSales.setText( bean.getSalesVolume()+"已售");

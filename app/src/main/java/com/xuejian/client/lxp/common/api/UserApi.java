@@ -299,7 +299,7 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //LogUtil.d(jsonObject.toString());
+      //  LogUtil.d(jsonObject.toString());
         setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
 

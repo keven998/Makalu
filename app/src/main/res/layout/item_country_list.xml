@@ -12,6 +12,7 @@
         android:layout_height="97dp" />
 
     <LinearLayout
+        android:id="@+id/fl_city_num"
         android:layout_width="48dp"
         android:layout_height="32dp"
         android:layout_gravity="right"

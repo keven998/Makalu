@@ -349,22 +349,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             public void call(List<MessageBean> messageBeans) {
                                 messageList.addAll(messageBeans);
 
-//                                MessageBean messag = new MessageBean();
-//                                messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
-//                                messag.setType(20);
-//                                messag.setSenderId(210710);
-//                                messag.setSendType(1);
-//                                messag.setCreateTime(System.currentTimeMillis());
-//                                messageList.add(messag);
-
-
-
-//                                ShareCommodityBean shareCommodityBean = new ShareCommodityBean();
-//                                shareCommodityBean.title = "马来西亚十日游";
-//                                shareCommodityBean.image=new ImageBean();
-//                                shareCommodityBean.image.url = "http://images.taozilvxing.com/402d30e898b5466b9f2b58be7316aecc?imageView2/2/w/200";
-//                                shareCommodityBean.price = 2342.01;
-
                                 if (fromTrade){
                                     ShareCommodityBean shareCommodityBean = getIntent().getParcelableExtra("shareCommodityBean");
                                     final MessageBean messag1 = new MessageBean();
@@ -883,86 +867,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             default:
                 break;
         }
-
-
-//        int id = view.getId();
-//        if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
-//            String s = mEditTextContent.getText().toString();
-//            sendText(s, 0);
-//        } else if (id == R.id.btn_my_guide) {
-//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
-//            try {
-//                Intent intent = new Intent(mContext, StrategyListActivity.class);
-//                intent.putExtra("chatType", chatType);
-//                intent.putExtra("toId", toChatUsername);
-//                intent.putExtra("conversation", conversation);
-//                intent.putExtra("userId", AccountManager.getCurrentUserId());
-//                intent.putExtra("isShare", true);
-//                //  intent.setAction("action.chat");
-//                startActivity(intent);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-////        else if (id == R.id.btn_dest) {
-////            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpsearch");
-////            Intent intent = new Intent(mContext, SearchAllActivity.class);
-////            intent.putExtra("chatType", chatType);
-////            intent.putExtra("toId", toChatUsername);
-////            intent.putExtra("conversation", conversation);
-////            intent.putExtra("isShare", true);
-////            intent.setAction("action.chat");
-////            startActivityWithNoAnim(intent);
-////            overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
-////        }
-//         /*else if (id == R.id.btn_location) {
-//            ToastUtil.getInstance(this).showToast("发送位置");*/
-//           /* MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
-//            Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
-//            intent.putExtra("chatType",chatType);
-//            intent.putExtra("toId",toChatUsername);
-//            intent.setAction("action.chat");
-//            startActivity(intent);*/
-////            // 点击我的目的地图标
-////            JSONObject contentJson = new JSONObject();
-////            try {
-////                contentJson.put("id","1");
-////                contentJson.put("desc","我的游记描述");
-////                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-////                contentJson.put("name","游记");
-////                sendText(contentJson.toString(), Constant.ExtType.TRAVELS);
-////            } catch (JSONException e) {
-////                e.printStackTrace();
-////            }
-//        //}
-//        else if (id == R.id.btn_take_picture) {
-//            selectPicFromCamera();// 点击照相图标
-//        } else if (id == R.id.btn_picture) {
-//            selectPicFromLocal(); // 点击图片图标
-//        } else if (id == R.id.btn_location) { // 位置
-//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
-//            startActivityForResult(new Intent(this, MapActivity.class), REQUEST_CODE_MAP);
-//        } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
-//            hideKeyboard();
-//
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mExtraPanel.setVisibility(View.VISIBLE);
-//                    iv_emoticons_normal.setVisibility(View.GONE);
-//                    iv_emoticons_checked.setVisibility(View.VISIBLE);
-//                    btnContainer.setVisibility(View.GONE);
-//                    expressionContainer.setVisibility(View.VISIBLE);
-//                }
-//            }, 100);
-//        } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
-//            iv_emoticons_normal.setVisibility(View.VISIBLE);
-//            iv_emoticons_checked.setVisibility(View.GONE);
-//            btnContainer.setVisibility(View.GONE);
-//            expressionContainer.setVisibility(View.GONE);
-//            mExtraPanel.setVisibility(View.GONE);
-//            showKeyboard(mEditTextContent);
-//        }
     }
 
     /**

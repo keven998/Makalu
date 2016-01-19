@@ -369,8 +369,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     Intent talkIntent = new Intent(mContext, ChatActivity.class);
                     talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
                     talkIntent.putExtra("chatType", "single");
-                    talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
-                    talkIntent.putExtra("fromTrade", true);
+               //     talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
+              //      talkIntent.putExtra("fromTrade", true);
                     startActivity(talkIntent);
                 }
             });
@@ -476,8 +476,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
-        startActivity(tv_title_back);
+//        Intent tv_title_back = new Intent(OrderDetailActivity.this, OrderListActivity.class);
+//        startActivity(tv_title_back);
         finish();
     }
 

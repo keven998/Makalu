@@ -100,7 +100,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+      //  DialogManager.getInstance().showModelessLoadingDialog(getActivity());
     }
 
     private void initScrollView() {

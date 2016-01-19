@@ -89,6 +89,12 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
             }
             else if (i == 4) {
                 View view = View.inflate(this, R.layout.guide_4, null);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        handler.sendEmptyMessage(START_LOGIN);
+                    }
+                });
                 views.add(view);
             }
         }
