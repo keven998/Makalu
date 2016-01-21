@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.igexin.sdk.PushManager;
 import com.lv.Listener.FetchListener;
 import com.lv.Listener.HttpCallback;
@@ -15,12 +16,14 @@ import com.lv.bean.InventMessage;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.bean.SendMessageBean;
+import com.lv.bean.User;
 import com.lv.data.MessageDB;
 import com.lv.net.HttpUtils;
 import com.lv.net.UploadUtils;
 import com.lv.utils.Config;
 import com.lv.utils.CryptUtils;
 import com.lv.utils.PictureUtil;
+import com.lv.utils.SharePrefUtil;
 import com.lv.utils.TimeUtils;
 
 import org.json.JSONArray;
@@ -54,8 +57,8 @@ public class IMClient {
     private volatile boolean isRunning;
     public int p;
     public static long lastSuccessFetch;
-    private Context mContext;
-
+    private static Context mContext;
+    private static User user;
     public boolean isLogin() {
         return isLogin;
     }
@@ -85,12 +88,36 @@ public class IMClient {
         countFrequency = new CountFrequency();
     }
 
+    public static User getLoginAccount() {
+
+        if (user == null) {
+            String userJson = SharePrefUtil.getString(mContext, "login_user", "");
+            if (TextUtils.isEmpty(userJson)) {
+                return null;
+            }
+            user = JSON.parseObject(userJson,User.class);
+        }
+        return user;
+    }
+
+//    public static IMClient getInstance() {
+//        if (client == null) {
+//            client = new IMClient();
+//        }
+//        return client;
+//    }
+
     public static IMClient getInstance() {
         if (client == null) {
-            client = new IMClient();
+            synchronized (IMClient.class) {
+                if (client == null) {
+                    client = new IMClient();
+                }
+            }
         }
         return client;
     }
+
 
     public void initDB(String userId, int version, int currentVersion) {
         MessageDB.initDB(userId);
@@ -104,6 +131,7 @@ public class IMClient {
     }
 
     public static void initIM(Context context) {
+        mContext = context;
         PushManager.getInstance().initialize(context.getApplicationContext());
         if (Config.isDebug) {
             Log.i(Config.TAG, "start initialize");
@@ -152,7 +180,7 @@ public class IMClient {
         if (Config.isDebug) {
             Log.i(Config.TAG, "ACK  频率" + frequency);
         }
-        if (frequency == 0) frequency = 60 * 1000;
+        if (frequency == 0) frequency = 60 * 2 * 1000;
         if (isRunning) return;
         isRunning = true;
         timer = new Timer();
@@ -250,13 +278,14 @@ public class IMClient {
     }
 
     public int getUnReadCount() {
-        count = 0;
-        if (convercationList != null) {
-            for (ConversationBean c : convercationList) {
-                count += c.getIsRead();
-            }
-        }
-        return count;
+//        count = 0;
+//        if (convercationList != null) {
+//            for (ConversationBean c : convercationList) {
+//                count += c.getIsRead();
+//            }
+//        }
+        return db.getUnReadCount();
+     //   return count;
     }
 
     public void deleteConversation(String friend) {
@@ -478,6 +507,39 @@ public class IMClient {
         HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
     }
 
+    public void senCommodityMessage(String UserId, String friendId, String chatType, String contentJson, int type, HttpCallback listen) {
+        if (TextUtils.isEmpty(contentJson)) return;
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, type, contentJson);
+        MessageBean messageBean = imessage2Bean(message);
+        long localId = db.saveMsg(friendId, messageBean, chatType);
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, type, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
+        m.setLocalId((int) localId);
+        //return m;
+        //if ("0".equals(conversation)) conversation = null;
+        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId), friendId, type, m.getMessage());
+        HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
+    }
+
+    public MessageBean createCommodityMessage(String UserId, String friendId, String chatType, String contentJson, int type) {
+        if (TextUtils.isEmpty(contentJson)) return null;
+        SendMessageBean message = new SendMessageBean(Integer.parseInt(UserId), friendId, type, contentJson);
+        MessageBean messageBean = imessage2Bean(message);
+        long localId = db.saveMsg(friendId, messageBean, chatType);
+        MessageBean m = new MessageBean(0, Config.STATUS_SENDING, type, contentJson, TimeUtils.getTimestamp(), Config.TYPE_SEND, null, messageBean.getSenderId());
+        m.setLocalId((int) localId);
+//        SendMessageBean imessage = new SendMessageBean(Integer.parseInt(UserId), friendId, type, m.getMessage());
+//        HttpUtils.sendMessage(null, friendId, imessage, m.getLocalId(), listen, chatType);
+        return m;
+    }
+    public void sendCommodityMessage(String conversation, String friendId, String chatType, MessageBean message, HttpCallback listen) {
+
+        if ("0".equals(conversation)) conversation = null;
+        SendMessageBean imessage = new SendMessageBean((int) message.getSenderId(), friendId, message.getType(), message.getMessage());
+        if (Config.isDebug) {
+            System.out.println("message.getSenderId()  ====" + message.getSenderId());
+        }
+        HttpUtils.sendMessage(conversation, friendId, imessage, message.getLocalId(), listen, chatType);
+    }
 
     public void updateMessage(String fri_ID, long LocalId, String msgId, String conversation, long timestamp, int status, String message, int Type) {
         db.updateMsg(fri_ID, LocalId, msgId, conversation, timestamp, status, message, Type);
@@ -516,7 +578,7 @@ public class IMClient {
                 LazyQueue.getInstance().add2Temp(msg.getConversation(), msg);
             }
             LazyQueue.getInstance().TempDequeue();
-            ack(60 * 1000);
+            ack(60 * 2 * 1000);
         });
     }
 

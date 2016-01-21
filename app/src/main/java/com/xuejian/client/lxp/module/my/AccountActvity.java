@@ -15,7 +15,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -47,6 +46,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
+import com.xuejian.client.lxp.bean.SecretKeyBean;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.OtherApi;
@@ -60,7 +60,6 @@ import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.utils.SelectPicUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
@@ -79,8 +78,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/11.
@@ -88,27 +87,27 @@ import butterknife.InjectView;
 public class AccountActvity extends PeachBaseActivity implements View.OnClickListener {
 
 
-    @InjectView(R.id.iv_avatar)
+    @Bind(R.id.iv_avatar)
     ImageView avatarIv;
-    @InjectView(R.id.tv_nickname)
+    @Bind(R.id.tv_nickname)
     TextView tv_nickname;
-    @InjectView(R.id.tv_gender)
+    @Bind(R.id.tv_gender)
     TextView tv_gender;
-    @InjectView(R.id.tv_zodiac)
+    @Bind(R.id.tv_zodiac)
     TextView tv_zodiac;
-    @InjectView(R.id.tv_resident)
+    @Bind(R.id.tv_resident)
     TextView tv_resident;
-    @InjectView(R.id.tv_plan)
+    @Bind(R.id.tv_plan)
     TextView tv_plan;
-    @InjectView(R.id.tv_foot_print)
+    @Bind(R.id.tv_foot_print)
     TextView tv_foot_print;
-    @InjectView(R.id.tv_photo)
+    @Bind(R.id.tv_photo)
     TextView tv_photo;
-    @InjectView(R.id.tv_bind_phone)
+    @Bind(R.id.tv_bind_phone)
     TextView tv_bind_phone;
-    @InjectView(R.id.tv_modify_pwd)
+    @Bind(R.id.tv_modify_pwd)
     TextView tv_modify_pwd;
-    @InjectView(R.id.tv_sign)
+    @Bind(R.id.tv_sign)
     TextView tv_sign;
 
     public String getBirthDay() {
@@ -151,7 +150,7 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
 
     private void initView() {
         setContentView(R.layout.activity_account);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         findViewById(R.id.ll_nickname).setOnClickListener(this);
         findViewById(R.id.ll_gender).setOnClickListener(this);
         findViewById(R.id.ll_resident).setOnClickListener(this);
@@ -575,6 +574,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 public void doSuccess(String result, String method) {
                     CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                     if (userResult.code == 0) {
+                        User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                        SecretKeyBean secretKeyBean =user.getSecretKey();
+                        userResult.result.setSecretKey(secretKeyBean);
                         AccountManager.getInstance().saveLoginAccount(mContext, userResult.result);
                         bindView(userResult.result, user.getUserId());
                     }
@@ -762,6 +764,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
                     user.setGender(gender);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                    user.setGender(gender);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     if (gender.equalsIgnoreCase("M")) {
                         //   iv_header_frame_gender.setImageResource(R.drawable.ic_home_header_boy);
@@ -891,9 +895,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                                     new UpProgressHandler() {
                                         public void progress(String key, double percent) {
                                             try {
-                                                progressDialog.setContent((int) (percent * 100) + "%");
+                                                if (progressDialog!=null)progressDialog.setContent((int) (percent * 100) + "%");
                                             } catch (Exception e) {
-
+                                                e.printStackTrace();
                                             }
 
                                         }
@@ -939,8 +943,9 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 if (modifyResult.code == 0) {
                     user.setAvatar(url);
                     try {
-                        AccountManager.getInstance().getLoginAccountInfo().setAvatar(url);
-                        AccountManager.getInstance().saveLoginAccount(mContext, user);
+//                       User user = AccountManager.getInstance().getLoginAccountInfo();
+//                        user.setAvatar(url);
+//                        AccountManager.getInstance().saveLoginAccount(mContext, user);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1128,6 +1133,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
                     user.setTravelStatus(sstatus);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                    user.setTravelStatus(sstatus);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     //status.setText(sstatus);
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -1171,6 +1178,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
                     user.setResidence(residence);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
+                    user.setResidence(residence);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     tv_resident.setText(residence);
 //                    ToastUtil.getInstance(mContext).showToast("修改成功");
@@ -1212,6 +1221,8 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
                 DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                 if (modifyResult.code == 0) {
+                    user.setBirthday(birth);
+                    User user = AccountManager.getInstance().getLoginAccount(AccountActvity.this);
                     user.setBirthday(birth);
                     AccountManager.getInstance().saveLoginAccount(mContext, user);
                     tv_zodiac.setText(birth);

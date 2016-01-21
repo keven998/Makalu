@@ -21,7 +21,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/white">
+        android:background="@color/tab_bar_color">
 
         <RelativeLayout
             android:id="@+id/btn_container_address_list"
@@ -65,7 +65,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="消息"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="@dimen/title_text_size"/>
 
         <TextView

@@ -1,6 +1,8 @@
 package com.xuejian.client.lxp.module;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -13,24 +15,24 @@ import android.widget.TextView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.StrategyBean;
-import com.xuejian.client.lxp.common.utils.ShareUtils;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/13.
  */
 public class PeachWebViewActivity extends BaseWebViewActivity implements View.OnClickListener {
 
-    @InjectView(R.id.web_view_go_back)
+    @Bind(R.id.web_view_go_back)
     ImageView go_back;
-    @InjectView(R.id.web_view_go_forward)
+    @Bind(R.id.web_view_go_forward)
     ImageView go_forward;
-    @InjectView(R.id.web_view_refresh)
+    @Bind(R.id.web_view_refresh)
     ImageView refresh;
-    @InjectView(R.id.web_view_share)
+    @Bind(R.id.web_view_share)
     ImageView share;
     String title;
     StrategyBean strategy;
@@ -39,7 +41,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_with_titlebar);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 //        titleHeaderBar.enableBackKey(true);
         if (getIntent().getBooleanExtra("enable_bottom_bar", false)) {
             findViewById(R.id.bottom_bar).setVisibility(View.VISIBLE);
@@ -49,7 +51,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             public void onClick(View view) {
                 if (mWebView.canGoBack()) {
                     mWebView.goBack();
-                  //  resetGoback();
+                    //  resetGoback();
                 } else {
                     finish();
                 }
@@ -64,6 +66,8 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         if (!TextUtils.isEmpty(title)) {
             ((TextView) findViewById(R.id.tv_title_bar_title)).setText(title);
         } else {
+            Uri uri = Uri.parse(mCurrentUrl);
+            ((TextView) findViewById(R.id.tv_title_bar_title)).setText(uri.getQueryParameter("title"));
             title = "分享";
         }
         strategy = new StrategyBean();
@@ -75,22 +79,22 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         share.setOnClickListener(this);
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.loadUrl(mCurrentUrl);
-       // resetForward();
-       // resetGoback();
+        // resetForward();
+        // resetGoback();
     }
 
-    public void resetForward(){
-        if(!mWebView.canGoForward()){
+    public void resetForward() {
+        if (!mWebView.canGoForward()) {
             go_forward.setEnabled(false);
-        }else{
+        } else {
             go_forward.setEnabled(true);
         }
     }
 
-    public void resetGoback(){
-        if(!mWebView.canGoBack()){
+    public void resetGoback() {
+        if (!mWebView.canGoBack()) {
             go_back.setEnabled(false);
-        }else{
+        } else {
             go_back.setEnabled(true);
         }
     }
@@ -116,7 +120,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
                 break;
 
             case R.id.web_view_share:
-                ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, strategy);
+            //    ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, strategy,"");
                 break;
             default:
                 break;
@@ -139,14 +143,35 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             go_back.setEnabled(mWebView.canGoBack());
             go_forward.setEnabled(mWebView.canGoForward());
         }
+
         @Override
         public void onPageFinished(WebView view, String url) {
             //设置程序的标题为网页的标题
         }
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             go_back.setEnabled(mWebView.canGoBack());
             go_forward.setEnabled(mWebView.canGoForward());
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (url.startsWith("lvxingpai")) {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.route");
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                intent.setData(Uri.parse(url));
+                if (CommonUtils.checkIntent(PeachWebViewActivity.this, intent))
+                    startActivity(intent);
+                return true;
+            }
+            if ((url.toLowerCase().startsWith("http://")) || (url.toLowerCase().startsWith("https://"))) {
+                return false;
+            }
+
+            return true;
+            // return super.shouldOverrideUrlLoading(view, url);
         }
     }
 }

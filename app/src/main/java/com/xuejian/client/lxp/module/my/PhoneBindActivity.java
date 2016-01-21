@@ -24,24 +24,24 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class PhoneBindActivity extends PeachBaseActivity implements View.OnClickListener {
-    @InjectView(R.id.et_phone)
+    @Bind(R.id.et_phone)
     EditText phoneEt;
-    @InjectView(R.id.et_sms)
+    @Bind(R.id.et_sms)
     EditText smsEt;
-    @InjectView(R.id.tv_confirm)
+    @Bind(R.id.tv_confirm)
     TextView tv_confirm;
-    @InjectView(R.id.tv_cancel)
+    @Bind(R.id.tv_cancel)
     TextView tv_cancel;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView tv_title_bar_title;
-    @InjectView(R.id.btn_time_down)
+    @Bind(R.id.btn_time_down)
     TextView downTimeBtn;
     private CountDownTimer countDownTimer;
     private int countDown;
@@ -53,7 +53,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_phone);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         downTimeBtn.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(this);
         tv_confirm.setOnClickListener(this);
@@ -128,7 +128,6 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        System.out.println(code);
                         if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(PhoneBindActivity.this).showToast("发送短信过于频繁！");
@@ -181,6 +180,8 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                                         DialogManager.getInstance().dissMissLoadingDialog();
                                         CommonJson<ModifyResult> bindResult = CommonJson.fromJson(result, ModifyResult.class);
                                         if (bindResult.code == 0) {
+                                            user.setTel(sendSuccessPhone);
+                                            User user = AccountManager.getInstance().getLoginAccount(PhoneBindActivity.this);
                                             user.setTel(sendSuccessPhone);
                                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                                             Intent intent = new Intent();

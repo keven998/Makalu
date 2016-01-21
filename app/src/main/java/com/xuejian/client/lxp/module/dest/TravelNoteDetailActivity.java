@@ -29,8 +29,6 @@ import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.widget.BlurDialogMenu.BlurDialogFragment;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by Rjm on 2014/12/13.
  */
@@ -43,7 +41,6 @@ public class TravelNoteDetailActivity extends BaseWebViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_with_titlebar);
-        ButterKnife.inject(this);
         mWebView = (WebView) findViewById(R.id.web_view);
         mProgressBar = (NumberProgressBar) findViewById(R.id.numberbar1);
         initWebView();

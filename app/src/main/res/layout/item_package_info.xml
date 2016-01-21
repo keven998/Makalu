@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="7dp"
+        android:id="@+id/ll_bg"
+        android:background="@drawable/icon_package_bg_default"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_package"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
+            android:gravity="center_vertical"
+            android:lines="2"
+            android:ellipsize="end"
+            android:textColor="@color/color_text_iii"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_package_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_text_iii"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout>

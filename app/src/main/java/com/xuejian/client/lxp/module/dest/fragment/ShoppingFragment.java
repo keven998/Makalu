@@ -46,8 +46,8 @@ import com.xuejian.client.lxp.module.dest.OnStrategyModeChangeListener;
 import com.xuejian.client.lxp.module.dest.PoiListActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/29.
@@ -56,7 +56,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
 
     public final static int ADD_SHOPPING_REQUEST_CODE = 103;
     private OnStrategyModeChangeListener mOnEditModeChangeListener;
-    @InjectView(R.id.edit_dslv)
+    @Bind(R.id.edit_dslv)
     DragSortListView mEditDslv;
     View addFooter;
     Button addBtn;
@@ -69,7 +69,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
         addBtn.setText("收集购物");
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         mEditDslv.addFooterView(addFooter);
         initData();
         return rootView;
@@ -78,7 +78,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

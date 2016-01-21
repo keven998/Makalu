@@ -7,7 +7,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
-import com.xuejian.client.lxp.module.dest.CityDetailActivity;
+import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.PicPagerActivity;
 import com.xuejian.client.lxp.module.dest.PicPagerActivity2;
 import com.xuejian.client.lxp.module.dest.PoiDetailActivity;
@@ -22,7 +22,7 @@ public class IntentUtils {
 
     public static void intentToDetail(Activity act, String type, String id) {
         if (type.equals(TravelApi.PeachType.LOC)) {
-            Intent intent = new Intent(act, CityDetailActivity.class);
+            Intent intent = new Intent(act, CityInfoActivity.class);
             intent.putExtra("id", id);
             act.startActivity(intent);
         } else if (type.equals(TravelApi.PeachType.SPOT)) {
@@ -33,11 +33,6 @@ public class IntentUtils {
         } else if (type.equals(TravelApi.PeachType.SHOPPING) || type.equals(TravelApi.PeachType.RESTAURANTS) || type.equals(TravelApi.PeachType.HOTEL)) {
             Intent intent = new Intent(act, PoiDetailActivity.class);
             intent.putExtra("type", type);
-            intent.putExtra("id", id);
-            act.startActivity(intent);
-        } else if (type.equals(TravelApi.PeachType.LOC)) {
-            Intent intent = new Intent();
-            intent.setClass(act, CityDetailActivity.class);
             intent.putExtra("id", id);
             act.startActivity(intent);
         }

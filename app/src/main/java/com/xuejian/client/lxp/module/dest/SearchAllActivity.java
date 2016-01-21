@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -53,26 +52,26 @@ import com.xuejian.client.lxp.module.dest.adapter.TravelNoteViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/9.
  */
 public class SearchAllActivity extends PeachBaseActivity {
-    @InjectView(R.id.et_search)
+    @Bind(R.id.et_search)
     EditText mEtSearch;
-    @InjectView(R.id.btn_search)
+    @Bind(R.id.btn_search)
     TextView mBtnSearch;
-    @InjectView(R.id.search_all_lv)
+    @Bind(R.id.search_all_lv)
     ListView mSearchAllLv;
-    @InjectView(R.id.cleanHistory)
+    @Bind(R.id.cleanHistory)
     TextView cleanHistory;
-    @InjectView(R.id.history_pannel)
+    @Bind(R.id.history_pannel)
     FrameLayout history_pannel;
-    @InjectView(R.id.recomend_tag)
+    @Bind(R.id.recomend_tag)
     TagListView recomend_tag;
-    @InjectView(R.id.history_lebel)
+    @Bind(R.id.history_lebel)
     TextView historyLebel;
     String toId;
     String chatType;
@@ -96,7 +95,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         chatType = getIntent().getStringExtra("chatType");
         conversation = getIntent().getStringExtra("conversation");
         type = getIntent().getStringExtra("type");
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         cleanHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -322,7 +321,7 @@ public class SearchAllActivity extends PeachBaseActivity {
                         public void onTagClick(TagView tagView, Tag tag) {
                             if (mKeyTags != null && mKeyTags.size() > 0) {
                                 mEtSearch.setText(mKeyTags.get(tag.getId()).getTitle());
-                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(tagView.getWindowToken(), 0);
                                 searchAll(mKeyTags.get(tag.getId()).getTitle());
                             }
@@ -454,6 +453,31 @@ public class SearchAllActivity extends PeachBaseActivity {
             });
         } else if ("shopping".equals(type)) {
             TravelApi.searchAll(keyword, "false", "false", "false", "false", "true", new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson<SearchAllBean> searchAllResult = CommonJson.fromJson(result, SearchAllBean.class);
+                    if (searchAllResult.code == 0) {
+                        //          if (searchAllResult.result.s)
+                        bindView(keyword, searchAllResult.result);
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    if (!isFinishing()) {
+                        ToastUtil.getInstance(SearchAllActivity.this).showToast(getResources().getString(R.string.request_network_failed));
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }else if ("loc".equals(type)){
+            TravelApi.searchAll(keyword, "true", "false", "false", "false", "false", new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
                     DialogManager.getInstance().dissMissLoadingDialog();

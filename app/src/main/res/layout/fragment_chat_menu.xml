@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_backgroud"
+    android:background="@color/base_color_white"
     android:orientation="vertical">
 
 
@@ -80,6 +80,62 @@
             android:layout_height="1px"
             android:layout_marginLeft="18dp"
             android:background="@color/color_line" />
+        <TextView
+            android:id="@+id/tv_pics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/option_cell_selector"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="12dp"
+            android:paddingTop="15dp"
+            android:singleLine="true"
+            android:text="聊天图集"
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="18dp"
+            android:background="@color/color_line" />
+        <LinearLayout
+            android:id="@+id/ll_user_info"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/base_color_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="18dp"
+                android:id="@+id/iv_avatar"
+                android:layout_width="55dp"
+                android:layout_height="55dp" />
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="15sp"
+                android:textColor="@color/color_text_ii"
+                />
+        </LinearLayout>
+        <TextView
+            android:background="@drawable/bg_common"
+            android:id="@+id/create_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginLeft="18dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="7dp"
+            android:text="新建群聊"/>
 
     </LinearLayout>
 

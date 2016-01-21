@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.HttpManager;
-import com.aizou.core.utils.RegexUtils;
 import com.lv.im.IMClient;
 import com.lv.utils.SharePrefUtil;
 import com.xuejian.client.lxp.R;
@@ -32,28 +31,27 @@ import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.MainActivity;
-import com.xuejian.client.lxp.module.SplashActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class LoginActivity extends PeachBaseActivity {
     public final static int REQUEST_CODE_REG = 101;
     public final static int REQUEST_CODE_FIND_PASSWD = 102;
 
-    @InjectView(R.id.et_account)
+    @Bind(R.id.et_account)
     AutoCompleteTextView loginNameEt;
-    @InjectView(R.id.et_password)
+    @Bind(R.id.et_password)
     EditText pwdEt;
 
-    @InjectView(R.id.btn_login)
+    @Bind(R.id.btn_login)
     Button loginBtn;
     private int request_code;
     private boolean autoLogin = false;
     private boolean isBackWeixinLoginPage = true;
     private boolean isWeixinClickLogin = false;
     CustomLoadingDialog dialog;
-    private boolean isFromSplash,isFromTalkShare;
+    private boolean isFromSplash,isFromTalkShare,isFromGoods;
 
     //type
     private int LOGIN = 1;
@@ -79,11 +77,10 @@ public class LoginActivity extends PeachBaseActivity {
                 startActivityForResult(intent, REQUEST_CODE_REG);
             }
         });
-        if (SplashActivity.instance!=null){
-            SplashActivity.instance.finish();
-        }
+        setResult(RESULT_OK);
         isFromSplash = getIntent().getBooleanExtra("isFromSplash",false);
         isFromTalkShare = getIntent().getBooleanExtra("isFromTalkShare",false);
+        isFromGoods = getIntent().getBooleanExtra("isFromGoods",false);
         request_code = getIntent().getIntExtra("request_code", 0);
         if (request_code == REQUEST_CODE_REG) {
             Intent intent = new Intent(this, RegActivity.class);
@@ -112,7 +109,7 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_login);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         String phoneNum = SharePrefUtil.getPhoneNum(this,"lastPhone");
         if (phoneNum!=null){
             String [] arr={""};
@@ -187,7 +184,7 @@ public class LoginActivity extends PeachBaseActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 DialogManager.getInstance().dissMissLoadingDialog();
-                if (isFromTalkShare) {
+                if (isFromTalkShare||isFromGoods) {
                     finish();
                 } else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -196,7 +193,7 @@ public class LoginActivity extends PeachBaseActivity {
                     startActivity(intent);
                     finish();
                     if (isFromSplash) {
-                        SplashActivity.instance.finish();
+                       setResult(RESULT_OK);
                     }
                 }
                 // setResult(RESULT_OK);
@@ -329,13 +326,13 @@ public class LoginActivity extends PeachBaseActivity {
 
     private void signIn() {
         if (TextUtils.isEmpty(loginNameEt.getText()) || TextUtils.isEmpty(pwdEt.getText())) {
-            ToastUtil.getInstance(mContext).showToast("我要账号和密码");
+            ToastUtil.getInstance(mContext).showToast("请输入账号和密码");
             return;
         }
-        if (!RegexUtils.isMobileNO(loginNameEt.getText().toString().trim())) {
-            ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
-            return;
-        }
+//        if (!RegexUtils.isMobileNO(loginNameEt.getText().toString().trim())) {
+//            ToastUtil.getInstance(this).showToast("请正确输入11位手机号");
+//            return;
+//        }
         try {
             DialogManager.getInstance().showLoadingDialog(this);
         } catch (Exception e) {
@@ -449,7 +446,7 @@ public class LoginActivity extends PeachBaseActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_REG && resultCode == RESULT_OK) {
-            User user = (User) data.getSerializableExtra("user");
+            User user = data.getParcelableExtra("user");
             loginNameEt.setText(user.getTel());
             try {
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
@@ -458,7 +455,7 @@ public class LoginActivity extends PeachBaseActivity {
             }
             imLogin(user, REGISTER);
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FIND_PASSWD) {
-            User user = (User) data.getSerializableExtra("user");
+            User user =  data.getParcelableExtra("user");
             try {
                 DialogManager.getInstance().showLoadingDialog(mContext, "正在登录");
             }catch (Exception e){

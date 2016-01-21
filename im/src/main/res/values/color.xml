@@ -20,13 +20,13 @@
      <color name="gray_add">#313c4c</color>
     <color name="red_add">#fa6b5b</color>
      <color name="blue_add">#436EEE</color>
-     <color name="seekbar_secondaryprogress_color">#3F4DB5A4</color>
+     <color name="seekbar_secondaryprogress_color">#99ccff</color>
      <color name="item_common_select">#e8e8e5</color>
      <color name="red_n">#ff7676</color>
     
     <color name="light_green_label">#B9DC96</color>
     <color name="light_red_label">#FF96A0</color>
     <color name="light_perple_label">#8cc8ff</color>
-    <color name="light_yellow_label">#ffbe64</color>
+    <color name="light_yellow_label">#f9932e</color>
     <color name="light_blue_label">#82f0fa</color>
 </resources>

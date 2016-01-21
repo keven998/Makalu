@@ -23,14 +23,14 @@ import com.xuejian.client.lxp.db.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by xuyongchen on 15/8/28.
  */
 public class TravelExpertApplyActivity extends PeachBaseActivity {
-    @InjectView(R.id.number_input)
+    @Bind(R.id.number_input)
     EditText numberInput;
     PopupWindow popupWindow;
 
@@ -38,7 +38,7 @@ public class TravelExpertApplyActivity extends PeachBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.travel_expert_apply);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         findViewById(R.id.apply_head_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

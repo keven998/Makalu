@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/talent_loc_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:overScrollMode="always"
+            android:paddingBottom="50dp" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_round_menu"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="-150dp"
+            >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/yuan" />
+
+                <com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout
+                    android:id="@+id/circle_layout"
+                    android:layout_width="260dp"
+                    android:layout_height="260dp"
+                    circle:firstChildPosition="West">
+                    <include layout="@layout/circle_menu_item" />
+                </com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout>
+            </FrameLayout>
+
+        </LinearLayout>
+        <com.xuejian.client.lxp.common.widget.VerticalTextView
+            android:id="@+id/iv_show"
+            android:layout_width="30dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right|center_vertical"
+            android:gravity="right|center_vertical"
+            android:background="@drawable/icon_show_button"/>
+        <include layout="@layout/component_fake_search"/>
+    </FrameLayout>
+
+</LinearLayout>

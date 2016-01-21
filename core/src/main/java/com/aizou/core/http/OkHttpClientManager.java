@@ -41,7 +41,7 @@ public class OkHttpClientManager {
     private OkHttpClient mOkHttpClient;
     private Handler mDelivery;
     private Gson mGson;
-
+    private AuthenticationFailed listener;
     private static final String TAG = "LXPHttp";
     public static final MediaType json
             = MediaType.parse("application/json; charset=utf-8");
@@ -50,7 +50,7 @@ public class OkHttpClientManager {
         mOkHttpClient = new OkHttpClient();
         mDelivery = new Handler(Looper.getMainLooper());
         mGson = new Gson();
-        mOkHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
+        mOkHttpClient.setConnectTimeout(5, TimeUnit.SECONDS);
     }
 
     public static OkHttpClientManager getInstance() {
@@ -62,6 +62,13 @@ public class OkHttpClientManager {
             }
         }
         return mInstance;
+    }
+
+    public void setOnAuthenticationFailed(AuthenticationFailed listener){
+        this.listener = listener;
+    }
+    public OkHttpClient getmOkHttpClient() {
+        return mOkHttpClient;
     }
 
     public void request(PTRequest request, String postBody, final HttpCallBack callBack) {
@@ -77,6 +84,7 @@ public class OkHttpClientManager {
             }
             i++;
         }
+        System.out.println("请求接口： " + url);
         Log.d(TAG, "请求接口： " + url);
         List<Header> headerList = request.getPTHeader().overwirdeHeaders;
         Map<String,String>headerMap =new HashMap<>();
@@ -644,14 +652,15 @@ public class OkHttpClientManager {
             public void onResponse(final Response response) {
                 try {
                     final String string = response.body().string();
-                    Log.d(TAG, "返回结果： code "+response.code()+"  "+ string);
+                    System.out.println("返回结果： code " + response.code() + "  " + string+response.request().urlString());
+                    Log.d(TAG, "返回结果： code " + response.code() + "  " + string);
                     if (response.isSuccessful()) {
 
                         if (callback.mType == String.class) {
-                            sendSuccessResultCallback(string, response.code(),response.headers().toMultimap() ,callback);
+                            sendSuccessResultCallback(string, response.code(), response.headers().toMultimap(), callback);
                         } else {
                             Object o = mGson.fromJson(string, callback.mType);
-                            sendSuccessResultCallback(o, response.code(), response.headers().toMultimap() ,callback);
+                            sendSuccessResultCallback(o, response.code(), response.headers().toMultimap(), callback);
                         }
                     } else {
                         sendFailedStringCallback(response.request(), null, response.code(), callback);
@@ -669,11 +678,17 @@ public class OkHttpClientManager {
     }
 
     private void sendFailedStringCallback(final Request request, final Exception e, final int code, final ResultCallback callback) {
+        System.out.println("code  "+code);
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
-                if (callback != null)
+                if (code==401&&listener!=null){
+                        System.out.println("listener "+code);
+                        listener.onFailed("from lxp "+code+" :"+request.urlString());
+                }
+                if (callback != null){
                     callback.onError(request, e, code);
+                }
             }
         });
     }

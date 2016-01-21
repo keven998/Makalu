@@ -1,103 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/tab_bar_color">
 
-    <LinearLayout
+        <TextView
+            android:id="@+id/tv_title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/icon_arrow_left_white"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp" />
+
+        <TextView
+            android:id="@+id/tv_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="商品列表"
+            android:textColor="@color/base_color_white"
+            android:textSize="17sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/app_theme_color" />
+
+    </RelativeLayout>
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_marginTop="@dimen/title_bar_height"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            <LinearLayout
+                android:id="@+id/ll_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@color/base_color_white"
+                android:minHeight="55dp"
+                android:orientation="horizontal"
+                app:layout_scrollFlags="scroll|enterAlways"
+                >
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/title_bar_height"
-            android:background="@color/base_color_white">
+                <com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner
+                    android:id="@+id/type_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/base_color_white"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="全部"
+                    app:arrowTint="@color/app_theme_color"
+                    android:textColor="@color/color_text_ii" />
 
-            <TextView
-                android:id="@+id/tv_title_back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:drawableLeft="@drawable/selector_ic_nav_back"
-                android:paddingLeft="10dp"
-                android:paddingRight="30dp" />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center"
+                    android:background="@color/color_line" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:drawablePadding="5dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="产品展示"
-                android:textColor="@color/color_text_ii"
-                android:textSize="17sp" />
+                <com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner
+                    android:id="@+id/sort_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/base_color_white"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    app:arrowTint="@color/app_theme_color"
+                    android:text="推荐排序"
+                    app:paddingStart="15dp"
+                    android:textColor="@color/color_text_ii" />
+            </LinearLayout>
 
+            <ImageView
+                android:id="@+id/iv_banner"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:visibility="gone"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_alignParentBottom="true"
-                android:background="@color/app_theme_color" />
+                android:background="@color/color_line" />
 
-        </RelativeLayout>
+        </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@color/base_color_white"
-            android:gravity="center_vertical"
-            android:minHeight="55dp"
-            android:orientation="horizontal"
-            android:padding="11dp">
-
-            <Spinner
-                android:id="@+id/type_spinner"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/base_color_white"
-                android:dropDownVerticalOffset="10dp"
-                android:gravity="center_horizontal"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:spinnerMode="dropdown" />
-
-            <Spinner
-                android:id="@+id/sort_spinner"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/base_color_white"
-                android:dropDownVerticalOffset="10dp"
-                android:gravity="center_horizontal"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-
-        <com.aizou.core.widget.prv.PullToRefreshListView
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/lv_poi_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@color/color_line"
-            android:dividerHeight="1px"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"
-            android:visibility="visible" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/iv_toTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/icon_totop"
+            android:visibility="gone"
+            app:backgroundTint="@color/app_theme_color"
+            app:layout_behavior="com.xuejian.client.lxp.common.widget.behavior.ScrollingFabBehavior" />
 
-    <ImageView
-        android:id="@+id/iv_toTop"
-        android:layout_gravity="bottom|right"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/icon_totop"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_toTop"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_gravity="bottom|right"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:src="@drawable/icon_totop" />-->
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
 
 </merge>

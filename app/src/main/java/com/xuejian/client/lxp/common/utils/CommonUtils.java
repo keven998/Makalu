@@ -14,11 +14,10 @@
 package com.xuejian.client.lxp.common.utils;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -27,30 +26,36 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.CountryCodeBean;
 import com.xuejian.client.lxp.bean.StartCity;
-
-import org.apache.http.Header;
-import org.apache.http.util.EncodingUtils;
+import com.xuejian.client.lxp.common.httpclient.Header;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -59,12 +64,53 @@ import java.util.Map;
 
 public class CommonUtils {
 
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0, len = listAdapter.getCount(); i < len; i++) { //listAdapter.getCount()返回数据项的数目
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0); //计算子项View 的宽高
+            totalHeight += listItem.getMeasuredHeight(); //统计所有子项的总高度
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
+
+    public static int getToolbarHeight(Context context) {
+        final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
+                new int[]{R.attr.actionBarSize});
+        int toolbarHeight = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        return toolbarHeight;
+    }
+
+    public static String getPriceString(double price) {
+        if (Math.round(price) - price == 0) {
+            return String.valueOf((long) price);
+        } else {
+            BigDecimal bd = new BigDecimal(price);
+            BigDecimal bd2 = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+            return bd2.toString();
+        }
+
+        //  return String.valueOf((double) Math.round(price * 100 / 100));
+    }
+
+
     /**
      * 检测网络是否可用
      *
      * @param context
      * @return
      */
+
     public static boolean isNetWorkConnected(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -106,6 +152,7 @@ public class CommonUtils {
         }
         return display.getWidth();
     }
+
     public static int getScreenHeight(Activity context) {
         Display display = context.getWindowManager().getDefaultDisplay();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -115,6 +162,7 @@ public class CommonUtils {
         }
         return display.getHeight();
     }
+
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
 
         float[] results = new float[1];
@@ -171,8 +219,8 @@ public class CommonUtils {
     }
 
     public static String getLastModifyForHeader(Map<String, List<String>> headers) {
-        if (headers==null)return "";
-        if (!headers.containsKey("Last-Modify"))return "";
+        if (headers == null) return "";
+        if (!headers.containsKey("Last-Modify")) return "";
         return headers.get("Last-Modify").get(0);
     }
 //    public static boolean isBackground(Context context) {
@@ -209,6 +257,17 @@ public class CommonUtils {
         return gson.fromJson(json, listType);
     }
 
+    public static ArrayList<CountryCodeBean> parserCountryCodeJson(Context context) {
+        String json = getFromAssets(context, "countryCode.json");
+        if (json == null) {
+            return new ArrayList<>();
+        }
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<CountryCodeBean>>() {
+        }.getType();
+        return gson.fromJson(json, listType);
+    }
+
     public static String getFromAssets(Context context, String fileName) {
         String result = "";
         try {
@@ -219,11 +278,58 @@ public class CommonUtils {
             byte[] buffer = new byte[lenght];
             // 将文件中的数据读到byte数组中
             in.read(buffer);
-            result = EncodingUtils.getString(buffer, "utf-8");
+            result = getString(buffer, "utf-8");
+            in.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String getString(final byte[] data, final String charset) {
+        notNull(data, "Input");
+        return getString(data, 0, data.length, charset);
+    }
+
+    public static String getString(
+            final byte[] data,
+            int offset,
+            int length,
+            String charset) {
+        notNull(data, "Input");
+        notEmpty(charset, "Charset");
+        try {
+            return new String(data, offset, length, charset);
+        } catch (UnsupportedEncodingException e) {
+            return new String(data, offset, length);
+        }
+    }
+
+    public static <T extends CharSequence> T notEmpty(final T argument, final String name) {
+        if (argument == null) {
+            throw new IllegalArgumentException(name + " may not be null");
+        }
+        if (TextUtils.isEmpty(argument)) {
+            throw new IllegalArgumentException(name + " may not be empty");
+        }
+        return argument;
+    }
+
+    public static <T> T notNull(final T argument, final String name) {
+        if (argument == null) {
+            throw new IllegalArgumentException(name + " may not be null");
+        }
+        return argument;
+    }
+
+    public static <E, T extends Collection<E>> T notEmpty(final T argument, final String name) {
+        if (argument == null) {
+            throw new IllegalArgumentException(name + " may not be null");
+        }
+        if (argument.isEmpty()) {
+            throw new IllegalArgumentException(name + " may not be empty");
+        }
+        return argument;
     }
 
     public static void fixInputMethodManagerLeak(Context destContext) {
@@ -358,6 +464,7 @@ public class CommonUtils {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
+
     public static String getSystemProperty() {
         String line = null;
         BufferedReader reader = null;
@@ -373,9 +480,10 @@ public class CommonUtils {
         }
         return "UNKNOWN";
     }
-    public static int checkOp(Context context, int op){
+
+    public static int checkOp(Context context, int op) {
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 19){
+        if (version >= 19) {
             Object object = context.getSystemService(Context.APP_OPS_SERVICE);
             Class c = object.getClass();
             try {
@@ -385,7 +493,7 @@ public class CommonUtils {
                 cArg[2] = String.class;
                 Method lMethod = c.getDeclaredMethod("checkOp", cArg);
                 return (Integer) lMethod.invoke(object, op, Binder.getCallingUid(), context.getPackageName());
-            } catch(NoSuchMethodException e) {
+            } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -396,5 +504,14 @@ public class CommonUtils {
             }
         }
         return -1;
+    }
+
+    public static String formatDuring(long mss) {
+        long day = mss /  86400000;
+        long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (mss % (1000 * 60)) / 1000;
+        return String.valueOf(day)+"天"+hours + " 小时 " + minutes + " 分 "
+                + seconds + " 秒 ";
     }
 }

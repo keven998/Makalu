@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/24.
@@ -53,7 +53,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     public static final int ADD_POI_REQUEST_CODE = 101;
     private ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
     private OnStrategyModeChangeListener mOnEditModeChangeListener;
-    @InjectView(R.id.edit_dslv)
+    @Bind(R.id.edit_dslv)
     DragSortListView mEditDslv;
     RouteDayAdapter routeDayAdpater;
     View addDayFooter;
@@ -65,7 +65,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_route_guide, container, false);
         addDayFooter = View.inflate(getActivity(), R.layout.footer_route_day_bottom, null);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         mEditDslv.addFooterView(addDayFooter);
         initData();
@@ -75,7 +75,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

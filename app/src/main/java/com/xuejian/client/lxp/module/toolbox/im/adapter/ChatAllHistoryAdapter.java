@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.aizou.core.utils.GsonTools;
 import com.aizou.core.utils.LocalDisplay;
 import com.lv.bean.ConversationBean;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -34,6 +35,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
@@ -73,6 +75,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
     private static final int HOTEL_MSG = 16;
     private static final int QA_MSG = 17;
     private static final int H5_MSG = 18;
+    private static final int TRADE_MSG = 20;
+    private static final int GOODS_MSG = 19;
     private static final int TIPS_MSG = 200;
     boolean isGroup;
 
@@ -212,6 +216,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                     finalHolder.avatar.setImageResource(R.drawable.lvxingwenwen);
                 } else if (user.getUserId() == 10000) {
                     finalHolder.avatar.setImageResource(R.drawable.lvxingpaipai);
+                } else if (user.getUserId() == 10002) {
+                    finalHolder.avatar.setImageResource(R.drawable.icon_trade_message);
+                } else if (user.getUserId() == 10003) {
+                    finalHolder.avatar.setImageResource(R.drawable.icon_activity_message);
                 } else {
                     if (finalHolder.avatar.getTag() != null && (int) finalHolder.avatar.getTag() == conversation.getFriendId()) {
                         ImageLoader.getInstance().displayImage(user.getAvatarSmall(), finalHolder.avatar, options);
@@ -257,6 +265,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
             holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(conversation, (this.getContext()), isGroup)),
                     BufferType.SPANNABLE);
         } else {
+            holder.message.setCompoundDrawables(null, null, null, null);
             holder.message.setText("");
             holder.time.setText("");
         }
@@ -366,6 +375,19 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<ConversationBean> {
                 break;
             case TIPS_MSG:
                 digest = "[系统消息]";
+                break;
+            case TRADE_MSG:
+                digest = "[交易消息]";
+                break;
+            case GOODS_MSG:
+                final String conent = conversationBean.getLastMessage();
+                try {
+                    ShareCommodityBean bean = GsonTools.parseJsonToBean(conent, ShareCommodityBean.class);
+                    digest = "[宝贝]"+bean.title;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    digest = "[宝贝消息]";
+                }
                 break;
             default:
                 System.err.println("error, unknow type");

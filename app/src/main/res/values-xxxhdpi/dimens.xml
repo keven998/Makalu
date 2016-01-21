@@ -26,7 +26,17 @@
     <dimen name="edit_page_bg_size">220dp</dimen>
     <dimen name="user_profile_entry_height">160dp</dimen>
     <dimen name="spot_detail_picture_height">300dp</dimen>
-
+    <dimen name="goods_main_viewpager_height">220dp</dimen>
     <dimen name="talent_loc_cell_height">220dp</dimen>
+    <dimen name="city_viewpager_height">168dp</dimen>
+    <dimen name="goods_frame_height">302dp</dimen>
+    <dimen name="goods_img_height">230dp</dimen>
+    <dimen name="goods_avatar_height">86dp</dimen>
+    <dimen name="goods_avatar_margin_bottom">29dp</dimen>
+    <dimen name="goods_main_page_frame_size">266dp</dimen>
+    <dimen name="goods_main_page_img_size">226dp</dimen>
+    <dimen name="goods_main_page_price_size">84dp</dimen>
+    <dimen name="goods_main_page_price_text_size">42dp</dimen>
+    <dimen name="goods_loc_margin">56dp</dimen>
 
 </resources>

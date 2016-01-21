@@ -22,21 +22,21 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/13.
  */
 public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClickListener {
     public final static int REQUEST_CODE_RESET_PWD = 300;
-    @InjectView(R.id.et_phone)
+    @Bind(R.id.et_phone)
     EditText phoneEt;
-    @InjectView(R.id.et_sms)
+    @Bind(R.id.et_sms)
     EditText smsEt;
-    @InjectView(R.id.btn_next)
+    @Bind(R.id.btn_next)
     Button nextBtn;
-    @InjectView(R.id.btn_time_down)
+    @Bind(R.id.btn_time_down)
     Button downTimeBtn;
     private TitleHeaderBar titleBar;
     private CountDownTimer countDownTimer;
@@ -49,7 +49,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("账户验证");
         titleBar.enableBackKey(true);
@@ -113,7 +113,6 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
                         DialogManager.getInstance().dissMissLoadingDialog();
-                        System.out.println(code);
                         if (code == HttpManager.PERMISSION_ERROR) {
                             if (!isFinishing())
                                 ToastUtil.getInstance(ForgetPwdActivity.this).showToast("发送短信过于频繁！");
@@ -168,7 +167,6 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
 
                     @Override
                     public void doFailure(Exception error, String msg, String method, int code) {
-                        System.out.println("code " + code);
                         DialogManager.getInstance().dissMissLoadingDialog();
                         if (code == HttpManager.PWD_ERROR) {
                             ToastUtil.getInstance(ForgetPwdActivity.this).showToast("验证码错误");

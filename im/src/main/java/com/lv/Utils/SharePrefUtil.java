@@ -15,7 +15,11 @@ public class SharePrefUtil {
             sp = context.getSharedPreferences(SP_NAME, 0);
         sp.edit().putBoolean(key, value).commit();
     }
-
+    public static String getString(Context context, String key, String defValue) {
+        if (sp == null)
+            sp = context.getSharedPreferences(SP_NAME, 0);
+        return sp.getString(key, defValue);
+    }
     public synchronized static boolean getBoolean(Context context, String key,
                                      boolean defValue) {
         if (sp == null)

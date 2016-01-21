@@ -25,7 +25,7 @@ import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.PreferenceUtils;
-import com.xuejian.client.lxp.module.dest.CityDetailActivity;
+import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +91,7 @@ public class HomeTownFragment extends PeachBaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try{
-                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
+                    Intent intent = new Intent(getActivity(), CityInfoActivity.class);
                     intent.putExtra("id",adapter.getList().get(position).id);
                     intent.putExtra("isFromStrategy", false);
                     startActivity(intent);

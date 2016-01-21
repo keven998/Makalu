@@ -35,7 +35,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -67,6 +66,7 @@ import android.widget.Toast;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.DotView;
+import com.alibaba.fastjson.JSON;
 import com.lv.Audio.MediaRecordFunc;
 import com.lv.bean.MessageBean;
 import com.lv.im.HandleImMessage;
@@ -76,6 +76,7 @@ import com.lv.utils.TimeUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
+import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -93,11 +94,21 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.MessageAdapter;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * 聊天页面
@@ -182,7 +193,10 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     TextView titleView;
     private int currentSize;
     private String changedTitle = null;
-
+    public CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private boolean fromTrade;
+    ChatMenuFragment fragment;
+    MessageBean tempTradeBean;
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -214,14 +228,61 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private boolean isRecord;
 
+    public void update() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection conn = null;
+                File localObject = new File(getFilesDir(), "ReactNativeDevBundle.js");
+                if ((localObject).exists()) {
+//                    boolean result = ( localObject).delete();
+//                    System.out.println("删除 " + result);
+                }
+                File[] filesss = getFilesDir().listFiles();
+                System.out.println(filesss.length);
+                try {
+
+                    URL downloadUrl = new URL("http://7xiktj.com1.z0.glb.clouddn.com/ReactNativeDevBundle.js.png");
+                    conn = (HttpURLConnection) downloadUrl.openConnection();
+                    conn.setConnectTimeout(5000);
+                    conn.setRequestMethod("GET");
+                    if (conn.getResponseCode() == 200) {
+                        File newfile = new File(getFilesDir(), "ReactNativeDevBundle.js");
+                        FileOutputStream output = new FileOutputStream(newfile);
+                        InputStream input = null;
+                        input = conn.getInputStream();
+                        byte[] voice_bytes = new byte[1024];
+                        int len1 = -1;
+                        while ((len1 = input.read(voice_bytes)) != -1) {
+                            output.write(voice_bytes, 0, len1);
+                        }
+                        output.flush();
+                        input.close();
+                        output.close();
+                        System.out.println("替换成功");
+                        File[] files = getFilesDir().listFiles();
+                        for (File file : files) {
+                            System.out.println(file.getName());
+                            System.out.println(file.getTotalSpace());
+                        }
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }).start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        //    update();
         Intent intent = getIntent();
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
+        fromTrade = intent.getBooleanExtra("fromTrade",false);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(10001);
         if (!TextUtils.isEmpty(toChatUsername)) {
@@ -246,8 +307,22 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
-                CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
-                UserDBManager.getInstance().saveContact(userInfo.result);
+                final CommonJson<User> userInfo = CommonJson.fromJson(result, User.class);
+                if (fragment != null) {
+                    if (userInfo.result == null) {
+                        fragment.setInfo(toChatUsername, "");
+                    } else {
+                        fragment.setInfo(userInfo.result.getNickName(), userInfo.result.getAvatar());
+                        titleView.setText(userInfo.result.getNickName());
+                    }
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        UserDBManager.getInstance().saveContact(userInfo.result);
+                    }
+                }).start();
+
             }
 
             @Override
@@ -264,14 +339,51 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     private void initData() {
         messageList.clear();
-        messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, 0));
-        currentSize = messageList.size();
-        adapter.refresh();
-        int count = listView.getCount();
-        if (count > 0) {
-            listView.setSelection(count - 1);
-        }
+        compositeSubscription.add(
+                Observable.from(IMClient.getInstance().getMessages(toChatUsername, 0))
+                        .toList()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<List<MessageBean>>() {
+                            @Override
+                            public void call(List<MessageBean> messageBeans) {
+                                messageList.addAll(messageBeans);
+
+                                if (fromTrade){
+                                    ShareCommodityBean shareCommodityBean = getIntent().getParcelableExtra("shareCommodityBean");
+                                    final MessageBean messag1 = new MessageBean();
+                                    messag1.setMessage(JSON.toJSONString(shareCommodityBean));
+                                    messag1.setType(201);
+                                    messag1.setSenderId(Long.parseLong(toChatUsername));
+                                    messag1.setSendType(1);
+                                    messag1.setCreateTime(System.currentTimeMillis());
+                                    tempTradeBean = messag1;
+                                    messageList.add(messag1);
+                                    adapter.setSendCommodityListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            messageList.remove(messag1);
+                                            tempTradeBean = null;
+                                            adapter.notifyDataSetChanged();
+                                            MessageBean m = IMClient.getInstance().createCommodityMessage(AccountManager.getCurrentUserId(), toChatUsername, chatType, messag1.getMessage(), MessageAdapter.GOODS_MSG);
+                                            messageList.add(m);
+                                            adapter.notifyDataSetChanged();
+                                            listView.setSelection(listView.getCount() - 1);
+                                        }
+                                    });
+                                }
+                                currentSize = messageList.size();
+                                adapter.refresh();
+                                int count = listView.getCount();
+                                if (count > 0) {
+                                    listView.setSelection(count - 1);
+                                }
+                            }
+                        })
+        );
     }
+
+
 
     /**
      * initView
@@ -456,10 +568,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         } else titleView.setText(user.getNickName());
         // 判断单聊还是群聊
         if ("single".equals(chatType)) { // 单聊
-            final Fragment fragment = new ChatMenuFragment();
+            fragment = new ChatMenuFragment();
             Bundle args = new Bundle();
             args.putString("userId", toChatUsername);
             args.putString("conversation", conversation);
+            if (user!=null){
+               args.putParcelable("user",user);
+            }
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -479,7 +594,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             });
         } else {
             // 群聊
-            final Fragment fragment = new GroupDetailFragment();
+            final GroupDetailFragment fragment = new GroupDetailFragment();
             Bundle args = new Bundle();
             args.putString("groupId", toChatUsername);
             args.putString("conversation", conversation);
@@ -500,14 +615,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 }
             });
         }
+        if ("10002".equals(toChatUsername)){
+            findViewById(R.id.iv_nav_menu).setVisibility(View.GONE);
+            findViewById(R.id.bar_bottom).setVisibility(View.GONE);
+        }
+
         adapter = new MessageAdapter(this, toChatUsername, chatType, conversation);
         // 显示消息
         listView.setAdapter(adapter);
         listView.setOnScrollListener(new ListScrollListener());
-        int count = listView.getCount();
-        if (count > 0) {
-            listView.setSelection(count - 1);
-        }
+//        int count = listView.getCount();
+//        if (count > 0) {
+//            listView.setSelection(count - 1);
+//        }
         listView.setOnTouchListener(new OnTouchListener() {
 
             @Override
@@ -684,7 +804,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 break;
             case R.id.iv_emoticons_normal:
                 hideKeyboard();
-
+                setModeKeyboard(null);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -704,129 +824,49 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 mExtraPanel.setVisibility(View.GONE);
                 showKeyboard(mEditTextContent);
                 break;
-            case  R.id.btn_note:
+            case R.id.btn_note:
                 Intent intent = new Intent(mContext, SearchAllActivity.class);
                 intent.putExtra("chatType", chatType);
                 intent.putExtra("toId", toChatUsername);
                 intent.putExtra("conversation", conversation);
                 intent.putExtra("userId", AccountManager.getCurrentUserId());
                 intent.putExtra("isShare", true);
-                intent.putExtra("type","travelNote");
+                intent.putExtra("type", "travelNote");
                 startActivity(intent);
                 break;
-            case  R.id.btn_viewspot:
+            case R.id.btn_viewspot:
                 Intent intent1 = new Intent(mContext, SearchAllActivity.class);
                 intent1.putExtra("chatType", chatType);
                 intent1.putExtra("toId", toChatUsername);
                 intent1.putExtra("conversation", conversation);
                 intent1.putExtra("userId", AccountManager.getCurrentUserId());
                 intent1.putExtra("isShare", true);
-                intent1.putExtra("type","vs");
+                intent1.putExtra("type", "vs");
                 startActivity(intent1);
                 break;
-            case  R.id.btn_food:
+            case R.id.btn_food:
                 Intent intent2 = new Intent(mContext, SearchAllActivity.class);
                 intent2.putExtra("chatType", chatType);
                 intent2.putExtra("toId", toChatUsername);
                 intent2.putExtra("conversation", conversation);
                 intent2.putExtra("userId", AccountManager.getCurrentUserId());
                 intent2.putExtra("isShare", true);
-                intent2.putExtra("type","restaurant");
+                intent2.putExtra("type", "restaurant");
                 startActivity(intent2);
                 break;
-            case  R.id.btn_shopping:
+            case R.id.btn_shopping:
                 Intent intent3 = new Intent(mContext, SearchAllActivity.class);
                 intent3.putExtra("chatType", chatType);
                 intent3.putExtra("toId", toChatUsername);
                 intent3.putExtra("conversation", conversation);
                 intent3.putExtra("userId", AccountManager.getCurrentUserId());
                 intent3.putExtra("isShare", true);
-                intent3.putExtra("type","shopping");
+                intent3.putExtra("type", "shopping");
                 startActivity(intent3);
                 break;
             default:
                 break;
         }
-
-
-//        int id = view.getId();
-//        if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
-//            String s = mEditTextContent.getText().toString();
-//            sendText(s, 0);
-//        } else if (id == R.id.btn_my_guide) {
-//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
-//            try {
-//                Intent intent = new Intent(mContext, StrategyListActivity.class);
-//                intent.putExtra("chatType", chatType);
-//                intent.putExtra("toId", toChatUsername);
-//                intent.putExtra("conversation", conversation);
-//                intent.putExtra("userId", AccountManager.getCurrentUserId());
-//                intent.putExtra("isShare", true);
-//                //  intent.setAction("action.chat");
-//                startActivity(intent);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-////        else if (id == R.id.btn_dest) {
-////            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpsearch");
-////            Intent intent = new Intent(mContext, SearchAllActivity.class);
-////            intent.putExtra("chatType", chatType);
-////            intent.putExtra("toId", toChatUsername);
-////            intent.putExtra("conversation", conversation);
-////            intent.putExtra("isShare", true);
-////            intent.setAction("action.chat");
-////            startActivityWithNoAnim(intent);
-////            overridePendingTransition(android.R.anim.fade_in, R.anim.slide_stay);
-////        }
-//         /*else if (id == R.id.btn_location) {
-//            ToastUtil.getInstance(this).showToast("发送位置");*/
-//           /* MobclickAgent.onEvent(mContext,"event_share_travel_notes_extra");
-//            Intent intent = new Intent(mContext, TravelNoteSearchActivity.class);
-//            intent.putExtra("chatType",chatType);
-//            intent.putExtra("toId",toChatUsername);
-//            intent.setAction("action.chat");
-//            startActivity(intent);*/
-////            // 点击我的目的地图标
-////            JSONObject contentJson = new JSONObject();
-////            try {
-////                contentJson.put("id","1");
-////                contentJson.put("desc","我的游记描述");
-////                contentJson.put("image","http://img0.bdstatic.com/img/image/shouye/lysxwz-6645354418.jpg");
-////                contentJson.put("name","游记");
-////                sendText(contentJson.toString(), Constant.ExtType.TRAVELS);
-////            } catch (JSONException e) {
-////                e.printStackTrace();
-////            }
-//        //}
-//        else if (id == R.id.btn_take_picture) {
-//            selectPicFromCamera();// 点击照相图标
-//        } else if (id == R.id.btn_picture) {
-//            selectPicFromLocal(); // 点击图片图标
-//        } else if (id == R.id.btn_location) { // 位置
-//            MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
-//            startActivityForResult(new Intent(this, MapActivity.class), REQUEST_CODE_MAP);
-//        } else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
-//            hideKeyboard();
-//
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mExtraPanel.setVisibility(View.VISIBLE);
-//                    iv_emoticons_normal.setVisibility(View.GONE);
-//                    iv_emoticons_checked.setVisibility(View.VISIBLE);
-//                    btnContainer.setVisibility(View.GONE);
-//                    expressionContainer.setVisibility(View.VISIBLE);
-//                }
-//            }, 100);
-//        } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
-//            iv_emoticons_normal.setVisibility(View.VISIBLE);
-//            iv_emoticons_checked.setVisibility(View.GONE);
-//            btnContainer.setVisibility(View.GONE);
-//            expressionContainer.setVisibility(View.GONE);
-//            mExtraPanel.setVisibility(View.GONE);
-//            showKeyboard(mEditTextContent);
-//        }
     }
 
     /**
@@ -1110,7 +1150,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         mExtraPanel.setVisibility(View.GONE);
         btnContainer.setVisibility(View.GONE);
         expressionContainer.setVisibility(View.GONE);
-        view.setVisibility(View.GONE);
+        if (view!=null)view.setVisibility(View.GONE);
         buttonSetModeVoice.setVisibility(View.VISIBLE);
         mEditTextContent.requestFocus();
         buttonPressToSpeak.setVisibility(View.GONE);
@@ -1122,7 +1162,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             btnMore.setVisibility(View.GONE);
             buttonSend.setVisibility(View.VISIBLE);
         }
-        showKeyboard(mEditTextContent);
+        if (view!=null)showKeyboard(mEditTextContent);
     }
 
     /**
@@ -1181,13 +1221,13 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     public void onMsgArrive(MessageBean m, String groupId) {
         if ("single".equals(chatType) && !groupId.equals(String.valueOf(0))) {
-         //   if (isLongEnough())
-          //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            //   if (isLongEnough())
+            //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("single".equals(chatType) && !toChatUsername.equals(String.valueOf(m.getSenderId())))) {
-          //  if (isLongEnough())
-          //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            //  if (isLongEnough())
+            //      Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else if (("group".equals(chatType) && !toChatUsername.equals(groupId))) {
-           // if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
+            // if (isLongEnough())Toast.makeText(ChatActivity.this, "有新消息！", Toast.LENGTH_SHORT).show();
         } else {
             m.setSendType(1);
             messageList.add(m);
@@ -1195,10 +1235,19 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //            MessageBean messageBean =new MessageBean();
 //            messageBean.setMessage("{\"title\":\"title\",\"desc\":\"desc\",\"image\":\"http://7xirnn.com1.z0.glb.clouddn.com/2ed2cb7c-ac84-4720-9aa0-b5bb8dba6795!thumb?e=1439527658&token=jU6KkDZdGYODmrPVh5sbBIkJX65y-Cea991uWpWZ:QmwHGiZqUA-Cg0p4hgxNLY8f6F4=\",\"url\":\"http://m.creatby.com/manage/book/b10qbu/\"}");
 //            messageBean.setType(17);
-//            messageBean.setSenderId(100014);
+//            messageBean.setSenderId(210710);
 //            messageBean.setSendType(1);
 //            messageBean.setCreateTime(System.currentTimeMillis());
 //            messageList.add(messageBean);
+
+//            MessageBean messag =new MessageBean();
+//            messag.setMessage("{\"title\":\"等待支付\",\"text\":\"您的订单将于2015年12月7日20:09:11过期，请尽快完成支付\",\"commodityName\":\"新马泰七日游\",\"orderId\":\"1231312312414214\"}");
+//            messag.setType(19);
+//            messag.setSenderId(210710);
+//            messag.setSendType(1);
+//            messag.setCreateTime(System.currentTimeMillis());
+//            messageList.add(messag);
+
             adapter.refresh();
             int curSelection = listView.getFirstVisiblePosition();
             if (curSelection > listView.getCount() / 2) {
@@ -1400,6 +1449,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 
     @Override
     protected void onDestroy() {
+        if (this.compositeSubscription.hasSubscriptions()) this.compositeSubscription.clear();
         super.onDestroy();
         HandleImMessage.getInstance().unregisterMessageListener(this, conversation);
         CommonUtils.fixInputMethodManagerLeak(this);
@@ -1481,6 +1531,15 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         super.onStop();
     }
 
+    private static long mSendTime;
+
+    public static boolean isLongEnough() {
+        long currentTime = System.currentTimeMillis();
+        long time = currentTime - mSendTime;
+        mSendTime = currentTime;
+        return !(0 < time && time < 1000);
+    }
+
     /**
      * listview滑动监听listener
      */
@@ -1490,28 +1549,40 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             switch (scrollState) {
                 case OnScrollListener.SCROLL_STATE_IDLE:
-                    if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
+                    if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData&&isLongEnough()) {
                         loadmorePB.setVisibility(View.VISIBLE);
                         try {
                             currentSize = messageList.size();
+                            int pos = -1;
+                            if (tempTradeBean!=null){
+                                pos = currentSize - messageList.indexOf(tempTradeBean)-1;
+                            }
                             messageList.clear();
                             messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, ++PAGE));
+                            if (tempTradeBean!=null&&pos!=-1){
+                                messageList.add(messageList.size()- pos,tempTradeBean);
+                            }
                         } catch (Exception e1) {
                             loadmorePB.setVisibility(View.GONE);
                             return;
                         }
-                        if (messageList.size() != 0) {
-                            // 刷新ui
-                            adapter.notifyDataSetChanged();
-                            if (messageList.size() > currentSize) {
-                                listView.setSelection(messageList.size() - currentSize - 1);
-                            }
-                            if (messageList.size() == currentSize) {
+                        try {
+                            if (messageList.size() != 0) {
+                                // 刷新ui
+                                adapter.notifyDataSetChanged();
+                                if (messageList.size() > currentSize) {
+                                    listView.setSelection(messageList.size() - currentSize - 1);
+                                }
+                                if (messageList.size() == currentSize) {
+                                    haveMoreData = false;
+                                }
+                            } else {
                                 haveMoreData = false;
                             }
-                        } else {
-                            haveMoreData = false;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+
                         loadmorePB.setVisibility(View.GONE);
                         isloading = false;
 
@@ -1570,11 +1641,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             }
             AppOpsManager manager = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
             int result = manager.checkOp("27", uid, "com.xuejian.client.lxp");
-            System.out.println(uid + " " + result);
         }
         return 0;
     }
-
-    private static long mSendTime;
 
 }

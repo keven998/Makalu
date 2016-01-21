@@ -7,9 +7,11 @@ import com.lv.Listener.FetchListener;
 import com.lv.Listener.HttpCallback;
 import com.lv.bean.Message;
 import com.lv.bean.SendMessageBean;
+import com.lv.bean.User;
 import com.lv.im.IMClient;
 import com.lv.im.LazyQueue;
 import com.lv.utils.Config;
+import com.lv.utils.SecurityUtil;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -20,8 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -32,27 +38,51 @@ import java.util.concurrent.TimeUnit;
 public class HttpUtils {
     static ExecutorService exec = Executors.newCachedThreadPool();
     public static final OkHttpClient client = new OkHttpClient();
+    public static AuthenticationFailed listener;
 
     static {
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        client.setConnectTimeout(7, TimeUnit.SECONDS);
     }
 
+    public static void setAuthenticationFailed(AuthenticationFailed listener){
+        HttpUtils.listener = listener;
+    }
     public static final MediaType json
             = MediaType.parse("application/json; charset=utf-8");
 
     public static Response HttpRequest_Post(String url, String postBody) throws Exception {
+        User user = IMClient.getLoginAccount();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String date = sdf.format(new Date()).replaceAll("\\+\\d{2}.+$", "");
+
         RequestBody body = RequestBody.create(json, postBody);
-        Request request = new Request.Builder()
-                .addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+        Request.Builder builder = new Request.Builder();
+        builder.addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+                .addHeader("X-Lvxingpai-Id", IMClient.getInstance().getCurrentUserId())
                 .addHeader("Accept", "application/vnd.hedylogos.v1+json")
+                .addHeader("Date", date)
                 .url(url)
-                .post(body)
-                .build();
-        if (Config.isDebug){
-            Log.d(Config.TAG,"请求内容： "+postBody);
-            Log.d(Config.TAG,"请求接口： "+url);
+                .post(body);
+
+        if (user != null) {
+            String authString = SecurityUtil.getAuthBody(user.getSecretKey(), url, postBody, date, IMClient.getInstance().getCurrentUserId());
+            builder.addHeader("Authorization", "LVXINGPAI-v1-HMAC-SHA256 Signature=" + authString);
         }
-        return client.newCall(request).execute();
+
+        Request request = builder.build();
+        if (Config.isDebug) {
+            Log.d(Config.TAG, "请求内容： " + postBody);
+            Log.d(Config.TAG, "请求接口： " + url);
+        }
+        Response response = client.newCall(request).execute();
+        if (response.code() == 401) {
+            if (listener != null) {
+                listener.onFailed("401 from hedy "+request.urlString());
+            }
+        }
+        return response;
 
     }
 
@@ -69,31 +99,69 @@ public class HttpUtils {
     }
 
     public static Response HttpRequest_Get(String url) throws Exception {
-        Request request = new Request.Builder()
-                .addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+        User user = IMClient.getLoginAccount();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String date = sdf.format(new Date()).replaceAll("\\+\\d{2}.+$", "");
+
+
+        Request.Builder builder = new Request.Builder();
+        builder.addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+                .addHeader("X-Lvxingpai-Id", IMClient.getInstance().getCurrentUserId())
                 .addHeader("Accept", "application/vnd.hedylogos.v1+json")
+                .addHeader("Date", date)
                 .url(url)
-                .get()
-                .build();
-        if (Config.isDebug){
-            Log.d(Config.TAG,"请求接口： "+url);
+                .get();
+        if (user != null) {
+            String authString = SecurityUtil.getAuthBody(user.getSecretKey(), url, "", date, IMClient.getInstance().getCurrentUserId());
+            builder.addHeader("Authorization", "LVXINGPAI-v1-HMAC-SHA256 Signature=" + authString);
         }
-        return client.newCall(request).execute();
+        Request request = builder.build();
+        if (Config.isDebug) {
+            Log.d(Config.TAG, "请求接口： " + url);
+        }
+        Response response = client.newCall(request).execute();
+        if (response.code() == 401) {
+            if (listener != null) {
+                listener.onFailed("401 from hedy :"+request.urlString());
+            }
+        }
+        return response;
     }
 
     public static Response HttpRequest_Patch(String url, String patchBody) throws Exception {
+
+        User user = IMClient.getLoginAccount();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String date = sdf.format(new Date()).replaceAll("\\+\\d{2}.+$", "");
+
         RequestBody body = RequestBody.create(json, patchBody);
-        Request request = new Request.Builder()
-                .addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+        Request.Builder builder = new Request.Builder();
+        builder.addHeader("UserId", IMClient.getInstance().getCurrentUserId())
+                .addHeader("X-Lvxingpai-Id", IMClient.getInstance().getCurrentUserId())
                 .addHeader("Accept", "application/vnd.hedylogos.v1+json")
+                .addHeader("Date", date)
                 .url(url)
-                .patch(body)
-                .build();
-        if (Config.isDebug){
-            Log.d(Config.TAG,"请求内容： "+patchBody);
-            Log.d(Config.TAG,"请求接口： "+url);
+                .patch(body);
+        if (user != null) {
+            String authString = SecurityUtil.getAuthBody(user.getSecretKey(), url, patchBody, date, IMClient.getInstance().getCurrentUserId());
+            builder.addHeader("Authorization", "LVXINGPAI-v1-HMAC-SHA256 Signature=" + authString);
         }
-        return client.newCall(request).execute();
+        Request request = builder.build();
+        if (Config.isDebug) {
+            Log.d(Config.TAG, "请求内容： " + patchBody);
+            Log.d(Config.TAG, "请求接口： " + url);
+        }
+        Response response = client.newCall(request).execute();
+        if (response.code() == 401) {
+            if (listener != null) {
+                listener.onFailed("401 from hedy "+request.urlString());
+            }
+        }
+        return response;
     }
 
     public static void muteConversation(String conversation, boolean value, HttpCallback callback) {
@@ -140,9 +208,10 @@ public class HttpUtils {
                     if (Config.isDebug) {
                         Log.i(Config.TAG, "ack Result : " + s);
                     }
-                    if (resultArray.length()>0){
+                    if (resultArray.length() > 0) {
                         IMClient.lastSuccessFetch = object.getLong("timestamp");
                     }
+                    object = null;
                     for (int j = 0; j < resultArray.length(); j++) {
                         Message msg = JSON.parseObject(resultArray.getJSONObject(j).toString(), Message.class);
                         list.add(msg);
@@ -152,13 +221,18 @@ public class HttpUtils {
                             Log.i(Config.TAG, "msg list : " + list.toString());
                         }
                         listener.OnMsgArrive(list);
-                    }else {
-                        listener.OnMsgArrive(new ArrayList<Message>());
+                    } else {
+                        ArrayList<Message> messageList1 = new ArrayList<Message>();
+                        listener.OnMsgArrive(messageList1);
+                        messageList1 = null;
                     }
+                    list = null;
                 } else {
-                    listener.OnMsgArrive(new ArrayList<Message>());
+                    ArrayList<Message> messageList = new ArrayList<Message>();
+                    listener.OnMsgArrive(messageList);
                     IMClient.getInstance().setBLOCK(false);
                     LazyQueue.getInstance().TempDequeue();
+                    messageList = null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -338,7 +412,7 @@ public class HttpUtils {
 
     public static void getConversationAttrs(String userId, List<String> chatIds, final HttpCallback callback) {
         exec.execute(() -> {
-            if (chatIds.size()==0)return;
+            if (chatIds.size() == 0) return;
             String cids = "";
             for (int i = 0; i < chatIds.size(); i++) {
                 if (i != 0) cids += ",";
@@ -357,7 +431,8 @@ public class HttpUtils {
             }
         });
     }
-    public static void getConversationAttr(String userId,String friendId, final HttpCallback callback) {
+
+    public static void getConversationAttr(String userId, String friendId, final HttpCallback callback) {
         exec.execute(() -> {
             String url = Config.HOST + String.format(Config.CON_URL, userId) + friendId;
             try {

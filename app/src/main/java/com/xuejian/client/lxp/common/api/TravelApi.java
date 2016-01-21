@@ -9,20 +9,17 @@ import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.SystemConfig;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Rjm on 2014/11/13.
- */
 public class TravelApi extends BaseApi {
     public static class PeachType {
         public final static String GUIDE = "guide";
@@ -37,9 +34,9 @@ public class TravelApi extends BaseApi {
     //目的地推荐
     public final static String REC_DEST = "/recommend";
     //国内目的地列表  已修改
-    public final static String IN_DESTINATIONS = "/geo/localities/domestic";
+    public final static String IN_DESTINATIONS = "/guide/localities";
     //国外目的地列表  已修改
-    public final static String OUT_DESTINATIONS = "/geo/localities/abroad";
+    public final static String OUT_DESTINATIONS = "/guide/localities";
     //目的地详情  已修改
     public final static String CITY_DETAIL = "/geo/localities/";
     //目的地图集  已修改
@@ -84,29 +81,7 @@ public class TravelApi extends BaseApi {
     //达人列表
     public final static String EXPERT_LIST = "/geo/countries";
     public final static String ANCILLARY_INFO = "/search/ancillary-info";
-    public final static String RECOMMEND_LIST="/geo/localities/recommendations";
-    //    //景点列表
-//    /app/poi/viewspots
-//    //单个景点的信息
-//    /app/poi/viewspots/:id
-//    //景点的用户评论
-//    /app/poi/viewspots/:id/comments
-//    //景点的详细介绍
-//    /app/poi/viewspots/:id/descriptions
-//    //单个景点的深度攻略（HTML页面）
-//    /app/poi/viewspots/:id/details
-//    //餐厅列表
-//    /app/poi/restaurants
-//    //单个餐厅的信息
-//    /app/poi/restaurants/:id
-//    //餐厅的评论
-//    /app/poi/restaurants/:id/comments
-//    //商场列表
-//    /app/poi/shopping
-//    //单个商场的信息
-//    /app/poi/shopping/:id
-//    //商场的评论
-//    /app/poi/shopping/:id/comments
+    public final static String RECOMMEND_LIST = "/geo/localities/recommendations";
     //poi 列表
     public final static String POI_LIST = "/poi/%s";
     //单个POI的信息
@@ -116,7 +91,322 @@ public class TravelApi extends BaseApi {
 
     public final static String USERS = "/users/";
 
-    public final static String RECOMMEND_KEYWORD ="/search/hot-queries";
+    public final static String RECOMMEND_KEYWORD = "/search/hot-queries";
+
+    // 国家列表
+    public final static String COUNTRY_LIST = "/geo/countries";
+
+    // 城市列表
+    public final static String CITY_LIST = "/geo/localities";
+
+    // 首页专栏
+    public final static String MAIN_PAGE = "/columns";
+
+    // 首页推荐
+    public final static String RECOMMEND = "/marketplace/commodities/recommendations";
+
+    // 商品列表
+    public final static String COMMODITY_LIST = "/marketplace/commodities";
+
+    // 商品列表
+    public final static String CATEGORY_LIST = "/marketplace/commodities/categories";
+
+    // 订单创建
+    public final static String CREATE_ORDER = "/marketplace/orders";
+
+    // 商品详情
+    public final static String COMMODITY_DETAIL = "/marketplace/commodities/%s";
+
+    // 订单详情
+    public final static String ORDER_DETAIL = "/marketplace/orders/%s";
+
+    // 旅客信息
+    public final static String TRAVELLER_INFO = "/users/%d/travellers";
+
+    // 修改旅客信息
+    public final static String EDIT_TRAVELLER_INFO = "/users/%d/travellers/%s";
+
+    // 订单列表
+    public final static String ORDER_LIST = "/marketplace/orders";
+
+    // 修改订单状态
+    public final static String EDIT_ORDER_STATUS = "/marketplace/orders/%d/actions";
+
+    // 支付订单
+    public final static String PAY_ORDER = "/marketplace/orders/%d/payments";
+
+    // 商户信息
+    public final static String SELLER_INFO = "/marketplace/sellers/";
+
+    // 推荐城市
+    public final static String RECOMMEND_CIRY = "/geo/localities/recommendations";
+
+    public static void getRecommendCity(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + RECOMMEND_CIRY);
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
+    public static void getSellerInfo(long orderId,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + SELLER_INFO + String.valueOf(orderId));
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getPrePayInfo(long orderId,String vendor,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+       request.setUrl(SystemConfig.DEV_URL + String.format(PAY_ORDER, orderId));
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("provider",vendor);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+    public static void editOrderStatus(long orderId, String action,JSONObject data, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(EDIT_ORDER_STATUS, orderId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("action", action);
+            jsonObject.put("data",data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        setDefaultParams(request, jsonObject.toString());
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
+    public static void getOrderList(long userId,String status ,String start,String count,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + ORDER_LIST);
+        request.putUrlParams("userId", String.valueOf(userId));
+        if (!TextUtils.isEmpty(status)){
+            request.putUrlParams("status",status);
+        }
+        if (!TextUtils.isEmpty(start)&&!TextUtils.isEmpty(count)) {
+            request.putUrlParams("start", start);
+            request.putUrlParams("count", count);
+        }
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
+    public static void getTravellers(long orderId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRAVELLER_INFO, orderId));
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void editTraveller
+            (long userId, String key,String surname, String givenName, String gender, long birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.PUT);
+        request.setUrl(SystemConfig.DEV_URL + String.format(EDIT_TRAVELLER_INFO, userId, key));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("surname", surname);
+            jsonObject.put("givenName", givenName);
+            jsonObject.put("gender", gender);
+            jsonObject.put("birthday", birthday);
+            jsonObject.put("idProof", idProof);
+            jsonObject.put("tel", tel);
+            jsonObject.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        setDefaultParams(request, jsonObject.toString());
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
+
+    public static void createTraveller
+            (long userId, String surname, String givenName, String gender, long birthday, JSONObject idProof, JSONObject tel, String email, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRAVELLER_INFO, userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("surname", surname);
+            jsonObject.put("givenName", givenName);
+            jsonObject.put("gender", gender);
+            jsonObject.put("birthday", birthday);
+            jsonObject.put("idProof", idProof);
+            jsonObject.put("tel", tel);
+            jsonObject.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        setDefaultParams(request, jsonObject.toString());
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
+
+    public static void getOrderDetail(long orderId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(ORDER_DETAIL, String.valueOf(orderId)));
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
+    public static void getCommodity(long commodityId,long version, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(COMMODITY_DETAIL, String.valueOf(commodityId)));
+        if (version>0)request.putUrlParams("version",String.valueOf(version));
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
+    public static void createOrder
+            (long commodityId, String planId, String rendezvousTime, int quantity, JSONObject contactObject, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + CREATE_ORDER);
+    //    request.setUrl("http://182.92.168.171:11219"+ CREATE_ORDER);
+
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        JSONObject telObject = new JSONObject();
+        try {
+       //     telObject.put("dialCode",contactPhoneDialCode);
+       //     telObject.put("number",contactPhoneNumber);
+            jsonObject.put("commodityId", commodityId);
+            jsonObject.put("planId", planId);
+            jsonObject.put("rendezvousTime", rendezvousTime);
+            jsonObject.put("quantity", quantity);
+            jsonObject.put("contact", contactObject);
+     //       jsonObject.put("contactPhone", telObject);
+    //        jsonObject.put("contactEmail", contactEmail);
+   //         jsonObject.put("contactSurname", contactSurname);
+   //         jsonObject.put("contactGivenName", contactGivenName);
+            jsonObject.put("comment", contactComment);
+            if (list != null && list.size() > 0) {
+                JSONArray array = new JSONArray();
+                for (TravellerBean bean : list) {
+                    array.put(bean.getKey());
+                }
+                jsonObject.put("travellers", array);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        setDefaultParams(request, jsonObject.toString());
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
+    public static void getCategoryList(String localityId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CATEGORY_LIST);
+        request.putUrlParams("locality", localityId);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getCommodityList(String sellerId, String localityId, String category, String sortBy, String sort,String start ,String count,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + COMMODITY_LIST);
+        if (!TextUtils.isEmpty(start)&&!TextUtils.isEmpty(count)) {
+            request.putUrlParams("start", start);
+            request.putUrlParams("count", count);
+        }
+        if (!TextUtils.isEmpty(sellerId)) request.putUrlParams("seller", sellerId);
+        if (!TextUtils.isEmpty(localityId)) request.putUrlParams("locality", localityId);
+        if (!TextUtils.isEmpty(category)) request.putUrlParams("category", category);
+        if (!TextUtils.isEmpty(sortBy)) {
+            request.putUrlParams("sortBy", sortBy);
+            request.putUrlParams("sort", sort);
+        }
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getRecommend(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + RECOMMEND);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getMainPageColumns(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + MAIN_PAGE);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getCountryList(String code, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + COUNTRY_LIST);
+        request.putUrlParams("continentCode", code);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getCityList(String countryId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CITY_LIST);
+        request.putUrlParams("countryId", countryId);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getCityInfo(String cityId, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CITY_LIST + "/" + cityId);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getCityDetail(String cityId, String field, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CITY_LIST + "/" + cityId + "/details");
+        if (!TextUtils.isEmpty(field))request.putUrlParams("field", field);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
 
     /**
      * 获取目的地推荐
@@ -128,9 +418,9 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + REC_DEST);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -145,13 +435,14 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + IN_DESTINATIONS);
 //        request.putUrlParams("groupBy","true");
-        setDefaultParams(request);
+
         if (!TextUtils.isEmpty(lastModeify)) {
             request.addHeader("Cache-Control", "private");
             request.addHeader("If-Modified-Since", lastModeify);
         }
-        OkHttpClientManager.getInstance().request(request,"", callback);
-      //  return HttpManager.request(request, callback);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //  return HttpManager.request(request, callback);
     }
 
     /**
@@ -164,24 +455,26 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + IN_DESTINATIONS);
+        request.putUrlParams("abroad", "false");
         request.putUrlParams("groupBy", "true");
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
-        setDefaultParams(request);
+
         if (!TextUtils.isEmpty(lastModeify)) {
             request.addHeader("Cache-Control", "private");
             request.addHeader("If-Modified-Since", lastModeify);
         }
-        OkHttpClientManager.getInstance().request(request,"", callback);
-     //   return HttpManager.request(request, callback);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //   return HttpManager.request(request, callback);
     }
 
-    public static void getAncillaryInfo(String type,String keyword, HttpCallBack callback) {
+    public static void getAncillaryInfo(String type, String keyword, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + ANCILLARY_INFO);
         request.putUrlParams("query", keyword);
         request.putUrlParams("scope", type);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
@@ -195,15 +488,17 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + OUT_DESTINATIONS);
+        request.putUrlParams("abroad", "true");
         request.putUrlParams("groupBy", "true");
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
-        setDefaultParams(request);
+
         if (!TextUtils.isEmpty(lastModeify)) {
             request.addHeader("Cache-Control", "private");
             request.addHeader("If-Modified-Since", lastModeify);
         }
-        OkHttpClientManager.getInstance().request(request,"", callback);
-     //   return HttpManager.request(request, callback);
+        setDefaultParams(request,"");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -216,16 +511,16 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + String.format(LOC_POI_GUIDE, locId, type));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     public static void getRecommendPlan(String locId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(RECOMMEND_PLAN, locId));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
     }
@@ -242,9 +537,9 @@ public class TravelApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + CITY_DETAIL + id);
         request.putUrlParams("noteCnt", "3");
         request.putUrlParams("imgWidth", imgWidth + "");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     /**
@@ -258,20 +553,23 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(CITY_GALLEY, id));
         request.putUrlParams("imgWidth", (int) (LocalDisplay.SCREEN_HEIGHT_PIXELS / 3 / 1.5) + "");
-        setDefaultParams(request);
+        request.putUrlParams("page", String.valueOf(0));
+        request.putUrlParams("pageSize", String.valueOf(1000));
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-       // return HttpManager.request(request, callback);
+        // return HttpManager.request(request, callback);
     }
 
-    public static void getRecommendKeywords(String type ,HttpCallBack callback) {
+    public static void getRecommendKeywords(String type, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + RECOMMEND_KEYWORD);
-        if (!TextUtils.isEmpty(type)){
-            if (type.equals("vs"))type="viewspot";
-            request.putUrlParams("scope",type);
+        if (!TextUtils.isEmpty(type)) {
+            if (type.equals("vs")) type = "viewspot";
+            if (type.equals("loc")) type = "locality";
+            request.putUrlParams("scope", type);
         }
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
@@ -285,9 +583,9 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + SPOT_DETAIL + id);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     /**
@@ -310,9 +608,9 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(150) + "");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-      //  return HttpManager.request(request, callback);
+        //  return HttpManager.request(request, callback);
     }
 
     /**
@@ -329,9 +627,9 @@ public class TravelApi extends BaseApi {
         if (type.equals("restaurant")) type = type + "s";
 
         request.setUrl(SystemConfig.DEV_URL + String.format(POI_DETAIL, type) + id);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
 
@@ -346,9 +644,9 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + USERS + userId + String.format(GUIDEBYID, id));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -365,7 +663,7 @@ public class TravelApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             JSONArray jsonArray = new JSONArray();
@@ -382,15 +680,10 @@ public class TravelApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        setDefaultParams(request, jsonObject.toString());
         LogUtil.d(jsonObject.toString());
-        OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+        //  return HttpManager.request(request, callback);
     }
 
     /**
@@ -407,7 +700,7 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
 
 
 //        request.setHttpMethod(PTRequest.POST);
@@ -421,9 +714,10 @@ public class TravelApi extends BaseApi {
 //        } catch (UnsupportedEncodingException e) {
 //            e.printStackTrace();
 //        }
+        setDefaultParams(request,guideJson);
         LogUtil.d(guideJson);
         OkHttpClientManager.getInstance().request(request, guideJson, callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -441,9 +735,9 @@ public class TravelApi extends BaseApi {
         if (!TextUtils.isEmpty(status)) {
             request.putUrlParams("status", status);
         }
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -464,10 +758,10 @@ public class TravelApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        setDefaultParams(request);
+        setDefaultParams(request, jsonObject.toString());
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-     //   return HttpManager.request(request, callback);
+        //   return HttpManager.request(request, callback);
     }
 
     /**
@@ -481,9 +775,9 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + GUIDE + "/" + id);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         //  return HttpManager.request(request, callBack);
-        OkHttpClientManager.getInstance().request(request,"", callBack);
+        OkHttpClientManager.getInstance().request(request, "", callBack);
     }
 
     /**
@@ -499,22 +793,17 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-       // return HttpManager.request(request, callback);
+        // return HttpManager.request(request, callback);
     }
 
     /**
@@ -530,7 +819,7 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + GUIDE);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", id);
@@ -538,15 +827,10 @@ public class TravelApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
-        OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
-      //  return HttpManager.request(request, callback);
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+        //  return HttpManager.request(request, callback);
     }
 
 
@@ -563,7 +847,7 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             //   jsonObject.put("id", id);
@@ -572,9 +856,9 @@ public class TravelApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
-
-     //   return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
+        setDefaultParams(request, jsonObject.toString());
+        //   return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
     }
 
 
@@ -591,7 +875,7 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()) + "/" + id);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", id);
@@ -601,9 +885,9 @@ public class TravelApi extends BaseApi {
                 locObject = new JSONObject();
                 locObject.put("id", loc.id);
                 locObject.put("zhName", loc.zhName);
-                if(TextUtils.isEmpty(loc.enName)){
+                if (TextUtils.isEmpty(loc.enName)) {
                     locObject.put("enName", "");
-                }else  locObject.put("enName", loc.enName);
+                } else locObject.put("enName", loc.enName);
                 locArray.put(locObject);
             }
             jsonObject.put("localities", locArray);
@@ -638,9 +922,9 @@ public class TravelApi extends BaseApi {
 //            e.printStackTrace();
 //        }
         LogUtil.d(jsonObject.toString());
-
-       // return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
+        setDefaultParams(request, jsonObject.toString());
+        // return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
     }
 
     /**
@@ -657,9 +941,9 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("page", page + "");
         request.putUrlParams("pageSize", PAGE_SIZE + "");
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
-        setDefaultParams(request);
-      //  return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        setDefaultParams(request,"");
+        //  return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
     /**
@@ -673,9 +957,9 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.BASE_URL + FAV + "/" + id);
-        setDefaultParams(request);
-     //   return HttpManager.request(request, callBack);
-        OkHttpClientManager.getInstance().request(request,"", callBack);
+        setDefaultParams(request,"");
+        //   return HttpManager.request(request, callBack);
+        OkHttpClientManager.getInstance().request(request, "", callBack);
     }
 
     //目的地查询
@@ -687,18 +971,18 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("loc", "true");
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
-        setDefaultParams(request);
-      //  return HttpManager.request(request, callback);
+        setDefaultParams(request,"");
+        //  return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
     //目的地联想
     public static void suggestLoc(String keyword, HttpCallBack callback) {
-         suggestForType(keyword, "loc", callback);
+        suggestForType(keyword, "loc", callback);
     }
 
     //联合查询
-    public static void searchAll(String keyword,String loc,String vs,String hotel,String restaurant,String shopping, HttpCallBack callback) {
+    public static void searchAll(String keyword, String loc, String vs, String hotel, String restaurant, String shopping, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEARCH);
@@ -709,11 +993,10 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("restaurant", restaurant);
         request.putUrlParams("shopping", shopping);
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(50) + "");
-        setDefaultParams(request);
-    //    return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        setDefaultParams(request,"");
+        //    return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
-
 
 
     //搜索地点
@@ -727,9 +1010,9 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
-        setDefaultParams(request);
-      //  return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        setDefaultParams(request,"");
+        //  return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
     //联想地点
@@ -740,9 +1023,9 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("keyword", keyword);
         request.putUrlParams(type, "true");
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(50) + "");
-        setDefaultParams(request);
-   //     return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        setDefaultParams(request,"");
+        //     return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
     //获取周边
@@ -756,9 +1039,9 @@ public class TravelApi extends BaseApi {
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(PAGE_SIZE));
         request.putUrlParams("imgWidth", LocalDisplay.dp2px(100) + "");
-        setDefaultParams(request);
-       // return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        setDefaultParams(request,"");
+        // return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
     //达人列表
@@ -766,19 +1049,19 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + EXPERT_LIST);
-        setDefaultParams(request);
-       // return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        setDefaultParams(request,"");
+        // return HttpManager.request(request, callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
 
-    public static void getRecomendCountry(HttpCallBack callback,String isAbroad){
+    public static void getRecomendCountry(HttpCallBack callback, String isAbroad) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + RECOMMEND_LIST);
-        request.putUrlParams("abroad",isAbroad);
-        setDefaultParams(request);
+        request.putUrlParams("abroad", isAbroad);
+        setDefaultParams(request,"");
         // return HttpManager.request(request, callback);
-        OkHttpClientManager.getInstance().request(request,"", callback);
+        OkHttpClientManager.getInstance().request(request, "", callback);
     }
 }

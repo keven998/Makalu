@@ -38,13 +38,22 @@ public class DialogManager {
 
     private static DialogManager mDialogManager = null;
 
+//    public static DialogManager getInstance() {
+//        if (mDialogManager == null) {
+//            mDialogManager = new DialogManager();
+//        }
+//        return mDialogManager;
+//    }
     public static DialogManager getInstance() {
         if (mDialogManager == null) {
-            mDialogManager = new DialogManager();
+            synchronized (DialogManager.class) {
+                if (mDialogManager == null) {
+                    mDialogManager = new DialogManager();
+                }
+            }
         }
         return mDialogManager;
     }
-
 
     /**
      * 描述: 定义弹出框的宽高，弹出对话框
@@ -116,7 +125,7 @@ public class DialogManager {
      */
     public void dissMissModelessLoadingDialog() {
         if (mModelessLoadingDialog != null) {
-            if (mModelessLoadingDialog.isShowing())
+             if (mModelessLoadingDialog.isShowing())
                 mModelessLoadingDialog.dismiss();
 
         }

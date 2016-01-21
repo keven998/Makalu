@@ -23,4 +23,6 @@
     <dimen name="my_plan_title_width">169dp</dimen>
     <dimen name="operation_section_height">205dp</dimen>
     <dimen name="spot_detail_picture_height">172dp</dimen>
+    <dimen name="goods_main_viewpager_height">137dp</dimen>
+    <dimen name="city_viewpager_height">96dp</dimen>
 </resources>

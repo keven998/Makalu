@@ -9,15 +9,15 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * Created by Rjm on 2014/12/2.
  */
 public class ShareActivity extends PeachBaseActivity {
-    @InjectView(R.id.title_bar)
+    @Bind(R.id.title_bar)
     TitleHeaderBar mTitleBar;
-    @InjectView(R.id.create_new_talk)
+    @Bind(R.id.create_new_talk)
     TextView mCreateNewTalk;
     private ListView mImShareLv;
 

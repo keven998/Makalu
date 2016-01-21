@@ -5,12 +5,13 @@
     >
 
     <CheckedTextView
+        android:layout_marginTop="5dp"
         android:id="@+id/imageview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:focusable="false"
-        android:textColor="@color/textcolor_selector_2"
+        android:textColor="@color/base_color_white"
         android:textSize="11sp"
         />
 
@@ -29,16 +30,6 @@
         android:textColor="@color/base_color_white"
         android:textSize="11sp"
         android:visibility="gone"
-        />
-    <View
-        android:id="@+id/line_inter"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/color_line"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         />
 
 

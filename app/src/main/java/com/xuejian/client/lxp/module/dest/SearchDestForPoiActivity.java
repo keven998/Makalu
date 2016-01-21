@@ -34,19 +34,19 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/18.
  */
 public class SearchDestForPoiActivity extends PeachBaseActivity {
 
-    @InjectView(R.id.et_search)
+    @Bind(R.id.et_search)
     EditText mEtSearch;
-    @InjectView(R.id.search_result_lv)
+    @Bind(R.id.search_result_lv)
     PullToRefreshListView mSearchResultLv;
-    @InjectView(R.id.ll_loading)
+    @Bind(R.id.ll_loading)
     ProgressBar mProgressBar;
     private ListViewDataAdapter mSearchResultAdapter;
     private int curPage;
@@ -61,7 +61,7 @@ public class SearchDestForPoiActivity extends PeachBaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_search_dest_for_poi);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         findViewById(R.id.tv_title_bar_left).setOnClickListener(new View.OnClickListener() {
             @Override

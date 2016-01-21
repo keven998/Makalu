@@ -54,8 +54,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/22.
@@ -170,7 +170,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         //图片
         if (bean.images != null) {
             ViewPager vp = (ViewPager) findViewById(R.id.vp_poi);
-            vp.setAdapter(new POIImageVPAdapter(this, bean.images));
+
             final DotView dotview = (DotView) findViewById(R.id.dot_view);
             int pc = bean.images.size();
             if (pc > 1) {
@@ -192,6 +192,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
             } else {
                 dotview.setVisibility(View.GONE);
             }
+            if ( bean.images.size() == 0){
+                ImageBean imageBean = new ImageBean();
+                imageBean.url="";
+                bean.images.add(imageBean);
+                vp.setAdapter(new POIImageVPAdapter(this, bean.images));
+            }else {
+                vp.setAdapter(new POIImageVPAdapter(this, bean.images));
+            }
+
         }
 
         //评分、类型、排名
@@ -421,13 +430,13 @@ public class PoiDetailActivity extends PeachBaseActivity {
     }
 
     public static class CommentViewHolder extends ViewHolderBase<CommentBean> {
-        @InjectView(R.id.tv_commenter_property)
+        @Bind(R.id.tv_commenter_property)
         TextView mTvCommentProperty;
-        @InjectView(R.id.tv_comment_content)
+        @Bind(R.id.tv_comment_content)
         TextView mTvComment;
-        @InjectView(R.id.iv_commenter_avatar)
+        @Bind(R.id.iv_commenter_avatar)
         ImageView mCommeterAvatar;
-        @InjectView(R.id.rb_comment_rating)
+        @Bind(R.id.rb_comment_rating)
         RatingBar starbar;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         private DisplayImageOptions options;
@@ -448,7 +457,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         @Override
         public View createView(LayoutInflater layoutInflater) {
             View view = View.inflate(mContext, R.layout.row_poi_comment, null);
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
             return view;
         }
 

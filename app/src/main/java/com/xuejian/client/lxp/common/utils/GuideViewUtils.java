@@ -50,7 +50,7 @@ public class GuideViewUtils {
                     // 设置LayoutParams参数
                     final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
                     // 设置显示的类型，TYPE_PHONE指的是来电话的时候会被覆盖，其他时候会在最前端，显示位置在stateBar下面，其他更多的值请查阅文档
-                    params.type = WindowManager.LayoutParams.TYPE_PHONE;
+                    params.type = WindowManager.LayoutParams.TYPE_TOAST;
                     // 设置显示格式
                     params.format = PixelFormat.RGBA_8888;
                     // 设置对齐方式

@@ -46,8 +46,8 @@ import com.xuejian.client.lxp.module.dest.OnStrategyModeChangeListener;
 import com.xuejian.client.lxp.module.dest.PoiListActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/29.
@@ -56,7 +56,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
 
     public final static int ADD_REST_REQUEST_CODE = 102;
     private OnStrategyModeChangeListener mOnEditModeChangeListener;
-    @InjectView(R.id.edit_dslv)
+    @Bind(R.id.edit_dslv)
     DragSortListView mEditDslv;
     View addFooter;
     Button addBtn;
@@ -69,7 +69,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
         addFooter = View.inflate(getActivity(), R.layout.footer_route_day_add_day, null);
         addBtn = (Button) addFooter.findViewById(R.id.btn_add_day);
         addBtn.setText("收集美食");
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         mEditDslv.addFooterView(addFooter);
         initData();
         return rootView;
@@ -78,7 +78,7 @@ public class RestaurantFragment extends PeachBaseFragment implements OnStrategyM
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

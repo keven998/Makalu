@@ -20,7 +20,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckedTextView;
-import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -45,28 +44,38 @@ import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.api.UserApi;
-import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.LocationUtils;
 import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
-import com.xuejian.client.lxp.module.dest.fragment.DestinationFragment;
-import com.xuejian.client.lxp.module.dest.fragment.SearchAllFragment;
+import com.xuejian.client.lxp.module.goods.Fragment.DestinationFragment;
+import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
-import com.xuejian.client.lxp.module.my.MyFragment;
-import com.xuejian.client.lxp.module.my.UserFragment;
+import com.xuejian.client.lxp.module.my.fragment.MyInfoFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 
 public class MainActivity extends PeachBaseActivity implements HandleImMessage.MessageHandler, AMapLocationListener {
@@ -79,25 +88,24 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {TalkFragment.class, DestinationFragment.class, SearchAllFragment.class, UserFragment.class};
+    private Class fragmentArray[] = {GoodsMainFragment.class, DestinationFragment.class, TalkFragment.class, MyInfoFragment.class};
     //TalentLocFragement
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_user};
+    private int mImageViewArray[] = {R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
     // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
-    private String[] tabTitle = {"消息", "目的地", "搜索", "我的"};
+    private static String[] tabTitle = {"首页", "目的地", "消息", "我的"};
     private TextView unreadMsg;
-    private TextView regNotice;
     //Tab选项Tag
-    private String mTagArray[] = {"Talk", "Travel", "Soso", "My"};
+    private static String mTagArray[] = {"Soso", "Travel", "Talk", "My"};
 
     private boolean FromBounce, ring, vib;
     private Vibrator vibrator;
-    PopupWindow mPop;
     SuperToast superToast;
     private boolean isPause;
     LocationManagerProxy mLocationManagerProxy;
     private SparseBooleanArray infoStatus = new SparseBooleanArray();
     private MediaPlayer mMediaPlayer;
+    public CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,9 +120,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();
-        if (getIntent().getBooleanExtra("conflict", false)) {
-            showConflictDialog(MainActivity.this);
-        }
+        prepareJSBundle();
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -220,10 +226,11 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 CommonJson<User> Info = CommonJson.fromJson(result.toString(), User.class);
                 if (Info.code == 0) {
                     AccountManager.getInstance().setLoginAccountInfo(Info.result);
-                    UserFragment myFragment = (UserFragment) getSupportFragmentManager().findFragmentByTag("My");
+                    MyInfoFragment myFragment = (MyInfoFragment) getSupportFragmentManager().findFragmentByTag("My");
                     if (myFragment != null && Info.result != null) {
                         myFragment.initHeadTitleView(Info.result);
                     }
+
                 }
             }
 
@@ -237,16 +244,23 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             }
         });
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                IMClient.getInstance().getConversationList();
+//            }
+//        }).start();
+
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getBooleanExtra("conflict", false)) {
-            showConflictDialog(MainActivity.this);
-        }
         if (intent.getBooleanExtra("reLogin", false)) {
             initClient();
+        }
+        if (intent.getBooleanExtra("back", false)) {
+            mTabHost.setCurrentTab(0);
         }
     }
 
@@ -282,11 +296,25 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                     String drawableUrl = ImageDownloader.Scheme.DRAWABLE.wrap("R.drawable.lvxingwenwen");
                     wenwen.setAvatarSmall("drawable://R.drawable.lvxingwenwen");
                     UserDBManager.getInstance().saveContact(wenwen);
+
                     User paipai = new User();
-                    paipai.setNickName("派派");
+                    paipai.setNickName("客服派派");
                     paipai.setUserId(10000l);
                     paipai.setType(1);
                     UserDBManager.getInstance().saveContact(paipai);
+
+                    User trade = new User();
+                    trade.setNickName("交易消息");
+                    trade.setUserId(10002l);
+                    trade.setType(1);
+                    UserDBManager.getInstance().saveContact(trade);
+
+                    User activity = new User();
+                    activity.setNickName("活动消息");
+                    activity.setUserId(10003l);
+                    activity.setType(1);
+                    UserDBManager.getInstance().saveContact(activity);
+
                     List<User> users = new ArrayList<User>(userlist.values());
                     UserDBManager.getInstance().saveContactList(users);
                     AccountManager.getInstance().setContactList(userlist);
@@ -326,7 +354,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      */
     private void initView() {
         //实例化布局对象
-        layoutInflater = LayoutInflater.from(this);
+        layoutInflater = getLayoutInflater();
 
         //实例化TabHost对象，得到TabHost
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
@@ -347,7 +375,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
-                if (s.equals(mTagArray[0])) {
+                if (s.equals(mTagArray[2])) {
                     if (AccountManager.getInstance().getLoginAccount(MainActivity.this) == null) {
                         mTabHost.setCurrentTab(1);
                         Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -367,12 +395,12 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             mTabHost.setCurrentTab(0);
         } else {
-            mTabHost.setCurrentTab(1);
+            mTabHost.setCurrentTab(0);
         }
     }
 
     public void setTabForLogout() {
-        mTabHost.setCurrentTab(1);
+        mTabHost.setCurrentTab(0);
     }
 
     /**
@@ -381,7 +409,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private View getTabItemView(int index) {
         View view = layoutInflater.inflate(R.layout.tab_item_view, null);
         //  view.setBackgroundResource(colors[index]);
-        if (index == 0) {
+        if (index == 2) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
 //        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false) && index == 3) {
@@ -389,10 +417,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //            regNotice.setTextColor(Color.RED);
 //            regNotice.setVisibility(View.VISIBLE);
 //        }
-
-        if (index == 3) {
-            view.findViewById(R.id.line_inter).setVisibility(View.GONE);
-        }
         // Drawable myImage = (Drawable)getResources().getDrawable(mImageViewArray[index], );
         // myImage.setBounds(1, 1, 100, 100);
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
@@ -405,11 +429,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         return view;
     }
 
-    public void setNoticeInvisiable() {
-        if (regNotice != null) {
-            regNotice.setVisibility(View.GONE);
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -424,12 +443,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //                talkFragment.loadConversation();
 //                talkFragment.updateUnreadAddressLable();
 //            }
-//            updateUnreadMsgCount();
-
+            updateUnreadMsgCount();
         } else unreadMsg.setVisibility(View.GONE);
         try {
             if (!IMClient.isPushTurnOn(mContext)) {
-                System.out.println("push Off");
                 IMClient.initPushService(mContext);
             }
         } catch (Exception e) {
@@ -443,48 +460,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         super.onSaveInstanceState(outState);
     }
 
-    protected PeachMessageDialog conflictDialog;
-
-    /**
-     * 显示帐号在别处登录dialog
-     */
-    public void showConflictDialog(Context context) {
-        AccountManager.getInstance().logout(context);
-        int i = mTabHost.getCurrentTab();
-        if (i == 2) {
-            MyFragment my = (MyFragment) getSupportFragmentManager().findFragmentByTag("My");
-            my.onResume();
-        }
-        if (isFinishing())
-            return;
-        try {
-            if (conflictDialog == null) {
-                conflictDialog = new PeachMessageDialog(context);
-                conflictDialog.setTitle("下线通知");
-                //conflictDialog.setTitleIcon(R.drawable.ic_dialog_tip);
-                conflictDialog.setMessage(getResources().getText(R.string.connect_conflict).toString());
-                conflictDialog.setPositiveButton("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        conflictDialog.dismiss();
-                        conflictDialog = null;
-                        mTabHost.setCurrentTab(1);
-                        if (isAccountAbout) {
-                            finish();
-                        }
-                    }
-                });
-                conflictDialog.show();
-                conflictDialog.isCancle(false);
-            }
-            conflictDialog.show();
-            isConflict = true;
-        } catch (Exception e) {
-
-        }
-
-
-    }
 
 
     @Override
@@ -740,14 +715,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         });
     }
 
-    /**
-     * 保存提示新消息
-     */
-    private void notifyNewInviteMessage() {
-
-        // 刷新bottom bar消息未读数
-        updateUnreadAddressLable();
-    }
 
     /**
      * 网络状态广播
@@ -786,17 +753,46 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 
     public void updateUnreadMsgCount() {
-        int unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
-        if (unreadMsgCountTotal > 0) {
-            unreadMsg.setVisibility(View.VISIBLE);
-            if (unreadMsgCountTotal < 100) {
-                unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
-            } else {
-                unreadMsg.setText("...");
-            }
-        } else {
-            unreadMsg.setVisibility(View.GONE);
-        }
+        Observable<Integer> UnReadCount = Observable.just(IMClient.getInstance().getUnReadCount()).subscribeOn(Schedulers.io());
+        Observable<Integer> UnAccept = Observable.just(IMClient.getInstance().getUnAcceptMsg()).subscribeOn(Schedulers.io());
+        compositeSubscription.add(
+                Observable.zip(UnReadCount, UnAccept, new Func2<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer call(Integer integer, Integer integer2) {
+                        return integer + integer2;
+                    }
+                })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Integer>() {
+                            @Override
+                            public void call(Integer integer) {
+                                if (integer > 0) {
+                                    unreadMsg.setVisibility(View.VISIBLE);
+                                    if (integer < 100) {
+                                        unreadMsg.setText(String.valueOf(integer));
+                                    } else {
+                                        unreadMsg.setText("...");
+                                    }
+                                } else {
+                                    unreadMsg.setVisibility(View.GONE);
+                                }
+                            }
+                        })
+        );
+
+
+//        int unreadMsgCountTotal = IMClient.getInstance().getUnReadCount() + IMClient.getInstance().getUnAcceptMsg();
+//        if (unreadMsgCountTotal > 0) {
+//            unreadMsg.setVisibility(View.VISIBLE);
+//            if (unreadMsgCountTotal < 100) {
+//                unreadMsg.setText(String.valueOf(unreadMsgCountTotal));
+//            } else {
+//                unreadMsg.setText("...");
+//            }
+//        } else {
+//            unreadMsg.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -820,6 +816,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (this.compositeSubscription.hasSubscriptions()) this.compositeSubscription.clear();
         if (connectionReceiver != null) {
             unregisterReceiver(connectionReceiver);
             connectionReceiver = null;
@@ -869,7 +866,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             //获取位置信息
             Double geoLat = aMapLocation.getLatitude();
             Double geoLng = aMapLocation.getLongitude();
-            System.out.println("geoLat " + geoLat + " geoLat " + geoLng);
             LocationUtils utils = new LocationUtils();
             boolean isAbroad = utils.pointInPolygon(new LocationUtils.Point(geoLat, geoLng));
             SharePrefUtil.saveBoolean(mContext, "isAbroad", isAbroad);
@@ -878,4 +874,36 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
     }
 
+    private static void copyFile(InputStream paramInputStream, OutputStream paramOutputStream)
+            throws IOException {
+        byte[] arrayOfByte = new byte[1024];
+        for (; ; ) {
+            int i = paramInputStream.read(arrayOfByte);
+            if (i == -1) {
+                break;
+            }
+            paramOutputStream.write(arrayOfByte, 0, i);
+        }
+    }
+
+    private void prepareJSBundle() {
+        Object localObject = new File(getFilesDir(), "ReactNativeDevBundle.js");
+        if (((File) localObject).exists()) {
+            return;
+        }
+        InputStream localInputStream = null;
+        try {
+            localObject = new FileOutputStream((File) localObject);
+            localInputStream = getAssets().open("ReactNativeDevBundle.js");
+            copyFile(localInputStream, (OutputStream) localObject);
+            ((OutputStream) localObject).close();
+            if (localInputStream != null) localInputStream.close();
+            return;
+        } catch (FileNotFoundException localFileNotFoundException) {
+            localFileNotFoundException.printStackTrace();
+            return;
+        } catch (IOException localIOException) {
+            localIOException.printStackTrace();
+        }
+    }
 }

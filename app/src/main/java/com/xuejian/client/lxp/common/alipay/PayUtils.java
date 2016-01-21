@@ -1,15 +1,10 @@
 package com.xuejian.client.lxp.common.alipay;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
-/**
- * Created by xuyongchen on 15/10/21.
- */
 public class PayUtils {
 
     // 商户PID
@@ -17,9 +12,9 @@ public class PayUtils {
     // 商户收款账号
     public static final String SELLER = "xjpay@xuejianinc.com";
     // 商户私钥，pkcs8格式
-    public static final String RSA_PRIVATE="MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKGaAyDXCtls1k+xY8l8ZnOqRG/NL+cgTzpqp5Asr67bt4qQR8dn9PmZt1aZovuJ1/4ptSMbNtYYCkonz/JV8knXtze83Xymhaabkji0pN9utTWzxOYuhK4rE7rYCM+LeOirIMa/DiJDbXN8X1ezaY2kwnPk9UfIocAQefpTbyHzAgMBAAECgYBaLpWCVR9T2L38eTUDsu2FrMZGUg5igBBWvEBIX/emsCzMIdo8uJHoXNUIefKPRwyHZQUV01EVxxKu8WrFhRsRIUY/R2LuzEF4zu4flj0juePJQHmE8NcF+YsYkPmptIB/Ih1ySNdAeU/8uGS9sNvxYyKKN15dA/moVjWMwhc7cQJBAM+IYfnk2AHE6pT3IRNQT9AytSAkqlD9K8SjIrPFXnBqnYTH4zdijFe/Yg5i4Zkn2qHkQGw/03RAFpNtPq+zKjkCQQDHV5ON0/wDMqsKrh0mgi2k6TGgDxljqjG17YuQDNp4k9C8Ggrt4941pkjAqdRM4YrsYqzG5fzV23KZB0CfVN2LAkB+AeD7Seedq2KDcEm04F6VmzQ+gASpiA67JhI79OqSdymNJZDgYAW2gY2YDpHL3FbzVROIpnhNbVxHx1z4cWCBAkBnYV/AuiOEdQ6HZ2zuv6x0TgvSeoIsUeOd+ifa+Q+EYQRryQXKAdcH88jfQjQ7+uxVU4dPT48kSb7Q5hX5i8WpAkEAoUBYL8/SkKOcn9KUQsmOcIFATPvEPZDqXmUQj7GZt4acSLbxZnrhFYg7jO76OAiOuYjEC/n4GGsa85SoIhGIFw==";
+    public static final String RSA_PRIVATE="";
     // 支付宝公钥
-    public static final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB";
+    public static final String RSA_PUBLIC = "";
     private static final int SDK_PAY_FLAG = 1;
 
     /**

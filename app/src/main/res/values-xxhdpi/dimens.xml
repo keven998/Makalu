@@ -38,5 +38,16 @@
 
     <dimen name="operation_section_height">238dp</dimen>
     <dimen name="spot_detail_picture_height">280dp</dimen>
-
+    <dimen name="goods_main_viewpager_height">205dp</dimen>
+    <dimen name="city_viewpager_height">157dp</dimen>
+    <dimen name="goods_frame_height">262dp</dimen>
+    <dimen name="goods_img_height">200dp</dimen>
+    <dimen name="goods_avatar_height">75dp</dimen>
+    <dimen name="goods_avatar_margin_bottom">26dp</dimen>
+    <dimen name="goods_main_page_frame_size">253dp</dimen>
+    <dimen name="goods_main_page_img_size">213dp</dimen>
+    <dimen name="goods_main_page_price_size">79dp</dimen>
+    <dimen name="goods_main_page_price_text_size">39.5dp</dimen>
+    <dimen name="goods_loc_margin">47dp</dimen>
+    <dimen name="trade_image_height">260dp</dimen>
 </resources>

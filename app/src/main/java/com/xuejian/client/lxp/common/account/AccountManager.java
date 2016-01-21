@@ -66,11 +66,12 @@ public class AccountManager {
     }
 
     public User getLoginAccount(Context context) {
-        String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
-        if (TextUtils.isEmpty(userJson)) {
-            return null;
-        }
+
         if (user == null) {
+            String userJson = SharePrefUtil.getString(context, LOGIN_USER_PREF, "");
+            if (TextUtils.isEmpty(userJson)) {
+                return null;
+            }
             user = GsonTools.parseJsonToBean(userJson,
                     User.class);
         }

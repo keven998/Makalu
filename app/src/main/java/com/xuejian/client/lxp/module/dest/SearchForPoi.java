@@ -27,21 +27,21 @@ import com.xuejian.client.lxp.module.dest.adapter.PoiAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by yibiao.qin on 2015/7/21.
  */
 public class SearchForPoi extends PeachBaseActivity {
     PoiAdapter mPoiAdapter;
-    @InjectView(R.id.tv_title_bar_left)
+    @Bind(R.id.tv_title_bar_left)
     TextView mTvTitleBarLeft;
-    @InjectView(R.id.et_search)
+    @Bind(R.id.et_search)
     EditText mEtSearch;
-    @InjectView(R.id.btn_search)
+    @Bind(R.id.btn_search)
     Button mBtnSearch;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView mTitle;
     private PullToRefreshListView mPoiListLv;
     private String mType;
@@ -76,7 +76,7 @@ public class SearchForPoi extends PeachBaseActivity {
     }
 
     private void initView() {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.lv_poi_list);
         mPoiListLv = listView;
         mPoiAdapter = new PoiAdapter(SearchForPoi.this, isCanAdd);

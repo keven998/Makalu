@@ -7,6 +7,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.xuejian.client.lxp.R;
 
 public class UILUtils {
     public static final String QINIU_URL_FORMART = "?imageView/1/w/%1$d/h/%2$d/q/70/format/jpg/interlace/1";
@@ -16,6 +17,9 @@ public class UILUtils {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.ic_default_picture)
+                .showImageOnLoading(R.drawable.ic_default_picture)
+                .showImageForEmptyUri(R.drawable.ic_default_picture)
 //				.decodingOptions(D)
                 .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
@@ -40,6 +44,9 @@ public class UILUtils {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
+                .showImageOnFail(R.drawable.ic_default_picture)
+                .showImageOnLoading(R.drawable.ic_default_picture)
+                .showImageForEmptyUri(R.drawable.ic_default_picture)
 //				.decodingOptions(D)
                 .displayer(new RoundedBitmapDisplayer(radius))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();

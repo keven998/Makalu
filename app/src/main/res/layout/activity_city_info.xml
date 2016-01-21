@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/tab_bar_color">
+
+        <ImageView
+            android:id="@+id/iv_nav_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dp"
+            android:paddingRight="30dp"
+            android:scaleType="center"
+            android:src="@drawable/icon_arrow_left_white" />
+
+        <TextView
+            android:id="@+id/tv_title_bar_title"
+            android:layout_width="128dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="旅行"
+            android:textColor="@color/base_color_white"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/iv_create_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="3dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="14dp"
+            android:scaleType="center"
+            android:visibility="gone"
+            android:src="@drawable/selector_btn_menu_add_navigationbar" />
+        <!--selector_ic_create_plan-->
+
+        <ImageView
+            android:id="@+id/iv_talk_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/iv_create_plan"
+            android:paddingLeft="32dp"
+            android:paddingRight="7dp"
+            android:scaleType="center"
+            android:visibility="gone"
+            android:src="@drawable/navigation_talk" />
+        <!--selector_ic_talk_share-->
+    </RelativeLayout>
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <ListView
+            android:id="@+id/lv_city_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@color/color_line"
+            android:dividerHeight="1px"
+            android:fadingEdge="none"
+            android:scrollbars="none"
+            />
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_city_empty"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:gravity="center"-->
+            <!--android:visibility="gone"-->
+            <!--android:text="招商"/>-->
+    <!--</FrameLayout>-->
+
+</LinearLayout>

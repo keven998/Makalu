@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,24 +35,24 @@ import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by xuyongchen on 15/8/14.
  */
 public class SearchDestyCityActivity extends Activity {
-    @InjectView(R.id.search_city_text)
+    @Bind(R.id.search_city_text)
     EditText searchCityText;
-    @InjectView(R.id.search_city_button)
+    @Bind(R.id.search_city_button)
     TextView searchCityButton;
-    @InjectView(R.id.search_city_item)
+    @Bind(R.id.search_city_item)
     ListView searchCityItem;
-    @InjectView(R.id.add_poi_panel)
+    @Bind(R.id.add_poi_panel)
     HorizontalScrollView hsView;
-    @InjectView(R.id.poiadd_ll)
+    @Bind(R.id.poiadd_ll)
     LinearLayout hsViewLL;
-    @InjectView(R.id.search_city_cancel)
+    @Bind(R.id.search_city_cancel)
     ImageView search_back;
     private String keyWords;
     private ArrayList<LocBean> searchCities=new ArrayList<LocBean>();
@@ -66,7 +65,7 @@ public class SearchDestyCityActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_some_city);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         keyWords = getIntent().getStringExtra("keyWords");
         if(keyWords==null){
             keyWords="";
@@ -136,7 +135,7 @@ public class SearchDestyCityActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final  LocBean locBean =cityListAdapter.getDataList().get(position);
-                Intent intent = new Intent(SearchDestyCityActivity.this, CityDetailActivity.class);
+                Intent intent = new Intent(SearchDestyCityActivity.this, CityInfoActivity.class);
                 intent.putExtra("id", locBean.id);
                 intent.putExtra("isFromStrategy", false);
                 startActivity(intent);

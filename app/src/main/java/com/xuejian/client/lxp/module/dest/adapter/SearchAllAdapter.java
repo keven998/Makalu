@@ -26,8 +26,8 @@ import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/9.
@@ -268,20 +268,20 @@ public class SearchAllAdapter extends BaseSectionAdapter {
 
     public class ContentViewHolder {
 
-        @InjectView(R.id.image_iv)
+        @Bind(R.id.image_iv)
         ImageView mImageIv;
-        @InjectView(R.id.name_tv)
+        @Bind(R.id.name_tv)
         TextView mNameTv;
-        @InjectView(R.id.address_tv)
+        @Bind(R.id.address_tv)
         TextView mAddressTv;
-        @InjectView(R.id.btn_send)
+        @Bind(R.id.btn_send)
         CheckedTextView mSendTv;
-        @InjectView(R.id.rb_poi)
+        @Bind(R.id.rb_poi)
         RatingBar ratingBar;
-        @InjectView(R.id.tv_poi_time)
+        @Bind(R.id.tv_poi_time)
         TagListView tvPoiTime;
         public ContentViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
 
     }

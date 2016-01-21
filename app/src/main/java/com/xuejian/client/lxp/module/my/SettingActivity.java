@@ -29,9 +29,6 @@ import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.pay.ChoosePayWayActivity;
-import com.xuejian.client.lxp.module.pay.PayDetailAcitivity;
-
 
 import java.io.File;
 
@@ -47,7 +44,6 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             @Override
             public void run() {
                 File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + SystemConfig.NET_IMAGE_CACHE_DIR);
-                System.out.println(file.getAbsolutePath());
                 if (file.exists()) {
                     long size = getFolderSize(file);
                     size = size / 1024 / 1024;
@@ -139,10 +135,8 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                 clearCache();
                 break;
             case R.id.ll_tv_feedback:
-                /*Intent feedback = new Intent(SettingActivity.this, FeedbackActivity.class);
-                startActivity(feedback);*/
-                Intent intent = new Intent(SettingActivity.this, ChoosePayWayActivity.class);
-                startActivity(intent);
+                Intent feedback = new Intent(SettingActivity.this, FeedbackActivity.class);
+                startActivity(feedback);
                 break;
             case R.id.logout_app:
                 warnLogout();

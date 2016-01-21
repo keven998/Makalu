@@ -18,19 +18,19 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.db.User;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/10/11.
  */
 public class ModifyGenderActivity extends PeachBaseActivity {
-    @InjectView(R.id.rg_gender)
+    @Bind(R.id.rg_gender)
     RadioGroup genderRg;
     private User user;
     private String gender;
 
-    @InjectView(R.id.title_bar)
+    @Bind(R.id.title_bar)
     TitleHeaderBar titleHeaderBar;
 
     @Override
@@ -38,7 +38,7 @@ public class ModifyGenderActivity extends PeachBaseActivity {
         setAccountAbout(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_gender);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         genderRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -74,6 +74,8 @@ public class ModifyGenderActivity extends PeachBaseActivity {
                         DialogManager.getInstance().dissMissLoadingDialog();
                         CommonJson<ModifyResult> modifyResult = CommonJson.fromJson(result, ModifyResult.class);
                         if (modifyResult.code == 0) {
+                            user.setGender(gender);
+                            User user = AccountManager.getInstance().getLoginAccount(ModifyGenderActivity.this);
                             user.setGender(gender);
                             AccountManager.getInstance().saveLoginAccount(mContext, user);
                         } else {

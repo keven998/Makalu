@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/goods_main_viewpager_height">
+
+        <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
+            android:id="@+id/vp_pic"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/goods_main_viewpager_height" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="#48ffffff" />
+
+        <com.aizou.core.widget.DotView xmlns:cube_dotview="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/dot_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            cube_dotview:dot_radius="3dp"
+            cube_dotview:dot_selected_color="0xff99cc66"
+            cube_dotview:dot_span="18dp"
+            cube_dotview:dot_unselected_color="0xffe2e2e2" />
+
+    </FrameLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/hs_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="15dp"
+        android:scrollbars="none" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+</LinearLayout>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/option_cell_selector"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/goods_main_page_frame_size">
+
+        <ImageView
+            android:id="@+id/iv_goods_img"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/goods_main_page_img_size"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/goods_main_page_img_size"
+            android:scaleType="centerCrop"
+            android:src="@drawable/expert_country_list_bg" />
+
+        <TextView
+            android:id="@+id/tv_goods_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="@dimen/goods_loc_margin"
+            android:layout_marginLeft="7dp"
+            android:drawableLeft="@drawable/search_total_place"
+            android:drawablePadding="5dp"
+            android:textColor="@color/base_color_white"
+            android:textSize="15sp" />
+
+        <FrameLayout
+            android:layout_width="@dimen/goods_main_page_price_size"
+            android:layout_height="@dimen/goods_main_page_price_size"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="10dp">
+
+            <ImageView
+                android:layout_width="@dimen/goods_main_page_price_size"
+                android:layout_height="@dimen/goods_main_page_price_size"
+                android:src="@drawable/icon_price" />
+
+            <LinearLayout
+                android:layout_width="@dimen/goods_main_page_price_size"
+                android:layout_height="@dimen/goods_main_page_price_size"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_goods_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/goods_main_page_price_text_size"
+                    android:layout_gravity="center_horizontal|top"
+                    android:gravity="center_horizontal|bottom"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_goods_current_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/goods_main_page_price_text_size"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:gravity="center_horizontal|top"
+                    android:textColor="@color/base_color_white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_goods_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="@dimen/goods_main_page_price_size"
+            android:drawablePadding="2dp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/color_text_ii"
+            android:textSize="15sp" />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/tv_shop_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="7dp"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/icon_shop"
+        android:drawablePadding="2dp"
+        android:textColor="@color/color_text_iii"
+        android:textSize="13sp" />
+
+</LinearLayout>

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="14dp"
-        android:text="转发到其它平台"
+        android:text="分享"
         android:textColor="@color/base_text_color_title"
         android:textSize="17sp" />
 
@@ -27,14 +27,14 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/tv_wxcircle"
+            android:id="@+id/tv_lxp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_share_wxcircle"
+            android:drawableTop="@drawable/ic_share_lxp"
             android:gravity="center"
             android:drawablePadding="4dp"
-            android:text="朋友圈"
+            android:text="旅行派好友"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
 
@@ -50,14 +50,14 @@
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
         <TextView
-            android:id="@+id/tv_qq"
+            android:id="@+id/tv_wxcircle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_share_qq"
+            android:drawableTop="@drawable/ic_share_wxcircle"
             android:gravity="center"
-            android:text="QQ好友"
             android:drawablePadding="4dp"
+            android:text="朋友圈"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />
 
@@ -70,13 +70,13 @@
         android:layout_marginTop="12dp"
         android:orientation="horizontal" >
         <TextView
-            android:id="@+id/tv_qzone"
+            android:id="@+id/tv_qq"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_share_qzone"
+            android:drawableTop="@drawable/ic_share_qq"
             android:gravity="center"
-            android:text="QQ空间"
+            android:text="QQ好友"
             android:drawablePadding="4dp"
             android:textColor="@color/base_text_color_subtitle"
             android:textSize="12sp" />

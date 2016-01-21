@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/white">
+        android:background="@color/tab_bar_color">
 
         <ImageView
             android:id="@+id/apply_head_back"
@@ -16,7 +16,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="30dp"
             android:scaleType="center"
-            android:src="@drawable/selector_ic_nav_back" />
+            android:src="@drawable/icon_arrow_left_white" />
 
 
         <TextView
@@ -29,8 +29,8 @@
             android:layout_marginBottom="0dp"
             android:gravity="center"
             android:singleLine="true"
-            android:text="达人·申请"
-            android:textColor="@color/color_text_i"
+            android:text="商家·申请"
+            android:textColor="@color/base_color_white"
             android:textSize="18sp" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:paddingRight="14dp"
             android:singleLine="true"
             android:text="提交"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="14sp"
             />
 
@@ -81,7 +81,7 @@
         android:background="@color/white"
         android:textSize="@dimen/text_size_16"
         android:singleLine="true"
-        android:numeric="integer"
+        android:inputType="phone"
         />
     <View
         android:layout_width="match_parent"

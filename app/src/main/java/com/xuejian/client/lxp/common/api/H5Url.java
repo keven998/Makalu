@@ -18,10 +18,12 @@ public class H5Url {
     public static final String GUIDE = "http://h5.taozilvxing.com/planshare.php?pid=";
     //关于旅行派
    // public static final String ABOUT = "http://h5.taozilvxing.com/about.php";
-    public static final String ABOUT ="http://api.lvxingpai.com/app/about";
+    public static final String ABOUT ="http://h5.lvxingpai.com/about.htm";
     //用户协议
     //public static final String AGREEMENT = "http://h5.taozilvxing.com/agreement.htm";
 
     public static final String AGREEMENT ="http://api.lvxingpai.com/app/eula";
+
+    public static final String TRADE ="http://nluloh.epub360.com/v2/manage/book/pe3rs2/?from=groupmessage&isappinstalled=0#page/page_dbe3bdbbe4d89902";
 
 }

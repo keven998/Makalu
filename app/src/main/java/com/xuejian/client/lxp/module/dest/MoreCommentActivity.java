@@ -10,8 +10,8 @@ import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/12/13.
@@ -22,14 +22,14 @@ public class MoreCommentActivity extends BaseWebViewActivity {
 //    TitleHeaderBar titleBar;
     PoiDetailBean poiBean;
     String id;
-    @InjectView(R.id.tv_title_bar_title)
+    @Bind(R.id.tv_title_bar_title)
     TextView mTvTitleBarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_with_titlebar);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mWebView = (WebView) findViewById(R.id.web_view);
         mProgressBar = (NumberProgressBar) findViewById(R.id.numberbar1);
         initWebView();

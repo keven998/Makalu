@@ -84,7 +84,7 @@
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/white">
+        android:background="@color/tab_bar_color">
 
         <ImageView
             android:id="@+id/ly_title_bar_left"
@@ -94,7 +94,7 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="30dp"
-            android:src="@drawable/selector_ic_nav_back" />
+            android:src="@drawable/icon_arrow_left_white" />
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -104,7 +104,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="17sp" />
 
         <LinearLayout
@@ -131,10 +131,6 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/color_line"/>
     </FrameLayout>
 
     <com.xuejian.client.lxp.common.widget.NumberProgressBar

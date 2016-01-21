@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
+import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.bean.SpotDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.bean.TravelNoteBean;
@@ -183,81 +184,84 @@ public class IMUtils {
         });
     }
 
-    public static void onShareResult(final Context context, ICreateShareDialog iCreateShareDialog, int requestCode, int resultCode, Intent data, final OnDialogShareCallBack callback) {
+    public static void onShareResult(final Context context, Object iCreateShareDialog, int requestCode, int resultCode, Intent data, final OnDialogShareCallBack callback) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IM_LOGIN_REQUEST_CODE) {
                 Intent intent = new Intent(context, IMShareActivity.class);
                 ((Activity) context).startActivityForResult(intent, IM_SHARE_REQUEST_CODE);
             } else if (requestCode == IM_SHARE_REQUEST_CODE) {
+
                 final String chatType = data.getStringExtra("chatType");
                 final String toId = "" + data.getLongExtra("toId", 0);
-                showImShareDialog(context, iCreateShareDialog, new OnDialogShareCallBack() {
-                    @Override
-                    public void onDialogShareOk(final Dialog dialog, final int type, final String content, final String leave_msg) {
-                        try {
-                            DialogManager.getInstance().showLoadingDialog(context);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                        IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
-                            @Override
-                            public void onSuccess() {
-                                if (TextUtils.isEmpty(leave_msg)) {
+
+                if (iCreateShareDialog instanceof ICreateShareDialog){
+                    showImShareDialog(context, (ICreateShareDialog)iCreateShareDialog, new OnDialogShareCallBack() {
+                        @Override
+                        public void onDialogShareOk(final Dialog dialog, final int type, final String content, final String leave_msg) {
+                            try {
+                                DialogManager.getInstance().showLoadingDialog(context);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    if (TextUtils.isEmpty(leave_msg)) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        ((Activity) context).runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(context).showToast("已发送~");
+
+                                            }
+                                        });
+                                    } else {
+                                        MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), leave_msg, toId, chatType);
+                                        IMClient.getInstance().sendTextMessage(messageBean, toId, null, new HttpCallback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                DialogManager.getInstance().dissMissLoadingDialog();
+                                                ((Activity) context).runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        ToastUtil.getInstance(context).showToast("已发送~");
+
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onFailed(int code) {
+                                                DialogManager.getInstance().dissMissLoadingDialog();
+                                                ((Activity) context).runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        ToastUtil.getInstance(context).showToast("好像发送失败了");
+
+                                                    }
+                                                });
+                                            }
+                                            @Override
+                                            public void onSuccess(String result) {
+
+                                            }
+                                        }, chatType);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(int code) {
                                     DialogManager.getInstance().dissMissLoadingDialog();
                                     ((Activity) context).runOnUiThread(new Runnable() {
                                         public void run() {
-                                            ToastUtil.getInstance(context).showToast("已发送~");
+                                            ToastUtil.getInstance(context).showToast("好像发送失败了");
 
                                         }
                                     });
-                                } else {
-                                    MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), leave_msg, toId, chatType);
-                                    IMClient.getInstance().sendTextMessage(messageBean, toId, null, new HttpCallback() {
-                                        @Override
-                                        public void onSuccess() {
-                                            DialogManager.getInstance().dissMissLoadingDialog();
-                                            ((Activity) context).runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    ToastUtil.getInstance(context).showToast("已发送~");
-
-                                                }
-                                            });
-                                        }
-
-                                        @Override
-                                        public void onFailed(int code) {
-                                            DialogManager.getInstance().dissMissLoadingDialog();
-                                            ((Activity) context).runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    ToastUtil.getInstance(context).showToast("好像发送失败了");
-
-                                                }
-                                            });
-                                        }
-                                        @Override
-                                        public void onSuccess(String result) {
-
-                                        }
-                                    }, chatType);
                                 }
-                            }
 
-                            @Override
-                            public void onFailed(int code) {
-                                DialogManager.getInstance().dissMissLoadingDialog();
-                                ((Activity) context).runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        ToastUtil.getInstance(context).showToast("好像发送失败了");
+                                @Override
+                                public void onSuccess(String result) {
 
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onSuccess(String result) {
-
-                            }
-                        });
+                                }
+                            });
 
 //                        IMClient.getInstance().sendExtMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
 //
@@ -282,7 +286,7 @@ public class IMUtils {
 //                                    }
 //                                });
 //                            }
-                        //                       });
+                            //                       });
 //                        sendExtMessage(context, type, content, chatType, toId, new EMCallBack() {
 //                            @Override
 //                            public void onSuccess() {
@@ -312,18 +316,102 @@ public class IMUtils {
 //
 //                            }
 //                        });
-                        if (callback != null) {
-                            callback.onDialogShareOk(dialog, type, content, leave_msg);
+                            if (callback != null) {
+                                callback.onDialogShareOk(dialog, type, content, leave_msg);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onDialogShareCancle(Dialog dialog, int type, String content) {
-                        if (callback != null) {
-                            callback.onDialogShareCancle(dialog, type, content);
+                        @Override
+                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            if (callback != null) {
+                                callback.onDialogShareCancle(dialog, type, content);
+                            }
                         }
-                    }
-                });
+                    });
+                }else if (iCreateShareDialog instanceof ShareCommodityBean){
+                    showImShareCommodityDialog(context, (ShareCommodityBean) iCreateShareDialog, new OnDialogShareCallBack() {
+                        @Override
+                        public void onDialogShareOk(final Dialog dialog, final int type, final String content, final String leave_msg) {
+                            try {
+                                DialogManager.getInstance().showLoadingDialog(context);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            IMClient.getInstance().senCommodityMessage(AccountManager.getCurrentUserId(), toId, chatType, content, type, new HttpCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    if (TextUtils.isEmpty(leave_msg)) {
+                                        DialogManager.getInstance().dissMissLoadingDialog();
+                                        ((Activity) context).runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                ToastUtil.getInstance(context).showToast("已发送~");
+
+                                            }
+                                        });
+                                    } else {
+                                        MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), leave_msg, toId, chatType);
+                                        IMClient.getInstance().sendTextMessage(messageBean, toId, null, new HttpCallback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                DialogManager.getInstance().dissMissLoadingDialog();
+                                                ((Activity) context).runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        ToastUtil.getInstance(context).showToast("已发送~");
+
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onFailed(int code) {
+                                                DialogManager.getInstance().dissMissLoadingDialog();
+                                                ((Activity) context).runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        ToastUtil.getInstance(context).showToast("好像发送失败了");
+
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onSuccess(String result) {
+
+                                            }
+                                        }, chatType);
+                                    }
+                                }
+
+                                @Override
+                                public void onSuccess(String result) {
+
+                                }
+
+                                @Override
+                                public void onFailed(int code) {
+                                    DialogManager.getInstance().dissMissLoadingDialog();
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            ToastUtil.getInstance(context).showToast("好像发送失败了");
+
+                                        }
+                                    });
+                                }
+                            });
+                            if (callback != null) {
+                                callback.onDialogShareOk(dialog, type, content, leave_msg);
+                            }
+                        }
+
+                        @Override
+                        public void onDialogShareCancle(Dialog dialog, int type, String content) {
+                            if (callback != null) {
+                                callback.onDialogShareCancle(dialog, type, content);
+                            }
+                        }
+                    });
+                }
+
+
 
             }
         }
@@ -370,6 +458,46 @@ public class IMUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 callback.onDialogShareCancle(dialog, dialogBean.getExtType(), GsonTools.createGsonString(dialogBean.getExtMessageBean()));
+            }
+        });
+        WindowManager m = ((Activity) context).getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+        WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); // 获取对话框当前的参数值
+        p.width = d.getWidth() - LocalDisplay.dp2px(40); // 宽度设置为屏幕的0.65
+        dialog.getWindow().setAttributes(p);
+        dialog.show();
+    }
+
+    public static void showImShareCommodityDialog(Context context, final ShareCommodityBean dialogBean, final OnDialogShareCallBack callback) {
+        final Dialog dialog = new Dialog(context, R.style.ComfirmDialog);
+        View contentView = View.inflate(context, R.layout.dialog_im_share, null);
+        TextView titleTv = (TextView) contentView.findViewById(R.id.tv_title);
+        ImageView vsIv = (ImageView) contentView.findViewById(R.id.iv_image);
+        TextView nameTv = (TextView) contentView.findViewById(R.id.tv_name);
+        TextView attrTv = (TextView) contentView.findViewById(R.id.tv_attr);
+        TextView descTv = (TextView) contentView.findViewById(R.id.tv_desc);
+        Button okBtn = (Button) contentView.findViewById(R.id.btn_ok);
+        Button cancleBtn = (Button) contentView.findViewById(R.id.btn_cancle);
+        final EditText msg = (EditText) contentView.findViewById(R.id.leave_msg);
+        titleTv.setText("商品");
+        nameTv.setText(dialogBean.title);
+        attrTv.setVisibility(View.GONE);
+        descTv.setTextColor(context.getResources().getColor(R.color.price_color));
+        descTv.setText(String.format("¥%s",CommonUtils.getPriceString(dialogBean.price)));
+        ImageLoader.getInstance().displayImage(dialogBean.image, vsIv, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+        dialog.setContentView(contentView);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                callback.onDialogShareOk(dialog, 19, GsonTools.createGsonString(dialogBean), msg.getText().toString());
+            }
+        });
+        cancleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                callback.onDialogShareCancle(dialog, 19, msg.getText().toString());
             }
         });
         WindowManager m = ((Activity) context).getWindowManager();

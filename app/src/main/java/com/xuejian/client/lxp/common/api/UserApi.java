@@ -2,7 +2,6 @@ package com.xuejian.client.lxp.common.api;
 
 import android.text.TextUtils;
 
-import com.aizou.core.http.GzipCompressingEntity;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.http.OkHttpClientManager;
 import com.aizou.core.http.entity.PTHeader;
@@ -13,12 +12,10 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.db.User;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -98,13 +95,53 @@ public class UserApi extends BaseApi {
     public final static String EXPERT_SEARCH = "/users/experts?zone=%s";
     public final static String EXPERT_TRAVEL_NOTE = "/users/%s/travelnotes";
 
+    //用户收藏
+    public final static String USER_FAV = "/users/%s/favorites";
+
+    public static void addFav(String userId,String id,String type, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(USER_FAV,userId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("itemId", id);
+            jsonObject.put("itemType", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+        //   return HttpManager.request(request, callback);
+    }
+    public static void getFav(String userId,String id,String type, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(USER_FAV, userId));
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        request.putUrlParams("itemType", type);
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //   return HttpManager.request(request, callback);
+    }
+    public static void delFav(String userId,String id,String type, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.DELETE);
+        request.setUrl(SystemConfig.DEV_URL + String.format(USER_FAV, userId) + "/" +type+ "/"+id);
+     //   request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+        //   return HttpManager.request(request, callback);
+    }
 
     public static void authSignUp(String code, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNIN);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("authCode", code);
@@ -112,13 +149,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -129,7 +161,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SEND_VALIDATION);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -142,13 +174,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -159,7 +186,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CHECK_VALIDATION);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -172,13 +199,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -188,7 +210,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNUP);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -197,13 +219,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //    return HttpManager.request(request, callback);
     }
@@ -213,7 +230,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", phone);
@@ -224,13 +241,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -240,7 +252,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, "_"));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("tel", tel);
@@ -249,13 +261,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        LogUtil.d(jsonObject.toString());
+     //   LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -265,7 +272,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + String.format(MODIFY_PWD, uid));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("oldPassword", oldPwd);
@@ -273,13 +280,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString());
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         // return HttpManager.request(request, callback);
     }
@@ -289,7 +291,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNIN);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("loginName", loginName);
@@ -297,14 +299,10 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+      //  LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
-        LogUtil.d(jsonObject.toString());
+
         // return null;
         //   return HttpManager.request(request, callback);
     }
@@ -314,7 +312,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("action", type);
@@ -326,13 +324,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -341,8 +334,8 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + USERINFO + userId);
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);
     }
@@ -351,8 +344,8 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_TRAVEL_NOTE,userId));
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);
     }
@@ -360,8 +353,8 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(TRACKS, userId));
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+     //   request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
     }
@@ -403,7 +396,7 @@ public class UserApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + USERINFO + user.getUserId());
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
 //        request.setHeader(PTHeader.HEADER_CHARSET, "utf-8");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             if (!TextUtils.isEmpty(avatar)) {
@@ -433,13 +426,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //    return HttpManager.request(request, callback);
     }
@@ -454,8 +442,8 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()));
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
     }
@@ -487,7 +475,7 @@ public class UserApi extends BaseApi {
         // request.setUrl(SystemConfig.BASE_URL + REQUEST_ADD_CONTACTS);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contact-requests");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request, uid);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("contactId", Long.parseLong(uid));
@@ -495,13 +483,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -518,7 +501,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contact-requests/" + requestId);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("action", 1);
@@ -526,13 +509,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         // return HttpManager.request(request, callback);
     }
@@ -549,7 +527,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(CONTACTS, AccountManager.getCurrentUserId()) + "/" + uid);
 //        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -572,7 +550,7 @@ public class UserApi extends BaseApi {
         //    }
         //    request.setUrl(SystemConfig.DEV_URL + CONTACTS);
         //    request.putUrlParams("Keyword", key);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -588,13 +566,7 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        setDefaultParams(request);
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -614,13 +586,7 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        setDefaultParams(request);
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -642,7 +608,7 @@ public class UserApi extends BaseApi {
         request.putUrlParams("field", field);
         request.putUrlParams("page", page + "");
         request.putUrlParams("pageSize", pageSize + "");
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //  return HttpManager.request(request, callback);
     }
@@ -661,7 +627,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.BASE_URL + SEARCH_EXPERT_FOOTPRINT);
         request.putUrlParams("abroad", String.valueOf(abroad));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -679,7 +645,7 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //   return HttpManager.request(request, callback);
     }
@@ -698,7 +664,7 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(ALBUMS, userId) + "/" + picId);
-        setDefaultParams(request);
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         //return HttpManager.request(request, callback);
     }
@@ -721,7 +687,7 @@ public class UserApi extends BaseApi {
         }catch (Exception ex){
 
         }
-        setDefaultParams(request);
+        setDefaultParams(request,jsonObject.toString());
         OkHttpClientManager.getInstance().request(request,jsonObject.toString(), callback);
     }
     /**
@@ -736,10 +702,10 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_BY_TRACK, locId[0]));
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         request.putUrlParams("page", String.valueOf(page));
         request.putUrlParams("pageSize", String.valueOf(pageSize));
-        setDefaultParams(request);
+        setDefaultParams(request,"");
 //        JSONObject jsonObject = new JSONObject();
 //        try {
 //            JSONArray jsonArray = new JSONArray();
@@ -775,7 +741,7 @@ public class UserApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + String.format(SEARCH_BY_ADDRESSBOOK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
       //  request.setHeader("Content-Encoding", "gzip");
-        setDefaultParams(request);
+
         JSONObject rootObject = new JSONObject();
         try {
 
@@ -791,17 +757,11 @@ public class UserApi extends BaseApi {
             }
             rootObject.put("contacts", jsonArray);
             rootObject.put("action", "addressbook");
-            try {
-                StringEntity entity = new StringEntity(rootObject.toString(), "utf-8");
-//                request.setBodyEntity( entity);
-                request.setBodyEntity(new GzipCompressingEntity(entity));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
             LogUtil.d(rootObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        setDefaultParams(request, rootObject.toString());
         OkHttpClientManager.getInstance().request(request, rootObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
@@ -812,20 +772,15 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PUT);
         request.setUrl(SystemConfig.DEV_URL + "/users/" + AccountManager.getCurrentUserId() + "/contacts/" + userId + "/memo");
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("memo", memo);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -836,20 +791,15 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.PATCH);
         request.setUrl(SystemConfig.DEV_URL + String.format(MUTE_CONVERSATION, userId) + conversation);
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("mute", value);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -861,7 +811,7 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", Long.parseLong(AccountManager.getCurrentUserId()));
@@ -869,13 +819,8 @@ public class UserApi extends BaseApi {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -884,8 +829,8 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(VOTE, id) + "/" + AccountManager.getCurrentUserId());
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+      //  request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
         // return HttpManager.request(request, callback);
     }
@@ -897,20 +842,15 @@ public class UserApi extends BaseApi {
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()));
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", Long.parseLong(userId));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
-            request.setBodyEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }
@@ -919,8 +859,8 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.DELETE);
         request.setUrl(SystemConfig.DEV_URL + String.format(BLOCK, AccountManager.getCurrentUserId()) + "/" + userId);
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+    //    request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request,"");
         //    return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
@@ -929,8 +869,8 @@ public class UserApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(EXPERT_SEARCH, keyword));
-        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
-        setDefaultParams(request);
+     //   request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        setDefaultParams(request,"");
         //    return HttpManager.request(request, callback);
         OkHttpClientManager.getInstance().request(request, "", callback);
     }

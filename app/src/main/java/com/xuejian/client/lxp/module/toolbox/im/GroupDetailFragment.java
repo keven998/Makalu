@@ -16,6 +16,7 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -33,6 +34,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -42,6 +44,7 @@ import com.xuejian.client.lxp.config.PeachApplication;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.group.GroupManager;
 
@@ -51,6 +54,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class GroupDetailFragment extends PeachBaseFragment {
 
@@ -137,7 +147,6 @@ public class GroupDetailFragment extends PeachBaseFragment {
 
                     @Override
                     public void onFailed(int code) {
-                        System.out.println(code);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -150,7 +159,6 @@ public class GroupDetailFragment extends PeachBaseFragment {
                     public void onSuccess(String result) {
                     }
                 });
-
             }
         });
 
@@ -184,6 +192,66 @@ public class GroupDetailFragment extends PeachBaseFragment {
                     }
                 });
                 dialog.show();
+            }
+        });
+
+        getView().findViewById(R.id.tv_pics).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Action1<Throwable> onErrorAction = new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(getActivity(), "图片获取失败", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                mActivity.compositeSubscription.add(
+                        Observable.create(new Observable.OnSubscribe<ArrayList<String>>() {
+                            @Override
+                            public void call(Subscriber<? super ArrayList<String>> subscriber) {
+                                try {
+                                    subscriber.onNext(IMClient.getInstance().getPics(groupId));
+                                    subscriber.onCompleted();
+                                } catch (Exception e) {
+                                    subscriber.onError(e);
+                                }
+                            }
+                        })
+                                .flatMap(new Func1<ArrayList<String>, Observable<String>>() {
+                                    @Override
+                                    public Observable<String> call(ArrayList<String> strings) {
+                                        return Observable.from(strings);
+                                    }
+                                })
+                                .map(new Func1<String, ImageBean>() {
+                                    @Override
+                                    public ImageBean call(String s) {
+                                        ImageBean bean = new ImageBean();
+                                        bean.url = s;
+                                        bean.full = s;
+                                        return bean;
+                                    }
+                                })
+                                .toList()
+                                .map(new Func1<List<ImageBean>, ArrayList<ImageBean>>() {
+                                    @Override
+                                    public ArrayList<ImageBean> call(List<ImageBean> imageBeans) {
+                                        ArrayList<ImageBean> list = new ArrayList<ImageBean>();
+                                        list.addAll(imageBeans);
+                                        return list;
+                                    }
+                                })
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Action1<ArrayList<ImageBean>>() {
+                                    @Override
+                                    public void call(final ArrayList<ImageBean> imageBeans) {
+                                        startAlbum(imageBeans);
+                                    }
+                                }, onErrorAction)
+                );
+
+
             }
         });
     }
@@ -238,6 +306,16 @@ public class GroupDetailFragment extends PeachBaseFragment {
         dialog.show();
     }
 
+    public void startAlbum(ArrayList<ImageBean> imageBeans) {
+        if (imageBeans.size() == 0) {
+            Toast.makeText(getActivity(), "暂时没有聊天图片", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent2 = new Intent(getActivity(), CityPictureActivity.class);
+            intent2.putExtra("chatPics", imageBeans);
+            intent2.putExtra("showChatImage", true);
+            startActivity(intent2);
+        }
+    }
 
     /**
      * 清空群聊天记录

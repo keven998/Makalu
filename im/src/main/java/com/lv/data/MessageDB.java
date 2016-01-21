@@ -755,7 +755,7 @@ public class MessageDB {
         m.setType(TIPS_TYPE);
         saveMsg(String.valueOf(chatId), m, chatType);
     }
-    public ArrayList<String> getAllPics(String chatId) {
+    public ArrayList<String> getAllPics(String chatId){
         ArrayList<String> pics = new ArrayList<>();
         if (TextUtils.isEmpty(chatId)) return pics;
         String table_name = "chat_" + CryptUtils.getMD5String(chatId);

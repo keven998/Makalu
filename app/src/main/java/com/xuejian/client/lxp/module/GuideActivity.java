@@ -12,9 +12,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.aizou.core.utils.SharePrefUtil;
@@ -32,18 +29,6 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
     private ViewPagerAdapter vpAdapter;
     private List<View> views;
     private String type;
-//    private DotView dotView;
-
-    // 底部小店图片
-    private ImageView[] dots;
-
-    // 记录当前选中位置
-    private int currentIndex;
-
-    //引导页第二页小图动画index
-    private int guide2IvIndex;
-    //引导页第三页小图动画index
-    private int guide3IvIndex;
     private static final int START_LOGIN=0x232;
     private Handler handler = new Handler(){
         @Override
@@ -88,12 +73,12 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
             if (i == 0) {
                 View view = View.inflate(this, R.layout.guide_ad, null);
                 //      ImageView earthIv = (ImageView) view.findViewById(R.id.iv_guide_earth);
-                Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
+      //          Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
                 //        earthIv.startAnimation(operatingAnim);
                 views.add(view);
             }else if (i == 1) {
                 View view = View.inflate(this, R.layout.guide_1, null);
-                Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
+        //        Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_guide_earth);
                 views.add(view);
             } else if (i == 2) {
                 View view = View.inflate(this, R.layout.guide_2, null);
@@ -104,6 +89,12 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
             }
             else if (i == 4) {
                 View view = View.inflate(this, R.layout.guide_4, null);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        handler.sendEmptyMessage(START_LOGIN);
+                    }
+                });
                 views.add(view);
             }
         }
@@ -165,6 +156,7 @@ public class GuideActivity extends PeachBaseActivity implements OnPageChangeList
         SharePrefUtil.saveBoolean(GuideActivity.this, "hasLoad_" + UpdateUtil.getVerName(GuideActivity.this), true);
         Intent mainActivity = new Intent(GuideActivity.this, LoginActivity.class);
         startActivityWithNoAnim(mainActivity);
+        finish();
     }
 
 //    // 当新的页面被选中时调用

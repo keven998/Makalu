@@ -52,22 +52,22 @@ import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpertAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by Rjm on 2014/11/13.
  */
 public class CityDetailActivity extends PeachBaseActivity implements View.OnClickListener {
-    @InjectView(R.id.recommend_plan)
+    @Bind(R.id.recommend_plan)
     TextView recommend_plan;
-    @InjectView(R.id.recommend_note)
+    @Bind(R.id.recommend_note)
     TextView recommend_note;
-    @InjectView(R.id.tv_all_expert)
+    @Bind(R.id.tv_all_expert)
     RelativeLayout rl_all_expert;
-    @InjectView(R.id.lv_city_detail)
+    @Bind(R.id.lv_city_detail)
     ListView expertListview;
-    @InjectView(R.id.apply_expert)
+    @Bind(R.id.apply_expert)
     ImageView apply_expert;
     private ImageView mCityIv1;
     private ImageView mCityIv2;
@@ -98,7 +98,7 @@ public class CityDetailActivity extends PeachBaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_detail);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         isFromStrategy = getIntent().getBooleanExtra("isFromStrategy", false);
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
