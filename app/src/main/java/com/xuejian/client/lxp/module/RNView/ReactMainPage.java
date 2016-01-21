@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.module.RNView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -179,7 +180,7 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
 //                    WritableMap event = Arguments.createMap();
 //                    event.putString("result", jsonObject.getJSONObject("result").toString());
 //                    sendEvent(mReactInstanceManager.getCurrentReactContext(), "test", event);
-
+                  //  saveCrashInfo2File(result);
                     CommonJson<SimpleCommodityBean> commodity = CommonJson.fromJson(result, SimpleCommodityBean.class);
                     bean = commodity.result;
                     final String id = bean.id;
@@ -301,6 +302,35 @@ public class ReactMainPage extends PeachBaseActivity implements DefaultHardwareB
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
+
+    private String saveCrashInfo2File(String ex) {
+        StringBuilder sb = new StringBuilder();
+
+        String result = ex;
+        sb.append(result);
+        try {
+            long timestamp = System.currentTimeMillis();
+            String time ="";
+            String fileName = "crash-" + time + "-" + timestamp + ".log";
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                String path = Environment.getExternalStorageDirectory().getPath()+"/lvxingpai/crash/";
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                FileOutputStream fos = new FileOutputStream(path + fileName);
+                fos.write(sb.toString().getBytes());
+                fos.close();
+            }
+            //  copyDBToSDcrad(time,timestamp);
+            return fileName;
+        } catch (Exception e) {
+          //  Log.e(TAG, "an error occured while writing file...", e);
+        }
+
+        return null;
+    }
+
 
     public void showLoading() {
         try {

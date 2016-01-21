@@ -102,7 +102,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
             @Override
             public void onItemClick(View view, int position, long id) {
                 Intent intent = new Intent();
-                intent.setClass(StoreDetailActivity.this, ReactMainPage.class);
+                intent.setClass(StoreDetailActivity.this, CommodityDetailActivity.class);
                 intent.putExtra("commodityId", id);
                 startActivity(intent);
             }

@@ -78,4 +78,11 @@
     <string name="talk_to_seller">联系卖家</string>
     <string name="order_confirm">订单确认</string>
     <string name="next_step">下一步</string>
+    <string name="pay_now">立即预定</string>
+    <string name="to_store">进入店铺</string>
+    <string name="talk_to_busness">联系商家</string>
+    <string name="commodity_desc">商品介绍</string>
+    <string name="commodity_notice">购买须知</string>
+    <string name="commodity_book">预定及退改</string>
+    <string name="commodity_traffic">交通提示</string>
 </resources>

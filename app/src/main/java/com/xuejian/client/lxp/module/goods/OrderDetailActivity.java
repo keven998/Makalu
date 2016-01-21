@@ -245,7 +245,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     tvAction0.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                            intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                             intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                             startActivity(intent);
                         }
@@ -258,7 +258,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                         if (tvPay.getText().toString().equals("立即支付")) {
                             showPayActionDialog();
                         } else if (tvPay.getText().toString().equals("再次预定")) {
-                            intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                            intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                             intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                             startActivity(intent);
                         }
@@ -273,7 +273,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -286,7 +286,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -299,7 +299,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -312,7 +312,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -329,7 +329,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvGoodsName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderDetailActivity.this, ReactMainPage.class);
+                Intent intent = new Intent(OrderDetailActivity.this, CommodityDetailActivity.class);
                 intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                 intent.putExtra("snapshots",true);
                 intent.putExtra("version",bean.getCommodity().version);

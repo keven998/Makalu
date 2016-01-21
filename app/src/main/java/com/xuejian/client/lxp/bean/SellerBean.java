@@ -24,12 +24,14 @@ public class SellerBean implements Parcelable {
     private long sellerId;
     private String name;
     private int favorCnt;
-    private List<String> lang;
-    private List<String> serviceZones;
+    private List<ServiceZonesEntity> serviceZones;
     private List<String> bankAccounts;
     private List<String> email;
     private List<String> phone;
 
+    public List<String> lang;
+    public List<String> qualifications;
+    public List<String> services;
     public void setSellerId(long sellerId) {
         this.sellerId = sellerId;
     }
@@ -46,7 +48,7 @@ public class SellerBean implements Parcelable {
         this.lang = lang;
     }
 
-    public void setServiceZones(List<String> serviceZones) {
+    public void setServiceZones(List<ServiceZonesEntity> serviceZones) {
         this.serviceZones = serviceZones;
     }
 
@@ -78,7 +80,7 @@ public class SellerBean implements Parcelable {
         return lang;
     }
 
-    public List<String> getServiceZones() {
+    public List<ServiceZonesEntity> getServiceZones() {
         return serviceZones;
     }
 
@@ -105,7 +107,7 @@ public class SellerBean implements Parcelable {
         dest.writeString(this.name);
         dest.writeStringList(this.lang);
         dest.writeInt(this.favorCnt);
-        dest.writeStringList(this.serviceZones);
+        dest.writeTypedList(this.serviceZones);
         dest.writeStringList(this.bankAccounts);
         dest.writeStringList(this.email);
         dest.writeStringList(this.phone);
@@ -119,7 +121,7 @@ public class SellerBean implements Parcelable {
         this.name = in.readString();
         this.lang = in.createStringArrayList();
         this.favorCnt = in.readInt();
-        this.serviceZones = in.createStringArrayList();
+        this.serviceZones = in.createTypedArrayList(ServiceZonesEntity.CREATOR);
         this.bankAccounts = in.createStringArrayList();
         this.email = in.createStringArrayList();
         this.phone = in.createStringArrayList();

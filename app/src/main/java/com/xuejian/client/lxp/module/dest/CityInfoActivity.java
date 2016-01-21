@@ -41,7 +41,7 @@ import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.RNView.ReactMainPage;
+import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ public class CityInfoActivity extends PeachBaseActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Intent intent = new Intent();
-                            intent.setClass(CityInfoActivity.this, ReactMainPage.class);
+                            intent.setClass(CityInfoActivity.this, CommodityDetailActivity.class);
                             intent.putExtra("commodityId", id);
                             startActivity(intent);
                         }

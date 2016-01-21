@@ -36,7 +36,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.RNView.ReactMainPage;
+import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -482,7 +482,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                 viewHolder.container.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent settingIntent = new Intent(getActivity(), ReactMainPage.class);
+                        Intent settingIntent = new Intent(getActivity(), CommodityDetailActivity.class);
                         settingIntent.putExtra("commodityId", bean.getCommodityId());
                         startActivity(settingIntent);
                     }

@@ -80,6 +80,7 @@ import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
+import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -514,7 +515,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.rl_commodity.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, ReactMainPage.class);
+                Intent intent = new Intent(activity, CommodityDetailActivity.class);
                 intent.putExtra("commodityId", bean.commodityId);
                 activity.startActivity(intent);
             }
@@ -784,7 +785,7 @@ public class MessageAdapter extends BaseAdapter {
         holder.rl_content.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, ReactMainPage.class);
+                Intent intent = new Intent(activity, CommodityDetailActivity.class);
                 intent.putExtra("commodityId", finalBean.commodityId);
                 activity.startActivity(intent);
             }

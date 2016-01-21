@@ -218,7 +218,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -231,7 +231,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -244,7 +244,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
@@ -257,7 +257,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 tvPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent.setClass(OrderConfirmActivity.this, ReactMainPage.class);
+                        intent.setClass(OrderConfirmActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
