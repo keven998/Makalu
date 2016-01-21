@@ -520,11 +520,10 @@
             android:name=".module.goods.DestinationActivity"
             android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".module.pay.AlipayDetailActivity"
-            android:screenOrientation="portrait"
-            />
-
+        <activity android:name=".module.pay.ChoosePayWayActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".module.pay.PayDetailAcitivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"

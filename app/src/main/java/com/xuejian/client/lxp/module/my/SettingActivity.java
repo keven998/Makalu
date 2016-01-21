@@ -29,7 +29,9 @@ import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.pay.AlipayDetailActivity;
+import com.xuejian.client.lxp.module.pay.ChoosePayWayActivity;
+import com.xuejian.client.lxp.module.pay.PayDetailAcitivity;
+
 
 import java.io.File;
 
@@ -139,7 +141,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             case R.id.ll_tv_feedback:
                 /*Intent feedback = new Intent(SettingActivity.this, FeedbackActivity.class);
                 startActivity(feedback);*/
-                Intent intent = new Intent(SettingActivity.this, AlipayDetailActivity.class);
+                Intent intent = new Intent(SettingActivity.this, ChoosePayWayActivity.class);
                 startActivity(intent);
                 break;
             case R.id.logout_app:
