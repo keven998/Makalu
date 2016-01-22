@@ -76,8 +76,6 @@ import com.xuejian.client.lxp.common.widget.ItemListView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
-import com.xuejian.client.lxp.module.RNView.ReactMainPage;
-import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;

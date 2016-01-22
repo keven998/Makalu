@@ -37,7 +37,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 

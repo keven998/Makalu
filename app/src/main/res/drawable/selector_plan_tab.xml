@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/base_color_white"  android:state_selected="false"/>
-    <item android:drawable="@drawable/btn_theme_highlight_shape_radius_4" android:state_pressed="true"/>
-    <item android:drawable="@drawable/btn_theme_highlight_shape_radius_4" android:state_selected="true"/>
-    <item android:drawable="@drawable/btn_theme_normal_shape_radius_4" />
-</selector>

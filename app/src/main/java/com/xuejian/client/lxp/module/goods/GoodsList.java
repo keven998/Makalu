@@ -40,7 +40,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
 import com.xuejian.client.lxp.db.User;
-import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;

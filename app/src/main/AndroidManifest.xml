@@ -55,9 +55,9 @@
         android:name=".config.PeachApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:largeHeap="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
 
         <activity
@@ -90,10 +90,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.PeachWebViewActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".module.dest.SearchExpertActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
@@ -158,11 +154,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".module.dest.CityDetailActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-        <activity
             android:name=".module.dest.PicPagerActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
@@ -206,10 +197,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".module.my.ShareAccountActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".module.my.TravelExpertApplyActivity"
             android:screenOrientation="portrait" />
@@ -309,10 +296,10 @@
         </activity>
         <activity
             android:name=".module.my.GalleryCatergoryActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".module.my.GalleryDetailActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".module.my.UploadAlbumActivity"
@@ -418,11 +405,6 @@
 
         <!-- 公开的群聊列表 -->
         <!-- 群聊简单信息 -->
-        <activity
-            android:name=".module.toolbox.im.RecorderVideoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateAlwaysHidden" />
         <!-- upload error log -->
         <activity
             android:name=".module.dest.ReadMoreActivity"
@@ -441,10 +423,6 @@
             android:theme="@style/Transparent" />
 
         <activity
-            android:name=".module.dest.RecDestActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-        <activity
             android:name=".module.toolbox.StrategyListActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
@@ -459,28 +437,6 @@
             android:name=".module.goods.GoodsList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.goods.DestinationActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".module.RNView.ReactMainPage"
-            android:screenOrientation="portrait"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.route" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="lvxingpai" />
-                <data android:host="marketplace" />
-                <data android:pathPrefix="/commodities/" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".module.RNView.TestActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.facebook.react.devsupport.DevSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".module.goods.CountryListActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -488,8 +444,10 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.route" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="lvxingpai" />
                 <data android:host="*" />
                 <data android:pathPrefix="/test/haha" />
@@ -531,8 +489,8 @@
             android:theme="@style/Transparent" />
         <activity
             android:name=".module.pay.PaymentActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
             <data android:scheme="wx86048e56adaf7486" />
         </activity>
         <activity
@@ -549,7 +507,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.CommodityDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.route" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="lvxingpai" />
+                <data android:host="marketplace" />
+                <data android:pathPrefix="/commodities/" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -566,31 +535,22 @@
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-        <activity
-            android:name=".module.pay.PayDetailAcitivity"
-            android:screenOrientation="portrait" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind"/>
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind"/>
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop" />
-
-        <receiver android:name="com.xuejian.client.lxp.common.receiver.UpdateReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-            </intent-filter>
-        </receiver>
 
         <!-- ###################Glide Module###################### -->
         <meta-data

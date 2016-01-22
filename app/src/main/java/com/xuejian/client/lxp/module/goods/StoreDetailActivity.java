@@ -29,7 +29,6 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
-import com.xuejian.client.lxp.module.RNView.ReactMainPage;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
