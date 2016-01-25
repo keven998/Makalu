@@ -33,13 +33,11 @@ public class GalleryAdapter extends BaseAdapter {
 
     private LayoutInflater infalter;
     private ArrayList<LocalImageHelper.LocalFile> data = new ArrayList<LocalImageHelper.LocalFile>();
-    ImageLoader imageLoader;
     private TextView btnGalleryOk;
     private DisplayImageOptions options;
     private CustomGalleryActivity context;
-    public GalleryAdapter(CustomGalleryActivity c, ImageLoader imageLoader, TextView btnGalleryOk) {
+    public GalleryAdapter(CustomGalleryActivity c, TextView btnGalleryOk) {
         infalter = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.imageLoader = imageLoader;
         this.btnGalleryOk=btnGalleryOk;
         this.context=c;
         options = new DisplayImageOptions.Builder()

@@ -3,35 +3,20 @@ package com.xuejian.client.lxp.module.my;
 /**
  * Created by xuyongchen on 15/9/17.
  */
-import java.io.File;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.aizou.core.base.BaseApplication;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.xuejian.client.lxp.R;
@@ -39,6 +24,13 @@ import com.xuejian.client.lxp.bean.CustomGalleryBean;
 import com.xuejian.client.lxp.common.utils.LocalImageHelper;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
 import com.xuejian.client.lxp.module.my.adapter.GalleryAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 public class CustomGalleryActivity extends Activity implements CompoundButton.OnCheckedChangeListener{
@@ -62,7 +54,7 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.grid_gallery);
         folderNames = new ArrayList<String>();
-        LocalImageHelper.init(BaseApplication.getContext());
+     //   LocalImageHelper.init(BaseApplication.getContext());
         helper = LocalImageHelper.getInstance();
         folderName = getIntent().getStringExtra("folderName");
         gallery_title = (TitleHeaderBar)findViewById(R.id.gallery_title);
@@ -87,7 +79,6 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
                 finish();
             }
         });
-        imageLoader = ImageLoader.getInstance();
         init();
         if(null != savedInstanceState){
             if(null != savedInstanceState.getString("photoPath")){
@@ -108,7 +99,7 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
         gridGallery = (GridView) findViewById(R.id.grid_Gallery);
         btnGalleryOk = (TextView) findViewById(R.id.btnGalleryOk);
         prey_check = (TextView)findViewById(R.id.prey_check);
-        adapter = new GalleryAdapter(CustomGalleryActivity.this,imageLoader,btnGalleryOk);
+        adapter = new GalleryAdapter(CustomGalleryActivity.this,btnGalleryOk);
 
         PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader,true, true);
         gridGallery.setOnScrollListener(listener);

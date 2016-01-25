@@ -15,8 +15,10 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -40,6 +42,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
+import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
 import com.xuejian.client.lxp.db.User;
@@ -136,7 +139,8 @@ public class CommodityDetailActivity extends PeachBaseActivity {
     LinearLayout ll_service_container;
     @Bind(R.id.ll_action)
     LinearLayout llAction;
-
+    @Bind(R.id.lv_comment)
+    ListViewForScrollView lvComment;
     private long commodityId;
     private long userId;
     public CommodityBean bean;
@@ -470,6 +474,45 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             llAction.setVisibility(View.GONE);
         } else {
             llSnapshot.setVisibility(View.GONE);
+        }
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("sfsfsdfsdfsdfsfs");
+        list.add("sdhfsjhskhfksfhk\nshfkshfskdjfs\nhfskfhskjfjksfhs");
+        list.add("sfsklfhsfjdffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        lvComment.setAdapter(new CommentAdapter(this,list));
+        scrollView.smoothScrollTo(0,0);
+    }
+
+    public class CommentAdapter extends BaseAdapter{
+        private ArrayList<String> list;
+        private Context context;
+        public CommentAdapter(Context context, ArrayList<String> list) {
+            this.list=list;
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_activities,null);
+            TextView textView = (TextView) convertView.findViewById(R.id.tv_activity);
+            textView.setSingleLine(false);
+            textView.setText(getItem(position).toString());
+            return convertView;
         }
     }
 

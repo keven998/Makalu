@@ -128,30 +128,6 @@ public class UploadAlbumActivity extends Activity {
 
     private MyHandler myHandler = new MyHandler(this);
 
-//    private Handler myHandler = new Handler(){
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what){
-//                case UPLOAD_ONE_IMAGE:
-//                    if(currentUpload>=0 && currentUpload<pictures.size()-1){
-//                        adapter.notifyDataSetChanged();
-//
-//                        if(!"addfile".equals(pictures.get(currentUpload).getThumbnailUri())){
-//                            uploadAvatar(pictures.get(currentUpload),info);
-//                        }
-//                    }else{
-//                        Toast.makeText(UploadAlbumActivity.this,"上传成功~",Toast.LENGTH_SHORT).show();
-//                        setResult(RESULT_OK);
-//                        finish();
-//                    }
-//                    break;
-//                case REFRESHADAPTER:
-//                    adapter.notifyDataSetChanged();
-//                    break;
-//            }
-//            super.handleMessage(msg);
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

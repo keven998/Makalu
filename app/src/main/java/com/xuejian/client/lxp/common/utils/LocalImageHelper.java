@@ -6,7 +6,6 @@ package com.xuejian.client.lxp.common.utils;
 
 
 
-import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -14,9 +13,7 @@ import android.text.TextUtils;
 import com.aizou.core.base.BaseApplication;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -66,8 +66,10 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         if (!TextUtils.isEmpty(title)) {
             ((TextView) findViewById(R.id.tv_title_bar_title)).setText(title);
         } else {
-            Uri uri = Uri.parse(mCurrentUrl);
-            ((TextView) findViewById(R.id.tv_title_bar_title)).setText(uri.getQueryParameter("title"));
+            if (!TextUtils.isEmpty(mCurrentUrl)){
+                Uri uri = Uri.parse(mCurrentUrl);
+                ((TextView) findViewById(R.id.tv_title_bar_title)).setText(uri.getQueryParameter("title"));
+            }
             title = "分享";
         }
         strategy = new StrategyBean();

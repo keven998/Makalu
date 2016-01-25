@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:f="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -62,9 +62,9 @@
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="62dp"
+        android:layout_marginTop="@dimen/title_bar_height"
         android:clipToPadding="false"
-        android:layout_marginTop="@dimen/title_bar_height">
+        android:paddingBottom="62dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,7 +118,6 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:text="工会十分快捷方式开发还是 收款方还是手机话费似睡非睡返回是是爽肤水"
                     android:textColor="@color/color_text_ii"
                     android:textSize="16sp" />
 
@@ -144,7 +143,6 @@
                         android:layout_gravity="bottom"
                         android:layout_marginLeft="2dp"
                         android:singleLine="true"
-                        android:text="100%"
                         android:textColor="@color/color_text_iii"
                         android:textSize="12sp" />
 
@@ -155,7 +153,6 @@
                         android:layout_gravity="bottom"
                         android:layout_marginLeft="5dp"
                         android:singleLine="true"
-                        android:text="销量100"
                         android:textColor="@color/color_text_iii"
                         android:textSize="12sp" />
 
@@ -172,7 +169,6 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:singleLine="true"
-                        android:text="234"
                         android:textColor="@color/color_text_iii"
                         android:textSize="12sp" />
 
@@ -184,7 +180,6 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:singleLine="true"
-                        android:text="111"
                         android:textColor="#ff3300"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -258,15 +253,14 @@
 
                 <TextView
                     android:id="@+id/tv_snapshot"
-                    android:paddingBottom="7dp"
-                    android:paddingTop="7dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
-                    android:textColor="@color/color_text_ii"
-                    android:textSize="14dp"
                     android:gravity="center_horizontal"
-                    />
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="14dp" />
             </LinearLayout>
 
             <RelativeLayout
@@ -314,7 +308,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
-                    android:text="地址：北京海淀区知春路108号"
                     android:textColor="@color/color_text_iii"
                     android:textSize="14sp" />
 
@@ -325,7 +318,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="地址：北京海淀区知春路108号"
                     android:textColor="@color/color_text_iii"
                     android:textSize="14sp" />
 
@@ -344,7 +336,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="    北京海淀区知春路108号jsfdshf电风扇收款方就是看看爽肤水爽肤水爽肤水是否额 开始电风扇电风扇粉色胜多负少是十分儿二手房谁说的是否是对方的发生水电费爽肤水双方都是发斯蒂芬"
                     android:textColor="@color/color_text_iii"
                     android:textSize="14sp" />
 
@@ -443,7 +434,6 @@
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="fgsjhfgsjfg双方公司法规双方各是否改善公司风格双方公司规范施工费是否是否归属感爽肤水公司根深蒂固是"
                     android:textColor="@color/color_text_iii"
                     android:textSize="14sp" />
 
@@ -599,7 +589,6 @@
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="fgsjhfgsjfg双方公司法规双方各是否改善公司风格双方公司规范施工费是否是否归属感爽肤水公司根深蒂固是"
                     android:textColor="@color/color_text_iii"
                     android:textSize="14sp" />
 
@@ -633,7 +622,6 @@
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="fgsjhfgsjfg双方公司法规双方各是否改善公司风格双方公司规范施工费是否是否归属感爽肤水公司根深蒂固是"
                     android:textColor="@color/color_text_iii"
                     android:textSize="14sp" />
 
@@ -708,7 +696,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
-                    android:text="地址：北京海淀区知春路108号"
                     android:textColor="@color/color_text_iii"
                     android:textSize="14sp" />
 
@@ -805,7 +792,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:orientation="horizontal"/>
+                        android:orientation="horizontal" />
                 </LinearLayout>
 
                 <View
@@ -814,6 +801,10 @@
                     android:background="@color/color_line" />
             </LinearLayout>
 
+            <com.xuejian.client.lxp.common.widget.ListViewForScrollView
+                android:id="@+id/lv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -903,4 +894,4 @@
     </LinearLayout>
 
     <include layout="@layout/error_page" />
-</FrameLayout>
+</merge>

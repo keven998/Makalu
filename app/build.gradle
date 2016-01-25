@@ -26,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.xuejian.client.lxp"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 11
         versionName "2.2.0"
         multiDexEnabled true
