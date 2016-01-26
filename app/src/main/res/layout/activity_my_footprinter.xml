@@ -86,11 +86,6 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/color_line"/>
-        <com.airbnb.android.airmapview.AirMapView
-            android:id="@+id/my_footprinter_map"
-            android:layout_width="match_parent"
-            android:layout_height="195dp"
-            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="match_parent"

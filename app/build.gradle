@@ -100,7 +100,7 @@ dependencies {
     compile project(':core')
     compile project(':social_sdk_library_project')
     compile project(':im')
-    compile project(':library')
+   // compile project(':library')
     compile files('libs/locSDK_3.3.jar')
     compile 'com.android.support:support-v4:23.1.0'
     //   compile 'com.android.support:appcompat-v7:23.2.0'
@@ -147,27 +147,27 @@ def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
 
-final def TARGET_BUNDLE_DIR = 'app/src/main/assets/'
-final def TARGET_BUNDLE_FILE = 'ReactNativeDevBundle.js'
-final def DOWNLOAD_URL = 'http://localhost:8081/src/index.android.bundle?platform=android&dev=false&minify=true'
-//final def DOWNLOAD_URL = 'http://localhost:8081/src/index.android.bundle?platform=android&dev=false'
-
-task downloadJSBundle << {
-    def dir = new File(TARGET_BUNDLE_DIR)
-    if (!dir.exists()) {
-        dir.mkdirs()
-    }
-    def f = new File(TARGET_BUNDLE_DIR + TARGET_BUNDLE_FILE)
-    if (f.exists()) {
-        f.delete()
-    }
-
-    try {
-        new URL(DOWNLOAD_URL).withInputStream { i -> f.withOutputStream { it << i } }
-    } catch (Exception e) {
-        e.printStackTrace()
-    }
-
-}
-
-preBuild.dependsOn downloadJSBundle
+//final def TARGET_BUNDLE_DIR = 'app/src/main/assets/'
+//final def TARGET_BUNDLE_FILE = 'ReactNativeDevBundle.js'
+//final def DOWNLOAD_URL = 'http://localhost:8081/src/index.android.bundle?platform=android&dev=false&minify=true'
+////final def DOWNLOAD_URL = 'http://localhost:8081/src/index.android.bundle?platform=android&dev=false'
+//
+//task downloadJSBundle << {
+//    def dir = new File(TARGET_BUNDLE_DIR)
+//    if (!dir.exists()) {
+//        dir.mkdirs()
+//    }
+//    def f = new File(TARGET_BUNDLE_DIR + TARGET_BUNDLE_FILE)
+//    if (f.exists()) {
+//        f.delete()
+//    }
+//
+//    try {
+//        new URL(DOWNLOAD_URL).withInputStream { i -> f.withOutputStream { it << i } }
+//    } catch (Exception e) {
+//        e.printStackTrace()
+//    }
+//
+//}
+//
+//preBuild.dependsOn downloadJSBundle

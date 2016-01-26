@@ -415,12 +415,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent" />
         <!--去过页面-->
-        <!--攻略地图-->
-        <activity
-            android:name=".module.dest.StrategyMapActivity"
-            android:hardwareAccelerated="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Transparent" />
 
         <activity
             android:name=".module.toolbox.StrategyListActivity"
@@ -559,9 +553,6 @@
 
         <!-- ###################注册SDK使用的Activity###################### -->
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <!-- 高德地图-->
         <!--DevKey -->
@@ -578,10 +569,6 @@
 
         <!--android:value="5e52974b98ed60f5fd81ce6de1860deb" />-->
         <!--备用签名更新坐标 1ebc37fe421415484068dad4493ffccb-->
-
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyB129WN9KPdWsTg2Kz0kQ3XheA_nec03XI" />
 
 
         <meta-data

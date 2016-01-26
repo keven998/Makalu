@@ -70,7 +70,7 @@ public class GalleryCatergoryActivity extends Activity {
         gallery_title.getRightTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               setResult(RESULT_OK);
+                setResult(RESULT_OK);
                 finish();
             }
         });

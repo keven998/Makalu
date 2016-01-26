@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,8 +135,13 @@ public class UploadAlbumActivity extends Activity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_album_activity);
-        Intent intent = new Intent(UploadAlbumActivity.this, GalleryCatergoryActivity.class);
-        startActivityForResult(intent, REQUEST_CATEGORY);
+        boolean comment = getIntent().getBooleanExtra("comment",false);
+
+        if (!comment) {
+            Intent intent = new Intent(UploadAlbumActivity.this, GalleryCatergoryActivity.class);
+            startActivityForResult(intent, REQUEST_CATEGORY);
+        }
+
         addFile = new LocalImageHelper.LocalFile();
         addFile.setThumbnailUri("addfile");
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -170,7 +176,7 @@ public class UploadAlbumActivity extends Activity {
             @Override
             public void onClick(View v) {
                 info = mContent.getText().toString().trim();
-                if (info != null && info.length() > 0) {
+                if (!TextUtils.isEmpty(info)) {
                     post_album_title.getRightTextView().setEnabled(false);
                     for (int i = 0; i < pictures.size(); i++) {
                         if ("addfile".equals(pictures.get(i).getThumbnailUri())) {
@@ -245,7 +251,7 @@ public class UploadAlbumActivity extends Activity {
             try {
                 String[] project = new String[]{MediaStore.Images.Media.DATA};
                 Cursor cursor = UploadAlbumActivity.this.getContentResolver().query(Uri.parse(localFile.getOriginalUri()), project, null, null, null);
-                cursor.moveToFirst();
+                if (cursor!=null)cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 filepath = cursor.getString(columnIndex);
                 cursor.close();
@@ -354,45 +360,6 @@ public class UploadAlbumActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        // case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
-               /* if (LocalImageHelper.getInstance().isResultOk()) {
-                    LocalImageHelper.getInstance().setResultOk(false);
-                    //获取选中的图片
-                    List<LocalImageHelper.LocalFile> files = LocalImageHelper.getInstance().getCheckedItems();
-                    for (int i = 0; i < files.size(); i++) {
-                        LayoutParams params = new LayoutParams(size, size);
-                        params.rightMargin = padding;
-                        FilterImageView imageView = new FilterImageView(this);
-                        imageView.setLayoutParams(params);
-                        imageView.setScaleType(ScaleType.CENTER_CROP);
-                        ImageLoader.getInstance().displayImage(files.get(i).getThumbnailUri(), new ImageViewAware(imageView), options,
-                                null, null, files.get(i).getOrientation());
-                        imageView.setOnClickListener(this);
-                        pictures.add(files.get(i));
-                        if (pictures.size() == 9) {
-                            add.setVisibility(View.GONE);
-                        } else {
-                            add.setVisibility(View.VISIBLE);
-                        }
-                        picContainer.addView(imageView, picContainer.getChildCount() - 1);
-                        picRemain.setText(pictures.size() + "/9");
-                        LocalImageHelper.getInstance().setCurrentSize(pictures.size());
-                    }
-                    //清空选中的图片
-                    files.clear();
-                    //设置当前选中的图片数量
-                    LocalImageHelper.getInstance().setCurrentSize(pictures.size());
-                    //延迟滑动至最右边
-                    new Handler().postDelayed(new Runnable() {
-                        public void run() {
-                            scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                        }
-                    }, 50L);
-                }
-                //清空选中的图片
-                LocalImageHelper.getInstance().getCheckedItems().clear();*/
-        //break;
         if (requestCode == REFRESH_CURRENT_IMAGES) {
             if (LocalImageHelper.getInstance() != null) {
                 pictures.clear();
@@ -441,7 +408,7 @@ public class UploadAlbumActivity extends Activity {
 
         @Override
         public int getCount() {
-            return uploadImages.size();
+            return  Math.min(uploadImages.size(),10);
         }
 
         @Override

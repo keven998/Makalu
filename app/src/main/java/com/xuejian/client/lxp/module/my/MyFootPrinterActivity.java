@@ -10,20 +10,12 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.airbnb.android.airmapview.AirMapInterface;
-import com.airbnb.android.airmapview.AirMapMarker;
-import com.airbnb.android.airmapview.AirMapView;
-import com.airbnb.android.airmapview.AirMapViewTypes;
-import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
-import com.airbnb.android.airmapview.GoogleChinaMapType;
-import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.amap.api.maps2d.AMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -40,7 +32,6 @@ import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -51,16 +42,12 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
-    private AirMapView mapView;
     private AMap aMap;
-    private DefaultAirMapViewBuilder mapViewBuilder;
-    private AirMapInterface airMapInterface;
     private long MARKER = 1;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> originalAllAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> hasSelectLoc;
     private Set<OnDestActionListener> mOnDestActionListeners = new HashSet<OnDestActionListener>();
-    private Map<LatLng, AirMapMarker> markers;
     private RelativeLayout titleHeaderBar;
     private String printInfo;
     private TextView tv_title, title_back, title_confirm;
@@ -179,37 +166,6 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         return allAddCityList;
     }
 
-    private void refreshMapView(final ArrayList<LocBean> bean) {
-        if (mapView != null) {
-            mapView.removeAllViews();
-            // mapView.clearMarkers();
-        }
-        if (bean.size() > 0) {
-            mapViewBuilder = new DefaultAirMapViewBuilder(this);
-            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
-            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
-                @Override
-                public void onMapInitialized() {
-                    for (int j = 0; j < bean.size(); j++) {
-                        mapView.addMarker(new AirMapMarker(new LatLng(bean.get(j).location.coordinates[1], bean.get(j).location.coordinates[0]), MARKER));
-
-                    }
-                    mapView.animateCenterZoom(new LatLng(bean.get(0).location.coordinates[1], bean.get(0).location.coordinates[0]), 2);
-                }
-            });
-        } else {
-            mapViewBuilder = new DefaultAirMapViewBuilder(this);
-            airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
-            mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
-                @Override
-                public void onMapInitialized() {
-                    mapView.animateCenterZoom(new LatLng(39.969654, 116.393525), 2);
-                }
-            });
-        }
-        mapView.initialize(getSupportFragmentManager(), airMapInterface);
-        //mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-    }
 
 
     @Override
@@ -235,7 +191,6 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
         }
 
 
-        mapView = (AirMapView) rootView.findViewById(R.id.my_footprinter_map);
         hasSelectLoc = getIntent().getParcelableArrayListExtra("myfootprint");
         originalAllAddCityList.addAll(hasSelectLoc);
         inOutIndicator = (FixedIndicatorView) rootView.findViewById(R.id.my_footprinter_in_out_indicator);

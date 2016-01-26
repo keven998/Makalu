@@ -53,6 +53,7 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.goods.Fragment.DestinationFragment;
 import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
+import com.xuejian.client.lxp.module.my.UploadAlbumActivity;
 import com.xuejian.client.lxp.module.my.fragment.MyInfoFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
@@ -120,7 +121,10 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         FromBounce = getIntent().getBooleanExtra("FromBounce", false);
         setContentView(R.layout.activity_main);
         initView();
-        prepareJSBundle();
+        Intent intent = new Intent(MainActivity.this, UploadAlbumActivity.class);
+        intent.putExtra("comment",true);
+        startActivity(intent);
+        //prepareJSBundle();
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);

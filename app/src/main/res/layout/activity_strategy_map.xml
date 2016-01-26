@@ -17,11 +17,6 @@
             android:layout_weight="1">
 
 
-            <com.airbnb.android.airmapview.AirMapView
-                android:id="@+id/strategy_map"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
             <TextView
                 android:id="@+id/spinnet"
                 android:layout_width="wrap_content"

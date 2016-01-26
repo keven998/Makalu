@@ -3,13 +3,13 @@ package com.xuejian.client.lxp.module.my;
 /**
  * Created by xuyongchen on 15/9/17.
  */
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.aizou.core.base.BaseApplication;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.xuejian.client.lxp.R;
@@ -40,8 +41,6 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
     GalleryAdapter adapter;
     TextView btnGalleryOk;
     TextView prey_check;
-    String action;
-    private ImageLoader imageLoader;
     private String photoPath;
     private final int REFRESH_CURRENT_ACTIVITY=35;
     private TitleHeaderBar gallery_title;
@@ -54,7 +53,7 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.grid_gallery);
         folderNames = new ArrayList<String>();
-     //   LocalImageHelper.init(BaseApplication.getContext());
+        LocalImageHelper.init(BaseApplication.getContext());
         helper = LocalImageHelper.getInstance();
         folderName = getIntent().getStringExtra("folderName");
         gallery_title = (TitleHeaderBar)findViewById(R.id.gallery_title);
@@ -101,7 +100,7 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
         prey_check = (TextView)findViewById(R.id.prey_check);
         adapter = new GalleryAdapter(CustomGalleryActivity.this,btnGalleryOk);
 
-        PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader,true, true);
+        PauseOnScrollListener listener = new PauseOnScrollListener(ImageLoader.getInstance(),true, true);
         gridGallery.setOnScrollListener(listener);
 
         findViewById(R.id.llBottomContainer).setVisibility(View.VISIBLE);
@@ -209,13 +208,11 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("customresult",resultCode+"-----------------------");
          if(requestCode==REFRESH_CURRENT_ACTIVITY && resultCode==RESULT_OK){
             refreshCheckedImages();
              adapter.notifyDataSetChanged();
              gridGallery.setAdapter(adapter);
          }else if(requestCode==REFRESH_CURRENT_ACTIVITY && resultCode==20){
-             Log.e("","执行finish啦啦啦啦-------------------");
              setResult(20);
              finish();
          }
@@ -228,36 +225,12 @@ public class CustomGalleryActivity extends Activity implements CompoundButton.On
         @Override
         public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 
-            Log.e("onItem","我被点击啦啦啦啦啦啦啦啦-------------------");
             Intent intent= new Intent(CustomGalleryActivity.this,GalleryDetailActivity.class);
             intent.putExtra("currentIndex",position);
             if(folderName!=null){
                 intent.putExtra("folder",folderName);
             }
             startActivityForResult(intent, REFRESH_CURRENT_ACTIVITY);
-          /*  if(position == 0){
-                StringBuilder fileName = new StringBuilder();
-                fileName.append(Environment.getExternalStorageDirectory());
-                fileName.append(File.separator+"tataufo"+File.separator);
-                fileName.append(new SimpleDateFormat("yyyyMMddHHmmss")
-                        .format(new Date()));
-                fileName.append(".png");
-                if(!Util.isFileDirectoryExits(File.separator + "tataufo")){
-                    Toast.makeText(CustomGalleryActivity.this,"找不到SD卡",Toast.LENGTH_SHORT).show();
-                }
-                photoPath = fileName.toString();
-
-                File file = new File(photoPath);
-
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(
-                        MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(file));
-                startActivityForResult(intent, REQUEST_FROM_CAMERA);
-            }else{
-                //adapter.changeSelection(v, position);
-            }*/
-
         }
     };
 
