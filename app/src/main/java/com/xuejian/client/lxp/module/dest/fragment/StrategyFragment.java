@@ -79,8 +79,8 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
         super.onCreate(savedInstanceState);
 
         options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
-                .showImageOnFail(R.drawable.messages_bg_useravatar)
+                .showImageForEmptyUri(R.drawable.ic_default_picture)
+                .showImageOnFail(R.drawable.ic_default_picture)
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中// 设置成圆角图片
                 .build();

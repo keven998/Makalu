@@ -134,9 +134,9 @@ public class PoiSaveActivity extends PeachBaseActivity {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
-                .showImageOnFail(R.drawable.empty_photo)
-                .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                .showImageForEmptyUri(R.drawable.empty_photo)
+                .showImageOnFail(R.drawable.ic_default_picture)
+                .showImageOnLoading(R.drawable.ic_default_picture)
+                .showImageForEmptyUri(R.drawable.ic_default_picture)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
         ArrayList<PoiDetailBean> value;
 

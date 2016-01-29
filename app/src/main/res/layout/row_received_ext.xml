@@ -24,9 +24,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:padding="1dp"
-            android:background="@drawable/messages_bg_useravatar"
             android:scaleType="fitCenter"
-            android:src="@drawable/messages_bg_useravatar" />
+              />
 
         <TextView
             android:id="@+id/tv_userid"

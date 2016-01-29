@@ -59,7 +59,7 @@ public class ChatMenuFragment extends Fragment {
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                 .resetViewBeforeLoading(true)
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
-                .showImageOnLoading(R.drawable.messages_bg_useravatar)
+                .showImageOnLoading(R.drawable.ic_home_more_avatar_unknown_round)
                 .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
                 .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.size_avatar)))
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();

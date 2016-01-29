@@ -27,7 +27,7 @@
             android:layout_marginRight="10dp"
             android:padding="1dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/messages_bg_useravatar" />
+             />
 
         <RelativeLayout
             android:id="@+id/rl_chatcontent"

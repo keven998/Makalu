@@ -19,7 +19,7 @@
             android:layout_height="50dp"
             android:scaleType="fitCenter"
             android:layout_marginTop="5dp"
-            android:src="@drawable/poi_comment_pic"/>
+            android:src="@drawable/ic_home_more_avatar_unknown_round"/>
 
         <TextView
             android:id="@+id/spot_detail_dp_name"

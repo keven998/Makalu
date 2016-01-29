@@ -102,7 +102,8 @@ public class SearchResultAdapter extends BaseSectionAdapter {
             if (locBean.images != null && locBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(locBean.images.get(0).url, holder.ivPoiImg, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             } else {
-                holder.ivPoiImg.setImageResource(R.drawable.bg_common_default);
+                ImageLoader.getInstance().displayImage("", holder.ivPoiImg, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+
             }
             final LocBean finalLocBean = locBean;
             convertView.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +152,8 @@ public class SearchResultAdapter extends BaseSectionAdapter {
             if (poiBean.images != null && poiBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiBean.images.get(0).url, holder.ivPoiImg, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
             } else {
-                holder.ivPoiImg.setImageDrawable(null);
+                ImageLoader.getInstance().displayImage("", holder.ivPoiImg, UILUtils.getRadiusOption(LocalDisplay.dp2px(2)));
+
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override

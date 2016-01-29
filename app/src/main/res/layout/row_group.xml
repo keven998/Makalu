@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:padding="5dp"
         android:layout_marginLeft="4dp"
-        android:src="@drawable/messages_bg_useravatar" />
+         />
 
     <TextView
         android:id="@+id/name"

@@ -98,6 +98,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     private Handler handler;
     private boolean fromSingle;
     private User single;
+    public static final int NEW_CHAT_REQUEST_CODE = 101;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,7 +215,7 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
             ToastUtil.getInstance(mContext).showToast("请至少选择一位联系人");
             return;
         }
-        if (request == IMMainActivity.NEW_CHAT_REQUEST_CODE) {
+        if (request == NEW_CHAT_REQUEST_CODE) {
             if (fromSingle){
                 toBeAddContacts.add(single);
             }
@@ -484,9 +485,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
-                    .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnLoading(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20)))
@@ -671,9 +672,9 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
                     .cacheInMemory(true)
                     .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
                     .resetViewBeforeLoading(true)
-                    .showImageOnFail(R.drawable.messages_bg_useravatar)
-                    .showImageOnLoading(R.drawable.messages_bg_useravatar)
-                    .showImageForEmptyUri(R.drawable.messages_bg_useravatar)
+                    .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageOnLoading(R.drawable.ic_home_more_avatar_unknown_round)
+                    .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)
 //				.decodingOptions(D)
 //                .displayer(new FadeInBitmapDisplayer(150, true, true, false))
                     .displayer(new RoundedBitmapDisplayer(getResources().getDimensionPixelSize(R.dimen.page_more_header_frame_height) - LocalDisplay.dp2px(20)))

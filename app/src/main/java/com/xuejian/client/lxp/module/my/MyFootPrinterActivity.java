@@ -15,22 +15,17 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
-import com.amap.api.maps2d.AMap;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
-import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.UserApi;
-import com.xuejian.client.lxp.common.gson.CommonJson4List;
-import com.xuejian.client.lxp.common.utils.PreferenceUtils;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.OnDestActionListener;
 import com.xuejian.client.lxp.module.dest.fragment.InDestFragment;
 import com.xuejian.client.lxp.module.dest.fragment.OutCountryFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,8 +37,6 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
     private FixedIndicatorView inOutIndicator;
     private FixedViewPager mSelectDestVp;
     private IndicatorViewPager indicatorViewPager;
-    private AMap aMap;
-    private long MARKER = 1;
     private ArrayList<LocBean> allAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> originalAllAddCityList = new ArrayList<LocBean>();
     private ArrayList<LocBean> hasSelectLoc;
@@ -239,71 +232,9 @@ public class MyFootPrinterActivity extends PeachBaseActivity implements OnDestAc
                     onDestActionListener.onDestAdded(locBean, false, null);
                 }
             }
-        } /*else {
-            //refreshMapView(allAddCityList);
-            if (allAddCityList.size() > 0) {
-                mapViewBuilder = new DefaultAirMapViewBuilder(this);
-                airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
-                mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
-                    @Override
-                    public void onMapInitialized() {
-                        for (int j = 0; j < allAddCityList.size(); j++) {
-                            mapView.addMarker(new AirMapMarker(new LatLng(allAddCityList.get(j).location.coordinates[1], allAddCityList.get(j).location.coordinates[0]), MARKER));
-                        }
-                        mapView.animateCenterZoom(new LatLng(allAddCityList.get(0).location.coordinates[1], allAddCityList.get(0).location.coordinates[0]), 2);
-                    }
-                });
-            } else {
-                mapViewBuilder = new DefaultAirMapViewBuilder(this);
-                airMapInterface = mapViewBuilder.builder(AirMapViewTypes.WEB).withOptions(new GoogleChinaMapType()).build();
-                mapView.setOnMapInitializedListener(new OnMapInitializedListener() {
-                    @Override
-                    public void onMapInitialized() {
-                        mapView.animateCenterZoom(new LatLng(39.969654, 116.393525), 2);
-                    }
-                });
-            }
-            mapView.initialize(getSupportFragmentManager(), airMapInterface);
-        }*/
-    }
-
-    private void updateFootPrint(ArrayList<LocBean> allAddCityList) {
-        HashMap<String, ArrayList<LocBean>> track = new HashMap<>();
-        String outcountry = PreferenceUtils.getCacheData(MyFootPrinterActivity.this, "destination_outcountry");
-        String inCountry = PreferenceUtils.getCacheData(MyFootPrinterActivity.this, "destination_indest_group");
-        CommonJson4List<CountryBean> countryListResult = CommonJson4List.fromJson(outcountry, CountryBean.class);
-        CommonJson4List<CountryBean> groupListResult = CommonJson4List.fromJson(inCountry, CountryBean.class);
-        if (countryListResult!=null&&groupListResult!=null){
-            for (LocBean locBean : allAddCityList) {
-                for (CountryBean countryBean : countryListResult.result) {
-                    for (LocBean kLocBean : countryBean.destinations) {
-                        if (locBean.equals(kLocBean)) {
-                            if (track.containsKey(countryBean.zhName)) {
-                                track.get(countryBean.zhName).add(locBean);
-                            } else {
-                                track.put(countryBean.zhName, new ArrayList<LocBean>());
-                                track.get(countryBean.zhName).add(locBean);
-                            }
-                        }
-                    }
-                }
-
-                for (CountryBean incountryBean : groupListResult.result) {
-                    for (LocBean kLocBean : incountryBean.destinations) {
-                        if (locBean.equals(kLocBean)) {
-                            if (track.containsKey("中国")) {
-                                track.get("中国").add(locBean);
-                            } else {
-                                track.put("中国", new ArrayList<LocBean>());
-                                track.get("中国").add(locBean);
-                            }
-                        }
-                    }
-                }
-            }
         }
-
     }
+
 
     private class InOutFragmentAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
         private String[] tabNames = {"国内", "国外"};

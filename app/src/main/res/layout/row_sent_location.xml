@@ -27,7 +27,7 @@
             android:background="@drawable/ic_home_more_avatar_unknown_round"
             android:padding="1dp"
             android:scaleType="fitXY"
-            android:src="@drawable/messages_bg_useravatar" />
+              />
 
         <LinearLayout
             android:id="@+id/ll_location"
