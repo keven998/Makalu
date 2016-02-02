@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.goods;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -32,6 +34,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.CommentDetailBean;
 import com.xuejian.client.lxp.bean.CommodityBean;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
@@ -42,20 +45,25 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
+import com.xuejian.client.lxp.common.widget.GridViewForListView;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
 import com.xuejian.client.lxp.common.widget.TagView.Tag;
 import com.xuejian.client.lxp.common.widget.TagView.TagListView;
+import com.xuejian.client.lxp.common.widget.glide.GlideCircleTransform;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 /**
  * Created by yibiao.qin on 2016/1/20.
@@ -141,6 +149,16 @@ public class CommodityDetailActivity extends PeachBaseActivity {
     LinearLayout llAction;
     @Bind(R.id.lv_comment)
     ListViewForScrollView lvComment;
+    @Bind(R.id.rb_goods)
+    ProperRatingBar ratingBar;
+    @Bind(R.id.tv_comment_show_all)
+    TextView tvCommentShowAll;
+    @Bind(R.id.ll_comment)
+    LinearLayout ll_comment;
+    @Bind(R.id.empty_comment)
+    TextView empty_comment;
+    @Bind(R.id.tv_comment)
+    TextView tv_comment;
     private long commodityId;
     private long userId;
     public CommodityBean bean;
@@ -260,7 +278,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         tvCommodityName.setText(bean.getTitle());
         tvGoodsSales.setText(String.valueOf(bean.getSalesVolume()) + "已售");
         tvGoodsComment.setText(String.valueOf((int) (bean.getRating() * 100)) + "%满意");
-
+        ratingBar.setRating((int) (bean.getRating() * 5));
         SpannableString string = new SpannableString("起");
         string.setSpan(new AbsoluteSizeSpan(12, true), 0, 1,
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -475,18 +493,52 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         } else {
             llSnapshot.setVisibility(View.GONE);
         }
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("sfsfsdfsdfsdfsfs");
-        list.add("sdhfsjhskhfksfhk\nshfkshfskdjfs\nhfskfhskjfjksfhs");
-        list.add("sfsklfhsfjdffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-        lvComment.setAdapter(new CommentAdapter(this,list));
+
+        if (bean.comments.size()>0){
+            empty_comment.setVisibility(View.GONE);
+            lvComment.setAdapter(new CommentAdapter(this,bean.comments));
+            tvCommentShowAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(CommodityDetailActivity.this,CommentListActivity.class);
+                    intent.putExtra("commodityId",bean.getCommodityId());
+                    startActivity(intent);
+                }
+            });
+        }else {
+            tv_comment.setVisibility(View.GONE);
+            ll_comment.setVisibility(View.GONE);
+            empty_comment.setVisibility(View.VISIBLE);
+        }
+
         scrollView.smoothScrollTo(0,0);
     }
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_avatar)
+        ImageView ivAvatar;
+        @Bind(R.id.tv_name)
+        TextView tvName;
+        @Bind(R.id.tv_timestamp)
+        TextView tvTimestamp;
+        @Bind(R.id.rb_comment)
+        ProperRatingBar rbComment;
+        @Bind(R.id.tv_comment)
+        TextView tvComment;
+        @Bind(R.id.gv_comment_pic)
+        GridViewForListView gvCommentPic;
+        @Bind(R.id.tv_package)
+        TextView tvPackage;
 
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
     public class CommentAdapter extends BaseAdapter{
-        private ArrayList<String> list;
+        private ArrayList<CommentDetailBean> list;
         private Context context;
-        public CommentAdapter(Context context, ArrayList<String> list) {
+        public CommentAdapter(Context context, ArrayList<CommentDetailBean> list) {
             this.list=list;
             this.context = context;
         }
@@ -503,19 +555,99 @@ public class CommodityDetailActivity extends PeachBaseActivity {
 
         @Override
         public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if (convertView==null){
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_comment,null);
+                viewHolder = new ViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            }else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            CommentDetailBean bean = (CommentDetailBean) getItem(position);
+            viewHolder.rbComment.setRating((int)bean.getRating());
+            viewHolder.tvComment.setText(bean.getContents());
+            viewHolder.tvTimestamp.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getCreateTime())));
+            if (bean.images.size()>0){
+                viewHolder.gvCommentPic.setAdapter(new CommentPicAdapter(CommodityDetailActivity.this));
+            }
+            if (bean.getUser()!=null){
+                if (bean.getUser().getAvatar()!=null){
+                    Glide.with(mContext)
+                            .load(bean.getUser().getAvatar().url)
+                            .placeholder(R.drawable.ic_home_more_avatar_unknown_round)
+                            .error(R.drawable.ic_home_more_avatar_unknown_round)
+                            .centerCrop()
+                            .transform(new GlideCircleTransform(mContext))
+                            .into(viewHolder.ivAvatar);
+                }
+
+                viewHolder.tvName.setText(bean.getUser().getNickname());
+            }
+            return convertView;
+        }
+    }
+    public  class CommentPicAdapter extends BaseAdapter {
+
+
+        Activity activity;
+
+        public CommentPicAdapter(Activity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public int getCount() {
+            return 8;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
             return 0;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_activities,null);
-            TextView textView = (TextView) convertView.findViewById(R.id.tv_activity);
-            textView.setSingleLine(false);
-            textView.setText(getItem(position).toString());
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(activity).inflate(R.layout.all_pics_cell, null);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            ViewGroup.LayoutParams layoutParams = holder.allPicsCellId.getLayoutParams();
+            layoutParams.width = (CommonUtils.getScreenWidth(activity)-75) / 6;
+            layoutParams.height = (CommonUtils.getScreenWidth(activity)-75) / 6;
+            holder.allPicsCellId.setLayoutParams(layoutParams);
+            Glide.with(mContext)
+                    .load("http://7sbm17.com1.z0.glb.clouddn.com/commodity/images/f074adb29e1d39a184a02320a3aff555")
+                    .placeholder(R.drawable.ic_default_picture)
+                    .error(R.drawable.ic_default_picture)
+                    .centerCrop()
+                    .into(holder.allPicsCellId);
             return convertView;
         }
-    }
 
+        class ViewHolder {
+            @Bind(R.id.all_pics_cell_id)
+            ImageView allPicsCellId;
+
+            ViewHolder(View view) {
+                ButterKnife.bind(this, view);
+            }
+        }
+    }
     public void changeCollection(boolean isCollection, String id) {
         if (isCollection) {
             UserApi.delFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {

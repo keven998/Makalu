@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/option_cell_selector"
@@ -63,12 +64,35 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp">
 
+            <!--<RatingBar-->
+                <!--android:id="@+id/rb_goods"-->
+                <!--style="@style/custom_rating_bar"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!-- -->
+                <!--/>-->
+
+            <io.techery.properratingbar.ProperRatingBar
+                android:id="@+id/rb_goods"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                app:prb_defaultRating="0"
+                app:prb_tickNormalDrawable="@drawable/ic_rating_start_default"
+                app:prb_tickSelectedDrawable="@drawable/ic_rating_start_highlight"
+                app:prb_totalTicks="5"
+                />
+
             <ImageView
                 android:id="@+id/icon"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 android:src="@drawable/icon_positive" />
 
             <TextView
@@ -81,6 +105,7 @@
                 android:drawablePadding="2dp"
                 android:gravity="center_vertical"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:textColor="@color/color_text_iii"
                 android:textSize="12sp" />
 
@@ -90,7 +115,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/tv_goods_comment"
+                android:layout_toRightOf="@+id/rb_goods"
+                android:text="sdfsdfdsf"
                 android:drawablePadding="2dp"
                 android:singleLine="true"
                 android:textColor="@color/color_text_iii"

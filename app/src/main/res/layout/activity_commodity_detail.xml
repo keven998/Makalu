@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:f="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -128,13 +129,26 @@
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
+                    <io.techery.properratingbar.ProperRatingBar
+                        android:id="@+id/rb_goods"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:textSize="12sp"
+                        app:prb_defaultRating="0"
+                        app:prb_tickNormalDrawable="@drawable/ic_rating_start_default"
+                        app:prb_tickSelectedDrawable="@drawable/ic_rating_start_highlight"
+                        app:prb_totalTicks="5" />
+
                     <ImageView
                         android:id="@+id/icon"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="15dp"
-                        android:src="@drawable/icon_positive" />
+                        android:src="@drawable/icon_positive"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_goods_comment"
@@ -144,7 +158,8 @@
                         android:layout_marginLeft="2dp"
                         android:singleLine="true"
                         android:textColor="@color/color_text_iii"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_goods_sales"
@@ -262,6 +277,7 @@
                     android:textColor="@color/color_text_ii"
                     android:textSize="14dp" />
             </LinearLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -801,10 +817,72 @@
                     android:background="@color/color_line" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/empty_comment"
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/base_color_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/color_text_ii"
+                android:text="暂无评价"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                />
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/color_text_ii"
+                android:text="用户评价"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                />
             <com.xuejian.client.lxp.common.widget.ListViewForScrollView
                 android:id="@+id/lv_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/color_line" />
+
+            <LinearLayout
+                android:id="@+id/ll_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/base_color_white"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/tv_comment_show_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_common_theme_color"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp"
+                    android:text="查看全部"
+                    android:textColor="@color/app_theme_color"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
         </LinearLayout>
 

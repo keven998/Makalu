@@ -63,26 +63,46 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <RelativeLayout
+                android:id="@+id/ll_all_order"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:background="@color/base_color_white"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="13sp"
+                    android:text="我的订单"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/price_color"
+                    android:layout_alignParentRight="true"
+                    android:text="查看全部订单 >"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_line"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:background="@color/base_color_white"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:weightSum="5">
 
-                <TextView
-                    android:id="@+id/tv_all_order"
-                    android:drawableTop="@drawable/icon_all_order"
-                    android:text="全部订单"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:textColor="@color/color_text_ii"
-                    android:textSize="13sp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/tv_need_pay"
                     android:drawableTop="@drawable/icon_nedd_pay"
@@ -107,6 +127,16 @@
                     android:id="@+id/tv_available"
                     android:drawableTop="@drawable/icon_available"
                     android:text="可使用"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="13sp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_toReview"
+                    android:drawableTop="@drawable/icon_all_order"
+                    android:text="待评价"
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:textColor="@color/color_text_ii"

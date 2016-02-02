@@ -37,6 +37,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
+import com.xuejian.client.lxp.module.goods.GoodsList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,15 @@ public class GoodsMainFragment extends PeachBaseFragment {
             public void onClick(View v) {
                 rlError.setVisibility(View.GONE);
                 retry();
+            }
+        });
+        ((TextView)v.findViewById(R.id.tv_search_content)).setText("商品搜索");
+        v.findViewById(R.id.ll_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GoodsList.class);
+                intent.putExtra("search", true);
+                startActivity(intent);
             }
         });
         return v;

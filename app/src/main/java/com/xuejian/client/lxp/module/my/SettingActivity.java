@@ -3,13 +3,16 @@ package com.xuejian.client.lxp.module.my;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.SharedPreferencesUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
@@ -25,12 +28,14 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.utils.UpdateUtil;
+import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class SettingActivity extends PeachBaseActivity implements OnClickListener {
@@ -90,6 +95,40 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
 
         boolean notifyStatus = SettingConfig.getInstance().getLxqPushSetting(this);
         ctv.setChecked(notifyStatus);
+
+        NiceSpinner spinner = (NiceSpinner) findViewById(R.id.sp_dev);
+        final ArrayList<String> list = new ArrayList<>();
+        list.add("OnLine");
+        list.add("Beta");
+        list.add("Dev");
+        spinner.attachDataSource(list);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position==0){
+                    SharedPreferencesUtil.saveValue(SettingActivity.this,"Header","");
+                }else {
+                    SharedPreferencesUtil.saveValue(SettingActivity.this,"Header",list.get(position));
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        String current = SharedPreferencesUtil.getStringValue(SettingActivity.this, "Header", "");
+        if (TextUtils.isEmpty(current)){
+            spinner.setSelectedIndex(0);
+        }else {
+            try {
+                spinner.setSelectedIndex(list.indexOf(current));
+            }catch (Exception e){
+
+            }
+
+        }
     }
 
     @Override

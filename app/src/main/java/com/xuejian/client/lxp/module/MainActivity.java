@@ -123,6 +123,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
 //        Intent intent = new Intent(MainActivity.this, UploadAlbumActivity.class);
 //        intent.putExtra("comment",true);
+//        intent.putExtra("commodityId",100132l);
 //        startActivity(intent);
 
         //断网提示

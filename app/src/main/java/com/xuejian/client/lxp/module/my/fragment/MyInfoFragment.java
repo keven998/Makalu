@@ -22,6 +22,7 @@ import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
+import com.xuejian.client.lxp.module.goods.RefundActivity;
 import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
@@ -41,8 +42,8 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RoundImageBoarderView userAvatar;
     @Bind(R.id.tv_nickname)
     TextView tvNickname;
-    @Bind(R.id.tv_all_order)
-    TextView tvAllOrder;
+    @Bind(R.id.tv_toReview)
+    TextView tv_toReview;
     @Bind(R.id.tv_need_pay)
     TextView tvNeedPay;
     @Bind(R.id.tv_process)
@@ -61,6 +62,8 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RelativeLayout rlMyCommonUser;
     @Bind(R.id.user_info_pannel)
     LinearLayout linearLayout;
+    @Bind(R.id.ll_all_order)
+    RelativeLayout llAllOrder;
     User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,13 +83,14 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         ButterKnife.bind(this, view);
 
         settingBtn.setOnClickListener(this);
-        tvAllOrder.setOnClickListener(this);
+        tv_toReview.setOnClickListener(this);
         tvNeedPay.setOnClickListener(this);
         tvProcess.setOnClickListener(this);
         tvAvailable.setOnClickListener(this);
         tvDrawback.setOnClickListener(this);
         rlMyCollection.setOnClickListener(this);
         rlMyCommonUser.setOnClickListener(this);
+        llAllOrder.setOnClickListener(this);
       //  rlMyContact.setOnClickListener(this);
         rlMyPlan.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
@@ -127,7 +131,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 Intent setting_btn = new Intent(getActivity(), SettingActivity.class);
                 startActivity(setting_btn);
                 break;
-            case R.id.tv_all_order:
+            case R.id.ll_all_order:
                 Intent tv_all_order = new Intent(getActivity(), OrderListActivity.class);
                 startActivity(tv_all_order);
                 break;
@@ -143,12 +147,16 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 break;
             case R.id.tv_available:
                 Intent tv_available = new Intent(getActivity(), OrderListActivity.class);
-                tv_available.putExtra("page",3);
+                tv_available.putExtra("page", 3);
                 startActivity(tv_available);
                 break;
+            case R.id.tv_toReview:
+                Intent tv_toReview = new Intent(getActivity(), OrderListActivity.class);
+                tv_toReview.putExtra("page", 4);
+                startActivity(tv_toReview);
+                break;
             case R.id.tv_drawback:
-                Intent tv_drawback = new Intent(getActivity(), OrderListActivity.class);
-                tv_drawback.putExtra("page",4);
+                Intent tv_drawback = new Intent(getActivity(), RefundActivity.class);
                 startActivity(tv_drawback);
                 break;
             case R.id.rl_my_collection:

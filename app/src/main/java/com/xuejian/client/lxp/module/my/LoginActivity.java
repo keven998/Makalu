@@ -180,6 +180,19 @@ public class LoginActivity extends PeachBaseActivity {
         paipai.setNickName("派派");
         paipai.setUserId(10000l);
         UserDBManager.getInstance().saveContact(paipai);
+
+        User trade = new User();
+        trade.setNickName("交易消息");
+        trade.setUserId(10002l);
+        trade.setType(1);
+        UserDBManager.getInstance().saveContact(trade);
+
+        User activity = new User();
+        activity.setNickName("活动消息");
+        activity.setUserId(10003l);
+        activity.setType(1);
+        UserDBManager.getInstance().saveContact(activity);
+
         // 进入主页面
         runOnUiThread(new Runnable() {
             public void run() {

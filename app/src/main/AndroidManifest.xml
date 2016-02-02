@@ -367,10 +367,6 @@
             android:theme="@style/Transparent"
             android:windowSoftInputMode="adjustPan" />
         <!-- 地图 -->
-        <!--<activity-->
-        <!--android:name=".module.toolbox.im.BaiduMapActivity"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:theme="@style/horizontal_slide"/>-->
         <activity
             android:name=".module.toolbox.im.MapActivity"
             android:screenOrientation="portrait"
@@ -509,6 +505,13 @@
                 <data android:pathPrefix="/commodities/" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".module.goods.CommentListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.goods.RefundActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

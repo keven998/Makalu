@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.aizou.core.http.entity.PTRequest;
+import com.aizou.core.utils.SharedPreferencesUtil;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.security.SecurityUtil;
 import com.xuejian.client.lxp.config.PeachApplication;
@@ -25,7 +26,7 @@ public class BaseApi {
         User user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
         if (user != null) {
             request.setHeader("UserId", String.valueOf(user.getUserId()));
-        //    request.setHeader("X-Lvxingpai-Id", String.valueOf(user.getUserId()));
+            //    request.setHeader("X-Lvxingpai-Id", String.valueOf(user.getUserId()));
         }
         if (!TextUtils.isEmpty(PeachApplication.ChannelId)) {
             request.setHeader("ChannelId", PeachApplication.ChannelId);
@@ -40,22 +41,27 @@ public class BaseApi {
         if (!TextUtils.isEmpty(PeachApplication.ChannelId)) {
             request.setHeader("ChannelId", PeachApplication.ChannelId);
         }
+        String header = SharedPreferencesUtil.getStringValue(PeachApplication.getContext(), "Header", "");
+        if (!TextUtils.isEmpty(header)) {
+            request.setHeader("X-Lvxingpai-API-Control", header);
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String date = sdf.format(new Date());
         Log.e("LXP", date.replaceAll("\\+\\d{2}.+$", ""));
-       // System.out.println(date+" LXP"+ date.replaceAll("\\+\\d{2}.+$", ""));
+        // System.out.println(date+" LXP"+ date.replaceAll("\\+\\d{2}.+$", ""));
         request.setHeader("Accept", "application/vnd.lvxingpai.v1+json");
         request.setHeader("Platform", "Android " + android.os.Build.VERSION.RELEASE);
         request.setHeader("Version", PeachApplication.APP_VERSION_NAME);
-        request.setHeader("Date",  date.replaceAll("\\+\\d{2}.+$", ""));
+        request.setHeader("Date", date.replaceAll("\\+\\d{2}.+$", ""));
         User user = AccountManager.getInstance().getLoginAccount(PeachApplication.getContext());
         if (user != null) {
             request.setHeader("UserId", String.valueOf(user.getUserId()));
             request.setHeader("X-Lvxingpai-Id", String.valueOf(user.getUserId()));
             try {
                 String authString = SecurityUtil.getAuthBody(user.getSecretKey(), request, body, date.replaceAll("\\+\\d{2}.+$", ""), String.valueOf(user.getUserId()));
-                request.setHeader("Authorization", "LVXINGPAI-v1-HMAC-SHA256 Signature="+authString);
+                request.setHeader("Authorization", "LVXINGPAI-v1-HMAC-SHA256 Signature=" + authString);
             } catch (Exception e) {
                 e.printStackTrace();
             }

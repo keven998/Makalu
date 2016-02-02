@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
-    android:orientation="vertical" >
+    android:orientation="vertical">
     <!-- 标题 -->
     <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/post_album_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height" />
+
     <LinearLayout
         android:id="@+id/post_edit_container"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white"
         android:layout_marginTop="15dp"
-        android:paddingTop="10dp"
+        android:background="@color/white"
+        android:orientation="vertical"
         android:paddingBottom="10dp"
-        >
-
+        android:paddingTop="10dp">
 
 
         <EditText
             android:id="@+id/post_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:gravity="top"
-            android:hint="给照片添加描述..."
-            android:maxLength="150"
             android:lines="6"
-            android:textColor="@color/color_text_ii"
+            android:maxLength="150"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:textSize="14sp"
-            android:background="@color/white"
-            />
+            android:textColor="@color/color_text_ii"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/post_text_remain"
@@ -53,15 +51,101 @@
             android:id="@+id/image_to_upload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:horizontalSpacing="4dp"
+            android:numColumns="4"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:verticalSpacing="4dp"
-            android:horizontalSpacing="4dp"
-            android:numColumns="4"
             >
 
         </GridView>
+
+        <LinearLayout
+            android:id="@+id/ll_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_line" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="评个分吧"
+                android:textColor="@color/color_text_iii"
+                android:textSize="14sp" />
+
+            <io.techery.properratingbar.ProperRatingBar
+                android:id="@+id/rb_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"
+                app:prb_clickable="true"
+                app:prb_defaultRating="0"
+                app:prb_tickNormalDrawable="@drawable/ic_rating_start_default"
+                app:prb_tickSelectedDrawable="@drawable/ic_rating_start_highlight"
+                app:prb_tickSpacing="4dp"
+                app:prb_totalTicks="5" />
+        </LinearLayout>
+
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/base_color_white"
+        android:orientation="horizontal">
+
+        <CheckedTextView
+            android:id="@+id/ctv_1"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/checker_for_checkbox"
+            android:clickable="true"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:text="匿名评价"
+            android:textColor="@color/color_text_iii"
+            android:textColorLink="@color/app_theme_color"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/color_line" />
+
+        <TextView
+            android:id="@+id/tv_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:background="@color/price_color"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/base_color_white"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="发表评价" />
+    </LinearLayout>
 </LinearLayout>

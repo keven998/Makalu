@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp">
@@ -41,13 +42,15 @@
         android:textColor="@color/color_text_i"
         android:textSize="15sp" />
 
-    <RatingBar
+    <io.techery.properratingbar.ProperRatingBar
         android:id="@+id/rb_comment_rating"
-        style="@style/custom_small_rating_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/tv_commenter_property"
         android:layout_alignParentRight="true"
-        android:numStars="5" />
-
+        app:prb_defaultRating="0"
+        app:prb_tickSpacing="2dp"
+        app:prb_tickNormalDrawable="@drawable/ic_rating_start_default"
+        app:prb_tickSelectedDrawable="@drawable/ic_rating_start_highlight"
+        app:prb_totalTicks="5"/>
 </RelativeLayout>

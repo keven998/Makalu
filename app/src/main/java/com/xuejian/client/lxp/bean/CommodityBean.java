@@ -43,6 +43,7 @@ public class CommodityBean {
     private int salesVolume;
     private double marketPrice;
     private double price;
+    public ArrayList<CommentDetailBean>comments;
     /**
      * url : http://images.taozilvxing.com/commodity/images/0a63fa611f1317d93b193fb5a3f663a4
      */

@@ -49,6 +49,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 /**
  * Created by yibiao.qin on 2015/11/4.
@@ -438,7 +439,7 @@ public class CityInfoActivity extends PeachBaseActivity {
                 SpannableStringBuilder spb = new SpannableStringBuilder();
                 spb.append("¥" + CommonUtils.getPriceString(bean.getPrice())).append(string);
                 holder.tvGoodsCurrentPrice.setText(spb);
-
+                holder.rb_goods.setRating((int)(bean.getRating()*5));
                 holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
                 holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 holder.tvGoodsPrice.getPaint().setAntiAlias(true);
@@ -479,7 +480,8 @@ public class CityInfoActivity extends PeachBaseActivity {
             TextView tvGoodsPrice;
             @Bind(R.id.tv_store_name)
             TextView tvStoreName;
-
+            @Bind(R.id.rb_goods)
+            ProperRatingBar rb_goods;
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }

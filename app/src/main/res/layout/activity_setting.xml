@@ -279,6 +279,33 @@
             android:layout_height="1px"
             android:background="@color/color_line" />
 
+        <TableRow android:background="@drawable/option_cell_selector">
+            <LinearLayout
+                android:id="@+id/ll_dev"
+                android:layout_column="1"
+                android:layout_span="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:text="DEV Option"/>
+                <com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner
+                    android:id="@+id/sp_dev"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+        </TableRow>
+
         <TableRow
             android:id="@+id/logout_app"
             android:layout_marginTop="20dp"

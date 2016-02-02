@@ -2,6 +2,7 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="1dp"
@@ -70,16 +71,21 @@
 
         </LinearLayout>
 
-        <RatingBar
+
+        <io.techery.properratingbar.ProperRatingBar
             android:id="@+id/poi_rating"
-            style="@style/custom_small_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@id/poi_image_iv"
-            android:visibility="gone" />
-
+            android:textSize="12sp"
+            app:prb_defaultRating="0"
+            app:prb_tickSpacing="2dp"
+            app:prb_tickNormalDrawable="@drawable/ic_rating_start_default"
+            app:prb_tickSelectedDrawable="@drawable/ic_rating_start_highlight"
+            app:prb_totalTicks="5"/>
         <TextView
             android:id="@+id/poi_rank_tv"
             android:layout_width="wrap_content"

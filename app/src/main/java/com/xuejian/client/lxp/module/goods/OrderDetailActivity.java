@@ -37,6 +37,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
+import com.xuejian.client.lxp.module.my.UploadAlbumActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
@@ -132,7 +133,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         }
 
         ivNavBack.setOnClickListener(this);
-        tvCancel.setOnClickListener(this);
+    //    tvCancel.setOnClickListener(this);
     }
 
     @Override
@@ -151,9 +152,9 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
 //                startActivity(tv_title_back);
                 finish();
                 break;
-            case R.id.tv_cancel_action:
-                cancelOrderDialog();
-                break;
+//            case R.id.tv_cancel_action:
+//                cancelOrderDialog();
+//                break;
             default:
                 break;
         }
@@ -220,6 +221,13 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                 tvState.setText("退款申请中");
                 break;
             case "pending":
+                tvCancel.setText("取消订单");
+                tvCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cancelOrderDialog();
+                    }
+                });
                 tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice())));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
@@ -313,6 +321,30 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     public void onClick(View v) {
                         intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                         intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                        startActivity(intent);
+                    }
+                });
+                break;
+            case "toReview":
+                tvState.setText("已完成");
+                llTradeAction1.setVisibility(View.VISIBLE);
+                tvCancel.setText("再次预定");
+                tvCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                        startActivity(intent);
+                    }
+                });
+                tvPay.setText("评价");
+                tvPay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        intent.setClass(OrderDetailActivity.this, UploadAlbumActivity.class);
+                        intent.putExtra("comment", true);
+                        intent.putExtra("commodityId",bean.getCommodity().getCommodityId());
+                        intent.putExtra("orderId", bean.getOrderId());
                         startActivity(intent);
                     }
                 });

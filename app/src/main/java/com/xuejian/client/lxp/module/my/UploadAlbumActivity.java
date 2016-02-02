@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -47,6 +48,8 @@ import com.qiniu.android.storage.UploadOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.UploadTokenBean;
 import com.xuejian.client.lxp.common.api.OtherApi;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.LocalImageHelper;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
@@ -57,6 +60,8 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.techery.properratingbar.ProperRatingBar;
 
 public class UploadAlbumActivity extends Activity {
 
@@ -82,7 +87,9 @@ public class UploadAlbumActivity extends Activity {
     private LocalImageHelper.LocalFile addFile;
     private int currentUpload = 0;
     private String info;
-
+    boolean comment;
+    long commodityId;
+    long orderId;
     private static class MyHandler extends Handler {
 
         private final WeakReference<UploadAlbumActivity> mActivity;
@@ -135,13 +142,18 @@ public class UploadAlbumActivity extends Activity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_album_activity);
-        boolean comment = getIntent().getBooleanExtra("comment",false);
-
+        comment = getIntent().getBooleanExtra("comment",false);
+        commodityId = getIntent().getLongExtra("commodityId", -1);
+        orderId = getIntent().getLongExtra("orderId",-1);
         if (!comment) {
             Intent intent = new Intent(UploadAlbumActivity.this, GalleryCatergoryActivity.class);
             startActivityForResult(intent, REQUEST_CATEGORY);
         }
 
+        if (comment){
+            findViewById(R.id.ll_rating).setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_action_bar).setVisibility(View.VISIBLE);
+        }
         addFile = new LocalImageHelper.LocalFile();
         addFile.setThumbnailUri("addfile");
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -164,7 +176,7 @@ public class UploadAlbumActivity extends Activity {
     private void initViews() {
         // TODO Auto-generated method stub
         post_album_title = (TitleHeaderBar) findViewById(R.id.post_album_title);
-        post_album_title.getLeftTextView().setText("取消");
+
         post_album_title.getLeftTextView().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,6 +210,17 @@ public class UploadAlbumActivity extends Activity {
             }
         });
         mContent = (EditText) findViewById(R.id.post_content);
+        if (comment){
+            mContent.setHint("输入点评");
+            post_album_title.getTitleTextView().setText("发表评价");
+            findViewById(R.id.image_to_upload).setVisibility(View.GONE);
+            post_album_title.getRightTextView().setVisibility(View.GONE);
+        }else {
+            post_album_title.getLeftTextView().setText("取消");
+            mContent.setHint("给照片添加描述...");
+            findViewById(R.id.image_to_upload).setVisibility(View.VISIBLE);
+            post_album_title.getRightTextView().setVisibility(View.VISIBLE);
+        }
         textRemain = (TextView) findViewById(R.id.post_text_remain);
         editContainer = findViewById(R.id.post_edit_container);
         image_to_upload = (GridView) findViewById(R.id.image_to_upload);
@@ -241,6 +264,47 @@ public class UploadAlbumActivity extends Activity {
             @Override
             public void afterTextChanged(Editable content) {
                 textRemain.setText(content.toString().length() + "/150");
+            }
+        });
+        final ProperRatingBar ratingBar = (ProperRatingBar) findViewById(R.id.rb_comment);
+
+        final CheckedTextView checkedTextView = (CheckedTextView) findViewById(R.id.ctv_1);
+        checkedTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkedTextView.setChecked(!checkedTextView.isChecked());
+            }
+        });
+        final TextView submit = (TextView) findViewById(R.id.tv_submit);
+        submit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(mContent.getText().toString().trim())) {
+                    Toast.makeText(UploadAlbumActivity.this,"请输入评价内容",Toast.LENGTH_LONG).show();
+                }else {
+                    submitComment(mContent.getText().toString().trim(), (float) ratingBar.getRating(),checkedTextView.isChecked());
+                }
+            }
+        });
+
+    }
+
+    private void submitComment(String content,float rating,boolean anonymous) {
+        TravelApi.createComment(commodityId,orderId ,content, rating,anonymous, new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                Toast.makeText(UploadAlbumActivity.this,"发表评价成功",Toast.LENGTH_LONG).show();
+                finish();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                Toast.makeText(UploadAlbumActivity.this,"发表评价失败",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
             }
         });
     }
@@ -346,7 +410,7 @@ public class UploadAlbumActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+     //   super.onBackPressed();
         beforeBack();
     }
 
@@ -354,9 +418,34 @@ public class UploadAlbumActivity extends Activity {
         if (LocalImageHelper.getInstance() != null && LocalImageHelper.getInstance().getCheckedItems() != null) {
             LocalImageHelper.getInstance().getCheckedItems().clear();
         }
-        finish();
-    }
+        if (comment){
+            notice();
+        }else {
+            finish();
+        }
 
+
+    }
+    private void notice() {
+        final PeachMessageDialog dialog = new PeachMessageDialog(UploadAlbumActivity.this);
+        dialog.setTitle("提示");
+        dialog.setMessage("亲，评价还未完成，确定离开吗？");
+        dialog.setPositiveButton("离开", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

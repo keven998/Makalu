@@ -1,4 +1,4 @@
-package com.xuejian.client.lxp.module.goods.Fragment;
+package com.xuejian.client.lxp.module.goods;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -24,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,7 +33,7 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -42,106 +42,61 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
-import com.xuejian.client.lxp.module.my.UploadAlbumActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by yibiao.qin on 2015/11/11.
- */
-public class OrderListFragment extends PeachBaseFragment {
-   // SwipeRefreshLayout mSwipeRefreshWidget;
-    private int type;
-    public static final int ALL = 1;
-    public static final int NEED_PAY = 2;
-    public static final int PROCESS = 3;
-    public static final int AVAILABLE = 4;
-    public static final int TO_REVIEW = 5;
-    OrderListAdapter adapter;
-    XRecyclerView recyclerView;
-    TextView empty;
-    Handler handler;
-    private static int COUNT = 5;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        type = getArguments().getInt("type");
-        if (handler == null)handler = new Handler();
-    }
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-    @Nullable
+/**
+ * Created by yibiao.qin on 2016/2/1.
+ */
+public class RefundActivity extends PeachBaseActivity {
+
+    @Bind(R.id.tv_title_back)
+    TextView tvTitleBack;
+    @Bind(R.id.tv_list_title)
+    TextView tvListTitle;
+    @Bind(R.id.rl_normal_bar)
+    RelativeLayout rlNormalBar;
+    @Bind(R.id.lv_poi_list)
+    XRecyclerView lvOrderList;
+    OrderListAdapter adapter;
+    private static int COUNT = 5;
+    Handler handler;
+    @Bind(R.id.empty_view)
+    LinearLayout emptyView;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-     //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
-        View view = (View) inflater.inflate(
-                R.layout.fragment_order_list, container, false);
-        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        empty = (TextView) view.findViewById(R.id.empty_view);
-//        mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_widget);
-//        mSwipeRefreshWidget.setOnRefreshListener(this);
-//        mSwipeRefreshWidget.setColorSchemeResources(R.color.app_theme_color);
-        setupRecyclerView(recyclerView);
-        recyclerView.setRefreshProgressStyle(ProgressStyle.SysProgress);
-        recyclerView.setLoadingMoreEnabled(true);
-     //   DialogManager.getInstance().showModelessLoadingDialog(getActivity());
-        switch (type) {
-            case ALL:
-                empty.setText("您近期没有出行订单");
-          //      getOrder("");
-                break;
-            case NEED_PAY:
-                empty.setText("您没有待付款的订单");
-          //      getOrder("pending");
-                break;
-            case PROCESS:
-                empty.setText("您没有处理中的订单");
-         //       getOrder("paid");
-                break;
-            case AVAILABLE:
-                empty.setText("您没有可使用的订单");
-         //       getOrder("committed");
-                break;
-            case TO_REVIEW:
-                empty.setText("您没有待评价的订单");
-           //     getOrder("refundApplied");
-                break;
-            default:
-                break;
-        }
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_comment_list);
+        ButterKnife.bind(this);
+        tvListTitle.setText("退款");
+        tvTitleBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        emptyView.setVisibility(View.VISIBLE);
+        handler = new Handler();
+        setupRecyclerView(lvOrderList);
+        lvOrderList.setRefreshProgressStyle(ProgressStyle.SysProgress);
+        lvOrderList.setLoadingMoreEnabled(false);
+        lvOrderList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                recyclerView.setLoadingMoreEnabled(true);
+                lvOrderList.setLoadingMoreEnabled(true);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        switch (type) {
-                            case ALL:
-                                getOrder("",0,COUNT,true);
-                                break;
-                            case NEED_PAY:
-                                getOrder("pending",0,COUNT,true);
-                                break;
-                            case PROCESS:
-                                getOrder("paid",0,COUNT,true);
-                                break;
-                            case AVAILABLE:
-                                getOrder("committed",0,COUNT,true);
-                                break;
-                            case TO_REVIEW:
-                                getOrder("toReview",0,COUNT,true);
-                                break;
-                            default:
-                                //   if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
-                                break;
-                        }
+                        getOrder("refundApplied,refunded", 0, COUNT, true);
                     }
-                },1000);
+                }, 1000);
             }
 
             @Override
@@ -149,86 +104,60 @@ public class OrderListFragment extends PeachBaseFragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        switch (type) {
-                            case ALL:
-                                getOrder("", adapter.getItemCount(), COUNT,false);
-                                break;
-                            case NEED_PAY:
-                                getOrder("pending", adapter.getItemCount(), COUNT,false);
-                                break;
-                            case PROCESS:
-                                getOrder("paid", adapter.getItemCount(), COUNT,false);
-                                break;
-                            case AVAILABLE:
-                                getOrder("committed", adapter.getItemCount(), COUNT,false);
-                                break;
-                            case TO_REVIEW:
-                                getOrder("toReview", adapter.getItemCount(), COUNT,false);
-                                break;
-                            default:
-                                //   if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
-                                break;
-                        }
+                        getOrder("refundApplied,refunded", adapter.getItemCount(), COUNT, false);
                     }
                 }, 1000);
             }
         });
-        return view;
     }
 
+    private void setupRecyclerView(RecyclerView recyclerView) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(false);
+        adapter = new OrderListAdapter(this, 5);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, long id) {
+                Intent intent = new Intent(RefundActivity.this, OrderDetailActivity.class);
+                intent.putExtra("type", "orderDetail");
+                intent.putExtra("orderId", id);
+                startActivity(intent);
+            }
+        });
+    }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
-      //  DialogManager.getInstance().showModelessLoadingDialog(getActivity());
-     //   mSwipeRefreshWidget.setRefreshing(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        switch (type) {
-            case ALL:
-                getOrder("",0,COUNT,true);
-                break;
-            case NEED_PAY:
-                getOrder("pending",0,COUNT,true);
-                break;
-            case PROCESS:
-                getOrder("paid",0,COUNT,true);
-                break;
-            case AVAILABLE:
-                getOrder("committed",0,COUNT,true);
-                break;
-            case TO_REVIEW:
-                getOrder("toReview",0,COUNT,true);
-                break;
-            default:
-           //     if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
-                DialogManager.getInstance().dissMissModelessLoadingDialog();
-                break;
-        }
+        lvOrderList.setLoadingMoreEnabled(true);
+        getOrder("refundApplied,refunded", 0, COUNT, true);
     }
 
-    public void getOrder(String status,int start,int count, final boolean refresh) {
-        long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
-        TravelApi.getOrderList(userId, status,String.valueOf(start),String.valueOf(count), new HttpCallBack<String>() {
+    public void getOrder(String status, int start, int count, final boolean refresh) {
+        long userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
+        TravelApi.getOrderList(userId, status, String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<OrderBean> list = CommonJson4List.fromJson(result, OrderBean.class);
-                if (refresh)adapter.getDataList().clear();
+                if (refresh) adapter.getDataList().clear();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
-                if (list.result.size() > 0) empty.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-        //        if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
-                recyclerView.refreshComplete();
-                recyclerView.loadMoreComplete();
+                if (list.result.size() > 0) emptyView.setVisibility(View.GONE);
+                lvOrderList.setVisibility(View.VISIBLE);
+                //        if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
+                lvOrderList.refreshComplete();
+                lvOrderList.loadMoreComplete();
 
                 if (list.result.size() >= COUNT) {
 
                 } else {
 //                    goodsList.noMoreLoading();
-                    recyclerView.setLoadingMoreEnabled(false);
+                    lvOrderList.setLoadingMoreEnabled(false);
                 }
-              DialogManager.getInstance().dissMissModelessLoadingDialog();
+                DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
             @Override
@@ -236,9 +165,9 @@ public class OrderListFragment extends PeachBaseFragment {
 //                if (mSwipeRefreshWidget.isRefreshing()){
 //                    mSwipeRefreshWidget.setRefreshing(false);
 //                }
-                recyclerView.refreshComplete();
-                recyclerView.setVisibility(View.GONE);
-                empty.setVisibility(View.VISIBLE);
+                lvOrderList.refreshComplete();
+                lvOrderList.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
                 DialogManager.getInstance().dissMissModelessLoadingDialog();
             }
 
@@ -248,50 +177,6 @@ public class OrderListFragment extends PeachBaseFragment {
             }
         });
     }
-
-    private void setupRecyclerView(RecyclerView recyclerView) {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(false);
-        adapter = new OrderListAdapter(getActivity(), type);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-                intent.putExtra("type", "orderDetail");
-                intent.putExtra("orderId", id);
-                startActivity(intent);
-            }
-        });
-    }
-
-//    @Override
-//    public void onRefresh() {
-//        System.out.println("onRefresh");
-//        switch (type) {
-//            case ALL:
-//                getOrder("");
-//                break;
-//            case NEED_PAY:
-//                getOrder("pending");
-//                break;
-//            case PROCESS:
-//                getOrder("paid");
-//                break;
-//            case AVAILABLE:
-//                getOrder("committed");
-//                break;
-//            case TO_REVIEW:
-//                getOrder("refundApplied");
-//                break;
-//            default:
-//                if (mSwipeRefreshWidget.isRefreshing()) mSwipeRefreshWidget.setRefreshing(false);
-//                break;
-//        }
-//
-//
-//    }
 
     static class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
         public interface OnItemClickListener {
@@ -328,11 +213,6 @@ public class OrderListFragment extends PeachBaseFragment {
             public final TextView tvDate;
             public final RelativeLayout rlItem;
 
-            public final RelativeLayout rlToReview;
-            public final TextView tvReviewState;
-            public final TextView tvReviewTalk;
-            public final TextView tvReviewComment;
-
             public ViewHolder(View view) {
                 super(view);
 
@@ -359,11 +239,6 @@ public class OrderListFragment extends PeachBaseFragment {
                 tvDate = (TextView) view.findViewById(R.id.tv_goods_time);
                 tvPackageName = (TextView) view.findViewById(R.id.tv_goods_package);
                 rlItem = (RelativeLayout) view.findViewById(R.id.rl_item);
-
-                rlToReview = (RelativeLayout) view.findViewById(R.id.rl_to_review);
-                tvReviewState = (TextView) view.findViewById(R.id.tv_to_review_state);
-                tvReviewTalk = (TextView) view.findViewById(R.id.tv_to_review_talk);
-                tvReviewComment = (TextView) view.findViewById(R.id.tv_to_review_comment);
             }
         }
 
@@ -396,7 +271,6 @@ public class OrderListFragment extends PeachBaseFragment {
             holder.rlAvailable.setVisibility(View.GONE);
             holder.rlProcess.setVisibility(View.GONE);
             holder.rlNeedPay.setVisibility(View.GONE);
-            holder.rlToReview.setVisibility(View.GONE);
             switch (bean.getStatus()) {
                 case "paid":
                     holder.rlProcess.setVisibility(View.VISIBLE);
@@ -423,10 +297,10 @@ public class OrderListFragment extends PeachBaseFragment {
                         holder.tvNeedPayPay.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showPayActionDialog((Activity)mContext,bean.getOrderId());
+                                showPayActionDialog((Activity) mContext, bean.getOrderId());
                             }
                         });
-                    }else {
+                    } else {
                         holder.rlProcess.setVisibility(View.VISIBLE);
                         holder.tvDrawBackState.setText("订单已超过支付期限,请重新下单");
                     }
@@ -448,20 +322,6 @@ public class OrderListFragment extends PeachBaseFragment {
                     holder.rlDrawBack.setVisibility(View.VISIBLE);
                     holder.tvDrawBackState.setText("已退款");
                     break;
-                case "toReview":
-                    holder.rlToReview.setVisibility(View.VISIBLE);
-                    holder.tvReviewState.setText("已完成");
-                    holder.tvReviewComment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mContext, UploadAlbumActivity.class);
-                            intent.putExtra("comment",true);
-                            intent.putExtra("commodityId",bean.getCommodity().getCommodityId());
-                            intent.putExtra("orderId",bean.getOrderId());
-                            mContext.startActivity(intent);
-                        }
-                    });
-                    break;
                 default:
 //                    holder.rlNeedPay.setVisibility(View.VISIBLE);
 //                    holder.rlNeedPay.setVisibility(View.VISIBLE);
@@ -474,7 +334,7 @@ public class OrderListFragment extends PeachBaseFragment {
                     break;
             }
             holder.tvGoodsName.setText(bean.getCommodity().getTitle());
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+          //  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             holder.tvDate.setText(String.format("出行日期:%s", bean.getRendezvousTime()));
             if (bean.getCommodity().getPlans().size() > 0) {
                 holder.tvPackageName.setText(bean.getCommodity().getPlans().get(0).getTitle() + " x" + bean.getQuantity());
@@ -487,8 +347,8 @@ public class OrderListFragment extends PeachBaseFragment {
             Intent talkIntent = new Intent(mContext, ChatActivity.class);
             talkIntent.putExtra("friend_id", bean.getCommodity().getSeller().getSellerId() + "");
             talkIntent.putExtra("chatType", "single");
-         //   talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
-         //   talkIntent.putExtra("fromTrade", true);
+            //   talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
+            //   talkIntent.putExtra("fromTrade", true);
             final Intent intent = talkIntent;
             holder.rlItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -522,12 +382,6 @@ public class OrderListFragment extends PeachBaseFragment {
                     mContext.startActivity(intent);
                 }
             });
-            holder.tvReviewTalk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mContext.startActivity(intent);
-                }
-            });
 
         }
 
@@ -550,7 +404,7 @@ public class OrderListFragment extends PeachBaseFragment {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    if (!WeixinApi.getInstance().isWXinstalled(act)){
+                    if (!WeixinApi.getInstance().isWXinstalled(act)) {
                         ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
                         return;
                     }
@@ -587,4 +441,5 @@ public class OrderListFragment extends PeachBaseFragment {
             this.listener = listener;
         }
     }
+
 }

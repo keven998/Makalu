@@ -19,7 +19,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,6 +47,7 @@ import com.xuejian.client.lxp.module.dest.StrategyActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 /**
  * Created by Rjm on 2014/11/29.
@@ -231,7 +231,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
                 holder.poiNameTv = (TextView) convertView.findViewById(R.id.tv_poi_name);
                 holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
                 holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
-                holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
+                holder.poiRating = (ProperRatingBar) convertView.findViewById(R.id.poi_rating);
                 holder.poiRankTv = (TextView) convertView.findViewById(R.id.poi_rank_tv);
                 holder.costTimeDesc = (TextView) convertView.findViewById(R.id.poi_costtime_tv);
                 convertView.setTag(holder);
@@ -257,7 +257,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.app_theme_color)), 0, locName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.poiAddressTv.setText(ss);
             holder.poiAddressTv.append(poiDetailBean.address);
-            holder.poiRating.setRating(poiDetailBean.getRating());
+            holder.poiRating.setRating((int)poiDetailBean.getRating());
             holder.poiPriceTv.setText(poiDetailBean.priceDesc);
             if (!poiDetailBean.getFormatRank().equals("0")) {
 //                holder.poiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
@@ -389,7 +389,7 @@ public class ShoppingFragment extends PeachBaseFragment implements OnStrategyMod
             public TextView poiNameTv;
             public TextView poiAddressTv;
             public TextView poiPriceTv;
-            public RatingBar poiRating;
+            public ProperRatingBar poiRating;
             public TextView poiRankTv;
             public TextView costTimeDesc;
         }

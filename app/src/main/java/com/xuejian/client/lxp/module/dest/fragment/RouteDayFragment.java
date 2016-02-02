@@ -13,7 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,6 +44,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 /**
  * Created by Rjm on 2014/11/24.
@@ -282,7 +282,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
                         holder.poiNameTv = (TextView) convertView.findViewById(R.id.poi_name_tv);
                         holder.poiAddressTv = (TextView) convertView.findViewById(R.id.poi_address_tv);
                         holder.poiPriceTv = (TextView) convertView.findViewById(R.id.poi_price_tv);
-                        holder.poiRating = (RatingBar) convertView.findViewById(R.id.poi_rating);
+                        holder.poiRating = (ProperRatingBar) convertView.findViewById(R.id.poi_rating);
 
                         convertView.setTag(holder);
                         break;
@@ -407,7 +407,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
 
                     holder.poiNameTv.setText(poiDetailBean.zhName);
                     holder.poiAddressTv.setText(poiDetailBean.address);
-                    holder.poiRating.setRating(poiDetailBean.getRating());
+                    holder.poiRating.setRating((int)poiDetailBean.getRating());
                     String typeName = "";
                     if (TravelApi.PeachType.RESTAURANTS.equals(poiDetailBean.type)) {
                         typeName = "美食";
@@ -612,7 +612,7 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
             public TextView poiNameTv, spotNameTv;
             public TextView poiAddressTv, spotCostTimeTv;
             public TextView poiPriceTv;
-            public RatingBar poiRating;
+            public ProperRatingBar poiRating;
         }
 
         private class HeaderViewHolder {

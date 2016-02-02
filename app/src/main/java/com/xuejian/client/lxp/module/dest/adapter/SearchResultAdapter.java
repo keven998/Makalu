@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.utils.LocalDisplay;
@@ -28,6 +27,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 
 public class SearchResultAdapter extends BaseSectionAdapter {
@@ -133,7 +133,7 @@ public class SearchResultAdapter extends BaseSectionAdapter {
             holder.tvPoiTime.setVisibility(View.VISIBLE);
             poiBean = (PoiDetailBean) itemObject;
             holder.ratingBar.setVisibility(View.VISIBLE);
-            if (poiBean.rating >= 0) holder.ratingBar.setRating(poiBean.getRating());
+            if (poiBean.rating >= 0) holder.ratingBar.setRating((int)poiBean.getRating());
             if (poiBean.style.size() > 0){
                 List<Tag> mKeyTags = new ArrayList<Tag>();
                 for (int i = 0; i < poiBean.style.size()&& i<4; i++) {
@@ -296,7 +296,7 @@ public class SearchResultAdapter extends BaseSectionAdapter {
         @Bind(R.id.tv_poi_time)
         TagListView tvPoiTime;
         @Bind(R.id.rb_poi)
-        RatingBar ratingBar;
+        ProperRatingBar ratingBar;
         @Bind(R.id.address_tv)
         TextView address_tv;
         ViewHolder(View view) {

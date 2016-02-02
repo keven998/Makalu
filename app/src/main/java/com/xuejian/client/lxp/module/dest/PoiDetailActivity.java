@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aizou.core.dialog.ToastUtil;
@@ -56,6 +55,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 /**
  * Created by Rjm on 2014/11/22.
@@ -204,8 +204,8 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         //评分、类型、排名
-        RatingBar rb = (RatingBar) findViewById(R.id.rb_poi);
-        rb.setRating(bean.getRating());
+        ProperRatingBar rb = (ProperRatingBar) findViewById(R.id.rb_poi);
+        rb.setRating((int)bean.getRating());
         TextView styleTV = (TextView) findViewById(R.id.tv_poi_style);
         if (bean.style.size() > 0) {
             styleTV.setText(bean.style.get(0));
@@ -437,7 +437,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         @Bind(R.id.iv_commenter_avatar)
         ImageView mCommeterAvatar;
         @Bind(R.id.rb_comment_rating)
-        RatingBar starbar;
+        ProperRatingBar starbar;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         private DisplayImageOptions options;
         private Context mContext;
@@ -465,7 +465,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
         public void showData(int position, final CommentBean itemData) {
             mTvCommentProperty.setText(String.format("%s | %s", itemData.authorName, dateFormat.format(new Date(itemData.publishTime))));
             mTvComment.setText(Html.fromHtml(itemData.contents));
-            starbar.setRating(itemData.getRating());
+            starbar.setRating((int)itemData.getRating());
             ImageLoader.getInstance().displayImage(itemData.authorAvatar, mCommeterAvatar, options);
         }
     }

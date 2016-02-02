@@ -17,19 +17,26 @@ import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
+import com.aizou.core.utils.SharePrefUtil;
 import com.bumptech.glide.Glide;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.FavBean;
+import com.xuejian.client.lxp.bean.KeywordBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -38,14 +45,19 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.widget.TagView.Tag;
+import com.xuejian.client.lxp.common.widget.TagView.TagListView;
+import com.xuejian.client.lxp.common.widget.TagView.TagView;
 import com.xuejian.client.lxp.common.widget.niceSpinner.NiceSpinner;
 import com.xuejian.client.lxp.db.User;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 /**
  * Created by yibiao.qin on 2015/10/17.
@@ -69,6 +81,28 @@ public class GoodsList extends PeachBaseActivity {
     @Bind(R.id.iv_banner)
     ImageView iv_banner;
     GoodsListAdapter adapter;
+    @Bind(R.id.search_city_cancel)
+    ImageView searchCancel;
+    @Bind(R.id.search_city_text)
+    EditText searchText;
+    @Bind(R.id.search_city_button)
+    TextView searchButton;
+    @Bind(R.id.search_city_bar)
+    LinearLayout searchBar;
+    @Bind(R.id.rl_normal_bar)
+    RelativeLayout rlNormalBar;
+    @Bind(R.id.history_lebel)
+    TextView historyLebel;
+    @Bind(R.id.cleanHistory)
+    TextView cleanHistory;
+    @Bind(R.id.history_pannel)
+    FrameLayout historyPannel;
+    @Bind(R.id.history_tag)
+    TagListView historyTag;
+    @Bind(R.id.recomend_tag)
+    TagListView recomendTag;
+    @Bind(R.id.empty_text)
+    LinearLayout emptyText;
 //    private int[] lebelColors = new int[]{
 //            R.drawable.all_light_green_label,
 //            R.drawable.all_light_red_label,
@@ -81,15 +115,17 @@ public class GoodsList extends PeachBaseActivity {
     private String[] sortType = new String[]{"推荐排序", "销量最高", "价格最低", "价格最高"};
     private String[] sortValue = new String[]{"", "salesVolume", "price", "price"};
     private String[] sort = new String[]{"", "desc", "asc", "desc"};
-    private String currentSortValue="";
-    private String currentsort="";
-    private String currentType="";
+    private String currentSortValue = "";
+    private String currentsort = "";
+    private String currentType = "";
     private static final int PAGE_SIZE = 15;
     private static int COUNT = 15;
     private static int START;
     String locId;
     LinearLayoutManager layoutManager;
     boolean collection;
+    boolean search;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +135,7 @@ public class GoodsList extends PeachBaseActivity {
         locId = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
         collection = getIntent().getBooleanExtra("collection", false);
+        search = getIntent().getBooleanExtra("search", false);
         if (!TextUtils.isEmpty(title)) tvTitle.setText(title);
 
         adapter = new GoodsListAdapter(this);
@@ -113,10 +150,24 @@ public class GoodsList extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
+
+        if (search) {
+            emptyText.setVisibility(View.VISIBLE);
+            rlNormalBar.setVisibility(View.GONE);
+            searchBar.setVisibility(View.VISIBLE);
+            ll_spinner.setVisibility(View.GONE);
+            goodsList.setLoadingMoreEnabled(false);
+            searchCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
         if (collection) {
             goodsList.setLoadingMoreEnabled(false);
             ll_spinner.setVisibility(View.GONE);
-         //   toTop.setVisibility(View.GONE);
+            //   toTop.setVisibility(View.GONE);
         }
         goodsList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -126,6 +177,7 @@ public class GoodsList extends PeachBaseActivity {
 
             @Override
             public void onLoadMore() {
+
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -156,7 +208,10 @@ public class GoodsList extends PeachBaseActivity {
 
             }
         });
-        if (collection) {
+
+        if (search) {
+
+        } else if (collection) {
 //            final User user = AccountManager.getInstance().getLoginAccount(mContext);
 //            if (user != null) {
 //                getCollectionList(user.getUserId());
@@ -179,17 +234,154 @@ public class GoodsList extends PeachBaseActivity {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    if (layoutManager.findLastVisibleItemPosition()>8){
+                    if (layoutManager.findLastVisibleItemPosition() > 8) {
                         toTop.setVisibility(View.VISIBLE);
                     }
-                    if (layoutManager.findFirstCompletelyVisibleItemPosition()==1){
+                    if (layoutManager.findFirstCompletelyVisibleItemPosition() == 1) {
                         toTop.setVisibility(View.GONE);
                     }
                 }
             });
         }
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                if (TextUtils.isEmpty(searchText.getText().toString())) {
+                    Toast.makeText(GoodsList.this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
+                } else {
+                    //   imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    saveHistory(searchText.getText().toString());
 
+                    searchCommodity(searchText.getText().toString());
+                }
 
+            }
+        });
+        cleanHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                historyTag.cleanTags();
+                historyPannel.setVisibility(View.GONE);
+                SharePrefUtil.saveHistory(mContext, String.format("%s_his", "commodity"), "");
+            }
+        });
+        setupData();
+    }
+
+    private void setupData() {
+        List<Tag> mTags = new ArrayList<Tag>();
+        String[] keys = getSearchHistory();
+        if (keys.length > 0 && !TextUtils.isEmpty(keys[0])) {
+            int count = 0;
+            for (int i = keys.length - 1; i >= 0; i--) {
+                Tag tag = new Tag();
+                tag.setId(i);
+                tag.setChecked(true);
+                tag.setTitle(keys[i]);
+                tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+                tag.setTextColor(R.color.app_theme_color);
+                mTags.add(tag);
+                count++;
+                if (count == 9) break;
+            }
+        } else {
+            historyPannel.setVisibility(View.GONE);
+        }
+        historyTag.removeAllViews();
+        historyTag.addTags(mTags);
+        historyTag.setOnTagClickListener(new TagListView.OnTagClickListener() {
+            @Override
+            public void onTagClick(TagView tagView, Tag tag) {
+                searchCommodity(tag.getTitle());
+            }
+        });
+
+        TravelApi.getRecommendKeywords("", new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(), KeywordBean.class);
+                if (keyList.code == 0) {
+
+                    List<Tag> mTags = new ArrayList<Tag>();
+                    for (int i = 0; i < keyList.result.size(); i++) {
+                        Tag tag = new Tag();
+                        tag.setId(i);
+                        tag.setChecked(true);
+                        tag.setTitle(keyList.result.get(i).zhName);
+                        tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
+                        tag.setTextColor(R.color.app_theme_color);
+                        mTags.add(tag);
+                    }
+                    recomendTag.removeAllViews();
+                    recomendTag.setTags(mTags);
+                    recomendTag.setOnTagClickListener(new TagListView.OnTagClickListener() {
+                        @Override
+                        public void onTagClick(TagView tagView, Tag tag) {
+                            searchCommodity(tag.getTitle());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private String[] getSearchHistory() {
+        String save_Str = SharePrefUtil.getHistory(this, String.format("%s_his", "commodity"));
+        return save_Str.split(",");
+    }
+
+    private void saveHistory(String keyword) {
+
+        String save_Str = SharePrefUtil.getHistory(this, String.format("%s_his", "commodity"));
+        String[] hisArrays = save_Str.split(",");
+        for (String s : hisArrays) {
+            if (s.equals(keyword)) {
+                return;
+            }
+        }
+        StringBuilder sb = new StringBuilder(save_Str);
+        sb.append(keyword + ",");
+        SharePrefUtil.saveHistory(this, String.format("%s_his", "commodity"), sb.toString());
+    }
+    private void searchCommodity(final String key) {
+
+        TravelApi.searchCommodity(key, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
+                if (list.result.size() > 0) {
+                    emptyText.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(GoodsList.this, String.format("没有找到与\"%s\"相关的商品", key), Toast.LENGTH_LONG).show();
+                }
+                adapter.getDataList().clear();
+                adapter.getDataList().addAll(list.result);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     @Override
@@ -258,7 +450,7 @@ public class GoodsList extends PeachBaseActivity {
 
             @Override
             public void doSuccess(String result, String method) {
-                CommonJson<CategoryBean> list = CommonJson.fromJson(result, GoodsList.CategoryBean.class);
+                CommonJson<CategoryBean> list = CommonJson.fromJson(result, CategoryBean.class);
                 initCategoryData(list.result);
 
             }
@@ -304,20 +496,20 @@ public class GoodsList extends PeachBaseActivity {
                 START = list.result.size();
                 adapter.getDataList().addAll(list.result);
                 adapter.notifyDataSetChanged();
-               // goodsList.refreshComplete();
+                // goodsList.refreshComplete();
 
-                if ( adapter.getDataList().size() >= PAGE_SIZE) {
+                if (adapter.getDataList().size() >= PAGE_SIZE) {
                     // goodsList.setHasMoreData(true);
-                  //  toTop.setVisibility(View.VISIBLE);
+                    //  toTop.setVisibility(View.VISIBLE);
                 } else {
-                  //  toTop.setVisibility(View.GONE);
+                    //  toTop.setVisibility(View.GONE);
                 }
                 goodsList.loadMoreComplete();
                 if (list.result.size() >= COUNT) {
 
                 } else {
 //                    goodsList.noMoreLoading();
-                   goodsList.setLoadingMoreEnabled(false);
+                    goodsList.setLoadingMoreEnabled(false);
                 }
             }
 
@@ -498,12 +690,13 @@ public class GoodsList extends PeachBaseActivity {
             SpannableStringBuilder spb = new SpannableStringBuilder();
             spb.append("¥" + CommonUtils.getPriceString(bean.getPrice())).append(string);
             holder.tvGoodsCurrentPrice.setText(spb);
+            holder.rb_goods.setRating((int) (bean.getRating() * 5));
 
             holder.tvGoodsPrice.setText("¥" + CommonUtils.getPriceString(bean.getMarketPrice()));
             holder.tvGoodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvGoodsPrice.getPaint().setAntiAlias(true);
             holder.tvGoodsSales.setText(String.valueOf(bean.getSalesVolume()) + "已售");
-            holder.tvGoodsComment.setText(String.valueOf((int)(bean.getRating()* 100)) + "%满意");
+            holder.tvGoodsComment.setText(String.valueOf((int) (bean.getRating() * 100)) + "%满意");
             if (bean.getSeller() != null) {
                 holder.tvStoreName.setText(bean.getSeller().getName());
             }
@@ -578,6 +771,7 @@ public class GoodsList extends PeachBaseActivity {
         public final TextView tvGoodsPrice;
         public final TextView tvStoreName;
         public final LinearLayout llContainer;
+        public final ProperRatingBar rb_goods;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -589,6 +783,7 @@ public class GoodsList extends PeachBaseActivity {
             tvGoodsName = (TextView) itemView.findViewById(R.id.tv_goods_name);
             ivGoods = (ImageView) itemView.findViewById(R.id.iv_poi_img);
             llContainer = (LinearLayout) itemView.findViewById(R.id.ll_container);
+            rb_goods = (ProperRatingBar) itemView.findViewById(R.id.rb_goods);
         }
     }
 

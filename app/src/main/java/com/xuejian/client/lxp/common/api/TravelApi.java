@@ -141,6 +141,51 @@ public class TravelApi extends BaseApi {
     // 推荐城市
     public final static String RECOMMEND_CIRY = "/geo/localities/recommendations";
 
+    // 发表评价
+    public final static String CREATE_COMMENT = "/marketplace/commodities/%d/comments";
+
+    // 获取评价
+    public final static String COMMENT_LIST = "/marketplace/commodities/%d/comments";
+
+
+    public static void getCommentList(long commodityId ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(COMMENT_LIST, commodityId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
+    public static void createComment(long commodityId,long orderId,String comment,float rating,boolean anonymous,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_COMMENT, commodityId));
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("contents",comment);
+            jsonObject.put("rating",rating);
+            jsonObject.put("anonymous",anonymous);
+            jsonObject.put("orderId",orderId);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+    public static void searchCommodity(String key,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + COMMODITY_LIST);
+        request.putUrlParams("query",key);
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
     public static void getRecommendCity(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

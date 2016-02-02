@@ -150,15 +150,15 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 hideMenu();
 
-                if (adapter.getItem(position) instanceof CountryBean){
+                if (adapter.getItem(position) instanceof CountryBean) {
                     Intent intent = new Intent(getActivity(), CountryListActivity.class);
-                    intent.putExtra("id", ((CountryBean)adapter.getItem(position)).id);
-                    intent.putExtra("name", ((CountryBean)adapter.getItem(position)).zhName);
+                    intent.putExtra("id", ((CountryBean) adapter.getItem(position)).id);
+                    intent.putExtra("name", ((CountryBean) adapter.getItem(position)).zhName);
                     startActivity(intent);
-                }else if (adapter.getItem(position) instanceof CityBean){
+                } else if (adapter.getItem(position) instanceof CityBean) {
                     Intent intent = new Intent(getActivity(), CityInfoActivity.class);
-                    intent.putExtra("id", ((CityBean)adapter.getItem(position)).id);
-                //    intent.putExtra("name", ((CountryBean)adapter.getItem(position)).zhName);
+                    intent.putExtra("id", ((CityBean) adapter.getItem(position)).id);
+                    //    intent.putExtra("name", ((CountryBean)adapter.getItem(position)).zhName);
                     startActivity(intent);
                 }
 
@@ -173,6 +173,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         showMenu.setTextColor(getResources().getColor(R.color.base_color_white));
         showMenu.setTextSize(12);
         showMenu.setText("热门");
+        ((TextView)view.findViewById(R.id.tv_search_content)).setText("目的地搜索");
     }
 
     private void showMenu(){
