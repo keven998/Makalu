@@ -90,7 +90,7 @@
                 android:layout_marginTop="5dp"
                 android:textSize="12sp"
                 app:prb_clickable="true"
-                app:prb_defaultRating="0"
+                app:prb_defaultRating="5"
                 app:prb_tickNormalDrawable="@drawable/ic_rating_start_default"
                 app:prb_tickSelectedDrawable="@drawable/ic_rating_start_highlight"
                 app:prb_tickSpacing="4dp"

@@ -15,7 +15,8 @@ public class CommentDetailBean {
      * createTime : 1454068730557
      * updateTime : 1454068730557
      */
-
+    public OrderBean order;
+    public boolean anonymous;
     private String id;
     private String contents;
     private float rating;

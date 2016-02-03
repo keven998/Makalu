@@ -9,14 +9,18 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -210,7 +214,44 @@ public class GoodsList extends PeachBaseActivity {
         });
 
         if (search) {
+            searchText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.length() == 0) {
+                        emptyText.setVisibility(View.VISIBLE);
+                        if (adapter != null) {
+                            adapter.getDataList().clear();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+            searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    if (i == EditorInfo.IME_ACTION_SEARCH) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                        if (TextUtils.isEmpty(searchText.getText().toString().trim())) {
+                            Toast.makeText(GoodsList.this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else {
+                            saveHistory(searchText.getText().toString());
+                            searchCommodity(searchText.getText().toString());
+                        }
+                    }
+                    return false;
+                }
+            });
         } else if (collection) {
 //            final User user = AccountManager.getInstance().getLoginAccount(mContext);
 //            if (user != null) {
@@ -248,7 +289,7 @@ public class GoodsList extends PeachBaseActivity {
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                if (TextUtils.isEmpty(searchText.getText().toString())) {
+                if (TextUtils.isEmpty(searchText.getText().toString().trim())) {
                     Toast.makeText(GoodsList.this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
                 } else {
                     //   imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -294,11 +335,12 @@ public class GoodsList extends PeachBaseActivity {
         historyTag.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
+                searchText.setText(tag.getTitle());
                 searchCommodity(tag.getTitle());
             }
         });
 
-        TravelApi.getRecommendKeywords("", new HttpCallBack() {
+        TravelApi.getRecommendKeywords("commodity", new HttpCallBack() {
             @Override
             public void doSuccess(Object result, String method) {
                 CommonJson4List<KeywordBean> keyList = CommonJson4List.fromJson(result.toString(), KeywordBean.class);
@@ -354,6 +396,9 @@ public class GoodsList extends PeachBaseActivity {
         StringBuilder sb = new StringBuilder(save_Str);
         sb.append(keyword + ",");
         SharePrefUtil.saveHistory(this, String.format("%s_his", "commodity"), sb.toString());
+
+        setupData();
+
     }
     private void searchCommodity(final String key) {
 

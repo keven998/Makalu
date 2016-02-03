@@ -345,6 +345,19 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                         intent.putExtra("comment", true);
                         intent.putExtra("commodityId",bean.getCommodity().getCommodityId());
                         intent.putExtra("orderId", bean.getOrderId());
+                        startActivityForResult(intent, REFRESH);
+                    }
+                });
+                break;
+            case "reviewed":
+                tvState.setText("已完成");
+                llTradeAction0.setVisibility(View.VISIBLE);
+                tvAction0.setText("再次预定");
+                tvAction0.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                         startActivity(intent);
                     }
                 });

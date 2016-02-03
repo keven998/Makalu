@@ -428,13 +428,13 @@ public class OrderListFragment extends PeachBaseFragment {
                         });
                     }else {
                         holder.rlProcess.setVisibility(View.VISIBLE);
-                        holder.tvDrawBackState.setText("订单已超过支付期限,请重新下单");
+                        holder.tvProcessState.setText("订单已超过支付期限,请重新下单");
                     }
 
                     break;
                 case "finished":
                     holder.rlProcess.setVisibility(View.VISIBLE);
-                    holder.tvDrawBackState.setText("已完成");
+                    holder.tvProcessState.setText("已完成");
                     break;
                 case "canceled":
                     holder.rlProcess.setVisibility(View.VISIBLE);
@@ -442,7 +442,7 @@ public class OrderListFragment extends PeachBaseFragment {
                     break;
                 case "expired":
                     holder.rlProcess.setVisibility(View.VISIBLE);
-                    holder.tvDrawBackState.setText("已过期");
+                    holder.tvProcessState.setText("已过期");
                     break;
                 case "refunded":
                     holder.rlDrawBack.setVisibility(View.VISIBLE);
@@ -461,6 +461,10 @@ public class OrderListFragment extends PeachBaseFragment {
                             mContext.startActivity(intent);
                         }
                     });
+                    break;
+                case "reviewed":
+                    holder.rlProcess.setVisibility(View.VISIBLE);
+                    holder.tvProcessState.setText("已评价");
                     break;
                 default:
 //                    holder.rlNeedPay.setVisibility(View.VISIBLE);

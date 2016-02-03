@@ -127,28 +127,34 @@ public class CommentListActivity extends PeachBaseActivity {
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
             CommentDetailBean bean = (CommentDetailBean) getItem(position);
-            holder.rbComment.setRating((int)bean.getRating());
+            holder.rbComment.setRating((int)(bean.getRating()*5));
             holder.tvComment.setText(bean.getContents());
             holder.tvTimestamp.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getCreateTime())));
             if (bean.images.size()>0){
                 holder.gvCommentPic.setAdapter(new CommentPicAdapter(CommentListActivity.this));
             }
-            if (bean.getUser()!=null){
-                if (bean.getUser().getAvatar()!=null){
-                    Glide.with(mContext)
-                            .load(bean.getUser().getAvatar().url)
-                            .placeholder(R.drawable.ic_home_more_avatar_unknown_round)
-                            .error(R.drawable.ic_home_more_avatar_unknown_round)
-                            .centerCrop()
-                            .transform(new GlideCircleTransform(mContext))
-                            .into(holder.ivAvatar);
+            if (bean.anonymous){
+                holder.tvName.setText("*****");
+            }else {
+                if (bean.getUser()!=null){
+                    if (bean.getUser().getAvatar()!=null){
+                        Glide.with(mContext)
+                                .load(bean.getUser().getAvatar().url)
+                                .placeholder(R.drawable.ic_home_more_avatar_unknown_round)
+                                .error(R.drawable.ic_home_more_avatar_unknown_round)
+                                .centerCrop()
+                                .transform(new GlideCircleTransform(mContext))
+                                .into(holder.ivAvatar);
+                    }
+                    holder.tvName.setText(bean.getUser().getNickname());
+                }else {
+                    holder.tvName.setText("*****");
                 }
-
-                holder.tvName.setText(bean.getUser().getNickname());
             }
-
+            if (bean.order.getCommodity()!=null&&bean.order.getCommodity().getPlans().size()>0){
+                holder.tvPackage.setText("套餐类型："+bean.order.getCommodity().getPlans().get(0).getTitle());
+            }
         }
-
 
         @Override
         public int getItemCount() {

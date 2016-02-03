@@ -137,7 +137,6 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:text="待付款:¥4564"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
     </RelativeLayout>
@@ -156,7 +155,6 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:text="待卖家确认"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
 
@@ -234,13 +232,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:gravity="center_vertical"
-            android:background="@drawable/bg_common_pricecolor"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="评价"
-            android:textColor="@color/price_color"
+            android:background="@drawable/pay_bg" android:paddingLeft="15dp"
+            android:padding="7dp"
+            android:text=" 评价 "
+            android:textColor="@color/base_color_white"
             android:textSize="13sp" />
 
 

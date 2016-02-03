@@ -159,6 +159,8 @@ public class CommodityDetailActivity extends PeachBaseActivity {
     TextView empty_comment;
     @Bind(R.id.tv_comment)
     TextView tv_comment;
+    @Bind(R.id.line)
+    View line;
     private long commodityId;
     private long userId;
     public CommodityBean bean;
@@ -303,8 +305,10 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "商品介绍");
                 intent.putExtra("url", bean.getDescUrl());
+                intent.putExtra("showAnim",true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
             }
         });
 
@@ -320,8 +324,10 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "购买须知");
                 intent.putExtra("url", bean.getNoticeUrl());
+                intent.putExtra("showAnim",true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
             }
         });
 
@@ -341,8 +347,10 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "预定及退改");
                 intent.putExtra("url", bean.getRefundPolicyUrl());
+                intent.putExtra("showAnim",true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
             }
         });
 
@@ -358,8 +366,10 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "交通提示");
                 intent.putExtra("url", bean.getTrafficInfoUrl());
+                intent.putExtra("showAnim",true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
             }
         });
 
@@ -495,7 +505,9 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         }
 
         if (bean.comments.size()>0){
+            line.setVisibility(View.VISIBLE);
             empty_comment.setVisibility(View.GONE);
+            tv_comment.setText(String.format("用户评价 (%d人，%d分)",bean.commentCnt,(int)(bean.getRating()*5)));
             lvComment.setAdapter(new CommentAdapter(this,bean.comments));
             tvCommentShowAll.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -507,6 +519,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 }
             });
         }else {
+            line.setVisibility(View.GONE);
             tv_comment.setVisibility(View.GONE);
             ll_comment.setVisibility(View.GONE);
             empty_comment.setVisibility(View.VISIBLE);
@@ -569,25 +582,34 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             CommentDetailBean bean = (CommentDetailBean) getItem(position);
-            viewHolder.rbComment.setRating((int)bean.getRating());
+            viewHolder.rbComment.setRating((int)(bean.getRating()*5));
             viewHolder.tvComment.setText(bean.getContents());
             viewHolder.tvTimestamp.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getCreateTime())));
             if (bean.images.size()>0){
                 viewHolder.gvCommentPic.setAdapter(new CommentPicAdapter(CommodityDetailActivity.this));
             }
-            if (bean.getUser()!=null){
-                if (bean.getUser().getAvatar()!=null){
-                    Glide.with(mContext)
-                            .load(bean.getUser().getAvatar().url)
-                            .placeholder(R.drawable.ic_home_more_avatar_unknown_round)
-                            .error(R.drawable.ic_home_more_avatar_unknown_round)
-                            .centerCrop()
-                            .transform(new GlideCircleTransform(mContext))
-                            .into(viewHolder.ivAvatar);
+            if (bean.anonymous){
+                viewHolder.tvName.setText("*****");
+            }else {
+                if (bean.getUser()!=null){
+                    if (bean.getUser().getAvatar()!=null){
+                        Glide.with(mContext)
+                                .load(bean.getUser().getAvatar().url)
+                                .placeholder(R.drawable.ic_home_more_avatar_unknown_round)
+                                .error(R.drawable.ic_home_more_avatar_unknown_round)
+                                .centerCrop()
+                                .transform(new GlideCircleTransform(mContext))
+                                .into(viewHolder.ivAvatar);
+                    }
+                    viewHolder.tvName.setText(bean.getUser().getNickname());
+                }else {
+                    viewHolder.tvName.setText("*****");
                 }
-
-                viewHolder.tvName.setText(bean.getUser().getNickname());
             }
+            if (bean.order.getCommodity()!=null&&bean.order.getCommodity().getPlans().size()>0){
+                viewHolder.tvPackage.setText("套餐类型："+bean.order.getCommodity().getPlans().get(0).getTitle());
+            }
+
             return convertView;
         }
     }

@@ -36,7 +36,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
     ImageView share;
     String title;
     StrategyBean strategy;
-
+    boolean  showAnim;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +58,21 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
 
             }
         });
+        showAnim = getIntent().getBooleanExtra("showAnim",false);
+        if (showAnim){
+            findViewById(R.id.ly_title_bar_left).setVisibility(View.GONE);
+            findViewById(R.id.bottom_bar).setVisibility(View.VISIBLE);
+            go_back.setVisibility(View.GONE);
+            go_forward.setVisibility(View.GONE);
+            refresh.setImageResource(R.drawable.icon_close);
+            refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finishWithNoAnim();
+                    overridePendingTransition(0,R.anim.push_bottom_out);
+                }
+            });
+        }
         mWebView = (WebView) findViewById(R.id.web_view);
         mProgressBar = (NumberProgressBar) findViewById(R.id.numberbar1);
         initWebView();
@@ -77,7 +92,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         strategy.title = title;
         go_back.setOnClickListener(this);
         go_forward.setOnClickListener(this);
-        refresh.setOnClickListener(this);
+        if (!showAnim)refresh.setOnClickListener(this);
         share.setOnClickListener(this);
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.loadUrl(mCurrentUrl);

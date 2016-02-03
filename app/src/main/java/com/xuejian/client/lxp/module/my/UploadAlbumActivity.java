@@ -90,6 +90,7 @@ public class UploadAlbumActivity extends Activity {
     boolean comment;
     long commodityId;
     long orderId;
+    boolean changed;
     private static class MyHandler extends Handler {
 
         private final WeakReference<UploadAlbumActivity> mActivity;
@@ -267,7 +268,6 @@ public class UploadAlbumActivity extends Activity {
             }
         });
         final ProperRatingBar ratingBar = (ProperRatingBar) findViewById(R.id.rb_comment);
-
         final CheckedTextView checkedTextView = (CheckedTextView) findViewById(R.id.ctv_1);
         checkedTextView.setOnClickListener(new OnClickListener() {
             @Override
@@ -281,8 +281,10 @@ public class UploadAlbumActivity extends Activity {
             public void onClick(View v) {
                 if (TextUtils.isEmpty(mContent.getText().toString().trim())) {
                     Toast.makeText(UploadAlbumActivity.this,"请输入评价内容",Toast.LENGTH_LONG).show();
+                }else if (mContent.getText().toString().trim().length()<15){
+                    Toast.makeText(UploadAlbumActivity.this,"评价内容需要大于15字哦！",Toast.LENGTH_LONG).show();
                 }else {
-                    submitComment(mContent.getText().toString().trim(), (float) ratingBar.getRating(),checkedTextView.isChecked());
+                    submitComment(mContent.getText().toString().trim(), ratingBar.getRating()/5,checkedTextView.isChecked());
                 }
             }
         });
@@ -294,6 +296,7 @@ public class UploadAlbumActivity extends Activity {
             @Override
             public void doSuccess(Object result, String method) {
                 Toast.makeText(UploadAlbumActivity.this,"发表评价成功",Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK);
                 finish();
             }
 

@@ -193,6 +193,7 @@
         android:layout_marginTop="@dimen/title_bar_height"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/base_color_white"
         android:orientation="vertical">
 
         <FrameLayout
