@@ -513,6 +513,9 @@
             android:name=".module.goods.RefundActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".module.goods.CouponListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">

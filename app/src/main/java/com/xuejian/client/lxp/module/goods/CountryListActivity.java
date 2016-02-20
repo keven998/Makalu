@@ -43,7 +43,7 @@ public class CountryListActivity extends PeachBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_country_list);
+        setContentView(R.layout.item_voupon_list);
         ButterKnife.bind(this);
         String name = getIntent().getStringExtra("name");
         String id = getIntent().getStringExtra("id");

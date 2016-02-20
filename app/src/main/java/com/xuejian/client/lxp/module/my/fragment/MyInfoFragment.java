@@ -20,6 +20,7 @@ import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
+import com.xuejian.client.lxp.module.goods.CouponListActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
 import com.xuejian.client.lxp.module.goods.RefundActivity;
@@ -58,6 +59,8 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RelativeLayout rlMyPlan;
     @Bind(R.id.rl_my_contact)
     RelativeLayout rlMyContact;
+    @Bind(R.id.rl_my_coupon)
+    RelativeLayout rl_my_coupon;
     @Bind(R.id.rl_my_common_user)
     RelativeLayout rlMyCommonUser;
     @Bind(R.id.user_info_pannel)
@@ -94,6 +97,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
       //  rlMyContact.setOnClickListener(this);
         rlMyPlan.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
+        rl_my_coupon.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
         return view;
@@ -188,6 +192,10 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
             case R.id.user_info_pannel:
                 Intent intent = new Intent(getActivity(), MyProfileActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.rl_my_coupon:
+                Intent rl_my_coupon = new Intent(getActivity(), CouponListActivity.class);
+                startActivity(rl_my_coupon);
                 break;
             default:
                 break;

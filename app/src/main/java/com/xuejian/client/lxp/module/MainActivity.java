@@ -121,10 +121,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         setContentView(R.layout.activity_main);
         initView();
 
-//        Intent intent = new Intent(MainActivity.this, UploadAlbumActivity.class);
-//        intent.putExtra("comment",true);
-//        intent.putExtra("commodityId",100132l);
-//        startActivity(intent);
 
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
@@ -554,17 +550,18 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         if (mMediaPlayer == null) {
             Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            mMediaPlayer = new MediaPlayer();
-            try {
-                mMediaPlayer.setDataSource(mContext, uri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                mMediaPlayer.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mMediaPlayer = MediaPlayer.create(mContext,uri);
+//            mMediaPlayer = new MediaPlayer();
+//            try {
+//                mMediaPlayer.setDataSource(mContext, uri);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                mMediaPlayer.prepare();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
             mMediaPlayer.setLooping(false); //循环播放
         }
 

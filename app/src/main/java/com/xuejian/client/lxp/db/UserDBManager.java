@@ -3,9 +3,11 @@ package com.xuejian.client.lxp.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import com.lv.utils.Config;
 import com.lv.utils.CryptUtils;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.utils.HanziToPinyin;
 
 import org.json.JSONArray;
@@ -66,6 +68,12 @@ public class UserDBManager {
 
     public synchronized SQLiteDatabase getDB() {
         if (mOpenCounter.incrementAndGet() == 1) {
+            if (TextUtils.isEmpty(databaseFilename)){
+                String path = CryptUtils.getMD5String(AccountManager.getCurrentUserId());
+                fri_table_name = "FRI_" + path;
+                String DATABASE_PATH = Config.DB_PATH + path;
+                databaseFilename = DATABASE_PATH + "/" + "lxp.db";
+            }
             db = SQLiteDatabase.openDatabase(databaseFilename, null, SQLiteDatabase.OPEN_READWRITE);
         }
         return db;

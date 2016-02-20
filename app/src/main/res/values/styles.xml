@@ -98,7 +98,10 @@
         <item name="@android:windowEnterAnimation">@anim/push_bottom_in</item>
         <item name="@android:windowExitAnimation">@anim/push_bottom_out</item>
     </style>
-
+    <style name="PopAnimation1" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/bottom_push_in</item>
+        <item name="@android:windowExitAnimation">@anim/bottom_push_out</item>
+    </style>
     <style name="SelectPicDialog" parent="android:Animation">
         <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
         <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
@@ -195,5 +198,8 @@
     <!--<style name="activityTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
     </style>-->
-
+    <style name="ImageTranslucentTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+    <style name="ColorTranslucentTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
 </resources>

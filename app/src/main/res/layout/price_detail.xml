@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_transparent_color"
+    >
+
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/base_color_white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_text_ii"
+            android:paddingLeft="10dp"
+            android:text="费用明细"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_text_ii"
+                android:paddingLeft="15dp"
+                android:textSize="16sp"
+                android:text="套餐套餐套餐套餐提出退房的身份"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/price_color"
+                android:paddingLeft="5dp"
+                android:textSize="16sp"
+                android:paddingRight="15dp"
+                android:text="128X1"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_text_ii"
+                android:paddingLeft="15dp"
+                android:textSize="16sp"
+                android:text="优惠"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/price_color"
+                android:paddingLeft="5dp"
+                android:textSize="16sp"
+                android:paddingRight="15dp"
+                android:text="-128"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line" />
+
+
+    </LinearLayout>
+
+</FrameLayout>

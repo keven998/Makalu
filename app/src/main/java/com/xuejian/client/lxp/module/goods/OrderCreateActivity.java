@@ -1,7 +1,10 @@
 package com.xuejian.client.lxp.module.goods;
 
+import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -9,14 +12,18 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,21 +91,29 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     TextView tvDialCode;
     @Bind(R.id.tv_unit_price)
     TextView tvUnitPrice;
+    @Bind(R.id.iv_arrow)
+    ImageView arrow;
+    @Bind(R.id.ll_action_bar)
+    LinearLayout ll_action_bar;
+    @Bind(R.id.rl_coupon)
+    RelativeLayout rl_coupon;
     public final static int SELECTED_DATE = 101;
     public final static int SELECTED_USER = 102;
     public final static int EDIT_USER_LIST = 103;
     public final static int SELECTED_CODE = 104;
     public final static int SUBMIT_ORDER_CODE = 105;
+    public final static int SELECT_COUPON = 106;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
     CommonAdapter memberAdapter;
     ListView memberList;
     private int goodsNum = 1;
-    String commodityId;
-    PlanBean currentPlanBean;
-    PriceBean priceBean;
-    int currenrDialCode = 86;
-    String name;
-
+    private String commodityId;
+    private PlanBean currentPlanBean;
+    private PriceBean priceBean;
+    private int currenrDialCode = 86;
+    private String name;
+    private boolean isShow;
+    AlertDialog priceInfoDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +131,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
         tvEditUser.setOnClickListener(this);
         tvTitleBack.setOnClickListener(this);
         tvDialCode.setOnClickListener(this);
+        rl_coupon.setOnClickListener(this);
         ListView packageList = (ListView) findViewById(R.id.lv_choose);
         CommonAdapter commonAdapter = new CommonAdapter(mContext, R.layout.item_package_info, true, data);
         packageList.setAdapter(commonAdapter);
@@ -193,6 +209,81 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 }
             }
         });
+        tvTotalPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isShow){
+                    hideVoucher();
+                }else {
+                    showVoucher();
+                }
+            }
+        });
+    }
+
+    public void showVoucher(){
+//        final Activity act = this;
+//        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+//        priceInfoDialog =dialog;
+//        dialog.setCanceledOnTouchOutside(false);
+//        View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
+//        CheckedTextView alipay = (CheckedTextView) contentView.findViewById(R.id.ctv_alipay);
+//        CheckedTextView weixinpay = (CheckedTextView) contentView.findViewById(R.id.ctv_weixin);
+//        alipay.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//            }
+//        });
+//        weixinpay.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//            }
+//        });
+//        dialog.show();
+//        WindowManager windowManager = act.getWindowManager();
+//        Window window = dialog.getWindow();
+//        window.setContentView(contentView);
+//        Display display = windowManager.getDefaultDisplay();
+//        WindowManager.LayoutParams lp = window.getAttributes();
+//        lp.width = display.getWidth(); // 设置宽度
+//        lp.verticalMargin=10f;
+//        window.setAttributes(lp);
+//        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+//        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+
+        View view = View.inflate(this, R.layout.price_detail, null);
+        PopupWindow popupWindow = new PopupWindow(view);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setHeight(CommonUtils.getScreenHeight(this) - CommonUtils.dip2px(this, 62f));
+        popupWindow.setWidth(CommonUtils.getScreenWidth(this));
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                hideVoucher();
+            }
+        });
+        int[] location = new int[2];
+        ll_action_bar.getLocationOnScreen(location);
+        popupWindow.setAnimationStyle(R.style.PopAnimation1);
+        popupWindow.showAtLocation(ll_action_bar, Gravity.NO_GRAVITY, location[0], location[1] - popupWindow.getHeight());
+        ObjectAnimator animator = ObjectAnimator.ofFloat(arrow,"rotation",0f,180f).setDuration(300);
+        animator.start();
+    }
+
+    public void hideVoucher(){
+        ObjectAnimator animator = ObjectAnimator.ofFloat(arrow,"rotation",180f,360f).setDuration(300);
+        animator.start();
+        if (priceInfoDialog!=null){
+            priceInfoDialog.dismiss();
+        }
     }
 
     @Override
@@ -240,6 +331,10 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
             case R.id.tv_dialCode:
                 Intent tv_dialCode = new Intent(OrderCreateActivity.this, CountryPickActivity.class);
                 startActivityForResult(tv_dialCode, SELECTED_CODE);
+                break;
+            case R.id.rl_coupon:
+                Intent rl_coupon = new Intent(OrderCreateActivity.this, CouponListActivity.class);
+                startActivityForResult(rl_coupon,SELECT_COUPON);
                 break;
             default:
                 break;

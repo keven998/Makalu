@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -50,14 +51,12 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
             public void run() {
                 File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + SystemConfig.NET_IMAGE_CACHE_DIR);
                 if (file.exists()) {
-                    long size = getFolderSize(file);
-                    size = size / 1024 / 1024;
-                    final long s = size;
+                    final long size = getFolderSize(file);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            cacheSize.setText(s + "MB");
+                            cacheSize.setText(Formatter.formatFileSize(mContext,size));
                         }
                     });
                 }
