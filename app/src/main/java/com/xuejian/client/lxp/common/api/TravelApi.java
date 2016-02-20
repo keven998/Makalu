@@ -148,6 +148,18 @@ public class TravelApi extends BaseApi {
     public final static String COMMENT_LIST = "/marketplace/commodities/%d/comments";
 
 
+    // 获取评价
+    public final static String COUPON_LIST = "/marketplace/coupons";
+
+    public static void getCouponList(long userId ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + COUPON_LIST);
+        request.putUrlParams("userId",String.valueOf(userId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
     public static void getCommentList(long commodityId ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
@@ -335,7 +347,7 @@ public class TravelApi extends BaseApi {
 
 
     public static void createOrder
-            (long commodityId, String planId, String rendezvousTime, int quantity, JSONObject contactObject, String contactComment, ArrayList<TravellerBean> list, HttpCallBack callback) {
+            (long commodityId, String planId, String rendezvousTime, int quantity, JSONObject contactObject, String contactComment, ArrayList<TravellerBean> list,String couponId, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + CREATE_ORDER);
@@ -344,20 +356,16 @@ public class TravelApi extends BaseApi {
         request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
 
         JSONObject jsonObject = new JSONObject();
-        JSONObject telObject = new JSONObject();
+        JSONArray coupons = new JSONArray();
+        if (!TextUtils.isEmpty(couponId))coupons.put(couponId);
         try {
-       //     telObject.put("dialCode",contactPhoneDialCode);
-       //     telObject.put("number",contactPhoneNumber);
             jsonObject.put("commodityId", commodityId);
             jsonObject.put("planId", planId);
             jsonObject.put("rendezvousTime", rendezvousTime);
             jsonObject.put("quantity", quantity);
             jsonObject.put("contact", contactObject);
-     //       jsonObject.put("contactPhone", telObject);
-    //        jsonObject.put("contactEmail", contactEmail);
-   //         jsonObject.put("contactSurname", contactSurname);
-   //         jsonObject.put("contactGivenName", contactGivenName);
             jsonObject.put("comment", contactComment);
+            jsonObject.put("coupons", coupons);
             if (list != null && list.size() > 0) {
                 JSONArray array = new JSONArray();
                 for (TravellerBean bean : list) {

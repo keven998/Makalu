@@ -97,6 +97,8 @@ public class OrderConfirmActivity extends PeachBaseActivity {
     TextView tvTalk;
     @Bind(R.id.ll_message)
     LinearLayout llMessage;
+    @Bind(R.id.tv_coupon_price)
+    TextView tv_coupon_price;
     long orderId;
     CountDownTimer countDownTimer;
     private ArrayList<TravellerBean> passengerList = new ArrayList<>();
@@ -166,7 +168,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 tvState.setText("退款申请中");
                 break;
             case "pending":
-                tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice())));
+                tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
 //                long time = bean.getExpireTime() - System.currentTimeMillis();
 //                if (time > 0) {
 //                    countDownTimer = new CountDownTimer(time, 1000) {
@@ -283,6 +285,11 @@ public class OrderConfirmActivity extends PeachBaseActivity {
         tvOrderDate.setText(bean.getRendezvousTime());
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
         tvOrderPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
+        if (bean.couponBean!=null){
+            tv_coupon_price.setText("¥" + CommonUtils.getPriceString(bean.couponBean.getDiscount()));
+        }else {
+            tv_coupon_price.setText("¥" + CommonUtils.getPriceString(0.0f));
+        }
 
         // tvOrderTravellerCount.setText(String.valueOf(list.size()));
 
@@ -324,7 +331,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
             e.printStackTrace();
         }
         TravelApi.createOrder(bean.getCommodity().getCommodityId(), bean.getPlanId(), bean.getRendezvousTime(), bean.getQuantity(), object,
-                bean.getComment(), list, new HttpCallBack<String>() {
+                bean.getComment(), list,bean.couponBean.getId() ,new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();

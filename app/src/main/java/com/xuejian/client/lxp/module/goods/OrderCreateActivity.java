@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactBean;
+import com.xuejian.client.lxp.bean.CouponBean;
 import com.xuejian.client.lxp.bean.OrderBean;
 import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.PriceBean;
@@ -97,6 +98,8 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     LinearLayout ll_action_bar;
     @Bind(R.id.rl_coupon)
     RelativeLayout rl_coupon;
+    @Bind(R.id.tv_coupon_price)
+    TextView tv_coupon_price;
     public final static int SELECTED_DATE = 101;
     public final static int SELECTED_USER = 102;
     public final static int EDIT_USER_LIST = 103;
@@ -114,6 +117,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     private String name;
     private boolean isShow;
     AlertDialog priceInfoDialog;
+    private CouponBean currentCoupon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,13 +213,18 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 }
             }
         });
+
+        arrow.setVisibility(View.INVISIBLE);
         tvTotalPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isShow){
-                    hideVoucher();
-                }else {
-                    showVoucher();
+                if (currentCoupon!=null){
+                    arrow.setVisibility(View.VISIBLE);
+                    if (isShow){
+                        hideVoucher();
+                    }else {
+                        showVoucher();
+                    }
                 }
             }
         });
@@ -258,6 +267,14 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 //        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
 
         View view = View.inflate(this, R.layout.price_detail, null);
+        TextView tvpackage = (TextView) view.findViewById(R.id.tv_package);
+        TextView tvprice = (TextView) view.findViewById(R.id.tv_package_price);
+        TextView coupon = (TextView) view.findViewById(R.id.tv_coupon_price);
+        if (currentCoupon!=null&&priceBean!=null&&currentPlanBean!=null){
+            tvpackage.setText(currentPlanBean.getTitle());
+            tvprice.setText(String.format("¥%s*%d", CommonUtils.getPriceString(priceBean.price), selectNum.getCurrentValue()));
+            coupon.setText(String.format("-¥%s", CommonUtils.getPriceString(currentCoupon.getDiscount())));
+        }
         PopupWindow popupWindow = new PopupWindow(view);
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
@@ -333,8 +350,15 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 startActivityForResult(tv_dialCode, SELECTED_CODE);
                 break;
             case R.id.rl_coupon:
-                Intent rl_coupon = new Intent(OrderCreateActivity.this, CouponListActivity.class);
-                startActivityForResult(rl_coupon,SELECT_COUPON);
+                if (priceBean==null){
+                    Toast.makeText(mContext,"请先选择套餐",Toast.LENGTH_LONG).show();
+                }else {
+                    Intent rl_coupon = new Intent(OrderCreateActivity.this, CouponListActivity.class);
+                    rl_coupon.putExtra("createOrder",true);
+                    rl_coupon.putExtra("price",priceBean.getPrice() * (double)selectNum.getCurrentValue());
+                    startActivityForResult(rl_coupon, SELECT_COUPON);
+                }
+
                 break;
             default:
                 break;
@@ -387,6 +411,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
 //            list.add(bean.getTraveller());
 //        }
 //        orderBean.setTravellers(list);
+        orderBean.couponBean = currentCoupon;
         ContactBean contactBean = new ContactBean();
         TelBean telBean = new TelBean();
         telBean.setDialCode(currenrDialCode);
@@ -630,6 +655,11 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 tvDialCode.setText("+" + currenrDialCode);
             } else if (requestCode == SUBMIT_ORDER_CODE) {
                 finish();
+            }else if (requestCode == SELECT_COUPON){
+                arrow.setVisibility(View.VISIBLE);
+                currentCoupon = data.getParcelableExtra("coupon");
+                tv_coupon_price.setText("-"+currentCoupon.getDiscount());
+                tvTotalPrice.setText(String.format("¥%s", CommonUtils.getPriceString(priceBean.getPrice() * (double)selectNum.getCurrentValue()-(double)currentCoupon.getDiscount())));
             }
         }
     }

@@ -31,6 +31,7 @@
             android:layout_height="62dp"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/tv_package"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -39,8 +40,9 @@
                 android:textColor="@color/color_text_ii"
                 android:paddingLeft="15dp"
                 android:textSize="16sp"
-                android:text="套餐套餐套餐套餐提出退房的身份"/>
+                />
             <TextView
+                android:id="@+id/tv_package_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:singleLine="true"
@@ -49,7 +51,7 @@
                 android:paddingLeft="5dp"
                 android:textSize="16sp"
                 android:paddingRight="15dp"
-                android:text="128X1"/>
+                />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -70,6 +72,7 @@
                 android:textSize="16sp"
                 android:text="优惠"/>
             <TextView
+                android:id="@+id/tv_coupon_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:singleLine="true"
@@ -78,7 +81,7 @@
                 android:paddingLeft="5dp"
                 android:textSize="16sp"
                 android:paddingRight="15dp"
-                android:text="-128"/>
+                />
         </LinearLayout>
 
         <View

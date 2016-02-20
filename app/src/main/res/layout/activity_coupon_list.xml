@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="20dp"
                 android:textColor="@color/color_text_iii"
-                android:text="您目前没有优惠券～"
+                android:text="您目前没有可用的优惠券～"
                 android:textSize="15sp"
                 android:gravity="center"
                 />

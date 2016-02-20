@@ -36,7 +36,7 @@ public class OrderBean implements Parcelable {
     private ContactBean contact;
     private String rendezvousTime;
     private double totalPrice;
-    private int discount;
+    private double discount;
     private int quantity;
     private String comment;
     private String status;
@@ -46,7 +46,7 @@ public class OrderBean implements Parcelable {
     private long updateTime;
     private long expireTime;
     public ArrayList<TradeActivityBean> activities;
-
+    public CouponBean couponBean;
     public long getUpdateTime() {
         return updateTime;
     }
@@ -99,7 +99,7 @@ public class OrderBean implements Parcelable {
         this.totalPrice = totalPrice;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
@@ -159,7 +159,7 @@ public class OrderBean implements Parcelable {
         return totalPrice;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
@@ -183,6 +183,9 @@ public class OrderBean implements Parcelable {
 //        return commodityTimeRange;
 //    }
 
+    public OrderBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -197,19 +200,16 @@ public class OrderBean implements Parcelable {
         dest.writeParcelable(this.contact, 0);
         dest.writeString(this.rendezvousTime);
         dest.writeDouble(this.totalPrice);
-        dest.writeInt(this.discount);
+        dest.writeDouble(this.discount);
         dest.writeInt(this.quantity);
         dest.writeString(this.comment);
         dest.writeString(this.status);
         dest.writeTypedList(travellers);
-   //     dest.writeStringList(this.commodityTimeRange);
         dest.writeLong(this.createTime);
         dest.writeLong(this.updateTime);
         dest.writeLong(this.expireTime);
         dest.writeTypedList(activities);
-    }
-
-    public OrderBean() {
+        dest.writeParcelable(this.couponBean, 0);
     }
 
     protected OrderBean(Parcel in) {
@@ -220,19 +220,19 @@ public class OrderBean implements Parcelable {
         this.contact = in.readParcelable(ContactBean.class.getClassLoader());
         this.rendezvousTime = in.readString();
         this.totalPrice = in.readDouble();
-        this.discount = in.readInt();
+        this.discount = in.readDouble();
         this.quantity = in.readInt();
         this.comment = in.readString();
         this.status = in.readString();
         this.travellers = in.createTypedArrayList(TravellerEntity.CREATOR);
-   //     this.commodityTimeRange = in.createStringArrayList();
         this.createTime = in.readLong();
         this.updateTime = in.readLong();
         this.expireTime = in.readLong();
         this.activities = in.createTypedArrayList(TradeActivityBean.CREATOR);
+        this.couponBean = in.readParcelable(CouponBean.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<OrderBean> CREATOR = new Parcelable.Creator<OrderBean>() {
+    public static final Creator<OrderBean> CREATOR = new Creator<OrderBean>() {
         public OrderBean createFromParcel(Parcel source) {
             return new OrderBean(source);
         }

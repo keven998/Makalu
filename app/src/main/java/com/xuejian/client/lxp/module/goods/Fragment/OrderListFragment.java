@@ -414,7 +414,7 @@ public class OrderListFragment extends PeachBaseFragment {
                     long time = bean.getExpireTime() - System.currentTimeMillis();
                     if (time > 0) {
                         holder.rlNeedPay.setVisibility(View.VISIBLE);
-                        SpannableString priceStr = new SpannableString("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
+                        SpannableString priceStr = new SpannableString("¥" + CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount()));
                         priceStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         priceStr.setSpan(new AbsoluteSizeSpan(13, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                         SpannableStringBuilder spb = new SpannableStringBuilder();

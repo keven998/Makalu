@@ -1285,14 +1285,14 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     }
                     try {
 
-                        MediaRecordFunc.getInstance().startRecordNotFile();
-                        final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
-                        long time = com.lv.utils.CommonUtils.getAmrDuration(new File(path));
-                        if (time <= 0) {
-                            ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
-                            MediaRecordFunc.getInstance().cancleRecord();
-                            return false;
-                        }
+//                        MediaRecordFunc.getInstance().startRecordNotFile();
+//                        final String path = MediaRecordFunc.getInstance().stopRecordAndFile();
+//                        long time = com.lv.utils.CommonUtils.getAmrDuration(new File(path));
+//                        if (time <= 0) {
+//                            ToastUtil.getInstance(ChatActivity.this).showToast("录音权限被禁止，请先开启录音权限");
+//                            MediaRecordFunc.getInstance().cancleRecord();
+//                            return false;
+//                        }
                         v.setPressed(true);
                         wakeLock.acquire();
                         if (VoicePlayClickListener.isPlaying)

@@ -109,6 +109,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     LinearLayout llMessage;
     @Bind(R.id.lv_activity)
     ListView listView;
+    @Bind(R.id.tv_coupon_price)
+    TextView tv_coupon_price;
     long orderId;
     OrderBean currentOrder;
     CountDownTimer countDownTimer;
@@ -228,7 +230,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                         cancelOrderDialog();
                     }
                 });
-                tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice())));
+                tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
                     llTradeAction1.setVisibility(View.VISIBLE);
@@ -375,8 +377,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             public void onClick(View v) {
                 Intent intent = new Intent(OrderDetailActivity.this, CommodityDetailActivity.class);
                 intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                intent.putExtra("snapshots",true);
-                intent.putExtra("version",bean.getCommodity().version);
+                intent.putExtra("snapshots", true);
+                intent.putExtra("version", bean.getCommodity().version);
                 startActivity(intent);
             }
         });
@@ -385,6 +387,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         tvOrderDate.setText(bean.getRendezvousTime());
         tvOrderNum.setText(String.valueOf(bean.getQuantity()));
         tvOrderPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
+        tv_coupon_price.setText("¥" + CommonUtils.getPriceString(bean.getDiscount()));
 
         tvOrderTravellerCount.setText(String.valueOf(bean.getTravellers().size()));
 

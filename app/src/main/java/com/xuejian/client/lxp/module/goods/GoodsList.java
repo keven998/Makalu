@@ -36,7 +36,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
 import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.FavBean;
@@ -675,7 +674,6 @@ public class GoodsList extends PeachBaseActivity {
     private class GoodsListAdapter extends RecyclerView.Adapter<ViewHolder> {
         private Activity mContext;
         private ArrayList<SimpleCommodityBean> mDataList;
-        private DisplayImageOptions picOptions;
         private OnItemClickListener listener;
         private OnItemLongClickListener longClickListener;
 
