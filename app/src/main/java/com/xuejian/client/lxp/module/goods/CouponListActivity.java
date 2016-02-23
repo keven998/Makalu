@@ -25,6 +25,7 @@ import com.xuejian.client.lxp.bean.CouponBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.db.User;
 
 import java.text.ParseException;
@@ -98,11 +99,13 @@ public class CouponListActivity extends PeachBaseActivity {
         lvList.setLayoutManager(new LinearLayoutManager(this));
 //        lvList.addItemDecoration(new DividerItemDecoration(this,
 //                DividerItemDecoration.VERTICAL_LIST));
-        GoodsListAdapter adapter = new GoodsListAdapter(this, true);
+
 
         ArrayList<CouponBean> availableList = new ArrayList<>();
         boolean createOrder = getIntent().getBooleanExtra("createOrder", false);
         double price = getIntent().getDoubleExtra("price", 0);
+        String id = getIntent().getStringExtra("id");
+        GoodsListAdapter adapter = new GoodsListAdapter(this, createOrder,id);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         if (createOrder) {
@@ -113,7 +116,7 @@ public class CouponListActivity extends PeachBaseActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (bean.isAvailable() &&price>bean.getThreshold()&&d!=null&&(d.after(date)||SampleDecorator.checkDate(d, date))){
+                if (price>=bean.getThreshold()&&d!=null&&(d.after(date)||SampleDecorator.checkDate(d, date))){
                     availableList.add(bean);
                 }
             }
@@ -135,7 +138,7 @@ public class CouponListActivity extends PeachBaseActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (bean.isAvailable() &&d!=null&&(d.after(date)||SampleDecorator.checkDate(d,date))){
+                if (d!=null&&(d.after(date)||SampleDecorator.checkDate(d,date))){
                     availableList.add(bean);
                 }
             }
@@ -154,11 +157,12 @@ public class CouponListActivity extends PeachBaseActivity {
         private ArrayList<CouponBean> mDataList;
         private boolean isCheckable;
         private OnItemClickListener listener;
-
-        public GoodsListAdapter(Activity context, boolean isCheckable) {
+        private String selectedId;
+        public GoodsListAdapter(Activity context, boolean isCheckable,String selectedId) {
             mContext = context;
             this.isCheckable = isCheckable;
             mDataList = new ArrayList<CouponBean>();
+            this.selectedId = selectedId;
         }
 
         public void setOnItemClickListener(OnItemClickListener listener) {
@@ -193,7 +197,7 @@ public class CouponListActivity extends PeachBaseActivity {
             });
             holder.tvCouponTitle.setText(bean.getDesc());
             if (bean.getThreshold() > 0) {
-                holder.tvCouponCondition.setText(String.format("满%d元可用", bean.getThreshold()));
+                holder.tvCouponCondition.setText(String.format("满%s元可用", CommonUtils.getPriceString(bean.getThreshold())));
             } else {
                 holder.tvCouponCondition.setText("无条件使用");
             }
@@ -203,6 +207,13 @@ public class CouponListActivity extends PeachBaseActivity {
             stringBuilder.append(string).append(String.valueOf(bean.getDiscount()));
             holder.tvCouponPrice.setText(stringBuilder);
             holder.tvCouponTimestamp.setText("有效期至: " + bean.getExpire());
+            if (this.isCheckable){
+                holder.ctv.setVisibility(View.VISIBLE);
+                if (bean.getId().equals(selectedId)){
+                    holder.ctv.setChecked(true);
+                }
+            }
+
         }
 
         @Override

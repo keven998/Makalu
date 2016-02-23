@@ -207,10 +207,10 @@ public class TravelApi extends BaseApi {
     }
 
 
-    public static void getSellerInfo(long orderId,HttpCallBack callback) {
+    public static void getSellerInfo(long userId,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
-        request.setUrl(SystemConfig.DEV_URL + SELLER_INFO + String.valueOf(orderId));
+        request.setUrl(SystemConfig.DEV_URL + SELLER_INFO + String.valueOf(userId));
         setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }

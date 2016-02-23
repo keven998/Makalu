@@ -77,7 +77,9 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
+import com.xuejian.client.lxp.bean.StoreBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -88,6 +90,7 @@ import com.xuejian.client.lxp.common.widget.PasteEditText;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
+import com.xuejian.client.lxp.module.goods.StoreDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
@@ -293,9 +296,43 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }
+        isBusiness();
         initData();
     }
+        public void isBusiness(){
+            if (!TextUtils.isEmpty(toChatUsername)&&TextUtils.isDigitsOnly(toChatUsername)){
+                TravelApi.getSellerInfo(Long.parseLong(toChatUsername), new HttpCallBack<String>() {
 
+                    @Override
+                    public void doSuccess(String result, String method) {
+                        CommonJson<StoreBean> commonJson = CommonJson.fromJson(result,StoreBean.class);
+                        if (commonJson.code==0){
+                                findViewById(R.id.iv_store).setVisibility(View.VISIBLE);
+                                findViewById(R.id.iv_store).setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent();
+                                        intent.setClass(ChatActivity.this, StoreDetailActivity.class);
+                                        intent.putExtra("sellerId", toChatUsername);
+                                        startActivity(intent);
+                                    }
+                                });
+                        }
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+            }
+
+        }
 
     public void getUserInfo(int userId) {
         try {
@@ -348,6 +385,34 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             @Override
                             public void call(List<MessageBean> messageBeans) {
                                 messageList.addAll(messageBeans);
+
+
+//
+//                                MessageBean messageBean =new MessageBean();
+//            messageBean.setMessage("{\"title\":\"恭喜你获得100元优惠券，请点击查看\",\"desc\":\"desc\",\"image\":\"http://7xirnn.com1.z0.glb.clouddn.com/2ed2cb7c-ac84-4720-9aa0-b5bb8dba6795!thumb?e=1439527658&token=jU6KkDZdGYODmrPVh5sbBIkJX65y-Cea991uWpWZ:QmwHGiZqUA-Cg0p4hgxNLY8f6F4=\",\"url\":\"http://m.creatby.com/manage/book/b10qbu/\"}");
+//            messageBean.setType(21);
+//            messageBean.setSenderId(10000);
+//            messageBean.setSendType(1);
+//            messageBean.setCreateTime(System.currentTimeMillis());
+//            messageList.add(messageBean);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                                 if (fromTrade){
                                     ShareCommodityBean shareCommodityBean = getIntent().getParcelableExtra("shareCommodityBean");

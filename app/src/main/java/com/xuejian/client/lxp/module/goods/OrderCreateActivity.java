@@ -356,6 +356,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                     Intent rl_coupon = new Intent(OrderCreateActivity.this, CouponListActivity.class);
                     rl_coupon.putExtra("createOrder",true);
                     rl_coupon.putExtra("price",priceBean.getPrice() * (double)selectNum.getCurrentValue());
+                    if (currentCoupon!=null)rl_coupon.putExtra("id",currentCoupon.getId());
                     startActivityForResult(rl_coupon, SELECT_COUPON);
                 }
 

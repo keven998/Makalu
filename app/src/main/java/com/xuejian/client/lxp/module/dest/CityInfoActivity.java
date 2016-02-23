@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -68,7 +69,7 @@ public class CityInfoActivity extends PeachBaseActivity {
     FrameLayout fl_city_img;
     TextView showMore;
     TextView title;
-
+    LinearLayout footView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,9 +86,10 @@ public class CityInfoActivity extends PeachBaseActivity {
         title = (TextView) findViewById(R.id.tv_title_bar_title);
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
-        View footView = View.inflate(this, R.layout.footer_show_all, null);
-        showMore = (TextView) footView.findViewById(R.id.tv_show_all);
+    //    View footView = View.inflate(this, R.layout.footer_show_all, null);
+        showMore = (TextView) findViewById(R.id.tv_show_all);
         showMore.setText("查看全部玩乐");
+        footView = (LinearLayout) findViewById(R.id.footView);
         fl_city_img = (FrameLayout) headView.findViewById(R.id.fl_city_img);
         ImageView back = (ImageView) findViewById(R.id.iv_nav_back);
         tvStoreNum = (TextView) headView.findViewById(R.id.tv_store_num);
@@ -104,7 +106,7 @@ public class CityInfoActivity extends PeachBaseActivity {
         });
         viewPager = (AutoScrollViewPager) headView.findViewById(R.id.vp_pic);
         listView.addHeaderView(headView);
-        listView.addFooterView(footView);
+    //    listView.addFooterView(footView);
         adapter = new RecommendGoodsAdapter(this, CityInfoActivity.this);
         listView.setAdapter(adapter);
         initData(id);
@@ -156,6 +158,7 @@ public class CityInfoActivity extends PeachBaseActivity {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
 
                 if (list.result.size() > 0) {
+                    footView.setVisibility(View.VISIBLE);
                     adapter.getDataList().clear();
                     adapter.getDataList().addAll(list.result);
                     adapter.notifyDataSetChanged();
@@ -171,9 +174,8 @@ public class CityInfoActivity extends PeachBaseActivity {
                 } else {
                     adapter.getDataList().clear();
                     adapter.setEmpty(true);
-                    adapter.getDataList().add(0,new SimpleCommodityBean());
+                    adapter.getDataList().add(0, new SimpleCommodityBean());
                     adapter.notifyDataSetChanged();
-                    showMore.setVisibility(View.GONE);
                 }
             }
 

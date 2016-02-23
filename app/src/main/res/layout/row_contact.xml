@@ -22,6 +22,7 @@
         android:background="@color/color_line" />
 
     <RelativeLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@drawable/option_cell_selector"

@@ -23,7 +23,7 @@ public class CouponBean implements Parcelable {
     private double discount;
     private boolean available;
     private String expire;
-    private int threshold;
+    private double threshold;
 
     public void setId(String id) {
         this.id = id;
@@ -77,7 +77,7 @@ public class CouponBean implements Parcelable {
         return expire;
     }
 
-    public int getThreshold() {
+    public double getThreshold() {
         return threshold;
     }
 
@@ -94,7 +94,7 @@ public class CouponBean implements Parcelable {
         dest.writeDouble(this.discount);
         dest.writeByte(available ? (byte) 1 : (byte) 0);
         dest.writeString(this.expire);
-        dest.writeInt(this.threshold);
+        dest.writeDouble(this.threshold);
     }
 
     public CouponBean() {
@@ -107,7 +107,7 @@ public class CouponBean implements Parcelable {
         this.discount = in.readDouble();
         this.available = in.readByte() != 0;
         this.expire = in.readString();
-        this.threshold = in.readInt();
+        this.threshold = in.readDouble();
     }
 
     public static final Parcelable.Creator<CouponBean> CREATOR = new Parcelable.Creator<CouponBean>() {

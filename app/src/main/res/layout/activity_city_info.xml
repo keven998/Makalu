@@ -52,9 +52,9 @@
             android:src="@drawable/navigation_talk" />
         <!--selector_ic_talk_share-->
     </RelativeLayout>
-    <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <ListView
             android:id="@+id/lv_city_detail"
             android:layout_width="match_parent"
@@ -64,6 +64,8 @@
             android:dividerHeight="1px"
             android:fadingEdge="none"
             android:scrollbars="none"
+            android:paddingBottom="60dp"
+            android:clipToPadding="false"
             />
 
         <!--<TextView-->
@@ -73,6 +75,24 @@
             <!--android:gravity="center"-->
             <!--android:visibility="gone"-->
             <!--android:text="招商"/>-->
-    <!--</FrameLayout>-->
+        <LinearLayout
+            android:visibility="gone"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/base_color_white"
+            android:layout_gravity="bottom"
+            android:id="@+id/footView"
+            >
+            <TextView
+                android:paddingTop="17dp"
+                android:paddingBottom="17dp"
+                android:id="@+id/tv_show_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@color/app_theme_color"
+                android:gravity="center"/>
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

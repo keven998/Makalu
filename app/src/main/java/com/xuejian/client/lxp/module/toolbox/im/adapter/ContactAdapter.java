@@ -62,7 +62,7 @@ public class ContactAdapter extends ArrayAdapter<User> implements SectionIndexer
 
         picOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
-                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
+                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
                 .resetViewBeforeLoading(true)
                 .showImageOnFail(R.drawable.ic_home_more_avatar_unknown_round)
                 .showImageForEmptyUri(R.drawable.ic_home_more_avatar_unknown_round)

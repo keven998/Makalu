@@ -58,10 +58,12 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
                 startActivity(intent1);
 			}else if (resp.errCode == -2){
 				Toast.makeText(WXPayEntryActivity.this, "支付取消 " , Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+				finish();
+               // startActivity(intent);
 			}else {
 				Toast.makeText(WXPayEntryActivity.this,"支付失败",Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+				finish();
+              //  startActivity(intent);
 			}
 
 			finish();

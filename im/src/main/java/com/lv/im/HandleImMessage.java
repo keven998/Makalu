@@ -13,12 +13,12 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.lv.Listener.DequeueListener;
 import com.lv.Listener.MsgListener;
-import com.lv.utils.Config;
-import com.lv.utils.SharePrefUtil;
-import com.lv.utils.TimeUtils;
 import com.lv.bean.Message;
 import com.lv.bean.MessageBean;
 import com.lv.service.DownloadService;
+import com.lv.utils.Config;
+import com.lv.utils.SharePrefUtil;
+import com.lv.utils.TimeUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -167,7 +167,6 @@ public class HandleImMessage {
             if (Config.isDebug) {
                 Log.i(Config.TAG, "onDequeueMsg ");
             }
-
             if (lastTime == 0) {
                 lastTime = messageBean.getTimestamp();
             } else if (messageBean.getTimestamp() < lastTime) {

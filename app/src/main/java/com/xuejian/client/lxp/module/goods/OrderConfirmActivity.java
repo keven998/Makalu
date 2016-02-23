@@ -330,8 +330,13 @@ public class OrderConfirmActivity extends PeachBaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        String couponId ="";
+        if (bean.couponBean!=null){
+            couponId = bean.couponBean.getId();
+        }
+
         TravelApi.createOrder(bean.getCommodity().getCommodityId(), bean.getPlanId(), bean.getRendezvousTime(), bean.getQuantity(), object,
-                bean.getComment(), list,bean.couponBean.getId() ,new HttpCallBack<String>() {
+                bean.getComment(), list,couponId ,new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
                         DialogManager.getInstance().dissMissLoadingDialog();
@@ -384,7 +389,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 }
                 tv_pay.putExtra("type", "alipay");
                 startActivity(tv_pay);
-                finish();
+             //   finish();
             }
         });
         weixinpay.setOnClickListener(new View.OnClickListener() {
@@ -401,7 +406,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 }
                 tv_pay.putExtra("type", "weixinpay");
                 startActivity(tv_pay);
-                finish();
+            //    finish();
             }
         });
         contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {

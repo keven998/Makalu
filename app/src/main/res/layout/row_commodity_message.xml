@@ -31,15 +31,13 @@
             android:scaleType="centerCrop"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/icon"
             />
 
 
 
         <TextView
-            android:text="商品名稱等級劃分是否是浪費和水立方收到非師範生"
             android:layout_marginTop="17dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="7dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/iv_goods_img"
             android:textSize="15sp"
@@ -50,9 +48,8 @@
             />
 
         <TextView
-            android:text="¥700"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="7dp"
             android:layout_toRightOf="@+id/iv_goods_img"
             android:layout_below="@+id/tv_commodity_name"
             android:textSize="15sp"

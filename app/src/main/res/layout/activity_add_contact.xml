@@ -3,108 +3,126 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <com.xuejian.client.lxp.common.widget.TitleHeaderBar
         android:id="@+id/ly_header_bar_title_wrap"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_bar_height"/>
+        android:layout_height="@dimen/title_bar_height" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_line"
-        />
+        android:background="@color/color_line" />
 
     <!--<RelativeLayout-->
-        <!--android:id="@+id/title"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/height_top_bar"-->
-        <!--android:background="@color/top_bar_normal_bg"-->
-        <!--android:gravity="center_vertical">-->
+    <!--android:id="@+id/title"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/height_top_bar"-->
+    <!--android:background="@color/top_bar_normal_bg"-->
+    <!--android:gravity="center_vertical">-->
 
-        <!--<include layout="@layout/commom_back_btn" />-->
+    <!--<include layout="@layout/commom_back_btn" />-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:text="添加好友"-->
-            <!--android:textColor="#fff"-->
-            <!--android:textSize="18sp" />-->
-        <!---->
-        <!--<Button-->
-            <!--android:id="@+id/search"-->
-            <!--android:layout_width="54dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:background="@drawable/common_tab_bg"-->
-            <!--android:onClick="searchContact"-->
-            <!--android:text="@string/button_search"-->
-            <!--android:textColor="#fff"-->
-            <!--android:textSize="16sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:text="添加好友"-->
+    <!--android:textColor="#fff"-->
+    <!--android:textSize="18sp" />-->
+    <!---->
+    <!--<Button-->
+    <!--android:id="@+id/search"-->
+    <!--android:layout_width="54dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:background="@drawable/common_tab_bg"-->
+    <!--android:onClick="searchContact"-->
+    <!--android:text="@string/button_search"-->
+    <!--android:textColor="#fff"-->
+    <!--android:textSize="16sp" />-->
     <!--</RelativeLayout>-->
 
-    <LinearLayout android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/base_color_white"
         android:orientation="horizontal">
 
-        <EditText android:id="@+id/edit_note"
+        <EditText
+            android:id="@+id/edit_note"
             android:layout_width="0dp"
             android:layout_height="35dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="12dp"
-            android:paddingLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:background="@drawable/button_normal_shape"
-            android:hint="昵称或手机号"
-            android:imeOptions="actionSearch"
-            android:singleLine="true"
-            android:textColorHint="@color/base_text_color_text_placeholder"
-            android:textColor="@color/base_text_color_title"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dp"
+            android:hint="昵称或手机号"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textColor="@color/base_text_color_title"
+            android:textColorHint="@color/base_text_color_text_placeholder"
             android:textSize="@dimen/text_size_14" />
 
-        <Button android:id="@+id/search_contact"
+        <Button
+            android:id="@+id/search_contact"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
-            android:layout_marginRight="10dp"
-            android:textSize="@dimen/text_size_14"
-            android:layout_marginLeft="10dp"
-            android:text="搜索"
-            android:background="@drawable/btn_theme_secondary_selector"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/base_color_white"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_theme_secondary_selector"
+            android:text="搜索"
+            android:textColor="@color/base_color_white"
+            android:textSize="@dimen/text_size_14" />
 
     </LinearLayout>
 
-    <TextView android:id="@+id/tv_phone_contact"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:textColor="@color/base_text_color_title"
-        android:textSize="15sp"
-        android:paddingLeft="20dp"
-        android:background="@drawable/option_cell_selector"
-        android:paddingRight="11dp"
-        android:drawableRight="@drawable/icon_arrow_right"
-        android:gravity="left|center_vertical"
-        android:layout_marginTop="10dp"
-        android:text="添加通讯录朋友"/>
+        android:layout_height="match_parent">
 
-    <TextView android:id="@+id/tv_weixin_contacts"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:textColor="@color/base_text_color_title"
-        android:textSize="15sp"
-        android:paddingLeft="20dp"
-        android:background="@drawable/option_cell_selector"
-        android:paddingRight="11dp"
-        android:drawableRight="@drawable/icon_arrow_right"
-        android:gravity="left|center_vertical"
-        android:layout_marginTop="1dp"
-        android:text="邀请微信朋友"/>
+        <TextView
+            android:id="@+id/tv_phone_contact"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/option_cell_selector"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="11dp"
+            android:text="添加通讯录朋友"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_weixin_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="62dp"
+            android:background="@drawable/option_cell_selector"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="11dp"
+            android:text="邀请微信朋友"
+            android:textColor="@color/base_text_color_title"
+            android:textSize="15sp" />
+
+        <ListView
+            android:visibility="gone"
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/app_backgroud"/>
+
+    </FrameLayout>
 
 </LinearLayout>

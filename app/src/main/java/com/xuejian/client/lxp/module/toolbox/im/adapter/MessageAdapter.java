@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -56,6 +57,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
+import com.xuejian.client.lxp.bean.CouponMessageBean;
 import com.xuejian.client.lxp.bean.ExtMessageBean;
 import com.xuejian.client.lxp.bean.H5MessageBean;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
@@ -79,6 +81,7 @@ import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.dest.CityInfoActivity;
 import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
+import com.xuejian.client.lxp.module.goods.CouponListActivity;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.toolbox.HisMainPageActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -144,6 +147,7 @@ public class MessageAdapter extends BaseAdapter {
     private static final int QA_MSG = 17;
     private static final int H5_MSG = 18;
     private static final int TRADE_MSG = 20;
+    private static final int COUPON_MSG = 21;
     private static final int COMMOMDITY_MSG = 201;
     public static final int GOODS_MSG = 19;
     private static final int TIP_MSG = 200;
@@ -245,6 +249,8 @@ public class MessageAdapter extends BaseAdapter {
                 return TRADE_MSG;
             case COMMOMDITY_MSG:
                 return COMMOMDITY_MSG;
+            case COUPON_MSG:
+                return COUPON_MSG;
             default:
                 return message.getSendType() == 1 ? MESSAGE_TYPE_RECV_EXT : MESSAGE_TYPE_SENT_EXT;
         }
@@ -301,6 +307,8 @@ public class MessageAdapter extends BaseAdapter {
                 return inflater.inflate(R.layout.row_trade_message, null);
             case COMMOMDITY_MSG:
                 return inflater.inflate(R.layout.row_commodity_message, null);
+            case COUPON_MSG:
+                return inflater.inflate(R.layout.row_received_coupon, null);
             default:
                 break;
         }
@@ -367,6 +375,7 @@ public class MessageAdapter extends BaseAdapter {
                 case HOTEL_MSG:
                 case H5_MSG:
                 case GOODS_MSG:
+                case COUPON_MSG:
                     holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
                     holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
                     holder.iv_image = (ImageView) convertView.findViewById(R.id.iv_image);
@@ -473,6 +482,11 @@ public class MessageAdapter extends BaseAdapter {
             case GOODS_MSG:
                 handleGroupMessage(position, convertView, message, holder);
                 handleGoodsMessage(message, holder, position);
+                handleCommonMessage(position, convertView, message, holder);
+                break;
+            case COUPON_MSG:
+                handleGroupMessage(position, convertView, message, holder);
+                handleCouponMessage(message, holder, position);
                 handleCommonMessage(position, convertView, message, holder);
                 break;
             default:
@@ -830,7 +844,78 @@ public class MessageAdapter extends BaseAdapter {
 
     }
 
+    /**
+     * 优惠券消息
+     * @param message
+     * @param holder
+     * @param position
+     */
+    private void handleCouponMessage(MessageBean message, final ViewHolder holder, final int position) {
+        final String conent = message.getMessage();
+        CouponMessageBean bean = null;
+        try {
+            bean = GsonTools.parseJsonToBean(conent, CouponMessageBean.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (bean == null) return;
+        final CouponMessageBean finalBean = bean;
+        holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        holder.tv_attr.setVisibility(View.GONE);
+        holder.tv_name.setSingleLine(false);
+        holder.tv_name.setMaxLines(10);
+        holder.tv_name.setText(bean.title);
+    //    holder.tv_desc.setText(bean.title);
+        holder.tv_name.setTextColor(activity.getResources().getColor(R.color.price_color));
+        //    holder.tv_attr.setText(bean.timeCost);
 
+        //     holder.tv_type.setText("计划");
+        holder.rl_content.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, CouponListActivity.class);
+                activity.startActivity(intent);
+            }
+        });
+        if (message.getSendType() == TYPE_REV) {
+            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_highlight, 0, 0, 0);
+        } else {
+            holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_rating_start_default, 0, 0, 0);
+        }
+
+        holder.rl_content.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                activity.startActivityForResult(
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
+                                -1), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                return true;
+            }
+        });
+
+        if (message.getSendType() == TYPE_SEND) {
+            switch (message.getStatus()) {
+                case 0: // 发送成功
+                    holder.pb.setVisibility(View.GONE);
+                    holder.staus_iv.setVisibility(View.GONE);
+                    break;
+                case 2: // 发送失败
+                    holder.pb.setVisibility(View.GONE);
+                    holder.staus_iv.setVisibility(View.VISIBLE);
+                    holder.staus_iv.setClickable(true);
+                    break;
+                case 1: // 发送中
+                    holder.pb.setVisibility(View.VISIBLE);
+                    holder.staus_iv.setVisibility(View.GONE);
+                    sendCommodityMsgInBackground(message, holder);
+                    break;
+                default:
+                    break;
+                // 发送消息
+                //       sendMsgInBackground(message, holder);
+            }
+        }
+    }
     /**
      * 自定义消息
      */
