@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -195,11 +196,16 @@ public class CouponListActivity extends PeachBaseActivity {
                     if (listener != null) listener.onItemClick(v, position, bean);
                 }
             });
-            holder.tvCouponTitle.setText(bean.getDesc());
+            holder.tvCouponTitle.setText(bean.title);
+            holder.tvCouponType.setText(bean.getDesc());
             if (bean.getThreshold() > 0) {
+                holder.bg.setBackgroundResource(R.drawable.icon_voupon);
                 holder.tvCouponCondition.setText(String.format("满%s元可用", CommonUtils.getPriceString(bean.getThreshold())));
+                holder.title.setText("代金券");
             } else {
+                holder.bg.setBackgroundResource(R.drawable.icon_voupon_yellow);
                 holder.tvCouponCondition.setText("无条件使用");
+                holder.title.setText("现金券");
             }
             SpannableString string = new SpannableString("¥");
             string.setSpan(new AbsoluteSizeSpan(12, true), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -223,7 +229,7 @@ public class CouponListActivity extends PeachBaseActivity {
 
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static                 class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_coupon_price)
         TextView tvCouponPrice;
         @Bind(R.id.tv_coupon_title)
@@ -238,7 +244,10 @@ public class CouponListActivity extends PeachBaseActivity {
         LinearLayout ll_container;
         @Bind(R.id.ctv_1)
         CheckedTextView ctv;
-
+        @Bind(R.id.rl_bg)
+        RelativeLayout bg;
+        @Bind(R.id.tv_title)
+        TextView title;
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

@@ -168,7 +168,12 @@ public class OrderConfirmActivity extends PeachBaseActivity {
                 tvState.setText("退款申请中");
                 break;
             case "pending":
-                tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+                if (bean.getTotalPrice()-bean.getDiscount()<=0){
+                    tvState.setText(String.format("待付款 ¥%s", "0"));
+                }else {
+                    tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+                }
+
 //                long time = bean.getExpireTime() - System.currentTimeMillis();
 //                if (time > 0) {
 //                    countDownTimer = new CountDownTimer(time, 1000) {

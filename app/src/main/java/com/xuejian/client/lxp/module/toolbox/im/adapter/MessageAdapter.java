@@ -859,7 +859,6 @@ public class MessageAdapter extends BaseAdapter {
             e.printStackTrace();
         }
         if (bean == null) return;
-        final CouponMessageBean finalBean = bean;
         holder.tv_attr.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         holder.tv_attr.setVisibility(View.GONE);
         holder.tv_name.setSingleLine(false);

@@ -230,7 +230,15 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                         cancelOrderDialog();
                     }
                 });
-                tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+
+                if (bean.getTotalPrice()-bean.getDiscount()<=0){
+                    tvState.setText(String.format("待付款 ¥%s", "0"));
+                }else {
+                    tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+                }
+
+
+           //     tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
                 long time = bean.getExpireTime() - System.currentTimeMillis();
                 if (time > 0) {
                     llTradeAction1.setVisibility(View.VISIBLE);
