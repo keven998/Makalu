@@ -13,13 +13,13 @@
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/title_bar_height"
-            android:background="@color/white">
+            android:background="@color/tab_bar_color">
 
             <TextView
                 android:id="@+id/poi_det_back"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:drawableLeft="@drawable/selector_ic_nav_back"
+                android:drawableLeft="@drawable/icon_arrow_left_white"
                 android:paddingLeft="12dp" />
 
             <TextView
@@ -29,7 +29,7 @@
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:singleLine="true"
-                android:textColor="@color/color_text_ii"
+                android:textColor="@color/base_color_white"
                 android:textSize="18sp" />
 
             <ImageView
@@ -40,13 +40,9 @@
                 android:paddingLeft="32dp"
                 android:paddingRight="12dp"
                 android:scaleType="center"
-                android:src="@drawable/navigation_talk" />
+                android:src="@drawable/icon_share" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/color_line"/>
     </LinearLayout>
     <ListView
         android:id="@+id/spot_detail_list"
@@ -56,5 +52,6 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:fadingEdge="none"
+        android:scrollbars="none"
         android:listSelector="@android:color/transparent" />
 </LinearLayout>

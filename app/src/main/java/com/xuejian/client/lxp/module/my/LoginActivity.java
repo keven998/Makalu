@@ -58,7 +58,7 @@ public class LoginActivity extends PeachBaseActivity {
     public int REGISTER = 2;
     private int WXLOGIN = 3;
     private int FINDPASSWORD = 4;
-
+    private String tempPhoneNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +135,7 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ForgetPwdActivity.class);
+                if (!TextUtils.isEmpty(tempPhoneNum))intent.putExtra("phone",tempPhoneNum);
                 startActivityForResult(intent, REQUEST_CODE_FIND_PASSWD);
             }
         });
@@ -363,6 +364,7 @@ public class LoginActivity extends PeachBaseActivity {
                 } else {
                     DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
+                    tempPhoneNum = loginNameEt.getText().toString().trim();
                 }
 
             }
@@ -377,6 +379,7 @@ public class LoginActivity extends PeachBaseActivity {
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
                 DialogManager.getInstance().dissMissLoadingDialog();
+                tempPhoneNum = loginNameEt.getText().toString().trim();
                 if (code == HttpManager.PWD_ERROR) {
                     ToastUtil.getInstance(LoginActivity.this).showToast("用户名或密码错误");
                 } else if (!isFinishing())

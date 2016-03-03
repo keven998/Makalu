@@ -200,6 +200,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     private boolean fromTrade;
     ChatMenuFragment fragment;
     MessageBean tempTradeBean;
+
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -285,7 +286,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         toChatUsername = intent.getStringExtra("friend_id");
         conversation = intent.getStringExtra("conversation");
         chatType = intent.getStringExtra("chatType");
-        fromTrade = intent.getBooleanExtra("fromTrade",false);
+        fromTrade = intent.getBooleanExtra("fromTrade", false);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(10001);
         if (!TextUtils.isEmpty(toChatUsername)) {
@@ -299,40 +300,41 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         isBusiness();
         initData();
     }
-        public void isBusiness(){
-            if (!TextUtils.isEmpty(toChatUsername)&&TextUtils.isDigitsOnly(toChatUsername)){
-                TravelApi.getSellerInfo(Long.parseLong(toChatUsername), new HttpCallBack<String>() {
 
-                    @Override
-                    public void doSuccess(String result, String method) {
-                        CommonJson<StoreBean> commonJson = CommonJson.fromJson(result,StoreBean.class);
-                        if (commonJson.code==0){
-                                findViewById(R.id.iv_store).setVisibility(View.VISIBLE);
-                                findViewById(R.id.iv_store).setOnClickListener(new OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent();
-                                        intent.setClass(ChatActivity.this, StoreDetailActivity.class);
-                                        intent.putExtra("sellerId", toChatUsername);
-                                        startActivity(intent);
-                                    }
-                                });
-                        }
+    public void isBusiness() {
+        if (!TextUtils.isEmpty(toChatUsername) && TextUtils.isDigitsOnly(toChatUsername)) {
+            TravelApi.getSellerInfo(Long.parseLong(toChatUsername), new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson<StoreBean> commonJson = CommonJson.fromJson(result, StoreBean.class);
+                    if (commonJson.code == 0) {
+                        findViewById(R.id.iv_store).setVisibility(View.VISIBLE);
+                        findViewById(R.id.iv_store).setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent();
+                                intent.setClass(ChatActivity.this, StoreDetailActivity.class);
+                                intent.putExtra("sellerId", toChatUsername);
+                                startActivity(intent);
+                            }
+                        });
                     }
+                }
 
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
 
-                    }
+                }
 
-                    @Override
-                    public void doFailure(Exception error, String msg, String method, int code) {
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
 
-                    }
-                });
-            }
-
+                }
+            });
         }
+
+    }
 
     public void getUserInfo(int userId) {
         try {
@@ -397,24 +399,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
 //            messageList.add(messageBean);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                if (fromTrade){
+                                if (fromTrade) {
                                     ShareCommodityBean shareCommodityBean = getIntent().getParcelableExtra("shareCommodityBean");
                                     final MessageBean messag1 = new MessageBean();
                                     messag1.setMessage(JSON.toJSONString(shareCommodityBean));
@@ -447,7 +432,6 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                         })
         );
     }
-
 
 
     /**
@@ -637,8 +621,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             Bundle args = new Bundle();
             args.putString("userId", toChatUsername);
             args.putString("conversation", conversation);
-            if (user!=null){
-               args.putParcelable("user",user);
+            if (user != null) {
+                args.putParcelable("user", user);
             }
             fragment.setArguments(args); // FragmentActivity将点击的菜单列表标题传递给Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -680,7 +664,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 }
             });
         }
-        if ("10002".equals(toChatUsername)){
+        if ("10002".equals(toChatUsername)) {
             findViewById(R.id.iv_nav_menu).setVisibility(View.GONE);
             findViewById(R.id.bar_bottom).setVisibility(View.GONE);
         }
@@ -1215,7 +1199,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         mExtraPanel.setVisibility(View.GONE);
         btnContainer.setVisibility(View.GONE);
         expressionContainer.setVisibility(View.GONE);
-        if (view!=null)view.setVisibility(View.GONE);
+        if (view != null) view.setVisibility(View.GONE);
         buttonSetModeVoice.setVisibility(View.VISIBLE);
         mEditTextContent.requestFocus();
         buttonPressToSpeak.setVisibility(View.GONE);
@@ -1227,7 +1211,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
             btnMore.setVisibility(View.GONE);
             buttonSend.setVisibility(View.VISIBLE);
         }
-        if (view!=null)showKeyboard(mEditTextContent);
+        if (view != null) showKeyboard(mEditTextContent);
     }
 
     /**
@@ -1614,18 +1598,18 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             switch (scrollState) {
                 case OnScrollListener.SCROLL_STATE_IDLE:
-                    if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData&&isLongEnough()) {
+                    if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData && isLongEnough()) {
                         loadmorePB.setVisibility(View.VISIBLE);
                         try {
                             currentSize = messageList.size();
                             int pos = -1;
-                            if (tempTradeBean!=null){
-                                pos = currentSize - messageList.indexOf(tempTradeBean)-1;
+                            if (tempTradeBean != null) {
+                                pos = currentSize - messageList.indexOf(tempTradeBean) - 1;
                             }
                             messageList.clear();
                             messageList.addAll(IMClient.getInstance().getMessages(toChatUsername, ++PAGE));
-                            if (tempTradeBean!=null&&pos!=-1){
-                                messageList.add(messageList.size()- pos,tempTradeBean);
+                            if (tempTradeBean != null && pos != -1) {
+                                messageList.add(messageList.size() - pos, tempTradeBean);
                             }
                         } catch (Exception e1) {
                             loadmorePB.setVisibility(View.GONE);

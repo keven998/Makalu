@@ -38,7 +38,9 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
+import com.xuejian.client.lxp.bean.StoreBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachEditDialog;
@@ -58,6 +60,7 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.MoreTravelNoteActivity;
 import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
+import com.xuejian.client.lxp.module.goods.StoreDetailActivity;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -316,8 +319,42 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                 }
             }
         });
+        isBusiness(userId);
     }
+    public void isBusiness(final long userId){
+        if (userId>0){
+            TravelApi.getSellerInfo(userId, new HttpCallBack<String>() {
 
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson<StoreBean> commonJson = CommonJson.fromJson(result, StoreBean.class);
+                    if (commonJson.code == 0) {
+                        findViewById(R.id.ll_shop).setVisibility(View.VISIBLE);
+                        findViewById(R.id.ll_shop).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent();
+                                intent.setClass(HisMainPageActivity.this, StoreDetailActivity.class);
+                                intent.putExtra("sellerId", String.valueOf(userId));
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
+
+    }
     private void editMemo(String memo) {
         UserApi.editMemo(String.valueOf(userId), memo, new HttpCallBack() {
             @Override

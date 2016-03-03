@@ -121,7 +121,7 @@ public class IMShareActivity extends PeachBaseActivity {
         List<ConversationBean> list = IMClient.getInstance().getConversationList();
         List<ConversationBean> del = new ArrayList<>();
         for (ConversationBean bean : list) {
-            if (bean.getFriendId() == 10000 || bean.getFriendId() == 10001) {
+            if (bean.getFriendId() == 10001 || bean.getFriendId() == 10002|| bean.getFriendId() == 10003) {
                 del.add(bean);
             }
         }

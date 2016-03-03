@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@color/white">
+        android:background="@color/tab_bar_color">
 
         <TextView
             android:id="@+id/tv_title_bar_left"
@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:clickable="true"
-            android:drawableLeft="@drawable/selector_ic_nav_back"
+            android:drawableLeft="@drawable/icon_arrow_left_white"
             android:minWidth="60dp"
             android:paddingLeft="12dp"
             android:paddingRight="20dp" />
@@ -29,7 +29,7 @@
             android:layout_marginRight="100dp"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="17sp" />
 
         <TextView
@@ -38,7 +38,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:clickable="true"
-            android:drawableRight="@drawable/expert_search"
+            android:drawableRight="@drawable/search_hilighted"
             android:minWidth="60dp"
             android:paddingLeft="32dp"
             android:paddingRight="13dp" />

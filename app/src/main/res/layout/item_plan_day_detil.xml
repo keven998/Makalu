@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/option_cell_selector"
@@ -8,6 +9,7 @@
     android:paddingTop="5dp">
 
     <FrameLayout
+        android:visibility="gone"
         android:id="@+id/tv_poi_save_level"
         android:layout_width="22dp"
         android:layout_height="29dp"
@@ -31,15 +33,33 @@
 
     </FrameLayout>
 
-
+<FrameLayout
+    android:id="@+id/fl_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="6dp">
     <ImageView
         android:id="@+id/iv_poi_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="6dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_toRightOf="@+id/tv_poi_save_level"
         android:background="@color/app_backgroud"
         android:scaleType="centerCrop" />
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/hot_tag"
+        android:text="热门"
+        android:textColor="@color/base_color_white"
+        android:textSize="10sp"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:paddingLeft="2dp"
+        android:background="@drawable/icon_hot_poi"/>
+</FrameLayout>
+
 
     <CheckedTextView
         android:id="@+id/btn_send"
@@ -59,30 +79,44 @@
         android:id="@+id/tv_poi_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="7dp"
         android:layout_toLeftOf="@id/btn_send"
-        android:layout_toRightOf="@id/iv_poi_img"
+        android:layout_toRightOf="@id/fl_img"
         android:ellipsize="end"
         android:gravity="left"
         android:singleLine="true"
         android:textColor="@color/color_text_ii"
-        android:textSize="16sp" />
-
+        android:textSize="14sp" />
+    <io.techery.properratingbar.ProperRatingBar
+        android:id="@+id/rb_poi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_send"
+        android:layout_toRightOf="@id/fl_img"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@id/tv_poi_title"
+        android:layout_marginTop="5dp"
+        android:textSize="12sp"
+        app:prb_defaultRating="0"
+        app:prb_tickNormalDrawable="@drawable/ic_rating_start_default"
+        app:prb_tickSelectedDrawable="@drawable/ic_rating_start_highlight"
+        app:prb_totalTicks="5"
+        />
     <TextView
         android:id="@+id/tv_poi_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_below="@id/tv_poi_title"
+        android:layout_below="@id/rb_poi"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="5dp"
         android:layout_toLeftOf="@id/btn_send"
-        android:layout_toRightOf="@id/iv_poi_img"
+        android:layout_toRightOf="@id/fl_img"
         android:ellipsize="end"
         android:gravity="left"
         android:singleLine="true"
@@ -92,7 +126,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/iv_poi_img"
+        android:layout_below="@id/fl_img"
         android:layout_marginTop="5dp"
         android:background="@color/color_line" />
 

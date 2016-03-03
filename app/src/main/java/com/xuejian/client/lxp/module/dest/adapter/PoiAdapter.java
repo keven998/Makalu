@@ -26,6 +26,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.techery.properratingbar.ProperRatingBar;
 
 /**
  * Created by Rjm on 2014/11/27.
@@ -152,6 +153,11 @@ public class PoiAdapter extends BaseAdapter {
 
         if (type == SPOT) {
 
+            if (position<=2){
+                spotViewHolder.hot_tag.setVisibility(View.VISIBLE);
+            }else {
+                spotViewHolder.hot_tag.setVisibility(View.GONE);
+            }
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, spotViewHolder.mSpotImageIv, picOptions);
             } else {
@@ -166,12 +172,12 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mSpotCosttimeTv.setText("建议游玩:" + poiDetailBean.timeCostDesc);
             }
 
-            //spotViewHolder.mSpotRating.setRating(poiDetailBean.getRating());
             if (!poiDetailBean.getFormatRank().equals("0")) {
                 spotViewHolder.mSpotRankTv.setText(poiDetailBean.getFormatRank());
             } else {
                 spotViewHolder.mSpotRankTv.setText("N");
             }
+            spotViewHolder.rb_poi.setRating((int)poiDetailBean.getRating());
             if (mIsCanAdd) {
                 spotViewHolder.mBtnAdd.setVisibility(View.VISIBLE);
                 if (poiDetailBean.hasAdded) {
@@ -203,15 +209,6 @@ public class PoiAdapter extends BaseAdapter {
                 });
             } else {
                 spotViewHolder.mBtnAdd.setVisibility(View.GONE);
-//                spotViewHolder.mBtnAdd.setText(/*poiDetailBean.distance*/"地图");     //TODO 添加距离
-//                spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        if (mOnPoiActionListener != null) {
-//                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
-//                        }
-//                    }
-//                });
             }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -220,6 +217,12 @@ public class PoiAdapter extends BaseAdapter {
                 }
             });
         } else {
+            if (position<=2){
+                poiViewHolder.hot_tag.setVisibility(View.VISIBLE);
+            }else {
+                poiViewHolder.hot_tag.setVisibility(View.GONE);
+            }
+            poiViewHolder.rb_poi.setRating((int)poiDetailBean.getRating());
             poiViewHolder.mTvPoiName.setText(poiDetailBean.zhName);
             if (mIsCanAdd) {
                 if (poiDetailBean.hasAdded) {
@@ -250,42 +253,21 @@ public class PoiAdapter extends BaseAdapter {
                 });
             } else {
                 poiViewHolder.mBtnAdd.setVisibility(View.GONE);
-//                poiViewHolder.mBtnAdd.setText("地图");     //TODO 添加距离 导航
-//                poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        //TODO
-//                        if (mOnPoiActionListener != null) {
-//                            mOnPoiActionListener.onPoiNavi(poiDetailBean);
-//                        }
-//                    }
-//                });
             }
+
+
             if (poiDetailBean.style.size()>0)
             poiViewHolder.mPoiPriceTv.setText(poiDetailBean.style.get(0));
-//            poiViewHolder.mPoiAddressTv.setText(poiDetailBean.address);
             if (poiDetailBean.images != null && poiDetailBean.images.size() > 0) {
                 ImageLoader.getInstance().displayImage(poiDetailBean.images.get(0).url, poiViewHolder.mPoiImageIv, picOptions);
             } else {
                 ImageLoader.getInstance().displayImage(null, poiViewHolder.mPoiImageIv, picOptions);
-                //poiViewHolder.mPoiImageIv.setImageDrawable(null);
             }
-//            poiViewHolder.mPoiRating.setRating(poiDetailBean.getRating());
             if (!poiDetailBean.getFormatRank().equals("0")) {
-//                poiViewHolder.mPoiRankTv.setText("热度排名 "+poiDetailBean.getFormatRank());
                 poiViewHolder.mPoiRankTv.setText(poiDetailBean.getFormatRank());
             } else {
                 poiViewHolder.mPoiRankTv.setText("N");
             }
-//            if (poiDetailBean.comments == null || poiDetailBean.comments.size() == 0) {
-////                poiViewHolder.mRlComment.setVisibility(View.GONE);
-//            } else {
-////                poiViewHolder.mRlComment.setVisibility(View.VISIBLE);
-//                CommentBean commentBean = poiDetailBean.comments.get(0);
-//                poiViewHolder.mPoiCommentUsername.setText(commentBean.authorName);
-////                poiViewHolder.mTvCommentNum.setText(String.valueOf(poiDetailBean.commentCnt));
-//                poiViewHolder.mPoiCommentContent.setText(Html.fromHtml(commentBean.contents));
-//            }
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -305,17 +287,15 @@ public class PoiAdapter extends BaseAdapter {
         CheckedTextView mBtnAdd;
         @Bind(R.id.iv_poi_img)
         ImageView mSpotImageIv;
-        //        @InjectView(R.id.spot_address_tv)
-//        TextView mSpotAddressTv;
         @Bind(R.id.tv_poi_time)
         TextView mSpotCosttimeTv;
-        /*@InjectView(R.id.spot_rating)
-        RatingBar mSpotRating;*/
         @Bind(R.id.tv_poi_level)
         TextView mSpotRankTv;
-
+        @Bind(R.id.rb_poi)
+        ProperRatingBar rb_poi;
+        @Bind(R.id.hot_tag)
+        TextView hot_tag;
         public SpotViewHolder(View view) {
-//            view = View.inflate(mContext, R.layout.row_spot_list, null);
             ButterKnife.bind(this, view);
         }
 
@@ -329,21 +309,15 @@ public class PoiAdapter extends BaseAdapter {
         CheckedTextView mBtnAdd;
         @Bind(R.id.iv_poi_img)
         ImageView mPoiImageIv;
-        //        @InjectView(R.id.poi_address_tv)
-//        TextView mPoiAddressTv;
         @Bind(R.id.tv_poi_time)
         TextView mPoiPriceTv;
-        //        @InjectView(R.id.poi_rating)
-//        RatingBar mPoiRating;
         @Bind(R.id.tv_poi_level)
         TextView mPoiRankTv;
-//        @InjectView(R.id.poi_comment_username)
-//        TextView mPoiCommentUsername;
-//        @InjectView(R.id.poi_comment_content)
-//        TextView mPoiCommentContent;
-
+        @Bind(R.id.rb_poi)
+        ProperRatingBar rb_poi;
+        @Bind(R.id.hot_tag)
+        TextView hot_tag;
         public PoiViewHolder(View view) {
-//            view = View.inflate(mContext, R.layout.row_poi_list, null);
             ButterKnife.bind(this, view);
         }
 

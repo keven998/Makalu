@@ -12,6 +12,8 @@ import java.util.ArrayList;
  * Created by Rjm on 2014/11/17.
  */
 public class SpotDetailBean implements ICreateShareDialog {
+    public String trafficInfo;
+    public String visitGuide;
     public boolean isFavorite;
     public String type;
     public String id;

@@ -18,7 +18,8 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
     public final static String RESTAURANT = "restaurant";
         public final static String SHOPPING = "shopping";
     public String distance = "";
-
+    public String trafficInfo;
+    public String visitGuide;
     public boolean hasAdded = false;
     public boolean isFavorite;
     public String type;

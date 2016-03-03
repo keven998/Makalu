@@ -42,7 +42,7 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
     private CountDownTimer countDownTimer;
     private int countDown;
     private String sendSuccessPhone;
-
+    private String tempPhoneNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +50,13 @@ public class ForgetPwdActivity extends PeachBaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
         ButterKnife.bind(this);
+        tempPhoneNum =getIntent().getStringExtra("phone");
         titleBar = (TitleHeaderBar) findViewById(R.id.ly_header_bar_title_wrap);
         titleBar.getTitleTextView().setText("账户验证");
         titleBar.enableBackKey(true);
         nextBtn.setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
+        if (!TextUtils.isEmpty(tempPhoneNum))phoneEt.setText(tempPhoneNum);
     }
 
     private void startCountDownTime() {
