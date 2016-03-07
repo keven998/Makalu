@@ -24,6 +24,7 @@ import com.xuejian.client.lxp.module.goods.CouponListActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
 import com.xuejian.client.lxp.module.goods.RefundActivity;
+import com.xuejian.client.lxp.module.my.InventActivity;
 import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
@@ -67,6 +68,8 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     LinearLayout linearLayout;
     @Bind(R.id.ll_all_order)
     RelativeLayout llAllOrder;
+    @Bind(R.id.rl_my_invent)
+    RelativeLayout rl_my_invent;
     User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rlMyPlan.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
         rl_my_coupon.setOnClickListener(this);
+        rl_my_invent.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
         return view;
@@ -196,6 +200,10 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
             case R.id.rl_my_coupon:
                 Intent rl_my_coupon = new Intent(getActivity(), CouponListActivity.class);
                 startActivity(rl_my_coupon);
+                break;
+            case R.id.rl_my_invent:
+                Intent rl_my_invent = new Intent(getActivity(), InventActivity.class);
+                startActivity(rl_my_invent);
                 break;
             default:
                 break;

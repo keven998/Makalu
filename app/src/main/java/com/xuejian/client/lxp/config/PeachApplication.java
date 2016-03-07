@@ -55,9 +55,10 @@ public class PeachApplication extends BaseApplication implements AuthenticationF
         HttpUtils.setAuthenticationFailed(new com.lv.net.AuthenticationFailed() {
             @Override
             public void onFailed(String msg) {
-                System.out.println(msg);
                 if (AccountManager.getInstance().getLoginAccount(PeachApplication.this)!=null){
-                    logout();
+                    if (!msg.contains("password")){
+                        logout();
+                    }
                 }
             }
         });

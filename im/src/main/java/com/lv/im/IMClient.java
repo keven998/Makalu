@@ -284,7 +284,7 @@ public class IMClient {
 //                count += c.getIsRead();
 //            }
 //        }
-        return db.getUnReadCount();
+            return  MessageDB.getInstance().getUnReadCount();
      //   return count;
     }
 

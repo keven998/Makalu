@@ -40,6 +40,15 @@ public class User implements Parcelable {
     private ArrayList<String> tags;
     private SecretKeyBean secretKey;
 
+    public String getPromotionCode() {
+        return promotionCode;
+    }
+
+    public void setPromotionCode(String promotionCode) {
+        this.promotionCode = promotionCode;
+    }
+
+    private String promotionCode;
     public SecretKeyBean getSecretKey() {
         return secretKey;
     }
@@ -339,6 +348,7 @@ public class User implements Parcelable {
         dest.writeValue(this.Type);
         dest.writeString(this.Ext);
         dest.writeString(this.header);
+        dest.writeString(this.promotionCode);
     }
 
     protected User(Parcel in) {
@@ -369,6 +379,7 @@ public class User implements Parcelable {
         this.Type = (Integer) in.readValue(Integer.class.getClassLoader());
         this.Ext = in.readString();
         this.header = in.readString();
+        this.promotionCode = in.readString();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

@@ -20,6 +20,7 @@ public class PoiDetailBean implements Parcelable, ICreateShareDialog, Comparable
     public String distance = "";
     public String trafficInfo;
     public String visitGuide;
+    public ArrayList<TipsBean> tips;
     public boolean hasAdded = false;
     public boolean isFavorite;
     public String type;

@@ -33,6 +33,8 @@ import com.xuejian.client.lxp.bean.CommentBean;
 import com.xuejian.client.lxp.bean.ImageBean;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.RecommendBean;
+import com.xuejian.client.lxp.bean.TipsBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -41,7 +43,9 @@ import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.utils.IMUtils;
 import com.xuejian.client.lxp.common.utils.IntentUtils;
 import com.xuejian.client.lxp.common.widget.GridViewForListView;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
+import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -152,13 +156,25 @@ public class PoiDetailActivity extends PeachBaseActivity {
 
     private void bindView(final PoiDetailBean bean) {
         //标题
-        TextView titleView = (TextView) findViewById(R.id.poi_det_title);
+        final TextView titleView = (TextView) findViewById(R.id.poi_det_title);
         titleView.setText(bean.zhName);
+
         findViewById(R.id.iv_chat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                User user = AccountManager.getInstance().getLoginAccount(PoiDetailActivity.this);
+                if (user != null) {
+                    IMUtils.onClickImShare(PoiDetailActivity.this);
+
+                } else {
+                    ToastUtil.getInstance(PoiDetailActivity.this).showToast("请先登录");
+                    Intent intent = new Intent(PoiDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("isFromTalkShare", true);
+                    startActivity(intent);
+                }
+
                 MobclickAgent.onEvent(mContext, "navigation_item_poi_lxp_share");
-                IMUtils.onClickImShare(PoiDetailActivity.this);
+           //     IMUtils.onClickImShare(PoiDetailActivity.this);
             }
         });
         final TextView pic_num = (TextView) headerView.findViewById(R.id.tv_commodity_pic_num);
@@ -210,11 +226,25 @@ public class PoiDetailActivity extends PeachBaseActivity {
         ProperRatingBar rb = (ProperRatingBar) headerView.findViewById(R.id.rb_poi);
         rb.setRating((int) bean.getRating());
         TextView styleTV = (TextView) headerView.findViewById(R.id.tv_poi);
-        if (bean.style.size() > 0) {
-            styleTV.setText(bean.style.get(0));
-        } else {
-            styleTV.setVisibility(View.INVISIBLE);
+        if ("vs".equals(bean.type)){
+           styleTV.setBackgroundResource(0);
+            styleTV.setTextColor(getResources().getColor(R.color.color_text_ii));
+            if (TextUtils.isEmpty(bean.timeCostDesc)){
+                styleTV.setVisibility(View.INVISIBLE);
+            }else {
+                styleTV.setText("推荐游玩："+bean.timeCostDesc);
+            }
+
+        }else {
+           styleTV.setBackgroundResource(R.drawable.bg_common_theme_color_solid);
+           styleTV.setTextColor(getResources().getColor(R.color.base_color_white));
+            if (bean.style.size() > 0) {
+                styleTV.setText(bean.style.get(0));
+            } else {
+                styleTV.setVisibility(View.INVISIBLE);
+            }
         }
+
 
         //费用
         TextView ptv = (TextView) headerView.findViewById(R.id.tv_cost);
@@ -261,9 +291,9 @@ public class PoiDetailActivity extends PeachBaseActivity {
         }
 
         TextView addrT = (TextView) headerView.findViewById(R.id.tv_traffic_1);
-        addrT.setText(address);
+        addrT.setText("地址："+address);
         TextView addrT1 = (TextView) headerView.findViewById(R.id.tv_traffic_2);
-        addrT1.setText(bean.trafficInfo);
+        addrT1.setText("乘车方案："+bean.trafficInfo);
         headerView.findViewById(R.id.tv_traffic_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,9 +376,20 @@ public class PoiDetailActivity extends PeachBaseActivity {
             TextView guideView = (TextView) headerView.findViewById(R.id.tv_plan_1);
             guideView.setText(bean.visitGuide);
         }
+        final StringBuilder sb = new StringBuilder();
+        if (bean.tips!=null&&bean.tips.size()>0){
 
-        findViewById(R.id.rl_tips).setVisibility(View.GONE);
-        findViewById(R.id.ll_tips).setVisibility(View.GONE);
+            for (TipsBean tip : bean.tips) {
+                sb.append(tip.title).append("\n");
+                sb.append(tip.desc).append("\n");
+            }
+            TextView tvTip = (TextView) headerView.findViewById(R.id.tv_tips_1);
+            tvTip.setText(Html.fromHtml(sb.toString()));
+        }else {
+            findViewById(R.id.rl_tips).setVisibility(View.GONE);
+            findViewById(R.id.ll_tips).setVisibility(View.GONE);
+        }
+
 
         // 操作
         //    if ("vs".equals(bean.type)) {
@@ -380,7 +421,18 @@ public class PoiDetailActivity extends PeachBaseActivity {
                 }
             });
         } else {
-            headerView.findViewById(R.id.iv_tips).setVisibility(View.GONE);
+            if (bean.tips!=null&&bean.tips.size()>0){
+                headerView.findViewById(R.id.rl_tips).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.putExtra("content", sb.toString());
+                        intent.putExtra("title", "贴士");
+                        intent.setClass(PoiDetailActivity.this, ReadMoreActivity.class);
+                        startActivityWithNoAnim(intent);
+                    }
+                });
+            }else headerView.findViewById(R.id.iv_tips).setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(bean.trafficInfoUrl)) {
             headerView.findViewById(R.id.rl_traffic).setOnClickListener(new View.OnClickListener() {

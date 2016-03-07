@@ -520,7 +520,7 @@
                     android:paddingLeft="10dp"
                     android:layout_marginRight="40dp"
                     android:scaleType="center"
-                    android:src="@drawable/icon_shop" />
+                    android:src="@drawable/icon_shop_white" />
 
                 <View
                     android:layout_width="match_parent"

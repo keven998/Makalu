@@ -73,6 +73,8 @@ public class SearchAllActivity extends PeachBaseActivity {
     TagListView recomend_tag;
     @Bind(R.id.history_lebel)
     TextView historyLebel;
+    @Bind(R.id.history_tag)
+    TagListView history_tag;
     String toId;
     String chatType;
     Object temp;
@@ -81,7 +83,6 @@ public class SearchAllActivity extends PeachBaseActivity {
     String type;
     private final List<Tag> mTags = new ArrayList<Tag>();
     private final List<Tag> mKeyTags = new ArrayList<Tag>();
-    private TagListView history_tag;
     private String[] keys;
     View headerView;
     LinearLayout header;
@@ -186,9 +187,8 @@ public class SearchAllActivity extends PeachBaseActivity {
                 imm.showSoftInput(mEtSearch, InputMethodManager.SHOW_IMPLICIT);
             }
         }, 600);
-        history_tag = (TagListView) findViewById(R.id.history_tag);
+     //   history_tag = (TagListView) findViewById(R.id.history_tag);
         setUpData();
-        history_tag.setTags(mTags);
         history_tag.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
@@ -282,7 +282,9 @@ public class SearchAllActivity extends PeachBaseActivity {
             tagBackground=R.drawable.all_whitesolid_greenline;
             tagcolor = R.color.app_theme_color;
         }
+        keys = null;
         keys = getSearchHistory();
+        mTags.clear();
         if (keys.length > 0 && !TextUtils.isEmpty(keys[0])) {
             int count = 0;
             for (int i = keys.length - 1; i >= 0; i--) {
@@ -299,6 +301,9 @@ public class SearchAllActivity extends PeachBaseActivity {
         } else {
             history_pannel.setVisibility(View.GONE);
         }
+        history_tag.cleanTags();
+        history_tag.removeAllViews();
+        history_tag.setTags(mTags);
         final int tagBgRes = tagBackground;
         final int tagTxRes = tagcolor;
         TravelApi.getRecommendKeywords(type, new HttpCallBack() {
@@ -543,6 +548,8 @@ public class SearchAllActivity extends PeachBaseActivity {
         StringBuilder sb = new StringBuilder(save_Str);
         sb.append(keyword + ",");
         SharePrefUtil.saveHistory(this, String.format("%s_his", type), sb.toString());
+
+        setUpData();
     }
 
     @Override

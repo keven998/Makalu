@@ -33,6 +33,7 @@ import com.umeng.socialize.weixin.media.WeiXinShareContent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 
 public class ShareUtils {
     public class PlatfromSetting {
@@ -164,11 +165,19 @@ public class ShareUtils {
         wxHandler.addToSocialSDK();
         WeiXinShareContent circleMedia = new WeiXinShareContent();
         circleMedia.setTitle("推荐\"旅行派\"给你。");
-        if (TextUtils.isEmpty(content)) {
-            circleMedia.setShareContent("汇聚全球特色旅游体验项目的应用");
-        } else {
-            circleMedia.setShareContent(content);
+        String code="";
+        try {
+            code = AccountManager.getInstance().getLoginAccountInfo().getPromotionCode();
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        StringBuilder stringBuilder = new StringBuilder();
+        if (TextUtils.isEmpty(content)) {
+            stringBuilder.append("汇聚全球特色旅游体验项目的应用").append("\n我的邀请码:"+code);
+        } else {
+            stringBuilder.append(content).append("\n我的邀请码:"+code);
+        }
+        circleMedia.setShareContent(stringBuilder.toString());
         circleMedia.setShareImage(new UMImage(act, R.drawable.icon_for_share));
         circleMedia.setTargetUrl(downloadUrl);
         mController.setShareMedia(circleMedia);
@@ -480,12 +489,15 @@ public class ShareUtils {
 
         //      }
         mController.getConfig().closeToast();
-        mController.setShareMedia(umImage);
+        if (SHARE_MEDIA.DOUBAN !=platform){
+            mController.setShareMedia(umImage);
+        }
+
         String shareUrl = url;
         String shareTitle = "旅行派特色体验";
         String shareContent =String.format("%s元起|%s",CommonUtils.getPriceString(shareCommodityBean.price),shareCommodityBean.title) ;
 
-        if (SHARE_MEDIA.SINA == platform){
+        if (SHARE_MEDIA.SINA == platform||SHARE_MEDIA.DOUBAN==platform){
             shareContent+=url;
         }
         mController.setShareContent(shareContent);

@@ -27,7 +27,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
 
     private EditText phoneEt;
     private EditText pwdEt;
-
+    private EditText inviteCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
         });
         phoneEt = (EditText) findViewById(R.id.et_account);
         pwdEt = (EditText) findViewById(R.id.et_password);
+        inviteCode = (EditText) findViewById(R.id.et_invite_code);
     }
 
     @Override
@@ -94,6 +95,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                             intent.putExtra("pwd", pwdEt.getText().toString().trim());
                             intent.putExtra("countDown", validationResult.result.coolDown);
                             intent.putExtra("actionCode", UserApi.ValidationCode.REG_CODE);
+                            intent.putExtra("promotionCode",inviteCode.getText().toString());
                             startActivityForResult(intent, REQUEST_CODE_CHECH_VALICATION);
                         } else {
                             ToastUtil.getInstance(mContext).showToast(validationResult.err.message);

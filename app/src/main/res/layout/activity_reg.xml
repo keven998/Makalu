@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/icon_little"
+        android:src="@drawable/icon"
         android:scaleType="fitCenter" />
 
     <RelativeLayout
@@ -79,7 +79,32 @@
             android:textColor="@color/color_text_i"
             android:textColorHint="@color/color_disable"
             android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/et_password"
+            android:background="@color/app_theme_color" />
 
+        <EditText
+            android:id="@+id/et_invite_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_password"
+            android:layout_marginTop="1dp"
+            android:background="@null"
+            android:cursorVisible="true"
+            android:gravity="center_vertical"
+            android:hint="邀请码(选填)"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textColor="@color/color_text_i"
+            android:textColorHint="@color/color_disable"
+            android:textSize="15sp" />
     </RelativeLayout>
 
     <Button

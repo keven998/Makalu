@@ -1065,7 +1065,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
      */
     private void sendPicByUri(Uri selectedImage) {
         Cursor cursor = getContentResolver().query(selectedImage, null, null, null, null);
-        if (cursor != null) {
+        if (cursor != null&&cursor.getColumnCount()>0) {
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex("_data");
             String picturePath = cursor.getString(columnIndex);

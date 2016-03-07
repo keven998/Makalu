@@ -78,6 +78,7 @@ android {
         leshop {}
         shop360 {}
         google {}
+        samsung {}
         productFlavors.all {
 
             flavor ->

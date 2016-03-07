@@ -205,7 +205,7 @@ public class UserApi extends BaseApi {
         //   return HttpManager.request(request, callback);
     }
 
-    public static void signUp(String phone, String pwd, String captcha, HttpCallBack callback) {
+    public static void signUp(String phone, String pwd, String captcha,String code ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + SIGNUP);
@@ -213,6 +213,7 @@ public class UserApi extends BaseApi {
 
         JSONObject jsonObject = new JSONObject();
         try {
+            jsonObject.put("promotionCode",code);
             jsonObject.put("tel", phone);
             jsonObject.put("password", pwd);
             jsonObject.put("validationCode", captcha);

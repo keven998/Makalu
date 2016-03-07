@@ -42,7 +42,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
     private String tel, pwd, actionCode;
     private int countDown;
     private User user;
-
+    private String promotionCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +50,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
         ButterKnife.bind(this);
         findViewById(R.id.btn_next).setOnClickListener(this);
         downTimeBtn.setOnClickListener(this);
+        promotionCode = getIntent().getStringExtra("promotionCode");
         initData();
         startCountDownTime();
 
@@ -130,7 +131,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        UserApi.signUp(tel, pwd, smsEt.getText().toString().trim(), new HttpCallBack<String>() {
+                        UserApi.signUp(tel, pwd, smsEt.getText().toString().trim(),promotionCode, new HttpCallBack<String>() {
                             @Override
                             public void doSuccess(String result, String method) {
                                 DialogManager.getInstance().dissMissLoadingDialog();

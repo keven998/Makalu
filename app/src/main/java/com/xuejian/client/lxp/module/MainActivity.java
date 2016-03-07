@@ -562,7 +562,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            mMediaPlayer.setLooping(false); //循环播放
+            if (mMediaPlayer!=null)mMediaPlayer.setLooping(false); //循环播放
         }
 
 
@@ -571,7 +571,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 //   vibrator.vibrate(500);
                 if (isLongEnough()) {
                     try {
-                        if (ring) mMediaPlayer.start();
+                        if (ring&&mMediaPlayer!=null) mMediaPlayer.start();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -582,7 +582,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 //    vibrator.vibrate(500);
                 if (isLongEnough()) {
                     try {
-                        if (ring) mMediaPlayer.start();
+                        if (ring&&mMediaPlayer!=null) mMediaPlayer.start();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -729,26 +729,30 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             if (intent != null) {
                 acton = intent.getAction();
             }
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(acton)) {
-                ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            try {
+                if (ConnectivityManager.CONNECTIVITY_ACTION.equals(acton)) {
+                    ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                    NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                    NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
-                    TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-                    if (talkFragment != null) {
-                        talkFragment.netStateChange("(未连接)");
+                    if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
+                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                        if (talkFragment != null) {
+                            talkFragment.netStateChange("(未连接)");
+                        }
+                    } else {
+                        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
+                        if (talkFragment != null) {
+                            talkFragment.netStateChange("");
+                        }
+                        //IMClient.initIM(getApplicationContext());
+                        IMClient.getInstance().initAckAndFetch();
                     }
-                } else {
-                    TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-                    if (talkFragment != null) {
-                        talkFragment.netStateChange("");
-                    }
-                    //IMClient.initIM(getApplicationContext());
-                    IMClient.getInstance().initAckAndFetch();
+                } else if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(acton)) {
+                    getAlarmParams();
                 }
-            } else if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(acton)) {
-                getAlarmParams();
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     };
