@@ -55,6 +55,7 @@ import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.fragment.MyInfoFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
+import com.xuejian.client.lxp.module.trade.TradeOrderListActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -121,6 +122,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         setContentView(R.layout.activity_main);
         initView();
 
+        Intent intent = new Intent(this, TradeOrderListActivity.class);
+        intent.putExtra("type", TradeOrderListActivity.GOODS);
+        startActivity(intent);
+
+        Intent intent1 = new Intent(this, TradeOrderListActivity.class);
+        intent1.putExtra("type",TradeOrderListActivity.ORDER);
+        startActivity(intent1);
 
         //断网提示
         IntentFilter intentFilter = new IntentFilter();

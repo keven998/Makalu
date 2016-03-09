@@ -155,7 +155,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + COUPON_LIST);
-        request.putUrlParams("userId",String.valueOf(userId));
+        request.putUrlParams("userId", String.valueOf(userId));
         setDefaultParams(request, "");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
@@ -192,7 +192,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + COMMODITY_LIST);
-        request.putUrlParams("query",key);
+        request.putUrlParams("query", key);
         setDefaultParams(request, "");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
@@ -211,7 +211,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + SELLER_INFO + String.valueOf(userId));
-        setDefaultParams(request,"");
+        setDefaultParams(request, "");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
@@ -249,10 +249,14 @@ public class TravelApi extends BaseApi {
     }
 
 
-    public static void getOrderList(long userId,String status ,String start,String count,HttpCallBack callback) {
+    public static void getOrderList(long userId,String status ,String start,String count,boolean trade,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + ORDER_LIST);
+        if (trade){
+            request.putUrlParams("seller", String.valueOf(userId));
+            request.putUrlParams("sort", "updateTime");
+        }
         request.putUrlParams("userId", String.valueOf(userId));
         if (!TextUtils.isEmpty(status)){
             request.putUrlParams("status",status);
@@ -391,7 +395,7 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
-    public static void getCommodityList(String sellerId, String localityId, String category, String sortBy, String sort,String start ,String count,HttpCallBack callback) {
+    public static void getCommodityList(String sellerId,String status, String localityId, String category, String sortBy, String sort,String start ,String count,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + COMMODITY_LIST);
@@ -404,7 +408,12 @@ public class TravelApi extends BaseApi {
         if (!TextUtils.isEmpty(category)) request.putUrlParams("category", category);
         if (!TextUtils.isEmpty(sortBy)) {
             request.putUrlParams("sortBy", sortBy);
+        }
+        if (!TextUtils.isEmpty(sort)) {
             request.putUrlParams("sort", sort);
+        }
+        if (!TextUtils.isEmpty(status)) {
+            request.putUrlParams("status", status);
         }
         setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);

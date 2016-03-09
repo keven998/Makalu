@@ -151,7 +151,7 @@ public class CityInfoActivity extends PeachBaseActivity {
 //            }
 //        });
 
-        TravelApi.getCommodityList(null, id, null, null, null, "0", "3", new HttpCallBack<String>() {
+        TravelApi.getCommodityList(null,null, id, null, null, null, "0", "3", new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {

@@ -528,7 +528,7 @@ public class GoodsList extends PeachBaseActivity {
 
     public void getData(String sellerId, String localityId, String category, String sortBy, String sort, final int start, int count, final boolean fresh) {
 
-        TravelApi.getCommodityList(sellerId, localityId, category, sortBy, sort, String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getCommodityList(sellerId, null,localityId, category, sortBy, sort, String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {

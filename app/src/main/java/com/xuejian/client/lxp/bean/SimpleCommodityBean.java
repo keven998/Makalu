@@ -22,6 +22,7 @@ public class SimpleCommodityBean implements Parcelable {
      * images : [{"url":"http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc"}]
      * cover : {"url":"http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc"}
      */
+    public String status;
     public String shareUrl;
     public long version;
     private long commodityId;
@@ -160,6 +161,7 @@ public class SimpleCommodityBean implements Parcelable {
         dest.writeTypedList(plans);
         dest.writeString(this.id);
         dest.writeByte(isFavorite ? (byte) 1 : (byte) 0);
+        dest.writeString(this.status);
     }
 
     protected SimpleCommodityBean(Parcel in) {
@@ -178,6 +180,7 @@ public class SimpleCommodityBean implements Parcelable {
         this.plans = in.createTypedArrayList(PlanBean.CREATOR);
         this.id = in.readString();
         this.isFavorite = in.readByte() != 0;
+        this.status = in.readString();
     }
 
     public static final Creator<SimpleCommodityBean> CREATOR = new Creator<SimpleCommodityBean>() {

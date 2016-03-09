@@ -137,7 +137,7 @@ public class RefundActivity extends PeachBaseActivity {
 
     public void getOrder(String status, int start, int count, final boolean refresh) {
         long userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
-        TravelApi.getOrderList(userId, status, String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getOrderList(userId, status, String.valueOf(start), String.valueOf(count),false, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
