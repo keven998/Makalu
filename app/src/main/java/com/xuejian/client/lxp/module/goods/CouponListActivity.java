@@ -210,7 +210,7 @@ public class CouponListActivity extends PeachBaseActivity {
             SpannableString string = new SpannableString("¥");
             string.setSpan(new AbsoluteSizeSpan(12, true), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-            stringBuilder.append(string).append(String.valueOf(bean.getDiscount()));
+            stringBuilder.append(string).append(CommonUtils.getPriceString(bean.getDiscount()));
             holder.tvCouponPrice.setText(stringBuilder);
             holder.tvCouponTimestamp.setText("有效期至: " + bean.getExpire());
             if (this.isCheckable){
@@ -229,7 +229,7 @@ public class CouponListActivity extends PeachBaseActivity {
 
     }
 
-    public static                 class ViewHolder extends RecyclerView.ViewHolder {
+    public static  class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_coupon_price)
         TextView tvCouponPrice;
         @Bind(R.id.tv_coupon_title)
