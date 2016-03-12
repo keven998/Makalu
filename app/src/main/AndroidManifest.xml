@@ -479,6 +479,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.OrderConfirmActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.goods.CountryPickActivity"

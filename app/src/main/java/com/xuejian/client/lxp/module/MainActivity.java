@@ -55,8 +55,6 @@ import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.fragment.MyInfoFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
-import com.xuejian.client.lxp.module.trade.TradeActionActivity;
-import com.xuejian.client.lxp.module.trade.TradeOrderListActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,15 +121,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         setContentView(R.layout.activity_main);
         initView();
 
-        Intent intent = new Intent(this, TradeOrderListActivity.class);
-        intent.putExtra("type", TradeOrderListActivity.GOODS);
-        startActivity(intent);
-
-        Intent intent1 = new Intent(this, TradeOrderListActivity.class);
-        intent1.putExtra("type",TradeOrderListActivity.ORDER);
-        startActivity(intent1);
-        Intent intent2 = new Intent(this, TradeActionActivity.class);
-        startActivity(intent2);
+//        Intent intent = new Intent(this, TradeOrderListActivity.class);
+//        intent.putExtra("type", TradeOrderListActivity.GOODS);
+//        startActivity(intent);
+//
+//        Intent intent1 = new Intent(this, TradeOrderListActivity.class);
+//        intent1.putExtra("type",TradeOrderListActivity.ORDER);
+//        startActivity(intent1);
+//        Intent intent2 = new Intent(this, TradeActionActivity.class);
+//        startActivity(intent2);
 
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
@@ -557,6 +555,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             } else {
                 superToast.setText("  你有一条新消息");
             }
+
+            /**
+             * 自动回复
+             */
+          // autoResponse(m,groupId);
+
+
         } catch (Exception e) {
         }
         if (mMediaPlayer == null) {
@@ -606,6 +611,27 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         //  notifyNewMessage(m);
     }
 
+    public void autoResponse(MessageBean m, String groupId){
+        if(m.getMessage().contains("红包")&&(Integer.parseInt(groupId) == 0 )){
+            MessageBean messageBean = IMClient.getInstance().createTextMessage(AccountManager.getCurrentUserId(), "感谢亲使用旅行派APP，支付宝红包稍后统一发放！一定会发到的亲不要捉急！（为了保证亲可以第一时间收到红包，请留实名验证的支付宝账号哟）这会儿亲可以去我们的APP逛逛^_^有你想体验的旅行产品，来跟派派说，派派可以给你炒鸡感动的折扣哦", String.valueOf(m.getSenderId()), "single");
+            IMClient.getInstance().sendTextMessage(messageBean, String.valueOf(m.getSenderId()), "", new HttpCallback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onSuccess(String result) {
+
+                }
+
+                @Override
+                public void onFailed(final int code) {
+
+                }
+            }, "single");
+        }
+    }
     @Override
     public void onCMDMessageArrive(MessageBean m, String groupId) {
         try {

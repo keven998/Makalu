@@ -24,6 +24,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.goods.OrderConfirmActivity;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
 
@@ -102,6 +103,10 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                             Toast.makeText(mActivity.get(), "支付取消 ",
                                     Toast.LENGTH_SHORT).show();
                             if (mActivity.get() != null) {
+                                Intent intent1 = new Intent();
+                                intent1.setClass(mActivity.get(), OrderConfirmActivity.class);
+                                intent1.putExtra("cancel", true);
+                                mActivity.get().startActivity(intent1);
                                 mActivity.get().finish();
                             }
                         } else {
@@ -109,6 +114,10 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                             Toast.makeText(mActivity.get(), "支付失败 " + resultStatus,
                                     Toast.LENGTH_SHORT).show();
                             if (mActivity.get() != null) {
+                                Intent intent1 = new Intent();
+                                intent1.setClass(mActivity.get(), OrderConfirmActivity.class);
+                                intent1.putExtra("cancel", true);
+                                mActivity.get().startActivity(intent1);
                                 mActivity.get().finish();
                             }
                         }

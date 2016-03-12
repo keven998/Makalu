@@ -131,10 +131,6 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     poiDetailBean = detailBean.result;
                     bindView(poiDetailBean);
                 } else {
-                    findViewById(R.id.tv_traffic).setEnabled(false);
-                    findViewById(R.id.tv_travel).setEnabled(false);
-                    findViewById(R.id.tv_tips).setEnabled(false);
-//                    ToastUtil.getInstance(PoiDetailActivity.this).showToast(getResources().getString(R.string.request_server_failed));
                 }
             }
 

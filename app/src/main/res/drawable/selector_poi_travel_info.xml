@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/poi_bottom_button_raid_disable" android:state_enabled="false"/>
-    <item android:drawable="@drawable/poi_button_raid_selected" android:state_pressed="true"/>
-    <item android:drawable="@drawable/poi_button_raid_selected" android:state_focused="true"/>
-    <item android:drawable="@drawable/poi_button_raid_default"/>
-   
-
-</selector>

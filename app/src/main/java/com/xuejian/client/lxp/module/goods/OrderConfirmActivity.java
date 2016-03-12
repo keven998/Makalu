@@ -107,6 +107,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
     private HashMap<String, String> idType = new HashMap<>();
     private OrderBean currentBean;
     private boolean orderCreated;
+    private AlertDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +129,17 @@ public class OrderConfirmActivity extends PeachBaseActivity {
         idType.put("HMPermit", "港澳通行证");
         idType.put("TWPermit", "台湾通行证");
         bindView(bean);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra("cancel",false)){
+            if (dialog!=null&&!dialog.isShowing()){
+                dialog.show();
+            }
+        }
+
     }
 
     private void bindView(final OrderBean bean) {
@@ -379,7 +391,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
 
     private void showPayActionDialog(final OrderBean currentOrder) {
         final Activity act = this;
-        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        dialog = new AlertDialog.Builder(act).create();
         dialog.setCanceledOnTouchOutside(false);
         View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
         CheckedTextView alipay = (CheckedTextView) contentView.findViewById(R.id.ctv_alipay);
