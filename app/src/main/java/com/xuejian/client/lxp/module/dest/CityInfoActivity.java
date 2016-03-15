@@ -27,7 +27,6 @@ import com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CityBean;
@@ -336,7 +335,7 @@ public class CityInfoActivity extends PeachBaseActivity {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(CityInfoActivity.this, "card_item_city_pictures");
+                    //MobclickAgent.onEvent(CityInfoActivity.this, "card_item_city_pictures");
                     Intent intent = new Intent(CityInfoActivity.this, CityPictureActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("title", zhName);

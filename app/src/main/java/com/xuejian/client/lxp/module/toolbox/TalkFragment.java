@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.lv.bean.ConversationBean;
 import com.lv.im.IMClient;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -114,7 +113,7 @@ public class TalkFragment extends PeachBaseFragment {
         btnContainerAddressList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(getActivity(), "navigation_item_my_friends");
+                //MobclickAgent.onEvent(getActivity(), "navigation_item_my_friends");
                 Intent intent = new Intent(getActivity(), ContactActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
@@ -130,9 +129,9 @@ public class TalkFragment extends PeachBaseFragment {
                     ToastUtil.getInstance(getActivity()).showToast("还不支持自己聊");
                 else {
                     if (curconversation.getFriendId() == 10000) {
-                        MobclickAgent.onEvent(getActivity(), "cell_item_paipai");
+                        //MobclickAgent.onEvent(getActivity(), "cell_item_paipai");
                     } else if (curconversation.getFriendId() == 10001) {
-                        MobclickAgent.onEvent(getActivity(), "cell_item_wenwen");
+                        //MobclickAgent.onEvent(getActivity(), "cell_item_wenwen");
                     }
 
                     // 进入聊天页面
@@ -177,7 +176,7 @@ public class TalkFragment extends PeachBaseFragment {
     }
 
     private void showActionDialog() {
-        MobclickAgent.onEvent(getActivity(), "navigation_item_talks_menu");
+        //MobclickAgent.onEvent(getActivity(), "navigation_item_talks_menu");
         String[] names = {"新建聊天/群聊", "添加朋友", "取消"};
         final MoreDialog dialog = new MoreDialog(getActivity());
         dialog.setMoreStyle(false, 3, names);
@@ -432,7 +431,7 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_home_talk_lists");
+        //MobclickAgent.onPageStart("page_home_talk_lists");
         //返回页面的动画样式
         //getActivity().overridePendingTransition(R.anim.push_bottom_out,R.anim.push_bottom_in);
         if (!hidden) {
@@ -452,7 +451,7 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_home_talk_lists");
+        //MobclickAgent.onPageEnd("page_home_talk_lists");
     }
 
     @Override

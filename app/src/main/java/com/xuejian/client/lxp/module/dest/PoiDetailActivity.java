@@ -26,7 +26,6 @@ import com.aizou.core.widget.listHelper.ViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentBean;
@@ -104,15 +103,15 @@ public class PoiDetailActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_poi_detai");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_poi_detai");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_poi_detai");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_poi_detai");
+        //MobclickAgent.onPause(this);
     }
 
 
@@ -169,7 +168,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
                     startActivity(intent);
                 }
 
-                MobclickAgent.onEvent(mContext, "navigation_item_poi_lxp_share");
+                //MobclickAgent.onEvent(mContext, "navigation_item_poi_lxp_share");
            //     IMUtils.onClickImShare(PoiDetailActivity.this);
             }
         });
@@ -393,7 +392,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             headerView.findViewById(R.id.rl_plan).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(PoiDetailActivity.this, "button_item_poi_travel_notes");
+                    //MobclickAgent.onEvent(PoiDetailActivity.this, "button_item_poi_travel_notes");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("enable_bottom_bar", false);
                     intent.putExtra("url", bean.visitGuideUrl);
@@ -408,7 +407,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             headerView.findViewById(R.id.rl_tips).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(PoiDetailActivity.this, "button_item_poi_travel_tips");
+                    //MobclickAgent.onEvent(PoiDetailActivity.this, "button_item_poi_travel_tips");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("enable_bottom_bar", false);
                     intent.putExtra("url", bean.tipsUrl);
@@ -434,7 +433,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             headerView.findViewById(R.id.rl_traffic).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(PoiDetailActivity.this, "button_item_poi_travel_traffic");
+                    //MobclickAgent.onEvent(PoiDetailActivity.this, "button_item_poi_travel_traffic");
                     Intent intent = new Intent(mContext, PeachWebViewActivity.class);
                     intent.putExtra("enable_bottom_bar", false);
                     intent.putExtra("url", bean.trafficInfoUrl);
@@ -456,7 +455,7 @@ public class PoiDetailActivity extends PeachBaseActivity {
             findViewById(R.id.rl_comment).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(PoiDetailActivity.this, "cell_item_poi_all_comments");
+                    //MobclickAgent.onEvent(PoiDetailActivity.this, "cell_item_poi_all_comments");
                     Intent intent = new Intent(mContext, MoreCommentActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("poi", poiDetailBean);

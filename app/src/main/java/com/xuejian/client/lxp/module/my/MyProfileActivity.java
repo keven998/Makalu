@@ -23,7 +23,6 @@ import com.aizou.core.utils.SharePrefUtil;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
@@ -241,7 +240,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
 
 
     private void turnToEditProfile() {
-        MobclickAgent.onEvent(MyProfileActivity.this, "navigation_item_edit_profile");
+        //MobclickAgent.onEvent(MyProfileActivity.this, "navigation_item_edit_profile");
         User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
         if (user == null) {
             Intent logIntent = new Intent(MyProfileActivity.this, LoginActivity.class);
@@ -290,7 +289,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
                 break;*/
 
             case R.id.my_profile_edit:
-                MobclickAgent.onEvent(MyProfileActivity.this, "navigation_item_edit_profile");
+                //MobclickAgent.onEvent(MyProfileActivity.this, "navigation_item_edit_profile");
                 User user = AccountManager.getInstance().getLoginAccount(MyProfileActivity.this);
                 if (user == null) {
                     Intent logIntent = new Intent(MyProfileActivity.this, LoginActivity.class);
@@ -613,7 +612,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_home_mine");
+        //MobclickAgent.onPageStart("page_home_mine");
         refreshUserInfo();
     }
 
@@ -784,7 +783,7 @@ public class MyProfileActivity extends PeachBaseActivity implements View.OnClick
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_home_mine");
+        //MobclickAgent.onPageEnd("page_home_mine");
     }
 
 

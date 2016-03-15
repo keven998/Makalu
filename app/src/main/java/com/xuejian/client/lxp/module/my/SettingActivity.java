@@ -15,7 +15,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharedPreferencesUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.UpdateBean;
@@ -133,15 +132,15 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_app_setting");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_app_setting");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_app_setting");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_app_setting");
+        //MobclickAgent.onPause(this);
     }
 
 

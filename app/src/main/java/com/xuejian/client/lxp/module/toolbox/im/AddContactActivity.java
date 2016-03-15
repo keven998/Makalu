@@ -40,7 +40,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -116,15 +115,15 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_add_friend");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_add_friend");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_add_friend");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_add_friend");
+        //MobclickAgent.onPause(this);
     }
 
     private void initTitleBar() {
@@ -214,7 +213,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                 if (CommonUtils.checkOp(AddContactActivity.this, 4) == 1) {
                     Toast.makeText(AddContactActivity.this, "通讯录权限被禁止，请打开权限后重试", Toast.LENGTH_SHORT).show();
                 } else {
-                    MobclickAgent.onEvent(AddContactActivity.this, "cell_item_add_lxp_friends_from_contacts");
+                    //MobclickAgent.onEvent(AddContactActivity.this, "cell_item_add_lxp_friends_from_contacts");
                     Intent phoneIntent = new Intent(mContext, AddPhoneContactActivity.class);
                     startActivity(phoneIntent);
                 }
@@ -222,7 +221,7 @@ public class AddContactActivity extends ChatBaseActivity implements View.OnClick
                 break;
 
             case R.id.tv_weixin_contacts:
-                MobclickAgent.onEvent(AddContactActivity.this, "cell_item_add_lxp_friends_from_weichat");
+                //MobclickAgent.onEvent(AddContactActivity.this, "cell_item_add_lxp_friends_from_weichat");
                 ShareUtils.shareAppToWx(this, String.format("我正在用旅行派，搜索: %s 加我", AccountManager.getInstance().getLoginAccount(this).getNickName()));
                 break;
         }

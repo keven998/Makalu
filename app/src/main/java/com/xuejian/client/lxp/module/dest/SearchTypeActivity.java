@@ -14,7 +14,6 @@ import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
 import com.lv.Listener.HttpCallback;
 import com.lv.im.IMClient;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -260,7 +259,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
                     @Override
                     public void onSendClick(String type, String id, Object object) {
-                        MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
+                        //MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
                         IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {
@@ -333,7 +332,7 @@ public class SearchTypeActivity extends PeachBaseActivity {
 
                     @Override
                     public void onSendClick(String type, String id, Object object) {
-                        MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
+                        //MobclickAgent.onEvent(SearchTypeActivity.this, "button_item_pois_lxp_send");
                         IMUtils.showImShareDialog(mContext, (ICreateShareDialog) object, new IMUtils.OnDialogShareCallBack() {
                             @Override
                             public void onDialogShareOk(Dialog dialog, int type, String content, String leave_msg) {

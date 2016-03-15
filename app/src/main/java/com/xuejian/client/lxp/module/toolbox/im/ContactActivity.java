@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
@@ -35,7 +34,7 @@ public class ContactActivity extends PeachBaseActivity {
         titleBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(ContactActivity.this, "navigation_item_add_lxp_friend");
+                //MobclickAgent.onEvent(ContactActivity.this, "navigation_item_add_lxp_friend");
                 startActivity(new Intent(ContactActivity.this, AddContactActivity.class));
             }
         });
@@ -51,13 +50,13 @@ public class ContactActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPause(this);
     }
 
     @Override

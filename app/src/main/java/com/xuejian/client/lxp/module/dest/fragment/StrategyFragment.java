@@ -24,7 +24,6 @@ import com.aizou.core.utils.GsonTools;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -291,7 +290,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
             mCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(getActivity(), "ell_item_plans_change_status");
+                    //MobclickAgent.onEvent(getActivity(), "ell_item_plans_change_status");
                     if (strategyBean.status.equals("planned")) {
                         haveBeenVisited(strategyBean);
                         notifyDataSetChanged();
@@ -421,7 +420,7 @@ public class StrategyFragment extends PeachBaseFragment implements AbsListView.O
         }
 
         private void deleteItem(final StrategyBean itemData, final int pos) {
-            MobclickAgent.onEvent(getActivity(), "cell_item_plans_delete");
+            //MobclickAgent.onEvent(getActivity(), "cell_item_plans_delete");
             final PeachMessageDialog dialog = new PeachMessageDialog(getActivity());
             dialog.setTitle("提示");
             dialog.setTitleIcon(R.drawable.ic_dialog_tip);

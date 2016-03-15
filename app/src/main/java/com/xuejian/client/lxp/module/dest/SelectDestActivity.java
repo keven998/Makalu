@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -270,15 +268,15 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_select_plan_city");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_select_plan_city");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-         MobclickAgent.onPageEnd("page_select_plan_city");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_select_plan_city");
+        //MobclickAgent.onPause(this);
     }
 
     @Override

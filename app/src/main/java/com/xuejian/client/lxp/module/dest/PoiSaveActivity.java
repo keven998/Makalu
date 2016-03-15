@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -197,7 +196,7 @@ public class PoiSaveActivity extends PeachBaseActivity {
             save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(PoiSaveActivity.this,"button_item_add_favorite");
+                    //MobclickAgent.onEvent(PoiSaveActivity.this,"button_item_add_favorite");
                     ArrayList<LocBean> list = new ArrayList<LocBean>();
                     list.add(destinations.get(i));
                     Intent intent = new Intent(PoiSaveActivity.this, PoiListActivity.class);
@@ -255,12 +254,12 @@ public class PoiSaveActivity extends PeachBaseActivity {
     protected void onResume() {
         super.onResume();
         if ("购物".equals(title)) {
-            MobclickAgent.onPageStart("page_plan_favorite_pois_lists_type_shoppping");
+            //MobclickAgent.onPageStart("page_plan_favorite_pois_lists_type_shoppping");
         }else {
-            MobclickAgent.onPageStart("page_plan_favorite_pois_lists_type_delicy");
+            //MobclickAgent.onPageStart("page_plan_favorite_pois_lists_type_delicy");
         }
 
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onResume(this);
 
     }
 
@@ -268,12 +267,12 @@ public class PoiSaveActivity extends PeachBaseActivity {
     protected void onPause() {
         super.onPause();
         if ("购物".equals(title)) {
-            MobclickAgent.onPageEnd("page_plan_favorite_pois_lists_type_shoppping");
+            //MobclickAgent.onPageEnd("page_plan_favorite_pois_lists_type_shoppping");
         }else {
-            MobclickAgent.onPageEnd("page_plan_favorite_pois_lists_type_delicy");
+            //MobclickAgent.onPageEnd("page_plan_favorite_pois_lists_type_delicy");
         }
 
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPause(this);
     }
 
     @Override

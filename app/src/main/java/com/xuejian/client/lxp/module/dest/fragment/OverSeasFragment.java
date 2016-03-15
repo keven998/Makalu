@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CountryWithExpertsBean;
@@ -135,15 +134,15 @@ public class OverSeasFragment extends PeachBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_lxp_guide_distribute");
-        MobclickAgent.onResume(getActivity());
+        //MobclickAgent.onPageStart("page_lxp_guide_distribute");
+        //MobclickAgent.onResume(getActivity());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_lxp_guide_distribute");
-        MobclickAgent.onPause(getActivity());
+        //MobclickAgent.onPageEnd("page_lxp_guide_distribute");
+        //MobclickAgent.onPause(getActivity());
     }
 
 

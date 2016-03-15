@@ -13,7 +13,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.widget.prv.PullToRefreshBase;
 import com.aizou.core.widget.prv.PullToRefreshListView;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ExpertBean;
@@ -105,15 +104,15 @@ public class GuilderListActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_lxp_guide_lists");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_lxp_guide_lists");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_lxp_guide_lists");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_lxp_guide_lists");
+        //MobclickAgent.onPause(this);
     }
 
     public class DarenClick implements AdapterView.OnItemClickListener {

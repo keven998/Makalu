@@ -47,6 +47,22 @@
 #-dontwarn class com.alibaba.fastjson.**
 #-dontwarn class butterknife.internal.**
 #-dontwarn class okio.**
+
+
+#butterKnife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+
 -keep class org.lucasr.twowayview.** { *; }
 -keep class com.baidu.** { *; }
 -keep class vi.com.gdi.bgl.android.**{*;}
@@ -55,10 +71,29 @@
 -keep public class * extends android.app.Fragment
 -keep public class * extends android.app.FragmentActivity
 
+
+#fastjson
+-dontwarn com.alibaba.fastjson.**
+
+-keep class com.alibaba.fastjson.** { *; }
+
 # 高德地图
 # -libraryjars /libs/android-support-v4.jar  -dontwarn android.support.v4.**
+
+#-libraryjars   libs/AMap_2DMap_v2.6.0_20150916.jar
+#
+#-libraryjars   libs/AMap_ Location_v1.4.0.1_20150910.jar
+
+-dontwarn com.amap.api.**
+
+-dontwarn com.a.a.**
+
+-dontwarn com.autonavi.**
+
 -keep class com.amap.api.**  {*;}
+
 -keep class com.autonavi.**  {*;}
+
 -keep class com.a.a.**  {*;}
 
 ##---------------Begin: proguard configuration for Gson  ----------
@@ -77,7 +112,14 @@
 -keep class com.xuejian.client.lxp.bean.** { *; }
 -keep class com.xuejian.client.lxp.common.gson.** { *; }
 
-
+#禁止log
+-assumenosideeffects class android.util.Log {
+    public static *** v(...);
+    public static *** i(...);
+    public static *** d(...);
+    public static *** w(...);
+    public static *** e(...);
+}
 
 ##---------------End: proguard configuration for Gson  ----------
 

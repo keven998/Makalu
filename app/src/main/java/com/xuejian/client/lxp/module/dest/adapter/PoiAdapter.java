@@ -14,7 +14,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseActivity;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -191,7 +190,7 @@ public class PoiAdapter extends BaseAdapter {
                 spotViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(mContext,"button_item_pois_lxp_plan");
+                        //MobclickAgent.onEvent(mContext,"button_item_pois_lxp_plan");
                         if (poiDetailBean.hasAdded) {
                             poiDetailBean.hasAdded = false;
                             if (mOnPoiActionListener != null) {
@@ -235,7 +234,7 @@ public class PoiAdapter extends BaseAdapter {
                 poiViewHolder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(mContext,"button_item_pois_lxp_plan");
+                        //MobclickAgent.onEvent(mContext,"button_item_pois_lxp_plan");
                         if (poiDetailBean.hasAdded) {
                             poiDetailBean.hasAdded = false;
                             if (mOnPoiActionListener != null) {

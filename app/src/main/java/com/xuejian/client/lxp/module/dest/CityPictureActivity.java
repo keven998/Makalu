@@ -25,7 +25,6 @@ import com.aizou.core.utils.LocalDisplay;
 import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ImageBean;
@@ -86,15 +85,15 @@ public class CityPictureActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_profile_album");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_profile_album");
+        // MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageStart("page_profile_album");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageStart("page_profile_album");
+        // MobclickAgent.onPause(this);
     }
 
     private void initView() {

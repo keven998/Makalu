@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
@@ -127,15 +126,15 @@ public class DayAgendaActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_lxp_day_schedule_detail");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_lxp_day_schedule_detail");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_lxp_day_schedule_detail");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_lxp_day_schedule_detail");
+        // MobclickAgent.onPause(this);
     }
 
     @Override

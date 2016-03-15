@@ -49,7 +49,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.common.api.GroupApi;
@@ -170,15 +169,15 @@ public class PickContactsWithCheckboxActivity extends ChatBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-         MobclickAgent.onPageStart("page_create_new_talk");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_create_new_talk");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-         MobclickAgent.onPageEnd("page_create_new_talk");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_create_new_talk");
+        //MobclickAgent.onPause(this);
     }
 
     private void initTitleBar() {

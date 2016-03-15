@@ -24,7 +24,6 @@ import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.listHelper.ListViewDataAdapter;
 import com.aizou.core.widget.listHelper.ViewHolderBase;
 import com.aizou.core.widget.listHelper.ViewHolderCreator;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.KeywordBean;
@@ -356,15 +355,15 @@ public class SearchAllActivity extends PeachBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_lxp_search");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_lxp_search");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_lxp_search");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_lxp_search");
+        //MobclickAgent.onPause(this);
     }
 
     private void searchAll(final String keyword) {
@@ -608,7 +607,7 @@ public class SearchAllActivity extends PeachBaseActivity {
         searchAllAdapter.setOnSearchResultClickListener(new SearchResultAdapter.OnSearchResultClickListener() {
             @Override
             public void onMoreResultClick(String type) {
-                MobclickAgent.onEvent(SearchAllActivity.this, "button_item_all_search_result");
+                //MobclickAgent.onEvent(SearchAllActivity.this, "button_item_all_search_result");
                 Intent intent = new Intent(mContext, SearchTypeActivity.class);
                 intent.putExtra("type", type);
                 intent.putExtra("keyWord", keyword);
@@ -626,7 +625,7 @@ public class SearchAllActivity extends PeachBaseActivity {
 
             @Override
             public void onSendClick(String type, String id, Object object) {
-                MobclickAgent.onEvent(SearchAllActivity.this, "button_item_lxp_send_search_result");
+                //MobclickAgent.onEvent(SearchAllActivity.this, "button_item_lxp_send_search_result");
                 currentType = type;
                 temp = object;
                 //IMUtils.onClickImShare(mContext);

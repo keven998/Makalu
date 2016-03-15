@@ -34,7 +34,6 @@ import com.lv.im.IMClient;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -520,7 +519,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext, "event_delete_it");
+                    //MobclickAgent.onEvent(mContext, "event_delete_it");
                     final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
                     deleteDialog.setTitle("提示");
                     deleteDialog.setMessage("确认屏蔽");
@@ -548,7 +547,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MobclickAgent.onEvent(mContext, "event_delete_it");
+                    //MobclickAgent.onEvent(mContext, "event_delete_it");
                     final PeachMessageDialog deleteDialog = new PeachMessageDialog(act);
                     deleteDialog.setTitle("提示");
                     deleteDialog.setMessage("确认取消屏蔽");
@@ -866,7 +865,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
         flPlansEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
+                //MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_plan");
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyListActivity.class);
                 intent.putExtra("userId", String.valueOf(userId));
                 startActivity(intent);
@@ -877,7 +876,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
             @Override
             public void onClick(View v) {
 
-                MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
+                //MobclickAgent.onEvent(HisMainPageActivity.this, "button_item_tracks");
                 Intent intent = new Intent(HisMainPageActivity.this, StrategyDomesticMapActivity.class);
                 intent.putExtra("isExpertFootPrint", true);
                 intent.putExtra("title", tv_track_count.getText().toString());
@@ -1041,15 +1040,15 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_user_profile");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_user_profile");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_user_profile");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_user_profile");
+        //MobclickAgent.onPause(this);
     }
 
     @Override

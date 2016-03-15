@@ -13,7 +13,6 @@ import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.IndicatorViewPager;
 import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -140,15 +139,15 @@ public class SelectCityActivity extends PeachBaseActivity implements OnDestActio
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_select_plan_city");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_select_plan_city");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_select_plan_city");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_select_plan_city");
+        //MobclickAgent.onPause(this);
     }
 
     @Override

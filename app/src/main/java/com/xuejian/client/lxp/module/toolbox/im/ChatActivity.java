@@ -73,7 +73,6 @@ import com.lv.im.HandleImMessage;
 import com.lv.im.IMClient;
 import com.lv.utils.Config;
 import com.lv.utils.TimeUtils;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.ChatBaseActivity;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
@@ -571,8 +570,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_lxp_chatting");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_lxp_chatting");
+        //MobclickAgent.onResume(this);
         HandleImMessage.getInstance().registerMessageListener(this, conversation);
     }
 
@@ -636,7 +635,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                     if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
                         drawerLayout.closeDrawer(GravityCompat.END);//关闭抽屉
                     } else {
-                        MobclickAgent.onEvent(ChatActivity.this, "navigation_item_chat_setting");
+                        //MobclickAgent.onEvent(ChatActivity.this, "navigation_item_chat_setting");
                         drawerLayout.openDrawer(GravityCompat.END);//打开抽屉
                     }
                 }
@@ -827,7 +826,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 sendText(s, 0);
                 break;
             case R.id.btn_my_guide:
-                MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
+                //MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxpplan");
                 try {
                     Intent intent = new Intent(mContext, StrategyListActivity.class);
                     intent.putExtra("chatType", chatType);
@@ -848,7 +847,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                 selectPicFromLocal();
                 break;
             case R.id.btn_location:
-                MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
+                //MobclickAgent.onEvent(ChatActivity.this, "chat_item_lxplocation");
                 startActivityForResult(new Intent(this, MapActivity.class), REQUEST_CODE_MAP);
                 break;
             case R.id.iv_emoticons_normal:
@@ -1513,8 +1512,8 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_lxp_chatting");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_lxp_chatting");
+        //MobclickAgent.onPause(this);
         if (wakeLock.isHeld())
             wakeLock.release();
         if (VoicePlayClickListener.isPlaying && VoicePlayClickListener.currentPlayListener != null) {

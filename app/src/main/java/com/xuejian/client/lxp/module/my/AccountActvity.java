@@ -41,7 +41,6 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.LocBean;
@@ -277,16 +276,16 @@ public class AccountActvity extends PeachBaseActivity implements View.OnClickLis
         user = AccountManager.getInstance().getLoginAccount(this);
         // initData();
         refreshUserInfo();
-        MobclickAgent.onPageStart("page_edit_my_profile");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_edit_my_profile");
+        //MobclickAgent.onResume(this);
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_edit_my_profile");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_edit_my_profile");
+        //MobclickAgent.onPause(this);
     }
 
     private void bindView(final User user, final long userId) {

@@ -31,7 +31,6 @@ import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -141,17 +140,17 @@ public class StrategyListActivity extends PeachBaseActivity {
         newCreate = SharePrefUtil.getBoolean(mContext, "newPlan", false);
         newId = SharePrefUtil.getString(mContext, "newPlanId", "");
         getStrategyListData(0, mContentType);
-        MobclickAgent.onPageStart("page_lxp_plan_lists");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_lxp_plan_lists");
+        //MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_lxp_plan_lists");
+        //MobclickAgent.onPageEnd("page_lxp_plan_lists");
         newCopy = false;
         SharePrefUtil.saveBoolean(mContext, "newPlan", false);
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPause(this);
     }
 
     private void initView() {
@@ -201,7 +200,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MobclickAgent.onEvent(StrategyListActivity.this, "navigation_item_plan_create");
+                        //MobclickAgent.onEvent(StrategyListActivity.this, "navigation_item_plan_create");
                         Intent intent = new Intent(StrategyListActivity.this, SelectDestActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_NEW_PLAN);
                     }
@@ -234,7 +233,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         findViewById(R.id.ivb_content_filter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(StrategyListActivity.this, "navigation_item_plans_status_filter");
+                //MobclickAgent.onEvent(StrategyListActivity.this, "navigation_item_plans_status_filter");
                 String[] names = {"全部", "只看计划", "只看已签到"};
                 final MoreDialog dialog = new MoreDialog(StrategyListActivity.this);
                 dialog.setMoreStyle(false, 13, names);
@@ -541,7 +540,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             mCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(StrategyListActivity.this, "ell_item_plans_change_status");
+                    //MobclickAgent.onEvent(StrategyListActivity.this, "ell_item_plans_change_status");
                     if (itemData.status.equals("planned")) {
                         haveBeenVisited(itemData);
                         mStrategyListAdapter.notifyDataSetChanged();
@@ -601,7 +600,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         }
 
         private void deleteItem(final StrategyBean itemData) {
-            MobclickAgent.onEvent(StrategyListActivity.this, "cell_item_plans_delete");
+            //MobclickAgent.onEvent(StrategyListActivity.this, "cell_item_plans_delete");
             final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
             dialog.setTitle("提示");
             dialog.setTitleIcon(R.drawable.ic_dialog_tip);
@@ -659,7 +658,7 @@ public class StrategyListActivity extends PeachBaseActivity {
 
 
     private void deleteItem(final StrategyBean itemData) {
-        MobclickAgent.onEvent(StrategyListActivity.this, "cell_item_plans_delete");
+        //MobclickAgent.onEvent(StrategyListActivity.this, "cell_item_plans_delete");
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         dialog.setTitleIcon(R.drawable.ic_dialog_tip);

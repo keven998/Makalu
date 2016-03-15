@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -37,7 +36,6 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.GuideViewUtils;
-import com.xuejian.client.lxp.common.widget.FlowLayout;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortController;
 import com.xuejian.client.lxp.common.widget.dslv.DragSortListView;
 import com.xuejian.client.lxp.module.dest.fragment.EditPlanFragment;
@@ -104,7 +102,7 @@ public class ActivityPlanEditor extends FragmentActivity {
                 if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);//关闭抽屉
                 } else {
-                    MobclickAgent.onEvent(ActivityPlanEditor.this,"button_item_edit_day_schedule");
+                //    MobclickAgent.onEvent(ActivityPlanEditor.this,"button_item_edit_day_schedule");
                     drawerLayout.openDrawer(GravityCompat.START);//打开抽屉
                 }
             }
@@ -112,7 +110,7 @@ public class ActivityPlanEditor extends FragmentActivity {
         findViewById(R.id.btn_add_day).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(ActivityPlanEditor.this, "button_item_add_day");
+                //MobclickAgent.onEvent(ActivityPlanEditor.this, "button_item_add_day");
                 addNewDayRouter(routeDayMap.size(), false);
                 if (editorAdapter.getCount()>=1){
                     mDragListView.setSelection(editorAdapter.getCount()-1);
@@ -140,15 +138,15 @@ public class ActivityPlanEditor extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_edit_lxp_plan");
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onPageStart("page_edit_lxp_plan");
+        //  MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_edit_lxp_plan");
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPageEnd("page_edit_lxp_plan");
+        // MobclickAgent.onPause(this);
     }
 
     @Override
@@ -373,7 +371,7 @@ public class ActivityPlanEditor extends FragmentActivity {
             holder.iv_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MobclickAgent.onEvent(ActivityPlanEditor.this,"button_item_add_poi");
+            //        MobclickAgent.onEvent(ActivityPlanEditor.this,"button_item_add_poi");
                     Intent intent = new Intent(ActivityPlanEditor.this, AddPoiActivity.class);
                     intent.putParcelableArrayListExtra("locList", strategy.localities);
                     intent.putExtra("dayIndex", section);

@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import com.aizou.core.utils.SharedPreferencesUtil;
 import com.aizou.core.widget.SideBar;
-import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.config.Constant;
@@ -125,7 +124,7 @@ public class ContactlistFragment extends Fragment {
                         startActivity(new Intent(getActivity(), AddContactActivity.class));
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     } else if ("item_friends_request".equals(username)) {
-                        MobclickAgent.onEvent(getActivity(), "cell_item_new_friends_request");
+                        //MobclickAgent.onEvent(getActivity(), "cell_item_new_friends_request");
                         startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
                         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                     } else if (Constant.GROUP_USERNAME.equals(username)) {
@@ -180,7 +179,7 @@ public class ContactlistFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("page_friends_lists");
+        //MobclickAgent.onPageStart("page_friends_lists");
         boolean needfresh = SharedPreferencesUtil.getBooleanValue(getActivity(), "contactNeedRefresh", false);
         if (!hidden || needfresh) {
             SharedPreferencesUtil.saveValue(getActivity(), "contactNeedRefresh", false);
@@ -193,7 +192,7 @@ public class ContactlistFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("page_friends_lists");
+        //MobclickAgent.onPageEnd("page_friends_lists");
     }
 
     @Override
