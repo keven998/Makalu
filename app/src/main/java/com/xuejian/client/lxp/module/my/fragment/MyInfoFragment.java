@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -117,6 +118,8 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_mine");
+        MobclickAgent.onResume(getActivity());
         User user = AccountManager.getInstance().getLoginAccount(getActivity());
         if (user != null) {
             initHeadTitleView(user);
@@ -124,6 +127,13 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
             MainActivity activity = (MainActivity) getActivity();
             activity.setTabForLogout();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_mine");
+        MobclickAgent.onPause(getActivity());
     }
 
     @Override

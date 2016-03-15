@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactBean;
@@ -326,6 +327,7 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
                 startActivityForResult(intent, SELECTED_USER);
                 break;
             case R.id.tv_submit_order:
+                MobclickAgent.onEvent(OrderCreateActivity.this, "event_confirmOrder");
                 if (checkOrder()) return;
                 submitOrder();
                 break;

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.alibaba.fastjson.JSON;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.OrderBean;
@@ -390,6 +391,7 @@ public class OrderConfirmActivity extends PeachBaseActivity {
     }
 
     private void showPayActionDialog(final OrderBean currentOrder) {
+        MobclickAgent.onEvent(OrderConfirmActivity.this, "event_payForOrder");
         final Activity act = this;
         dialog = new AlertDialog.Builder(act).create();
         dialog.setCanceledOnTouchOutside(false);

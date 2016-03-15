@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.aizou.core.dialog.ToastUtil;
 import com.lv.bean.ConversationBean;
 import com.lv.im.IMClient;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -431,6 +432,8 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("page_chatList");
+        MobclickAgent.onResume(getActivity());
         //MobclickAgent.onPageStart("page_home_talk_lists");
         //返回页面的动画样式
         //getActivity().overridePendingTransition(R.anim.push_bottom_out,R.anim.push_bottom_in);
@@ -451,7 +454,8 @@ public class TalkFragment extends PeachBaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        //MobclickAgent.onPageEnd("page_home_talk_lists");
+        MobclickAgent.onPageEnd("page_chatList");
+        MobclickAgent.onPause(getActivity());
     }
 
     @Override

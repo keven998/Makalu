@@ -31,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ModifyResult;
@@ -140,17 +141,17 @@ public class StrategyListActivity extends PeachBaseActivity {
         newCreate = SharePrefUtil.getBoolean(mContext, "newPlan", false);
         newId = SharePrefUtil.getString(mContext, "newPlanId", "");
         getStrategyListData(0, mContentType);
-        //MobclickAgent.onPageStart("page_lxp_plan_lists");
-        //MobclickAgent.onResume(this);
+        MobclickAgent.onPageStart("page_myPlanList");
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //MobclickAgent.onPageEnd("page_lxp_plan_lists");
+        MobclickAgent.onPageEnd("page_myPlanList");
         newCopy = false;
         SharePrefUtil.saveBoolean(mContext, "newPlan", false);
-        //MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     private void initView() {

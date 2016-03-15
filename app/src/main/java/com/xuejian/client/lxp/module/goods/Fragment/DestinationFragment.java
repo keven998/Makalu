@@ -21,6 +21,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.CityBean;
@@ -176,6 +177,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     }
 
     private void showMenu(){
+        MobclickAgent.onEvent(getActivity(),"event_changeContinent");
         showMenu.setVisibility(View.GONE);
         menu.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_right);
@@ -192,15 +194,15 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
     @Override
     public void onResume() {
         super.onResume();
-        //MobclickAgent.onPageStart("page_lxp_guide_distribute");
-        //MobclickAgent.onResume(getActivity());
+        MobclickAgent.onPageStart("page_countryList");
+        MobclickAgent.onResume(getActivity());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //MobclickAgent.onPageEnd("page_lxp_guide_distribute");
-        //MobclickAgent.onPause(getActivity());
+        MobclickAgent.onPageEnd("page_countryList");
+        MobclickAgent.onPause(getActivity());
     }
 
     @Override

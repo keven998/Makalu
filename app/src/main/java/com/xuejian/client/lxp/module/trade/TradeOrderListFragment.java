@@ -271,37 +271,58 @@ public class TradeOrderListFragment extends PeachBaseFragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final OrderBean bean = (OrderBean) getItem(position);
-
+            holder.tvAction2.setVisibility(View.VISIBLE);
+            holder.tvAction1.setVisibility(View.VISIBLE);
             switch (bean.getStatus()) {
                 case "paid":
-                    holder.tvState.setText("待卖家确认");
+                    holder.tvState.setText("待发货");
+                    holder.tvAction2.setText("缺货退款");
+                    holder.tvAction1.setText("发货");
                     break;
                 case "committed":
                     holder.tvState.setText("可使用");
+                    holder.tvAction2.setVisibility(View.GONE);
+                    holder.tvAction1.setVisibility(View.GONE);
                     break;
                 case "refundApplied":
-                    holder.tvState.setText("退款申请中");
+                    holder.tvState.setText("待退款");
+                    holder.tvAction2.setText("拒绝退款");
+                    holder.tvAction1.setText("同意退款");
                     break;
                 case "pending":
                     holder.tvState.setText("待付款");
+                    holder.tvAction1.setText("关闭交易");
+                    holder.tvAction2.setVisibility(View.GONE);
                     break;
                 case "finished":
                     holder.tvState.setText("已完成");
+                    holder.tvAction2.setVisibility(View.GONE);
+                    holder.tvAction1.setVisibility(View.GONE);
                     break;
                 case "canceled":
                     holder.tvState.setText("订单已取消");
+                    holder.tvAction2.setVisibility(View.GONE);
+                    holder.tvAction1.setVisibility(View.GONE);
                     break;
                 case "expired":
                     holder.tvState.setText("已过期");
+                    holder.tvAction2.setVisibility(View.GONE);
+                    holder.tvAction1.setVisibility(View.GONE);
                     break;
                 case "refunded":
                     holder.tvState.setText("已退款");
+                    holder.tvAction2.setVisibility(View.GONE);
+                    holder.tvAction1.setVisibility(View.GONE);
                     break;
                 case "toReview":
                     holder.tvState.setText("待评价");
+                    holder.tvAction2.setVisibility(View.GONE);
+                    holder.tvAction1.setVisibility(View.GONE);
                     break;
                 case "reviewed":
                     holder.tvState.setText("已评价");
+                    holder.tvAction2.setVisibility(View.GONE);
+                    holder.tvAction1.setVisibility(View.GONE);
                     break;
                 default:
                     break;
@@ -339,6 +360,8 @@ public class TradeOrderListFragment extends PeachBaseFragment {
                     mContext.startActivity(intent);
                 }
             });
+
+
         }
 
         private void showPayActionDialog(final Activity act, final long orderId) {

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CountryBean;
@@ -84,6 +85,20 @@ public class CountryListActivity extends PeachBaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_cityList");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_cityList");
+        MobclickAgent.onPause(this);
     }
 
     class CountryAdapter extends BaseAdapter {

@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentDetailBean;
@@ -376,6 +377,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         tvTalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(CommodityDetailActivity.this,"event_chatWithSeller");
                 Intent intent = new Intent();
                 if (AccountManager.getInstance().getLoginAccount(CommodityDetailActivity.this) == null) {
                     intent.putExtra("isFromGoods", true);
@@ -395,6 +397,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         tvStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(CommodityDetailActivity.this,"event_gotoStoreDetail");
                 Intent intent = new Intent();
                 intent.setClass(CommodityDetailActivity.this, StoreDetailActivity.class);
                 intent.putExtra("sellerId", String.valueOf(bean.getSeller().getSellerId()));
@@ -404,6 +407,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         tvSubmitOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(CommodityDetailActivity.this,"event_buyGoods");
                 Intent intent = new Intent();
                 if (AccountManager.getInstance().getLoginAccount(CommodityDetailActivity.this) == null) {
                     intent.putExtra("isFromGoods", true);
@@ -527,6 +531,24 @@ public class CommodityDetailActivity extends PeachBaseActivity {
 
         scrollView.smoothScrollTo(0,0);
     }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("page_goodsDetail");
+        MobclickAgent.onResume(this);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("page_goodsDetail");
+        MobclickAgent.onPause(this);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_avatar)
         ImageView ivAvatar;
