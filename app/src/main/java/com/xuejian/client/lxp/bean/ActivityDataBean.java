@@ -9,6 +9,11 @@ import android.os.Parcelable;
 public class ActivityDataBean implements Parcelable {
 
     public String userId;
+    public String reason;
+    public String memo;
+
+    public ActivityDataBean() {
+    }
 
     @Override
     public int describeContents() {
@@ -18,16 +23,17 @@ public class ActivityDataBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.userId);
-    }
-
-    public ActivityDataBean() {
+        dest.writeString(this.reason);
+        dest.writeString(this.memo);
     }
 
     protected ActivityDataBean(Parcel in) {
         this.userId = in.readString();
+        this.reason = in.readString();
+        this.memo = in.readString();
     }
 
-    public static final Parcelable.Creator<ActivityDataBean> CREATOR = new Parcelable.Creator<ActivityDataBean>() {
+    public static final Creator<ActivityDataBean> CREATOR = new Creator<ActivityDataBean>() {
         public ActivityDataBean createFromParcel(Parcel source) {
             return new ActivityDataBean(source);
         }

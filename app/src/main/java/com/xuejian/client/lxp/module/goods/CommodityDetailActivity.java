@@ -162,8 +162,15 @@ public class CommodityDetailActivity extends PeachBaseActivity {
     TextView tv_comment;
     @Bind(R.id.line)
     View line;
+    @Bind(R.id.ll_trade_action)
+    LinearLayout ll_trade_action;
+    @Bind(R.id.tv_trade_state)
+    TextView tv_trade_state;
+    @Bind(R.id.tv_trade_action)
+    TextView tv_trade_action;
     private long commodityId;
     private long userId;
+    private boolean isSeller;
     public CommodityBean bean;
     boolean snapshots;
     private int[] lebelColors = new int[]{
@@ -181,6 +188,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         ButterKnife.bind(this);
         commodityId = getIntent().getLongExtra("commodityId", -1);
         snapshots = getIntent().getBooleanExtra("snapshots", false);
+        isSeller = getIntent().getBooleanExtra("isSeller",false);
         final long version = getIntent().getLongExtra("version", -1);
         Uri uri = getIntent().getData();
         if (uri != null) {
@@ -529,10 +537,65 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             empty_comment.setVisibility(View.VISIBLE);
         }
 
+        if (isSeller){
+            llAction.setVisibility(View.GONE);
+            ll_trade_action.setVisibility(View.VISIBLE);
+            switch (bean.status) {
+                case "pub":
+                    tv_trade_state.setText("已发布");
+                    tv_trade_action.setText("下架");
+                    break;
+                case "review":
+                    tv_trade_state.setText("审核中");
+                    tv_trade_action.setVisibility(View.INVISIBLE);
+                    break;
+                case "disabled":
+                    tv_trade_state.setText("已下架");
+                    tv_trade_action.setText("上架");
+                    break;
+                default:
+                    break;
+            }
+
+            tv_trade_action.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (tv_trade_action.getText().toString()) {
+                        case "下架":
+                            editCommodity("disabled",bean.getCommodityId(),"商品已下架");
+                            break;
+                        case "上架":
+                            editCommodity("pub",bean.getCommodityId(),"商品已发布");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        }
         scrollView.smoothScrollTo(0,0);
     }
 
 
+    public void editCommodity(String status,long commodityId,final String notice){
+        TravelApi.editCommodityStatus(commodityId, status, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                Toast.makeText(mContext,notice,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
 
     @Override
     public void onResume() {

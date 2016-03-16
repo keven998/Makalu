@@ -26,6 +26,14 @@ public class StoreBean implements Parcelable {
      * images : []
      */
 
+//    历史销售额：totalSales
+//    订单总数：totalOrderCnt
+//    待处理订单数：pendingOrderCnt
+
+
+    public int totalOrderCnt;
+    public int pendingOrderCnt;
+    public double totalSales;
     private String id;
     private int sellerId;
     private String name;

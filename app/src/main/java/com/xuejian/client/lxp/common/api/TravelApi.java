@@ -268,7 +268,7 @@ public class TravelApi extends BaseApi {
             request.putUrlParams("start", start);
             request.putUrlParams("count", count);
         }
-        setDefaultParams(request,"");
+        setDefaultParams(request, "");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
@@ -338,7 +338,7 @@ public class TravelApi extends BaseApi {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + String.format(ORDER_DETAIL, String.valueOf(orderId)));
-        setDefaultParams(request,"");
+        setDefaultParams(request, "");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
@@ -352,6 +352,23 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
+
+    public static void editCommodityStatus(long commodityId,String status, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.PATCH);
+        request.setUrl(SystemConfig.DEV_URL + String.format(COMMODITY_DETAIL, String.valueOf(commodityId)));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("status", status);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        setDefaultParams(request, jsonObject.toString());
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
 
     public static void createOrder
             (long commodityId, String planId, String rendezvousTime, int quantity, JSONObject contactObject, String contactComment, ArrayList<TravellerBean> list,String couponId, HttpCallBack callback) {

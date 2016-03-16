@@ -18,7 +18,8 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,10 +139,10 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_talk"
             android:layout_marginRight="10dp"
-            android:background="@drawable/pay_bg"
+            android:background="@drawable/bg_common_theme_color"
             android:gravity="center_vertical"
             android:padding="7dp"
-            android:textColor="@color/base_color_white"
+            android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
         <TextView
             android:id="@+id/tv_action2"
@@ -150,10 +151,10 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_action1"
             android:layout_marginRight="10dp"
-            android:background="@drawable/pay_bg"
+            android:background="@drawable/bg_common_theme_color"
             android:gravity="center_vertical"
             android:padding="7dp"
-            android:textColor="@color/base_color_white"
+            android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
 
         <TextView

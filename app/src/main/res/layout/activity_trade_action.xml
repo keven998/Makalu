@@ -2,6 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
@@ -27,59 +28,67 @@
             android:textSize="18sp" />
 
     </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_backgroud"
-        android:paddingBottom="62dp"
         android:layout_marginTop="@dimen/title_bar_height"
+        android:background="@color/app_backgroud"
         android:clipToPadding="false"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="62dp">
 
         <LinearLayout
-            android:background="@color/app_backgroud"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/app_backgroud"
             android:orientation="vertical">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/color_line" />
+
             <LinearLayout
-    android:layout_width="match_parent"
-    android:background="@color/base_color_white"
-    android:layout_height="wrap_content"
+                android:id="@+id/ll_state"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/base_color_white"
                 android:weightSum="5">
-    <TextView
-        android:id="@+id/tv_pay_state"
-        android:layout_width="0dp"
-        android:layout_weight="2"
-        android:layout_height="wrap_content"
-        android:background="@color/base_color_white"
-        android:gravity="center_vertical"
-        android:paddingBottom="12dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="12dp"
-        android:textColor="@color/price_color"
-        android:textSize="16sp" />
-    <TextView
-        android:id="@+id/tv_pay_feedback"
-        android:layout_width="0dp"
-        android:layout_weight="3"
-        android:paddingBottom="10dp"
-        android:paddingLeft="12dp"
-        android:paddingTop="12dp"
-        android:layout_height="wrap_content"
-        android:background="@color/base_color_white"
-        android:gravity="center_vertical"
-        android:layout_marginRight="10dp"
-        android:textColor="@color/color_text_ii"
-        android:textSize="16sp" />
-</LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_state"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:background="@color/base_color_white"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="12dp"
+                    android:textColor="@color/price_color"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_pay_feedback"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/base_color_white"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="12dp"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
 
             <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_type_title"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_marginTop="10dp"
@@ -88,27 +97,168 @@
                 android:paddingBottom="10dp"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
-                android:text="提示"
                 android:textColor="@color/color_text_ii"
                 android:textSize="16sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/base_color_white"
-            android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/ll_notice"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingRight="10dp"
-                android:paddingLeft="20dp"
-                android:textSize="13sp"
-                android:textColor="@color/color_text_iii"
-                android:text="1.发送附件是打飞机\n2.发货时快捷回复即可耗费\n3.法布尔方式就是觉得房价"/>
-           </LinearLayout>
+                android:layout_height="wrap_content"
+                android:background="@color/base_color_white"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tv_notice_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/color_text_iii"
+                    android:textSize="13sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_goods_info"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/base_color_white"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="商品名:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_goods_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/app_theme_color"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="套餐:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_package"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="购买数量:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_goods_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="支付总价格:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_total_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="订单号:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_goods_order_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -116,270 +266,426 @@
                 android:background="@color/color_line" />
 
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:id="@+id/ll_drawback_user_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/base_color_white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="买家:"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/tv_goods_name"
-                        android:textColor="@color/app_theme_color"
+                        android:id="@+id/tv_customer_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/app_theme_color"
                         android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="实付金额:"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/tv_order_id"
-                        android:textColor="@color/color_text_iii"
+                        android:id="@+id/tv_real_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="申请退款时间:"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/tv_order_package"
-                        android:textColor="@color/color_text_iii"
+                        android:id="@+id/tv_drawback_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="申请退款原因:"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/tv_order_date"
-                        android:textColor="@color/color_text_iii"
+                        android:id="@+id/tv_drawback_reason"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="申请退款留言:"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/tv_order_num"
-                        android:textColor="@color/color_text_iii"
+                        android:id="@+id/tv_drawback_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
 
             </LinearLayout>
-
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_deliver_user_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/base_color_white">
+                android:paddingTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:background="@color/base_color_white"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:text="买家信息"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="16sp" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="联系人:"
                         android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_order_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/app_theme_color"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="联系方式:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_order_tel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="使用日期:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_deliver_order_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="留言:"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_order_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_drawback_action_container"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_drawback_price_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="退款金额:"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
+
                     <FrameLayout
-                        android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp">
+
                         <TextView
-                            android:visibility="gone"
                             android:id="@+id/tv_price"
-                            android:textColor="@color/color_text_iii"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="12"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:visibility="gone"
+                            android:textColor="@color/color_text_iii"
                             android:textSize="13sp" />
 
 
                         <EditText
-                            android:id="@+id/et_account"
-                            android:text="13"
-                            android:textSize="13sp"
-                            android:minWidth="80dp"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            android:textColor="@color/color_text_iii"
+                            android:visibility="gone"
+                            android:id="@+id/et_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/bg_common_without_corner"
-                            android:paddingLeft="15dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:minWidth="80dp"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="20dp"
+                            android:paddingTop="5dp"
+                            android:textColor="@color/color_text_iii"
+                            android:textSize="13sp" />
+
                         <TextView
                             android:id="@+id/tv_sign"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/color_text_iii"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="5dp"
-                            android:text="¥"/>
+                            android:text="¥"
+                            android:textColor="@color/color_text_iii" />
                     </FrameLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/ll_leave_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="备注:"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/tv_leave_message"
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
+
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/ll_drawback_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:textColor="@color/color_text_iii"
+                        android:id="@+id/tv_drawback_info_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
                         android:text="退款说明"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/tv_drawback_info"
-                        android:textColor="@color/color_text_iii"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
-
                 <EditText
+                    android:visibility="gone"
+                    android:id="@+id/et_uneditable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_common_without_corner"
-                    android:minLines="5"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:padding="5dp"/>
+                    android:gravity="left|top"
+                    android:editable="false"
+                    android:background="@drawable/bg_common_without_corner"
+                    android:minLines="5"
+                    android:padding="5dp" />
+                <EditText
+                    android:visibility="gone"
+                    android:id="@+id/et_editable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="left|top"
+                    android:background="@drawable/bg_common_without_corner"
+                    android:minLines="5"
+                    android:padding="5dp" />
             </LinearLayout>
 
             <View
@@ -389,13 +695,13 @@
 
         </LinearLayout>
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/ll_trade_action0"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:weightSum="1">
 
         <TextView
@@ -403,40 +709,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/price_color"
-            android:gravity="center"
-            android:textColor="@color/base_color_white"
-            android:textSize="19sp" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_trade_action1"
-        android:layout_width="match_parent"
-        android:layout_height="62dp"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <TextView
-            android:id="@+id/tv_cancel_action"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/base_color_white"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="@color/color_text_ii"
-            android:textSize="19sp" />
-        <TextView
-            android:id="@+id/tv_pay"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/app_theme_color"
             android:gravity="center"
-            android:text="退款"
             android:textColor="@color/base_color_white"
             android:textSize="19sp" />
     </LinearLayout>
+
 </merge>
 
 

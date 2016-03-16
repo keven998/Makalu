@@ -20,6 +20,7 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -36,7 +37,7 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
-import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
+import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
 import java.text.SimpleDateFormat;
@@ -94,7 +95,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
                     public void run() {
                         checkState(0, true);
                     }
-                },1000);
+                }, 1000);
             }
 
             @Override
@@ -102,7 +103,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        checkState(adapter.getItemCount(),false);
+                        checkState(adapter.getItemCount(), false);
                     }
                 }, 1000);
             }
@@ -141,7 +142,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
     public void getCommodities(String status,int start,int count, final boolean refresh) {
         long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
 
-        TravelApi.getCommodityList(String.valueOf(100012),status ,null, null, null, "updateTime", String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getCommodityList(String.valueOf(100012), status, null, null, null, "updateTime", String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
@@ -188,9 +189,9 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
         adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-                intent.putExtra("type", "orderDetail");
-                intent.putExtra("orderId", id);
+                Intent intent = new Intent(getActivity(), CommodityDetailActivity.class);
+                intent.putExtra("isSeller", true);
+                intent.putExtra("commodityId", id);
                 startActivity(intent);
             }
         });
@@ -267,12 +268,26 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
                 default:
                     break;
             }
+            holder.tvAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (bean.status) {
+                        case "pub":
+                            editCommodity("disabled",bean.getCommodityId(),"商品已下架");
+                            break;
+                        case "disabled":
+                            editCommodity("pub",bean.getCommodityId(),"商品已发布");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
             holder.tvGoodsName.setText(bean.getTitle());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String dateString  = format.format(new Date());
             holder.tvGoodsId.setText(String.format("商品编号:%d", bean.getCommodityId()));
             holder.tvGoodsPrice.setText(String.format("价格:¥%s起", CommonUtils.getPriceString(bean.getPrice())));
-//            holder.tvCustomer.setText(String.format("联系人:%s %d", bean.getContact().getGivenName() + bean.getContact().getSurname(), bean.getContact().getTel().getNumber()));
             if (bean.getCover() != null) {
                 ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.mImageView, UILUtils.getDefaultOption());
             } else {
@@ -345,5 +360,26 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
+        public void editCommodity(String status,long commodityId,final String notice){
+            TravelApi.editCommodityStatus(commodityId, status, new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    Toast.makeText(mContext, notice, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
     }
+
+
 }

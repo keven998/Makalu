@@ -28,7 +28,7 @@ public class OrderBean implements Parcelable {
      * updateTime : 订单更新时间
      * expireTime : 订单失效时间
      */
-
+    public boolean committed;
     private long orderId;
     private long consumerId;
     private String planId;
@@ -193,6 +193,7 @@ public class OrderBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(committed ? (byte) 1 : (byte) 0);
         dest.writeLong(this.orderId);
         dest.writeLong(this.consumerId);
         dest.writeString(this.planId);
@@ -213,6 +214,7 @@ public class OrderBean implements Parcelable {
     }
 
     protected OrderBean(Parcel in) {
+        this.committed = in.readByte() != 0;
         this.orderId = in.readLong();
         this.consumerId = in.readLong();
         this.planId = in.readString();

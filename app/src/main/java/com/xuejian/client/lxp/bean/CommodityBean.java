@@ -35,6 +35,7 @@ public class CommodityBean {
      * shareUrl : http://h5.taozilvxing.com/xq/detail.php?pid=100849
      * isFavorite : false
      */
+    public String status;
     public int commentCnt;
     private String id;
     private long commodityId;

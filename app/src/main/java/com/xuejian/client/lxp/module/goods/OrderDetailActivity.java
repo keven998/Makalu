@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
@@ -36,10 +38,12 @@ import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.my.UploadAlbumActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
+import com.xuejian.client.lxp.module.trade.TradeActionActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,16 +115,28 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
     ListView listView;
     @Bind(R.id.tv_coupon_price)
     TextView tv_coupon_price;
+    @Bind(R.id.ll_trade_action_seller)
+    LinearLayout llSellerAction;
+    @Bind(R.id.tv_seller_action_1)
+    TextView tvSellerAction1;
+    @Bind(R.id.tv_seller_action_2)
+    TextView tvSellerAction2;
+    @Bind(R.id.tv_seller_action_3)
+    TextView tvSellerAction3;
+    @Bind(R.id.rl_contact_seller)
+    RelativeLayout rl_contact_seller;
     long orderId;
     OrderBean currentOrder;
     CountDownTimer countDownTimer;
     private static final int REFRESH = 107;
+    boolean isSeller;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
         ButterKnife.bind(this);
         orderId = getIntent().getLongExtra("orderId", -1);
+        isSeller = getIntent().getBooleanExtra("isSeller",false);
         String type = getIntent().getStringExtra("type");
         switch (type) {
             case "pendingOrder":
@@ -186,77 +202,217 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
 
     private void bindView(final OrderBean bean) {
         currentOrder = bean;
+
+        if (isSeller){
+            rl_contact_seller.setVisibility(View.GONE);
+            tvSellerAction3.setText("联系买家");
+            tvSellerAction3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                    talkIntent.putExtra("friend_id", bean.getConsumerId()+ "");
+                    talkIntent.putExtra("chatType", "single");
+                    //     talkIntent.putExtra("shareCommodityBean", bean.creteShareBean());
+                    //      talkIntent.putExtra("fromTrade", true);
+                    startActivity(talkIntent);
+                }
+            });
+        }
         final Intent intent = new Intent();
         switch (bean.getStatus()) {
             case "paid":
-                tvState.setText("等待卖家确认");
-                llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("申请退款");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
-                        intent.putExtra("orderId", bean.getOrderId());
-                        startActivityForResult(intent, REFRESH);
-                    }
-                });
+                if (!isSeller) {
+                    tvState.setText("等待卖家确认");
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("申请退款");
+                    tvAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
+                            intent.putExtra("orderId", bean.getOrderId());
+                            startActivityForResult(intent, REFRESH);
+                        }
+                    });
+                } else {
+
+                    tvState.setText("待发货(买家已付款)");
+                    llSellerAction.setVisibility(View.VISIBLE);
+                    tvSellerAction1.setText("缺货退款");
+                    tvSellerAction2.setText("发货");
+                    tvSellerAction1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext,TradeActionActivity.class);
+                            intent.putExtra("type",1);
+                            intent.putExtra("orderId",bean.getOrderId());
+                            startActivity(intent);
+                        }
+                    });
+                    tvSellerAction2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext,TradeActionActivity.class);
+                            intent.putExtra("type",2);
+                            intent.putExtra("orderId",bean.getOrderId());
+                            startActivity(intent);
+                        }
+                    });
+                }
                 break;
             case "committed":
-                tvState.setText("可使用");
-                if (checkState(bean.activities)){
-                    llTradeAction0.setVisibility(View.GONE);
-                }else {
-                    llTradeAction0.setVisibility(View.VISIBLE);
-                }
-                tvAction0.setText("申请退款");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
-                        intent.putExtra("amount",bean.getTotalPrice());
-                        intent.putExtra("orderId", bean.getOrderId());
-                        startActivityForResult(intent,REFRESH);
+                if (!isSeller) {
+                    tvState.setText("可使用");
+                    if (checkState(bean.activities)){
+                        llTradeAction0.setVisibility(View.GONE);
+                    }else {
+                        llTradeAction0.setVisibility(View.VISIBLE);
                     }
-                });
+                    tvAction0.setText("申请退款");
+                    tvAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, DrawbackActivity.class);
+                            intent.putExtra("amount",bean.getTotalPrice());
+                            intent.putExtra("orderId", bean.getOrderId());
+                            startActivityForResult(intent,REFRESH);
+                        }
+                    });
+                } else {
+                    tvState.setText("已发货");
+                }
                 break;
             case "refundApplied":
-                tvState.setText("退款申请中");
-                break;
-            case "pending":
-                tvCancel.setText("取消订单");
-                tvCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cancelOrderDialog();
-                    }
-                });
-
-                if (bean.getTotalPrice()-bean.getDiscount()<=0){
-                    tvState.setText(String.format("待付款 ¥%s", "0"));
+                if (!isSeller){
+                    tvState.setText("退款申请中");
                 }else {
-                    tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+                    tvState.setText("待退款");
+                    llSellerAction.setVisibility(View.VISIBLE);
+
+                    if (bean.committed){
+                        tvSellerAction1.setText("拒绝退款");
+                        tvSellerAction2.setText("同意退款");
+                        tvSellerAction1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext,TradeActionActivity.class);
+                                intent.putExtra("type",5);
+                                intent.putExtra("orderId",bean.getOrderId());
+                                startActivity(intent);
+                            }
+                        });
+                        tvSellerAction2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext,TradeActionActivity.class);
+                                intent.putExtra("type",4);
+                                intent.putExtra("orderId",bean.getOrderId());
+                                startActivity(intent);
+                            }
+                        });
+                    }else {
+                        tvSellerAction1.setText("发货");
+                        tvSellerAction2.setText("同意退款");
+                        tvSellerAction1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext,TradeActionActivity.class);
+                                intent.putExtra("type",2);
+                                intent.putExtra("orderId",bean.getOrderId());
+                                startActivity(intent);
+                            }
+                        });
+                        tvSellerAction2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext,TradeActionActivity.class);
+                                intent.putExtra("type",3);
+                                intent.putExtra("orderId",bean.getOrderId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
                 }
 
-
-           //     tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
-                long time = bean.getExpireTime() - System.currentTimeMillis();
-                if (time > 0) {
-                    llTradeAction1.setVisibility(View.VISIBLE);
-                    countDownTimer = new CountDownTimer(time, 1000) {
+                break;
+            case "pending":
+                if (!isSeller) {
+                    tvCancel.setText("取消订单");
+                    tvCancel.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onTick(long millisUntilFinished) {
-                            tvFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
+                        public void onClick(View v) {
+                            cancelOrderDialog();
                         }
+                    });
 
+                    if (bean.getTotalPrice()-bean.getDiscount()<=0){
+                        tvState.setText(String.format("待付款 ¥%s", "0"));
+                    }else {
+                        tvState.setText(String.format("待付款 ¥%s", CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+                    }
+
+
+                    //     tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+                    long time = bean.getExpireTime() - System.currentTimeMillis();
+                    if (time > 0) {
+                        llTradeAction1.setVisibility(View.VISIBLE);
+                        countDownTimer = new CountDownTimer(time, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                tvFeedback.setText(String.format("请在%s内完成支付", CommonUtils.formatDuring(millisUntilFinished)));
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                tvFeedback.setText("订单已超过支付期限,请重新下单");
+                                tvPay.setText("再次预定");
+                            }
+                        }.start();
+                    } else {
+                        tvFeedback.setText("订单已超过支付期限,请重新下单");
+                        llTradeAction1.setVisibility(View.GONE);
+                        llTradeAction0.setVisibility(View.VISIBLE);
+                        tvAction0.setText("再次预定");
+                        tvAction0.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                                intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                                startActivity(intent);
+                            }
+                        });
+                      //  tvPay.setText("再次预定");
+                    }
+                    tvPay.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onFinish() {
-                            tvFeedback.setText("订单已超过支付期限,请重新下单");
-                            tvPay.setText("再次预定");
+                        public void onClick(View v) {
+                            if (tvPay.getText().toString().equals("立即支付")) {
+                                showPayActionDialog();
+                            } else if (tvPay.getText().toString().equals("再次预定")) {
+                                intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                                intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                                startActivity(intent);
+                            }
                         }
-                    }.start();
+                    });
                 } else {
-                    tvFeedback.setText("订单已超过支付期限,请重新下单");
-                    llTradeAction1.setVisibility(View.GONE);
+                    tvState.setText("等待买家付款");
+                    llSellerAction.setVisibility(View.VISIBLE);
+                    tvSellerAction1.setVisibility(View.INVISIBLE);
+                    tvSellerAction2.setText("关闭交易");
+                    tvSellerAction2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            chooseCloseReason((Activity) mContext,bean.getOrderId());
+                        }
+                    });
+                }
+
+                break;
+            case "finished":
+
+                if (!isSeller) {
+                    tvState.setText("已完成");
                     llTradeAction0.setVisibility(View.VISIBLE);
                     tvAction0.setText("再次预定");
                     tvAction0.setOnClickListener(new View.OnClickListener() {
@@ -267,110 +423,100 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                             startActivity(intent);
                         }
                     });
-                  //  tvPay.setText("再次预定");
+                } else {
+                    tvState.setText("已完成");
                 }
-                tvPay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (tvPay.getText().toString().equals("立即支付")) {
-                            showPayActionDialog();
-                        } else if (tvPay.getText().toString().equals("再次预定")) {
+                break;
+            case "canceled":
+                tvState.setText("已取消");
+                if (!isSeller){
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("再次预定");
+                    tvAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
                             intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
                             startActivity(intent);
                         }
-                    }
-                });
+                    });
+                }
 
-                break;
-            case "finished":
-                tvState.setText("已完成");
-                llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
-                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                        startActivity(intent);
-                    }
-                });
-                break;
-            case "canceled":
-                tvState.setText("已取消");
-                llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
-                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                        startActivity(intent);
-                    }
-                });
                 break;
             case "expired":
                 tvState.setText("已过期");
-                llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
-                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                        startActivity(intent);
-                    }
-                });
+                if (!isSeller){
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("再次预定");
+                    tvAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                            startActivity(intent);
+                        }
+                    });
+                }
+
                 break;
             case "refunded":
                 tvState.setText("已退款");
-                llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
-                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                        startActivity(intent);
-                    }
-                });
+                if (!isSeller){
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("再次预定");
+                    tvAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                            startActivity(intent);
+                        }
+                    });
+                }
+
                 break;
             case "toReview":
                 tvState.setText("已完成");
-                llTradeAction1.setVisibility(View.VISIBLE);
-                tvCancel.setText("再次预定");
-                tvCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
-                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                        startActivity(intent);
-                    }
-                });
-                tvPay.setText("评价");
-                tvPay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, UploadAlbumActivity.class);
-                        intent.putExtra("comment", true);
-                        intent.putExtra("commodityId",bean.getCommodity().getCommodityId());
-                        intent.putExtra("orderId", bean.getOrderId());
-                        startActivityForResult(intent, REFRESH);
-                    }
-                });
+                if (!isSeller){
+                    llTradeAction1.setVisibility(View.VISIBLE);
+                    tvCancel.setText("再次预定");
+                    tvCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                            startActivity(intent);
+                        }
+                    });
+                    tvPay.setText("评价");
+                    tvPay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, UploadAlbumActivity.class);
+                            intent.putExtra("comment", true);
+                            intent.putExtra("commodityId",bean.getCommodity().getCommodityId());
+                            intent.putExtra("orderId", bean.getOrderId());
+                            startActivityForResult(intent, REFRESH);
+                        }
+                    });
+                }
+
                 break;
             case "reviewed":
                 tvState.setText("已完成");
-                llTradeAction0.setVisibility(View.VISIBLE);
-                tvAction0.setText("再次预定");
-                tvAction0.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
-                        intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
-                        startActivity(intent);
-                    }
-                });
+                if (!isSeller){
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("再次预定");
+                    tvAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.setClass(OrderDetailActivity.this, CommodityDetailActivity.class);
+                            intent.putExtra("commodityId", bean.getCommodity().getCommodityId());
+                            startActivity(intent);
+                        }
+                    });
+                }
+
                 break;
             default:
                 break;
@@ -445,6 +591,66 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
         return false;
     }
 
+    private void chooseCloseReason(Activity act ,final long orderId) {
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        final long userId = AccountManager.getInstance().getLoginAccount(mContext).getUserId();
+        View contentView = View.inflate(act, R.layout.dialog_select_reason, null);
+        ListViewForScrollView listView = (ListViewForScrollView) contentView.findViewById(R.id.lv);
+        final String[] a = new String[]{"未及时付款","买家不想买","买家信息填写有误，重拍","恶意买家/同行捣乱","缺货","买家拍错了","同城见面交易","其他原因"};
+        listView.setAdapter(new ArrayAdapter<String>(act, R.layout.item_close_reson,a));
+        contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                closeOrder(orderId,userId,a[position]);
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = display.getWidth(); // 设置宽度
+        lp.height = display.getHeight()*3/4;
+        window.setAttributes(lp);
+        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    public void closeOrder( long orderId, long userId, String reason) {
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("userId", userId);
+            data.put("memo", "");
+            data.put("reason", reason);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        TravelApi.editOrderStatus(orderId, "cancel", data, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                Toast.makeText(mContext,"已关闭交易",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                Toast.makeText(mContext,"关闭交易失败",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
     public class ActivityAdapter extends BaseAdapter{
 
         private ArrayList<TradeActivityBean> data;
@@ -664,4 +870,6 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
             countDownTimer=null;
         }
     }
+
+
 }

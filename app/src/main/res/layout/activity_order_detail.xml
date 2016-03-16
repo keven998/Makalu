@@ -274,6 +274,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_contact_seller"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="10dp"
@@ -524,6 +525,50 @@
             android:textColor="@color/base_color_white"
             android:textSize="19sp" />
     </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_trade_action_seller"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/tv_seller_action_1"
+            android:layout_width="0dp"
+            android:layout_margin="3dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_common_theme_color"
+            android:gravity="center"
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_margin="3dp"
+            android:id="@+id/tv_seller_action_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_common_theme_color"
+            android:gravity="center"
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
+        <TextView
+            android:layout_margin="3dp"
+            android:id="@+id/tv_seller_action_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_common_theme_color"
+            android:gravity="center"
+            android:textColor="@color/color_text_ii"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
 </merge>
 
 
