@@ -279,6 +279,8 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     });
                 } else {
                     tvState.setText("已发货");
+                    tvSellerAction1.setVisibility(View.INVISIBLE);
+                    tvSellerAction2.setVisibility(View.INVISIBLE);
                 }
                 break;
             case "refundApplied":

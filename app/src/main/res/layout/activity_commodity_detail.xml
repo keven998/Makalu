@@ -278,7 +278,40 @@
                     android:textSize="14dp" />
             </LinearLayout>
 
+            <RelativeLayout
+                android:id="@+id/rl_package"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@color/base_color_white"
+                android:padding="10dp">
 
+                <ImageView
+                    android:id="@+id/iv_p"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icon_comm_desc" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_toRightOf="@+id/iv_p"
+                    android:text="商品套餐"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+            <com.xuejian.client.lxp.common.widget.ListViewForScrollView
+                android:background="@color/base_color_white"
+                android:id="@+id/lv_package"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:dividerHeight="0px" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

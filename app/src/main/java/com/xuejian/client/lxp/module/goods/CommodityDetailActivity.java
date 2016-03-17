@@ -38,6 +38,7 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CommentDetailBean;
 import com.xuejian.client.lxp.bean.CommodityBean;
 import com.xuejian.client.lxp.bean.ImageBean;
+import com.xuejian.client.lxp.bean.PlanBean;
 import com.xuejian.client.lxp.bean.ShareCommodityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -168,6 +169,11 @@ public class CommodityDetailActivity extends PeachBaseActivity {
     TextView tv_trade_state;
     @Bind(R.id.tv_trade_action)
     TextView tv_trade_action;
+    @Bind(R.id.rl_package)
+    RelativeLayout rlPackage;
+    @Bind(R.id.lv_package)
+    ListViewForScrollView lvPackage;
+
     private long commodityId;
     private long userId;
     private boolean isSeller;
@@ -188,7 +194,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         ButterKnife.bind(this);
         commodityId = getIntent().getLongExtra("commodityId", -1);
         snapshots = getIntent().getBooleanExtra("snapshots", false);
-        isSeller = getIntent().getBooleanExtra("isSeller",false);
+        isSeller = getIntent().getBooleanExtra("isSeller", false);
         final long version = getIntent().getLongExtra("version", -1);
         Uri uri = getIntent().getData();
         if (uri != null) {
@@ -286,6 +292,12 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         });
 
 
+        if (isSeller){
+            rlPackage.setVisibility(View.VISIBLE);
+            lvPackage.setVisibility(View.VISIBLE);
+            lvPackage.setAdapter(new CommonAdapter(this,R.layout.item_package_info,false,bean.getPlans()));
+        }
+
         tvCommodityName.setText(bean.getTitle());
         tvGoodsSales.setText(String.valueOf(bean.getSalesVolume()) + "已售");
         tvGoodsComment.setText(String.valueOf((int) (bean.getRating() * 100)) + "%满意");
@@ -314,7 +326,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "商品介绍");
                 intent.putExtra("url", bean.getDescUrl());
-                intent.putExtra("showAnim",true);
+                intent.putExtra("showAnim", true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
@@ -333,7 +345,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "购买须知");
                 intent.putExtra("url", bean.getNoticeUrl());
-                intent.putExtra("showAnim",true);
+                intent.putExtra("showAnim", true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
@@ -356,7 +368,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "预定及退改");
                 intent.putExtra("url", bean.getRefundPolicyUrl());
-                intent.putExtra("showAnim",true);
+                intent.putExtra("showAnim", true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
@@ -375,7 +387,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("title", "交通提示");
                 intent.putExtra("url", bean.getTrafficInfoUrl());
-                intent.putExtra("showAnim",true);
+                intent.putExtra("showAnim", true);
                 intent.setClass(CommodityDetailActivity.this, PeachWebViewActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
@@ -385,7 +397,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         tvTalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(CommodityDetailActivity.this,"event_chatWithSeller");
+                MobclickAgent.onEvent(CommodityDetailActivity.this, "event_chatWithSeller");
                 Intent intent = new Intent();
                 if (AccountManager.getInstance().getLoginAccount(CommodityDetailActivity.this) == null) {
                     intent.putExtra("isFromGoods", true);
@@ -405,7 +417,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         tvStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(CommodityDetailActivity.this,"event_gotoStoreDetail");
+                MobclickAgent.onEvent(CommodityDetailActivity.this, "event_gotoStoreDetail");
                 Intent intent = new Intent();
                 intent.setClass(CommodityDetailActivity.this, StoreDetailActivity.class);
                 intent.putExtra("sellerId", String.valueOf(bean.getSeller().getSellerId()));
@@ -415,7 +427,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         tvSubmitOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgent.onEvent(CommodityDetailActivity.this,"event_buyGoods");
+                MobclickAgent.onEvent(CommodityDetailActivity.this, "event_buyGoods");
                 Intent intent = new Intent();
                 if (AccountManager.getInstance().getLoginAccount(CommodityDetailActivity.this) == null) {
                     intent.putExtra("isFromGoods", true);
@@ -516,28 +528,28 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             llSnapshot.setVisibility(View.GONE);
         }
 
-        if (bean.comments.size()>0){
+        if (bean.comments.size() > 0) {
             line.setVisibility(View.VISIBLE);
             empty_comment.setVisibility(View.GONE);
-            tv_comment.setText(String.format("用户评价 (%d人，%d分)",bean.commentCnt,(int)(bean.getRating()*5)));
-            lvComment.setAdapter(new CommentAdapter(this,bean.comments));
+            tv_comment.setText(String.format("用户评价 (%d人，%d分)", bean.commentCnt, (int) (bean.getRating() * 5)));
+            lvComment.setAdapter(new CommentAdapter(this, bean.comments));
             tvCommentShowAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(CommodityDetailActivity.this,CommentListActivity.class);
-                    intent.putExtra("commodityId",bean.getCommodityId());
+                    intent.setClass(CommodityDetailActivity.this, CommentListActivity.class);
+                    intent.putExtra("commodityId", bean.getCommodityId());
                     startActivity(intent);
                 }
             });
-        }else {
+        } else {
             line.setVisibility(View.GONE);
             tv_comment.setVisibility(View.GONE);
             ll_comment.setVisibility(View.GONE);
             empty_comment.setVisibility(View.VISIBLE);
         }
 
-        if (isSeller){
+        if (isSeller) {
             llAction.setVisibility(View.GONE);
             ll_trade_action.setVisibility(View.VISIBLE);
             switch (bean.status) {
@@ -562,10 +574,10 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 public void onClick(View v) {
                     switch (tv_trade_action.getText().toString()) {
                         case "下架":
-                            editCommodity("disabled",bean.getCommodityId(),"商品已下架");
+                            editCommodity("disabled", bean.getCommodityId(), "商品已下架");
                             break;
                         case "上架":
-                            editCommodity("pub",bean.getCommodityId(),"商品已发布");
+                            editCommodity("pub", bean.getCommodityId(), "商品已发布");
                             break;
                         default:
                             break;
@@ -573,21 +585,21 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                 }
             });
         }
-        scrollView.smoothScrollTo(0,0);
+        scrollView.smoothScrollTo(0, 0);
     }
 
 
-    public void editCommodity(String status,long commodityId,final String notice){
+    public void editCommodity(String status, long commodityId, final String notice) {
         TravelApi.editCommodityStatus(commodityId, status, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
-                Toast.makeText(mContext,notice,Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, notice, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                Toast.makeText(mContext, "操作失败", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -633,11 +645,13 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             ButterKnife.bind(this, view);
         }
     }
-    public class CommentAdapter extends BaseAdapter{
+
+    public class CommentAdapter extends BaseAdapter {
         private ArrayList<CommentDetailBean> list;
         private Context context;
+
         public CommentAdapter(Context context, ArrayList<CommentDetailBean> list) {
-            this.list=list;
+            this.list = list;
             this.context = context;
         }
 
@@ -659,25 +673,25 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
-            if (convertView==null){
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_comment,null);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_comment, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             CommentDetailBean bean = (CommentDetailBean) getItem(position);
-            viewHolder.rbComment.setRating((int)(bean.getRating()*5));
+            viewHolder.rbComment.setRating((int) (bean.getRating() * 5));
             viewHolder.tvComment.setText(bean.getContents());
             viewHolder.tvTimestamp.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(bean.getCreateTime())));
-            if (bean.images.size()>0){
+            if (bean.images.size() > 0) {
                 viewHolder.gvCommentPic.setAdapter(new CommentPicAdapter(CommodityDetailActivity.this));
             }
-            if (bean.anonymous){
+            if (bean.anonymous) {
                 viewHolder.tvName.setText("*****");
-            }else {
-                if (bean.getUser()!=null){
-                    if (bean.getUser().getAvatar()!=null){
+            } else {
+                if (bean.getUser() != null) {
+                    if (bean.getUser().getAvatar() != null) {
                         Glide.with(mContext)
                                 .load(bean.getUser().getAvatar().url)
                                 .placeholder(R.drawable.ic_home_more_avatar_unknown_round)
@@ -687,18 +701,19 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                                 .into(viewHolder.ivAvatar);
                     }
                     viewHolder.tvName.setText(bean.getUser().getNickname());
-                }else {
+                } else {
                     viewHolder.tvName.setText("*****");
                 }
             }
-            if (bean.order.getCommodity()!=null&&bean.order.getCommodity().getPlans().size()>0){
-                viewHolder.tvPackage.setText("套餐类型："+bean.order.getCommodity().getPlans().get(0).getTitle());
+            if (bean.order.getCommodity() != null && bean.order.getCommodity().getPlans().size() > 0) {
+                viewHolder.tvPackage.setText("套餐类型：" + bean.order.getCommodity().getPlans().get(0).getTitle());
             }
 
             return convertView;
         }
     }
-    public  class CommentPicAdapter extends BaseAdapter {
+
+    public class CommentPicAdapter extends BaseAdapter {
 
 
         Activity activity;
@@ -734,8 +749,8 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             }
 
             ViewGroup.LayoutParams layoutParams = holder.allPicsCellId.getLayoutParams();
-            layoutParams.width = (CommonUtils.getScreenWidth(activity)-75) / 6;
-            layoutParams.height = (CommonUtils.getScreenWidth(activity)-75) / 6;
+            layoutParams.width = (CommonUtils.getScreenWidth(activity) - 75) / 6;
+            layoutParams.height = (CommonUtils.getScreenWidth(activity) - 75) / 6;
             holder.allPicsCellId.setLayoutParams(layoutParams);
             Glide.with(mContext)
                     .load("http://7sbm17.com1.z0.glb.clouddn.com/commodity/images/f074adb29e1d39a184a02320a3aff555")
@@ -755,6 +770,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             }
         }
     }
+
     public void changeCollection(boolean isCollection, String id) {
         if (isCollection) {
             UserApi.delFav(String.valueOf(userId), id, "commodity", new HttpCallBack<String>() {
@@ -888,5 +904,70 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             nextValue++;
         }
         return (nextValue + currentcolor) % 5;
+    }
+
+    public class CommonAdapter extends BaseAdapter {
+
+        private Context mContext;
+        private int ResId;
+        private ArrayList<PlanBean> packageList;
+
+        public CommonAdapter(Context c, int ResId, boolean selected, ArrayList<PlanBean> list) {
+            packageList = list;
+            mContext = c;
+            this.ResId = ResId;
+
+        }
+
+        @Override
+        public int getCount() {
+            return packageList.size();
+        }
+
+
+        @Override
+        public Object getItem(int position) {
+            return packageList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder1 viewHolder1;
+            if (convertView == null) {
+                convertView = View.inflate(mContext, ResId, null);
+                viewHolder1 = new ViewHolder1();
+                viewHolder1.packageName = (TextView) convertView.findViewById(R.id.tv_package);
+                viewHolder1.packagePrice = (TextView) convertView.findViewById(R.id.tv_package_price);
+                viewHolder1.bg = (LinearLayout) convertView.findViewById(R.id.ll_bg);
+                convertView.setTag(viewHolder1);
+            } else {
+                viewHolder1 = (ViewHolder1) convertView.getTag();
+            }
+            PlanBean bean = (PlanBean) getItem(position);
+            viewHolder1.packageName.setText(bean.getTitle());
+            viewHolder1.packagePrice.setText(String.format("¥%s起", CommonUtils.getPriceString(bean.getPrice())));
+//                if (position == lastId) {
+//                    viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_selected);
+//                } else {
+//                    viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_default);
+//                }
+            viewHolder1.bg.setBackgroundResource(R.drawable.icon_package_bg_default);
+            return convertView;
+        }
+
+        class ViewHolder {
+            private TextView content;
+        }
+
+        class ViewHolder1 {
+            private TextView packageName;
+            private TextView packagePrice;
+            private LinearLayout bg;
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.xuejian.client.lxp.module.trade;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import com.xuejian.client.lxp.bean.OrderBean;
 import com.xuejian.client.lxp.bean.TradeActivityBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 
@@ -123,6 +125,7 @@ public class TradeActionActivity extends PeachBaseActivity {
     private static final int DRAWBACK_BEFORE_DELIVER = 3;
     private static final int DRAWBACK_AFTER_DELIVER = 4;
     private static final int DRAWBACK_DENY = 5;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +189,7 @@ public class TradeActionActivity extends PeachBaseActivity {
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        drawback(bean.getOrderId(),userId,bean.getTotalPrice(),etEditable.getText().toString());
+                        showConfirmDialog(TradeActionActivity.this, bean.getOrderId(), userId, bean.getTotalPrice(), etEditable.getText().toString());
                     }
                 });
                 break;
@@ -224,14 +227,14 @@ public class TradeActionActivity extends PeachBaseActivity {
                 llDrawbackActionContainer.setVisibility(View.VISIBLE);
                 llDrawbackPriceContainer.setVisibility(View.VISIBLE);
                 tvPrice.setVisibility(View.VISIBLE);
-                tvPrice.setText("234");
+               // tvPrice.setText("234");
                 llLeaveMessage.setVisibility(View.VISIBLE);
                 etEditable.setVisibility(View.VISIBLE);
                 tvAction0.setText("退款");
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        drawback(bean.getOrderId(),userId,bean.getTotalPrice(),etEditable.getText().toString());
+                        showConfirmDialog(TradeActionActivity.this, bean.getOrderId(), userId, bean.getTotalPrice(), etEditable.getText().toString());
                     }
                 });
                 break;
@@ -258,7 +261,7 @@ public class TradeActionActivity extends PeachBaseActivity {
                             Toast.makeText(mContext,"请输入合法的金额",Toast.LENGTH_LONG).show();
                             return;
                         }
-                        drawback(bean.getOrderId(), userId, Double.parseDouble(etPrice.getText().toString()), etEditable.getText().toString());
+                        showConfirmDialog(TradeActionActivity.this, bean.getOrderId(), userId, Double.parseDouble(etPrice.getText().toString()), etEditable.getText().toString());
                     }
                 });
                 break;
@@ -307,12 +310,12 @@ public class TradeActionActivity extends PeachBaseActivity {
         TravelApi.editOrderStatus(orderId, "refundApprove", data, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-
+                Toast.makeText(TradeActionActivity.this,"退款成功",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                Toast.makeText(TradeActionActivity.this,"退款失败",Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -335,12 +338,12 @@ public class TradeActionActivity extends PeachBaseActivity {
         TravelApi.editOrderStatus(orderId, "commit", data, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-
+                Toast.makeText(TradeActionActivity.this,"发货成功",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                Toast.makeText(TradeActionActivity.this,"发货失败",Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -368,12 +371,12 @@ public class TradeActionActivity extends PeachBaseActivity {
                 TravelApi.editOrderStatus(orderId, "commit", data, new HttpCallBack<String>() {
                     @Override
                     public void doSuccess(String result, String method) {
-
+                        Toast.makeText(TradeActionActivity.this, "发货成功", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-
+                        Toast.makeText(TradeActionActivity.this, "发货失败", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -385,7 +388,7 @@ public class TradeActionActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                Toast.makeText(TradeActionActivity.this,"拒绝退款失败",Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -409,12 +412,12 @@ public class TradeActionActivity extends PeachBaseActivity {
         TravelApi.editOrderStatus(orderId, "refundDeny", data, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-
+                Toast.makeText(TradeActionActivity.this,"拒绝退款成功",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                Toast.makeText(TradeActionActivity.this,"拒绝退款失败",Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -426,9 +429,6 @@ public class TradeActionActivity extends PeachBaseActivity {
 
 
     private void bindCustomerData(final OrderBean bean) {
-//        tvOrderUserName.setText(bean.getContact().getGivenName()+bean.getContact().getSurname());
-//        tvRealPrice.setText(String.format("¥%s", CommonUtils.getPriceString(bean.getTotalPrice() - bean.getDiscount())));
-        final long userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
         if (type == DELIVER) {
             tvGoodsName.setText(bean.getCommodity().getTitle());
             tvPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
@@ -454,14 +454,27 @@ public class TradeActionActivity extends PeachBaseActivity {
 
             }
             tvPrice.setText(CommonUtils.getPriceString(bean.getTotalPrice()));
+
+            TradeActivityBean tradeActivityBean = getDrawBackData(bean.activities);
+            if (tradeActivityBean!=null){
+                long time = tradeActivityBean.timestamp+72*60*60*1000-System.currentTimeMillis();
+                if (time>0){
+                    countDownTimer = new CountDownTimer(time, 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            tvState.setText(String.format("倒计时:%s", CommonUtils.formatDuring(millisUntilFinished)));
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                        }
+                    }.start();
+                }
+            }
+
         }
 
-        tvAction0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmDialog(TradeActionActivity.this, bean.getOrderId(), userId);
-            }
-        });
     }
 
 
@@ -474,22 +487,40 @@ public class TradeActionActivity extends PeachBaseActivity {
         return null;
     }
 
-    private void showConfirmDialog(final Activity act, final long orderId, final long userId) {
+    private void showConfirmDialog(final Activity act, final long orderId, final long userId, final double amount, final String memo) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_confirm_password, null);
-        EditText et = (EditText) contentView.findViewById(R.id.et_password);
+        final EditText et = (EditText) contentView.findViewById(R.id.et_password);
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
         TextView tvCancle = (TextView) contentView.findViewById(R.id.tv_cancel);
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                UserApi.veryfyPassword(et.getText().toString(), new HttpCallBack() {
+                    @Override
+                    public void doSuccess(Object result, String method) {
+                        drawback(orderId, userId, amount, memo);
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        Toast.makeText(TradeActionActivity.this,"密码输入错误",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+
                 dialog.dismiss();
             }
         });
         tvCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commit(orderId,userId);
+
                 dialog.dismiss();
             }
         });
@@ -503,5 +534,11 @@ public class TradeActionActivity extends PeachBaseActivity {
         window.setAttributes(lp);
         window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer!=null)countDownTimer.cancel();
     }
 }

@@ -30,6 +30,7 @@ import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
+import com.xuejian.client.lxp.module.trade.TradeMainActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -71,6 +72,8 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RelativeLayout llAllOrder;
     @Bind(R.id.rl_my_invent)
     RelativeLayout rl_my_invent;
+    @Bind(R.id.rl_shop)
+    RelativeLayout rl_shop;
     User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         linearLayout.setOnClickListener(this);
         rl_my_coupon.setOnClickListener(this);
         rl_my_invent.setOnClickListener(this);
+        rl_shop.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
         return view;
@@ -214,6 +218,10 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
             case R.id.rl_my_invent:
                 Intent rl_my_invent = new Intent(getActivity(), InventActivity.class);
                 startActivity(rl_my_invent);
+                break;
+            case R.id.rl_shop:
+                Intent rl_shop = new Intent(getActivity(), TradeMainActivity.class);
+                startActivity(rl_shop);
                 break;
             default:
                 break;

@@ -142,7 +142,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
     public void getCommodities(String status,int start,int count, final boolean refresh) {
         long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
 
-        TravelApi.getCommodityList(String.valueOf(100012), status, null, null, null, "updateTime", String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getCommodityList(String.valueOf(userId), status, null, null, null, "updateTime", String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
@@ -186,7 +186,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
         recyclerView.setHasFixedSize(false);
         adapter = new OrderListAdapter(getActivity(), type);
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), CommodityDetailActivity.class);
@@ -196,12 +196,12 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
             }
         });
     }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position, long id);
+    }
 
+     class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
 
-    static class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
-        public interface OnItemClickListener {
-            void onItemClick(View view, int position, long id);
-        }
 
         private OnItemClickListener listener;
         private List<SimpleCommodityBean> mValues;
@@ -273,10 +273,10 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
                 public void onClick(View v) {
                     switch (bean.status) {
                         case "pub":
-                            editCommodity("disabled",bean.getCommodityId(),"商品已下架");
+                            editCommodity("disabled",bean.getCommodityId(),"商品已下架","pub");
                             break;
                         case "disabled":
-                            editCommodity("pub",bean.getCommodityId(),"商品已发布");
+                            editCommodity("pub",bean.getCommodityId(),"商品已发布","disabled");
                             break;
                         default:
                             break;
@@ -360,17 +360,20 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
-        public void editCommodity(String status,long commodityId,final String notice){
+        public void editCommodity(String status,long commodityId,final String notice,final String refreshType){
             TravelApi.editCommodityStatus(commodityId, status, new HttpCallBack<String>() {
 
                 @Override
                 public void doSuccess(String result, String method) {
                     Toast.makeText(mContext, notice, Toast.LENGTH_LONG).show();
+
+                    recyclerView.doRefresh();
+                  //  getCommodities(refreshType, 0, COUNT, true);
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-
+                    Toast.makeText(mContext, "操作失败", Toast.LENGTH_LONG).show();
                 }
 
                 @Override

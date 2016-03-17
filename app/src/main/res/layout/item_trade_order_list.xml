@@ -77,7 +77,6 @@
             android:layout_alignParentLeft="true"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:text="订单号"
             android:gravity="center_vertical"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
@@ -90,7 +89,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="7dp"
             android:layout_marginRight="10dp"
-            android:text="下单时间"
             android:gravity="center_vertical"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
@@ -103,7 +101,6 @@
             android:layout_alignParentLeft="true"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:text="联系人"
             android:gravity="center_vertical"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />
@@ -163,7 +160,6 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
-            android:text="退款申请中"
             android:gravity="center_vertical"
             android:textColor="@color/color_text_ii"
             android:textSize="13sp" />

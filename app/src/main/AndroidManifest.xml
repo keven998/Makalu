@@ -522,7 +522,9 @@
         <activity
             android:name=".module.trade.TradeActionActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".module.trade.TradeMainActivity"
+            android:screenOrientation="portrait" />
 
 
 

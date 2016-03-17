@@ -192,7 +192,7 @@ public class TradeOrderListFragment extends PeachBaseFragment {
         recyclerView.setHasFixedSize(false);
         adapter = new OrderListAdapter(getActivity(), type);
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
@@ -204,11 +204,11 @@ public class TradeOrderListFragment extends PeachBaseFragment {
         });
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position, long id);
+    }
+    class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
 
-    static class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
-        public interface OnItemClickListener {
-            void onItemClick(View view, int position, long id);
-        }
 
         private OnItemClickListener listener;
         private List<OrderBean> mValues;
@@ -462,6 +462,7 @@ public class TradeOrderListFragment extends PeachBaseFragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     closeOrder(orderId, userId, a[position]);
+                    dialog.dismiss();
                 }
             });
             dialog.show();
@@ -491,6 +492,7 @@ public class TradeOrderListFragment extends PeachBaseFragment {
             TravelApi.editOrderStatus(orderId, "cancel", data, new HttpCallBack<String>() {
                 @Override
                 public void doSuccess(String result, String method) {
+                    recyclerView.doRefresh();
                     Toast.makeText(mContext, "已关闭交易", Toast.LENGTH_LONG).show();
                 }
 

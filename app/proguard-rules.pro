@@ -38,15 +38,15 @@
     public *;
 }
 
-#-dontwarn class com.igexin.**
-#-dontwarn class com.igexin.**{*;}
-#-dontwarn class rx.internal.**
-#-keep class com.squareup.**
-#-dontwarn class com.lv.**
-#-keep class com.amap.api.**
-#-dontwarn class com.alibaba.fastjson.**
-#-dontwarn class butterknife.internal.**
-#-dontwarn class okio.**
+-keep class com.igexin.**
+-keep class com.igexin.**{*;}
+-keep class rx.internal.**
+-keep class com.squareup.**
+-keep class com.lv.**
+-keep class com.amap.api.**
+-keep class com.alibaba.fastjson.**
+-keep class butterknife.internal.**
+-keep class okio.**
 
 
 #butterKnife
@@ -216,6 +216,46 @@
 -keep public class com.xuejian.client.lxp.R$*{
     public static final int *;
 }
+
+-keep class com.lv.** {
+    *;
+}
+
+-keep class com.lv.im.IMClient {
+    *;
+}
+-keep class com.lv.im.LazyQueue {
+    *;
+}
+
+-keep class com.lv.net.HttpUtils {
+    *;
+}
+-keep class com.aizou.core.utils.MathUtils.** {
+    *;
+}
+-dontskipnonpubliclibraryclassmembers
+
+-keep class com.igexin.** {
+    *;
+}
+
+#okio
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.** { *;}
+-dontwarn okio.**
+
+
+-keep class android.support.** {
+    *;
+}
+
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
 #这些类型必须被原样的保留，不能移除或者重命名
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -223,11 +263,17 @@
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
 
+
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+
 -keep public class * extends android.view.View {
     public <init>(android.content.Context);
     public <init>(android.content.Context, android.util.AttributeSet);
     public <init>(android.content.Context, android.util.AttributeSet, int);
     public void set*(...);
+    *** get*();
 }
 
 -keepclasseswithmembers class * {

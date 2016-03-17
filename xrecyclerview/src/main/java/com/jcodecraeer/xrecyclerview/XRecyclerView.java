@@ -196,6 +196,9 @@ public class XRecyclerView extends RecyclerView {
         }
     }
 
+    public void doRefresh(){
+        if (mLoadingListener!=null)mLoadingListener.onRefresh();
+    }
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (mLastY == -1) {

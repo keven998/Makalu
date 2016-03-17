@@ -254,8 +254,8 @@ public class TravelApi extends BaseApi {
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + ORDER_LIST);
         if (trade){
-            request.putUrlParams("seller", String.valueOf(userId));
-            request.putUrlParams("userId", String.valueOf(userId));
+            request.putUrlParams("sellerId", String.valueOf(userId));
+      //      request.putUrlParams("userId", String.valueOf(userId));
         //    request.putUrlParams("sort", "updateTime");
         }else {
             request.putUrlParams("userId", String.valueOf(userId));

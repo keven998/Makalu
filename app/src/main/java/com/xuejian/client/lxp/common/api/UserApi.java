@@ -95,6 +95,9 @@ public class UserApi extends BaseApi {
     public final static String EXPERT_SEARCH = "/users/experts?zone=%s";
     public final static String EXPERT_TRAVEL_NOTE = "/users/%s/travelnotes";
 
+    //验证密码
+    public final static String VERYFY_PASSWORD = "/users/password";
+
     //用户收藏
     public final static String USER_FAV = "/users/%s/favorites";
 
@@ -116,6 +119,25 @@ public class UserApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //   return HttpManager.request(request, callback);
     }
+
+    public static void veryfyPassword(String password, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + VERYFY_PASSWORD);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+        //   return HttpManager.request(request, callback);
+    }
+
     public static void getFav(String userId,String id,String type, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
