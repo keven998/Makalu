@@ -1,7 +1,5 @@
 package com.xuejian.client.lxp.module.trade;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,20 +7,14 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -35,14 +27,10 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.imageloader.UILUtils;
-import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
-import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -142,7 +130,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
     public void getCommodities(String status,int start,int count, final boolean refresh) {
         long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
 
-        TravelApi.getCommodityList(String.valueOf(userId), status, null, null, null, "updateTime", String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getCommodityList(String.valueOf(userId), status, null, null,"updateTime", "desc",  String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
@@ -284,8 +272,6 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
                 }
             });
             holder.tvGoodsName.setText(bean.getTitle());
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString  = format.format(new Date());
             holder.tvGoodsId.setText(String.format("商品编号:%d", bean.getCommodityId()));
             holder.tvGoodsPrice.setText(String.format("价格:¥%s起", CommonUtils.getPriceString(bean.getPrice())));
             if (bean.getCover() != null) {
@@ -305,52 +291,6 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
 
         }
 
-        private void showPayActionDialog(final Activity act, final long orderId) {
-            final AlertDialog dialog = new AlertDialog.Builder(act).create();
-            View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
-            CheckedTextView alipay = (CheckedTextView) contentView.findViewById(R.id.ctv_alipay);
-            CheckedTextView weixinpay = (CheckedTextView) contentView.findViewById(R.id.ctv_weixin);
-            alipay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    Intent tv_pay = new Intent(act, PaymentActivity.class);
-                    tv_pay.putExtra("orderId", orderId);
-                    tv_pay.putExtra("type", "alipay");
-                    act.startActivity(tv_pay);
-                }
-            });
-            weixinpay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    if (!WeixinApi.getInstance().isWXinstalled(act)){
-                        ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
-                        return;
-                    }
-                    Intent tv_pay = new Intent(act, PaymentActivity.class);
-                    tv_pay.putExtra("orderId", orderId);
-                    tv_pay.putExtra("type", "weixinpay");
-                    act.startActivity(tv_pay);
-                }
-            });
-            contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-            WindowManager windowManager = act.getWindowManager();
-            Window window = dialog.getWindow();
-            window.setContentView(contentView);
-            Display display = windowManager.getDefaultDisplay();
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.width = display.getWidth(); // 设置宽度
-            window.setAttributes(lp);
-            window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-            window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
-        }
 
         @Override
         public int getItemCount() {

@@ -550,6 +550,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         }
 
         if (isSeller) {
+            ivCollection.setVisibility(View.GONE);
             llAction.setVisibility(View.GONE);
             ll_trade_action.setVisibility(View.VISIBLE);
             switch (bean.status) {

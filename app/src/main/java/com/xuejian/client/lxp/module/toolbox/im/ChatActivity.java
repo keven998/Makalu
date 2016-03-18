@@ -296,7 +296,12 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
         if ("single".equals(chatType) && user == null) {
             getUserInfo(Integer.parseInt(toChatUsername));
         }
-        isBusiness();
+        try {
+            isBusiness();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         initData();
     }
 

@@ -334,7 +334,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:drawableLeft="@drawable/icon_city_hasgone"
                             android:text="计划"
                             android:textColor="@color/color_text_iii"
                             android:textSize="@dimen/text_size_14" />
@@ -344,7 +343,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:text="15篇"
                             android:textColor="@color/app_theme_color"
                             android:textSize="16dp" />
                     </LinearLayout>

@@ -528,6 +528,7 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_trade_action_seller"
         android:layout_width="match_parent"
         android:layout_height="52dp"

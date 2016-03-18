@@ -122,7 +122,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
 //                }
                 else{
                     if (!CommonUtils.isNetWorkConnected(mContext)) {
-                        ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                        ToastUtil.getInstance(this).showToast(getResources().getString(R.string.request_network_failed));
                         return;
                     }
                     if (actionCode.equals(UserApi.ValidationCode.REG_CODE)) {
@@ -163,7 +163,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                                 if (code == HttpManager.PWD_ERROR) {
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("验证码错误");
                                 } else if (code == HttpManager.RESOURSE_CONFLICT) {
-                                    ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("手机号已存在");
+                                    ToastUtil.getInstance(VerifyPhoneActivity.this).showToast("手机号已注册，请直接登录");
                                 } else
                                     ToastUtil.getInstance(VerifyPhoneActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                             }
@@ -176,7 +176,7 @@ public class VerifyPhoneActivity extends PeachBaseActivity implements View.OnCli
                 break;
             case R.id.btn_time_down:
                 if (!CommonUtils.isNetWorkConnected(mContext)) {
-                    ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                    ToastUtil.getInstance(this).showToast(getResources().getString(R.string.request_network_failed));
                     return;
                 }
                 try {

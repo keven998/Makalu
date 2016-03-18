@@ -22,7 +22,7 @@
 
     <string name="tool_title">旅行派</string>
 
-    <string name="request_network_failed">网络请求失败</string>
+    <string name="request_network_failed">小主，您的网络好像有问题哦~</string>
     <string name="request_server_failed">请求失败</string>
 
     <string name="empty_string">empty</string>

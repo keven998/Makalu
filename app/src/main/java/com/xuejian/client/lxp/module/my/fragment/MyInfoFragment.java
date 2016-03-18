@@ -11,12 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.bean.StoreBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
@@ -109,8 +113,32 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rl_shop.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
+        isBusiness();
         return view;
     }
+    public void isBusiness() {
+        long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
+            TravelApi.getSellerInfo(userId, new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson<StoreBean> commonJson = CommonJson.fromJson(result, StoreBean.class);
+                    if (commonJson.code == 0) {
+                       rl_shop.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
 
     public void initHeadTitleView(User user) {
         if (AccountManager.getInstance().getLoginAccount(getActivity())!=null){

@@ -120,33 +120,33 @@ public class SearchTypeActivity extends PeachBaseActivity {
         conversation = getIntent().getStringExtra("conversation");
         chatType = getIntent().getStringExtra("chatType");
         fromChat = getIntent().getBooleanExtra("fromChat", false);
-        if (type.equals("loc")) {
+        if (("loc").equals(type)) {
             cityFilterTv.setVisibility(View.GONE);
             typeBean = new SearchTypeBean();
             typeBean.type = "loc";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
             titleTv.setText("全部城市");
-        } else if (type.equals("vs")) {
+        } else if (("vs").equals(type)) {
             // cityFilterTv.setVisibility(View.VISIBLE);
             typeBean = new SearchTypeBean();
             typeBean.type = "vs";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
             titleTv.setText("全部景点");
-        } else if (type.equals("hotel")) {
+        } else if (("hotel").equals(type)) {
             typeBean = new SearchTypeBean();
             typeBean.type = "hotel";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
             titleTv.setText("全部酒店");
-        } else if (type.equals("restaurant")) {
+        } else if (("restaurant").equals(type)) {
             typeBean = new SearchTypeBean();
             typeBean.type = "restaurant";
             typeBean.resultList = new ArrayList();
             typeBeans.add(typeBean);
             titleTv.setText("全部美食");
-        } else if (type.equals("shopping")) {
+        } else if (("shopping").equals(type)) {
             typeBean = new SearchTypeBean();
             typeBean.type = "shopping";
             typeBean.resultList = new ArrayList();

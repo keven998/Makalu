@@ -79,7 +79,7 @@ public class TradeMainActivity extends PeachBaseActivity {
 
         tvOrders.setText(String.format("总订单量\n%d单",bean.totalOrderCnt));
         tvSales.setText(String.format("总销售额\n%s元", CommonUtils.getPriceString(bean.totalSales)));
-        tv_pending_order.setText(String.format("订单(%d)",bean.pendingOrderCnt));
+        tv_pending_order.setText(String.format("订单(%d单待处理)",bean.pendingOrderCnt));
         rlCommodity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

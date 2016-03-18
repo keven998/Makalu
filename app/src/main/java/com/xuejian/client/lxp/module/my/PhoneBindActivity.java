@@ -94,7 +94,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                 }
 
                 if (!CommonUtils.isNetWorkConnected(mContext)) {
-                    ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                    ToastUtil.getInstance(this).showToast(getResources().getString(R.string.request_network_failed));
                     return;
                 }
                 try {
@@ -153,7 +153,7 @@ public class PhoneBindActivity extends PeachBaseActivity implements View.OnClick
                     return;
                 }
                 if (!CommonUtils.isNetWorkConnected(mContext)) {
-                    ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                    ToastUtil.getInstance(this).showToast(getResources().getString(R.string.request_network_failed));
                     return;
                 }
                 try {

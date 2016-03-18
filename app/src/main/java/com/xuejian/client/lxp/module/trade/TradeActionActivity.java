@@ -2,17 +2,20 @@ package com.xuejian.client.lxp.module.trade;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,6 +122,12 @@ public class TradeActionActivity extends PeachBaseActivity {
     LinearLayout llState;
     @Bind(R.id.tv_drawback_info_title)
     TextView tv_drawback_info_title;
+    @Bind(R.id.ll_t1)
+    LinearLayout llT1;
+    @Bind(R.id.ll_t2)
+    LinearLayout llT2;
+    @Bind(R.id.ll_t3)
+    LinearLayout llT3;
     private int type;
     private static final int DRAWBACK_OUT_OF_STOCK = 1;
     private static final int DELIVER = 2;
@@ -181,7 +190,6 @@ public class TradeActionActivity extends PeachBaseActivity {
                 llDrawbackActionContainer.setVisibility(View.VISIBLE);
                 llDrawbackPriceContainer.setVisibility(View.VISIBLE);
                 tvPrice.setVisibility(View.VISIBLE);
-                tvPrice.setText("123");
                 llLeaveMessage.setVisibility(View.VISIBLE);
                 etEditable.setVisibility(View.VISIBLE);
 
@@ -202,14 +210,20 @@ public class TradeActionActivity extends PeachBaseActivity {
 
                 llDeliverUserInfo.setVisibility(View.VISIBLE);
 
+                if (bean.getStatus().equals("paid")) {
+                    llT1.setVisibility(View.GONE);
+                    llT2.setVisibility(View.GONE);
+                    llT3.setVisibility(View.GONE);
+                }
+
                 tvAction0.setText("确认发货");
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (bean.getStatus().equals("paid")){
-                            commit(bean.getOrderId(),userId);
-                        }else {
-                            commitAndDeny(bean.getOrderId(),userId);
+                        if (bean.getStatus().equals("paid")) {
+                            commit(bean.getOrderId(), userId);
+                        } else {
+                            commitAndDeny(bean.getOrderId(), userId);
                         }
                     }
                 });
@@ -227,7 +241,7 @@ public class TradeActionActivity extends PeachBaseActivity {
                 llDrawbackActionContainer.setVisibility(View.VISIBLE);
                 llDrawbackPriceContainer.setVisibility(View.VISIBLE);
                 tvPrice.setVisibility(View.VISIBLE);
-               // tvPrice.setText("234");
+                // tvPrice.setText("234");
                 llLeaveMessage.setVisibility(View.VISIBLE);
                 etEditable.setVisibility(View.VISIBLE);
                 tvAction0.setText("退款");
@@ -257,11 +271,24 @@ public class TradeActionActivity extends PeachBaseActivity {
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!TextUtils.isDigitsOnly(etPrice.getText().toString())){
-                            Toast.makeText(mContext,"请输入合法的金额",Toast.LENGTH_LONG).show();
+                        if (TextUtils.isEmpty(etPrice.getText().toString().trim())) {
+                            Toast.makeText(mContext, "请输入合法的金额", Toast.LENGTH_LONG).show();
                             return;
                         }
-                        showConfirmDialog(TradeActionActivity.this, bean.getOrderId(), userId, Double.parseDouble(etPrice.getText().toString()), etEditable.getText().toString());
+                        double acount = 0;
+                        try {
+                            acount = Double.parseDouble(etPrice.getText().toString().trim());
+                        } catch (Exception e) {
+                            Toast.makeText(mContext, "请输入合法的金额", Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                            return;
+                        }
+
+                        if (acount > (bean.getTotalPrice()-bean.getDiscount())) {
+                            Toast.makeText(mContext, "退款金额不可以大于用户支付金额", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        showConfirmDialog(TradeActionActivity.this, bean.getOrderId(), userId, Double.parseDouble(etPrice.getText().toString().trim()), etEditable.getText().toString());
                     }
                 });
                 break;
@@ -284,7 +311,7 @@ public class TradeActionActivity extends PeachBaseActivity {
                 tvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        drawBackDeny(bean.getOrderId(),userId,etEditable.getText().toString());
+                        drawBackDeny(bean.getOrderId(), userId, etEditable.getText().toString());
                     }
                 });
                 break;
@@ -294,15 +321,14 @@ public class TradeActionActivity extends PeachBaseActivity {
     }
 
 
-
-    public void drawback(long orderId, long userId, double amount,String memo) {
+    public void drawback(long orderId, long userId, double amount, String memo) {
 
         JSONObject data = new JSONObject();
         try {
             data.put("userId", userId);
             data.put("memo", memo);
             data.put("reason", "");
-            data.put("amount",amount);
+            data.put("amount", amount);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -310,12 +336,13 @@ public class TradeActionActivity extends PeachBaseActivity {
         TravelApi.editOrderStatus(orderId, "refundApprove", data, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                Toast.makeText(TradeActionActivity.this,"退款成功",Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "退款成功", Toast.LENGTH_LONG).show();
+                finish();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                Toast.makeText(TradeActionActivity.this,"退款失败",Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "退款失败", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -325,7 +352,7 @@ public class TradeActionActivity extends PeachBaseActivity {
         });
     }
 
-    public void commit(long orderId, long userId){
+    public void commit(long orderId, long userId) {
         JSONObject data = new JSONObject();
         try {
             data.put("userId", userId);
@@ -338,12 +365,13 @@ public class TradeActionActivity extends PeachBaseActivity {
         TravelApi.editOrderStatus(orderId, "commit", data, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                Toast.makeText(TradeActionActivity.this,"发货成功",Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "发货成功", Toast.LENGTH_LONG).show();
+                finish();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                Toast.makeText(TradeActionActivity.this,"发货失败",Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "发货失败", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -354,7 +382,7 @@ public class TradeActionActivity extends PeachBaseActivity {
     }
 
 
-    public void commitAndDeny(final long orderId, long userId){
+    public void commitAndDeny(final long orderId, long userId) {
         final JSONObject data = new JSONObject();
         try {
             data.put("userId", userId);
@@ -372,6 +400,7 @@ public class TradeActionActivity extends PeachBaseActivity {
                     @Override
                     public void doSuccess(String result, String method) {
                         Toast.makeText(TradeActionActivity.this, "发货成功", Toast.LENGTH_LONG).show();
+                        finish();
                     }
 
                     @Override
@@ -388,7 +417,7 @@ public class TradeActionActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                Toast.makeText(TradeActionActivity.this,"拒绝退款失败",Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "拒绝退款失败", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -399,7 +428,7 @@ public class TradeActionActivity extends PeachBaseActivity {
 
     }
 
-    public void drawBackDeny(long orderId,long userId,String memo){
+    public void drawBackDeny(long orderId, long userId, String memo) {
         JSONObject data = new JSONObject();
         try {
             data.put("userId", userId);
@@ -412,12 +441,13 @@ public class TradeActionActivity extends PeachBaseActivity {
         TravelApi.editOrderStatus(orderId, "refundDeny", data, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                Toast.makeText(TradeActionActivity.this,"拒绝退款成功",Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "拒绝退款成功", Toast.LENGTH_LONG).show();
+                finish();
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                Toast.makeText(TradeActionActivity.this,"拒绝退款失败",Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "拒绝退款失败", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -433,32 +463,38 @@ public class TradeActionActivity extends PeachBaseActivity {
             tvGoodsName.setText(bean.getCommodity().getTitle());
             tvPackage.setText(bean.getCommodity().getPlans().get(0).getTitle());
             tvGoodsNum.setText(String.valueOf(bean.getQuantity()));
-            tvTotalDate.setText("¥"+ CommonUtils.getPriceString(bean.getTotalPrice()));
+            tvTotalDate.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice()));
             tvGoodsOrderId.setText(String.valueOf(bean.getOrderId()));
 
-            tvOrderUserName.setText(bean.getContact().getSurname()+bean.getContact().getGivenName());
+            tvOrderUserName.setText(bean.getContact().getSurname() + bean.getContact().getGivenName());
             tvOrderTel.setText(bean.getContact().getTel().toString());
             tvDeliverOrderDate.setText(bean.getRendezvousTime());
             tvOrderMessage.setText(bean.getComment());
         } else {
-            tvCustomerName.setText(bean.getContact().getSurname()+bean.getContact().getGivenName());
+            tvCustomerName.setText(bean.getContact().getSurname() + bean.getContact().getGivenName());
             tvRealPrice.setText("¥" + CommonUtils.getPriceString(bean.getTotalPrice() - bean.getDiscount()));
+            tvRealPrice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPriceDetail(bean.getTotalPrice(), bean.getDiscount());
+                }
+            });
             TradeActivityBean activityBean = getDrawBackData(bean.activities);
-            if (activityBean!=null){
+            if (activityBean != null) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 tvDrawbackTime.setText(format.format(new Date(activityBean.timestamp)));
-                if (activityBean.data!=null){
+                if (activityBean.data != null) {
                     tvDrawbackReason.setText(activityBean.data.reason);
                     tvDrawbackMessage.setText(activityBean.data.memo);
                 }
 
             }
             tvPrice.setText(CommonUtils.getPriceString(bean.getTotalPrice()));
-
+            etPrice.setText(CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount()));
             TradeActivityBean tradeActivityBean = getDrawBackData(bean.activities);
-            if (tradeActivityBean!=null){
-                long time = tradeActivityBean.timestamp+72*60*60*1000-System.currentTimeMillis();
-                if (time>0){
+            if (tradeActivityBean != null) {
+                long time = tradeActivityBean.timestamp + 72 * 60 * 60 * 1000 - System.currentTimeMillis();
+                if (time > 0) {
                     countDownTimer = new CountDownTimer(time, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -478,13 +514,31 @@ public class TradeActionActivity extends PeachBaseActivity {
     }
 
 
-    public TradeActivityBean getDrawBackData(ArrayList<TradeActivityBean> activityBeans){
+    public TradeActivityBean getDrawBackData(ArrayList<TradeActivityBean> activityBeans) {
         for (TradeActivityBean activityBean : activityBeans) {
-            if ("refundApply".equals(activityBean.action)){
+            if ("refundApply".equals(activityBean.action)) {
                 return activityBean;
             }
         }
         return null;
+    }
+
+    private void showPriceDetail(final double price, final double coupon) {
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_price_detail, null);
+        TextView tvPrice = (TextView) view.findViewById(R.id.tv_total_price);
+        TextView tvCustomer = (TextView) view.findViewById(R.id.tv_customer);
+        TextView tvCoupon = (TextView) view.findViewById(R.id.tv_coupon);
+        tvPrice.setText(String.format("订单总价：¥ %s", CommonUtils.getPriceString(price)));
+        tvCustomer.setText(String.format("买家支付：¥ %s", CommonUtils.getPriceString(price - coupon)));
+        tvCoupon.setText(String.format("平台支付：¥ %s", CommonUtils.getPriceString(coupon)));
+        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        //   popupWindow.setAnimationStyle(R.style.PopAnimation1);
+        popupWindow.showAtLocation(tvRealPrice, Gravity.CENTER, 0, 0);
+
     }
 
     private void showConfirmDialog(final Activity act, final long orderId, final long userId, final double amount, final String memo) {
@@ -505,7 +559,7 @@ public class TradeActionActivity extends PeachBaseActivity {
 
                     @Override
                     public void doFailure(Exception error, String msg, String method) {
-                        Toast.makeText(TradeActionActivity.this,"密码输入错误",Toast.LENGTH_LONG).show();
+                        Toast.makeText(TradeActionActivity.this, "密码输入错误", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -524,6 +578,7 @@ public class TradeActionActivity extends PeachBaseActivity {
                 dialog.dismiss();
             }
         });
+        dialog.setView(new EditText(TradeActionActivity.this));
         dialog.show();
         WindowManager windowManager = act.getWindowManager();
         Window window = dialog.getWindow();
@@ -539,6 +594,6 @@ public class TradeActionActivity extends PeachBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (countDownTimer!=null)countDownTimer.cancel();
+        if (countDownTimer != null) countDownTimer.cancel();
     }
 }

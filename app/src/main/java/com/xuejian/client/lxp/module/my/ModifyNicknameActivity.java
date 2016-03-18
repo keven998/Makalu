@@ -102,14 +102,14 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
                         return;
                     }
                     if (!RegexUtils.checkNickName(nickEt.getText().toString().trim())) {
-                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("请输入1-16位中英文昵称");
+                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("支持1-16位字母、数字、汉字和常用字符组合");
                         return;
                     } else if (InputCheckUtils.checkNickNameIsNumber(nickEt.getText().toString().trim())) {
                         ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("昵称不能为纯数字");
                         return;
                     }
                     if (!CommonUtils.isNetWorkConnected(ModifyNicknameActivity.this)) {
-                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast("无网络连接，请检查网络");
+                        ToastUtil.getInstance(ModifyNicknameActivity.this).showToast(getResources().getString(R.string.request_network_failed));
                         return;
                     }
 
@@ -171,12 +171,16 @@ public class ModifyNicknameActivity extends PeachBaseActivity {
         if (isEditMemo) {
             nickEt.setText(nickname);
         } else {
-            user = AccountManager.getInstance().getLoginAccount(this);
-            nickEt.setText(user.getNickName());
-            CharSequence text = nickEt.getText();
-            if (text instanceof Spannable) {
-                Spannable spanText = (Spannable) text;
-                Selection.setSelection(spanText, text.length());
+            try {
+                user = AccountManager.getInstance().getLoginAccount(this);
+                nickEt.setText(user.getNickName());
+                CharSequence text = nickEt.getText();
+                if (text instanceof Spannable) {
+                    Spannable spanText = (Spannable) text;
+                    Selection.setSelection(spanText, text.length());
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

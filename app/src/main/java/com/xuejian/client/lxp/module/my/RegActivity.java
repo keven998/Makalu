@@ -76,7 +76,7 @@ public class RegActivity extends PeachBaseActivity implements View.OnClickListen
                     return;
                 }
                 if (!CommonUtils.isNetWorkConnected(mContext)) {
-                    ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                    ToastUtil.getInstance(this).showToast(getResources().getString(R.string.request_network_failed));
                     return;
                 }
                 try {

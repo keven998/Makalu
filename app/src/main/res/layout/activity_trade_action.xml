@@ -324,11 +324,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:drawablePadding="7dp"
+                        android:drawableRight="@drawable/icon_use"
                         android:textColor="@color/color_text_iii"
                         android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_t1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -355,6 +358,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_t2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -381,6 +385,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_t3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"

@@ -121,11 +121,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         initView();
 
 
-//        Intent intent2 = new Intent(this, TradeActionActivity.class);
-//        intent2.putExtra("type",4);
-//        startActivity(intent2);
-
-
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -562,17 +557,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         if (mMediaPlayer == null) {
             Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             mMediaPlayer = MediaPlayer.create(mContext,uri);
-//            mMediaPlayer = new MediaPlayer();
-//            try {
-//                mMediaPlayer.setDataSource(mContext, uri);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                mMediaPlayer.prepare();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
             if (mMediaPlayer!=null)mMediaPlayer.setLooping(false); //循环播放
         }
 

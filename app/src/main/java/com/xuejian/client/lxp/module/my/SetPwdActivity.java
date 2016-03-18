@@ -62,7 +62,7 @@ public class SetPwdActivity extends PeachBaseActivity implements View.OnClickLis
                     return;
                 }
                 if (!CommonUtils.isNetWorkConnected(mContext)) {
-                    ToastUtil.getInstance(this).showToast("无网络，请检查网络连接");
+                    ToastUtil.getInstance(this).showToast(getResources().getString(R.string.request_network_failed));
                     return;
                 }
                 UserApi.bindPhone(mPhone, user.getUserId() + "", pwdEt.getText().toString().trim(), mToken, new HttpCallBack<String>() {

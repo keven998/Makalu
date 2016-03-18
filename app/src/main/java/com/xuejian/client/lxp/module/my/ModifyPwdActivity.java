@@ -58,7 +58,7 @@ public class ModifyPwdActivity extends PeachBaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.tv_confirm:
                 if (!RegexUtils.isPwdOk(oldPwdEt.getText().toString().trim())) {
-                    ToastUtil.getInstance(this).showToast("请输入你的当前密码");
+                    ToastUtil.getInstance(this).showToast("当前密码输入有误");
                 } else if (!RegexUtils.isPwdOk(newPwdEt.getText().toString().trim())) {
                     ToastUtil.getInstance(this).showToast("请正确输入6-12位新密码");
                 } else if (!RegexUtils.isPwdOk(rePwdEt.getText().toString().trim())) {

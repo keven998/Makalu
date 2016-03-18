@@ -56,7 +56,10 @@ public class PasteEditText extends EditText {
     public boolean onTextContextMenuItem(int id) {
         if (id == android.R.id.paste) {
             ClipboardManager clip = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            String text = clip.getText().toString();
+            String text = "";
+            if (clip.getText()!=null){
+                text = clip.getText().toString();
+            }
             if (text.startsWith(ChatActivity.COPY_IMAGE)) {
 //                intent.setDataAndType(Uri.fromFile(new File("/sdcard/mn1.jpg")), "image/*");     
                 text = text.replace(ChatActivity.COPY_IMAGE, "");
