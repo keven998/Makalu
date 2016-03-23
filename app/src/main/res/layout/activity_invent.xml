@@ -62,7 +62,6 @@
 
         <TextView
             android:id="@+id/invent_code"
-            android:text="24234"
             android:textSize="22sp"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/tv_copy"
@@ -70,6 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/info"
             android:layout_above="@+id/invent_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,6 +80,13 @@
             android:gravity="center"
             android:text="分享您的邀请码给好友\n当有好友使用你的邀请码注册后，即可获得优惠~"/>
 
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_invent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:layout_above="@+id/info"/>
    <TextView
        android:background="@color/app_theme_color"
        android:id="@+id/tv_invent"

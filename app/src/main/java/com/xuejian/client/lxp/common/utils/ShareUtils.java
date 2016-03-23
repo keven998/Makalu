@@ -47,7 +47,8 @@ public class ShareUtils {
 
     public static final String downloadUrl = "http://www.lvxingpai.com/app/download/";
 
-    public static void showSelectPlatformDialog(final Activity act, final StrategyBean strategy,final String url, final ShareCommodityBean shareCommodityBean) {
+    @SuppressWarnings("deprecation")
+    public static void showSelectPlatformDialog(final Activity act, final boolean Html,final String url, final ShareCommodityBean shareCommodityBean) {
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View
                 .inflate(act, R.layout.view_share_bar, null);
@@ -68,11 +69,13 @@ public class ShareUtils {
 //                IMUtils.onClickImShare(act);
 //            }
 //        });
+
+
         lxpTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                IMUtils.onClickImShare(act);
+                if (!Html)IMUtils.onClickImShare(act);
             }
         });
         wxcircleTv.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +84,12 @@ public class ShareUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 //    shareRoute(SHARE_MEDIA.WEIXIN_CIRCLE, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.WEIXIN_CIRCLE, act, strategy,url,shareCommodityBean);
+                if (Html){
+                    HtmlShareRoute(SHARE_MEDIA.WEIXIN_CIRCLE, act,url,shareCommodityBean);
+                }else {
+
+                    goodsShareRoute(SHARE_MEDIA.WEIXIN_CIRCLE, act,url,shareCommodityBean);
+                }
 
             }
         });
@@ -91,7 +99,12 @@ public class ShareUtils {
             public void onClick(View v) {
                 dialog.dismiss();
                 //   shareRoute(SHARE_MEDIA.WEIXIN, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.WEIXIN, act, strategy,url,shareCommodityBean);
+                if (Html){
+                    HtmlShareRoute(SHARE_MEDIA.WEIXIN, act,url,shareCommodityBean);
+                }else {
+
+                    goodsShareRoute(SHARE_MEDIA.WEIXIN, act, url,shareCommodityBean);
+                }
 
             }
         });
@@ -110,8 +123,12 @@ public class ShareUtils {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                //   shareRoute(SHARE_MEDIA.DOUBAN, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.DOUBAN, act, strategy,url,shareCommodityBean);
+                if (Html){
+                    HtmlShareRoute(SHARE_MEDIA.DOUBAN, act,url,shareCommodityBean);
+                }else {
+
+                    goodsShareRoute(SHARE_MEDIA.DOUBAN, act,url,shareCommodityBean);
+                }
             }
         });
         sinaTv.setOnClickListener(new View.OnClickListener() {
@@ -119,8 +136,12 @@ public class ShareUtils {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                // shareRoute(SHARE_MEDIA.SINA, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.SINA, act, strategy,url,shareCommodityBean);
+                if (Html){
+                    HtmlShareRoute(SHARE_MEDIA.SINA, act,url,shareCommodityBean);
+                }else {
+
+                    goodsShareRoute(SHARE_MEDIA.SINA, act, url,shareCommodityBean);
+                }
 
             }
         });
@@ -129,8 +150,12 @@ public class ShareUtils {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                //   shareRoute(SHARE_MEDIA.QQ, act, strategy);
-                goodsShareRoute(SHARE_MEDIA.QQ, act, strategy,url,shareCommodityBean);
+                if (Html){
+                    HtmlShareRoute(SHARE_MEDIA.QQ, act,url,shareCommodityBean);
+                }else {
+
+                    goodsShareRoute(SHARE_MEDIA.QQ, act,url,shareCommodityBean);
+                }
             }
         });
         cancleIv.setOnClickListener(new View.OnClickListener() {
@@ -191,11 +216,7 @@ public class ShareUtils {
             public void onComplete(SHARE_MEDIA platform, int eCode,
                                    SocializeEntity entity) {
                 if (eCode == 200) {
-//                    Toast.makeText(act, "分享成功.",
-//                            Toast.LENGTH_SHORT).show();
                     ToastUtil.getInstance(act).showToast("已分享");
-                } else {
-
                 }
             }
 
@@ -329,14 +350,12 @@ public class ShareUtils {
 
                     @Override
                     public void onStart(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
 
                     }
 
                     @Override
                     public void onError(SocializeException arg0,
                                         SHARE_MEDIA arg1) {
-                        // TODO Auto-generated method stub
 
                     }
 
@@ -376,7 +395,6 @@ public class ShareUtils {
 
                     @Override
                     public void onCancel(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
 
                     }
                 });
@@ -414,14 +432,12 @@ public class ShareUtils {
 
                     @Override
                     public void onStart(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
 
                     }
 
                     @Override
                     public void onError(SocializeException arg0,
                                         SHARE_MEDIA arg1) {
-                        // TODO Auto-generated method stub
 
                     }
 
@@ -461,7 +477,6 @@ public class ShareUtils {
 
                     @Override
                     public void onCancel(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
 
                     }
                 });
@@ -471,31 +486,21 @@ public class ShareUtils {
         return mController;
     }
 
-    public static UMSocialService goodsShareRoute(final SHARE_MEDIA platform, final Activity act, StrategyBean strategyBean,String url,ShareCommodityBean shareCommodityBean) {
+    public static UMSocialService HtmlShareRoute(final SHARE_MEDIA platform, final Activity act, String url,ShareCommodityBean shareCommodityBean) {
         // 首先在您的Activity中添加如下成员变量
         final UMSocialService mController = UMServiceFactory
                 .getUMSocialService("com.umeng.share");
         // 设置分享内容
-        UMImage umImage;
-//        if (strategyBean.images != null
-//                && strategyBean.images.size() > 0) {
-//            umImage = new UMImage(act, strategyBean.images.get(0).url);
-//        } else {
-        if (shareCommodityBean.image!=null){
-            umImage = new UMImage(act, shareCommodityBean.image);
-        }else {
-            umImage = new UMImage(act,R.drawable.icon_for_share);
-        }
+        UMImage   umImage = new UMImage(act,R.drawable.icon_for_share);
 
-        //      }
         mController.getConfig().closeToast();
         if (SHARE_MEDIA.DOUBAN !=platform){
             mController.setShareMedia(umImage);
         }
 
         String shareUrl = url;
-        String shareTitle = "旅行派特色体验";
-        String shareContent =String.format("%s元起|%s",CommonUtils.getPriceString(shareCommodityBean.price),shareCommodityBean.title) ;
+        String shareTitle = "邀请好友注册，领支付宝现金红包";
+        String shareContent ="邀请好友注册，领支付宝现金红包，10000元等你来抢！";
 
         if (SHARE_MEDIA.SINA == platform||SHARE_MEDIA.DOUBAN==platform){
             shareContent+=url;
@@ -609,14 +614,12 @@ public class ShareUtils {
 
                     @Override
                     public void onStart(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
 
                     }
 
                     @Override
                     public void onError(SocializeException arg0,
                                         SHARE_MEDIA arg1) {
-                        // TODO Auto-generated method stub
 
                     }
 
@@ -656,7 +659,6 @@ public class ShareUtils {
 
                     @Override
                     public void onCancel(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
 
                     }
                 });
@@ -768,14 +770,12 @@ public class ShareUtils {
 
                     @Override
                     public void onStart(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
 
                     }
 
                     @Override
                     public void onError(SocializeException arg0,
                                         SHARE_MEDIA arg1) {
-                        // TODO Auto-generated method stub
 
                     }
 
@@ -816,7 +816,311 @@ public class ShareUtils {
 
                     @Override
                     public void onCancel(SHARE_MEDIA arg0) {
-                        // TODO Auto-generated method stub
+
+                    }
+                });
+            }
+        }
+
+        return mController;
+    }
+
+
+
+    public static UMSocialService goodsShareRoute(final SHARE_MEDIA platform, final Activity act,String url,ShareCommodityBean shareCommodityBean) {
+        // 首先在您的Activity中添加如下成员变量
+        final UMSocialService mController = UMServiceFactory
+                .getUMSocialService("com.umeng.share");
+        // 设置分享内容
+        UMImage umImage;
+//        if (strategyBean.images != null
+//                && strategyBean.images.size() > 0) {
+//            umImage = new UMImage(act, strategyBean.images.get(0).url);
+//        } else {
+        if (shareCommodityBean.image!=null){
+            umImage = new UMImage(act, shareCommodityBean.image);
+        }else {
+            umImage = new UMImage(act,R.drawable.icon_for_share);
+        }
+
+        //      }
+        mController.getConfig().closeToast();
+        if (SHARE_MEDIA.DOUBAN !=platform){
+            mController.setShareMedia(umImage);
+        }
+
+        String shareUrl = url;
+        String shareTitle = "旅行派特色体验";
+        String shareContent =String.format("%s元起|%s",CommonUtils.getPriceString(shareCommodityBean.price),shareCommodityBean.title) ;
+
+        if (SHARE_MEDIA.SINA == platform||SHARE_MEDIA.DOUBAN==platform){
+            shareContent+=url;
+        }
+        mController.setShareContent(shareContent);
+
+        if (SHARE_MEDIA.WEIXIN_CIRCLE == platform) {
+            // 添加微信平台
+            UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
+            wxHandler.setToCircle(true);
+            wxHandler.addToSocialSDK();
+            CircleShareContent circleMedia = new CircleShareContent();
+            circleMedia.setShareContent(shareContent);
+            circleMedia.setTitle(shareTitle);
+            // 设置分享图片, 参数2为图片的url地址
+            circleMedia.setShareImage(umImage);
+            circleMedia.setTargetUrl(shareUrl);
+            mController.setShareMedia(circleMedia);
+            mController.postShare(act, platform, new SnsPostListener() {
+                @Override
+                public void onStart() {
+//					Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onComplete(SHARE_MEDIA platform, int eCode,
+                                       SocializeEntity entity) {
+                    if (eCode == 200) {
+                        Toast.makeText(act, "分享成功.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            });
+            // wxHandler.setTitle("友盟社会化组件还不错-WXHandler...");
+        } else if (SHARE_MEDIA.WEIXIN == platform) {
+            UMWXHandler wxHandler = new UMWXHandler(act, PlatfromSetting.WX_APPID, PlatfromSetting.WX_APPSECRET);
+            wxHandler.addToSocialSDK();
+            WeiXinShareContent circleMedia = new WeiXinShareContent();
+            circleMedia.setShareContent(shareContent);
+            circleMedia.setTitle(shareTitle);
+            circleMedia.setShareImage(umImage);
+            circleMedia.setTargetUrl(shareUrl);
+            mController.setShareMedia(circleMedia);
+            mController.postShare(act, platform, new SnsPostListener() {
+                @Override
+                public void onStart() {
+//					Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onComplete(SHARE_MEDIA platform, int eCode,
+                                       SocializeEntity entity) {
+                    if (eCode == 200) {
+                        Toast.makeText(act, "分享成功.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            });
+        } else if (SHARE_MEDIA.RENREN == platform) {
+            RenrenShareContent renren = new RenrenShareContent();
+            renren.setShareContent(shareContent);
+            renren.setTargetUrl(shareUrl);
+            renren.setTitle(shareTitle);
+            renren.setShareMedia(umImage);
+            mController.setAppWebSite(SHARE_MEDIA.RENREN, shareUrl);
+            mController.setShareMedia(renren);
+            boolean isOauth = OauthHelper.isAuthenticated(act, platform);
+            if (isOauth) {
+                mController.postShare(act, platform, new SnsPostListener() {
+                    @Override
+                    public void onStart() {
+//						Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA platform, int eCode,
+                                           SocializeEntity entity) {
+                        if (eCode == 200) {
+                            Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+
+                });
+            } else {
+                mController.doOauthVerify(act, platform, new UMAuthListener() {
+
+                    @Override
+                    public void onStart(SHARE_MEDIA arg0) {
+
+                    }
+
+                    @Override
+                    public void onError(SocializeException arg0,
+                                        SHARE_MEDIA arg1) {
+
+                    }
+
+                    @Override
+                    public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
+                        mController.postShare(act, platform,
+                                new SnsPostListener() {
+                                    @Override
+                                    public void onStart() {
+//										 Toast.makeText(act, "开始分享.",
+//										 Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onComplete(
+                                            SHARE_MEDIA platform, int eCode,
+                                            SocializeEntity entity) {
+                                        if (eCode == 200) {
+                                            Toast.makeText(act, "分享成功.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                });
+
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA arg0) {
+
+                    }
+                });
+            }
+
+        } else if (SHARE_MEDIA.QQ == platform) {
+            UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(act, PlatfromSetting.QQ_APPID,
+                    PlatfromSetting.QQ_APPKEY);
+            qqSsoHandler.addToSocialSDK();
+            QQShareContent qqShareContent = new QQShareContent();
+//设置分享文字
+            qqShareContent.setShareContent(shareContent);
+//设置分享title
+            qqShareContent.setTitle(shareTitle);
+//设置分享图片
+            qqShareContent.setShareImage(umImage);
+//设置点击分享内容的跳转链接
+            qqShareContent.setTargetUrl(shareUrl);
+            mController.setShareMedia(qqShareContent);
+
+            mController.postShare(act, SHARE_MEDIA.QQ,
+                    new SnsPostListener() {
+                        @Override
+                        public void onStart() {
+                            //  Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
+                            if (eCode == 200) {
+                                Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } else if (SHARE_MEDIA.QZONE == platform) {
+            QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(act, PlatfromSetting.QQ_APPID,
+                    PlatfromSetting.QQ_APPKEY);
+            qZoneSsoHandler.addToSocialSDK();
+
+            QZoneShareContent qZoneShareContent = new QZoneShareContent();
+//设置分享文字
+            qZoneShareContent.setShareContent(shareContent);
+//设置分享title
+            qZoneShareContent.setTitle(shareTitle);
+//设置分享图片
+            qZoneShareContent.setShareImage(umImage);
+//设置点击分享内容的跳转链接
+            qZoneShareContent.setTargetUrl(shareUrl);
+            mController.setShareMedia(qZoneShareContent);
+
+            mController.postShare(act, SHARE_MEDIA.QZONE,
+                    new SnsPostListener() {
+                        @Override
+                        public void onStart() {
+                            //  Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
+                            if (eCode == 200) {
+                                Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } else {
+            boolean isOauth = OauthHelper.isAuthenticated(act, platform);
+            if (isOauth) {
+                mController.postShare(act, platform, new SnsPostListener() {
+                    @Override
+                    public void onStart() {
+//						Toast.makeText(act, "开始分享.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA platform, int eCode,
+                                           SocializeEntity entity) {
+                        if (eCode == 200) {
+                            Toast.makeText(act, "分享成功.", Toast.LENGTH_SHORT)
+                                    .show();
+                        } else {
+                            System.out.println("eCode ="+eCode);
+                            // String eMsg = "";
+                            // if (eCode == -101) {
+                            // eMsg = "没有授权";
+                            // }
+                            // Toast.makeText(act, "分享失败[" + eCode + "] " +
+                            // eMsg,
+                            // Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                });
+            } else {
+                mController.doOauthVerify(act, platform, new UMAuthListener() {
+
+                    @Override
+                    public void onStart(SHARE_MEDIA arg0) {
+
+                    }
+
+                    @Override
+                    public void onError(SocializeException arg0,
+                                        SHARE_MEDIA arg1) {
+
+                    }
+
+                    @Override
+                    public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
+                        mController.postShare(act, platform,
+                                new SnsPostListener() {
+                                    @Override
+                                    public void onStart() {
+//										 Toast.makeText(act, "开始分享.",
+//										 Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onComplete(
+                                            SHARE_MEDIA platform, int eCode,
+                                            SocializeEntity entity) {
+                                        if (eCode == 200) {
+                                            Toast.makeText(act, "分享成功.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            System.out.println("eCode ="+eCode);
+                                            // String eMsg = "";
+                                            // if (eCode == -101) {
+                                            // eMsg = "没有授权";
+                                            // }
+                                            // Toast.makeText(
+                                            // act,
+                                            // "分享失败[" + eCode + "] "
+                                            // + eMsg,
+                                            // Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                });
+
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA arg0) {
 
                     }
                 });

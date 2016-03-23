@@ -30,7 +30,8 @@ import java.util.ArrayList;
 public class DrawbackActivity extends PeachBaseActivity {
 
     String [] reasons = new String[]{"我想重新下单","我的旅行计划有所改变","我不想体验这个项目了","其他"};
-    String currentReason = reasons[0];
+    String currentReason ;
+    UserAdapter a;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,8 @@ public class DrawbackActivity extends PeachBaseActivity {
         final EditText editText = (EditText) findViewById(R.id.et_memo);
         ListView reasonList = (ListView) findViewById(R.id.lv_reason);
         //reasonList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-        reasonList.setAdapter(new UserAdapter(mContext, true));
+        a = new UserAdapter(mContext, true);
+        reasonList.setAdapter(a);
         setListViewHeightBasedOnChildren(reasonList);
         findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +53,7 @@ public class DrawbackActivity extends PeachBaseActivity {
         reasonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentReason = reasons[position];
+
             }
         });
         findViewById(R.id.tv_title_back).setOnClickListener(new View.OnClickListener() {
@@ -60,11 +62,14 @@ public class DrawbackActivity extends PeachBaseActivity {
                 finish();
             }
         });
+        currentReason = reasons[0];
     }
 
     private void refundOrder(long orderId,String memo,double price) {
         JSONObject object = new JSONObject();
         User user = AccountManager.getInstance().getLoginAccount(this);
+
+        currentReason = reasons[a.getLastId()];
         try {
             object.put("userId",user.getUserId());
             object.put("memo",memo);
@@ -74,6 +79,9 @@ public class DrawbackActivity extends PeachBaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+        System.out.println("refundOrder "+currentReason);
         TravelApi.editOrderStatus(orderId, "refundApply", object, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
@@ -105,6 +113,9 @@ public class DrawbackActivity extends PeachBaseActivity {
 
         }
 
+        public int getLastId(){
+            return lastId;
+        }
         @Override
         public int getCount() {
             return reasons.length;

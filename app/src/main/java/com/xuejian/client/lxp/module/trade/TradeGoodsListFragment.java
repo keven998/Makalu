@@ -130,7 +130,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
     public void getCommodities(String status,int start,int count, final boolean refresh) {
         long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
 
-        TravelApi.getCommodityList(String.valueOf(userId), status, null, null,"updateTime", "desc",  String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getCommodityList(String.valueOf(userId), status, null, null,"createTime", "desc",  String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
@@ -176,16 +176,17 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), CommodityDetailActivity.class);
-                intent.putExtra("isSeller", true);
-                intent.putExtra("commodityId", id);
-                startActivity(intent);
+            public void onItemClick(View view, int position, long id,boolean expire) {
+                    Intent intent = new Intent(getActivity(), CommodityDetailActivity.class);
+                    intent.putExtra("isSeller", true);
+                    intent.putExtra("commodityId", id);
+                    intent.putExtra("expire",expire);
+                    startActivity(intent);
             }
         });
     }
     public interface OnItemClickListener {
-        void onItemClick(View view, int position, long id);
+        void onItemClick(View view, int position, long id,boolean expire);
     }
 
      class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder> {
@@ -264,7 +265,11 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
                             editCommodity("disabled",bean.getCommodityId(),"商品已下架","pub");
                             break;
                         case "disabled":
-                            editCommodity("pub",bean.getCommodityId(),"商品已发布","disabled");
+                            if (bean.expire){
+                                Toast.makeText(mContext,"商品已超出最大可用日期，请重新编辑后上架",Toast.LENGTH_LONG).show();
+                            }else {
+                                editCommodity("pub",bean.getCommodityId(),"商品已发布","disabled");
+                            }
                             break;
                         default:
                             break;
@@ -284,7 +289,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(holder.itemView, position, bean.getCommodityId());
+                        listener.onItemClick(holder.itemView, position, bean.getCommodityId(),bean.expire);
                     }
                 }
             });

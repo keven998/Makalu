@@ -40,6 +40,7 @@ import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
+import com.xuejian.client.lxp.bean.EventLogin;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
 import com.xuejian.client.lxp.common.api.UserApi;
@@ -55,6 +56,7 @@ import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.fragment.MyInfoFragment;
 import com.xuejian.client.lxp.module.toolbox.TalkFragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -258,6 +260,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         super.onNewIntent(intent);
         if (intent.getBooleanExtra("reLogin", false)) {
             initClient();
+            EventBus.getDefault().post(new EventLogin());
         }
         if (intent.getBooleanExtra("back", false)) {
             mTabHost.setCurrentTab(0);

@@ -22,6 +22,7 @@ public class SimpleCommodityBean implements Parcelable {
      * images : [{"url":"http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc"}]
      * cover : {"url":"http://7sbm17.com1.z0.glb.clouddn.com/avatar/436074aa3952b00f2e6757b4f3ae81fc"}
      */
+    public boolean expire;
     public String status;
     public String shareUrl;
     public long version;

@@ -178,6 +178,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
     private long userId;
     private boolean isSeller;
     public CommodityBean bean;
+    public boolean expire;
     boolean snapshots;
     private int[] lebelColors = new int[]{
             R.drawable.all_light_green_label,
@@ -195,6 +196,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
         commodityId = getIntent().getLongExtra("commodityId", -1);
         snapshots = getIntent().getBooleanExtra("snapshots", false);
         isSeller = getIntent().getBooleanExtra("isSeller", false);
+        expire = getIntent().getBooleanExtra("expire",false);
         final long version = getIntent().getLongExtra("version", -1);
         Uri uri = getIntent().getData();
         if (uri != null) {
@@ -458,7 +460,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                     intent.setClass(CommodityDetailActivity.this, LoginActivity.class);
                     startActivity(intent);
                 } else {
-                    ShareUtils.showSelectPlatformDialog(CommodityDetailActivity.this, null, bean.getShareUrl(), bean.creteShareBean());
+                    ShareUtils.showSelectPlatformDialog(CommodityDetailActivity.this, false, bean.getShareUrl(), bean.creteShareBean());
                 }
             }
         });
@@ -578,7 +580,11 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                             editCommodity("disabled", bean.getCommodityId(), "商品已下架");
                             break;
                         case "上架":
-                            editCommodity("pub", bean.getCommodityId(), "商品已发布");
+                            if (expire){
+                                Toast.makeText(mContext,"商品已超出最大可用日期，请重新编辑后上架",Toast.LENGTH_LONG).show();
+                            }else {
+                                editCommodity("pub", bean.getCommodityId(), "商品已发布");
+                            }
                             break;
                         default:
                             break;

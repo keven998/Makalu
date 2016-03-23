@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.bean.EventLogin;
 import com.xuejian.client.lxp.bean.StoreBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
@@ -35,6 +36,10 @@ import com.xuejian.client.lxp.module.my.SettingActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 import com.xuejian.client.lxp.module.trade.TradeMainActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -88,6 +93,9 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 .cacheInMemory(true) // 设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中// 设置成圆角图片
                 .build();
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Nullable
@@ -105,7 +113,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rlMyCollection.setOnClickListener(this);
         rlMyCommonUser.setOnClickListener(this);
         llAllOrder.setOnClickListener(this);
-      //  rlMyContact.setOnClickListener(this);
+        //  rlMyContact.setOnClickListener(this);
         rlMyPlan.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
         rl_my_coupon.setOnClickListener(this);
@@ -113,6 +121,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rl_shop.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
+
         isBusiness();
         return view;
     }
@@ -122,23 +131,41 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
 
                 @Override
                 public void doSuccess(String result, String method) {
+                    System.out.println("Test    "+result);
                     CommonJson<StoreBean> commonJson = CommonJson.fromJson(result, StoreBean.class);
                     if (commonJson.code == 0) {
                        rl_shop.setVisibility(View.VISIBLE);
+                    }else {
+                        rl_shop.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
-
+                    rl_shop.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method, int code) {
-
+                    rl_shop.setVisibility(View.GONE);
                 }
             });
         }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
+
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginEvent(EventLogin eventLogin){
+        System.out.println("Test Info");
+        isBusiness();
+    }
+
 
     public void initHeadTitleView(User user) {
         if (AccountManager.getInstance().getLoginAccount(getActivity())!=null){

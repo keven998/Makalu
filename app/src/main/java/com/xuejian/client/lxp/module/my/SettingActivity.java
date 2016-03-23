@@ -17,6 +17,7 @@ import com.aizou.core.utils.SharedPreferencesUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.EventLogout;
 import com.xuejian.client.lxp.bean.UpdateBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.H5Url;
@@ -33,6 +34,8 @@ import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.config.SystemConfig;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -202,6 +205,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
                     public void doSuccess(Object result, String method) {
                         AccountManager.getInstance().logout(mContext);
                         DialogManager.getInstance().dissMissLoadingDialog();
+                        EventBus.getDefault().postSticky(new EventLogout());
                         Intent intent = new Intent(mContext, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);

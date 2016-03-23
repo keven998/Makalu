@@ -16,6 +16,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.BaseWebViewActivity;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.NumberProgressBar;
 
 import butterknife.Bind;
@@ -34,6 +35,9 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
     ImageView refresh;
     @Bind(R.id.web_view_share)
     ImageView share;
+    @Bind(R.id.tv_title_bar_right)
+    ImageView shareHtml;
+
     String title;
     StrategyBean strategy;
     boolean  showAnim;
@@ -59,6 +63,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             }
         });
         showAnim = getIntent().getBooleanExtra("showAnim",false);
+        boolean isShare = getIntent().getBooleanExtra("share",false);
         if (showAnim){
             findViewById(R.id.ly_title_bar_left).setVisibility(View.GONE);
             findViewById(R.id.bottom_bar).setVisibility(View.VISIBLE);
@@ -95,9 +100,21 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
         if (!showAnim)refresh.setOnClickListener(this);
         share.setOnClickListener(this);
         mWebView.setWebViewClient(new MyWebViewClient());
+
+
         mWebView.loadUrl(mCurrentUrl);
         // resetForward();
         // resetGoback();
+        if (isShare&&mCurrentUrl.contains("mycode")){
+            shareHtml.setVisibility(View.VISIBLE);
+            shareHtml.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, true, mCurrentUrl+="&share=1", null);
+                }
+            });
+        }
+        System.out.println(mCurrentUrl);
     }
 
     public void resetForward() {
@@ -186,9 +203,9 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             if ((url.toLowerCase().startsWith("http://")) || (url.toLowerCase().startsWith("https://"))) {
                 return false;
             }
-
             return true;
             // return super.shouldOverrideUrlLoading(view, url);
         }
     }
+
 }

@@ -29,15 +29,23 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.ColumnBean;
+import com.xuejian.client.lxp.bean.EventLogin;
+import com.xuejian.client.lxp.bean.EventLogout;
 import com.xuejian.client.lxp.bean.RecommendCommodityBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
 import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,16 +71,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        options = new DisplayImageOptions.Builder()
-//           //     .cacheInMemory(true)
-//                .bitmapConfig(Bitmap.Config.RGB_565)
-//                .resetViewBeforeLoading(true)
-//                .showImageOnFail(R.drawable.ic_default_picture)
-//                .showImageOnLoading(R.drawable.ic_default_picture)
-//                .showImageForEmptyUri(R.drawable.ic_default_picture)
-//                .cacheOnDisk(true)
-//                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-//                .build();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -107,10 +106,20 @@ public class GoodsMainFragment extends PeachBaseFragment {
         return v;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogigEvent(EventLogin eventLogin){
+        getData();
+        getListData();
+    }
+    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+    public void onLogigEvent(EventLogout eventLogout){
+        getData();
+        getListData();
+    }
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-      //  DialogManager.getInstance().showModelessLoadingDialog(getActivity());
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initScrollView() {
@@ -275,7 +284,12 @@ public class GoodsMainFragment extends PeachBaseFragment {
 
 
     public void getData() {
-        TravelApi.getMainPageColumns(new HttpCallBack<String>() {
+        long userId = -1;
+        User user = AccountManager.getInstance().getLoginAccount(getActivity());
+        if (user!=null){
+            userId = user.getUserId();
+        }
+        TravelApi.getMainPageColumns(userId,new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
@@ -401,6 +415,7 @@ public class GoodsMainFragment extends PeachBaseFragment {
                         } else if (url.startsWith("http://")) {
                             Intent intent = new Intent(getActivity(), PeachWebViewActivity.class);
                             intent.putExtra("url", url);
+                            intent.putExtra("share",true);
                             startActivity(intent);
                         }
                     }

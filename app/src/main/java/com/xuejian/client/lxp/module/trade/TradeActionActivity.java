@@ -185,6 +185,10 @@ public class TradeActionActivity extends PeachBaseActivity {
                 llNotice.setVisibility(View.VISIBLE);
                 tvNoticeContent.setText("1.买家已经付款，您还未做任何处理。\n2.如果您想取消交易，可退款给买家。\n3.您还可以发货。");
 
+                llT1.setVisibility(View.GONE);
+                llT2.setVisibility(View.GONE);
+                llT3.setVisibility(View.GONE);
+
                 llDrawbackUserInfo.setVisibility(View.VISIBLE);
 
                 llDrawbackActionContainer.setVisibility(View.VISIBLE);
@@ -210,11 +214,6 @@ public class TradeActionActivity extends PeachBaseActivity {
 
                 llDeliverUserInfo.setVisibility(View.VISIBLE);
 
-                if (bean.getStatus().equals("paid")) {
-                    llT1.setVisibility(View.GONE);
-                    llT2.setVisibility(View.GONE);
-                    llT3.setVisibility(View.GONE);
-                }
 
                 tvAction0.setText("确认发货");
                 tvAction0.setOnClickListener(new View.OnClickListener() {
@@ -281,6 +280,10 @@ public class TradeActionActivity extends PeachBaseActivity {
                         } catch (Exception e) {
                             Toast.makeText(mContext, "请输入合法的金额", Toast.LENGTH_LONG).show();
                             e.printStackTrace();
+                            return;
+                        }
+                        if (acount<0.01){
+                            Toast.makeText(mContext, "请输入合法的金额", Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -396,28 +399,30 @@ public class TradeActionActivity extends PeachBaseActivity {
             @Override
             public void doSuccess(String result, String method) {
 
-                TravelApi.editOrderStatus(orderId, "commit", data, new HttpCallBack<String>() {
-                    @Override
-                    public void doSuccess(String result, String method) {
-                        Toast.makeText(TradeActionActivity.this, "发货成功", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-
-                    @Override
-                    public void doFailure(Exception error, String msg, String method) {
-                        Toast.makeText(TradeActionActivity.this, "发货失败", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void doFailure(Exception error, String msg, String method, int code) {
-
-                    }
-                });
+                Toast.makeText(TradeActionActivity.this, "发货成功", Toast.LENGTH_LONG).show();
+                finish();
+//                TravelApi.editOrderStatus(orderId, "commit", data, new HttpCallBack<String>() {
+//                    @Override
+//                    public void doSuccess(String result, String method) {
+//                        Toast.makeText(TradeActionActivity.this, "发货成功", Toast.LENGTH_LONG).show();
+//                        finish();
+//                    }
+//
+//                    @Override
+//                    public void doFailure(Exception error, String msg, String method) {
+//                        Toast.makeText(TradeActionActivity.this, "发货失败", Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void doFailure(Exception error, String msg, String method, int code) {
+//
+//                    }
+//                });
             }
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-                Toast.makeText(TradeActionActivity.this, "拒绝退款失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(TradeActionActivity.this, "发货失败", Toast.LENGTH_LONG).show();
             }
 
             @Override

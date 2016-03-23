@@ -16,14 +16,37 @@
 #   public *;
 #}
 
+#EVENTBUS
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+
 #支付宝
+#-libraryjars libs/alipaySDK-20151112.jar
+-dontskipnonpubliclibraryclassmembers
 -keep class com.alipay.android.app.IAlixPay{*;}
 -keep class com.alipay.android.app.IAlixPay$Stub{*;}
 -keep class com.alipay.android.app.IRemoteServiceCallback{*;}
 -keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
 -keep class com.alipay.sdk.app.PayTask{ public *;}
 -keep class com.alipay.sdk.app.AuthTask{ public *;}
-
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+-keepclasseswithmembernames class * {
+    public <init>(android.content.Context,android.util.AttributeSet);
+}
+-keepclasseswithmembernames class * {
+    public <init>(android.content.Context,android.util.AttributeSet,int);
+}
 # keep住源文件以及行号
 -keepattributes SourceFile,LineNumberTable
 
@@ -37,6 +60,15 @@
     **[] $VALUES;
     public *;
 }
+
+# Gradle Retrolambda Plugin
+# https://github.com/evant/gradle-retrolambda#user-content-proguard
+-dontwarn java.lang.invoke.*
+
+##---------------android  support----------
+-dontwarn android.support.**
+
+
 
 -keep class com.igexin.**
 -keep class com.igexin.**{*;}
@@ -231,14 +263,21 @@
 -keep class com.lv.net.HttpUtils {
     *;
 }
--keep class com.aizou.core.utils.MathUtils.** {
-    *;
-}
 -dontskipnonpubliclibraryclassmembers
 
 -keep class com.igexin.** {
     *;
 }
+
+#OKHttp
+-keepattributes *Annotation*
+-dontwarn rx.**
+
+-dontwarn okio.**
+
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
 
 #okio
 -dontwarn com.squareup.okhttp.**

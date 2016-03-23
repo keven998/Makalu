@@ -102,19 +102,6 @@ public class BaseApplication extends Application {
             LayoutValue.SCREEN_HEIGHT = dm.widthPixels;
         }
         LocalDisplay.init(dm);
-//		try {
-//			String db_path = Environment.getExternalStorageDirectory()
-//					.getAbsolutePath();
-//			String db_name = SystemConfig.DB_NAME;
-//			String db_path_name = db_path + File.separator + db_name;// 数据库的路径
-//			LogGloble.d(TAG, "-----db Path " + db_path_name);
-//			FileUtils.file_put_contents(db_path_name, getAssets()
-//					.open("itl.db"));
-//			dbUtils=DbUtils.create(context, db_path, db_name);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}// 把assert里的数据库存复制到相应的目录下
     }
 
     @Override

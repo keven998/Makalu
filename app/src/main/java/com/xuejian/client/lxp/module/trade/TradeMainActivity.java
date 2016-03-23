@@ -36,6 +36,7 @@ public class TradeMainActivity extends PeachBaseActivity {
     RelativeLayout rlCommodity;
     @Bind(R.id.tv_pending_order)
     TextView tv_pending_order;
+    long userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +49,16 @@ public class TradeMainActivity extends PeachBaseActivity {
                 finish();
             }
         });
-        long userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
-        getShopDetail(userId);
+        userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (userId>0){
+            getShopDetail(userId);
+        }
     }
 
     private void getShopDetail(long userId) {
