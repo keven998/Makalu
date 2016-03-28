@@ -16,8 +16,6 @@
 
 package com.aizou.core.widget;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -33,6 +31,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
+
+import java.util.ArrayList;
 
 /**
  * Special TabHost that allows the use of {@link android.support.v4.app.Fragment} objects for its tab
@@ -246,7 +246,7 @@ public class FragmentTabHost extends TabHost implements
 				FragmentTransaction ft = mFragmentManager.beginTransaction();
 //				ft.detach(info.fragment);
 				ft.hide(info.fragment);
-				ft.commit();
+				ft.commitAllowingStateLoss();
 			}
 		}
 
@@ -322,7 +322,7 @@ public class FragmentTabHost extends TabHost implements
 		if (mAttached) {
 			FragmentTransaction ft = doTabChanged(tabId, null);
 			if (ft != null) {
-				ft.commit();
+				ft.commitAllowingStateLoss();
 			}
 		}
 		if (mOnTabChangeListener != null) {

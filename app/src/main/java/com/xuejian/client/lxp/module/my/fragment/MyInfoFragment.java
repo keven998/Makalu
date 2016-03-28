@@ -121,10 +121,10 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rl_shop.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
-
         isBusiness();
         return view;
     }
+
     public void isBusiness() {
         long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
             TravelApi.getSellerInfo(userId, new HttpCallBack<String>() {

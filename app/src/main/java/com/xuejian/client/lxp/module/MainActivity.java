@@ -122,7 +122,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         setContentView(R.layout.activity_main);
         initView();
 
-
+   //     startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);

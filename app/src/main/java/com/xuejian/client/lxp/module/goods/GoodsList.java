@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.CategoryBean;
 import com.xuejian.client.lxp.bean.FavBean;
 import com.xuejian.client.lxp.bean.KeywordBean;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
@@ -830,9 +831,6 @@ public class GoodsList extends PeachBaseActivity {
         }
     }
 
-    public static class CategoryBean {
-        public ArrayList<String> category;
-    }
 
     public class CategoryAdapter extends BaseAdapter {
         private ArrayList<String> list;

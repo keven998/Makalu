@@ -215,7 +215,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
                 break;
-
             default:
                 break;
         }

@@ -676,6 +676,7 @@ public class SearchAllActivity extends PeachBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        DialogManager.getInstance().dissMissLoadingDialog();
         CommonUtils.fixInputMethodManagerLeak(this);
     }
 }

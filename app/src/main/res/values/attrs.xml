@@ -34,11 +34,6 @@
         <attr name="layout_centerJustified" format="boolean" />
         <attr name="android:layout_gravity"/>
     </declare-styleable>
-    <declare-styleable name="ExpandableLayout">
-        <attr name="header_Layout" format="reference"/>
-        <attr name="contentLayout" format="reference" />
-        <attr name="duration" format="integer" />
-    </declare-styleable>
     <declare-styleable name="RoundedImageView">
         <attr name="topLeftRadius" format="dimension"/>
         <attr name="topRightRadius" format="dimension"/>

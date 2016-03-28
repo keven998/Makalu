@@ -132,6 +132,7 @@ public class SettingActivity extends PeachBaseActivity implements OnClickListene
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();

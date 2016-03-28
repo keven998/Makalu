@@ -12,6 +12,10 @@ buildscript {
 }
 
 
+project.ext{
+
+}
+
 allprojects {
     repositories {
         jcenter()

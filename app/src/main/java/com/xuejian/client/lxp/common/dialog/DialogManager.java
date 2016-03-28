@@ -98,7 +98,7 @@ public class DialogManager {
      * 描述:隐藏通信框
      */
     public void dissMissLoadingDialog() {
-        if (mLoadingDialog != null) {
+        if (mLoadingDialog != null&&mLoadingDialog.getOwnerActivity()!=null) {
             if (mLoadingDialog.isShowing())
                 mLoadingDialog.dismiss();
 
