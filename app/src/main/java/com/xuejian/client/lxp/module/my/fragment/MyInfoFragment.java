@@ -22,9 +22,11 @@ import com.xuejian.client.lxp.bean.StoreBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
+import com.xuejian.client.lxp.common.widget.FixedScrollView;
 import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.customization.ProjectCreateActivity;
 import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
 import com.xuejian.client.lxp.module.goods.CouponListActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
@@ -83,6 +85,12 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RelativeLayout rl_my_invent;
     @Bind(R.id.rl_shop)
     RelativeLayout rl_shop;
+    @Bind(R.id.scrollview)
+    FixedScrollView scrollView;
+    @Bind(R.id.my_panpan_frame)
+    RelativeLayout title;
+    @Bind(R.id.rl_my_custom)
+    RelativeLayout custom;
     User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,10 +127,31 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rl_my_coupon.setOnClickListener(this);
         rl_my_invent.setOnClickListener(this);
         rl_shop.setOnClickListener(this);
+        custom.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
         isBusiness();
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        int[] locations = new int[2];
+        userAvatar.getLocationInWindow(locations);
+        final int height = locations[1];
+        scrollView.setOnScrollChangedListener(new FixedScrollView.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(int l, int t, int oldl, int oldt) {
+                if (t>=0&&t <= height) {
+                    title.setAlpha((1 - (float) t / height));
+                }
+                if (t>height){
+                    title.setAlpha(0f);
+                }
+            }
+        });
     }
 
     public void isBusiness() {
@@ -277,6 +306,10 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
             case R.id.rl_shop:
                 Intent rl_shop = new Intent(getActivity(), TradeMainActivity.class);
                 startActivity(rl_shop);
+                break;
+            case R.id.rl_my_custom:
+                Intent rl_my_custom = new Intent(getActivity(), ProjectCreateActivity.class);
+                startActivity(rl_my_custom);
                 break;
             default:
                 break;

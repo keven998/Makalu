@@ -3,9 +3,10 @@
     xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ScrollView
+    <com.xuejian.client.lxp.common.widget.FixedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/scrollview"
         android:layout_marginBottom="50dp"
         android:scrollbars="none"
         android:orientation="vertical">
@@ -308,6 +309,43 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"/>
             <RelativeLayout
+                android:id="@+id/rl_my_custom"
+                android:background="@color/base_color_white"
+                android:layout_width="match_parent"
+                android:layout_height="62dp">
+                <ImageView
+                    android:id="@+id/iv_custom"
+                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_invent"/>
+                <TextView
+                    android:layout_toRightOf="@+id/iv_custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_text_ii"
+                    android:text="我发布的需求"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/icon_arrow_right"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_line"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+            <RelativeLayout
                 android:id="@+id/rl_my_plan"
                 android:background="@color/base_color_white"
                 android:layout_width="match_parent"
@@ -423,7 +461,7 @@
                 android:layout_marginRight="15dp"/>
 
         </LinearLayout>
-    </ScrollView>
+    </com.xuejian.client.lxp.common.widget.FixedScrollView>
     <RelativeLayout
         android:id="@+id/my_panpan_frame"
         android:layout_width="match_parent"

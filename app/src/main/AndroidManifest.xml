@@ -514,7 +514,7 @@
 
 
 
-
+<!--Trade-->
 
         <activity
             android:name=".module.trade.TradeOrderListActivity"
@@ -526,6 +526,11 @@
             android:name=".module.trade.TradeMainActivity"
             android:screenOrientation="portrait" />
 
+        <!--Customization-->
+
+        <activity
+            android:name=".module.customization.ProjectCreateActivity"
+            android:screenOrientation="portrait" />
 
 
         <activity

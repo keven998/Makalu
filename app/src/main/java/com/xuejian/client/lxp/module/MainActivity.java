@@ -12,7 +12,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
@@ -50,6 +49,7 @@ import com.xuejian.client.lxp.common.widget.SuperToast.SuperToast;
 import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
+import com.xuejian.client.lxp.module.customization.CustomMainFragment;
 import com.xuejian.client.lxp.module.goods.Fragment.DestinationFragment;
 import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
@@ -89,15 +89,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {GoodsMainFragment.class, DestinationFragment.class, TalkFragment.class, MyInfoFragment.class};
+    private Class fragmentArray[] = {GoodsMainFragment.class, DestinationFragment.class, CustomMainFragment.class,TalkFragment.class, MyInfoFragment.class};
     //TalentLocFragement
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination, R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
+    private int mImageViewArray[] = {R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_home, R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
     // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
-    private static String[] tabTitle = {"首页", "目的地", "消息", "我的"};
+    private static String[] tabTitle = {"首页", "目的地","定制" ,"消息", "我的"};
     private TextView unreadMsg;
     //Tab选项Tag
-    private static String mTagArray[] = {"Soso", "Travel", "Talk", "My"};
+    private static String mTagArray[] = {"Soso", "Travel", "custom","Talk", "My"};
 
     private boolean FromBounce, ring, vib;
     private Vibrator vibrator;
@@ -178,7 +178,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 //        if (talkFragment != null) {
 //            talkFragment.loadConversation();
 //        }
-        Handler handler = new Handler();
         IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
             @Override
             public void onSuccess() {
@@ -392,6 +391,13 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                         startActivityWithNoAnim(logIntent);
                         overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
                     }
+                }else if (s.equals(mTagArray[4])) {
+                    if (AccountManager.getInstance().getLoginAccount(MainActivity.this) == null) {
+                        mTabHost.setCurrentTab(1);
+                        Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivityWithNoAnim(logIntent);
+                        overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+                    }
                 }
             }
         });
@@ -412,7 +418,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private View getTabItemView(int index) {
         View view = layoutInflater.inflate(R.layout.tab_item_view, null);
         //  view.setBackgroundResource(colors[index]);
-        if (index == 2) {
+        if (index == 3) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
 //        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false) && index == 3) {

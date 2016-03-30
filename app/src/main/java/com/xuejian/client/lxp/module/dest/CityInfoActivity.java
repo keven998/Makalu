@@ -73,13 +73,6 @@ public class CityInfoActivity extends PeachBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_info);
-//        Uri uri = getIntent().getData();
-//        System.out.println(uri.getHost());
-//        System.out.println(uri.getPath());
-//        System.out.println(uri.getScheme());
-//        System.out.println(uri.getQueryParameter("id"));
-//        System.out.println(uri.getLastPathSegment());
-//        System.out.println(uri.getPathSegments().toString());
 
         id = getIntent().getStringExtra("id");
         title = (TextView) findViewById(R.id.tv_title_bar_title);
