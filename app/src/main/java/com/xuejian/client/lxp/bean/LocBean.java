@@ -69,6 +69,14 @@ public class LocBean implements Parcelable, ICreateShareDialog {
     }
 
     @Override
+    public String toString() {
+        return "LocBean{" +
+                "id='" + id + '\'' +
+                ", zhName='" + zhName + '\'' +
+                '}';
+    }
+
+    @Override
     public ShareDialogBean createShareBean() {
         ExtMessageBean extMessageBean = new ExtMessageBean();
         extMessageBean.name = zhName;

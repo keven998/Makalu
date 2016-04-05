@@ -530,6 +530,14 @@
 
         <activity
             android:name=".module.customization.ProjectCreateActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.customization.ProjectConfirmActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.customization.DestMenuActivity"
             android:screenOrientation="portrait" />
 
 

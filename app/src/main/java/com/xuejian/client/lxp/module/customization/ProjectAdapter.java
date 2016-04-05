@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
-import com.xuejian.client.lxp.bean.SimpleCommodityBean;
+import com.xuejian.client.lxp.bean.BountiesBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
     }
 
     private OnItemClickListener listener;
-    private List<SimpleCommodityBean> mValues;
+    private List<BountiesBean> mValues;
     private Context mContext;
     private int type;
 
@@ -67,7 +67,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         return mValues.get(position);
     }
 
-    public List<SimpleCommodityBean> getDataList() {
+    public List<BountiesBean> getDataList() {
         return mValues;
     }
 
@@ -81,13 +81,15 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        BountiesBean bean = (BountiesBean) getItem(position);
+        holder.tvName.setText(bean.getContact().get(0).getSurname());
 
     }
 
 
     @Override
     public int getItemCount() {
-        return 5;
+        return mValues.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

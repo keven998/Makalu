@@ -244,11 +244,7 @@ public class OutCountryFragment extends PeachBaseFragment implements OnDestActio
     private class OutCountryNameHolder extends ViewHolderBase<CountryBean> {
         private TextView contry_name;
         //private DisplayImageOptions poptions = UILUtils.getDefaultOption();
-        private DisplayImageOptions poptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888)
-                .resetViewBeforeLoading(true)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();
+
 
         @Override
         public View createView(LayoutInflater layoutInflater) {

@@ -13,6 +13,15 @@ public class ContactBean implements Parcelable {
     private TelBean tel;
     private String email;
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    private String gender;
     public void setSurname(String surname) {
         this.surname = surname;
     }
@@ -45,6 +54,20 @@ public class ContactBean implements Parcelable {
         return email;
     }
 
+    public ContactBean() {
+    }
+
+    @Override
+    public String toString() {
+        return "ContactBean{" +
+                "surname='" + surname + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", tel=" + tel +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -54,11 +77,9 @@ public class ContactBean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.surname);
         dest.writeString(this.givenName);
-        dest.writeParcelable(this.tel, 0);
+        dest.writeParcelable(this.tel, flags);
         dest.writeString(this.email);
-    }
-
-    public ContactBean() {
+        dest.writeString(this.gender);
     }
 
     protected ContactBean(Parcel in) {
@@ -66,13 +87,16 @@ public class ContactBean implements Parcelable {
         this.givenName = in.readString();
         this.tel = in.readParcelable(TelBean.class.getClassLoader());
         this.email = in.readString();
+        this.gender = in.readString();
     }
 
-    public static final Parcelable.Creator<ContactBean> CREATOR = new Parcelable.Creator<ContactBean>() {
+    public static final Creator<ContactBean> CREATOR = new Creator<ContactBean>() {
+        @Override
         public ContactBean createFromParcel(Parcel source) {
             return new ContactBean(source);
         }
 
+        @Override
         public ContactBean[] newArray(int size) {
             return new ContactBean[size];
         }

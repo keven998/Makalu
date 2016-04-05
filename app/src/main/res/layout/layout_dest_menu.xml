@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/tab_bar_color">
+
+        <TextView
+            android:id="@+id/tv_title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/icon_arrow_left_white"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp" />
+
+        <TextView
+            android:id="@+id/strategy_title"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="旅游城市"
+            android:textColor="@color/base_color_white"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/tv_copy_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="确定"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical|right"
+            android:paddingLeft="11dp"
+            android:paddingRight="11dp"
+            android:singleLine="true"
+            android:textColor="@color/selector_white_text_color"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/add_dest_scroll_panel"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_white_bar_with_shadow"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/dest_add_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="6dp"
+            android:background="@color/base_color_white"
+            android:orientation="horizontal"
+            android:paddingRight="10dp" />
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="2"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/lv_main"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <ListView
+            android:id="@+id/lv_sub"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</LinearLayout>

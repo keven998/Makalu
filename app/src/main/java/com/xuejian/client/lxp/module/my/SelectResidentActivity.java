@@ -70,6 +70,8 @@ public class SelectResidentActivity extends PeachBaseActivity {
                                 public void onClick(View v) {
                                     Intent intent = new Intent();
                                     intent.putExtra("result", aMapLocation.getCity());
+                                    StartCity city = searchCity(aMapLocation.getCity());
+                                    intent.putExtra("resultId", city.id);
                                     setResult(RESULT_OK, intent);
                                     finish();
                                 }
@@ -121,24 +123,24 @@ public class SelectResidentActivity extends PeachBaseActivity {
 
     }
 
-    private void searchCity(String keyword) {
+    private StartCity searchCity(String keyword) {
         if (allCitys == null) {
             allCitys = CommonUtils.parserStartCityJson(mContext);
         }
-        startCitys.clear();
         for (StartCity city : allCitys) {
             if (city.name.contains(keyword) || city.pinyin.contains(keyword)) {
-                startCitys.add(city);
-                continue;
+
+                return city;
             } else {
                 for (StartCity childCity : city.childs) {
                     if (childCity.name.contains(keyword)
                             || childCity.pinyin.contains(keyword)) {
-                        startCitys.add(childCity);
+                        return childCity;
                     }
                 }
             }
         }
+        return null;
     }
 
     private class CityListAdapter extends BaseExpandableListAdapter {
@@ -222,6 +224,7 @@ public class SelectResidentActivity extends PeachBaseActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent();
                         intent.putExtra("result", city.name);
+                        intent.putExtra("resultId", city.id);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -251,6 +254,7 @@ public class SelectResidentActivity extends PeachBaseActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.putExtra("result", city.name);
+                    intent.putExtra("resultId", city.id);
                     setResult(RESULT_OK, intent);
                     finish();
 

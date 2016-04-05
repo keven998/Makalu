@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fl_container"
+    android:background="@color/light_transparent_color"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="70dp"
+        android:textColor="@color/base_color_white"
+        android:paddingLeft="10dp"
+        android:text="费用明细"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:textColor="@color/base_color_white"
+        android:padding="10dp"
+        android:textSize="14sp" />
+</FrameLayout>

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_backgroud"
     android:orientation="vertical">
-
+    <!--android:layout_marginTop="@dimen/title_bar_height"-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,6 +25,7 @@
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -73,6 +74,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textSize="14sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -124,6 +126,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textSize="14sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -173,6 +176,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textSize="14sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -238,6 +242,7 @@
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -258,6 +263,7 @@
                 android:hardwareAccelerated="false"
                 android:layerType="software" />
             <RelativeLayout
+                android:id="@+id/rl_setoff"
                 android:background="@color/base_color_white"
                 android:layout_width="match_parent"
                 android:layout_height="52dp">
@@ -278,8 +284,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
+                    android:singleLine="true"
+                    android:layout_marginLeft="100dp"
                     android:drawablePadding="2dp"
-                    android:text="¥0.00"
                     android:padding="4dp"
                     android:layout_toLeftOf="@+id/iv1"
                     android:textColor="@color/color_text_iii" />
@@ -302,6 +309,7 @@
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:id="@+id/date_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -348,13 +356,14 @@
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
-                    android:text="出发天数"
+                    android:text="出行天数"
                     android:textColor="@color/color_text_ii" />
 
                 <com.xuejian.client.lxp.common.widget.NumberPicker
@@ -376,13 +385,14 @@
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
-                    android:text="出发人数"
+                    android:text="出游人数"
                     android:textColor="@color/color_text_ii" />
 
                 <com.xuejian.client.lxp.common.widget.NumberPicker
@@ -394,6 +404,45 @@
                     android:layout_centerVertical="true" />
             </RelativeLayout>
 
+            <LinearLayout
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/base_color_white">
+                <TextView
+                    android:paddingLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="含"
+                    android:textColor="@color/color_text_ii"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="5dp"
+                    android:textSize="14sp"/>
+                <CheckedTextView
+                    android:id="@+id/ctv_child"
+                    android:paddingLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="儿童"
+                    android:textColor="@color/color_text_ii"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="5dp"
+                    android:textSize="14sp"
+                    android:drawableRight="@drawable/checker_for_checkbox"/>
+                <CheckedTextView
+                    android:id="@+id/ctv_elder"
+                    android:paddingLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="老人"
+                    android:textColor="@color/color_text_ii"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="5dp"
+                    android:textSize="14sp"
+                    android:drawableRight="@drawable/checker_for_checkbox"/>
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -404,6 +453,7 @@
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:id="@+id/unit_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -411,7 +461,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
-                    android:text="总预算"
+                    android:text="人均预算"
                     android:textColor="@color/color_text_ii" />
 
                 <EditText
@@ -423,13 +473,15 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_common_without_corner"
                     android:drawablePadding="2dp"
-                    android:text="¥0.00"
+                    android:hint="元/人 左右"
+                    android:textColorHint="@color/color_text_iv"
                     android:paddingRight="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="7dp"
+                    android:inputType="number"
                     android:paddingBottom="7dp"
                     android:textSize="14sp"
-                    android:textColor="@color/color_text_iii" />
+                    android:textColor="@color/color_text_iv" />
             </RelativeLayout>
 
 
@@ -445,6 +497,7 @@
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -465,11 +518,13 @@
                 android:hardwareAccelerated="false"
                 android:layerType="software" />
             <RelativeLayout
+                android:id="@+id/rl_target"
                 android:background="@color/base_color_white"
                 android:layout_width="match_parent"
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -485,8 +540,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
+                    android:singleLine="true"
+                    android:layout_marginLeft="100dp"
                     android:drawablePadding="2dp"
-                    android:text="¥0.00"
                     android:padding="4dp"
                     android:layout_toLeftOf="@+id/iv2"
                     android:textColor="@color/color_text_iii" />
@@ -504,11 +560,13 @@
                 android:layout_height="1px"
                 android:background="@color/color_line" />
             <RelativeLayout
+                android:id="@+id/rl_service"
                 android:background="@color/base_color_white"
                 android:layout_width="match_parent"
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -524,8 +582,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
+                    android:singleLine="true"
+                    android:layout_marginLeft="100dp"
                     android:drawablePadding="2dp"
-                    android:text="¥0.00"
                     android:padding="4dp"
                     android:layout_toLeftOf="@+id/iv3"
                     android:textColor="@color/color_text_iii" />
@@ -543,11 +602,13 @@
                 android:layout_height="1px"
                 android:background="@color/color_line" />
             <RelativeLayout
+                android:id="@+id/rl_theme"
                 android:background="@color/base_color_white"
                 android:layout_width="match_parent"
                 android:layout_height="52dp">
 
                 <TextView
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -564,7 +625,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:drawablePadding="2dp"
-                    android:text="¥0.00"
+                    android:singleLine="true"
+                    android:layout_marginLeft="100dp"
                     android:padding="4dp"
                     android:layout_toLeftOf="@+id/iv4"
                     android:textColor="@color/color_text_iii" />
@@ -586,6 +648,7 @@
 
             <LinearLayout
                 android:layout_marginTop="20dp"
+                android:padding="10dp"
                 android:background="@color/base_color_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -599,18 +662,16 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="52dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="15dp"
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textSize="14sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="10dp"
                             android:layout_marginRight="5dp"
                             android:text="其他需求"
-                            android:textColor="@color/color_text_iii" />
+                            android:textColor="@color/color_text_ii" />
                     </LinearLayout>
 
                     <EditText
@@ -619,6 +680,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:gravity="left|top"
+                        android:hint="限500字"
+                        android:textColorHint="@color/color_text_iii"
                         android:paddingTop="3dp"
                         android:layout_marginLeft="80dp"
                         android:layout_marginRight="10dp"
@@ -633,42 +696,24 @@
             <LinearLayout
                 android:id="@+id/ll_action_bar"
                 android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:background="#cccccc"
+                android:layout_height="40dp"
+                android:layout_marginBottom="20dp"
                 android:layout_gravity="bottom"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:weightSum="5">
 
                 <TextView
-                    android:id="@+id/tv_total_price"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2.5"
-                    android:background="#cccccc"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="30dp"
-                    android:text="¥0.00"
-                    android:textColor="@color/base_color_white"
-                    android:textSize="19sp" />
-                <ImageView
-                    android:id="@+id/iv_arrow"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:background="#cccccc"
-                    android:src="@drawable/icon_white_arrow_top"/>
-                <TextView
                     android:id="@+id/tv_submit_order"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingLeft="35dp"
+                    android:paddingRight="35dp"
                     android:background="@color/price_color"
                     android:gravity="center"
                     android:text="@string/next_step"
                     android:textColor="@color/base_color_white"
-                    android:textSize="19sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

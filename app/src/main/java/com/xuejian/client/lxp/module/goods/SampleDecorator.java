@@ -19,9 +19,10 @@ import java.util.Date;
 public class SampleDecorator implements CalendarCellDecorator {
     PlanBean bean;
     private static long TIME = 60 * 1000;
-
-    public SampleDecorator(PlanBean bean) {
+    boolean justDate;
+    public SampleDecorator(PlanBean bean,boolean justDate) {
         this.bean = bean;
+        this.justDate = justDate;
     }
 
     @Override
@@ -29,6 +30,15 @@ public class SampleDecorator implements CalendarCellDecorator {
 
         final Calendar lastYear = Calendar.getInstance();
         lastYear.add(Calendar.DAY_OF_YEAR, -1);
+
+        if (justDate){
+            if (date.before(lastYear.getTime())||date.equals(lastYear.getTime())) {
+                cellView.setEnabled(false);
+            }
+            cellView.setText(Integer.toString(date.getDate()));
+            return;
+        }
+
         if (date.before(lastYear.getTime())) {
             cellView.setText(Integer.toString(date.getDate()));
             cellView.setEnabled(false);

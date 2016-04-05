@@ -148,8 +148,22 @@ public class TravelApi extends BaseApi {
     public final static String COMMENT_LIST = "/marketplace/commodities/%d/comments";
 
 
-    // 获取评价
+    // 获取所有定制信息
+    public final static String BOUNTIES = "/marketplace/bounties";
+
+
+    // 获取优惠券
     public final static String COUPON_LIST = "/marketplace/coupons";
+
+
+    public static void getBounties(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + BOUNTIES);
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
 
     public static void getCouponList(long userId ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
