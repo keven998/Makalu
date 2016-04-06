@@ -22,7 +22,7 @@ android {
     }
 
     compileSdkVersion 23
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "com.xuejian.client.lxp"
         minSdkVersion 14
@@ -88,6 +88,10 @@ android {
                 flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 repositories {
     maven { url 'http://maven.oschina.net/content/groups/public/' }
@@ -132,7 +136,7 @@ dependencies {
     compile project(':xrecyclerview')
     compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
     compile 'com.github.techery:ProperRatingBar:v0.0.3'
-   // compile 'com.android.support:percent:23.0.0'
+    // compile 'com.android.support:percent:23.0.0'
     compile 'org.greenrobot:eventbus:3.0.0'
 }
 

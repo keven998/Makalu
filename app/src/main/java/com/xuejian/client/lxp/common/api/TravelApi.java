@@ -8,6 +8,8 @@ import com.aizou.core.http.entity.PTHeader;
 import com.aizou.core.http.entity.PTRequest;
 import com.aizou.core.log.LogUtil;
 import com.aizou.core.utils.LocalDisplay;
+import com.alibaba.fastjson.JSON;
+import com.xuejian.client.lxp.bean.BountiesBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -155,7 +157,55 @@ public class TravelApi extends BaseApi {
     // 获取优惠券
     public final static String COUPON_LIST = "/marketplace/coupons";
 
+    public static void createProject
+            (BountiesBean bountiesBean, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + BOUNTIES);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
 
+        JSONObject jsonObject = new JSONObject();
+
+        JSONObject contact = null;
+        try {
+            contact = new JSONObject(JSON.toJSON(bountiesBean.getContact().get(0)).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            jsonObject.put("departureDate", bountiesBean.getDepartureDate());
+            jsonObject.put("timeCost", bountiesBean.getTimeCost());
+            jsonObject.put("participantCnt", bountiesBean.getParticipantCnt());
+            jsonObject.put("participants", bountiesBean.getParticipants());
+            jsonObject.put("budget", bountiesBean.getBudget());
+            jsonObject.put("service", bountiesBean.getService());
+            jsonObject.put("topic", bountiesBean.getTopic());
+            jsonObject.put("contact", contact);
+            jsonObject.put("memo", bountiesBean.getMemo());
+            jsonObject.put("totalPrice", bountiesBean.getTotalPrice());
+
+            if (bountiesBean.getDestination() != null && bountiesBean.getDestination().size() > 0) {
+                JSONArray array = new JSONArray();
+                for (LocBean bean : bountiesBean.getDestination()) {
+                    JSONObject object = new JSONObject();
+                    object.put("id",bean.id);
+                    object.put("zhName",bean.zhName);
+                    array.put(object);
+                }
+                jsonObject.put("destination", array);
+            }
+            JSONObject departure =new JSONObject();
+            departure.put("id",bountiesBean.getDeparture().get(0).id);
+            departure.put("zhName",bountiesBean.getDeparture().get(0).zhName);
+            jsonObject.put("departure", departure);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
     public static void getBounties(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

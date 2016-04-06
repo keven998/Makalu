@@ -50,6 +50,7 @@ import com.xuejian.client.lxp.config.SettingConfig;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.customization.CustomMainFragment;
+import com.xuejian.client.lxp.module.customization.ProjectDetailActivity;
 import com.xuejian.client.lxp.module.goods.Fragment.DestinationFragment;
 import com.xuejian.client.lxp.module.goods.Fragment.GoodsMainFragment;
 import com.xuejian.client.lxp.module.my.LoginActivity;
@@ -122,7 +123,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         setContentView(R.layout.activity_main);
         initView();
 
-   //     startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+       startActivity(new Intent(this, ProjectDetailActivity.class));
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);

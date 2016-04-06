@@ -398,7 +398,10 @@
             android:name=".module.dest.StrategyDomesticMapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent" />
-        <!--去过页面-->
+
+
+
+        <!--电商页面-->
 
         <activity
             android:name=".module.toolbox.StrategyListActivity"
@@ -514,7 +517,7 @@
 
 
 
-<!--Trade-->
+        <!--Trade-->
 
         <activity
             android:name=".module.trade.TradeOrderListActivity"
@@ -525,6 +528,10 @@
         <activity
             android:name=".module.trade.TradeMainActivity"
             android:screenOrientation="portrait" />
+
+
+
+
 
         <!--Customization-->
 
@@ -539,8 +546,24 @@
         <activity
             android:name=".module.customization.DestMenuActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.customization.ProjectDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.customization.PlanDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.customization.CreatePlanActivity"
+            android:screenOrientation="portrait" />
 
 
+
+
+
+
+
+
+        <!-- third part -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

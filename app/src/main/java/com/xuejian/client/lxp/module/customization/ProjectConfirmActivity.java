@@ -17,9 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.BountiesBean;
 import com.xuejian.client.lxp.bean.OrderBean;
+import com.xuejian.client.lxp.common.api.TravelApi;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,7 +58,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_confirm);
         ButterKnife.bind(this);
-        getIntent().getParcelableArrayListExtra("BountiesBean");
+        final BountiesBean bean = getIntent().getParcelableExtra("BountiesBean");
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +88,9 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
         tvSubmitOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPayActionDialog(new OrderBean());
+                if (bean!=null) {
+                    createProject(bean);
+                }
             }
         });
         llBounty.setOnClickListener(new View.OnClickListener() {
@@ -96,29 +101,26 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
         });
     }
 
+    private void createProject(BountiesBean bean) {
+        TravelApi.createProject(bean, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                showPayActionDialog(new OrderBean());
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
     private void showNotice() {
-//        final Activity act = this;
-//        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-//        dialog.setCanceledOnTouchOutside(false);
-//        View contentView = View.inflate(act, R.layout.bounty_detail, null);
-//        TextView tvInfo = (TextView) contentView.findViewById(R.id.tv_info);
-//        tvInfo.setText(info);
-//        dialog.show();
-//        WindowManager windowManager = act.getWindowManager();
-//        Window window = dialog.getWindow();
-//        window.setContentView(contentView);
-//        Display display = windowManager.getDefaultDisplay();
-//        WindowManager.LayoutParams lp = window.getAttributes();
-//        lp.width = display.getWidth(); // 设置宽度
-//        lp.height = display.getHeight();
-//        window.setAttributes(lp);
-//        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
-//        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
-
-
-
-
-
         View view = getLayoutInflater().inflate(R.layout.bounty_detail, null);
         TextView tvInfo = (TextView) view.findViewById(R.id.tv_info);
         FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.fl_container);
