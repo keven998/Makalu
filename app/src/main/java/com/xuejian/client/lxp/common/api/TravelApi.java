@@ -157,6 +157,34 @@ public class TravelApi extends BaseApi {
     // 获取优惠券
     public final static String COUPON_LIST = "/marketplace/coupons";
 
+
+    // 我的悬赏列表
+    public final static String MY_CUSTOM_LIST = "/marketplace/users/%d/bounties";
+
+
+    // 商家接单
+    public final static String TAKER_ORDER = "/marketplace/bounties/%d/bounty-takers";
+
+
+    public static void takeOrder(long id ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL +String.format(TAKER_ORDER,id));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject object = new JSONObject();
+        setDefaultParams(request, object.toString());
+        OkHttpClientManager.getInstance().request(request, object.toString(), callback);
+    }
+
+    public static void getMyCustomList(long userId ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL +String.format(MY_CUSTOM_LIST,userId));
+
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
     public static void createProject
             (BountiesBean bountiesBean, HttpCallBack callback) {
         PTRequest request = new PTRequest();

@@ -26,7 +26,7 @@ import com.xuejian.client.lxp.common.widget.FixedScrollView;
 import com.xuejian.client.lxp.common.widget.RoundImageBoarderView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.MainActivity;
-import com.xuejian.client.lxp.module.customization.ProjectCreateActivity;
+import com.xuejian.client.lxp.module.customization.MyProjectListActivity;
 import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
 import com.xuejian.client.lxp.module.goods.CouponListActivity;
 import com.xuejian.client.lxp.module.goods.GoodsList;
@@ -308,7 +308,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
                 startActivity(rl_shop);
                 break;
             case R.id.rl_my_custom:
-                Intent rl_my_custom = new Intent(getActivity(), ProjectCreateActivity.class);
+                Intent rl_my_custom = new Intent(getActivity(), MyProjectListActivity.class);
                 startActivity(rl_my_custom);
                 break;
             default:

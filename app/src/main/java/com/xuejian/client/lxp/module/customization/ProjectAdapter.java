@@ -2,17 +2,25 @@ package com.xuejian.client.lxp.module.customization;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.BountiesBean;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,19 +58,22 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         TextView tvProjectCount;
         @Bind(R.id.tv_project_price)
         TextView tvProjectPrice;
-
+        @Bind(R.id.tv_state)
+        TextView tvState;
+        @Bind(R.id.ll_container)
+        LinearLayout ll_container;
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
     }
 
-    public ProjectAdapter(Context context, int type) {
-        mContext = context;
+
+    public ProjectAdapter(Context fragment, int type) {
+        mContext = fragment;
         mValues = new ArrayList<>();
         this.type = type;
     }
-
     public Object getItem(int position) {
         return mValues.get(position);
     }
@@ -81,9 +92,48 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        BountiesBean bean = (BountiesBean) getItem(position);
-        holder.tvName.setText(bean.getContact().get(0).getSurname());
+        final BountiesBean bean = (BountiesBean) getItem(position);
+        if (bean.getContact()!=null&&bean.getContact().size()>0){
+            holder.tvName.setText(bean.getContact().get(0).getSurname()+bean.getContact().get(0).getGivenName());
+        }
+//        Glide.with(mContext)
+//                .load(bean.get)
+//                .placeholder(R.drawable.ic_default_picture)
+//                .error(R.drawable.ic_default_picture)
+//                .centerCrop()
+//                .into(holder.ivGoods);
 
+        holder.tvTimestamp.setText(String.format("在%s发布了需求",CommonUtils.getTimestampString(new Date(bean.createTime))));
+        StringBuilder desc = new StringBuilder();
+        for (int i = 0; i < bean.getDestination().size(); i++) {
+            if (i!=0)desc.append("、");
+            desc.append(bean.getDestination().get(i).zhName);
+        }
+        holder.tvProjectInfo1.setText(String.format("[%s]",desc));
+        holder.tvProjectTime.setText(String.format(Locale.CHINA,"%d日游",bean.getTimeCost()));
+        holder.tvProjectInfo2.setText(bean.getService());
+        holder.tvProjectCount.setText(String.format(Locale.CHINA,"已有%d位商家抢单",bean.takersCnt));
+
+
+        String budget = String.format("定金%s元",CommonUtils.getPriceString(bean.getBudget()));
+        String total = String.format("总金额%s元",CommonUtils.getPriceString(bean.getTotalPrice()));
+
+        SpannableString budgetString = new SpannableString(budget);
+        budgetString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),2,budget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString totalString = new SpannableString(total);
+        totalString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),3,total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder price = new SpannableStringBuilder();
+        price.append(budgetString).append("  ").append(totalString);
+        holder.tvProjectPrice.setText(price);
+
+        holder.ll_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener!=null){
+                    listener.onItemClick(v,position,bean.getItemId(),false);
+                }
+            }
+        });
     }
 
 

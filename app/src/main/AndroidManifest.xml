@@ -528,7 +528,9 @@
         <activity
             android:name=".module.trade.TradeMainActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".module.trade.ServiceListActivity"
+            android:screenOrientation="portrait" />
 
 
 
@@ -555,7 +557,9 @@
         <activity
             android:name=".module.customization.CreatePlanActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".module.customization.MyProjectListActivity"
+            android:screenOrientation="portrait" />
 
 
 

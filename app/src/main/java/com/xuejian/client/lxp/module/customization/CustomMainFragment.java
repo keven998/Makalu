@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.customization;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -33,7 +35,13 @@ public class CustomMainFragment extends PeachBaseFragment {
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.head_project, (ViewGroup) view.findViewById(R.id.content),false);
         recyclerView.addHeaderView(headView);
         setupRecyclerView(recyclerView);
-
+        TextView tvCreate = (TextView) headView.findViewById(R.id.tv_create_project);
+        tvCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),ProjectCreateActivity.class));
+            }
+        });
         getData();
         return view;
     }
@@ -47,7 +55,10 @@ public class CustomMainFragment extends PeachBaseFragment {
         adapter.setOnItemClickListener(new ProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, long id, boolean expire) {
-
+                Intent intent = new Intent();
+                intent.putExtra("id",id);
+                intent.setClass(getActivity(),ProjectDetailActivity.class);
+                startActivity(intent);
             }
         });
     }

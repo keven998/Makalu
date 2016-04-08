@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/base_color_white"
     android:paddingBottom="10dp"
+    android:id="@+id/ll_container"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -17,26 +17,48 @@
             android:src="@drawable/ic_home_more_avatar_unknown_round"
             android:scaleType="fitXY"
             android:layout_height="40dp" />
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            android:text="3rwrwr"
-            android:textColor="@color/color_text_ii"
-            />
-        <TextView
-            android:id="@+id/tv_timestamp"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="14sp"
-            android:textColor="@color/color_text_ii"
-            android:text="wrwrw"
-            android:gravity="right"
-            android:paddingRight="5dp"/>
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="16sp"
+                    android:text="昵称"
+                    android:textColor="@color/color_text_ii"
+                    />
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/tv_timestamp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_text_iii"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:paddingRight="5dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_state"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已提交方案"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical|right"
+                android:textColor="@color/app_theme_color"/>
+        </FrameLayout>
+
+
     </LinearLayout>
 
 
@@ -53,7 +75,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="10dp"
             android:textSize="14sp"
-            android:text="sfdsdfsdf"
+            android:text="info1"
             android:textColor="@color/color_text_ii"/>
         <TextView
             android:id="@+id/tv_project_time"
@@ -71,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="20dp"
-        android:text="sfsfsdf"
+        android:text="info2"
         android:textSize="14sp"
         android:textColor="@color/color_text_ii"/>
 
@@ -88,15 +110,57 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="10dp"
             android:textSize="18sp"
-            android:text="sfdsdfsdf"
+            android:text="已有3位商家抢单"
             android:textColor="@color/color_text_ii"/>
         <TextView
             android:id="@+id/tv_project_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5日游"
+            android:text="定金2000元"
             android:layout_marginRight="16dp"
             android:textSize="16sp"
             android:textColor="@color/color_text_ii"/>
     </LinearLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_action"
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <TextView
+            android:id="@+id/tv_action0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/bg_common_theme_color_solid"
+            android:gravity="center_vertical"
+            android:padding="7dp"
+            android:textColor="@color/base_color_white"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/tv_talk"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/tv_action0"
+            android:gravity="center_vertical"
+            android:text="联系卖家"
+            android:textColor="@color/app_theme_color"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_action_state"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_text_ii"
+            android:textSize="13sp" />
+    </RelativeLayout>
 </LinearLayout>

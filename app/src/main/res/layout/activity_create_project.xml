@@ -709,7 +709,7 @@
                     android:layout_gravity="center_horizontal"
                     android:paddingLeft="35dp"
                     android:paddingRight="35dp"
-                    android:background="@color/price_color"
+                    android:background="@color/app_theme_color"
                     android:gravity="center"
                     android:text="@string/next_step"
                     android:textColor="@color/base_color_white"

@@ -29,6 +29,9 @@ public class BountiesBean implements Parcelable {
      * paid : false
      */
 
+    public int takersCnt;
+    public  long createTime;
+    public  long updateTime;
     private long itemId;
     private long consumerId;
     private double totalPrice;
@@ -189,49 +192,7 @@ public class BountiesBean implements Parcelable {
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.itemId);
-        dest.writeLong(this.consumerId);
-        dest.writeDouble(this.totalPrice);
-        dest.writeString(this.departureDate);
-        dest.writeInt(this.timeCost);
-        dest.writeInt(this.participantCnt);
-        dest.writeDouble(this.budget);
-        dest.writeString(this.memo);
-        dest.writeString(this.service);
-        dest.writeString(this.topic);
-        dest.writeByte(paid ? (byte) 1 : (byte) 0);
-        dest.writeTypedList(destination);
-        dest.writeTypedList(contact);
-        dest.writeTypedList(departure);
-        dest.writeStringList(this.participants);
-    }
-
     public BountiesBean() {
-    }
-
-    protected BountiesBean(Parcel in) {
-        this.itemId = in.readLong();
-        this.consumerId = in.readLong();
-        this.totalPrice = in.readDouble();
-        this.departureDate = in.readString();
-        this.timeCost = in.readInt();
-        this.participantCnt = in.readInt();
-        this.budget = in.readDouble();
-        this.memo = in.readString();
-        this.service = in.readString();
-        this.topic = in.readString();
-        this.paid = in.readByte() != 0;
-        this.destination = in.createTypedArrayList(LocBean.CREATOR);
-        this.contact = in.createTypedArrayList(ContactBean.CREATOR);
-        this.departure = in.createTypedArrayList(LocBean.CREATOR);
-        this.participants = in.createStringArrayList();
     }
 
     @Override
@@ -255,7 +216,55 @@ public class BountiesBean implements Parcelable {
                 '}';
     }
 
-    public static final Parcelable.Creator<BountiesBean> CREATOR = new Parcelable.Creator<BountiesBean>() {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.takersCnt);
+        dest.writeLong(this.createTime);
+        dest.writeLong(this.updateTime);
+        dest.writeLong(this.itemId);
+        dest.writeLong(this.consumerId);
+        dest.writeDouble(this.totalPrice);
+        dest.writeString(this.departureDate);
+        dest.writeInt(this.timeCost);
+        dest.writeInt(this.participantCnt);
+        dest.writeDouble(this.budget);
+        dest.writeString(this.memo);
+        dest.writeString(this.service);
+        dest.writeString(this.topic);
+        dest.writeByte(paid ? (byte) 1 : (byte) 0);
+        dest.writeTypedList(destination);
+        dest.writeTypedList(contact);
+        dest.writeTypedList(departure);
+        dest.writeStringList(this.participants);
+    }
+
+    protected BountiesBean(Parcel in) {
+        this.takersCnt = in.readInt();
+        this.createTime = in.readLong();
+        this.updateTime = in.readLong();
+        this.itemId = in.readLong();
+        this.consumerId = in.readLong();
+        this.totalPrice = in.readDouble();
+        this.departureDate = in.readString();
+        this.timeCost = in.readInt();
+        this.participantCnt = in.readInt();
+        this.budget = in.readDouble();
+        this.memo = in.readString();
+        this.service = in.readString();
+        this.topic = in.readString();
+        this.paid = in.readByte() != 0;
+        this.destination = in.createTypedArrayList(LocBean.CREATOR);
+        this.contact = in.createTypedArrayList(ContactBean.CREATOR);
+        this.departure = in.createTypedArrayList(LocBean.CREATOR);
+        this.participants = in.createStringArrayList();
+    }
+
+    public static final Creator<BountiesBean> CREATOR = new Creator<BountiesBean>() {
         @Override
         public BountiesBean createFromParcel(Parcel source) {
             return new BountiesBean(source);

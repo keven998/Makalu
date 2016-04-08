@@ -571,6 +571,7 @@
     </ScrollView>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_trade_action0"
         android:layout_width="match_parent"
         android:layout_height="62dp"
@@ -583,7 +584,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/price_color"
+            android:background="@color/app_theme_color"
             android:gravity="center"
             android:text="接单"
             android:textColor="@color/base_color_white"
@@ -604,7 +605,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/base_color_white"
+            android:background="@color/app_theme_color"
             android:gravity="center"
             android:text="制作方案"
             android:textColor="@color/color_text_ii"
@@ -615,7 +616,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/price_color"
+            android:background="@color/app_theme_color"
             android:gravity="center"
             android:text="联系买家"
             android:textColor="@color/base_color_white"
