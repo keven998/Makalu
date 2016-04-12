@@ -426,9 +426,10 @@ public class ProjectCreateActivity extends PeachBaseActivity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_project_theme, null);
             TextView textView = (TextView) convertView.findViewById(R.id.tv_content);
+            LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.ll_container);
             final CheckedTextView checkedTextView = (CheckedTextView) convertView.findViewById(R.id.ctv);
             textView.setText(getItem(position));
-            textView.setOnClickListener(new View.OnClickListener() {
+            linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     setSelected(position);

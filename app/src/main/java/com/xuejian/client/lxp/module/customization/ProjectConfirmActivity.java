@@ -40,8 +40,8 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
     EditText etPrice;
     @Bind(R.id.tv_sign)
     TextView tvSign;
-    @Bind(R.id.ll_drawback_price_container)
-    LinearLayout llDrawbackPriceContainer;
+    @Bind(R.id.ll_price_container)
+    LinearLayout llPriceContainer;
     @Bind(R.id.ll_bounty)
     LinearLayout llBounty;
     @Bind(R.id.tv_submit_order)
@@ -73,6 +73,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 }
                 ctvCharge.setChecked(true);
                 etPrice.setEnabled(false);
+                llPriceContainer.setVisibility(View.VISIBLE);
             }
         });
         ctvFree.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +84,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 }
                 ctvFree.setChecked(true);
                 etPrice.setEnabled(true);
+                llPriceContainer.setVisibility(View.GONE);
             }
         });
         tvSubmitOrder.setOnClickListener(new View.OnClickListener() {

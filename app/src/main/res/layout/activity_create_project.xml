@@ -461,7 +461,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
-                    android:text="人均预算"
+                    android:text="总预算"
                     android:textColor="@color/color_text_ii" />
 
                 <EditText
@@ -473,7 +473,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_common_without_corner"
                     android:drawablePadding="2dp"
-                    android:hint="元/人 左右"
+                    android:hint="   元"
                     android:textColorHint="@color/color_text_iv"
                     android:paddingRight="10dp"
                     android:paddingLeft="10dp"

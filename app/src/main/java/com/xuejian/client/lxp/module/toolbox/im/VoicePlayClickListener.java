@@ -23,7 +23,6 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.aizou.core.log.LogUtil;
 import com.lv.bean.MessageBean;
@@ -146,9 +145,9 @@ public class VoicePlayClickListener implements View.OnClickListener {
     private void showAnimation() {
         // play voice, and start animation
         if (message.getSendType() == 1) {
-            voiceIconView.setImageResource(R.anim.voice_from_icon);
+             voiceIconView.setImageResource(R.drawable.voice_from_icon);
         } else {
-            voiceIconView.setImageResource(R.anim.voice_to_icon);
+            voiceIconView.setImageResource(R.drawable.voice_to_icon);
         }
         voiceAnimation = (AnimationDrawable) voiceIconView.getDrawable();
         voiceAnimation.start();

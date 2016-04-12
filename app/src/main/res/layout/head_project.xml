@@ -3,11 +3,15 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/app_theme_color"></LinearLayout>
     <TextView
         android:id="@+id/tv_create_project"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="10dp"
         android:background="@color/app_theme_color"
         android:layout_width="match_parent"
         android:textColor="@color/base_color_white"
