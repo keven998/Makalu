@@ -139,4 +139,12 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
             return new StrategyBean[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof StrategyBean){
+            return id.equals(((StrategyBean) o).id);
+        }
+        return super.equals(o);
+    }
 }

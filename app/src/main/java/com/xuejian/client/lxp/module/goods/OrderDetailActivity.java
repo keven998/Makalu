@@ -354,7 +354,7 @@ public class OrderDetailActivity extends PeachBaseActivity implements View.OnCli
                     }
 
 
-                    //     tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getTotalPrice()-bean.getDiscount())));
+                    //     tvState.setText(String.format("待付款¥%s",CommonUtils.getPriceString(bean.getBountyPrice()-bean.getDiscount())));
                     long time = bean.getExpireTime() - System.currentTimeMillis();
                     if (time > 0) {
                         llTradeAction1.setVisibility(View.VISIBLE);

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/base_color_white"
+    android:orientation="horizontal"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_home_more_avatar_unknown_round"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:text="昵称"
+                android:textColor="@color/color_text_ii"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_timestamp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:paddingRight="5dp"
+                android:textColor="@color/color_text_iii"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_talk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:padding="10dp"
+            android:src="@drawable/icon_store_talk"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:padding="10dp"
+            android:src="@drawable/icon_arrow_right"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+
+</LinearLayout>

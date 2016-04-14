@@ -166,6 +166,41 @@ public class TravelApi extends BaseApi {
     public final static String TAKER_ORDER = "/marketplace/bounties/%d/bounty-takers";
 
 
+    // 提交方案
+    public final static String SUBMIT_PLAN = "/marketplace/bounties/%d/schedules";
+
+    //取得对某个悬赏应征的，所有日程安排
+    public final static String BOUNTY_LIST = "/marketplace/bounties/%d/schedules";
+
+    public static void getBOUNTYLIST(long bountyId ,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL +String.format(BOUNTY_LIST,bountyId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
+    public static void submitPlan(long bountyId,String desc,double price,ArrayList<String> guideId,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(SUBMIT_PLAN, bountyId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("desc",desc);
+            jsonObject.put("price",price);
+            jsonObject.put("guideId",guideId.get(0));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
     public static void takeOrder(long id ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
@@ -210,7 +245,7 @@ public class TravelApi extends BaseApi {
             jsonObject.put("topic", bountiesBean.getTopic());
             jsonObject.put("contact", contact);
             jsonObject.put("memo", bountiesBean.getMemo());
-            jsonObject.put("totalPrice", bountiesBean.getTotalPrice());
+            jsonObject.put("bountyPrice", bountiesBean.getBountyPrice());
 
             if (bountiesBean.getDestination() != null && bountiesBean.getDestination().size() > 0) {
                 JSONArray array = new JSONArray();
@@ -264,6 +299,7 @@ public class TravelApi extends BaseApi {
     public static void createComment(long commodityId,long orderId,String comment,float rating,boolean anonymous,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_COMMENT, commodityId));
         JSONObject jsonObject = new JSONObject();
         try {

@@ -556,6 +556,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.customization.CreatePlanActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.customization.MyProjectListActivity"

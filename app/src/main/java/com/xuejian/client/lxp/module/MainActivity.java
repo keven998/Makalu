@@ -122,6 +122,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         setContentView(R.layout.activity_main);
         initView();
 
+
         //断网提示
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -173,10 +174,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     }
 
     public void initClient() {
-//        TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-//        if (talkFragment != null) {
-//            talkFragment.loadConversation();
-//        }
         IMClient.login(AccountManager.getCurrentUserId(), new HttpCallback() {
             @Override
             public void onSuccess() {
@@ -192,33 +189,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         });
 
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                IMClient.getInstance().getConversationAttrs(AccountManager.getCurrentUserId(), IMClient.getInstance().getConversationIds(), new HttpCallback() {
-//                    @Override
-//                    public void onSuccess() {
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(String result) {
-//                        try {
-//                            JSONObject res = new JSONObject(result);
-//                            JSONArray array = res.getJSONArray("result");
-//                            for (int i = 0; i < array.length(); i++) {
-//                                SettingConfig.getInstance().setLxpNoticeSetting(MainActivity.this, String.valueOf(array.getJSONObject(i).getInt("targetId")), array.getJSONObject(i).getBoolean("muted"));
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailed(int code) {
-//                    }
-//                });
-//            }
-//        }, 5000);
         initData();
         UserApi.getUserInfo(AccountManager.getCurrentUserId(), new HttpCallBack() {
             @Override
@@ -244,12 +214,6 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
 
             }
         });
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                IMClient.getInstance().getConversationList();
-//            }
-//        }).start();
 
     }
 
@@ -262,6 +226,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
         }
         if (intent.getBooleanExtra("back", false)) {
             mTabHost.setCurrentTab(0);
+        }
+        if (intent.getBooleanExtra("custom",false)){
+            mTabHost.setCurrentTab(2);
         }
     }
 

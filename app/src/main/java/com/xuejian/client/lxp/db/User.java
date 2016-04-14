@@ -39,7 +39,7 @@ public class User implements Parcelable {
     public ExpertInfo expertInfo;
     private ArrayList<String> tags;
     private SecretKeyBean secretKey;
-
+    public boolean isSeller;
     public String getPromotionCode() {
         return promotionCode;
     }

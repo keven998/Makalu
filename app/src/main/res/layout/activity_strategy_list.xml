@@ -75,6 +75,17 @@
                 android:paddingRight="7dp"
                 android:scaleType="center"
                 android:src="@drawable/selector_ic_add_plan" />
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_confirm_select"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:textSize="14sp"
+                android:textColor="@color/base_color_white"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:text="确定"/>
         </RelativeLayout>
         <View
             android:layout_width="match_parent"

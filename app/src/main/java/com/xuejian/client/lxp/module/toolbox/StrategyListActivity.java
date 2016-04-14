@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -87,7 +88,9 @@ public class StrategyListActivity extends PeachBaseActivity {
     private boolean newCreate;
     private String newId;
     private ArrayList<StrategyBean> strategyBeans;
+    private boolean ProjectCreate;
 
+    private ArrayList<StrategyBean> selected = new ArrayList<>();
     /**
      * 需要的数据
      * toId ： 用户ID
@@ -107,6 +110,7 @@ public class StrategyListActivity extends PeachBaseActivity {
         conversation = getIntent().getStringExtra("conversation");
         newCopy = getIntent().getBooleanExtra("new_copy", false);
         copyId = getIntent().getStringExtra("copyId");
+        ProjectCreate = getIntent().getBooleanExtra("ProjectCreate",false);
         initView();
         initData();
     }
@@ -169,6 +173,22 @@ public class StrategyListActivity extends PeachBaseActivity {
         if (!isOwner) {
             findViewById(R.id.ivb_content_filter).setVisibility(View.INVISIBLE);
             create_plan.setVisibility(View.GONE);
+        }
+
+        if (ProjectCreate){
+            TextView confirm = (TextView) findViewById(R.id.tv_confirm_select);
+            confirm.setVisibility(View.VISIBLE);
+            confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra("selected",selected);
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }
+            });
+
+            findViewById(R.id.ivb_content_filter).setVisibility(View.GONE);
         }
 
         listView.getRefreshableView().setAdapter(mStrategyListAdapter);
@@ -413,11 +433,13 @@ public class StrategyListActivity extends PeachBaseActivity {
         TextView create_time;
         TextView mDelete;
         TextView mCheck;
-
+        CheckedTextView btn_send;
         ImageView travel_hasGone;
         RelativeLayout rl_send;
         boolean isOwner;
         private ArrayList<StrategyBean> data;
+
+
         private Context context;
         private LinearLayout swipe_ll;
         ImageView plane_pic;
@@ -479,6 +501,7 @@ public class StrategyListActivity extends PeachBaseActivity {
             plane_pic = (ImageView) convertView.findViewById(R.id.plane_pic);
             travel_hasGone = (ImageView) convertView.findViewById(R.id.travel_hasGone);
             rl_send = (RelativeLayout) convertView.findViewById(R.id.rl_send);
+            btn_send = (CheckedTextView) convertView.findViewById(R.id.btn_send);
             showData(data.get(position));
         }
 
@@ -522,16 +545,42 @@ public class StrategyListActivity extends PeachBaseActivity {
                 mCheck.setVisibility(View.GONE);
                 rl_send.setVisibility(View.VISIBLE);
             }
-            rl_send.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    temp = itemData;
-                    //IMUtils.onClickImShare(StrategyListActivity.this);
-                    IMUtils.showSendDialog(mContext, temp, chatType, toId, conversation, null);
+            if (!ProjectCreate){
+                rl_send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        temp = itemData;
+                        //IMUtils.onClickImShare(StrategyListActivity.this);
+                        IMUtils.showSendDialog(mContext, temp, chatType, toId, conversation, null);
 
 
+                    }
+                });
+            }else {
+                rl_send.setVisibility(View.VISIBLE);
+                if (selected.contains(itemData)){
+                    btn_send.setText("已选");
+                    btn_send.setChecked(true);
+                }else {
+                    btn_send.setText("选择");
+                    btn_send.setChecked(false);
                 }
-            });
+                rl_send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (btn_send.isChecked()){
+                            selected.remove(itemData);
+                            btn_send.setChecked(false);
+                        }else {
+                            selected.add(itemData);
+                            btn_send.setChecked(true);
+                        }
+                        notifyDataSetChanged();
+                    }
+                });
+
+            }
+
             mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -572,29 +621,7 @@ public class StrategyListActivity extends PeachBaseActivity {
                         cancleVisited(itemData);
                         mStrategyListAdapter.notifyDataSetChanged();
                         mMyStrategyLv.doPullRefreshing(true, 300);
-//                        final ComfirmDialog cdialog = new ComfirmDialog(StrategyListActivity.this);
-//                        cdialog.findViewById(R.id.tv_dialog_title).setVisibility(View.VISIBLE);
-//                        cdialog.findViewById(R.id.btn_cancle).setVisibility(View.GONE);
-//                        cdialog.setTitle("取消签到");
-//                        cdialog.setMessage("旅历-1");
-//                        cdialog.setPositiveButton("确定", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                cdialog.dismiss();
-//                                mMyStrategyLv.doPullRefreshing(true, 0);
-//                            }
-//                        });
-//                        final Handler handler = new Handler() {
-//                            public void handleMessage(Message msg) {
-//                                switch (msg.what) {
-//                                    case 1:
-//                                        cdialog.show();
-//                                }
-//                                super.handleMessage(msg);
-//                            }
-//                        };
-//                        Message message = handler.obtainMessage(1);
-//                        handler.sendMessageDelayed(message, 300);
+//
                     }
                 }
             });

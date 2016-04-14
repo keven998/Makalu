@@ -102,7 +102,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:id="@+id/rl_plan"
+                android:background="@color/base_color_white"
+                android:layout_width="match_parent"
+                android:layout_height="52dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:text="智能定制行程"
+                    android:textColor="@color/color_text_ii" />
+
+                <TextView
+                    android:id="@+id/tv_setOff_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:singleLine="true"
+                    android:layout_marginLeft="100dp"
+                    android:drawablePadding="2dp"
+                    android:padding="4dp"
+                    android:layout_toLeftOf="@+id/iv1"
+                    android:textColor="@color/color_text_iii" />
+
+                <ImageView
+                    android:id="@+id/iv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/icon_arrow_right"/>
+            </RelativeLayout>
+
+          <com.xuejian.client.lxp.common.widget.ListViewForScrollView
+              android:id="@+id/plan_list"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </ScrollView>
@@ -147,7 +189,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/price_color"
+            android:background="@color/app_theme_color"
             android:gravity="center"
             android:text="提交方案"
             android:textColor="@color/base_color_white"
@@ -160,6 +202,7 @@
         android:layout_height="62dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal"
+        android:background="@color/app_theme_color"
         android:visibility="gone"
         android:weightSum="2">
 
@@ -168,10 +211,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/base_color_white"
             android:gravity="center"
             android:text="修改方案"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="19sp" />
 
         <TextView
@@ -179,7 +221,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/price_color"
             android:gravity="center"
             android:text="联系买家"
             android:textColor="@color/base_color_white"

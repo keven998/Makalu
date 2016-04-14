@@ -78,6 +78,7 @@
             android:background="@color/color_line" />
 
         <TableRow
+            android:visibility="gone"
             android:id="@+id/geek_apply"
             android:background="@drawable/option_cell_selector">
 

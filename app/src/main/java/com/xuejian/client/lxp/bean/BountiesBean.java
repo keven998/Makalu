@@ -15,7 +15,7 @@ public class BountiesBean implements Parcelable {
      * consumerId : 211216
      * destination : [{"id":"5473ccd7b8ce043a64108c46","zhName":"北京","enName":""}]
      * contact : [{"surname":"霍","givenName":"青桐","gender":"m","email":"lvxingpai@gmail.com","birthday":0,"tel":{"dialCode":86,"number":13099880088},"identities":[]}]
-     * totalPrice : 1
+     * bountyPrice : 1
      * departure : [{"id":"5473ccd7b8ce043a64108c46","zhName":"北京","enName":""}]
      * departureDate : 2016-04-05
      * timeCost : 2
@@ -34,7 +34,7 @@ public class BountiesBean implements Parcelable {
     public  long updateTime;
     private long itemId;
     private long consumerId;
-    private double totalPrice;
+    private double bountyPrice;
     private String departureDate;
     private int timeCost;
     private int participantCnt;
@@ -87,12 +87,12 @@ public class BountiesBean implements Parcelable {
         this.consumerId = consumerId;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    public double getBountyPrice() {
+        return bountyPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setBountyPrice(double bountyPrice) {
+        this.bountyPrice = bountyPrice;
     }
 
     public String getDepartureDate() {
@@ -200,7 +200,7 @@ public class BountiesBean implements Parcelable {
         return "BountiesBean{" +
                 "itemId=" + itemId +
                 ", consumerId=" + consumerId +
-                ", totalPrice=" + totalPrice +
+                ", bountyPrice=" + bountyPrice +
                 ", departureDate='" + departureDate + '\'' +
                 ", timeCost=" + timeCost +
                 ", participantCnt=" + participantCnt +
@@ -228,7 +228,7 @@ public class BountiesBean implements Parcelable {
         dest.writeLong(this.updateTime);
         dest.writeLong(this.itemId);
         dest.writeLong(this.consumerId);
-        dest.writeDouble(this.totalPrice);
+        dest.writeDouble(this.bountyPrice);
         dest.writeString(this.departureDate);
         dest.writeInt(this.timeCost);
         dest.writeInt(this.participantCnt);
@@ -249,7 +249,7 @@ public class BountiesBean implements Parcelable {
         this.updateTime = in.readLong();
         this.itemId = in.readLong();
         this.consumerId = in.readLong();
-        this.totalPrice = in.readDouble();
+        this.bountyPrice = in.readDouble();
         this.departureDate = in.readString();
         this.timeCost = in.readInt();
         this.participantCnt = in.readInt();

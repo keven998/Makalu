@@ -235,13 +235,13 @@ public class LoginActivity extends PeachBaseActivity {
 
             @Override
             public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
                 CommonJson<User> userResult = CommonJson.fromJson(result, User.class);
                 if (userResult.code == 0) {
                     SharePrefUtil.savePhoneNum(LoginActivity.this,"lastPhone",loginNameEt.getText().toString().trim());
                     imLogin(userResult.result, LOGIN);
 
                 } else {
-                    DialogManager.getInstance().dissMissLoadingDialog();
                     ToastUtil.getInstance(mContext).showToast(userResult.err.message);
                     tempPhoneNum = loginNameEt.getText().toString().trim();
                 }

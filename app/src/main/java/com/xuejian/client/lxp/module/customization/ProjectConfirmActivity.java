@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.customization;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Display;
@@ -17,12 +18,15 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.BountiesBean;
 import com.xuejian.client.lxp.bean.OrderBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
+import com.xuejian.client.lxp.module.MainActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -90,6 +94,8 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
         tvSubmitOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if (bean!=null) {
                     createProject(bean);
                 }
@@ -101,13 +107,20 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 showNotice();
             }
         });
+
+
     }
 
     private void createProject(BountiesBean bean) {
         TravelApi.createProject(bean, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
-                showPayActionDialog(new OrderBean());
+                if (ctvFree.isChecked()){
+                    showSuccess();
+                }else {
+                    showPayActionDialog(new OrderBean());
+                }
+
             }
 
             @Override
@@ -117,7 +130,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method, int code) {
-
+                ToastUtil.getInstance(ProjectConfirmActivity.this).showToast("提交失败");
             }
         });
     }
@@ -155,9 +168,30 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.width = display.getWidth(); // 设置宽度
-        lp.height = display.getHeight();
         window.setAttributes(lp);
-        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+    private void showSuccess(){
+        final PeachMessageDialog dialog =new PeachMessageDialog(this);
+        dialog.setTitle("提示");
+        dialog.setMessage("您的需求已提交，请耐心等待回复～");
+        dialog.setPositiveButton("返回定制首页", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent(ProjectConfirmActivity.this, MainActivity.class);
+                intent.putExtra("custom",true);
+                startActivity(intent);
+            }
+        });
+        dialog.setNegativeButton("查看发布需求", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

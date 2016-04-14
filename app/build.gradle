@@ -43,7 +43,7 @@ android {
         release {
             manifestPlaceholders = [AMAP_KEY: "f20e266c3a0f9cf4d232dcfa4eeb72d6"]
             minifyEnabled false
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->

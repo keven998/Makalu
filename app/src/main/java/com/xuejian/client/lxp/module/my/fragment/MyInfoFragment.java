@@ -35,6 +35,7 @@ import com.xuejian.client.lxp.module.goods.RefundActivity;
 import com.xuejian.client.lxp.module.my.InventActivity;
 import com.xuejian.client.lxp.module.my.MyProfileActivity;
 import com.xuejian.client.lxp.module.my.SettingActivity;
+import com.xuejian.client.lxp.module.my.TravelExpertApplyActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ContactActivity;
 import com.xuejian.client.lxp.module.trade.TradeMainActivity;
@@ -91,6 +92,9 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     RelativeLayout title;
     @Bind(R.id.rl_my_custom)
     RelativeLayout custom;
+    @Bind(R.id.rl_apply_seller)
+    RelativeLayout rl_apply_seller;
+
     User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,7 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
         rl_my_invent.setOnClickListener(this);
         rl_shop.setOnClickListener(this);
         custom.setOnClickListener(this);
+        rl_apply_seller.setOnClickListener(this);
         user = AccountManager.getInstance().getLoginAccount(getActivity());
         initHeadTitleView(user);
         isBusiness();
@@ -310,6 +315,10 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
             case R.id.rl_my_custom:
                 Intent rl_my_custom = new Intent(getActivity(), MyProjectListActivity.class);
                 startActivity(rl_my_custom);
+                break;
+            case R.id.rl_apply_seller:
+                Intent applyIntent = new Intent(getActivity(), TravelExpertApplyActivity.class);
+                startActivity(applyIntent);
                 break;
             default:
                 break;

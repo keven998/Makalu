@@ -567,6 +567,11 @@
                 android:layout_height="1px"
                 android:background="@color/color_line" />
 
+            <com.xuejian.client.lxp.common.widget.ListViewForScrollView
+                android:id="@+id/lv_plan"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 
@@ -608,7 +613,7 @@
             android:background="@color/app_theme_color"
             android:gravity="center"
             android:text="制作方案"
-            android:textColor="@color/color_text_ii"
+            android:textColor="@color/base_color_white"
             android:textSize="19sp" />
 
         <TextView
