@@ -29,11 +29,18 @@ public class BountiesBean implements Parcelable {
      * paid : false
      */
 
+//    悬赏单中，选定的行程安排的价格，在选定行程安排后显示
+    public double totalPrice;
+//    悬赏单选定的行程安排是否已支付
+    public boolean schedulePaid;
+//    悬赏的订金是否已支付
+    public boolean bountyPaid;
     public int takersCnt;
     public  long createTime;
     public  long updateTime;
     private long itemId;
     private long consumerId;
+//    悬赏的订金价格
     private double bountyPrice;
     private String departureDate;
     private int timeCost;
@@ -223,6 +230,9 @@ public class BountiesBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.totalPrice);
+        dest.writeByte(schedulePaid ? (byte) 1 : (byte) 0);
+        dest.writeByte(bountyPaid ? (byte) 1 : (byte) 0);
         dest.writeInt(this.takersCnt);
         dest.writeLong(this.createTime);
         dest.writeLong(this.updateTime);
@@ -244,6 +254,9 @@ public class BountiesBean implements Parcelable {
     }
 
     protected BountiesBean(Parcel in) {
+        this.totalPrice = in.readDouble();
+        this.schedulePaid = in.readByte() != 0;
+        this.bountyPaid = in.readByte() != 0;
         this.takersCnt = in.readInt();
         this.createTime = in.readLong();
         this.updateTime = in.readLong();

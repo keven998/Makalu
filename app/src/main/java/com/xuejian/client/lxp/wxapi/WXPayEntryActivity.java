@@ -14,7 +14,6 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
-import com.xuejian.client.lxp.module.goods.OrderConfirmActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
 public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
@@ -52,21 +51,22 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 			//	Toast.makeText(WXPayEntryActivity.this,"支付成功",Toast.LENGTH_SHORT).show();
 				Intent intent1 = new Intent();
                 intent1.setClass(WXPayEntryActivity.this, PaymentActivity.class);
-                intent1.putExtra("wxSuccess", true);
+                intent1.putExtra("wxpay", 1);
                 startActivity(intent1);
+				finish();
 			}else if (resp.errCode == -2){
 				Toast.makeText(WXPayEntryActivity.this, "支付取消 " , Toast.LENGTH_SHORT).show();
 				Intent intent1 = new Intent();
-				intent1.setClass(WXPayEntryActivity.this, OrderConfirmActivity.class);
-				intent1.putExtra("cancel", true);
+				intent1.setClass(WXPayEntryActivity.this, PaymentActivity.class);
+				intent1.putExtra("wxpay", 2);
 				startActivity(intent1);
 				finish();
                // startActivity(intent);
 			}else {
 				Toast.makeText(WXPayEntryActivity.this,"支付失败",Toast.LENGTH_SHORT).show();
 				Intent intent1 = new Intent();
-				intent1.setClass(WXPayEntryActivity.this, OrderConfirmActivity.class);
-				intent1.putExtra("cancel", true);
+				intent1.setClass(WXPayEntryActivity.this, PaymentActivity.class);
+				intent1.putExtra("wxpay", 3);
 				startActivity(intent1);
 				finish();
               //  startActivity(intent);

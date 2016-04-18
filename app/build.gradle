@@ -62,7 +62,6 @@ android {
         javaMaxHeapSize "2g"
     }
     productFlavors {
-        Alpha {}
         xiaomi {}
         yingyongbao {}
         baidu {}

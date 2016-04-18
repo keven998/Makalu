@@ -216,11 +216,10 @@ public class ProjectCreateActivity extends PeachBaseActivity {
         bean.setDepartureDate(tvDate.getText().toString().trim());
         bean.setTimeCost(selectDayNum.getCurrentValue());
         bean.setParticipantCnt(selectTravellerNum.getCurrentValue());
-        bean.setBudget(Double.parseDouble(tvTotalPrice.getText().toString().trim()));
         bean.setService(tvService.getText().toString().trim());
         bean.setTopic(tvTheme.getText().toString().trim());
         bean.setMemo(etMessage.getText().toString().trim());
-
+        bean.setBudget(Double.parseDouble(tvTotalPrice.getText().toString().trim()));
         ArrayList<String> participants = new ArrayList<>();
         if (ctv_child.isChecked()) participants.add("children");
         if (ctv_elder.isChecked()) participants.add("oldman");

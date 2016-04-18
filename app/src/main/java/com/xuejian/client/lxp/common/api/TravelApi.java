@@ -137,6 +137,10 @@ public class TravelApi extends BaseApi {
     // 支付订单
     public final static String PAY_ORDER = "/marketplace/orders/%d/payments";
 
+    // 支付悬赏
+    public final static String PAY_BOUNTY = "/marketplace/bounties/%d/payments";
+
+
     // 商户信息
     public final static String SELLER_INFO = "/marketplace/sellers/";
 
@@ -341,6 +345,21 @@ public class TravelApi extends BaseApi {
         request.setUrl(SystemConfig.DEV_URL + SELLER_INFO + String.valueOf(userId));
         setDefaultParams(request, "");
         OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getBountyPrePayInfo(long bountyId,String vendor,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(PAY_BOUNTY, bountyId));
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("provider",vendor);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
     }
 
     public static void getPrePayInfo(long orderId,String vendor,HttpCallBack callback) {

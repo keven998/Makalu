@@ -116,7 +116,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
 
 
         String budget = String.format("定金%s元",CommonUtils.getPriceString(bean.getBudget()));
-        String total = String.format("总金额%s元",CommonUtils.getPriceString(bean.getBountyPrice()));
+        String total = String.format("总预算%s元",CommonUtils.getPriceString(bean.getBountyPrice()));
 
         SpannableString budgetString = new SpannableString(budget);
         budgetString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),2,budget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

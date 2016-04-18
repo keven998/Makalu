@@ -109,8 +109,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="10dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:text="已有3位商家抢单"
+            android:singleLine="true"
             android:textColor="@color/color_text_ii"/>
         <TextView
             android:id="@+id/tv_project_price"
@@ -118,6 +119,7 @@
             android:layout_height="wrap_content"
             android:text="定金2000元"
             android:layout_marginRight="16dp"
+            android:singleLine="true"
             android:textSize="16sp"
             android:textColor="@color/color_text_ii"/>
     </LinearLayout>

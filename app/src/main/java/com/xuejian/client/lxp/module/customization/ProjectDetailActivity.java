@@ -109,7 +109,6 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     boolean isSeller;
     long userId;
     private PlanAdapter mPlanAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

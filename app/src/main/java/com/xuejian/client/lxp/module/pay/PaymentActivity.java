@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.xuejian.client.lxp.common.dialog.DialogManager;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.module.MainActivity;
+import com.xuejian.client.lxp.module.customization.ProjectConfirmActivity;
 import com.xuejian.client.lxp.module.goods.OrderConfirmActivity;
 import com.xuejian.client.lxp.module.goods.OrderDetailActivity;
 import com.xuejian.client.lxp.module.goods.OrderListActivity;
@@ -81,46 +83,73 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
                         if (mActivity.get() != null) {
                             // Toast.makeText(mActivity.get(), "支付成功",Toast.LENGTH_SHORT).show();
-                            mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
-                            mActivity.get().tvMain.setVisibility(View.VISIBLE);
-                            mActivity.get().ivPayState.setVisibility(View.VISIBLE);
-                            mActivity.get().tvState.setText("订单已支付\n请等待卖家确认");
-                            mActivity.get().tvTitle.setText("支付成功");
+                            if (mActivity.get().bounty){
+                                if (mActivity.get() != null) {
+                                    Intent intent1 = new Intent();
+                                    intent1.setClass(mActivity.get(), ProjectConfirmActivity.class);
+                                    intent1.putExtra("success", true);
+                                    mActivity.get().startActivity(intent1);
+                                    mActivity.get().finish();
+                                }
+                            }else {
+                                mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
+                                mActivity.get().tvMain.setVisibility(View.VISIBLE);
+                                mActivity.get().ivPayState.setVisibility(View.VISIBLE);
+                                mActivity.get().tvState.setText("订单已支付\n请等待卖家确认");
+                                mActivity.get().tvTitle.setText("支付成功");
+                            }
                         }
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
-                        if (TextUtils.equals(resultStatus, "8000")) {
-                            if (mActivity.get() != null) {
+                        if (mActivity.get().bounty&&mActivity.get() != null){
+
+                            if (TextUtils.equals(resultStatus, "8000")) {
                                 Toast.makeText(mActivity.get(), "支付结果确认中",
                                         Toast.LENGTH_SHORT).show();
-                                mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
-                                mActivity.get().tvMain.setVisibility(View.VISIBLE);
-                                mActivity.get().ivPayState.setVisibility(View.VISIBLE);
-                                mActivity.get().tvState.setText("支付结果确认中");
-                            }
-                        } else if (TextUtils.equals(resultStatus, "6001")) {
-                            Toast.makeText(mActivity.get(), "支付取消 ",
-                                    Toast.LENGTH_SHORT).show();
-                            if (mActivity.get() != null) {
-                                Intent intent1 = new Intent();
-                                intent1.setClass(mActivity.get(), OrderConfirmActivity.class);
-                                intent1.putExtra("cancel", true);
-                                mActivity.get().startActivity(intent1);
+                                mActivity.get().finish();
+                            }else {
+                                Toast.makeText(mActivity.get(), "支付失败",
+                                        Toast.LENGTH_SHORT).show();
                                 mActivity.get().finish();
                             }
-                        } else {
-                            // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-                            Toast.makeText(mActivity.get(), "支付失败 " + resultStatus,
-                                    Toast.LENGTH_SHORT).show();
-                            if (mActivity.get() != null) {
-                                Intent intent1 = new Intent();
-                                intent1.setClass(mActivity.get(), OrderConfirmActivity.class);
-                                intent1.putExtra("cancel", true);
-                                mActivity.get().startActivity(intent1);
-                                mActivity.get().finish();
+
+
+                        }else {
+                            if (TextUtils.equals(resultStatus, "8000")) {
+                                if (mActivity.get() != null) {
+                                    Toast.makeText(mActivity.get(), "支付结果确认中",
+                                            Toast.LENGTH_SHORT).show();
+                                    mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
+                                    mActivity.get().tvMain.setVisibility(View.VISIBLE);
+                                    mActivity.get().ivPayState.setVisibility(View.VISIBLE);
+                                    mActivity.get().tvState.setText("支付结果确认中");
+                                }
+                            } else if (TextUtils.equals(resultStatus, "6001")) {
+                                Toast.makeText(mActivity.get(), "支付取消 ",
+                                        Toast.LENGTH_SHORT).show();
+                                if (mActivity.get() != null) {
+                                    Intent intent1 = new Intent();
+                                    intent1.setClass(mActivity.get(), OrderConfirmActivity.class);
+                                    intent1.putExtra("cancel", true);
+                                    mActivity.get().startActivity(intent1);
+                                    mActivity.get().finish();
+                                }
+                            } else {
+                                // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
+                                Toast.makeText(mActivity.get(), "支付失败 " + resultStatus,
+                                        Toast.LENGTH_SHORT).show();
+                                if (mActivity.get() != null) {
+                                    Intent intent1 = new Intent();
+                                    intent1.setClass(mActivity.get(), OrderConfirmActivity.class);
+                                    intent1.putExtra("cancel", true);
+                                    mActivity.get().startActivity(intent1);
+                                    mActivity.get().finish();
+                                }
                             }
                         }
+
+
                     }
 //                    if (mActivity.get()!=null){
 //                        mActivity.get().startActivity(intent);
@@ -142,20 +171,58 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getBooleanExtra("wxSuccess", false)) {
-            tvOrderDetail.setVisibility(View.VISIBLE);
-            tvMain.setVisibility(View.VISIBLE);
-            ivPayState.setVisibility(View.VISIBLE);
-            tvState.setText("订单已支付\n请等待卖家确认");
-            tvTitle.setText("支付成功");
+        int code = intent.getIntExtra("wxpay",0);
+
+        switch (code){
+            case 1:
+                if (bounty){
+                    Intent intent1 = new Intent();
+                    intent1.setClass(this, ProjectConfirmActivity.class);
+                    intent1.putExtra("success", true);
+                    startActivity(intent1);
+                    finish();
+                }else {
+                    tvOrderDetail.setVisibility(View.VISIBLE);
+                    tvMain.setVisibility(View.VISIBLE);
+                    ivPayState.setVisibility(View.VISIBLE);
+                    tvState.setText("订单已支付\n请等待卖家确认");
+                    tvTitle.setText("支付成功");
+                }
+
+                break;
+            case 2:
+                if (bounty){
+                }else {
+                    Intent intent2 = new Intent();
+                    intent2.setClass(PaymentActivity.this, OrderConfirmActivity.class);
+                    intent2.putExtra("cancel", true);
+                    startActivity(intent2);
+                }
+                finish();
+                break;
+            case 3:
+                if (bounty){
+                }else {
+                    Intent intent3 = new Intent();
+                    intent3.setClass(PaymentActivity.this, OrderConfirmActivity.class);
+                    intent3.putExtra("cancel", true);
+                    startActivity(intent3);
+                }
+                finish();
+                break;
         }
+
     }
 
+    boolean bounty;
+    long bountyId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_state);
         ButterKnife.bind(this);
+        bounty = getIntent().getBooleanExtra("bounty",false);
+        bountyId = getIntent().getLongExtra("bountyId",-1);
         tvTitleBack.setOnClickListener(this);
         DialogManager.getInstance().showLoadingDialog(this);
         tvOrderDetail.setVisibility(View.GONE);
@@ -171,13 +238,23 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
         String type = getIntent().getStringExtra("type");
         final long orderId = getIntent().getLongExtra("orderId", 0);
-
+        Log.d("PaymentActivity", "bountyId:" + bountyId);
         switch (type) {
             case "weixinpay":
-                getPrePayInfo(orderId, "wechat");
+                if (bounty){
+                    getBountyPrePayInfo(bountyId, "wechat");
+                }else {
+                    getPrePayInfo(orderId, "wechat");
+                }
+
                 break;
             case "alipay":
-                getPrePayInfo(orderId, "alipay");
+                if (bounty){
+                    getBountyPrePayInfo(bountyId, "alipay");
+                }else {
+                    getPrePayInfo(orderId, "alipay");
+                }
+
                 break;
             default:
                 break;
@@ -203,6 +280,42 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
             }
         });
 
+    }
+
+    private void getBountyPrePayInfo(long bountyId, final String vendor) {
+        TravelApi.getBountyPrePayInfo(bountyId, vendor, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<PrePayRespBean> bean = CommonJson.fromJson(result, PrePayRespBean.class);
+                if (bean.code == 0) {
+                    switch (vendor) {
+                        case "wechat":
+                            startWeixinPay(bean.result);
+                            break;
+                        case "alipay":
+                            startAliPay(bean.result);
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     private void getPrePayInfo(long orderId, final String vendor) {

@@ -132,7 +132,7 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/bg_common_without_corner"
                     android:minWidth="150dp"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:paddingBottom="5dp"
                     android:paddingLeft="20dp"
                     android:paddingTop="5dp"
