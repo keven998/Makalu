@@ -165,23 +165,29 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
 
                 @Override
                 public void doSuccess(String result, String method) {
-                    System.out.println("Test    "+result);
                     CommonJson<StoreBean> commonJson = CommonJson.fromJson(result, StoreBean.class);
                     if (commonJson.code == 0) {
                        rl_shop.setVisibility(View.VISIBLE);
+                        rl_apply_seller.setVisibility(View.GONE);
+                        AccountManager.getInstance().setSeller(true);
                     }else {
                         rl_shop.setVisibility(View.GONE);
+                        rl_apply_seller.setVisibility(View.VISIBLE);
+                        AccountManager.getInstance().setSeller(false);
                     }
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
                     rl_shop.setVisibility(View.GONE);
+                    rl_apply_seller.setVisibility(View.VISIBLE);
+                    AccountManager.getInstance().setSeller(false);
                 }
 
                 @Override
                 public void doFailure(Exception error, String msg, String method, int code) {
                     rl_shop.setVisibility(View.GONE);
+                    rl_apply_seller.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -196,7 +202,6 @@ public class MyInfoFragment extends PeachBaseFragment implements View.OnClickLis
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginEvent(EventLogin eventLogin){
-        System.out.println("Test Info");
         isBusiness();
     }
 

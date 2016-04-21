@@ -24,6 +24,7 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.BountiesBean;
 import com.xuejian.client.lxp.bean.ContactBean;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.ProjectEvent;
 import com.xuejian.client.lxp.bean.TelBean;
 import com.xuejian.client.lxp.bean.TravellerBean;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
@@ -32,6 +33,10 @@ import com.xuejian.client.lxp.module.goods.CommonUserInfoActivity;
 import com.xuejian.client.lxp.module.goods.CountryPickActivity;
 import com.xuejian.client.lxp.module.goods.DatePickActivity;
 import com.xuejian.client.lxp.module.my.SelectResidentActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,6 +120,9 @@ public class ProjectCreateActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_create_project);
         ButterKnife.bind(this);
         bindView();
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
     }
 
     private void bindView() {
@@ -239,6 +247,22 @@ public class ProjectCreateActivity extends PeachBaseActivity {
         startActivity(intent);
     }
 
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void OnProjectEvent(ProjectEvent event){
+        if ("success".equals(event.status)){
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
     private boolean checkOrder() {
 

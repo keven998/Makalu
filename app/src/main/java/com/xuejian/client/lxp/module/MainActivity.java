@@ -40,8 +40,10 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.ContactListBean;
 import com.xuejian.client.lxp.bean.EventLogin;
+import com.xuejian.client.lxp.bean.StoreBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.GroupApi;
+import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.LocationUtils;
@@ -92,7 +94,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     private Class fragmentArray[] = {GoodsMainFragment.class, DestinationFragment.class, CustomMainFragment.class,TalkFragment.class, MyInfoFragment.class};
     //TalentLocFragement
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_home, R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
+    private int mImageViewArray[] = {R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_cus, R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
     // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
     private static String[] tabTitle = {"首页", "目的地","定制" ,"消息", "我的"};
     private TextView unreadMsg;
@@ -135,6 +137,7 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
                 imLogin(AccountManager.getInstance().getLoginAccount(this));
             }
             initClient();
+            isBusiness(AccountManager.getInstance().getLoginAccount(this).getUserId());
         }
         initLocation();
     }
@@ -383,17 +386,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
      */
     private View getTabItemView(int index) {
         View view = layoutInflater.inflate(R.layout.tab_item_view, null);
-        //  view.setBackgroundResource(colors[index]);
         if (index == 3) {
             unreadMsg = (TextView) view.findViewById(R.id.unread_msg_notify);
         }
-//        if (SharePrefUtil.getBoolean(getApplicationContext(), "firstReg", false) && index == 3) {
-//            regNotice = (TextView) view.findViewById(R.id.unread_msg_notify);
-//            regNotice.setTextColor(Color.RED);
-//            regNotice.setVisibility(View.VISIBLE);
-//        }
-        // Drawable myImage = (Drawable)getResources().getDrawable(mImageViewArray[index], );
-        // myImage.setBounds(1, 1, 100, 100);
         CheckedTextView imageView = (CheckedTextView) view.findViewById(R.id.imageview);
         imageView.setCompoundDrawablesWithIntrinsicBounds(0, mImageViewArray[index], 0, 0);
         imageView.setCompoundDrawablePadding(2);
@@ -408,16 +403,9 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     @Override
     protected void onResume() {
         super.onResume();
-        //MobclickAgent.onResume(this);
         isPause = false;
         if (AccountManager.getInstance().getLoginAccount(MainActivity.this) != null) {
             HandleImMessage.getInstance().registerMessageListener(this);
-
-//            TalkFragment talkFragment = (TalkFragment) getSupportFragmentManager().findFragmentByTag("Talk");
-//            if (talkFragment != null) {
-//                talkFragment.loadConversation();
-//                talkFragment.updateUnreadAddressLable();
-//            }
             updateUnreadMsgCount();
         } else unreadMsg.setVisibility(View.GONE);
         try {
@@ -707,7 +695,28 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
             }
         });
     }
+    public void isBusiness(long userId) {
+        TravelApi.getSellerInfo(userId, new HttpCallBack<String>() {
 
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson<StoreBean> commonJson = CommonJson.fromJson(result, StoreBean.class);
+                if (commonJson.code == 0) {
+                    AccountManager.getInstance().setSeller(true);
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+                AccountManager.getInstance().setSeller(false);
+            }
+        });
+    }
 
     /**
      * 网络状态广播

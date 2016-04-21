@@ -51,6 +51,7 @@
                 android:background="@color/color_line" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,6 +92,8 @@
 
             <!--联系人信息-->
             <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_contact"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="10dp"
@@ -109,6 +112,8 @@
                 android:background="@color/color_line" />
 
             <LinearLayout
+                android:id="@+id/ll_contact_container"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/base_color_white"
@@ -168,6 +173,8 @@
 
             <!--公司信息-->
             <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_company_title"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="10dp"
@@ -186,6 +193,8 @@
                 android:background="@color/color_line" />
 
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_company_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/base_color_white"
@@ -474,6 +483,7 @@
             <!--其他需求-->
 
             <TextView
+                android:id="@+id/tv_message_title"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="10dp"
@@ -519,6 +529,7 @@
             <!--追加需求-->
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="10dp"
@@ -537,6 +548,7 @@
                 android:background="@color/color_line" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/base_color_white"

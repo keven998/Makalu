@@ -176,6 +176,17 @@ public class TravelApi extends BaseApi {
     //取得对某个悬赏应征的，所有日程安排
     public final static String BOUNTY_LIST = "/marketplace/bounties/%d/schedules";
 
+    //悬赏详情
+    public final static String PROJECT_DETAIL = "/marketplace/bounties/%d";
+
+    public static void getPROJECT_DETAIL(long id,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(PROJECT_DETAIL,id));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
     public static void getBOUNTYLIST(long bountyId ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
@@ -185,7 +196,7 @@ public class TravelApi extends BaseApi {
     }
 
 
-    public static void submitPlan(long bountyId,String desc,double price,ArrayList<String> guideId,HttpCallBack callback) {
+    public static void submitPlan(long bountyId,String desc,double price,JSONArray guideId,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(SUBMIT_PLAN, bountyId));
@@ -194,7 +205,7 @@ public class TravelApi extends BaseApi {
         try {
             jsonObject.put("desc",desc);
             jsonObject.put("price",price);
-            jsonObject.put("guideId",guideId.get(0));
+            jsonObject.put("guideId",guideId);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -273,10 +284,14 @@ public class TravelApi extends BaseApi {
         LogUtil.d(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
     }
-    public static void getBounties(HttpCallBack callback) {
+    public static void getBounties(String start ,String count,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + BOUNTIES);
+        if (!TextUtils.isEmpty(start)&&!TextUtils.isEmpty(count)) {
+            request.putUrlParams("start", start);
+            request.putUrlParams("count", count);
+        }
         setDefaultParams(request, "");
         OkHttpClientManager.getInstance().request(request, "", callback);
     }

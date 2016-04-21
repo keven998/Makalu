@@ -31,6 +31,8 @@ import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.module.MainActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -138,6 +140,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 id = beanCommonJson.result.getItemId();
                 if (ctvFree.isChecked()){
                     showSuccess();
+                    EventBus.getDefault().post("success");
                 }else {
                     showPayActionDialog(beanCommonJson.result.getItemId());
                 }

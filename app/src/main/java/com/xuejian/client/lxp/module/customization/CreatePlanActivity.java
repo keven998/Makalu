@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +20,16 @@ import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.ProjectEvent;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,10 +84,29 @@ public class CreatePlanActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_plan_create);
         ButterKnife.bind(this);
         id = getIntent().getLongExtra("id",-1);
-        Log.d("CreatePlanActivity", "id:" + id);
-        initView();
+        isDetail = getIntent().getBooleanExtra("",false);
+        if (isDetail){
+            initDetailView();
+            getData(id);
+        }else {
+            initView();
+        }
+
     }
 
+    private void getData(long id) {
+
+
+
+
+    }
+
+    public void initDetailView(){
+        mLlTradeAction0.setVisibility(View.GONE);
+        mLlTradeAction1.setVisibility(View.VISIBLE);
+        mEtMessage.setEnabled(false);
+        mTvTotalPrice.setEnabled(false);
+    }
     private void initView() {
         mRlPlan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,12 +141,12 @@ public class CreatePlanActivity extends PeachBaseActivity {
         }
 
         if (id>0){
-            ArrayList<String> ids = new ArrayList<>();
+            JSONArray array = new JSONArray();
 
             for (StrategyBean bean : mSelected) {
-                ids.add(bean.id);
+                array.put(bean.id);
             }
-            TravelApi.submitPlan(id, mEtMessage.getText().toString(), Double.parseDouble(mTvTotalPrice.getText().toString().trim()), ids, new HttpCallBack<String>() {
+            TravelApi.submitPlan(id, mEtMessage.getText().toString(), Double.parseDouble(mTvTotalPrice.getText().toString().trim()), array, new HttpCallBack<String>() {
 
                 @Override
                 public void doSuccess(String result, String method) {
@@ -166,6 +188,8 @@ public class CreatePlanActivity extends PeachBaseActivity {
                 startActivity(talkIntent);
             }
         });
+        EventBus.getDefault().post(new ProjectEvent("refresh"));
+        finish();
     }
 
     @Override

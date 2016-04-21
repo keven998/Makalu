@@ -20,12 +20,21 @@ public class AccountManager {
     public static String CurrentUserId;
     private static ConcurrentHashMap<Long, User> contactList;
     private boolean isLogin;
+    private boolean isSeller;
     private User userInfo;
     /**
      * 当前用户nickname,为了苹果推送不是userid而是昵称
      */
     public static String currentUserNick = "";
     private static AccountManager instance;
+
+    public boolean isSeller() {
+        return isSeller;
+    }
+
+    public void setSeller(boolean seller) {
+        isSeller = seller;
+    }
 
     public static String getChannelId() {
         return ChannelId;
