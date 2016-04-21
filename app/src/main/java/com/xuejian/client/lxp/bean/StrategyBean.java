@@ -18,6 +18,7 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
     public String title;
     public String summary;
     public long updateTime;
+    public long createTime;
     public ArrayList<ImageBean> images = new ArrayList<>();
     public ArrayList<LocBean> localities = new ArrayList<>();
     public ArrayList<IndexPoi> itinerary = new ArrayList<>();
@@ -93,6 +94,14 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o instanceof StrategyBean){
+            return id.equals(((StrategyBean) o).id);
+        }
+        return super.equals(o);
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -103,6 +112,7 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         dest.writeString(this.title);
         dest.writeString(this.summary);
         dest.writeLong(this.updateTime);
+        dest.writeLong(this.createTime);
         dest.writeTypedList(images);
         dest.writeTypedList(localities);
         dest.writeTypedList(itinerary);
@@ -112,39 +122,36 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         dest.writeValue(this.dayCnt);
         dest.writeValue(this.itineraryDays);
         dest.writeString(this.detailUrl);
+        dest.writeString(this.status);
     }
 
-    private StrategyBean(Parcel in) {
+    protected StrategyBean(Parcel in) {
         this.id = in.readString();
         this.title = in.readString();
         this.summary = in.readString();
         this.updateTime = in.readLong();
-        in.readTypedList(images, ImageBean.CREATOR);
-        in.readTypedList(localities, LocBean.CREATOR);
-        in.readTypedList(itinerary, IndexPoi.CREATOR);
-        in.readTypedList(shopping, PoiDetailBean.CREATOR);
-        in.readTypedList(restaurant, PoiDetailBean.CREATOR);
+        this.createTime = in.readLong();
+        this.images = in.createTypedArrayList(ImageBean.CREATOR);
+        this.localities = in.createTypedArrayList(LocBean.CREATOR);
+        this.itinerary = in.createTypedArrayList(IndexPoi.CREATOR);
+        this.shopping = in.createTypedArrayList(PoiDetailBean.CREATOR);
+        this.restaurant = in.createTypedArrayList(PoiDetailBean.CREATOR);
         this.userId = in.readLong();
         this.dayCnt = (Integer) in.readValue(Integer.class.getClassLoader());
         this.itineraryDays = (Integer) in.readValue(Integer.class.getClassLoader());
         this.detailUrl = in.readString();
+        this.status = in.readString();
     }
 
     public static final Creator<StrategyBean> CREATOR = new Creator<StrategyBean>() {
+        @Override
         public StrategyBean createFromParcel(Parcel source) {
             return new StrategyBean(source);
         }
 
+        @Override
         public StrategyBean[] newArray(int size) {
             return new StrategyBean[size];
         }
     };
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof StrategyBean){
-            return id.equals(((StrategyBean) o).id);
-        }
-        return super.equals(o);
-    }
 }

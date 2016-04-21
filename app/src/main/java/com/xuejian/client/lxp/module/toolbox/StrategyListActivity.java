@@ -574,11 +574,14 @@ public class StrategyListActivity extends PeachBaseActivity {
                         }else {
                             selected.add(itemData);
                             btn_send.setChecked(true);
+                            Intent intent = new Intent();
+                            intent.putExtra("selected",selected);
+                            setResult(RESULT_OK,intent);
+                            finish();
                         }
                         notifyDataSetChanged();
                     }
                 });
-
             }
 
             mDelete.setOnClickListener(new View.OnClickListener() {

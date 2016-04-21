@@ -24,6 +24,7 @@ public class SellerBean implements Parcelable {
     private long sellerId;
     private String name;
     private int favorCnt;
+    public Consumer user;
     private List<ServiceZonesEntity> serviceZones;
     private List<String> bankAccounts;
     private List<String> email;
@@ -96,6 +97,9 @@ public class SellerBean implements Parcelable {
         return phone;
     }
 
+    public SellerBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -105,33 +109,38 @@ public class SellerBean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.sellerId);
         dest.writeString(this.name);
-        dest.writeStringList(this.lang);
         dest.writeInt(this.favorCnt);
-        dest.writeTypedList(this.serviceZones);
+        dest.writeParcelable(this.user, flags);
+        dest.writeTypedList(serviceZones);
         dest.writeStringList(this.bankAccounts);
         dest.writeStringList(this.email);
         dest.writeStringList(this.phone);
-    }
-
-    public SellerBean() {
+        dest.writeStringList(this.lang);
+        dest.writeStringList(this.qualifications);
+        dest.writeStringList(this.services);
     }
 
     protected SellerBean(Parcel in) {
         this.sellerId = in.readLong();
         this.name = in.readString();
-        this.lang = in.createStringArrayList();
         this.favorCnt = in.readInt();
+        this.user = in.readParcelable(Consumer.class.getClassLoader());
         this.serviceZones = in.createTypedArrayList(ServiceZonesEntity.CREATOR);
         this.bankAccounts = in.createStringArrayList();
         this.email = in.createStringArrayList();
         this.phone = in.createStringArrayList();
+        this.lang = in.createStringArrayList();
+        this.qualifications = in.createStringArrayList();
+        this.services = in.createStringArrayList();
     }
 
-    public static final Parcelable.Creator<SellerBean> CREATOR = new Parcelable.Creator<SellerBean>() {
+    public static final Creator<SellerBean> CREATOR = new Creator<SellerBean>() {
+        @Override
         public SellerBean createFromParcel(Parcel source) {
             return new SellerBean(source);
         }
 
+        @Override
         public SellerBean[] newArray(int size) {
             return new SellerBean[size];
         }

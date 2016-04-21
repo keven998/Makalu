@@ -1,12 +1,18 @@
 package com.xuejian.client.lxp.module.customization;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
@@ -20,16 +26,19 @@ import com.aizou.core.http.HttpCallBack;
 import com.bumptech.glide.Glide;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.BountyItemBean;
 import com.xuejian.client.lxp.bean.ProjectEvent;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
+import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
+import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,35 +87,104 @@ public class CreatePlanActivity extends PeachBaseActivity {
     ArrayList<StrategyBean> mSelected = new ArrayList<>();
     long id;
     boolean isDetail;
+    @Bind(R.id.iv_avatar)
+    ImageView mIvAvatar;
+    @Bind(R.id.tv_seller_info)
+    TextView mTvSellerInfo;
+    @Bind(R.id.tv_talk)
+    TextView mTvTalk;
+    @Bind(R.id.ll_seller)
+    LinearLayout mLlSeller;
+    long targetUserId;
+    boolean isConsume;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_create);
         ButterKnife.bind(this);
-        id = getIntent().getLongExtra("id",-1);
-        isDetail = getIntent().getBooleanExtra("",false);
-        if (isDetail){
+        id = getIntent().getLongExtra("id", -1);
+        isDetail = getIntent().getBooleanExtra("isDetail", false);
+        isConsume = getIntent().getBooleanExtra("isConsume", false);
+        targetUserId  = getIntent().getLongExtra("targetUserId",0);
+        mIvNavBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        if (isDetail) {
             initDetailView();
-            getData(id);
-        }else {
+
+        } else {
             initView();
         }
 
     }
 
-    private void getData(long id) {
-
-
-
-
-    }
-
-    public void initDetailView(){
+    public void initDetailView() {
         mLlTradeAction0.setVisibility(View.GONE);
-        mLlTradeAction1.setVisibility(View.VISIBLE);
+        mRlPlan.setVisibility(View.GONE);
         mEtMessage.setEnabled(false);
         mTvTotalPrice.setEnabled(false);
+        final BountyItemBean bean = getIntent().getParcelableExtra("item");
+        if (bean != null) {
+            mEtMessage.setText(bean.getDesc());
+            mTvTotalPrice.setText("¥" + CommonUtils.getPriceString(bean.getPrice()));
+
+            mPlanAdapter = new PlanAdapter(this);
+            mPlanAdapter.getData().add(bean.guide);
+            mPlanList.setAdapter(mPlanAdapter);
+
+            mLlSeller.setVisibility(View.VISIBLE);
+            if (bean.getSeller()!=null){
+                mTvSellerInfo.setText(bean.getSeller().getName());
+                mTvTalk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                        talkIntent.putExtra("friend_id", bean.getSeller().getSellerId() + "");
+                        talkIntent.putExtra("chatType", "single");
+                        startActivity(talkIntent);
+                    }
+                });
+            }
+            if (isConsume){
+                mLlTradeAction0.setVisibility(View.VISIBLE);
+                mTvAction0.setText("购买方案");
+                mTvAction0.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        takePlan(bean.bountyId,bean.getItemId());
+                    }
+                });
+            }else {
+
+            }
+
+
+        }
     }
+
+    private void takePlan(final long bountyId, long itemId) {
+        TravelApi.TAKE_SCHEDULELD(bountyId, itemId, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                showPayActionDialog(bountyId);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
     private void initView() {
         mRlPlan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,13 +218,13 @@ public class CreatePlanActivity extends PeachBaseActivity {
             return;
         }
 
-        if (id>0){
-            JSONArray array = new JSONArray();
-
-            for (StrategyBean bean : mSelected) {
-                array.put(bean.id);
-            }
-            TravelApi.submitPlan(id, mEtMessage.getText().toString(), Double.parseDouble(mTvTotalPrice.getText().toString().trim()), array, new HttpCallBack<String>() {
+        if (id > 0) {
+//            JSONArray array = new JSONArray();
+//
+//            for (StrategyBean bean : mSelected) {
+//                array.put(bean.id);
+//            }
+            TravelApi.submitPlan(id, mEtMessage.getText().toString(), Double.parseDouble(mTvTotalPrice.getText().toString().trim()), mSelected.get(0).id, new HttpCallBack<String>() {
 
                 @Override
                 public void doSuccess(String result, String method) {
@@ -182,14 +260,68 @@ public class CreatePlanActivity extends PeachBaseActivity {
         mTvPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent talkIntent = new Intent(mContext, ChatActivity.class);
-                talkIntent.putExtra("friend_id", 100004+"");
-                talkIntent.putExtra("chatType", "single");
-                startActivity(talkIntent);
+                if (targetUserId>0){
+                    Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                    talkIntent.putExtra("friend_id", targetUserId+ "");
+                    talkIntent.putExtra("chatType", "single");
+                    startActivity(talkIntent);
+                }
             }
         });
         EventBus.getDefault().post(new ProjectEvent("refresh"));
         finish();
+    }
+
+    private void showPayActionDialog(final long id) {
+        final Activity act = this;
+        final AlertDialog dialog = new AlertDialog.Builder(act).create();
+        View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
+        CheckedTextView alipay = (CheckedTextView) contentView.findViewById(R.id.ctv_alipay);
+        CheckedTextView weixinpay = (CheckedTextView) contentView.findViewById(R.id.ctv_weixin);
+
+        alipay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent alipay = new Intent(CreatePlanActivity.this, PaymentActivity.class);
+                alipay.putExtra("schedule", true);
+                alipay.putExtra("bountyId", id);
+                alipay.putExtra("type", "alipay");
+                startActivity(alipay);
+            }
+        });
+        weixinpay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (!WeixinApi.getInstance().isWXinstalled(CreatePlanActivity.this)) {
+                    ToastUtil.getInstance(mContext).showToast("你还没有安装微信");
+                    return;
+                }
+                Intent tv_pay = new Intent(CreatePlanActivity.this, PaymentActivity.class);
+                tv_pay.putExtra("bounty", true);
+                tv_pay.putExtra("bountyId", id);
+                tv_pay.putExtra("type", "weixinpay");
+                startActivity(tv_pay);
+            }
+        });
+        contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = act.getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = display.getWidth(); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
     }
 
     @Override
@@ -197,8 +329,8 @@ public class CreatePlanActivity extends PeachBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECTPLAN) {
-                ArrayList<StrategyBean>list = data.getParcelableArrayListExtra("selected");
-                if (list!=null){
+                ArrayList<StrategyBean> list = data.getParcelableArrayListExtra("selected");
+                if (list != null) {
                     mSelected = list;
                     mPlanAdapter.getData().clear();
                     mPlanAdapter.getData().addAll(list);
@@ -252,7 +384,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
                 holder.plane_pic = (ImageView) convertView.findViewById(R.id.plane_pic);
                 holder.travel_hasGone = (ImageView) convertView.findViewById(R.id.travel_hasGone);
                 holder.rl_send = (RelativeLayout) convertView.findViewById(R.id.rl_send);
-                holder.btn_send =  (CheckedTextView) convertView.findViewById(R.id.btn_send);
+                holder.btn_send = (CheckedTextView) convertView.findViewById(R.id.btn_send);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -263,12 +395,12 @@ public class CreatePlanActivity extends PeachBaseActivity {
             holder.city_hasGone.setText(itemData.summary);
             holder.plane_title.setText(itemData.title);
             if (itemData.images != null && itemData.images.size() > 0) {
-                    Glide.with(mContext)
-                            .load(itemData.images.get(0).url)
-                            .placeholder(R.drawable.ic_default_picture)
-                            .error(R.drawable.ic_default_picture)
-                            .centerCrop()
-                            .into(holder.plane_pic);
+                Glide.with(mContext)
+                        .load(itemData.images.get(0).url)
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.plane_pic);
 
             } else {
                 Glide.with(mContext)
@@ -283,12 +415,10 @@ public class CreatePlanActivity extends PeachBaseActivity {
 
             holder.mDelete.setVisibility(View.GONE);
             holder.mCheck.setVisibility(View.GONE);
-//            if (isShare) {
-//                holder.mDelete.setVisibility(View.GONE);
-//                holder.mCheck.setVisibility(View.GONE);
-//                holder.rl_send.setVisibility(View.VISIBLE);
-//            }
             holder.rl_send.setVisibility(View.VISIBLE);
+            if (isDetail){
+                holder.rl_send.setVisibility(View.GONE);
+            }
             holder.btn_send.setText("删除");
             holder.rl_send.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -31,7 +31,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="15dp"
                     android:textSize="16sp"
-                    android:text="昵称"
                     android:textColor="@color/color_text_ii"
                     />
                 <TextView
@@ -75,13 +74,11 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="10dp"
             android:textSize="14sp"
-            android:text="info1"
             android:textColor="@color/color_text_ii"/>
         <TextView
             android:id="@+id/tv_project_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5日游"
             android:layout_marginRight="16dp"
             android:textSize="14sp"
             android:textColor="@color/color_text_ii"/>
@@ -93,7 +90,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="20dp"
-        android:text="info2"
         android:textSize="14sp"
         android:textColor="@color/color_text_ii"/>
 
@@ -110,14 +106,12 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="10dp"
             android:textSize="16sp"
-            android:text="已有3位商家抢单"
             android:singleLine="true"
             android:textColor="@color/color_text_ii"/>
         <TextView
             android:id="@+id/tv_project_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="定金2000元"
             android:layout_marginRight="16dp"
             android:singleLine="true"
             android:textSize="16sp"

@@ -187,8 +187,26 @@ public class TravelApi extends BaseApi {
     //添加订阅城市
     public final static String ADD_SUB_CITY = "/marketplace/sellers/subLocalities";
 
+    //支付方案
+    public final static String TAKE_SCHEDULELD = "/marketplace/bounties/%d/prepay";
 
 
+
+    public static void TAKE_SCHEDULELD(long bountyId,long scheduleld,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(TAKE_SCHEDULELD,bountyId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("scheduleId",scheduleld);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
     public static void ADD_SUB_CITY(JSONArray locs,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
@@ -232,7 +250,7 @@ public class TravelApi extends BaseApi {
     }
 
 
-    public static void submitPlan(long bountyId,String desc,double price,JSONArray guideId,HttpCallBack callback) {
+    public static void submitPlan(long bountyId,String desc,double price,String guideId,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(SUBMIT_PLAN, bountyId));
@@ -398,13 +416,14 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
-    public static void getBountyPrePayInfo(long bountyId,String vendor,HttpCallBack callback) {
+    public static void getBountyPrePayInfo(long bountyId,String vendor,String target,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(PAY_BOUNTY, bountyId));
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("provider",vendor);
+            if (!TextUtils.isEmpty(target)) jsonObject.put("target",target);
         } catch (JSONException e) {
             e.printStackTrace();
         }

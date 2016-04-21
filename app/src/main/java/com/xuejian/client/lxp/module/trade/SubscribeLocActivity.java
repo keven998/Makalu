@@ -41,6 +41,8 @@ public class SubscribeLocActivity extends PeachBaseActivity {
     TextView mTvSubscribe;
     @Bind(R.id.content)
     LinearLayout mContent;
+    @Bind(R.id.tv_loc)
+    TextView tv_loc;
     public final static int SELECTED_TARGET = 105;
 
     public ArrayList<LocBean> selectedCity = new ArrayList<>();
@@ -63,7 +65,7 @@ public class SubscribeLocActivity extends PeachBaseActivity {
                 startActivityForResult(residentIntent, SELECTED_TARGET);
             }
         });
-        mTvNotice.setText("旅行派APP重磅出击“定制功能了”，为了方便您能迅速抢单，请先订阅服务城市\n当有买家发布悬赏旅游需求时，平台将会根据您订阅的城市及时推送消息给您");
+        mTvNotice.setText("旅行派APP重磅出击“定制功能了”，为了方便您能迅速抢单，请先订阅服务城市\n\n当有买家发布悬赏旅游需求时，平台将会根据您订阅的城市及时推送消息给您");
         User user = AccountManager.getInstance().getLoginAccount(this);
         if (user!=null){
             getData(user.getUserId());
@@ -80,6 +82,13 @@ public class SubscribeLocActivity extends PeachBaseActivity {
                 CommonJson4List<LocBean> locBeanCommonJson = CommonJson4List.fromJson(result,LocBean.class);
                 selectedCity.clear();
                 selectedCity.addAll(locBeanCommonJson.result);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < selectedCity.size(); i++) {
+                    if (i != 0) stringBuilder.append("、");
+                    stringBuilder.append(selectedCity.get(i).zhName);
+                }
+                tv_loc.setText(stringBuilder);
             }
 
             @Override
@@ -107,6 +116,7 @@ public class SubscribeLocActivity extends PeachBaseActivity {
                     if (i != 0) stringBuilder.append("、");
                     stringBuilder.append(selectedCity.get(i).zhName);
                 }
+                tv_loc.setText(stringBuilder);
                 try {
                     addSubLocs(locBeans);
                 } catch (Exception e) {

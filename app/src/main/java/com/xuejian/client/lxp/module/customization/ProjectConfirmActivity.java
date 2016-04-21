@@ -24,6 +24,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.BountiesBean;
+import com.xuejian.client.lxp.bean.ProjectEvent;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -140,11 +141,10 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 id = beanCommonJson.result.getItemId();
                 if (ctvFree.isChecked()){
                     showSuccess();
-                    EventBus.getDefault().post("success");
                 }else {
                     showPayActionDialog(beanCommonJson.result.getItemId());
                 }
-
+                EventBus.getDefault().post(new ProjectEvent("success"));
             }
 
             @Override
@@ -266,6 +266,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 Intent intent = new Intent(ProjectConfirmActivity.this, MainActivity.class);
                 intent.putExtra("custom",true);
                 startActivity(intent);
+                finish();
             }
         });
         dialog.setNegativeButton("查看发布需求", new View.OnClickListener() {
@@ -275,6 +276,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 Intent intent = new Intent(ProjectConfirmActivity.this, ProjectDetailActivity.class);
                 intent.putExtra("id",id);
                 startActivity(intent);
+                finish();
             }
         });
         dialog.show();

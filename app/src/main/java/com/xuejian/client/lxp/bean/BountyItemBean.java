@@ -3,8 +3,6 @@ package com.xuejian.client.lxp.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
 /**
  * Created by yibiao.qin on 2016/4/14.
  */
@@ -22,6 +20,8 @@ public class BountyItemBean implements Parcelable {
     private long itemId;
     private String desc;
     private double price;
+    public long bountyId;
+    public String status;
     private long createTime;
     private long updateTime;
     /**
@@ -29,7 +29,9 @@ public class BountyItemBean implements Parcelable {
      * name : 青海容途旅游公司曹茜
      */
 
-    private List<SellerBean> seller;
+    public SellerBean seller;
+
+    public StrategyBean guide;
 
     public long getItemId() {
         return itemId;
@@ -71,12 +73,15 @@ public class BountyItemBean implements Parcelable {
         this.updateTime = updateTime;
     }
 
-    public List<SellerBean> getSeller() {
+    public SellerBean getSeller() {
         return seller;
     }
 
-    public void setSeller(List<SellerBean> seller) {
+    public void setSeller(SellerBean seller) {
         this.seller = seller;
+    }
+
+    public BountyItemBean() {
     }
 
     @Override
@@ -89,24 +94,27 @@ public class BountyItemBean implements Parcelable {
         dest.writeLong(this.itemId);
         dest.writeString(this.desc);
         dest.writeDouble(this.price);
+        dest.writeLong(this.bountyId);
+        dest.writeString(this.status);
         dest.writeLong(this.createTime);
         dest.writeLong(this.updateTime);
-        dest.writeTypedList(seller);
-    }
-
-    public BountyItemBean() {
+        dest.writeParcelable(this.seller, flags);
+        dest.writeParcelable(this.guide, flags);
     }
 
     protected BountyItemBean(Parcel in) {
         this.itemId = in.readLong();
         this.desc = in.readString();
         this.price = in.readDouble();
+        this.bountyId = in.readLong();
+        this.status = in.readString();
         this.createTime = in.readLong();
         this.updateTime = in.readLong();
-        this.seller = in.createTypedArrayList(SellerBean.CREATOR);
+        this.seller = in.readParcelable(SellerBean.class.getClassLoader());
+        this.guide = in.readParcelable(StrategyBean.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<BountyItemBean> CREATOR = new Parcelable.Creator<BountyItemBean>() {
+    public static final Creator<BountyItemBean> CREATOR = new Creator<BountyItemBean>() {
         @Override
         public BountyItemBean createFromParcel(Parcel source) {
             return new BountyItemBean(source);

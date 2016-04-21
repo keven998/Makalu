@@ -22,13 +22,13 @@ import com.bumptech.glide.Glide;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.BountyItemBean;
+import com.xuejian.client.lxp.bean.Consumer;
 import com.xuejian.client.lxp.bean.ProjectDetailBean;
 import com.xuejian.client.lxp.bean.ProjectEvent;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
-import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
 import com.xuejian.client.lxp.db.User;
@@ -39,7 +39,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -129,7 +128,8 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     boolean isOwner;
     long userId;
     private PlanAdapter mPlanAdapter;
-
+    private boolean isTakerOrder;
+    private boolean isCreatePlan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,10 +145,9 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         if (AccountManager.getInstance().getLoginAccount(this) != null) {
             userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
         }
-        mPlanAdapter = new PlanAdapter();
-        mLvPlan.setAdapter(mPlanAdapter);
+
         getData(id);
-        getBountyList(id);
+     //   getBountyList(id);
         if (!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this);
         }
@@ -168,29 +167,6 @@ public class ProjectDetailActivity extends PeachBaseActivity {
              getData(id);
         }
     }
-    private void getBountyList(long id) {
-        TravelApi.getBOUNTYLIST(id, new HttpCallBack<String>() {
-
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson4List<BountyItemBean> list = CommonJson4List.fromJson(result, BountyItemBean.class);
-                mPlanAdapter.getList().addAll(list.result);
-                mPlanAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-
-            }
-
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-
-            }
-        });
-    }
-
-
 
     private void getData(long id) {
 
@@ -227,7 +203,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                     .into(ivAvatar);
         }
 
-        tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString(new Date())));
+      //  tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString(new Date())));
         StringBuilder desc = new StringBuilder();
         if (bean.getDestination()!=null&&bean.getDestination().size()>0){
             for (int i = 0; i < bean.getDestination().size(); i++) {
@@ -238,7 +214,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         tvProjectInfo1.setText(String.format("[%s]", desc));
         tvProjectTime.setText(String.format(Locale.CHINA, "%d日游", bean.getTimeCost()));
         tvProjectInfo2.setText(bean.getService());
-        tvProjectCount.setText(String.format(Locale.CHINA, "已有%d位商家抢单", bean.getTakers().size()));
+        tvProjectCount.setText(String.format(Locale.CHINA, "已有%d位商家抢单", bean.takers.size()));
 
 
         String budget = String.format("定金%s元", CommonUtils.getPriceString(bean.getBountyPrice()));
@@ -291,9 +267,9 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
             if (user.getUserId() == bean.getConsumerId()) {
-                if (bean.isBountyPaid()) {
+                if (bean.isBountyPaid()&&!bean.isSchedulePaid()) {
                     llState.setVisibility(View.VISIBLE);
-                    tvState.setText("已支付");
+                    tvState.setText("已支付定金");
                     llTradeAction0.setVisibility(View.VISIBLE);
                     tvAction0.setText("申请退款");
                     llTradeAction0.setOnClickListener(new View.OnClickListener() {
@@ -303,24 +279,58 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                         }
                     });
 
-                } else {
+                } else if (bean.isBountyPaid()&&bean.isSchedulePaid()){
+                    llState.setVisibility(View.VISIBLE);
+                    tvState.setText("已付款");
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("申请退款");
+                    llTradeAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            drawback();
+                        }
+                    });
 
                 }
 
                 tv_contact.setVisibility(View.VISIBLE);
                 ll_contact_container.setVisibility(View.VISIBLE);
+
+                mPlanAdapter = new PlanAdapter(bean.schedules,bean.takers,false);
+                mLvPlan.setAdapter(mPlanAdapter);
             }else {
 
                 if (AccountManager.getInstance().isSeller()){
 
-                    llTradeAction0.setVisibility(View.VISIBLE);
-                    llTradeAction0.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takeOrder(bean.getConsumerId());
-                        }
-                    });
 
+                    /**
+                     * 判断是否接单
+                     */
+                    for (Consumer taker : bean.takers) {
+                        if (taker.getUserId()==user.getUserId()){
+                            isTakerOrder = true;
+                            break;
+                        }
+                    }
+                    isCreatePlan(bean.schedules,user.getUserId());
+
+
+                    if (isTakerOrder&&!isCreatePlan){
+                        tv_contact.setVisibility(View.VISIBLE);
+                        ll_contact_container.setVisibility(View.VISIBLE);
+                        takeOrderSuccess(bean.getConsumerId());
+                    }else if (isTakerOrder&&isCreatePlan){
+                        mPlanAdapter = new PlanAdapter(bean.schedules,bean.takers,true);
+                        mLvPlan.setAdapter(mPlanAdapter);
+                    }else {
+                        llTradeAction0.setVisibility(View.VISIBLE);
+                        llTradeAction0.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                takeOrder(bean.getConsumerId());
+                            }
+                        });
+                    }
 
                 }
             }
@@ -329,6 +339,17 @@ public class ProjectDetailActivity extends PeachBaseActivity {
 
 
 
+    }
+
+    private boolean isCreatePlan(ArrayList<BountyItemBean> schedules,long userId) {
+        for (BountyItemBean schedule : schedules) {
+
+            if (schedule.seller.getSellerId()==userId){
+                isCreatePlan = true;
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -381,7 +402,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         tvCancelAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toCreatePlan();
+                toCreatePlan(consumerId);
                 finish();
             }
         });
@@ -396,9 +417,10 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         });
     }
 
-    private void toCreatePlan() {
+    private void toCreatePlan(long consumerId) {
         Intent intent = new Intent(this, CreatePlanActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("targetUserId",consumerId);
         startActivity(intent);
     }
 
@@ -406,28 +428,38 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     public class PlanAdapter extends BaseAdapter {
 
         ArrayList<BountyItemBean> list;
-
-        public ArrayList<BountyItemBean> getList() {
-            return list;
+        ArrayList<Consumer> data;
+        public  ArrayList<Consumer>getList() {
+            return data;
         }
-
-        public PlanAdapter() {
-            list = new ArrayList<>();
+        boolean isSeller;
+        public PlanAdapter( ArrayList<BountyItemBean> Bountylist,ArrayList<Consumer> Consumerdata,boolean isSeller) {
+            this.list = Bountylist;
+            this.data = Consumerdata;
+            this.isSeller = isSeller;
         }
 
         @Override
         public int getCount() {
-            return list.size();
+            return data.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return list.get(position);
+            return data.get(position);
         }
 
         @Override
         public long getItemId(int position) {
             return 0;
+        }
+
+        public BountyItemBean isSub(long userId){
+           if (list==null)return  null;
+            for (BountyItemBean bean : list) {
+                if (bean.seller.getSellerId()==userId)return bean;
+            }
+            return null;
         }
 
         @Override
@@ -440,37 +472,65 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            final BountyItemBean bean = (BountyItemBean) getItem(position);
-            if (bean.getSeller() != null && bean.getSeller().size() > 0) {
-                holder.mTvName.setText(bean.getSeller().get(0).getName());
-//                Glide.with(mContext)
-//                        .load(bean.getSeller().get(0).)
-//                        .placeholder(R.drawable.ic_default_picture)
-//                        .error(R.drawable.ic_default_picture)
-//                        .centerCrop()
-//                        .into(holder.mIvAvatar);
+            final Consumer bean = (Consumer) getItem(position);
+
+                holder.mTvName.setText(bean.getNickname());
+                Glide.with(mContext)
+                        .load(bean.getAvatar().getUrl())
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.mIvAvatar);
+
+            final BountyItemBean bountyItemBean = isSub(bean.getUserId());
+            if (bountyItemBean!=null){
+
+                holder.mTvTimestamp.setText("已提交方案");
+                holder.mIvState.setVisibility(View.VISIBLE);
+                holder.mTvTimestamp.setText(DateFormat.format("yyyy-MM-dd", bountyItemBean.getUpdateTime()));
+                if (isSeller){
+                    if (bountyItemBean.seller.getSellerId()==AccountManager.getInstance().getLoginAccount(mContext).getUserId()){
+                        holder.ll_container.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext, CreatePlanActivity.class);
+                                intent.putExtra("isDetail",true);
+                                intent.putExtra("item",bountyItemBean);
+                                intent.putExtra("id", bountyItemBean.getItemId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                }else {
+                    holder.ll_container.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, CreatePlanActivity.class);
+                            intent.putExtra("isDetail",true);
+                            intent.putExtra("isConsume",true);
+                            intent.putExtra("item",bountyItemBean);
+                            intent.putExtra("id", bountyItemBean.getItemId());
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+
+            }else {
+                holder.mTvTimestamp.setText("已接单");
+                holder.mIvTalk.setVisibility(View.VISIBLE);
+                holder.ll_container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                        talkIntent.putExtra("friend_id", bean.getUserId()+"");
+                        talkIntent.putExtra("chatType", "single");
+                        startActivity(talkIntent);
+                    }
+                });
             }
 
-            holder.mTvTimestamp.setText(DateFormat.format("yyyy-MM-dd", bean.getCreateTime()));
-
-            holder.mIvTalk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent talkIntent = new Intent(mContext, ChatActivity.class);
-                    talkIntent.putExtra("friend_id", bean.getSeller().get(0).getSellerId());
-                    talkIntent.putExtra("chatType", "single");
-                    startActivity(talkIntent);
-                }
-            });
-            holder.ll_container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, CreatePlanActivity.class);
-                    intent.putExtra("isDetail",true);
-                    intent.putExtra("id", bean.getItemId());
-                    startActivity(intent);
-                }
-            });
             return convertView;
         }
 

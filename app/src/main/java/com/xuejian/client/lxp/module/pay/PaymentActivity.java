@@ -91,6 +91,8 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                                     mActivity.get().startActivity(intent1);
                                     mActivity.get().finish();
                                 }
+                            }else if (mActivity.get().schedule){
+                                mActivity.get().finish();
                             }else {
                                 mActivity.get().tvOrderDetail.setVisibility(View.VISIBLE);
                                 mActivity.get().tvMain.setVisibility(View.VISIBLE);
@@ -102,7 +104,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
-                        if (mActivity.get().bounty&&mActivity.get() != null){
+                        if ((mActivity.get().bounty||mActivity.get().schedule)&&mActivity.get() != null){
 
                             if (TextUtils.equals(resultStatus, "8000")) {
                                 Toast.makeText(mActivity.get(), "支付结果确认中",
@@ -181,6 +183,8 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                     intent1.putExtra("success", true);
                     startActivity(intent1);
                     finish();
+                }else if (schedule){
+                    finish();
                 }else {
                     tvOrderDetail.setVisibility(View.VISIBLE);
                     tvMain.setVisibility(View.VISIBLE);
@@ -191,7 +195,8 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
                 break;
             case 2:
-                if (bounty){
+                if (bounty||schedule){
+
                 }else {
                     Intent intent2 = new Intent();
                     intent2.setClass(PaymentActivity.this, OrderConfirmActivity.class);
@@ -201,7 +206,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                 finish();
                 break;
             case 3:
-                if (bounty){
+                if (bounty|schedule){
                 }else {
                     Intent intent3 = new Intent();
                     intent3.setClass(PaymentActivity.this, OrderConfirmActivity.class);
@@ -213,7 +218,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         }
 
     }
-
+    boolean schedule;
     boolean bounty;
     long bountyId;
     @Override
@@ -222,6 +227,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_pay_state);
         ButterKnife.bind(this);
         bounty = getIntent().getBooleanExtra("bounty",false);
+        schedule = getIntent().getBooleanExtra("schedule",false);
         bountyId = getIntent().getLongExtra("bountyId",-1);
         tvTitleBack.setOnClickListener(this);
         DialogManager.getInstance().showLoadingDialog(this);
@@ -242,7 +248,9 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         switch (type) {
             case "weixinpay":
                 if (bounty){
-                    getBountyPrePayInfo(bountyId, "wechat");
+                    getBountyPrePayInfo(bountyId, "wechat","bounty");
+                }else if (schedule){
+                    getBountyPrePayInfo(bountyId, "wechat","schedule");
                 }else {
                     getPrePayInfo(orderId, "wechat");
                 }
@@ -250,7 +258,9 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
                 break;
             case "alipay":
                 if (bounty){
-                    getBountyPrePayInfo(bountyId, "alipay");
+                    getBountyPrePayInfo(bountyId, "alipay","bounty");
+                }else if (schedule){
+                    getBountyPrePayInfo(bountyId, "alipay","schedule");
                 }else {
                     getPrePayInfo(orderId, "alipay");
                 }
@@ -282,40 +292,45 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
     }
 
-    private void getBountyPrePayInfo(long bountyId, final String vendor) {
-        TravelApi.getBountyPrePayInfo(bountyId, vendor, new HttpCallBack<String>() {
+    private void getBountyPrePayInfo(long bountyId, final String vendor,final String target) {
 
-            @Override
-            public void doSuccess(String result, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                CommonJson<PrePayRespBean> bean = CommonJson.fromJson(result, PrePayRespBean.class);
-                if (bean.code == 0) {
-                    switch (vendor) {
-                        case "wechat":
-                            startWeixinPay(bean.result);
-                            break;
-                        case "alipay":
-                            startAliPay(bean.result);
-                            break;
-                        default:
-                            break;
+            TravelApi.getBountyPrePayInfo(bountyId, vendor,target ,new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    CommonJson<PrePayRespBean> bean = CommonJson.fromJson(result, PrePayRespBean.class);
+                    if (bean.code == 0) {
+                        switch (vendor) {
+                            case "wechat":
+                                startWeixinPay(bean.result);
+                                break;
+                            case "alipay":
+                                startAliPay(bean.result);
+                                break;
+                            default:
+                                break;
+                        }
+                    } else {
+                        Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
+                        finish();
                     }
-                } else {
-                    Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
-                DialogManager.getInstance().dissMissLoadingDialog();
-                Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
-            }
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+                    DialogManager.getInstance().dissMissLoadingDialog();
+                    Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
+                    finish();
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
 
-            }
-        });
+                }
+            });
+
+
     }
 
     private void getPrePayInfo(long orderId, final String vendor) {

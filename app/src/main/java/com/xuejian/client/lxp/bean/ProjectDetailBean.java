@@ -1,11 +1,15 @@
 package com.xuejian.client.lxp.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by yibiao.qin on 2016/4/19.
  */
-public class ProjectDetailBean {
+public class ProjectDetailBean implements Parcelable {
 
     /**
      * itemId : 1460706241869
@@ -43,6 +47,7 @@ public class ProjectDetailBean {
     private double totalPrice;
     private boolean bountyPaid;
     private double bountyPrice;
+    public BountyItemBean scheduled;
     /**
      * id : 546f2da7b8ce0440eddb2855
      * zhName : 福冈
@@ -69,9 +74,9 @@ public class ProjectDetailBean {
     public  Consumer consumer;
     private List<LocBean> departure;
     private List<String> participants;
-    private List<String> takers;
-    private List<BountyItemBean> schedules;
 
+    public ArrayList<BountyItemBean> schedules;
+    public ArrayList<Consumer> takers;
     public long getItemId() {
         return itemId;
     }
@@ -208,20 +213,72 @@ public class ProjectDetailBean {
         this.participants = participants;
     }
 
-    public List<String> getTakers() {
-        return takers;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setTakers(List<String> takers) {
-        this.takers = takers;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.itemId);
+        dest.writeLong(this.consumerId);
+        dest.writeString(this.departureDate);
+        dest.writeInt(this.timeCost);
+        dest.writeInt(this.participantCnt);
+        dest.writeDouble(this.budget);
+        dest.writeString(this.memo);
+        dest.writeString(this.service);
+        dest.writeString(this.topic);
+        dest.writeByte(schedulePaid ? (byte) 1 : (byte) 0);
+        dest.writeDouble(this.totalPrice);
+        dest.writeByte(bountyPaid ? (byte) 1 : (byte) 0);
+        dest.writeDouble(this.bountyPrice);
+        dest.writeParcelable(this.scheduled, flags);
+        dest.writeTypedList(destination);
+        dest.writeTypedList(contact);
+        dest.writeParcelable(this.consumer, flags);
+        dest.writeTypedList(departure);
+        dest.writeStringList(this.participants);
+        dest.writeTypedList(schedules);
+        dest.writeTypedList(takers);
     }
 
-    public List<?> getSchedules() {
-        return schedules;
+    public ProjectDetailBean() {
     }
 
-    public void setSchedules(List<BountyItemBean> schedules) {
-        this.schedules = schedules;
+    protected ProjectDetailBean(Parcel in) {
+        this.itemId = in.readLong();
+        this.consumerId = in.readLong();
+        this.departureDate = in.readString();
+        this.timeCost = in.readInt();
+        this.participantCnt = in.readInt();
+        this.budget = in.readDouble();
+        this.memo = in.readString();
+        this.service = in.readString();
+        this.topic = in.readString();
+        this.schedulePaid = in.readByte() != 0;
+        this.totalPrice = in.readDouble();
+        this.bountyPaid = in.readByte() != 0;
+        this.bountyPrice = in.readDouble();
+        this.scheduled = in.readParcelable(BountyItemBean.class.getClassLoader());
+        this.destination = in.createTypedArrayList(LocBean.CREATOR);
+        this.contact = in.createTypedArrayList(ContactBean.CREATOR);
+        this.consumer = in.readParcelable(Consumer.class.getClassLoader());
+        this.departure = in.createTypedArrayList(LocBean.CREATOR);
+        this.participants = in.createStringArrayList();
+        this.schedules = in.createTypedArrayList(BountyItemBean.CREATOR);
+        this.takers = in.createTypedArrayList(Consumer.CREATOR);
     }
 
+    public static final Parcelable.Creator<ProjectDetailBean> CREATOR = new Parcelable.Creator<ProjectDetailBean>() {
+        @Override
+        public ProjectDetailBean createFromParcel(Parcel source) {
+            return new ProjectDetailBean(source);
+        }
+
+        @Override
+        public ProjectDetailBean[] newArray(int size) {
+            return new ProjectDetailBean[size];
+        }
+    };
 }

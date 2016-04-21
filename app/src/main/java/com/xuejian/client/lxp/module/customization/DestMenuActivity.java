@@ -59,6 +59,9 @@ public class DestMenuActivity extends PeachBaseActivity {
         ArrayList<LocBean> exist = getIntent().getParcelableArrayListExtra("exist");
         if (exist!=null){
             addedList.addAll(exist);
+            for (LocBean locBean : addedList) {
+                addLoc(locBean);
+            }
         }
         getData();
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
