@@ -179,6 +179,42 @@ public class TravelApi extends BaseApi {
     //悬赏详情
     public final static String PROJECT_DETAIL = "/marketplace/bounties/%d";
 
+
+    //查看订阅城市
+    public final static String SUB_CITY = "/marketplace/sellers/%d/subLocalities";
+
+
+    //添加订阅城市
+    public final static String ADD_SUB_CITY = "/marketplace/sellers/subLocalities";
+
+
+
+    public static void ADD_SUB_CITY(JSONArray locs,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + ADD_SUB_CITY);
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("localities",locs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.d(jsonObject.toString());
+        setDefaultParams(request, jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
+    public static void getSUB_CITY(long userId,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(SUB_CITY,userId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
     public static void getPROJECT_DETAIL(long id,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

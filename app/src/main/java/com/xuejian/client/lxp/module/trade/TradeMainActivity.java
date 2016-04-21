@@ -38,6 +38,8 @@ public class TradeMainActivity extends PeachBaseActivity {
     TextView tv_pending_order;
     @Bind(R.id.rl_service)
     RelativeLayout rlService;
+    @Bind(R.id.rl_sub)
+    RelativeLayout rl_sub;
     long userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,13 @@ public class TradeMainActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(TradeMainActivity.this, ServiceListActivity.class);
+                startActivity(intent1);
+            }
+        });
+        rl_sub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(TradeMainActivity.this, SubscribeLocActivity.class);
                 startActivity(intent1);
             }
         });

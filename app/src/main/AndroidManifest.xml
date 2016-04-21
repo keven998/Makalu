@@ -531,7 +531,9 @@
         <activity
             android:name=".module.trade.ServiceListActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".module.trade.SubscribeLocActivity"
+            android:screenOrientation="portrait" />
 
 
 

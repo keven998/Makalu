@@ -56,6 +56,10 @@ public class DestMenuActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_dest_menu);
         ButterKnife.bind(this);
+        ArrayList<LocBean> exist = getIntent().getParcelableArrayListExtra("exist");
+        if (exist!=null){
+            addedList.addAll(exist);
+        }
         getData();
         tvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +76,8 @@ public class DestMenuActivity extends PeachBaseActivity {
                 finish();
             }
         });
+
+
     }
 
     private void getData() {
