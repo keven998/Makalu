@@ -597,15 +597,14 @@
         android:weightSum="1">
 
         <TextView
-            android:id="@+id/tv_action0"
+            android:id="@+id/tv_action6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/app_theme_color"
             android:gravity="center"
-            android:text="接单"
             android:textColor="@color/base_color_white"
-            android:textSize="19sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -618,7 +617,7 @@
         android:weightSum="2">
 
         <TextView
-            android:id="@+id/tv_cancel_action"
+            android:id="@+id/tv_cancel_action1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -629,7 +628,7 @@
             android:textSize="19sp" />
 
         <TextView
-            android:id="@+id/tv_pay"
+            android:id="@+id/tv_pay1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

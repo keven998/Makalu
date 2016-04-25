@@ -28,6 +28,7 @@ public class BountiesBean implements Parcelable {
      * takers : []
      * paid : false
      */
+    public SellerBean seller;
     public  Consumer consumer;
 //    悬赏单中，选定的行程安排的价格，在选定行程安排后显示
     public double totalPrice;

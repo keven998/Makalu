@@ -191,6 +191,54 @@ public class TravelApi extends BaseApi {
     public final static String TAKE_SCHEDULELD = "/marketplace/bounties/%d/prepay";
 
 
+    //查看商家方案列表
+    public final static String SELLER_PROJECT = "/marketplace/sellers/%d/schedules";
+
+
+    // 修改悬赏订单状态
+    public final static String EDIT_BOUNTY_STATUS = "/marketplace/bounties/%d/actions";
+
+    // 悬赏总数
+    public final static String CUS_TOTAL_COUNT = "/marketplace/bounties/cnt";
+
+    public static void CUS_TOTAL_COUNT(HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + CUS_TOTAL_COUNT);
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
+    public static void drawbackCus(long bountyId, String action,String target,JSONObject data, HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.POST);
+        request.setUrl(SystemConfig.DEV_URL + String.format(EDIT_BOUNTY_STATUS, bountyId));
+        request.setHeader(PTHeader.HEADER_CONTENT_TYPE, "application/json");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("target", target);
+            jsonObject.put("action", action);
+            jsonObject.put("data",data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        setDefaultParams(request, jsonObject.toString());
+        LogUtil.d(jsonObject.toString());
+        OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
+    }
+
+
+    public static void getSELLER_PROJECT(long sellerId,HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(SELLER_PROJECT,sellerId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+
 
     public static void TAKE_SCHEDULELD(long bountyId,long scheduleld,HttpCallBack callback) {
         PTRequest request = new PTRequest();

@@ -12,28 +12,29 @@ import java.util.List;
 public class ProjectDetailBean implements Parcelable {
 
     /**
-     * itemId : 1460706241869
-     * consumerId : 202847
+     * itemId : 1460706241869         bountyId
+     * consumerId : 202847            游客id
      * destination : [{"id":"546f2da7b8ce0440eddb2855","zhName":"福冈","enName":""},{"id":"546f2da8b8ce0440eddb2874","zhName":"熊本","enName":""}]
      * contact : [{"surname":"jdjd","givenName":"jsjsj","gender":"m","email":"","birthday":0,"tel":{"dialCode":86,"number":1828},"identities":[]}]
      * departure : [{"id":"5473ccd7b8ce043a64108c46","zhName":"北京市","enName":""}]
      * departureDate : 2016-04-15
-     * timeCost : 1
-     * participants : ["children"]
-     * participantCnt : 0
-     * budget : 122
+     * timeCost : 1                     天数
+     * participants : ["children"]      出游人员类型
+     * participantCnt : 0               人数
+     * budget :                        预算
      * memo : 就是觉得家
      * service : 机票酒店,美食门票
      * topic : 蜜月度假,家庭亲子
-     * takers : []
-     * scheduled : {}
-     * schedules : []
-     * schedulePaid : false
+     * takers : []             接单的商家
+     * scheduled : {}         选中的方案
+     * schedules : []         已提交的方案
+     * schedulePaid : false  是否支付方案
      * totalPrice : 0.0
-     * bountyPaid : false
-     * bountyPrice : 0.0
+     * bountyPaid : false  是否支付定金
+     * bountyPrice : 0.0  定金
      */
 
+    public String status;
     private long itemId;
     private long consumerId;
     private String departureDate;
@@ -48,6 +49,7 @@ public class ProjectDetailBean implements Parcelable {
     private boolean bountyPaid;
     private double bountyPrice;
     public BountyItemBean scheduled;
+    public long createTime;
     /**
      * id : 546f2da7b8ce0440eddb2855
      * zhName : 福冈
@@ -213,6 +215,9 @@ public class ProjectDetailBean implements Parcelable {
         this.participants = participants;
     }
 
+    public ProjectDetailBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -220,6 +225,7 @@ public class ProjectDetailBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.status);
         dest.writeLong(this.itemId);
         dest.writeLong(this.consumerId);
         dest.writeString(this.departureDate);
@@ -234,6 +240,7 @@ public class ProjectDetailBean implements Parcelable {
         dest.writeByte(bountyPaid ? (byte) 1 : (byte) 0);
         dest.writeDouble(this.bountyPrice);
         dest.writeParcelable(this.scheduled, flags);
+        dest.writeLong(this.createTime);
         dest.writeTypedList(destination);
         dest.writeTypedList(contact);
         dest.writeParcelable(this.consumer, flags);
@@ -243,10 +250,8 @@ public class ProjectDetailBean implements Parcelable {
         dest.writeTypedList(takers);
     }
 
-    public ProjectDetailBean() {
-    }
-
     protected ProjectDetailBean(Parcel in) {
+        this.status = in.readString();
         this.itemId = in.readLong();
         this.consumerId = in.readLong();
         this.departureDate = in.readString();
@@ -261,6 +266,7 @@ public class ProjectDetailBean implements Parcelable {
         this.bountyPaid = in.readByte() != 0;
         this.bountyPrice = in.readDouble();
         this.scheduled = in.readParcelable(BountyItemBean.class.getClassLoader());
+        this.createTime = in.readLong();
         this.destination = in.createTypedArrayList(LocBean.CREATOR);
         this.contact = in.createTypedArrayList(ContactBean.CREATOR);
         this.consumer = in.readParcelable(Consumer.class.getClassLoader());
@@ -270,7 +276,7 @@ public class ProjectDetailBean implements Parcelable {
         this.takers = in.createTypedArrayList(Consumer.CREATOR);
     }
 
-    public static final Parcelable.Creator<ProjectDetailBean> CREATOR = new Parcelable.Creator<ProjectDetailBean>() {
+    public static final Creator<ProjectDetailBean> CREATOR = new Creator<ProjectDetailBean>() {
         @Override
         public ProjectDetailBean createFromParcel(Parcel source) {
             return new ProjectDetailBean(source);

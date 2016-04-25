@@ -1,20 +1,26 @@
 package com.xuejian.client.lxp.module.customization;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizou.core.dialog.ToastUtil;
 import com.aizou.core.http.HttpCallBack;
@@ -27,6 +33,7 @@ import com.xuejian.client.lxp.bean.ProjectDetailBean;
 import com.xuejian.client.lxp.bean.ProjectEvent;
 import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
@@ -37,8 +44,11 @@ import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -106,13 +116,13 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     TextView tvMessage;
     @Bind(R.id.tv_append_message)
     TextView tvAppendMessage;
-    @Bind(R.id.tv_action0)
+    @Bind(R.id.tv_action6)
     TextView tvAction0;
     @Bind(R.id.ll_trade_action0)
     LinearLayout llTradeAction0;
-    @Bind(R.id.tv_cancel_action)
+    @Bind(R.id.tv_cancel_action1)
     TextView tvCancelAction;
-    @Bind(R.id.tv_pay)
+    @Bind(R.id.tv_pay1)
     TextView tvPay;
     @Bind(R.id.ll_trade_action1)
     LinearLayout llTradeAction1;
@@ -121,7 +131,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     @Bind(R.id.tv_contact)
     TextView tv_contact;
     @Bind(R.id.ll_contact_container)
-    LinearLayout  ll_contact_container;
+    LinearLayout ll_contact_container;
     @Bind(R.id.tv_message_title)
     TextView tv_message_title;
     long id;
@@ -130,6 +140,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     private PlanAdapter mPlanAdapter;
     private boolean isTakerOrder;
     private boolean isCreatePlan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,8 +158,8 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         }
 
         getData(id);
-     //   getBountyList(id);
-        if (!EventBus.getDefault().isRegistered(this)){
+        //   getBountyList(id);
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
     }
@@ -156,15 +167,15 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void OnProjectEvent(ProjectEvent event){
-        if ("refresh".equals(event.status)){
-             getData(id);
+    public void OnProjectEvent(ProjectEvent event) {
+        if ("refresh".equals(event.status)) {
+            getData(id);
         }
     }
 
@@ -193,7 +204,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     private void bindView(final ProjectDetailBean bean) {
 
 
-        if (bean.consumer!=null){
+        if (bean.consumer != null) {
             tvName.setText(bean.consumer.getNickname());
             Glide.with(mContext)
                     .load(bean.consumer.getAvatar().getUrl())
@@ -203,9 +214,9 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                     .into(ivAvatar);
         }
 
-      //  tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString(new Date())));
+        tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString( new Date(bean.createTime))));
         StringBuilder desc = new StringBuilder();
-        if (bean.getDestination()!=null&&bean.getDestination().size()>0){
+        if (bean.getDestination() != null && bean.getDestination().size() > 0) {
             for (int i = 0; i < bean.getDestination().size(); i++) {
                 if (i != 0) desc.append("、");
                 desc.append(bean.getDestination().get(i).zhName);
@@ -247,7 +258,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             if (bean.getParticipants().contains("oldman")) departurePeople.append(" 含老人 ");
         }
         tvDeparturePeople.setText(departurePeople);
-        tvTotalPrice.setText(String.format("总预算%s元", CommonUtils.getPriceString(bean.getBudget())));
+        tvTotalPrice.setText(String.format("%s元", CommonUtils.getPriceString(bean.getBudget())));
 
         StringBuilder target = new StringBuilder();
         for (int i = 0; i < bean.getDestination().size(); i++) {
@@ -258,72 +269,106 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         tvService.setText(bean.getService());
         tvTheme.setText(bean.getTopic());
 
-        if (TextUtils.isEmpty(bean.getMemo())){
+        if (TextUtils.isEmpty(bean.getMemo())) {
             tvMessage.setVisibility(View.GONE);
             tv_message_title.setVisibility(View.GONE);
         }
         tvMessage.setText(bean.getMemo());
 
-        User user = AccountManager.getInstance().getLoginAccount(this);
+        final User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
             if (user.getUserId() == bean.getConsumerId()) {
-                if (bean.isBountyPaid()&&!bean.isSchedulePaid()) {
+                if (bean.isBountyPaid() && !bean.isSchedulePaid()) {
                     llState.setVisibility(View.VISIBLE);
-                    tvState.setText("已支付定金");
+                    tvPayState.setText("已支付定金");
                     llTradeAction0.setVisibility(View.VISIBLE);
                     tvAction0.setText("申请退款");
                     llTradeAction0.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            drawback();
+                            drawback(bean.getItemId(), "bounty", bean.getBountyPrice());
                         }
                     });
 
-                } else if (bean.isBountyPaid()&&bean.isSchedulePaid()){
+                } else if (bean.isBountyPaid() && bean.isSchedulePaid()) {
                     llState.setVisibility(View.VISIBLE);
-                    tvState.setText("已付款");
+                    tvPayState.setText("已付款");
                     llTradeAction0.setVisibility(View.VISIBLE);
                     tvAction0.setText("申请退款");
                     llTradeAction0.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            drawback();
+                            drawback(bean.getItemId(), "schedule", bean.getBudget());
                         }
                     });
 
+                } else {
+                    llTradeAction0.setVisibility(View.GONE);
                 }
 
                 tv_contact.setVisibility(View.VISIBLE);
                 ll_contact_container.setVisibility(View.VISIBLE);
 
-                mPlanAdapter = new PlanAdapter(bean.schedules,bean.takers,false);
+                mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, true);
                 mLvPlan.setAdapter(mPlanAdapter);
-            }else {
+            } else {
 
-                if (AccountManager.getInstance().isSeller()){
+                if (AccountManager.getInstance().isSeller()) {
 
 
                     /**
                      * 判断是否接单
                      */
                     for (Consumer taker : bean.takers) {
-                        if (taker.getUserId()==user.getUserId()){
+                        if (taker.getUserId() == user.getUserId()) {
                             isTakerOrder = true;
                             break;
                         }
                     }
-                    isCreatePlan(bean.schedules,user.getUserId());
+                    isCreatePlan(bean.schedules, user.getUserId());
 
 
-                    if (isTakerOrder&&!isCreatePlan){
+                    if ("refundApply".equals(bean.status)) {
+                        tv_contact.setVisibility(View.VISIBLE);
+                        ll_contact_container.setVisibility(View.VISIBLE);
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true);
+                        mLvPlan.setAdapter(mPlanAdapter);
+                        llTradeAction0.setVisibility(View.GONE);
+                        llTradeAction1.setVisibility(View.VISIBLE);
+                        tvPay.setText("联系买家");
+                        tvCancelAction.setText("待退款");
+                        tvCancelAction.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (bean.scheduled != null) {
+                                    showRefundDialog(bean.getItemId(), user.getUserId(), bean.scheduled.getPrice(), "schedule");
+                                }
+                            }
+                        });
+                        tvPay.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                                talkIntent.putExtra("friend_id", bean.getConsumerId() + "");
+                                talkIntent.putExtra("chatType", "single");
+                                startActivity(talkIntent);
+                            }
+                        });
+                    } else if (isTakerOrder && !isCreatePlan) {
                         tv_contact.setVisibility(View.VISIBLE);
                         ll_contact_container.setVisibility(View.VISIBLE);
                         takeOrderSuccess(bean.getConsumerId());
-                    }else if (isTakerOrder&&isCreatePlan){
-                        mPlanAdapter = new PlanAdapter(bean.schedules,bean.takers,true);
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
                         mLvPlan.setAdapter(mPlanAdapter);
-                    }else {
+                    } else if (isTakerOrder && isCreatePlan) {
+                        takeOrderSuccess(bean.getConsumerId());
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true);
+                        mLvPlan.setAdapter(mPlanAdapter);
+                    } else {
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
+                        mLvPlan.setAdapter(mPlanAdapter);
                         llTradeAction0.setVisibility(View.VISIBLE);
+                        tvAction0.setText("接单");
                         llTradeAction0.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -332,19 +377,24 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                         });
                     }
 
+                } else {
+                    mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
+                    mLvPlan.setAdapter(mPlanAdapter);
                 }
             }
 
+        } else {
+            mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
+            mLvPlan.setAdapter(mPlanAdapter);
         }
-
 
 
     }
 
-    private boolean isCreatePlan(ArrayList<BountyItemBean> schedules,long userId) {
+    private boolean isCreatePlan(ArrayList<BountyItemBean> schedules, long userId) {
         for (BountyItemBean schedule : schedules) {
 
-            if (schedule.seller.getSellerId()==userId){
+            if (schedule.seller.getSellerId() == userId) {
                 isCreatePlan = true;
                 return true;
             }
@@ -353,7 +403,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     }
 
 
-    private void drawback(){
+    private void drawback(final long bountyId, final String target, final double amount) {
         final PeachMessageDialog dialog = new PeachMessageDialog(mContext);
         dialog.setTitle("提示");
         dialog.setMessage("确定申请退款？");
@@ -361,6 +411,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                refundCus(bountyId, target, amount);
 
             }
         });
@@ -371,6 +422,52 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             }
         });
         dialog.show();
+    }
+
+    /**
+     * 申请退款
+     *
+     * @param bountyId bountyId
+     * @param target   target
+     * @param amount   amount
+     */
+    private void refundCus(long bountyId, String target, double amount) {
+        JSONObject object = new JSONObject();
+        User user = AccountManager.getInstance().getLoginAccount(this);
+
+        long userId = 0;
+        if (user != null) {
+            userId = user.getUserId();
+        }
+        try {
+            object.put("userId", userId);
+            object.put("memo", "");
+            object.put("reason", "");
+            object.put("amount", amount);
+            object.put("type", "apply");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        TravelApi.drawbackCus(bountyId, "refundApply", target, object, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                Toast.makeText(ProjectDetailActivity.this, "退款申请已提交", Toast.LENGTH_LONG).show();
+                llTradeAction0.setVisibility(View.GONE);
+//                setResult(RESULT_OK);
+//                finish();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                Toast.makeText(ProjectDetailActivity.this, "退款申请提交失败", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
 
@@ -399,6 +496,8 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     private void takeOrderSuccess(final long consumerId) {
         llTradeAction0.setVisibility(View.GONE);
         llTradeAction1.setVisibility(View.VISIBLE);
+        tvPay.setText("联系买家");
+        tvCancelAction.setText("制作方案");
         tvCancelAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -420,33 +519,181 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     private void toCreatePlan(long consumerId) {
         Intent intent = new Intent(this, CreatePlanActivity.class);
         intent.putExtra("id", id);
-        intent.putExtra("targetUserId",consumerId);
+        intent.putExtra("targetUserId", consumerId);
         startActivity(intent);
     }
 
+
+    private void showRefundDialog(final long bountyId, final long userId, final double amount, final String target) {
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View contentView = View.inflate(this, R.layout.dialog_confirm_refund, null);
+        TextView tvNotice = (TextView) contentView.findViewById(R.id.tv_notice);
+        final EditText et = (EditText) contentView.findViewById(R.id.et_password);
+        TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
+        TextView tvCancle = (TextView) contentView.findViewById(R.id.tv_cancel);
+        tvNotice.setText(String.format("买家购买了方案，共支付%s元。\n买家申请退款，等待退款处理。",CommonUtils.getPriceString(amount)));
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Double a = Double.parseDouble(et.getText().toString().trim());
+                    showConfirmDialog(bountyId,userId,a,target);
+                    dialog.dismiss();
+                }catch (Exception e){
+                    ToastUtil.getInstance(ProjectDetailActivity.this).showToast("请输入正确的金额");
+                }
+
+            }
+        });
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(new EditText(ProjectDetailActivity.this));
+        dialog.show();
+        WindowManager windowManager = getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = display.getWidth(); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+
+    private void showConfirmDialog(final long bountyId, final long userId, final double amount, final String target) {
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View contentView = View.inflate(this, R.layout.dialog_confirm_password, null);
+        final EditText et = (EditText) contentView.findViewById(R.id.et_password);
+        TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
+        TextView tvCancle = (TextView) contentView.findViewById(R.id.tv_cancel);
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                UserApi.veryfyPassword(et.getText().toString(), new HttpCallBack() {
+                    @Override
+                    public void doSuccess(Object result, String method) {
+                        drawbackConfirm(bountyId, userId, amount, target);
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method) {
+                        Toast.makeText(ProjectDetailActivity.this, "密码输入错误", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void doFailure(Exception error, String msg, String method, int code) {
+
+                    }
+                });
+
+                dialog.dismiss();
+            }
+        });
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(new EditText(ProjectDetailActivity.this));
+        dialog.show();
+        WindowManager windowManager = getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = display.getWidth(); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+    }
+
+
+    public void drawbackConfirm(long orderId, long userId, double amount, String target) {
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("userId", userId);
+            data.put("memo", "");
+            data.put("reason", "");
+            data.put("amount", amount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        TravelApi.drawbackCus(orderId, "refundApprove", target, data, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                Toast.makeText(ProjectDetailActivity.this, "退款成功", Toast.LENGTH_LONG).show();
+                finish();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                Toast.makeText(ProjectDetailActivity.this, "退款失败", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
 
     public class PlanAdapter extends BaseAdapter {
 
         ArrayList<BountyItemBean> list;
         ArrayList<Consumer> data;
-        public  ArrayList<Consumer>getList() {
+
+        public ArrayList<Consumer> getList() {
             return data;
         }
+
         boolean isSeller;
-        public PlanAdapter( ArrayList<BountyItemBean> Bountylist,ArrayList<Consumer> Consumerdata,boolean isSeller) {
+        boolean clickable;
+        ArrayList<Object> dataList;
+
+        public PlanAdapter(ArrayList<BountyItemBean> Bountylist, ArrayList<Consumer> Consumerdata, boolean isSeller, boolean clickable) {
             this.list = Bountylist;
             this.data = Consumerdata;
             this.isSeller = isSeller;
+            this.clickable = clickable;
+            dataList = new ArrayList<>();
+            initData();
+        }
+
+        private void initData() {
+            dataList.addAll(list);
+
+            for (Consumer consumer : data) {
+                if (!contain(consumer)) dataList.add(consumer);
+            }
+
+        }
+
+        private boolean contain(Consumer consumer) {
+            for (BountyItemBean bean : list) {
+                if (bean.getSeller().getSellerId() == consumer.getUserId()) return true;
+            }
+            return false;
         }
 
         @Override
         public int getCount() {
-            return data.size();
+            return dataList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return data.get(position);
+            return dataList.get(position);
         }
 
         @Override
@@ -454,12 +701,19 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             return 0;
         }
 
-        public BountyItemBean isSub(long userId){
-           if (list==null)return  null;
+        public BountyItemBean isSub(long userId) {
+            if (list == null) return null;
+            long time = 0;
+            BountyItemBean bountyItemBean = null;
             for (BountyItemBean bean : list) {
-                if (bean.seller.getSellerId()==userId)return bean;
+                if (bean.seller.getSellerId() == userId) {
+                    if (bean.getCreateTime() > time) {
+                        time = bean.getCreateTime();
+                        bountyItemBean = bean;
+                    }
+                }
             }
-            return null;
+            return bountyItemBean;
         }
 
         @Override
@@ -472,66 +726,157 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            final Consumer bean = (Consumer) getItem(position);
+            Object o = getItem(position);
 
-                holder.mTvName.setText(bean.getNickname());
-                Glide.with(mContext)
-                        .load(bean.getAvatar().getUrl())
-                        .placeholder(R.drawable.ic_default_picture)
-                        .error(R.drawable.ic_default_picture)
-                        .centerCrop()
-                        .into(holder.mIvAvatar);
+            if (o instanceof BountyItemBean) {
 
-            final BountyItemBean bountyItemBean = isSub(bean.getUserId());
-            if (bountyItemBean!=null){
 
-                holder.mTvTimestamp.setText("已提交方案");
+                final BountyItemBean bountyItemBean = (BountyItemBean) o;
+
+                final Consumer bean = getConsumer(bountyItemBean);
+
+                if ( bountyItemBean.getSeller().user != null) {
+                    holder.mTvName.setText(bountyItemBean.getSeller().user.getNickname());
+                    Glide.with(mContext)
+                            .load(bountyItemBean.getSeller().user.getAvatar().getUrl())
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.mIvAvatar);
+                }
+
+                holder.mTvTimestamp.setText(String.format("在%s提交了方案", CommonUtils.getTimestampString(new Date(bountyItemBean.getCreateTime()))));
                 holder.mIvState.setVisibility(View.VISIBLE);
-                holder.mTvTimestamp.setText(DateFormat.format("yyyy-MM-dd", bountyItemBean.getUpdateTime()));
-                if (isSeller){
-                    if (bountyItemBean.seller.getSellerId()==AccountManager.getInstance().getLoginAccount(mContext).getUserId()){
+                //  holder.mTvTimestamp.setText(DateFormat.format("yyyy-MM-dd", bountyItemBean.getUpdateTime()));
+                if (isSeller) {
+                    if (bountyItemBean.seller.getSellerId() == AccountManager.getInstance().getLoginAccount(mContext).getUserId()) {
                         holder.ll_container.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(mContext, CreatePlanActivity.class);
-                                intent.putExtra("isDetail",true);
-                                intent.putExtra("item",bountyItemBean);
+                                intent.putExtra("isDetail", true);
+                                intent.putExtra("item", bountyItemBean);
                                 intent.putExtra("id", bountyItemBean.getItemId());
+                                if (bean != null) intent.putExtra("Consumer", bean);
                                 startActivity(intent);
                             }
                         });
                     }
 
-                }else {
+                } else {
                     holder.ll_container.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(mContext, CreatePlanActivity.class);
-                            intent.putExtra("isDetail",true);
-                            intent.putExtra("isConsume",true);
-                            intent.putExtra("item",bountyItemBean);
+                            intent.putExtra("isDetail", true);
+                            intent.putExtra("isConsume", true);
+                            intent.putExtra("item", bountyItemBean);
                             intent.putExtra("id", bountyItemBean.getItemId());
+                            if (bean != null) intent.putExtra("Consumer", bean);
                             startActivity(intent);
                         }
                     });
                 }
 
 
-            }else {
+            } else {
+                final Consumer consumer = (Consumer) o;
+                holder.mTvName.setText(consumer.getNickname());
+                Glide.with(mContext)
+                        .load(consumer.getAvatar().getUrl())
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(holder.mIvAvatar);
+
                 holder.mTvTimestamp.setText("已接单");
                 holder.mIvTalk.setVisibility(View.VISIBLE);
                 holder.ll_container.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent talkIntent = new Intent(mContext, ChatActivity.class);
-                        talkIntent.putExtra("friend_id", bean.getUserId()+"");
+                        talkIntent.putExtra("friend_id", consumer.getUserId() + "");
                         talkIntent.putExtra("chatType", "single");
                         startActivity(talkIntent);
                     }
                 });
+
             }
 
+
+//
+//            final Consumer bean = (Consumer) getItem(position);
+//
+//                holder.mTvName.setText(bean.getNickname());
+//                Glide.with(mContext)
+//                        .load(bean.getAvatar().getUrl())
+//                        .placeholder(R.drawable.ic_default_picture)
+//                        .error(R.drawable.ic_default_picture)
+//                        .centerCrop()
+//                        .into(holder.mIvAvatar);
+//
+//            final BountyItemBean bountyItemBean = isSub(bean.getUserId());
+//            if (bountyItemBean!=null){
+//
+//                holder.mTvTimestamp.setText(String.format("在%s提交了方案",CommonUtils.getTimestampString(new Date(bountyItemBean.getCreateTime()))));
+//                holder.mIvState.setVisibility(View.VISIBLE);
+//                holder.mTvTimestamp.setText(DateFormat.format("yyyy-MM-dd", bountyItemBean.getUpdateTime()));
+//                if (isSeller){
+//                    if (bountyItemBean.seller.getSellerId()==AccountManager.getInstance().getLoginAccount(mContext).getUserId()){
+//                        holder.ll_container.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent intent = new Intent(mContext, CreatePlanActivity.class);
+//                                intent.putExtra("isDetail",true);
+//                                intent.putExtra("item",bountyItemBean);
+//                                intent.putExtra("id", bountyItemBean.getItemId());
+//                                if (bean!=null)intent.putExtra("Consumer",bean);
+//                                startActivity(intent);
+//                            }
+//                        });
+//                    }
+//
+//                }else {
+//                    holder.ll_container.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent(mContext, CreatePlanActivity.class);
+//                            intent.putExtra("isDetail",true);
+//                            intent.putExtra("isConsume",true);
+//                            intent.putExtra("item",bountyItemBean);
+//                            intent.putExtra("id", bountyItemBean.getItemId());
+//                            if (bean!=null)intent.putExtra("Consumer",bean);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                }
+//
+//
+//            }else {
+//                holder.mTvTimestamp.setText("已接单");
+//                holder.mIvTalk.setVisibility(View.VISIBLE);
+//                holder.ll_container.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent talkIntent = new Intent(mContext, ChatActivity.class);
+//                        talkIntent.putExtra("friend_id", bean.getUserId()+"");
+//                        talkIntent.putExtra("chatType", "single");
+//                        startActivity(talkIntent);
+//                    }
+//                });
+//            }
+
+            if (!clickable) holder.ll_container.setClickable(false);
             return convertView;
+        }
+
+        private Consumer getConsumer(BountyItemBean bean) {
+
+            for (Consumer consumer : data) {
+
+                if (consumer.getUserId() == bean.getSeller().getSellerId()) return consumer;
+            }
+            return null;
         }
 
         class ViewHolder {

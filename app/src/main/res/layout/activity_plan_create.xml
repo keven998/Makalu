@@ -125,17 +125,24 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="25dp"
                     android:background="@drawable/bg_common_without_corner"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:minWidth="100dp"
                     android:paddingBottom="7dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="7dp"
-                    android:textColor="@color/color_text_iv"
+                    android:textColor="@color/color_text_iii"
                     android:textColorHint="@color/color_text_iv"
                     android:textSize="14sp" />
+                <TextView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="元"/>
             </RelativeLayout>
 
             <View
@@ -252,7 +259,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="修改方案"
+            android:text="制作方案"
             android:textColor="@color/base_color_white"
             android:textSize="19sp" />
 

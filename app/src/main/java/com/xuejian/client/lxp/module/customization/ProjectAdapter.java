@@ -94,6 +94,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         final BountiesBean bean = (BountiesBean) getItem(position);
+
         if (bean.consumer!=null){
             holder.tvName.setText(bean.consumer.getNickname());
             Glide.with(mContext)
@@ -104,12 +105,24 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
                     .into(holder.ivAvatar);
         }
 
+        if (bean.seller!=null&&bean.seller.user!=null){
+            holder.tvName.setText(bean.seller.user.getNickname());
+            Glide.with(mContext)
+                    .load(bean.seller.user.getAvatar().getUrl())
+                    .placeholder(R.drawable.ic_default_picture)
+                    .error(R.drawable.ic_default_picture)
+                    .centerCrop()
+                    .into(holder.ivAvatar);
+        }
         holder.tvTimestamp.setText(String.format("在%s发布了需求",CommonUtils.getTimestampString(new Date(bean.createTime))));
         StringBuilder desc = new StringBuilder();
-        for (int i = 0; i < bean.getDestination().size(); i++) {
-            if (i!=0)desc.append("、");
-            desc.append(bean.getDestination().get(i).zhName);
+        if (bean.getDestination()!=null&&bean.getDestination().size()>0){
+            for (int i = 0; i < bean.getDestination().size(); i++) {
+                if (i!=0)desc.append("、");
+                desc.append(bean.getDestination().get(i).zhName);
+            }
         }
+
         holder.tvProjectInfo1.setText(String.format("[%s]",desc));
         holder.tvProjectTime.setText(String.format(Locale.CHINA,"%d日游",bean.getTimeCost()));
         holder.tvProjectInfo2.setText(bean.getService());

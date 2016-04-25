@@ -61,6 +61,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
     @Bind(R.id.strategy_title)
     TextView strategyTitle;
 
+    boolean isCreated;
     private static final String info = "1.悬赏定金能得到那些帮助？\n用户支付的定金越高，商家抢单的几率越大；\n支付定金不得低于50元，支付定金的用户保证在5个工作日内，至少有3个商家提供优秀方案；\n2.悬赏定金是否可退？\n定金支付后，若商家提供的方案用户都不满意，可申请退款；\n" +
             "平台会收取定金的5%作为违约费用；\n3.未设置悬赏定金和设置悬赏定金的区别？\n免费体验发布的需求，商家接单几率相对于支付定金的用户要少；\n在用户慎重考虑后，建议发布支付定金的需求，以便于能得到更优质的服务。";
     @Override
@@ -132,31 +133,42 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
     }
 
     private long id;
+    private long itemId;
     private void createProject(BountiesBean bean) {
-        Log.d("ProjectConfirmActivity", bean.toString());
-        TravelApi.createProject(bean, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson<BountiesBean> beanCommonJson = CommonJson.fromJson(result,BountiesBean.class);
-                id = beanCommonJson.result.getItemId();
-                if (ctvFree.isChecked()){
-                    showSuccess();
-                }else {
-                    showPayActionDialog(beanCommonJson.result.getItemId());
+        if (isCreated){
+            if (ctvFree.isChecked()){
+                showSuccess();
+            }else {
+                showPayActionDialog(itemId);
+            }
+        }else {
+            TravelApi.createProject(bean, new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson<BountiesBean> beanCommonJson = CommonJson.fromJson(result,BountiesBean.class);
+                    id = beanCommonJson.result.getItemId();
+                    isCreated =true;
+                    if (ctvFree.isChecked()){
+                        showSuccess();
+                    }else {
+                        itemId = beanCommonJson.result.getItemId();
+                        showPayActionDialog(itemId);
+                    }
+                    EventBus.getDefault().post(new ProjectEvent("success"));
                 }
-                EventBus.getDefault().post(new ProjectEvent("success"));
-            }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
 
-            }
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
-                ToastUtil.getInstance(ProjectConfirmActivity.this).showToast("提交失败");
-            }
-        });
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+                    ToastUtil.getInstance(ProjectConfirmActivity.this).showToast("提交失败");
+                }
+            });
+        }
+
     }
 
     private void showNotice() {
@@ -303,6 +315,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 Intent intent = new Intent(ProjectConfirmActivity.this, MainActivity.class);
                 intent.putExtra("custom",true);
                 startActivity(intent);
+                finish();
             }
         });
         dialog.setNegativeButton("查看发布需求", new View.OnClickListener() {
@@ -312,7 +325,7 @@ public class ProjectConfirmActivity extends PeachBaseActivity {
                 Intent intent = new Intent(ProjectConfirmActivity.this, ProjectDetailActivity.class);
                 intent.putExtra("id",id);
                 startActivity(intent);
-
+                finish();
             }
         });
         dialog.show();

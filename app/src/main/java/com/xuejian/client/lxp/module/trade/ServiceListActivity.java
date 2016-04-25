@@ -9,10 +9,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aizou.core.http.HttpCallBack;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.BountiesBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.twowayview.layout.DividerItemDecoration;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.customization.ProjectAdapter;
@@ -79,5 +83,26 @@ public class ServiceListActivity extends PeachBaseActivity {
 
     private void getData(long userId) {
 
+        TravelApi.getSELLER_PROJECT(userId, new HttpCallBack<String>() {
+
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<BountiesBean> list = CommonJson4List.fromJson(result,BountiesBean.class);
+                if (list.code==0){
+                    adapter.getDataList().addAll(list.result);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 }

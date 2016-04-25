@@ -478,10 +478,10 @@
                     android:paddingRight="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="7dp"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:paddingBottom="7dp"
                     android:textSize="14sp"
-                    android:textColor="@color/color_text_iv" />
+                    android:textColor="@color/color_text_iii" />
             </RelativeLayout>
 
 

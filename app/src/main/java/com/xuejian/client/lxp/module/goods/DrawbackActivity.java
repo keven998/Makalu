@@ -81,7 +81,7 @@ public class DrawbackActivity extends PeachBaseActivity {
         }
 
 
-        System.out.println("refundOrder "+currentReason);
+
         TravelApi.editOrderStatus(orderId, "refundApply", object, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {

@@ -321,7 +321,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/icon_my_coupon"/>
+                    android:src="@drawable/icon_my_cus"/>
                 <TextView
                     android:layout_toRightOf="@+id/iv_custom"
                     android:layout_width="wrap_content"

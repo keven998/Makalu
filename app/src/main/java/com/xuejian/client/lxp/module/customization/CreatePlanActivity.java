@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.BountyItemBean;
+import com.xuejian.client.lxp.bean.Consumer;
 import com.xuejian.client.lxp.bean.ProjectEvent;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -34,6 +36,7 @@ import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.thirdpart.weixin.WeixinApi;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
+import com.xuejian.client.lxp.module.dest.StrategyActivity;
 import com.xuejian.client.lxp.module.pay.PaymentActivity;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -97,6 +100,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
     LinearLayout mLlSeller;
     long targetUserId;
     boolean isConsume;
+    long userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +116,12 @@ public class CreatePlanActivity extends PeachBaseActivity {
                 finish();
             }
         });
+        try {
+            userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
+        }catch (Exception e){
+
+        }
+
         if (isDetail) {
             initDetailView();
 
@@ -130,14 +140,28 @@ public class CreatePlanActivity extends PeachBaseActivity {
         if (bean != null) {
             mEtMessage.setText(bean.getDesc());
             mTvTotalPrice.setText("¥" + CommonUtils.getPriceString(bean.getPrice()));
-
             mPlanAdapter = new PlanAdapter(this);
-            mPlanAdapter.getData().add(bean.guide);
-            mPlanList.setAdapter(mPlanAdapter);
+            if (bean.guide!=null&&!TextUtils.isEmpty(bean.guide.id)){
+                mPlanAdapter.getData().add(bean.guide);
+                mPlanList.setAdapter(mPlanAdapter);
+            }
 
             mLlSeller.setVisibility(View.VISIBLE);
+            StringBuilder info = new StringBuilder();
+            Consumer consumer = getIntent().getParcelableExtra("Consumer");
+            if (consumer!=null){
+                info.append(consumer.getNickname()).append("\n");
+                Glide.with(mContext)
+                        .load(consumer.getAvatar().getUrl())
+                        .placeholder(R.drawable.ic_default_picture)
+                        .error(R.drawable.ic_default_picture)
+                        .centerCrop()
+                        .into(mIvAvatar);
+            }
             if (bean.getSeller()!=null){
-                mTvSellerInfo.setText(bean.getSeller().getName());
+                info.append(String.format("在%s发布了需求",CommonUtils.getTimestampString(new Date(bean.getCreateTime()))));
+                mTvSellerInfo.setText(info);
+
                 mTvTalk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -148,6 +172,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
                     }
                 });
             }
+
             if (isConsume){
                 mLlTradeAction0.setVisibility(View.VISIBLE);
                 mTvAction0.setText("购买方案");
@@ -158,7 +183,25 @@ public class CreatePlanActivity extends PeachBaseActivity {
                     }
                 });
             }else {
-
+                mLlTradeAction1.setVisibility(View.GONE);
+                mTvCancelAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext,CreatePlanActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                mTvPay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (targetUserId>0){
+                            Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                            talkIntent.putExtra("friend_id", targetUserId+ "");
+                            talkIntent.putExtra("chatType", "single");
+                            startActivity(talkIntent);
+                        }
+                    }
+                });
             }
 
 
@@ -224,7 +267,12 @@ public class CreatePlanActivity extends PeachBaseActivity {
 //            for (StrategyBean bean : mSelected) {
 //                array.put(bean.id);
 //            }
-            TravelApi.submitPlan(id, mEtMessage.getText().toString(), Double.parseDouble(mTvTotalPrice.getText().toString().trim()), mSelected.get(0).id, new HttpCallBack<String>() {
+            String guideId = "";
+            if (mSelected.size()>0){
+               guideId = mSelected.get(0).id ;
+            }
+
+            TravelApi.submitPlan(id, mEtMessage.getText().toString(), Double.parseDouble(mTvTotalPrice.getText().toString().trim()), guideId, new HttpCallBack<String>() {
 
                 @Override
                 public void doSuccess(String result, String method) {
@@ -245,9 +293,14 @@ public class CreatePlanActivity extends PeachBaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void submitSuccess() {
         mLlTradeAction0.setVisibility(View.GONE);
-        mLlTradeAction1.setVisibility(View.VISIBLE);
+        mLlTradeAction1.setVisibility(View.GONE);
         mEtMessage.setEnabled(false);
         mTvTotalPrice.setEnabled(false);
         mTvCancelAction.setOnClickListener(new View.OnClickListener() {
@@ -269,10 +322,10 @@ public class CreatePlanActivity extends PeachBaseActivity {
             }
         });
         EventBus.getDefault().post(new ProjectEvent("refresh"));
-        finish();
+       // finish();
     }
 
-    private void showPayActionDialog(final long id) {
+    private void showPayActionDialog(final long bountyId) {
         final Activity act = this;
         final AlertDialog dialog = new AlertDialog.Builder(act).create();
         View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
@@ -285,7 +338,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
                 dialog.dismiss();
                 Intent alipay = new Intent(CreatePlanActivity.this, PaymentActivity.class);
                 alipay.putExtra("schedule", true);
-                alipay.putExtra("bountyId", id);
+                alipay.putExtra("bountyId", bountyId);
                 alipay.putExtra("type", "alipay");
                 startActivity(alipay);
             }
@@ -299,8 +352,8 @@ public class CreatePlanActivity extends PeachBaseActivity {
                     return;
                 }
                 Intent tv_pay = new Intent(CreatePlanActivity.this, PaymentActivity.class);
-                tv_pay.putExtra("bounty", true);
-                tv_pay.putExtra("bountyId", id);
+                tv_pay.putExtra("schedule", true);
+                tv_pay.putExtra("bountyId", bountyId);
                 tv_pay.putExtra("type", "weixinpay");
                 startActivity(tv_pay);
             }
@@ -385,6 +438,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
                 holder.travel_hasGone = (ImageView) convertView.findViewById(R.id.travel_hasGone);
                 holder.rl_send = (RelativeLayout) convertView.findViewById(R.id.rl_send);
                 holder.btn_send = (CheckedTextView) convertView.findViewById(R.id.btn_send);
+                holder.content = (FrameLayout) convertView.findViewById(R.id.fl_content);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -429,6 +483,15 @@ public class CreatePlanActivity extends PeachBaseActivity {
                 }
             });
 
+            holder.content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, StrategyActivity.class);
+                    intent.putExtra("id", itemData.id);
+                    intent.putExtra("userId", userId+"");
+                    startActivity(intent);
+                }
+            });
 
             return convertView;
         }
@@ -446,6 +509,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
             RelativeLayout rl_send;
             private LinearLayout swipe_ll;
             ImageView plane_pic;
+            FrameLayout content;
         }
 
     }

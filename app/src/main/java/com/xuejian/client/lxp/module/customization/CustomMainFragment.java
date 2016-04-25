@@ -15,14 +15,20 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
 import com.xuejian.client.lxp.bean.BountiesBean;
+import com.xuejian.client.lxp.bean.CusCount;
 import com.xuejian.client.lxp.bean.ProjectEvent;
+import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.twowayview.layout.DividerItemDecoration;
+import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Locale;
 
 /**
  * Created by yibiao.qin on 2016/3/28.
@@ -31,7 +37,7 @@ public class CustomMainFragment extends PeachBaseFragment {
 
     XRecyclerView recyclerView;
     ProjectAdapter adapter;
-
+    TextView tv_info;
     private static final int PAGE_SIZE = 15;
     private static int COUNT = 15;
     @Nullable
@@ -42,6 +48,7 @@ public class CustomMainFragment extends PeachBaseFragment {
         recyclerView.setPullRefreshEnabled(false);
         recyclerView.setLoadingMoreEnabled(true);
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.head_project, (ViewGroup) view.findViewById(R.id.content),false);
+        tv_info = (TextView) headView.findViewById(R.id.tv_info);
         recyclerView.addHeaderView(headView);
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -59,11 +66,37 @@ public class CustomMainFragment extends PeachBaseFragment {
         tvCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),ProjectCreateActivity.class));
+                if (AccountManager.getInstance().getLoginAccount(getActivity())==null){
+                    Intent logIntent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityWithNoAnim(logIntent);
+                }else {
+                    startActivity(new Intent(getActivity(),ProjectCreateActivity.class));
+                }
             }
         });
         getData(0,COUNT,true);
+        getCnt();
         return view;
+    }
+
+    private void getCnt() {
+        TravelApi.CUS_TOTAL_COUNT(new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+                CommonJson<CusCount> commonJson = CommonJson.fromJson(result.toString(),CusCount.class);
+                tv_info.setText(String.format(Locale.CHINA,"已为%d位旅行者提供了定制服务",commonJson.result.serviceCnt));
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 
     @Override
