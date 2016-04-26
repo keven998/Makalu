@@ -101,6 +101,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
     long targetUserId;
     boolean isConsume;
     long userId;
+    boolean isPaid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +111,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
         isDetail = getIntent().getBooleanExtra("isDetail", false);
         isConsume = getIntent().getBooleanExtra("isConsume", false);
         targetUserId  = getIntent().getLongExtra("targetUserId",0);
+        isPaid = getIntent().getBooleanExtra("isPaid",false);
         mIvNavBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +176,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
             }
 
             if (isConsume){
-                mLlTradeAction0.setVisibility(View.VISIBLE);
+                if (!isPaid)mLlTradeAction0.setVisibility(View.VISIBLE);
                 mTvAction0.setText("购买方案");
                 mTvAction0.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -218,7 +220,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
 
             @Override
             public void doFailure(Exception error, String msg, String method) {
-
+                ToastUtil.getInstance(CreatePlanActivity.this).showToast("购买失败");
             }
 
             @Override
@@ -301,6 +303,7 @@ public class CreatePlanActivity extends PeachBaseActivity {
     private void submitSuccess() {
         mLlTradeAction0.setVisibility(View.GONE);
         mLlTradeAction1.setVisibility(View.GONE);
+        mRlPlan.setVisibility(View.GONE );
         mEtMessage.setEnabled(false);
         mTvTotalPrice.setEnabled(false);
         mTvCancelAction.setOnClickListener(new View.OnClickListener() {

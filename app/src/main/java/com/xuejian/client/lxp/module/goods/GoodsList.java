@@ -107,14 +107,7 @@ public class GoodsList extends PeachBaseActivity {
     TagListView recomendTag;
     @Bind(R.id.empty_text)
     LinearLayout emptyText;
-//    private int[] lebelColors = new int[]{
-//            R.drawable.all_light_green_label,
-//            R.drawable.all_light_red_label,
-//            R.drawable.all_light_perple_label,
-//            R.drawable.all_light_blue_label,
-//            R.drawable.all_light_yellow_label
-//    };
-    //   private final List<Tag> mTags = new ArrayList<Tag>();
+
 
     private String[] sortType = new String[]{"推荐排序", "销量最高", "价格最低", "价格最高"};
     private String[] sortValue = new String[]{"", "salesVolume", "price", "price"};
@@ -253,16 +246,7 @@ public class GoodsList extends PeachBaseActivity {
                 }
             });
         } else if (collection) {
-//            final User user = AccountManager.getInstance().getLoginAccount(mContext);
-//            if (user != null) {
-//                getCollectionList(user.getUserId());
-//                adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
-//                    @Override
-//                    public void onItemLongClick(View view, int position, String id) {
-//                        notice(user.getUserId(), id);
-//                    }
-//                });
-//            }
+
         } else {
             getCategory(locId);
             getData(null, locId, null, null, null, 0, 15, true);
@@ -512,19 +496,6 @@ public class GoodsList extends PeachBaseActivity {
         });
     }
 
-//    private void initData() {
-//        int lastColor = new Random().nextInt(4);
-//        for (int i = 0; i < 3; i++) {
-//            Tag tag = new Tag();
-//            tag.setTitle("服务" + i);
-//            tag.setId(i);
-//            tag.setBackgroundResId(lebelColors[lastColor]);
-//            //   tag.setBackgroundResId(R.drawable.all_whitesolid_greenline);
-//            tag.setTextColor(R.color.white);
-//            mTags.add(tag);
-//            lastColor = getNextColor(lastColor);
-//        }
-//    }
 
 
     public void getData(String sellerId, String localityId, String category, String sortBy, String sort, final int start, int count, final boolean fresh) {
@@ -594,31 +565,6 @@ public class GoodsList extends PeachBaseActivity {
 
             }
         });
-//        final XDialog categoryDialog = new XDialog(GoodsList.this, R.layout.dialog_type_spinner, R.style.TypeSelectDialog);
-//        final CategoryAdapter adapter = new CategoryAdapter(bean.category, GoodsList.this);
-//        typeSpinner.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                typeSpinner.setChecked(true);
-//                WindowManager.LayoutParams wlmp = categoryDialog.getWindow().getAttributes();
-//                wlmp.gravity = Gravity.TOP ;
-//                wlmp.windowAnimations = android.R.anim.slide_in_left;
-//                final ListView lv = categoryDialog.getListView();
-//                lv.setAdapter(adapter);
-//                categoryDialog.show();
-//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        //    lv.setSelection(headerPos.get(position));
-//                        currentType = bean.category.get(position);
-//                        typeSpinner.setText(currentType);
-//                        getData(null, locId, currentType, null, 0, 15, true);
-//                        typeSpinner.setChecked(false);
-//                        if (categoryDialog != null) categoryDialog.dismiss();
-//                    }
-//                });
-//            }
-//        });
 
 
         sortSpinner.attachDataSource(Arrays.asList(sortType));
@@ -637,40 +583,8 @@ public class GoodsList extends PeachBaseActivity {
 
             }
         });
-//        final XDialog sortDialog = new XDialog(GoodsList.this, R.layout.dialog_sort_spinner, R.style.LocSelectDialog);
-//        final CategoryAdapter sortAdapter = new CategoryAdapter(SortList, GoodsList.this);
-//        sortSpinner.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sortSpinner.setChecked(true);
-//                WindowManager.LayoutParams wlmp = sortDialog.getWindow().getAttributes();
-//                wlmp.gravity = Gravity.TOP | Gravity.RIGHT;
-//                final ListView lv = sortDialog.getListView();
-//                lv.setAdapter(sortAdapter);
-//                sortDialog.show();
-//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        //    lv.setSelection(headerPos.get(position));
-//                        sortSpinner.setText(SortList.get(position));
-//                        getData(null, locId, currentType, sortValue[position], 0, 15, true);
-//                        sortSpinner.setChecked(false);
-//                        if (sortDialog != null) sortDialog.dismiss();
-//                    }
-//                });
-//            }
-//        });
     }
 
-
-//    public int getNextColor(int currentcolor) {
-//        Random random = new Random();
-//        int nextValue = random.nextInt(4);
-//        if (nextValue == 0) {
-//            nextValue++;
-//        }
-//        return (nextValue + currentcolor) % 5;
-//    }
 
     private class GoodsListAdapter extends RecyclerView.Adapter<ViewHolder> {
         private Activity mContext;
@@ -725,7 +639,6 @@ public class GoodsList extends PeachBaseActivity {
                     .centerCrop()
                     .into(holder.ivGoods);
 
-            //  ImageLoader.getInstance().displayImage(bean.getCover().getUrl(), holder.ivGoods, picOptions);
             holder.tvGoodsName.setText(bean.getTitle());
 
             SpannableString string = new SpannableString("起");

@@ -74,11 +74,13 @@ public class CityInfoActivity extends PeachBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_info);
 
+        /**
+         * 城市id
+         */
         id = getIntent().getStringExtra("id");
         title = (TextView) findViewById(R.id.tv_title_bar_title);
         listView = (ListView) findViewById(R.id.lv_city_detail);
         View headView = View.inflate(this, R.layout.activity_city_info_header, null);
-    //    View footView = View.inflate(this, R.layout.footer_show_all, null);
         showMore = (TextView) findViewById(R.id.tv_show_all);
         showMore.setText("查看全部玩乐");
         footView = (LinearLayout) findViewById(R.id.footView);
@@ -126,22 +128,6 @@ public class CityInfoActivity extends PeachBaseActivity {
 
             }
         });
-//        TravelApi.getCityDetail(id, "", new HttpCallBack<String>() {
-//            @Override
-//            public void doSuccess(String result, String method) {
-//
-//            }
-//
-//            @Override
-//            public void doFailure(Exception error, String msg, String method) {
-//
-//            }
-//
-//            @Override
-//            public void doFailure(Exception error, String msg, String method, int code) {
-//
-//            }
-//        });
 
         TravelApi.getCommodityList(null,null, id, null, null, null, "0", "3", new HttpCallBack<String>() {
 

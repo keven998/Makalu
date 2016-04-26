@@ -119,6 +119,8 @@ public class CustomMainFragment extends PeachBaseFragment {
     public void OnProjectEvent(ProjectEvent event){
         if ("success".equals(event.status)){
             getData(0,COUNT,true);
+        }else if ("refresh".equals(event.status)){
+            getData(0,COUNT,true);
         }
     }
 

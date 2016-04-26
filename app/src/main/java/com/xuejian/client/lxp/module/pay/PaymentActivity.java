@@ -234,12 +234,6 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
         tvOrderDetail.setVisibility(View.GONE);
         tvMain.setVisibility(View.GONE);
         ivPayState.setVisibility(View.GONE);
-//        SpannableString priceStr = new SpannableString("¥35353");
-//        priceStr.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.price_color)), 0, priceStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        priceStr.setSpan(new AbsoluteSizeSpan(15, true), 0, priceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        SpannableStringBuilder spb = new SpannableStringBuilder();
-//        spb.append("总价:").append(priceStr);
-//        tvPrice.setText(spb);
 
 
         String type = getIntent().getStringExtra("type");
@@ -298,6 +292,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
                 @Override
                 public void doSuccess(String result, String method) {
+               //     ToastUtil.getInstance(PaymentActivity.this).showToast(result);
                     DialogManager.getInstance().dissMissLoadingDialog();
                     CommonJson<PrePayRespBean> bean = CommonJson.fromJson(result, PrePayRespBean.class);
                     if (bean.code == 0) {
@@ -319,6 +314,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
                 @Override
                 public void doFailure(Exception error, String msg, String method) {
+
                     DialogManager.getInstance().dissMissLoadingDialog();
                     Toast.makeText(PaymentActivity.this, "支付失败！", Toast.LENGTH_LONG).show();
                     finish();
@@ -326,7 +322,7 @@ public class PaymentActivity extends PeachBaseActivity implements View.OnClickLi
 
                 @Override
                 public void doFailure(Exception error, String msg, String method, int code) {
-
+               //     ToastUtil.getInstance(PaymentActivity.this).showToast(code+msg);
                 }
             });
 

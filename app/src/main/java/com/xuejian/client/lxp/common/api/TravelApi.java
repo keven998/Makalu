@@ -201,6 +201,18 @@ public class TravelApi extends BaseApi {
     // 悬赏总数
     public final static String CUS_TOTAL_COUNT = "/marketplace/bounties/cnt";
 
+
+    // 商家接单列表
+    public final static String TRADE_PROJECT_LIST = "/marketplace/sellers/%d/bounties";
+
+    public static void TRADE_PROJECT_LIST(long sellerId , HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(TRADE_PROJECT_LIST,sellerId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
     public static void CUS_TOTAL_COUNT(HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
@@ -476,6 +488,7 @@ public class TravelApi extends BaseApi {
             e.printStackTrace();
         }
         LogUtil.d(jsonObject.toString());
+        System.out.print(jsonObject.toString());
         setDefaultParams(request, jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
     }

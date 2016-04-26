@@ -28,7 +28,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 16
-        versionName "2.3.1"
+        versionName "2.4.0"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -67,7 +67,6 @@ android {
         baidu {}
         huawei {}
         wandoujia {}
-        jinli {}
         androidMarket {}
         meizu {}
         xiaoqudao {}

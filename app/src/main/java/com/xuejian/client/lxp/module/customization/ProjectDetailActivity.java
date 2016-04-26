@@ -214,7 +214,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                     .into(ivAvatar);
         }
 
-        tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString( new Date(bean.createTime))));
+        tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString(new Date(bean.createTime))));
         StringBuilder desc = new StringBuilder();
         if (bean.getDestination() != null && bean.getDestination().size() > 0) {
             for (int i = 0; i < bean.getDestination().size(); i++) {
@@ -278,7 +278,9 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         final User user = AccountManager.getInstance().getLoginAccount(this);
         if (user != null) {
             if (user.getUserId() == bean.getConsumerId()) {
-                if (bean.isBountyPaid() && !bean.isSchedulePaid()) {
+                if ("refundApplied".equals(bean.status)) {
+
+                } else if (bean.isBountyPaid() && !bean.isSchedulePaid()) {
                     llState.setVisibility(View.VISIBLE);
                     tvPayState.setText("已支付定金");
                     llTradeAction0.setVisibility(View.VISIBLE);
@@ -292,7 +294,19 @@ public class ProjectDetailActivity extends PeachBaseActivity {
 
                 } else if (bean.isBountyPaid() && bean.isSchedulePaid()) {
                     llState.setVisibility(View.VISIBLE);
-                    tvPayState.setText("已付款");
+                    tvPayState.setText("已支付方案");
+                    llTradeAction0.setVisibility(View.VISIBLE);
+                    tvAction0.setText("申请退款");
+                    llTradeAction0.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            drawback(bean.getItemId(), "schedule", bean.getBudget());
+                        }
+                    });
+
+                } else if (!bean.isBountyPaid() && bean.isSchedulePaid()) {
+                    llState.setVisibility(View.VISIBLE);
+                    tvPayState.setText("已支付方案");
                     llTradeAction0.setVisibility(View.VISIBLE);
                     tvAction0.setText("申请退款");
                     llTradeAction0.setOnClickListener(new View.OnClickListener() {
@@ -309,7 +323,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                 tv_contact.setVisibility(View.VISIBLE);
                 ll_contact_container.setVisibility(View.VISIBLE);
 
-                mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, true);
+                mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, true, bean.isSchedulePaid());
                 mLvPlan.setAdapter(mPlanAdapter);
             } else {
 
@@ -326,12 +340,30 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                         }
                     }
                     isCreatePlan(bean.schedules, user.getUserId());
-
-
-                    if ("refundApply".equals(bean.status)) {
+                    if ("paid".equals(bean.status) && bean.scheduled != null && bean.scheduled.seller != null && (bean.scheduled.seller.getSellerId() == user.getUserId())) {
+                        llState.setVisibility(View.VISIBLE);
+                        tvPayState.setText("已购买方案");
                         tv_contact.setVisibility(View.VISIBLE);
                         ll_contact_container.setVisibility(View.VISIBLE);
-                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true);
+                        llTradeAction0.setVisibility(View.VISIBLE);
+                        tvAction0.setText("联系买家");
+                        tvAction0.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                                talkIntent.putExtra("friend_id", bean.getConsumerId() + "");
+                                talkIntent.putExtra("chatType", "single");
+                                startActivity(talkIntent);
+                            }
+                        });
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true, bean.isSchedulePaid());
+                        mLvPlan.setAdapter(mPlanAdapter);
+                    } else if ("refundApplied".equals(bean.status) && bean.scheduled != null && bean.scheduled.seller != null && (bean.scheduled.seller.getSellerId() == user.getUserId())) {
+                        llState.setVisibility(View.VISIBLE);
+                        tvPayState.setText("已申请退款");
+                        tv_contact.setVisibility(View.VISIBLE);
+                        ll_contact_container.setVisibility(View.VISIBLE);
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true, bean.isSchedulePaid());
                         mLvPlan.setAdapter(mPlanAdapter);
                         llTradeAction0.setVisibility(View.GONE);
                         llTradeAction1.setVisibility(View.VISIBLE);
@@ -354,18 +386,36 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                                 startActivity(talkIntent);
                             }
                         });
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true, bean.isSchedulePaid());
+                        mLvPlan.setAdapter(mPlanAdapter);
+                    } else if (bean.isSchedulePaid()) {
+                        tv_contact.setVisibility(View.VISIBLE);
+                        ll_contact_container.setVisibility(View.VISIBLE);
+                        llTradeAction0.setVisibility(View.VISIBLE);
+                        tvAction0.setText("联系买家");
+                        tvAction0.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent talkIntent = new Intent(mContext, ChatActivity.class);
+                                talkIntent.putExtra("friend_id", bean.getConsumerId() + "");
+                                talkIntent.putExtra("chatType", "single");
+                                startActivity(talkIntent);
+                            }
+                        });
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true, bean.isSchedulePaid());
+                        mLvPlan.setAdapter(mPlanAdapter);
                     } else if (isTakerOrder && !isCreatePlan) {
                         tv_contact.setVisibility(View.VISIBLE);
                         ll_contact_container.setVisibility(View.VISIBLE);
                         takeOrderSuccess(bean.getConsumerId());
-                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false, bean.isSchedulePaid());
                         mLvPlan.setAdapter(mPlanAdapter);
                     } else if (isTakerOrder && isCreatePlan) {
                         takeOrderSuccess(bean.getConsumerId());
-                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true);
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, true, true, bean.isSchedulePaid());
                         mLvPlan.setAdapter(mPlanAdapter);
                     } else {
-                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
+                        mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false, bean.isSchedulePaid());
                         mLvPlan.setAdapter(mPlanAdapter);
                         llTradeAction0.setVisibility(View.VISIBLE);
                         tvAction0.setText("接单");
@@ -378,13 +428,13 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                     }
 
                 } else {
-                    mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
+                    mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false, bean.isSchedulePaid());
                     mLvPlan.setAdapter(mPlanAdapter);
                 }
             }
 
         } else {
-            mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false);
+            mPlanAdapter = new PlanAdapter(bean.schedules, bean.takers, false, false, bean.isSchedulePaid());
             mLvPlan.setAdapter(mPlanAdapter);
         }
 
@@ -444,7 +494,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             object.put("memo", "");
             object.put("reason", "");
             object.put("amount", amount);
-            object.put("type", "apply");
+            //    object.put("type", "apply");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -454,6 +504,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             public void doSuccess(String result, String method) {
                 Toast.makeText(ProjectDetailActivity.this, "退款申请已提交", Toast.LENGTH_LONG).show();
                 llTradeAction0.setVisibility(View.GONE);
+                EventBus.getDefault().post(new ProjectEvent("refresh"));
 //                setResult(RESULT_OK);
 //                finish();
             }
@@ -531,15 +582,15 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         final EditText et = (EditText) contentView.findViewById(R.id.et_password);
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
         TextView tvCancle = (TextView) contentView.findViewById(R.id.tv_cancel);
-        tvNotice.setText(String.format("买家购买了方案，共支付%s元。\n买家申请退款，等待退款处理。",CommonUtils.getPriceString(amount)));
+        tvNotice.setText(String.format("买家购买了方案，共支付%s元。\n买家申请退款，等待退款处理。", CommonUtils.getPriceString(amount)));
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     Double a = Double.parseDouble(et.getText().toString().trim());
-                    showConfirmDialog(bountyId,userId,a,target);
+                    showConfirmDialog(bountyId, userId, a, target);
                     dialog.dismiss();
-                }catch (Exception e){
+                } catch (Exception e) {
                     ToastUtil.getInstance(ProjectDetailActivity.this).showToast("请输入正确的金额");
                 }
 
@@ -660,12 +711,14 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         boolean isSeller;
         boolean clickable;
         ArrayList<Object> dataList;
+        boolean isPaid;
 
-        public PlanAdapter(ArrayList<BountyItemBean> Bountylist, ArrayList<Consumer> Consumerdata, boolean isSeller, boolean clickable) {
+        public PlanAdapter(ArrayList<BountyItemBean> Bountylist, ArrayList<Consumer> Consumerdata, boolean isSeller, boolean clickable, boolean isPaid) {
             this.list = Bountylist;
             this.data = Consumerdata;
             this.isSeller = isSeller;
             this.clickable = clickable;
+            this.isPaid = isPaid;
             dataList = new ArrayList<>();
             initData();
         }
@@ -735,7 +788,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
 
                 final Consumer bean = getConsumer(bountyItemBean);
 
-                if ( bountyItemBean.getSeller().user != null) {
+                if (bountyItemBean.getSeller().user != null) {
                     holder.mTvName.setText(bountyItemBean.getSeller().user.getNickname());
                     Glide.with(mContext)
                             .load(bountyItemBean.getSeller().user.getAvatar().getUrl())
@@ -770,6 +823,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                             Intent intent = new Intent(mContext, CreatePlanActivity.class);
                             intent.putExtra("isDetail", true);
                             intent.putExtra("isConsume", true);
+                            intent.putExtra("isPaid", isPaid);
                             intent.putExtra("item", bountyItemBean);
                             intent.putExtra("id", bountyItemBean.getItemId());
                             if (bean != null) intent.putExtra("Consumer", bean);

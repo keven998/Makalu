@@ -83,7 +83,7 @@ public class ServiceListActivity extends PeachBaseActivity {
 
     private void getData(long userId) {
 
-        TravelApi.getSELLER_PROJECT(userId, new HttpCallBack<String>() {
+        TravelApi.TRADE_PROJECT_LIST(userId, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {
