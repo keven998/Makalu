@@ -39,8 +39,6 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
     private Context mContext;
     private int type;
 
-    static
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iv_avatar)

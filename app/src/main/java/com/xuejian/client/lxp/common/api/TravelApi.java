@@ -205,6 +205,50 @@ public class TravelApi extends BaseApi {
     // 商家接单列表
     public final static String TRADE_PROJECT_LIST = "/marketplace/sellers/%d/bounties";
 
+    // 城市详情
+    public final static String CITY_DETAIL_V1 = "/marketplace/geo/localities/%s";
+
+    // 城市详情中商家
+    public final static String CITY_DETAIL_V1_seller = "/marketplace/geo/localities/%s/sellers";
+
+    // 国家详情
+    public final static String COUNTRY_DETAIL_V1 = "/marketplace/geo/countries/%s";
+
+    // 国家详情中商家
+    public final static String COUNTRY_DETAIL_V1_seller = "/marketplace/geo/localities/%s/sellers";
+
+    public static void getSellerInCountryDetail(String countryId , HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CITY_DETAIL_V1_seller,countryId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getCountryDetail(String countryId , HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(COUNTRY_DETAIL_V1,countryId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getSellerInCityDetail(String cityId , HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CITY_DETAIL_V1_seller,cityId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
+    public static void getCityDetail(String cityId , HttpCallBack callback) {
+        PTRequest request = new PTRequest();
+        request.setHttpMethod(PTRequest.GET);
+        request.setUrl(SystemConfig.DEV_URL + String.format(CITY_DETAIL_V1,cityId));
+        setDefaultParams(request, "");
+        OkHttpClientManager.getInstance().request(request, "", callback);
+    }
+
     public static void TRADE_PROJECT_LIST(long sellerId , HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);

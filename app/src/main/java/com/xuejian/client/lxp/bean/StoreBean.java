@@ -31,6 +31,19 @@ public class StoreBean implements Parcelable {
 //    待处理订单数：pendingOrderCnt
 
 
+//            "refundCnt": 0,    // 退款数
+//            "refundRate": 0,   // 退款率
+//            "disputeCnt": 0,   // 纠纷数
+//            "disputeRate": 0,  // 纠纷率
+//            "subLocalities": [], // 服务城市
+//            "introduceURL": "http://h5.taozilvxing.com/poi/traffic.php?tid=547bfdbfb8ce043eb2d81fdb", // 介绍的页面
+
+    public int refundCnt;
+    public double refundRate;
+    public int disputeCnt;
+    public double disputeRate;
+    public String introduceURL;
+
     public int totalOrderCnt;
     public int pendingOrderCnt;
     public double totalSales;

@@ -401,6 +401,14 @@
 
 
 
+        <activity
+            android:name=".module.dest.CityDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.dest.CountryDetailActivity"
+            android:screenOrientation="portrait" />
+
+
         <!--电商页面-->
 
         <activity
@@ -567,7 +575,9 @@
 
 
 
-
+        <activity
+            android:name=".module.dest.CityDetailActivity"
+            android:screenOrientation="portrait" />
 
 
 

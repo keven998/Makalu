@@ -32,9 +32,9 @@ import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.VerticalTextView;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView;
-import com.xuejian.client.lxp.module.dest.CityInfoActivity;
+import com.xuejian.client.lxp.module.dest.CityDetailActivity;
+import com.xuejian.client.lxp.module.dest.CountryDetailActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
-import com.xuejian.client.lxp.module.goods.CountryListActivity;
 
 import java.util.ArrayList;
 
@@ -151,12 +151,12 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                 hideMenu();
 
                 if (adapter.getItem(position) instanceof CountryBean) {
-                    Intent intent = new Intent(getActivity(), CountryListActivity.class);
+                    Intent intent = new Intent(getActivity(), CountryDetailActivity.class);
                     intent.putExtra("id", ((CountryBean) adapter.getItem(position)).id);
-                    intent.putExtra("name", ((CountryBean) adapter.getItem(position)).zhName);
+                  //  intent.putExtra("name", ((CountryBean) adapter.getItem(position)).zhName);
                     startActivity(intent);
                 } else if (adapter.getItem(position) instanceof CityBean) {
-                    Intent intent = new Intent(getActivity(), CityInfoActivity.class);
+                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
                     intent.putExtra("id", ((CityBean) adapter.getItem(position)).id);
                     //    intent.putExtra("name", ((CountryBean)adapter.getItem(position)).zhName);
                     startActivity(intent);

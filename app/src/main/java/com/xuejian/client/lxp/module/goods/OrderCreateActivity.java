@@ -233,40 +233,6 @@ public class OrderCreateActivity extends PeachBaseActivity implements View.OnCli
     }
 
     public void showVoucher() {
-//        final Activity act = this;
-//        final AlertDialog dialog = new AlertDialog.Builder(act).create();
-//        priceInfoDialog =dialog;
-//        dialog.setCanceledOnTouchOutside(false);
-//        View contentView = View.inflate(act, R.layout.dialog_select_payment, null);
-//        CheckedTextView alipay = (CheckedTextView) contentView.findViewById(R.id.ctv_alipay);
-//        CheckedTextView weixinpay = (CheckedTextView) contentView.findViewById(R.id.ctv_weixin);
-//        alipay.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//            }
-//        });
-//        weixinpay.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//        contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//            }
-//        });
-//        dialog.show();
-//        WindowManager windowManager = act.getWindowManager();
-//        Window window = dialog.getWindow();
-//        window.setContentView(contentView);
-//        Display display = windowManager.getDefaultDisplay();
-//        WindowManager.LayoutParams lp = window.getAttributes();
-//        lp.width = display.getWidth(); // 设置宽度
-//        lp.verticalMargin=10f;
-//        window.setAttributes(lp);
-//        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-//        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
 
         View view = View.inflate(this, R.layout.price_detail, null);
         TextView tvpackage = (TextView) view.findViewById(R.id.tv_package);

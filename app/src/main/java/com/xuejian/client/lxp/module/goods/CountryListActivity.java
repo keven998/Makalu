@@ -23,7 +23,7 @@ import com.xuejian.client.lxp.bean.CountryBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.TitleHeaderBar;
-import com.xuejian.client.lxp.module.dest.CityInfoActivity;
+import com.xuejian.client.lxp.module.dest.CityDetailActivity;
 
 import java.util.ArrayList;
 
@@ -55,7 +55,7 @@ public class CountryListActivity extends PeachBaseActivity {
         gvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(CountryListActivity.this, CityInfoActivity.class);
+                Intent intent = new Intent(CountryListActivity.this, CityDetailActivity.class);
                 intent.putExtra("id", adapter.getItem(position).id);
                 startActivity(intent);
             }

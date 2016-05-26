@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.text.SpannableString;
@@ -12,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.aizou.core.http.HttpCallBack;
@@ -274,9 +277,96 @@ public class CityInfoActivity extends PeachBaseActivity {
                 startActivity(intent);
             }
         });
-
+        showPanel(bean );
     }
 
+    public void showPanel(final CityBean bean){
+        View view = View.inflate(this, R.layout.dialog_city_panel, null);
+        view.findViewById(R.id.btn_travel_notice).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CityInfoActivity.this, PeachWebViewActivity.class);
+                intent.putExtra("url", bean.playGuide);
+                intent.putExtra("title", "城市指南");
+                startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.btn_traffic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CityInfoActivity.this, PeachWebViewActivity.class);
+                intent.putExtra("url", bean.trafficInfoUrl);
+                intent.putExtra("title", "交通信息");
+                startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.btn_viewspot).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, SpotListActivity.class);
+//                locList.add(locBean);
+//                intent.putParcelableArrayListExtra("locList", locList);
+                intent.putExtra("type", TravelApi.PeachType.SPOT);
+                startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.btn_note).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MoreTravelNoteActivity.class);
+                intent.putExtra("keyword", bean.zhName);
+                intent.putExtra("id", bean.id);
+                startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.btn_food).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PoiListActivity.class);
+//                locList.clear();
+//                locList.add(locBean);
+ //               intent.putParcelableArrayListExtra("locList", locList);
+                intent.putExtra("type", TravelApi.PeachType.RESTAURANTS);
+                intent.putExtra("isFromCityDetail", true);
+                startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.btn_shopping).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PoiListActivity.class);
+//                locList.clear();
+//                locList.add(locBean);
+//                intent.putParcelableArrayListExtra("locList", locList);
+                intent.putExtra("type", TravelApi.PeachType.SHOPPING);
+                intent.putExtra("isFromCityDetail", true);
+                startActivity(intent);
+            }
+        });
+        final PopupWindow popupWindow = new PopupWindow(view);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setWidth(CommonUtils.getScreenWidth(this));
+        popupWindow.setHeight(CommonUtils.getScreenHeight(this)-title.getHeight()-50);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+        int[] location = new int[2];
+        title.getLocationOnScreen(location);
+        popupWindow.setAnimationStyle(R.style.PopAnimation1);
+        final int[]f = location;
+
+        findViewById(R.id.iv_menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.showAtLocation(title, Gravity.NO_GRAVITY,CommonUtils.getScreenWidth(CityInfoActivity.this)/2, title.getHeight()+50);
+            }
+        });
+    }
     class GoodsPageAdapter extends PagerAdapter {
 
         private Context mContext;

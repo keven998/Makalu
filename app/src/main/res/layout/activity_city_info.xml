@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
@@ -14,7 +16,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="30dp"
             android:scaleType="center"
-            android:src="@drawable/icon_arrow_left_white" />
+            android:src="@drawable/icon_arrow_left_white"/>
 
         <TextView
             android:id="@+id/tv_title_bar_title"
@@ -23,12 +25,12 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="旅行"
+            android:text="城市"
             android:textColor="@color/base_color_white"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <ImageView
-            android:id="@+id/iv_create_plan"
+            android:id="@+id/iv_menu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -36,63 +38,267 @@
             android:paddingLeft="8dp"
             android:paddingRight="14dp"
             android:scaleType="center"
-            android:visibility="gone"
-            android:src="@drawable/selector_btn_menu_add_navigationbar" />
-        <!--selector_ic_create_plan-->
-
-        <ImageView
-            android:id="@+id/iv_talk_share"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/iv_create_plan"
-            android:paddingLeft="32dp"
-            android:paddingRight="7dp"
-            android:scaleType="center"
-            android:visibility="gone"
-            android:src="@drawable/navigation_talk" />
-        <!--selector_ic_talk_share-->
+            android:src="@drawable/selector_btn_menu_add_navigationbar"
+            android:visibility="visible"/>
     </RelativeLayout>
-    <FrameLayout
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ListView
-            android:id="@+id/lv_city_detail"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@color/color_line"
-            android:dividerHeight="1px"
-            android:fadingEdge="none"
-            android:scrollbars="none"
-            android:paddingBottom="60dp"
-            android:clipToPadding="false"
-            />
+            android:orientation="vertical">
+            <FrameLayout
+                android:id="@+id/fl_city_img"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/city_viewpager_height">
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_city_empty"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="100dp"-->
-            <!--android:gravity="center"-->
-            <!--android:visibility="gone"-->
-            <!--android:text="招商"/>-->
-        <LinearLayout
-            android:visibility="gone"
-            android:orientation="vertical" android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/base_color_white"
-            android:layout_gravity="bottom"
-            android:id="@+id/footView"
-            >
-            <TextView
-                android:paddingTop="17dp"
-                android:paddingBottom="17dp"
-                android:id="@+id/tv_show_all"
+                <com.aizou.core.widget.autoscrollviewpager.AutoScrollViewPager
+                    android:id="@+id/vp_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/goods_img_height"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_city_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/base_color_white"
+                        android:textSize="17sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_city_name_en"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/base_color_white"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginRight="3dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_pic_num"/>
+
+                    <TextView
+                        android:id="@+id/tv_country_pic_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="12dp"
+                        android:text="图集"
+                        android:textColor="@color/base_color_white"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </FrameLayout>
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:textColor="@color/app_theme_color"
-                android:gravity="center"/>
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/iv_goods"
+                    android:text="玩家精选"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+                <TextView
+                    android:visibility="gone"
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tv_player_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/icon_commodity"
+                    android:drawablePadding="4dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="7dp"
+                android:background="@color/app_theme_color" />
+
+            <com.xuejian.client.lxp.common.widget.ListViewForScrollView
+                android:id="@+id/lv_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/iv_goods"
+                    android:text="当地热门旅行服务商"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+                <TextView
+                    android:visibility="gone"
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tv_seller_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/icon_commodity"
+                    android:drawablePadding="4dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+            <HorizontalScrollView
+                android:id="@+id/hs_seller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="15dp"
+                android:scrollbars="none" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_sellers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/iv_goods"
+                    android:text="当季热卖"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+                <TextView
+                    android:visibility="gone"
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tv_goods_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/icon_commodity"
+                    android:drawablePadding="4dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="7dp"
+                android:background="@color/app_theme_color" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/lv_city_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:fadingEdge="none"
+                    android:scrollbars="none"
+                    />
+                <LinearLayout
+                    android:id="@+id/footView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@color/base_color_white"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_show_all"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="17dp"
+                        android:paddingTop="17dp"
+                        android:textColor="@color/app_theme_color"
+                        android:textSize="17sp"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/base_color_white"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/iv_goods"
+                    android:text="热门城市"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+                <TextView
+                    android:visibility="gone"
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tv_city_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/icon_commodity"
+                    android:drawablePadding="4dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_text_ii"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="7dp"
+                android:background="@color/app_theme_color" />
+            <com.xuejian.client.lxp.common.widget.ListViewForScrollView
+                android:id="@+id/lv_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
-    </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
 
 </LinearLayout>
