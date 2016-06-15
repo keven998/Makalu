@@ -29,10 +29,28 @@
 
     </RelativeLayout>
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_create_project"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="80dp"
+            android:background="@color/app_theme_color"
+            android:layout_width="match_parent"
+            android:textColor="@color/base_color_white"
+            android:text="发布定制需求"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_height="50dp" />
+    </FrameLayout>
+
 
 </LinearLayout>

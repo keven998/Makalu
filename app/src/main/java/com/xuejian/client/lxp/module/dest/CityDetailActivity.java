@@ -8,10 +8,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
@@ -27,11 +29,11 @@ import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.CityBean;
 import com.xuejian.client.lxp.bean.CityDetailBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.Remarks;
 import com.xuejian.client.lxp.bean.SellerBean;
-import com.xuejian.client.lxp.bean.SellerWrap;
 import com.xuejian.client.lxp.bean.SimpleCommodityBean;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson;
@@ -42,6 +44,9 @@ import com.xuejian.client.lxp.common.widget.FixedGridLayoutManager;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
 import com.xuejian.client.lxp.common.widget.glide.GlideCircleTransform;
 import com.xuejian.client.lxp.module.PeachWebViewActivity;
+import com.xuejian.client.lxp.module.goods.CommodityDetailActivity;
+import com.xuejian.client.lxp.module.goods.CountryListActivity;
+import com.xuejian.client.lxp.module.goods.GoodsList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,27 +75,28 @@ public class CityDetailActivity extends PeachBaseActivity {
     TextView mTvCountryPicNum;
     @Bind(R.id.fl_city_img)
     FrameLayout mFlCityImg;
-    @Bind(R.id.tv_player_arrow)
-    TextView mTvPlayerArrow;
     @Bind(R.id.lv_player)
     ListViewForScrollView mLvPlayer;
     @Bind(R.id.rv_sellers)
     RecyclerView mRvSellers;
-    @Bind(R.id.tv_goods_arrow)
-    TextView mTvGoodsArrow;
     @Bind(R.id.lv_city_detail)
     RecyclerView mLvCityDetail;
     @Bind(R.id.tv_show_all)
     TextView mTvShowAll;
     @Bind(R.id.footView)
     LinearLayout mFootView;
-    @Bind(R.id.tv_city_arrow)
-    TextView mTvCityArrow;
     @Bind(R.id.lv_city)
     ListViewForScrollView mLvCity;
     @Bind(R.id.hs_seller)
     HorizontalScrollView hsSeller;
+    @Bind(R.id.rl_seller)
+    RelativeLayout rl_seller;
+    @Bind(R.id.rl_goods)
+    RelativeLayout rl_goods;
+    @Bind(R.id.rl_city)
+    RelativeLayout rl_city;
     private String id;
+    private boolean isCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,47 +104,95 @@ public class CityDetailActivity extends PeachBaseActivity {
         setContentView(R.layout.activity_city_info);
         ButterKnife.bind(this);
         id = getIntent().getStringExtra("id");
+        isCountry = getIntent().getBooleanExtra("isCountry",false);
+        mIvNavBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         getData();
     }
 
     private void getData() {
-        TravelApi.getCityDetail(id, new HttpCallBack<String>() {
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson<CityDetailBean> beanCommonJson = CommonJson.fromJson(result, CityDetailBean.class);
-                bindInfoView(beanCommonJson.result);
-            }
+        if (isCountry){
+            TravelApi.getCountryDetail(id, new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson<CityDetailBean> beanCommonJson = CommonJson.fromJson(result, CityDetailBean.class);
+                    bindInfoView(beanCommonJson.result);
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
 
-            }
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
 
-            }
-        });
+                }
+            });
+        }else {
+            TravelApi.getCityDetail(id, new HttpCallBack<String>() {
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson<CityDetailBean> beanCommonJson = CommonJson.fromJson(result, CityDetailBean.class);
+                    bindInfoView(beanCommonJson.result);
+                }
 
-        TravelApi.getSellerInCityDetail(id, new HttpCallBack<String>() {
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
 
-            @Override
-            public void doSuccess(String result, String method) {
-                CommonJson<SellerWrap> list = CommonJson.fromJson(result, SellerWrap.class);
-                bindSellerView(list.result.sellers);
-            }
+                }
 
-            @Override
-            public void doFailure(Exception error, String msg, String method) {
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
 
-            }
+                }
+            });
+        }
+        if (isCountry){
+            TravelApi.getSellerInCountryDetail(id, new HttpCallBack<String>() {
 
-            @Override
-            public void doFailure(Exception error, String msg, String method, int code) {
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson4List<SellerBean> list = CommonJson4List.fromJson(result, SellerBean.class);
+                    bindSellerView(list.result);
+                }
 
-            }
-        });
-        TravelApi.getCommodityList(null,null, id, null, null, null, "0", "4", new HttpCallBack<String>() {
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }else {
+            TravelApi.getSellerInCityDetail(id, new HttpCallBack<String>() {
+
+                @Override
+                public void doSuccess(String result, String method) {
+                    CommonJson4List<SellerBean> list = CommonJson4List.fromJson(result, SellerBean.class);
+                    bindSellerView(list.result);
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method) {
+
+                }
+
+                @Override
+                public void doFailure(Exception error, String msg, String method, int code) {
+
+                }
+            });
+        }
+
+        TravelApi.getCommodityList(null,null, id, null, null, null, "0", "4",false, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
@@ -156,13 +210,82 @@ public class CityDetailActivity extends PeachBaseActivity {
         });
     }
 
+    public void getCityList(String id){
+        if (TextUtils.isEmpty(id))return;
+        TravelApi.getCityList(id, "0","3",new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                CommonJson4List<CityBean> list = CommonJson4List.fromJson(result, CityBean.class);
+                bindCityView(list.result);
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
+    }
+
+    private void bindCityView(final List<CityBean> result) {
+
+        TalentLocAdapter adapter = new TalentLocAdapter();
+        if (result.size()>=3){
+            adapter.getList().addAll(result.subList(0,3));
+        }else {
+            adapter.getList().addAll(result);
+        }
+
+        mLvCity.setAdapter(adapter);
+        mLvCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(CityDetailActivity.this,CityDetailActivity.class);
+                intent.putExtra("id",result.get(position).id);
+                startActivity(intent);
+            }
+        });
+    }
+
     private void bindCommodityView(List<SimpleCommodityBean> result) {
         mLvCityDetail.setLayoutManager(new FixedGridLayoutManager(this, 2));
-        mLvCityDetail.setAdapter(new Adapter(this,result));
+        Adapter adapter = new Adapter(this,result);
+        mLvCityDetail.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(CityDetailActivity.this, CommodityDetailActivity.class);
+                intent.putExtra("commodityId", id);
+                startActivity(intent);
+            }
+        });
+
+        rl_goods.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CityDetailActivity.this, GoodsList.class);
+                intent.putExtra("id", id);
+                intent.putExtra("title", "");
+                startActivity(intent);
+            }
+        });
     }
 
     private void bindSellerView(List<SellerBean> result) {
         initScrollView(result);
+        rl_seller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CityDetailActivity.this,SellerListActivity.class);
+                intent.putExtra("id",id);
+                startActivity(intent);
+            }
+        });
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 //        mRvSellers.setLayoutManager(linearLayoutManager);
 //        mRvSellers.setAdapter(new SellerAdapter(result));
@@ -199,9 +322,27 @@ public class CityDetailActivity extends PeachBaseActivity {
         hsSeller.addView(llPics);
     }
     private void bindInfoView(final CityDetailBean result) {
+        getCityList(result.country.id);
+        rl_city.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CityDetailActivity.this,CountryListActivity.class);
+                intent.putExtra("id",result.country.id);
+                intent.putExtra("name",result.getZhName());
+                startActivity(intent);
+            }
+        });
         mTvTitleBarTitle.setText(result.getZhName());
         mVpPic.setAdapter(new GoodsPageAdapter(this, result.getImages(), result.getId(), result.getZhName()));
         mLvPlayer.setAdapter(new PlayAdapter(result.getRemarks()));
+        mLvPlayer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(CityDetailActivity.this,PeachWebViewActivity.class);
+                intent.putExtra("url",result.getRemarks().get(position).url);
+                startActivity(intent);
+            }
+        });
         mIvMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -595,6 +736,85 @@ public class CityDetailActivity extends PeachBaseActivity {
 
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
+        }
+    }
+
+    private class TalentLocAdapter extends BaseAdapter {
+        private ArrayList<Object> list;
+
+        public TalentLocAdapter() {
+            this.list = new ArrayList<>();
+        }
+
+        public ArrayList<Object> getList() {
+            return list;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+
+                final CityBean bean = (CityBean) getItem(position);
+                if (convertView == null) {
+                    convertView = View.inflate(parent.getContext(), R.layout.cell_destinaiton, null);
+                    holder = new ViewHolder();
+                    holder.bgImage = (ImageView) convertView.findViewById(R.id.iv_country_img);
+                    holder.zhName = (TextView) convertView.findViewById(R.id.tv_country_zh_name);
+                    holder.enName = (TextView) convertView.findViewById(R.id.tv_country_en_name);
+                    holder.storeCount = (TextView) convertView.findViewById(R.id.tv_store_num);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                if (bean.images.size() > 0) {
+                    Glide.with(parent.getContext())
+                            .load(bean.images.get(0).url)
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.bgImage);
+                    // mImgLoader.displayImage(bean.images.get(0).url, holder.bgImage, poptions);
+                } else {
+                    Glide.with(parent.getContext())
+                            .load("")
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.bgImage);
+                    //   mImgLoader.displayImage("", holder.bgImage, poptions);
+                }
+                holder.enName.setText(bean.enName);
+                holder.zhName.setText(bean.zhName);
+                if (bean.commoditiesCnt==0){
+                    holder.storeCount.setVisibility(View.GONE);
+                }else {
+                    holder.storeCount.setVisibility(View.VISIBLE);
+                    holder.storeCount.setText(String.valueOf(bean.commoditiesCnt));
+                }
+                return convertView;
+        }
+
+
+        private class ViewHolder {
+            private ImageView bgImage;
+            private TextView zhName;
+            private TextView enName;
+            private TextView storeCount;
         }
     }
 }

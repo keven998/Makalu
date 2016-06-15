@@ -2,25 +2,27 @@
 <resources>
     <string-array name="poi_type">
         <item>景点</item>
-        <item>酒店</item>
         <item>美食</item>
         <item>购物</item>
+        <item>酒店</item>
     </string-array>
     <string-array name="poi_type_value">
         <item>vs</item>
-        <item>hotel</item>
         <item>restaurant</item>
         <item>shopping</item>
+        <item>hotels</item>
     </string-array>
     <string-array name="poi_type_values_name">
         <item>景点</item>
         <item>美食</item>
         <item>购物</item>
+        <item>酒店</item>
     </string-array>
     <string-array name="poi_type_values">
         <item>vs</item>
         <item>restaurant</item>
         <item>shopping</item>
+        <item>hotels</item>
     </string-array>
     <string-array name="sns">
         <item>QQ</item>

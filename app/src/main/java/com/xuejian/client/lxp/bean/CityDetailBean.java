@@ -51,7 +51,7 @@ public class CityDetailBean {
      * cover : {"url":"http://7sbm17.com1.z0.glb.clouddn.com/commodity/images/9f3eaf3cad6a15ad1bebfa3a9a349dd0"}
      * images : null
      */
-
+    public LocBean country;
     private List<Remarks> remarks;
 
     public String getId() {

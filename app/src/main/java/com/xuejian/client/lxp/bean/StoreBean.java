@@ -40,16 +40,24 @@ public class StoreBean implements Parcelable {
 
     public int refundCnt;
     public double refundRate;
+    public double lastRefundRate;
+    public int lastRefundCnt;
     public int disputeCnt;
     public double disputeRate;
     public String introduceURL;
-
+    public ArrayList<LocBean> subLocalities;
     public int totalOrderCnt;
     public int pendingOrderCnt;
     public double totalSales;
     private String id;
     private int sellerId;
     private String name;
+    //haoping
+    public double goodRate;
+    public int level;
+    public double satisfactionRate;
+    public int lastSalesVolume;
+    public double lastSalesMoney;
     /**
      * title :
      * summary :

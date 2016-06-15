@@ -70,22 +70,16 @@ public class CountryDetailActivity extends PeachBaseActivity {
     TextView mTvCountryPicNum;
     @Bind(R.id.fl_city_img)
     FrameLayout mFlCityImg;
-    @Bind(R.id.tv_player_arrow)
-    TextView mTvPlayerArrow;
     @Bind(R.id.lv_player)
     ListViewForScrollView mLvPlayer;
     @Bind(R.id.rv_sellers)
     RecyclerView mRvSellers;
-    @Bind(R.id.tv_goods_arrow)
-    TextView mTvGoodsArrow;
     @Bind(R.id.lv_city_detail)
     RecyclerView mLvCityDetail;
     @Bind(R.id.tv_show_all)
     TextView mTvShowAll;
     @Bind(R.id.footView)
     LinearLayout mFootView;
-    @Bind(R.id.tv_city_arrow)
-    TextView mTvCityArrow;
     @Bind(R.id.lv_city)
     ListViewForScrollView mLvCity;
     @Bind(R.id.hs_seller)
@@ -138,7 +132,7 @@ public class CountryDetailActivity extends PeachBaseActivity {
 
             }
         });
-        TravelApi.getCommodityList(null,null, id, null, null, null, "0", "4", new HttpCallBack<String>() {
+        TravelApi.getCommodityList(null,null, id, null, null, null, "0", "4", false,new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);

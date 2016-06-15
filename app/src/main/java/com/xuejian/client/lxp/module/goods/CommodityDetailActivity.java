@@ -421,7 +421,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
             public void onClick(View v) {
                 MobclickAgent.onEvent(CommodityDetailActivity.this, "event_gotoStoreDetail");
                 Intent intent = new Intent();
-                intent.setClass(CommodityDetailActivity.this, StoreDetailActivity.class);
+                intent.setClass(CommodityDetailActivity.this, StoreDetailActivityV2.class);
                 intent.putExtra("sellerId", String.valueOf(bean.getSeller().getSellerId()));
                 startActivity(intent);
             }

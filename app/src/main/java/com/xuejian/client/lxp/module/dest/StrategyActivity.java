@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,8 +31,10 @@ import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CopyStrategyBean;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
+import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
+import com.xuejian.client.lxp.common.account.StrategyManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.dialog.ComfirmDialog;
 import com.xuejian.client.lxp.common.dialog.DialogManager;
@@ -47,6 +50,8 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.dest.fragment.CollectionFragment;
 import com.xuejian.client.lxp.module.dest.fragment.PlanScheduleFragment;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +79,10 @@ public class StrategyActivity extends PeachBaseActivity {
     FixedIndicatorView mStrategyIndicator;
     @Bind(R.id.iv_location)
     ImageView Iv_location;
+    @Bind(R.id.iv_edit)
+    ImageView ivEdit;
+    @Bind(R.id.day_pannel)
+    LinearLayout llAddDay;
     private String id;
     private StrategyBean strategy;
     private List<String> cityIdList;
@@ -91,7 +100,7 @@ public class StrategyActivity extends PeachBaseActivity {
     private String locId;
     private boolean recomment;
     private ArrayList<String> recommendCityList;
-
+    boolean auto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAccountAbout(true);
@@ -100,25 +109,64 @@ public class StrategyActivity extends PeachBaseActivity {
         locId = getIntent().getStringExtra("locId");
         recomment = getIntent().getBooleanExtra("recommend", false);
         destinations = getIntent().getParcelableArrayListExtra("destinations");
+        auto = getIntent().getBooleanExtra("auto",true);
         initView();
         initData(savedInstanceState);
+        llAddDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resizeData(strategy.itinerary);
+                routeDayMap.add(new ArrayList<PoiDetailBean>());
+                strategy.itineraryDays++;
+                saveStrategy();
+                if (routeDayFragment!=null){
+                    routeDayFragment.addDay();
+                }
+            }
+        });
     }
+    private void saveStrategy() {
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //MobclickAgent.onPageStart("page_lxp_plan_agenda");
-        //MobclickAgent.onResume(this);
+        final JSONObject jsonObject = new JSONObject();
+        StrategyManager.putSaveGuideBaseInfo(jsonObject, StrategyActivity.this, strategy);
+        StrategyManager.putItineraryJson(StrategyActivity.this, jsonObject, strategy, routeDayMap);
+
+        ArrayList<LocBean> locs=new ArrayList<LocBean>();
+        locs.addAll(strategy.localities);
+        TravelApi.saveGuide(strategy.id, jsonObject.toString(), new HttpCallBack() {
+            @Override
+            public void doSuccess(Object result, String method) {
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+            }
+        });
     }
+    private List<Integer> sectionlist ;
+    ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
+    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
+        sectionlist = new ArrayList<>();
+        StrategyBean strategyBean = strategy;
+        routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
+        for (int i = 0; i < strategyBean.itineraryDays; i++) {
+            routeDayMap.add(new ArrayList<PoiDetailBean>());
+        }
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //MobclickAgent.onPageEnd("page_lxp_plan_agenda");
-        //MobclickAgent.onPause(this);
+        for (StrategyBean.IndexPoi indexPoi : itinerary) {
+            if (routeDayMap.size() > indexPoi.dayIndex) {
+                routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
+            }
+        }
+        int temp = 0;
+        for (ArrayList<PoiDetailBean> list : routeDayMap) {
+            sectionlist.add(temp += list.size());
+        }
     }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -218,6 +266,15 @@ public class StrategyActivity extends PeachBaseActivity {
                 }.sendEmptyMessageDelayed(0, 300);
             }
         });
+        ivEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StrategyActivity.this, ActivityPlanEditor.class);
+                intent.putExtra("strategy", strategy);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_bottom_in, R.anim.slide_stay);
+            }
+        });
     }
 
     @Override
@@ -246,7 +303,7 @@ public class StrategyActivity extends PeachBaseActivity {
             for (LocBean loc : destinations) {
                 cityIdList.add(loc.id);
             }
-            createStrategyByCityIds(cityIdList, true);
+            createStrategyByCityIds(cityIdList, auto);
 
         } else {
             if (savedInstanceState != null) {
@@ -256,7 +313,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 boolean hasCache = setupViewFromCache(id);
                 if (!hasCache) {
                     try {
-                        DialogManager.getInstance().showLoadingDialog(this);
+                       // DialogManager.getInstance().showLoadingDialog(this);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -427,12 +484,17 @@ public class StrategyActivity extends PeachBaseActivity {
 
         if (user == null) {
             mIvMore.setVisibility(View.GONE);
+            ivEdit.setVisibility(View.GONE);
             Iv_location.setVisibility(View.VISIBLE);
             mTvCopyGuide.setVisibility(View.GONE);
         } else {
             isOwner = (user.getUserId() == result.userId);
+            if (isOwner){
+                llAddDay.setVisibility(View.VISIBLE);
+            }
             if (!isOwner) {
                 mIvMore.setVisibility(View.GONE);
+                ivEdit.setVisibility(View.GONE);
                 Iv_location.setVisibility(View.GONE);
                 mTvCopyGuide.setVisibility(View.VISIBLE);
                 mTvCopyGuide.setOnClickListener(new View.OnClickListener() {
@@ -447,7 +509,7 @@ public class StrategyActivity extends PeachBaseActivity {
                             public void onClick(View v) {
                                 dialog.dismiss();
                                 try {
-                                    DialogManager.getInstance().showLoadingDialog(mContext);
+                                //    DialogManager.getInstance().showLoadingDialog(mContext);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -525,6 +587,7 @@ public class StrategyActivity extends PeachBaseActivity {
                 });
             } else {
                 mIvMore.setVisibility(View.VISIBLE);
+                ivEdit.setVisibility(View.VISIBLE);
                 Iv_location.setVisibility(View.VISIBLE);
                 mTvCopyGuide.setVisibility(View.GONE);
                 dtv.setOnClickListener(new View.OnClickListener() {
@@ -544,7 +607,7 @@ public class StrategyActivity extends PeachBaseActivity {
                                 }
                                 editDialog.dismiss();
                                 try {
-                                    DialogManager.getInstance().showLoadingDialog(mContext);
+                                 //   DialogManager.getInstance().showLoadingDialog(mContext);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

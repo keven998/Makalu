@@ -63,23 +63,23 @@ android {
     }
     productFlavors {
         xiaomi {}
-        yingyongbao {}
-        baidu {}
-        huawei {}
-        wandoujia {}
-        androidMarket {}
-        meizu {}
-        xiaoqudao {}
-        leshi {}
-        LXP {}
-        anzhi {}
-        sougou {}
-        pp {}
-        leshop {}
-        shop360 {}
-        google {}
-        samsung {}
-        aiqiyi {}
+//        yingyongbao {}
+//        baidu {}
+//        huawei {}
+//        wandoujia {}
+//        androidMarket {}
+//        meizu {}
+//        xiaoqudao {}
+//        leshi {}
+//        LXP {}
+//        anzhi {}
+//        sougou {}
+//        pp {}
+//        leshop {}
+//        shop360 {}
+//        google {}
+//        samsung {}
+//        aiqiyi {}
         productFlavors.all {
 
             flavor ->
@@ -108,8 +108,10 @@ dependencies {
     compile project(':social_sdk_library_project')
     compile project(':im')
     compile files('libs/locSDK_3.3.jar')
-    compile 'com.android.support:support-v4:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
     /**
      * butterKnife view注入
      */
@@ -136,10 +138,6 @@ dependencies {
     compile files('libs/AMap_2DMap_v2.6.0_20150916.jar')
     compile files('libs/AMap_ Location_v1.4.0.1_20150910.jar')
     /**
-     * design库，6.0控件
-     */
-    compile 'com.android.support:design:23.1.1'
-    /**
      * 日历view
      */
     compile 'com.squareup:android-times-square:1.6.4@aar'
@@ -162,6 +160,7 @@ dependencies {
      * 消息总线
      */
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.jzxiang.pickerview:TimePickerDialog:0.9.2'
 }
 
 def releaseTime() {

@@ -93,19 +93,6 @@ public class AddPoiActivity extends PeachBaseActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        MobclickAgent.onPageStart("page_add_agenda");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        MobclickAgent.onPageEnd("page_add_agenda");
-    }
-
-
     private void initView() {
         setContentView(R.layout.activity_add_poi);
         ButterKnife.bind(this);
@@ -190,23 +177,6 @@ public class AddPoiActivity extends PeachBaseActivity {
                 startActivityForResult(sear_intent, SEARCH_CODE);
             }
         });
-//        mBtnSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mKeyWord = mEtSearch.getText().toString().trim();
-//                if(TextUtils.isEmpty(mKeyWord)){
-//                    ToastUtil.getInstance(mContext).showToast("请输入关键字");
-//                    return;
-//                }
-//                Intent intent = new Intent(mContext,SearchPoiActivity.class);
-//                intent.putExtra("keyword",mKeyWord);
-//                intent.putExtra("type",mType);
-//                intent.putExtra("dayIndex",dayIndex);
-//                intent.putParcelableArrayListExtra("poiList", hasAddList);
-//                intent.putExtra("loc",curLoc);
-//                startActivityForResult(intent,REQUEST_CODE_SEARCH_POI);
-//            }
-//        });
     }
 
 
@@ -376,46 +346,8 @@ public class AddPoiActivity extends PeachBaseActivity {
         }
     }
 
-    /*private void initSpinnerListener() {
-        mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MobclickAgent.onEvent(mContext,"event_filter_items");
-                mType = poiTypeValueArray[position];
-                mPoiAdapter.getDataList().clear();
-                mPoiAdapter.notifyDataSetChanged();
-                mLvPoiList.onPullUpRefreshComplete();
-                mLvPoiList.onPullDownRefreshComplete();
-                mLvPoiList.doPullRefreshing(true,500);
-//                getPoiListByLoc(mType, curLoc.id, 0);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        mLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
-                MobclickAgent.onEvent(mContext,"event_filter_city");
-                curLoc = locList.get(position);
-                mPoiAdapter.getDataList().clear();
-                mPoiAdapter.notifyDataSetChanged();
-                mLvPoiList.onPullUpRefreshComplete();
-                mLvPoiList.onPullDownRefreshComplete();
-                mLvPoiList.doPullRefreshing(true,500);
-//                getPoiListByLoc(mType, curLoc.id, 0);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-
-    }*/
-
     private void initData() {
+        mType = getIntent().getStringExtra("type");
         dayIndex = getIntent().getIntExtra("dayIndex", -1);
         hasAddList = getIntent().getParcelableArrayListExtra("poiList");
         if (hasAddList.size() > 0) {
@@ -640,13 +572,6 @@ public class AddPoiActivity extends PeachBaseActivity {
             if (requestCode == SEARCH_CODE) {
                 ArrayList<PoiDetailBean> list = new ArrayList<>();
                 list = data.getParcelableArrayListExtra("newPoi");
-//                hasAddList.addAll(list);
-//                for (PoiDetailBean detailBean : mPoiAdapter.getDataList()) {
-//                    detailBean.hasAdded = hasAddList.contains(detailBean);
-//                }
-//                mPoiAdapter.notifyDataSetChanged();
-
-
                 if (list.size() > 0) {
                     if (hasAddList.size() > 0) {
                         for (PoiDetailBean bean : hasAddList) {
@@ -667,12 +592,6 @@ public class AddPoiActivity extends PeachBaseActivity {
                         FrameLayout del_fl = (FrameLayout) view.findViewById(R.id.poi_del_fl);
                         TextView location = (TextView) view.findViewById(R.id.names);
                         location.setText(bean.zhName);
-
-
-//                        View cityView = View.inflate(mContext, R.layout.poi_select_name, null);
-//                        TextView poiNameTv = (TextView) cityView.findViewById(R.id.names);
-//                        poiNameTv.setText(bean.zhName);
-//                        poiNameTv.setTextColor(getResources().getColor(R.color.color_text_ii));
                         hsViewLL.addView(view);
                         autoScrollPanel();
                     }

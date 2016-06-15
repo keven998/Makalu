@@ -130,7 +130,7 @@ public class TradeGoodsListFragment extends PeachBaseFragment {
     public void getCommodities(String status,int start,int count, final boolean refresh) {
         long userId = AccountManager.getInstance().getLoginAccount(getActivity()).getUserId();
 
-        TravelApi.getCommodityList(String.valueOf(userId), status, null, null,"createTime", "desc",  String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getCommodityList(String.valueOf(userId), status, null, null,"createTime", "desc",  String.valueOf(start), String.valueOf(count),false, new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);

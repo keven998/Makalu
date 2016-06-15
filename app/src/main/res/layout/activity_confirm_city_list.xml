@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rl_normal_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/tab_bar_color">
+
+        <TextView
+            android:id="@+id/tv_title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:drawableLeft="@drawable/icon_arrow_left_white"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp" />
+
+        <TextView
+            android:id="@+id/tv_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:drawablePadding="5dp"
+            android:text="制作行程"
+            android:gravity="center"
+            android:padding="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/base_color_white"
+            android:textSize="17sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/app_theme_color" />
+
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/lv_city_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
+            />
+        <TextView
+            android:id="@+id/tv_save"
+            android:layout_gravity="bottom"
+            android:background="@color/app_theme_color"
+            android:textColor="@color/base_color_white"
+            android:textSize="16sp"
+            android:layout_margin="10dp"
+            android:text="完成"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+    </FrameLayout>
+
+</LinearLayout>

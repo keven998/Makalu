@@ -1,14 +1,21 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -189,10 +196,7 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                         });
 
                     } else {
-                        Intent intent = new Intent(mContext, StrategyActivity.class);
-                        intent.putParcelableArrayListExtra("destinations", allAddCityList);
-                        startActivity(intent);
-                        finish();
+                        showCreateType();
                     }
 
                 } else {
@@ -263,6 +267,52 @@ public class SelectDestActivity extends PeachBaseActivity implements OnDestActio
                 }
             }
         });
+    }
+
+    private void showCreateType() {
+        final Dialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setCanceledOnTouchOutside(false);
+        View contentView = View.inflate(this, R.layout.dialog_select_create_plan, null);
+        CheckedTextView alipay = (CheckedTextView) contentView.findViewById(R.id.ctv_alipay);
+        CheckedTextView weixinpay = (CheckedTextView) contentView.findViewById(R.id.ctv_weixin);
+        alipay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent intent = new Intent(mContext, StrategyActivity.class);
+                intent.putParcelableArrayListExtra("destinations", allAddCityList);
+                intent.putExtra("auto",true);
+                startActivity(intent);
+                finish();
+            }
+        });
+        weixinpay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent intent = new Intent(mContext, ConfirmCityActivity.class);
+                intent.putParcelableArrayListExtra("loc", allAddCityList);
+                startActivity(intent);
+                finish();
+            }
+        });
+        contentView.findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        WindowManager windowManager = getWindowManager();
+        Window window = dialog.getWindow();
+        window.setContentView(contentView);
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = display.getWidth(); // 设置宽度
+        window.setAttributes(lp);
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.SelectPicDialog); // 添加动画
+        dialog.getWindow().setAttributes(lp);
     }
 
     @Override

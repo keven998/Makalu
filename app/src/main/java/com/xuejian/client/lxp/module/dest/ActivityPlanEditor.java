@@ -135,19 +135,6 @@ public class ActivityPlanEditor extends FragmentActivity {
             }
         }
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //MobclickAgent.onPageStart("page_edit_lxp_plan");
-        //  MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //MobclickAgent.onPageEnd("page_edit_lxp_plan");
-        // MobclickAgent.onPause(this);
-    }
 
     @Override
     public void onBackPressed() {

@@ -33,7 +33,6 @@ import com.xuejian.client.lxp.common.widget.VerticalTextView;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleLayout;
 import com.xuejian.client.lxp.common.widget.circleMenu.CircleTextView;
 import com.xuejian.client.lxp.module.dest.CityDetailActivity;
-import com.xuejian.client.lxp.module.dest.CountryDetailActivity;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 
 import java.util.ArrayList;
@@ -151,8 +150,9 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
                 hideMenu();
 
                 if (adapter.getItem(position) instanceof CountryBean) {
-                    Intent intent = new Intent(getActivity(), CountryDetailActivity.class);
+                    Intent intent = new Intent(getActivity(), CityDetailActivity.class);
                     intent.putExtra("id", ((CountryBean) adapter.getItem(position)).id);
+                    intent.putExtra("isCountry",true);
                   //  intent.putExtra("name", ((CountryBean) adapter.getItem(position)).zhName);
                     startActivity(intent);
                 } else if (adapter.getItem(position) instanceof CityBean) {
@@ -172,7 +172,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         });
         showMenu.setTextColor(getResources().getColor(R.color.base_color_white));
         showMenu.setTextSize(12);
-        showMenu.setText("热门");
+       // showMenu.setText("热门");
         ((TextView)view.findViewById(R.id.tv_search_content)).setText("目的地搜索");
     }
 
@@ -210,7 +210,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         ((CircleTextView) view).setTextColor(getResources().getColor(R.color.app_theme_color));
         ((CircleTextView) view).setTextSize(14f);
         getData(code[Integer.parseInt(name)]);
-        showMenu.setText(zhName[Integer.parseInt(name)]);
+     //   showMenu.setText(zhName[Integer.parseInt(name)]);
     }
 
     @Override

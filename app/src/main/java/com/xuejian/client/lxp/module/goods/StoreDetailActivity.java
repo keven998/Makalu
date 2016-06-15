@@ -153,7 +153,7 @@ public class StoreDetailActivity extends PeachBaseActivity {
             }
         });
 
-        TravelApi.getCommodityList(sellerId,null ,null, null, null, null, String.valueOf(start), String.valueOf(count), new HttpCallBack<String>() {
+        TravelApi.getCommodityList(sellerId,null ,null, null, null, null, String.valueOf(start), String.valueOf(count),false, new HttpCallBack<String>() {
 
             @Override
             public void doSuccess(String result, String method) {

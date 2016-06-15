@@ -20,7 +20,9 @@ public class SellerBean implements Parcelable {
      * phone : []
      * favorCnt : 0
      */
-
+    public int level;
+    public int lastSalesVolume;
+    public double lastSalesMoney;
     private long sellerId;
     private String name;
     private int favorCnt;

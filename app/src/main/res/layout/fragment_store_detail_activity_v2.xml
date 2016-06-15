@@ -1,0 +1,12 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".module.goods.StoreDetailActivityV2$CommodityFragment">
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/ul_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"/>
+</RelativeLayout>

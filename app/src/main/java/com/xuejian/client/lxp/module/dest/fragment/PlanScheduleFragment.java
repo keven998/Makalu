@@ -46,11 +46,13 @@ public class PlanScheduleFragment extends Fragment {
         if (strategy != null) resizeData(strategy.itinerary, strategy);
     }
 
+    private DSAdapter mAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_plan_schedule_summary, container, false);
         mListView = (ListView) rootView.findViewById(R.id.listview_plan_schedule);
-        mListView.setAdapter(new DSAdapter(routeDayMap));
+        mAdapter = new DSAdapter(routeDayMap);
+        mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -64,6 +66,11 @@ public class PlanScheduleFragment extends Fragment {
         return rootView;
     }
 
+    public void addDay(){
+        if (mAdapter!=null){
+            mAdapter.addDay();
+        }
+    }
 
     private StrategyBean getStrategy() {
         return ((StrategyActivity) getActivity()).getStrategy();
@@ -103,6 +110,11 @@ public class PlanScheduleFragment extends Fragment {
         @Override
         public long getItemId(int position) {
             return position;
+        }
+
+        public void addDay(){
+            routeDayMap.add(new ArrayList<PoiDetailBean>());
+            notifyDataSetChanged();
         }
 
         @Override

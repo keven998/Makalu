@@ -65,7 +65,7 @@ public class CountryListActivity extends PeachBaseActivity {
 
     private void initData(String id) {
         if (TextUtils.isEmpty(id)) return;
-        TravelApi.getCityList(id, new HttpCallBack<String>() {
+        TravelApi.getCityList(id,"" ,"",new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 CommonJson4List<CountryBean> list = CommonJson4List.fromJson(result, CountryBean.class);

@@ -17,6 +17,7 @@ public class Remarks {
     public int articleId;
     public String title;
     public String desc;
+    public String url;
     public String contents;
     public String status;
     public long createTime;

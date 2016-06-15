@@ -737,7 +737,7 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
-    public static void getCommodityList(String sellerId,String status, String localityId, String category, String sortBy, String sort,String start ,String count,HttpCallBack callback) {
+    public static void getCommodityList(String sellerId,String status, String localityId, String category, String sortBy, String sort,String start ,String count,boolean type,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + COMMODITY_LIST);
@@ -745,6 +745,7 @@ public class TravelApi extends BaseApi {
             request.putUrlParams("start", start);
             request.putUrlParams("count", count);
         }
+        if (type)request.putUrlParams("cType","scheme");
         if (!TextUtils.isEmpty(sellerId)) request.putUrlParams("seller", sellerId);
         if (!TextUtils.isEmpty(localityId)) request.putUrlParams("locality", localityId);
         if (!TextUtils.isEmpty(category)) request.putUrlParams("category", category);
@@ -789,10 +790,14 @@ public class TravelApi extends BaseApi {
         OkHttpClientManager.getInstance().request(request, "", callback);
     }
 
-    public static void getCityList(String countryId, HttpCallBack callback) {
+    public static void getCityList(String countryId,String start ,String count, HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.GET);
         request.setUrl(SystemConfig.DEV_URL + CITY_LIST);
+        if (!TextUtils.isEmpty(start)&&!TextUtils.isEmpty(count)) {
+            request.putUrlParams("start", start);
+            request.putUrlParams("count", count);
+        }
         request.putUrlParams("countryId", countryId);
         setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
@@ -1089,6 +1094,7 @@ public class TravelApi extends BaseApi {
         }
         setDefaultParams(request, jsonObject.toString());
         LogUtil.d(jsonObject.toString());
+        System.out.println(jsonObject.toString());
         OkHttpClientManager.getInstance().request(request, jsonObject.toString(), callback);
         //  return HttpManager.request(request, callback);
     }

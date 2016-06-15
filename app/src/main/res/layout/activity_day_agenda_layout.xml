@@ -15,14 +15,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/title_bar_height"
-            android:background="@color/white">
+            android:background="@color/tab_bar_color">
 
             <TextView
                 android:id="@+id/tv_title_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:drawableLeft="@drawable/selector_ic_nav_back"
+                android:drawableLeft="@drawable/icon_arrow_left_white"
                 android:paddingLeft="10dp"
                 android:paddingRight="30dp" />
 
@@ -37,7 +37,7 @@
                 android:layout_marginTop="7dp"
                 android:gravity="center"
                 android:singleLine="true"
-                android:textColor="@color/color_text_ii"
+                android:textColor="@color/base_color_white"
                 android:textSize="14sp" />
 
             <TextView
@@ -52,23 +52,27 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
-                android:textColor="@color/color_text_ii"
+                android:textColor="@color/base_color_white"
                 android:textSize="10sp" />
 
-            <TextView
-                android:id="@+id/tv_edit_schedule"
+            <ImageView
+                android:id="@+id/iv_panel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:gravity="center_vertical"
-                android:paddingLeft="32dp"
-                android:paddingRight="14dp"
-                android:singleLine="true"
-                android:text="修改行程"
-                android:textColor="@color/color_text_ii"
-                android:textSize="16sp"
-                android:visibility="gone"/>
-
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_add_normal" />
+            <ImageView
+                android:layout_toLeftOf="@+id/iv_panel"
+                android:id="@+id/tv_edit_schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="center"
+                android:src="@drawable/icon_edit_plan" />
         </RelativeLayout>
 
         <View

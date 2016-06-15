@@ -18,6 +18,7 @@ import com.xuejian.client.lxp.common.account.AccountManager;
 import com.xuejian.client.lxp.common.api.TravelApi;
 import com.xuejian.client.lxp.common.gson.CommonJson4List;
 import com.xuejian.client.lxp.common.widget.twowayview.layout.DividerItemDecoration;
+import com.xuejian.client.lxp.module.my.LoginActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +36,8 @@ public class MyProjectListActivity extends PeachBaseActivity {
     XRecyclerView recyclerview;
     @Bind(R.id.content)
     LinearLayout content;
-
+    @Bind(R.id.tv_create_project)
+    TextView tv_create_project;
 
     ProjectAdapter adapter;
     @Override
@@ -54,6 +56,17 @@ public class MyProjectListActivity extends PeachBaseActivity {
         setupRecyclerView(recyclerview);
         long userId = AccountManager.getInstance().getLoginAccount(this).getUserId();
         getData(userId);
+        tv_create_project.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AccountManager.getInstance().getLoginAccount(MyProjectListActivity.this)==null){
+                    Intent logIntent = new Intent(MyProjectListActivity.this, LoginActivity.class);
+                    startActivityWithNoAnim(logIntent);
+                }else {
+                    startActivity(new Intent(MyProjectListActivity.this,ProjectCreateActivity.class));
+                }
+            }
+        });
     }
 
     private void getData(long userId) {
@@ -65,8 +78,13 @@ public class MyProjectListActivity extends PeachBaseActivity {
             public void doSuccess(String result, String method) {
                 CommonJson4List<BountiesBean> list = CommonJson4List.fromJson(result,BountiesBean.class);
                 if (list.code==0){
-                    adapter.getDataList().addAll(list.result);
-                    adapter.notifyDataSetChanged();
+                    if (list.result.size()==0){
+                        tv_create_project.setVisibility(View.VISIBLE);
+                    }else {
+                        adapter.getDataList().addAll(list.result);
+                        adapter.notifyDataSetChanged();
+                    }
+
                 }
             }
 

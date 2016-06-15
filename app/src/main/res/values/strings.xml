@@ -85,4 +85,6 @@
     <string name="commodity_notice">购买须知</string>
     <string name="commodity_book">预定及退改</string>
     <string name="commodity_traffic">交通提示</string>
+    <string name="title_activity_store_detail_activity_v2">StoreDetailActivityV2</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
