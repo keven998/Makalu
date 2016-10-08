@@ -172,7 +172,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         });
         showMenu.setTextColor(getResources().getColor(R.color.base_color_white));
         showMenu.setTextSize(12);
-       // showMenu.setText("热门");
+        showMenu.setText("热门");
         ((TextView)view.findViewById(R.id.tv_search_content)).setText("目的地搜索");
     }
 
@@ -210,7 +210,7 @@ public class DestinationFragment extends PeachBaseFragment implements CircleLayo
         ((CircleTextView) view).setTextColor(getResources().getColor(R.color.app_theme_color));
         ((CircleTextView) view).setTextSize(14f);
         getData(code[Integer.parseInt(name)]);
-     //   showMenu.setText(zhName[Integer.parseInt(name)]);
+        showMenu.setText(zhName[Integer.parseInt(name)]);
     }
 
     @Override

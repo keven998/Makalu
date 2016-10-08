@@ -27,7 +27,15 @@
             android:text="需求详情"
             android:textColor="@color/base_color_white"
             android:textSize="18sp" />
-
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dp"
+            android:paddingRight="15dp"
+            android:scaleType="center"
+            android:src="@drawable/icon_share" />
     </RelativeLayout>
     <!--android:layout_marginTop="@dimen/title_bar_height"-->
     <ScrollView
@@ -351,6 +359,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal">
@@ -381,6 +390,7 @@
             <!--旅行信息-->
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="10dp"
@@ -396,6 +406,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
+                android:visibility="gone"
                 android:background="@color/color_line" />
 
             <LinearLayout

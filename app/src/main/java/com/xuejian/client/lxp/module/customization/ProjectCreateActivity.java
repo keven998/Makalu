@@ -357,7 +357,7 @@ public class ProjectCreateActivity extends PeachBaseActivity {
         View contentView = View.inflate(this, R.layout.dialog_project_select, null);
         final ListViewForScrollView listView = (ListViewForScrollView) contentView.findViewById(R.id.lv);
         TextView title = (TextView) contentView.findViewById(R.id.tv_title);
-        final String[] theme = new String[]{"蜜月度假", "家庭亲子", "美食购物", "人文探索", "户外体验"};
+        final String[] theme = new String[]{"蜜月度假", "家庭亲子", "美食购物", "人文探索", "户外体验","商务考察"};
         final String[] service = new String[]{"机票酒店", "美食门票", "导游接机", "行程设计", "全套服务"};
 
         final ArrayList<String> themeList = new ArrayList<String>(Arrays.asList(theme));

@@ -549,6 +549,9 @@
             android:name=".module.customization.DestMenuActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".module.dest.MsgActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.customization.ProjectDetailActivity"
             android:screenOrientation="portrait"/>
         <activity

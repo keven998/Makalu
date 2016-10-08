@@ -26,6 +26,7 @@ import com.aizou.core.http.HttpCallBack;
 import com.aizou.core.utils.SharePrefUtil;
 import com.aizou.core.widget.section.BaseSectionAdapter;
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.IndexPoi;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -145,14 +146,14 @@ public class ActivityPlanEditor extends FragmentActivity {
         }
     }
 
-    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
+    private void resizeData(ArrayList<IndexPoi> itinerary) {
         StrategyBean strategyBean = strategy;
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
 
-        for (StrategyBean.IndexPoi indexPoi : itinerary) {
+        for (IndexPoi indexPoi : itinerary) {
             if (routeDayMap.size() > indexPoi.dayIndex) {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }

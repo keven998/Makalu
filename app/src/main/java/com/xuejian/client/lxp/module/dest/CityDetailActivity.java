@@ -303,16 +303,16 @@ public class CityDetailActivity extends PeachBaseActivity {
             if (list.get(index).user.getAvatar()!=null) {
                 Glide.with(this)
                         .load(list.get(index).user.getAvatar().getUrl())
-                        .placeholder(R.drawable.ic_default_picture)
-                        .error(R.drawable.ic_default_picture)
+                        .placeholder(R.drawable.icon_seller_default)
+                        .error(R.drawable.icon_seller_default)
                         .centerCrop()
                         .transform(new GlideCircleTransform(this))
                         .into(my_pics_cell);
             } else {
                 Glide.with(this)
                         .load("")
-                        .placeholder(R.drawable.ic_default_picture)
-                        .error(R.drawable.ic_default_picture)
+                        .placeholder(R.drawable.icon_seller_default)
+                        .error(R.drawable.icon_seller_default)
                         .centerCrop()
                         .transform(new GlideCircleTransform(this))
                         .into(my_pics_cell);
@@ -358,6 +358,8 @@ public class CityDetailActivity extends PeachBaseActivity {
         locBean.id = bean.getId();
         locBean.zhName = bean.getZhName();
         View view = View.inflate(this, R.layout.dialog_city_panel, null);
+        LinearLayout ll_container = (LinearLayout) view.findViewById(R.id.ll_container);
+
         view.findViewById(R.id.btn_travel_notice).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -440,6 +442,12 @@ public class CityDetailActivity extends PeachBaseActivity {
             @Override
             public void onClick(View v) {
                 popupWindow.showAtLocation(mTvTitleBarTitle, Gravity.NO_GRAVITY, CommonUtils.getScreenWidth(CityDetailActivity.this) / 2, mTvTitleBarTitle.getHeight() + 50);
+            }
+        });
+        ll_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
             }
         });
     }

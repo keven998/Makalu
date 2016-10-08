@@ -110,7 +110,7 @@ public class PeachWebViewActivity extends BaseWebViewActivity implements View.On
             shareHtml.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, true, mCurrentUrl+="&share=1", null);
+                    ShareUtils.showSelectPlatformDialog(PeachWebViewActivity.this, true, mCurrentUrl+="&share=1", null,"");
                 }
             });
         }

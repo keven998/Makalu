@@ -37,6 +37,7 @@ import com.xuejian.client.lxp.common.api.UserApi;
 import com.xuejian.client.lxp.common.dialog.PeachMessageDialog;
 import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
+import com.xuejian.client.lxp.common.utils.ShareUtils;
 import com.xuejian.client.lxp.common.widget.ListViewForScrollView;
 import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -47,6 +48,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -80,8 +82,8 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     TextView tvState;
     @Bind(R.id.tv_project_info1)
     TextView tvProjectInfo1;
-    @Bind(R.id.tv_project_time)
-    TextView tvProjectTime;
+//    @Bind(R.id.tv_project_time)
+//    TextView tvProjectTime;
     @Bind(R.id.tv_project_info2)
     TextView tvProjectInfo2;
     @Bind(R.id.tv_project_count)
@@ -134,13 +136,15 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     LinearLayout ll_contact_container;
     @Bind(R.id.tv_message_title)
     TextView tv_message_title;
+    @Bind(R.id.iv_share)
+    ImageView share;
     long id;
     boolean isOwner;
     long userId;
     private PlanAdapter mPlanAdapter;
     private boolean isTakerOrder;
     private boolean isCreatePlan;
-
+    public long itemId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,8 +206,16 @@ public class ProjectDetailActivity extends PeachBaseActivity {
     }
 
     private void bindView(final ProjectDetailBean bean) {
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareUtils.showSelectPlatformDialog(ProjectDetailActivity.this,true,bean.shareURL,null,"1");
+            }
+        });
 
-
+        if (bean.scheduled!=null){
+            itemId = bean.scheduled.getItemId();
+        }
         if (bean.consumer != null) {
             tvName.setText(bean.consumer.getNickname());
             Glide.with(mContext)
@@ -213,8 +225,10 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                     .centerCrop()
                     .into(ivAvatar);
         }
-
-        tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString(new Date(bean.createTime))));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //   holder.tvTimestamp.setText(String.format("在%s发布了需求",CommonUtils.getTimestampString(new Date(bean.createTime))));
+        tvTimestamp.setText(dateFormat.format(new Date(bean.createTime)));
+    //    tvTimestamp.setText(String.format("在%s发布了需求", CommonUtils.getTimestampString(new Date(bean.createTime))));
         StringBuilder desc = new StringBuilder();
         if (bean.getDestination() != null && bean.getDestination().size() > 0) {
             for (int i = 0; i < bean.getDestination().size(); i++) {
@@ -222,23 +236,36 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                 desc.append(bean.getDestination().get(i).zhName);
             }
         }
-        tvProjectInfo1.setText(String.format("[%s]", desc));
-        tvProjectTime.setText(String.format(Locale.CHINA, "%d日游", bean.getTimeCost()));
+        tvProjectInfo1.setText(String.format("%s%d日游", desc, bean.getTimeCost()));
+       // tvProjectTime.setText(String.format(Locale.CHINA, "%d日游", bean.getTimeCost()));
         tvProjectInfo2.setText(bean.getService());
-        tvProjectCount.setText(String.format(Locale.CHINA, "已有%d位商家抢单", bean.takers.size()));
+   //     tvProjectCount.setText(String.format(Locale.CHINA, "已有%d位商家抢单", bean.takers.size()));
+
+//
+//        String budget = String.format("定金%s元", CommonUtils.getPriceString(bean.getBountyPrice()));
+//
+//        SpannableString budgetString = new SpannableString(budget);
+//        budgetString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 2, budget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        SpannableString totalString = new SpannableString(total);
+//        totalString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 3, total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        SpannableStringBuilder price = new SpannableStringBuilder();
+//        price.append(budgetString).append("  ").append(totalString);
+//        tvProjectPrice.setText(price);
 
 
-        String budget = String.format("定金%s元", CommonUtils.getPriceString(bean.getBountyPrice()));
-        String total = String.format("总预算%s元", CommonUtils.getPriceString(bean.getBudget()));
+        tvProjectCount.setText(String.format(Locale.CHINA,"接单:已有%d位商家抢单",bean.takers.size()));
 
-        SpannableString budgetString = new SpannableString(budget);
-        budgetString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 2, budget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // String budget = String.format("定金%s元",CommonUtils.getPriceString(bean.getBountyPrice()));
+        String total = String.format("费用:总预算%s元",CommonUtils.getPriceString(bean.getBudget()));
+
+        //  SpannableString budgetString = new SpannableString(budget);
+        //  budgetString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),2,budget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableString totalString = new SpannableString(total);
-        totalString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)), 3, total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        totalString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),6,total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder price = new SpannableStringBuilder();
-        price.append(budgetString).append("  ").append(totalString);
+        price.append(totalString);
         tvProjectPrice.setText(price);
-
         if (bean.getContact() != null && bean.getContact().size() > 0) {
             tvContactName.setText(bean.getContact().get(0).getSurname() + bean.getContact().get(0).getGivenName());
             tvContactTel.setText(bean.getContact().get(0).getTel().getDialCode() + "-" + bean.getContact().get(0).getTel().getNumber());
@@ -252,7 +279,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
         tvDepartureDate.setText(bean.getDepartureDate());
         tvDepartureCnt.setText(String.format("%d天左右", bean.getTimeCost()));
         StringBuilder departurePeople = new StringBuilder();
-        departurePeople.append(String.format("%d人左右", bean.getParticipantCnt()));
+        departurePeople.append(String.format("%d人", bean.getParticipantCnt()));
         if (bean.getParticipants().size() > 0) {
             if (bean.getParticipants().contains("children")) departurePeople.append(" 含儿童 ");
             if (bean.getParticipants().contains("oldman")) departurePeople.append(" 含老人 ");
@@ -784,6 +811,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             if (o instanceof BountyItemBean) {
 
 
+
                 final BountyItemBean bountyItemBean = (BountyItemBean) o;
 
                 final Consumer bean = getConsumer(bountyItemBean);
@@ -798,6 +826,11 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                             .into(holder.mIvAvatar);
                 }
 
+                if (itemId == bountyItemBean.getItemId()){
+                    holder.zhongbiao.setVisibility(View.VISIBLE);
+                }else {
+                    holder.zhongbiao.setVisibility(View.GONE);
+                }
                 holder.mTvTimestamp.setText(String.format("在%s提交了方案", CommonUtils.getTimestampString(new Date(bountyItemBean.getCreateTime()))));
                 holder.mIvState.setVisibility(View.VISIBLE);
                 //  holder.mTvTimestamp.setText(DateFormat.format("yyyy-MM-dd", bountyItemBean.getUpdateTime()));
@@ -817,6 +850,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                     }
 
                 } else {
+
                     holder.ll_container.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -845,7 +879,7 @@ public class ProjectDetailActivity extends PeachBaseActivity {
 
                 holder.mTvTimestamp.setText("已接单");
                 holder.mIvTalk.setVisibility(View.VISIBLE);
-                holder.ll_container.setOnClickListener(new View.OnClickListener() {
+                holder.mIvTalk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent talkIntent = new Intent(mContext, ChatActivity.class);
@@ -854,6 +888,20 @@ public class ProjectDetailActivity extends PeachBaseActivity {
                         startActivity(talkIntent);
                     }
                 });
+//                holder.ll_container.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent talkIntent = new Intent(mContext, ChatActivity.class);
+//                        talkIntent.putExtra("friend_id", consumer.getUserId() + "");
+//                        talkIntent.putExtra("chatType", "single");
+//                        startActivity(talkIntent);
+//                    }
+//                });
+
+//                Matrix matrix=new Matrix();
+//                holder.zhongbiao.setScaleType(ImageView.ScaleType.MATRIX); //required
+//                matrix.postRotate((float) 90, 0, 0);
+//                holder.zhongbiao.setImageMatrix(matrix);
 
             }
 
@@ -946,7 +994,8 @@ public class ProjectDetailActivity extends PeachBaseActivity {
             ImageView mIvState;
             @Bind(R.id.ll_container)
             LinearLayout ll_container;
-
+            @Bind(R.id.iv_zhongbiao)
+            ImageView zhongbiao;
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }

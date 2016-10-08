@@ -1037,7 +1037,7 @@ public class TravelApi extends BaseApi {
 
         if (type.equals("vs")) type = "viewspots";
         if (type.equals("restaurant")) type = type + "s";
-
+        if (type.equals("hotel")) type = type + "s";
         request.setUrl(SystemConfig.DEV_URL + String.format(POI_DETAIL, type) + id);
         setDefaultParams(request,"");
         OkHttpClientManager.getInstance().request(request, "", callback);
@@ -1069,7 +1069,7 @@ public class TravelApi extends BaseApi {
      * @return change to api_dev
      */
     public static void createGuide
-    (String action, List<String> locList, boolean recommend, HttpCallBack callback) {
+    (String action, List<String> locList, boolean recommend,JSONArray array ,HttpCallBack callback) {
         PTRequest request = new PTRequest();
         request.setHttpMethod(PTRequest.POST);
         request.setUrl(SystemConfig.DEV_URL + String.format(CREATE_GUIDE, AccountManager.getCurrentUserId()));
@@ -1088,7 +1088,9 @@ public class TravelApi extends BaseApi {
             //        } else {
             jsonObject.put("action", action);
             //       }
-
+            if (array!=null){
+                jsonObject.put("localityItems", array);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

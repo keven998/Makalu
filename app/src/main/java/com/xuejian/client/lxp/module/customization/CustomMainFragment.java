@@ -120,7 +120,7 @@ public class CustomMainFragment extends PeachBaseFragment {
 
     private void bindView(List<ColumnBean> result) {
         for (ColumnBean columnBean : result) {
-            if ("slide".equals(columnBean.getColumnType())) {
+            if ("bounty".equals(columnBean.getColumnType())) {
                 mAutoScrollViewPager.setAdapter(new GoodsPageAdapter(getActivity(), result.get(0).getColumns()));
             }
         }

@@ -90,6 +90,7 @@ import com.xuejian.client.lxp.db.User;
 import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.SearchAllActivity;
 import com.xuejian.client.lxp.module.goods.StoreDetailActivity;
+import com.xuejian.client.lxp.module.goods.StoreDetailActivityV2;
 import com.xuejian.client.lxp.module.toolbox.StrategyListActivity;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionAdapter;
 import com.xuejian.client.lxp.module.toolbox.im.adapter.ExpressionPagerAdapter;
@@ -318,7 +319,7 @@ public class ChatActivity extends ChatBaseActivity implements OnClickListener, H
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent();
-                                intent.setClass(ChatActivity.this, StoreDetailActivity.class);
+                                intent.setClass(ChatActivity.this, StoreDetailActivityV2.class);
                                 intent.putExtra("sellerId", toChatUsername);
                                 startActivity(intent);
                             }

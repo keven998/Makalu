@@ -24,6 +24,9 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
     public ArrayList<IndexPoi> itinerary = new ArrayList<>();
     public ArrayList<PoiDetailBean> shopping = new ArrayList<>();
     public ArrayList<PoiDetailBean> restaurant = new ArrayList<>();
+    public ArrayList<DemoBean> demoItems = new ArrayList<>();
+    public ArrayList<TrafficBean> trafficItems = new ArrayList<>();
+
     public long userId;
     public Integer dayCnt;
     public Integer itineraryDays;
@@ -55,41 +58,6 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         return new ShareDialogBean(extMessageBean);
     }
 
-    public static class IndexPoi implements Parcelable {
-        public int dayIndex;
-        public PoiDetailBean poi;
-
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(this.dayIndex);
-            dest.writeParcelable(this.poi, 0);
-        }
-
-        public IndexPoi() {
-        }
-
-        private IndexPoi(Parcel in) {
-            this.dayIndex = in.readInt();
-            this.poi = in.readParcelable(PoiDetailBean.class.getClassLoader());
-        }
-
-        public static final Creator<IndexPoi> CREATOR = new Creator<IndexPoi>() {
-            public IndexPoi createFromParcel(Parcel source) {
-                return new IndexPoi(source);
-            }
-
-            public IndexPoi[] newArray(int size) {
-                return new IndexPoi[size];
-            }
-        };
-    }
-
     public StrategyBean() {
     }
 
@@ -118,6 +86,8 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         dest.writeTypedList(itinerary);
         dest.writeTypedList(shopping);
         dest.writeTypedList(restaurant);
+        dest.writeTypedList(demoItems);
+        dest.writeTypedList(trafficItems);
         dest.writeLong(this.userId);
         dest.writeValue(this.dayCnt);
         dest.writeValue(this.itineraryDays);
@@ -136,6 +106,8 @@ public class StrategyBean implements ICreateShareDialog, Parcelable {
         this.itinerary = in.createTypedArrayList(IndexPoi.CREATOR);
         this.shopping = in.createTypedArrayList(PoiDetailBean.CREATOR);
         this.restaurant = in.createTypedArrayList(PoiDetailBean.CREATOR);
+        this.demoItems = in.createTypedArrayList(DemoBean.CREATOR);
+        this.trafficItems = in.createTypedArrayList(TrafficBean.CREATOR);
         this.userId = in.readLong();
         this.dayCnt = (Integer) in.readValue(Integer.class.getClassLoader());
         this.itineraryDays = (Integer) in.readValue(Integer.class.getClassLoader());

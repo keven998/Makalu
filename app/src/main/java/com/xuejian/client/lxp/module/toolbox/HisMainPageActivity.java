@@ -59,7 +59,7 @@ import com.xuejian.client.lxp.db.UserDBManager;
 import com.xuejian.client.lxp.module.dest.CityPictureActivity;
 import com.xuejian.client.lxp.module.dest.MoreTravelNoteActivity;
 import com.xuejian.client.lxp.module.dest.StrategyDomesticMapActivity;
-import com.xuejian.client.lxp.module.goods.StoreDetailActivity;
+import com.xuejian.client.lxp.module.goods.StoreDetailActivityV2;
 import com.xuejian.client.lxp.module.my.LoginActivity;
 import com.xuejian.client.lxp.module.my.ModifyNicknameActivity;
 import com.xuejian.client.lxp.module.toolbox.im.ChatActivity;
@@ -333,7 +333,7 @@ public class HisMainPageActivity extends PeachBaseActivity implements View.OnCli
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent();
-                                intent.setClass(HisMainPageActivity.this, StoreDetailActivity.class);
+                                intent.setClass(HisMainPageActivity.this, StoreDetailActivityV2.class);
                                 intent.putExtra("sellerId", String.valueOf(userId));
                                 startActivity(intent);
                             }

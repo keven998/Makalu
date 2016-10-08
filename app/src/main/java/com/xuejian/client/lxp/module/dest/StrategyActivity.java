@@ -29,6 +29,7 @@ import com.aizou.core.widget.pagerIndicator.viewpager.FixedViewPager;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CopyStrategyBean;
+import com.xuejian.client.lxp.bean.IndexPoi;
 import com.xuejian.client.lxp.bean.LocBean;
 import com.xuejian.client.lxp.bean.ModifyResult;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
@@ -149,7 +150,7 @@ public class StrategyActivity extends PeachBaseActivity {
     }
     private List<Integer> sectionlist ;
     ArrayList<ArrayList<PoiDetailBean>> routeDayMap;
-    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
+    private void resizeData(ArrayList<IndexPoi> itinerary) {
         sectionlist = new ArrayList<>();
         StrategyBean strategyBean = strategy;
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
@@ -157,7 +158,7 @@ public class StrategyActivity extends PeachBaseActivity {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
 
-        for (StrategyBean.IndexPoi indexPoi : itinerary) {
+        for (IndexPoi indexPoi : itinerary) {
             if (routeDayMap.size() > indexPoi.dayIndex) {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }
@@ -309,7 +310,10 @@ public class StrategyActivity extends PeachBaseActivity {
             if (savedInstanceState != null) {
                 strategy = savedInstanceState.getParcelable("strategy");
                 bindView(strategy);
-            } else {
+            } else if (getIntent().getParcelableExtra("strategy")!=null){
+                strategy = getIntent().getParcelableExtra("strategy");
+                bindView(strategy);
+            }else {
                 boolean hasCache = setupViewFromCache(id);
                 if (!hasCache) {
                     try {
@@ -399,7 +403,7 @@ public class StrategyActivity extends PeachBaseActivity {
             DialogManager.getInstance().dissMissLoadingDialog();
         }
 
-        TravelApi.createGuide("create", cityIds, recommend, new HttpCallBack<String>() {
+        TravelApi.createGuide("create", cityIds, recommend, null,new HttpCallBack<String>() {
             @Override
             public void doSuccess(String result, String method) {
                 DialogManager.getInstance().dissMissLoadingDialog();
@@ -514,7 +518,7 @@ public class StrategyActivity extends PeachBaseActivity {
                                     e.printStackTrace();
                                 }
                                 if (recomment) {
-                                    TravelApi.createGuide("create", recommendCityList, true, new HttpCallBack<String>() {
+                                    TravelApi.createGuide("create", recommendCityList, true,null, new HttpCallBack<String>() {
                                         @Override
                                         public void doSuccess(String result, String method) {
                                             DialogManager.getInstance().dissMissLoadingDialog();

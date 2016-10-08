@@ -460,7 +460,7 @@ public class CommodityDetailActivity extends PeachBaseActivity {
                     intent.setClass(CommodityDetailActivity.this, LoginActivity.class);
                     startActivity(intent);
                 } else {
-                    ShareUtils.showSelectPlatformDialog(CommodityDetailActivity.this, false, bean.getShareUrl(), bean.creteShareBean());
+                    ShareUtils.showSelectPlatformDialog(CommodityDetailActivity.this, false, bean.getShareUrl(), bean.creteShareBean(),"");
                 }
             }
         });

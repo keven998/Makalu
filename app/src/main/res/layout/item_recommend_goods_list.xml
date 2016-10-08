@@ -51,21 +51,22 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_goods_price"
+                    android:id="@+id/tv_goods_current_price"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/goods_main_page_price_text_size"
+                    android:textColor="@color/price_color"
                     android:layout_gravity="center_horizontal|top"
                     android:gravity="center_horizontal|bottom"
-                    android:textSize="13sp" />
+                    android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/tv_goods_current_price"
+                    android:id="@+id/tv_goods_price"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/goods_main_page_price_text_size"
                     android:layout_gravity="center_horizontal|bottom"
                     android:gravity="center_horizontal|top"
                     android:textColor="@color/base_color_white"
-                    android:textSize="15sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
 
 

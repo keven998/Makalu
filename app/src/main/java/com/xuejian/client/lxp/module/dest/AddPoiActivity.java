@@ -2,6 +2,7 @@ package com.xuejian.client.lxp.module.dest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -388,7 +389,7 @@ public class AddPoiActivity extends PeachBaseActivity {
             cityStrList.add(locBean.zhName);
         }
         curLoc = locList.get(0);
-        mType = poiTypeValueArray[0];
+        if (TextUtils.isEmpty(mType))mType = poiTypeValueArray[0];
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cityStrList);
         adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
 //        filter_icon.setOnClickListener(new View.OnClickListener() {
@@ -419,9 +420,17 @@ public class AddPoiActivity extends PeachBaseActivity {
 
             }
         });
+
+        int pos =0;
+        for (int i = 0; i < poiTypeValueArray.length; i++) {
+            if (poiTypeValueArray[i].equals(mType)){
+                pos=i;
+                break;
+            }
+        }
         mTypeSpinnerAdapter = new StringSpinnerAdapter(mContext, Arrays.asList(getResources().getStringArray(R.array.poi_type_values_name)));
         type_spinner.setAdapter(mTypeSpinnerAdapter);
-        type_spinner.setSelection(0, true);
+        type_spinner.setSelection(pos, true);
         type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

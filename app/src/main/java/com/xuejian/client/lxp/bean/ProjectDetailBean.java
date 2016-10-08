@@ -55,7 +55,7 @@ public class ProjectDetailBean implements Parcelable {
      * zhName : 福冈
      * enName :
      */
-
+    public String shareURL;
     private List<LocBean> destination;
     /**
      * surname : jdjd

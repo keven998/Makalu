@@ -1,5 +1,6 @@
 package com.xuejian.client.lxp.module.dest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -7,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizou.core.widget.pagerIndicator.indicator.FixedIndicatorView;
 import com.aizou.core.widget.pagerIndicator.indicator.Indicator;
@@ -16,9 +16,11 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
+import com.xuejian.client.lxp.bean.TrafficBean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,12 +45,13 @@ public class TrafficActivity extends PeachBaseActivity implements OnDateSetListe
     int timeType;
     int type;
     private String[] tabNames = new String[]{"    飞机","    火车","    其他"};
-
+    TrafficBean mBean = new TrafficBean();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traffic);
         ButterKnife.bind(this);
+        mBean.category = "airline";
         mTvTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +112,12 @@ public class TrafficActivity extends PeachBaseActivity implements OnDateSetListe
         tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,"保存失败",Toast.LENGTH_SHORT).show();
+                mBean.start = mEtStart.getText().toString();
+                mBean.end = mEtEnd.getText().toString();
+                mBean.desc = mEtTrafficType.getText().toString();
+                Intent intent = new Intent();
+                intent.putExtra("traffic",mBean);
+                setResult(RESULT_OK,intent);
                 finish();
             }
         });
@@ -122,29 +130,34 @@ public class TrafficActivity extends PeachBaseActivity implements OnDateSetListe
                 mTvTimeSetoff.setText("未选择");
                 mTvTimeArrive.setText("未选择");
                 mEtTrafficType.setHint("火车车次");
+                mBean.category = "trainRoute";
                 break;
             case 2:
                 mEtTrafficType.setText("");
                 mTvTimeSetoff.setText("未选择");
                 mTvTimeArrive.setText("未选择");
                 mEtTrafficType.setHint("其他交通");
+                mBean.category = "other";
                 break;
             case 0:
                 mEtTrafficType.setText("");
                 mTvTimeSetoff.setText("未选择");
                 mTvTimeArrive.setText("未选择");
                 mEtTrafficType.setHint("飞机航班");
+                mBean.category = "airline";
                 break;
         }
     }
 
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 E kk点mm分");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 E kk点mm分", Locale.CHINA);
         if (timeType==1){
             mTvTimeSetoff.setText(simpleDateFormat.format(new Date(millseconds)));
+            mBean.depTime = simpleDateFormat.format(new Date(millseconds));
         }else if (timeType ==2){
             mTvTimeArrive.setText(simpleDateFormat.format(new Date(millseconds)));
+            mBean.arrTime = simpleDateFormat.format(new Date(millseconds));
         }
     }
 }

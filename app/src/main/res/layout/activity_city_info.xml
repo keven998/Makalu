@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical">
 
     <RelativeLayout
@@ -38,7 +39,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="14dp"
             android:scaleType="center"
-            android:src="@drawable/icon_edit_plan"
+            android:src="@drawable/common_icon_navigation_menu"
             android:visibility="visible"/>
     </RelativeLayout>
 
@@ -277,7 +278,18 @@
                     android:text="热门城市"
                     android:textColor="@color/color_text_ii"
                     android:textSize="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全部"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_text_iii"
+                    android:layout_toLeftOf="@+id/iv3"
+                    android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
+                    />
                 <ImageView
+                    android:id="@+id/iv3"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

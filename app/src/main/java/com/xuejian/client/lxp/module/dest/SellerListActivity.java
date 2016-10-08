@@ -139,8 +139,8 @@ public class SellerListActivity extends PeachBaseActivity {
             if (bean.user.getAvatar()!=null){
                 Glide.with(mContext)
                         .load(bean.user.getAvatar().getUrl())
-                        .placeholder(R.drawable.ic_default_picture)
-                        .error(R.drawable.ic_default_picture)
+                        .placeholder(R.drawable.icon_seller_default)
+                        .error(R.drawable.icon_seller_default)
                         .centerCrop()
                         .transform(new GlideCircleTransform(mContext))
                         .into(holder.mIvAvatar);

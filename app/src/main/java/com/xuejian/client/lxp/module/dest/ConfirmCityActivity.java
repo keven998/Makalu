@@ -12,12 +12,22 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aizou.core.dialog.ToastUtil;
+import com.aizou.core.http.HttpCallBack;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseActivity;
 import com.xuejian.client.lxp.bean.CouponBean;
 import com.xuejian.client.lxp.bean.LocBean;
+import com.xuejian.client.lxp.bean.StrategyBean;
+import com.xuejian.client.lxp.common.api.TravelApi;
+import com.xuejian.client.lxp.common.dialog.DialogManager;
+import com.xuejian.client.lxp.common.gson.CommonJson;
 import com.xuejian.client.lxp.common.widget.NumberPicker;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -40,7 +50,8 @@ public class ConfirmCityActivity extends PeachBaseActivity {
     @Bind(R.id.tv_save)
     TextView mTvSave;
     ArrayList<LocBean> list;
-
+    ArrayList<ArrayList<LocBean>> data = new ArrayList<>();
+    ArrayList <String> locIds = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,18 +59,23 @@ public class ConfirmCityActivity extends PeachBaseActivity {
         ButterKnife.bind(this);
         list = getIntent().getParcelableArrayListExtra("loc");
 
-
+        resizeData();
         mTvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, StrategyActivity.class);
-                intent.putParcelableArrayListExtra("destinations", list);
-                intent.putExtra("auto", false);
-                startActivity(intent);
-                finish();
+                createStrategyByCityIds();
             }
         });
-        bindView();
+       bindView();
+    }
+
+    private void resizeData() {
+        for (LocBean locBean : list) {
+            ArrayList<LocBean> item = new ArrayList<>();
+            item.add(locBean);
+            data.add(item);
+            locIds.add(locBean.id);
+        }
     }
 
     private void bindView() {
@@ -86,6 +102,11 @@ public class ConfirmCityActivity extends PeachBaseActivity {
             this.listener = listener;
         }
 
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
         public ArrayList<LocBean> getDataList() {
             return mDataList;
         }
@@ -107,6 +128,16 @@ public class ConfirmCityActivity extends PeachBaseActivity {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final LocBean bean = (LocBean) getItem(position);
             holder.mTvCityName.setText(bean.zhName);
+            holder.mSelectNum.setListenr(new NumberPicker.OnButtonClick() {
+                @Override
+                public void OnValueChange(int value) {
+                    ArrayList<LocBean> list= new ArrayList<LocBean>();
+                    for (int i = 0;i<value;i++){
+                        list.add(bean);
+                    }
+                    data.set(position,list);
+                }
+            });
         }
 
         @Override
@@ -127,5 +158,58 @@ public class ConfirmCityActivity extends PeachBaseActivity {
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+    public void createStrategyByCityIds() {
+        try {
+            DialogManager.getInstance().showLoadingDialog(mContext, "请稍后");
+        } catch (Exception e) {
+            DialogManager.getInstance().dissMissLoadingDialog();
+        }
+        JSONArray array = new JSONArray();
+        int j=0;
+        for (int i = 0; i < data.size(); i++) {
+            for (LocBean locBean : data.get(i)) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("dayIndex",j++);
+                    JSONObject object = new JSONObject();
+                    object.put("id",locBean.id);
+                    object.put("zhName",locBean.zhName);
+                    object.put("enName",locBean.enName);
+                    jsonObject.put("locality",object);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                array.put(jsonObject);
+            }
+        }
+
+        TravelApi.createGuide("create", locIds, false,array, new HttpCallBack<String>() {
+            @Override
+            public void doSuccess(String result, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                CommonJson<StrategyBean> strategyResult = CommonJson.fromJson(result, StrategyBean.class);
+                if (strategyResult.code == 0) {
+                    Intent intent = new Intent(ConfirmCityActivity.this,StrategyActivity.class);
+                    intent.putExtra("strategy",strategyResult.result);
+                    intent.putExtra("id","1");
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method) {
+                DialogManager.getInstance().dissMissLoadingDialog();
+                ToastUtil.getInstance(ConfirmCityActivity.this).showToast("创建失败");
+                finish();
+            }
+
+            @Override
+            public void doFailure(Exception error, String msg, String method, int code) {
+
+            }
+        });
     }
 }

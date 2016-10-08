@@ -19,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.xuejian.client.lxp.R;
+import com.xuejian.client.lxp.bean.IndexPoi;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.module.dest.DayAgendaActivity;
@@ -59,7 +60,7 @@ public class PlanScheduleFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(), DayAgendaActivity.class);
                 intent.putExtra("strategy", strategy);
                 intent.putExtra("current_day", position);
-                startActivity(intent);
+                startActivityForResult(intent,111);
                 getActivity().overridePendingTransition(0,0);
             }
         });
@@ -72,17 +73,29 @@ public class PlanScheduleFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == -1){
+            ArrayList<PoiDetailBean> list = data.getParcelableArrayListExtra("poiList");
+            int index = data.getIntExtra("dayIndex",0);
+            if (list!=null&&list.size()>0)routeDayMap.set(index,list);
+            mAdapter.notifyDataSetChanged();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
     private StrategyBean getStrategy() {
         return ((StrategyActivity) getActivity()).getStrategy();
     }
 
-    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary, StrategyBean str) {
+    private void resizeData(ArrayList<IndexPoi> itinerary, StrategyBean str) {
         StrategyBean strategyBean = getStrategy();
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
-        for (StrategyBean.IndexPoi indexPoi : itinerary) {
+        for (IndexPoi indexPoi : itinerary) {
             if (routeDayMap.size() > indexPoi.dayIndex) {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }

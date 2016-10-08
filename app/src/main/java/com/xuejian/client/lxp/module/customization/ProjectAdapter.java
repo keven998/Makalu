@@ -18,6 +18,7 @@ import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.bean.BountiesBean;
 import com.xuejian.client.lxp.common.utils.CommonUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,8 +50,8 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         TextView tvTimestamp;
         @Bind(R.id.tv_project_info1)
         TextView tvProjectInfo1;
-        @Bind(R.id.tv_project_time)
-        TextView tvProjectTime;
+//        @Bind(R.id.tv_project_time)
+//        TextView tvProjectTime;
         @Bind(R.id.tv_project_info2)
         TextView tvProjectInfo2;
         @Bind(R.id.tv_project_count)
@@ -112,7 +113,9 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
                     .centerCrop()
                     .into(holder.ivAvatar);
         }
-        holder.tvTimestamp.setText(String.format("在%s发布了需求",CommonUtils.getTimestampString(new Date(bean.createTime))));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+     //   holder.tvTimestamp.setText(String.format("在%s发布了需求",CommonUtils.getTimestampString(new Date(bean.createTime))));
+        holder.tvTimestamp.setText(dateFormat.format(new Date(bean.createTime)));
         StringBuilder desc = new StringBuilder();
         if (bean.getDestination()!=null&&bean.getDestination().size()>0){
             for (int i = 0; i < bean.getDestination().size(); i++) {
@@ -121,21 +124,21 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
             }
         }
 
-        holder.tvProjectInfo1.setText(String.format("[%s]",desc));
-        holder.tvProjectTime.setText(String.format(Locale.CHINA,"%d日游",bean.getTimeCost()));
+        holder.tvProjectInfo1.setText(String.format("%s%d日游",desc,bean.getTimeCost()));
+     //   holder.tvProjectTime.setText(String.format(Locale.CHINA,"%d日游",bean.getTimeCost()));
         holder.tvProjectInfo2.setText(bean.getService());
-        holder.tvProjectCount.setText(String.format(Locale.CHINA,"已有%d位商家抢单",bean.takersCnt));
+        holder.tvProjectCount.setText(String.format(Locale.CHINA,"接单:已有%d位商家抢单",bean.takersCnt));
 
 
-        String budget = String.format("定金%s元",CommonUtils.getPriceString(bean.getBountyPrice()));
-        String total = String.format("总预算%s元",CommonUtils.getPriceString(bean.getBudget()));
+       // String budget = String.format("定金%s元",CommonUtils.getPriceString(bean.getBountyPrice()));
+        String total = String.format("费用:总预算%s元",CommonUtils.getPriceString(bean.getBudget()));
 
-        SpannableString budgetString = new SpannableString(budget);
-        budgetString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),2,budget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      //  SpannableString budgetString = new SpannableString(budget);
+      //  budgetString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),2,budget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableString totalString = new SpannableString(total);
-        totalString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),3,total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        totalString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.price_color)),6,total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder price = new SpannableStringBuilder();
-        price.append(budgetString).append("  ").append(totalString);
+        price.append(totalString);
         holder.tvProjectPrice.setText(price);
 
         holder.ll_container.setOnClickListener(new View.OnClickListener() {

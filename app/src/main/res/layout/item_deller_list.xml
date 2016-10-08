@@ -19,6 +19,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="7dp"
+            android:src="@drawable/icon_seller_default"
             android:background="@color/app_backgroud"
             android:layout_marginBottom="15dp"
             android:scaleType="centerCrop" />

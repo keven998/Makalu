@@ -283,6 +283,7 @@
 
         <TableRow android:background="@drawable/option_cell_selector">
             <LinearLayout
+                android:visibility="visible"
                 android:id="@+id/ll_dev"
                 android:layout_column="1"
                 android:layout_span="2"

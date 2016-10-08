@@ -91,15 +91,15 @@ public class MainActivity extends PeachBaseActivity implements HandleImMessage.M
     //定义一个布局
     private LayoutInflater layoutInflater;
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {GoodsMainFragment.class, DestinationFragment.class, CustomMainFragment.class,TalkFragment.class, MyInfoFragment.class};
+    private Class fragmentArray[] = {CustomMainFragment.class, DestinationFragment.class, GoodsMainFragment.class,TalkFragment.class, MyInfoFragment.class};
     //TalentLocFragement
     // 定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.checker_tab_home_search, R.drawable.checker_tab_home_destination,R.drawable.checker_tab_cus, R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
+    private int mImageViewArray[] = { R.drawable.checker_tab_home_search,R.drawable.checker_tab_home_destination, R.drawable.checker_tab_cus,R.drawable.checker_tab_home, R.drawable.checker_tab_home_user};
     // private int[] colors = new int[]{R.color.white, R.color.black_overlay, R.color.white, R.color.black_overlay};
-    private static String[] tabTitle = {"首页", "目的地","定制" ,"消息", "我的"};
+    private static String[] tabTitle = {"首页", "目的地","商城" ,"消息", "我的"};
     private TextView unreadMsg;
     //Tab选项Tag
-    private static String mTagArray[] = {"Soso", "Travel", "custom","Talk", "My"};
+    private static String mTagArray[] = { "custom", "Travel","Soso","Talk", "My"};
 
     private boolean FromBounce, ring, vib;
     private Vibrator vibrator;

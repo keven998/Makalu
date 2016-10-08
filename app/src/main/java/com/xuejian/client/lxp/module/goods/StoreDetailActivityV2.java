@@ -325,11 +325,13 @@ public class StoreDetailActivityV2 extends PeachBaseActivity {
         }
         XRecyclerView recyclerView;
         Adapter adapter;
+        ImageView empty;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_store_detail_activity_v2, container, false);
             recyclerView = (XRecyclerView) rootView.findViewById(R.id.ul_recyclerView);
+            empty = (ImageView) rootView.findViewById(R.id.iv_empty);
             adapter = new Adapter(getActivity());
             recyclerView.setPullRefreshEnabled(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -344,8 +346,10 @@ public class StoreDetailActivityV2 extends PeachBaseActivity {
                 @Override
                 public void doSuccess(String result, String method) {
                     CommonJson4List<SimpleCommodityBean> list = CommonJson4List.fromJson(result, SimpleCommodityBean.class);
+                    if (list.result.size()==0)empty.setVisibility(View.VISIBLE);
                     adapter.getList().addAll(list.result);
                     adapter.notifyDataSetChanged();
+
                 }
 
                 @Override
@@ -383,11 +387,12 @@ public class StoreDetailActivityV2 extends PeachBaseActivity {
             public class ViewHolder extends RecyclerView.ViewHolder {
                 public final TextView tvPrice;
                 public final TextView tvGoodsName;
-
+                public final ImageView iv;
                 public ViewHolder(View itemView) {
                     super(itemView);
                     tvGoodsName = (TextView) itemView.findViewById(R.id.tv_project_name);
                     tvPrice = (TextView) itemView.findViewById(R.id.tv_project_price);
+                    iv = (ImageView) itemView.findViewById(R.id.iv_bg);
                 }
             }
 
@@ -406,6 +411,21 @@ public class StoreDetailActivityV2 extends PeachBaseActivity {
             @Override
             public void onBindViewHolder(ViewHolder holder, final int position) {
                 SimpleCommodityBean bean = (SimpleCommodityBean) getItem(position);
+                if (bean.getCover() != null) {
+                    Glide.with(mContext)
+                            .load(bean.getCover().getUrl())
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.iv);
+                } else {
+                    Glide.with(mContext)
+                            .load("")
+                            .placeholder(R.drawable.ic_default_picture)
+                            .error(R.drawable.ic_default_picture)
+                            .centerCrop()
+                            .into(holder.iv);
+                }
                 holder.tvGoodsName.setText(bean.getTitle());
                 holder.tvPrice.setText(String.format("%s元",CommonUtils.getPriceString(bean.getPrice())));
             }
@@ -620,9 +640,9 @@ public class StoreDetailActivityV2 extends PeachBaseActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "在售方案";
+                    return "在售商品";
                 case 1:
-                    return "行程商品";
+                    return "行程方案";
                 case 2:
                     return "店铺详情";
             }

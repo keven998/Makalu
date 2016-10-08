@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xuejian.client.lxp.R;
 import com.xuejian.client.lxp.base.PeachBaseFragment;
+import com.xuejian.client.lxp.bean.IndexPoi;
 import com.xuejian.client.lxp.bean.PoiDetailBean;
 import com.xuejian.client.lxp.bean.StrategyBean;
 import com.xuejian.client.lxp.common.account.AccountManager;
@@ -88,14 +89,14 @@ public class RouteDayFragment extends PeachBaseFragment implements OnStrategyMod
         super.onAttach(activity);
     }
 
-    private void resizeData(ArrayList<StrategyBean.IndexPoi> itinerary) {
+    private void resizeData(ArrayList<IndexPoi> itinerary) {
         StrategyBean strategyBean = getStrategy();
         routeDayMap = new ArrayList<ArrayList<PoiDetailBean>>();
         for (int i = 0; i < strategyBean.itineraryDays; i++) {
             routeDayMap.add(new ArrayList<PoiDetailBean>());
         }
 
-        for (StrategyBean.IndexPoi indexPoi : itinerary) {
+        for (IndexPoi indexPoi : itinerary) {
             if (routeDayMap.size() > indexPoi.dayIndex) {
                 routeDayMap.get(indexPoi.dayIndex).add(indexPoi.poi);
             }
